@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 
 interface ImageZoomProps {
@@ -14,7 +13,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, zoom = 2 }) => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (containerRef.current) {
-      const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+      const { left, top, width, height } =
+        containerRef.current.getBoundingClientRect();
       const x = e.clientX - left;
       const y = e.clientY - top;
 
@@ -30,7 +30,11 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, zoom = 2 }) => {
       onMouseLeave={() => setShowZoom(false)}
       onMouseMove={handleMouseMove}
     >
-      <img src={src} alt={alt} className="w-full h-full object-cover rounded-lg" />
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover rounded-lg"
+      />
 
       {showZoom && (
         <div

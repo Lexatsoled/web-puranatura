@@ -5,16 +5,59 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "format": "prettier --write .",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "validate": "npm run type-check && npm run lint && npm run format",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "vitest run"
   },
   "dependencies": {
+    "@react-hook/intersection-observer": "^3.1.2",
+    "@types/lodash": "^4.17.20",
+    "@types/react": "^19.1.9",
+    "@types/react-lazy-load-image-component": "^1.6.4",
+    "@types/react-router-dom": "^5.3.3",
+    "framer-motion": "^12.23.12",
+    "immer": "^10.1.1",
+    "lodash": "^4.17.21",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-lazy-load-image-component": "^1.6.3",
+    "react-router-dom": "^7.7.1",
+    "sharp": "^0.34.3",
+    "vite-imagetools": "^7.1.0",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-tailwindcss": "^3.18.2",
+    "happy-dom": "^18.0.1",
+    "jsdom": "^26.1.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.17",
     "typescript": "~5.7.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vitest": "^3.2.4"
   }
 }
