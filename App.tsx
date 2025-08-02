@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
+import { CartProvider } from './contexts/CartContext';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ServicesPage from './pages/ServicesPage';
@@ -8,15 +8,15 @@ import StorePage from './pages/StorePage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
-import { NotificationProvider } from './src/contexts/NotificationContext';
+import SimpleLayout from './SimpleLayout';
 import CartModal from './components/CartModal';
 
 const App: React.FC = () => {
   const [isCartOpen, setCartOpen] = useState(false);
 
   return (
-    <NotificationProvider>
-      <Layout onCartClick={() => setCartOpen(true)}>
+    <CartProvider>
+      <SimpleLayout onCartClick={() => setCartOpen(true)}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/sobre-nosotros" element={<AboutPage />} />
@@ -26,9 +26,9 @@ const App: React.FC = () => {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/contacto" element={<ContactPage />} />
         </Routes>
-      </Layout>
+      </SimpleLayout>
       <CartModal isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
-    </NotificationProvider>
+    </CartProvider>
   );
 };
 
