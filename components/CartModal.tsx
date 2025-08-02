@@ -18,6 +18,8 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   } = useCart();
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentComplete, setPaymentComplete] = useState(false);
   
   // Prevenir scroll cuando el modal está abierto
   useEffect(() => {
@@ -25,6 +27,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
+      // Resetear estados cuando se cierre el modal
+      setIsConfirmingClear(false);
+      setIsProcessingPayment(false);
+      setPaymentComplete(false);
     }
     return () => {
       document.body.style.overflow = 'unset';
@@ -61,6 +67,30 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     setIsConfirmingClear(false);
   };
 
+  const handleProceedToPayment = async () => {
+    setIsProcessingPayment(true);
+    
+    // Simular procesamiento de pago (3 segundos)
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // Simular éxito o fallo aleatoriamente (90% éxito)
+    const paymentSuccess = Math.random() > 0.1;
+    
+    if (paymentSuccess) {
+      setPaymentComplete(true);
+      // Limpiar carrito después del pago exitoso
+      setTimeout(() => {
+        clearCart();
+        setPaymentComplete(false);
+        setIsProcessingPayment(false);
+        onClose();
+      }, 2000);
+    } else {
+      setIsProcessingPayment(false);
+      alert('Error en el procesamiento del pago. Por favor, inténtalo de nuevo.');
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -82,11 +112,17 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-xl font-semibold">
-              Carrito ({cartCount} {cartCount === 1 ? 'artículo' : 'artículos'})
+              {isProcessingPayment 
+                ? 'Procesando Pago' 
+                : paymentComplete 
+                ? '¡Pago Exitoso!' 
+                : `Carrito (${cartCount} ${cartCount === 1 ? 'artículo' : 'artículos'})`
+              }
             </h2>
             <button
               onClick={onClose}
               className="p-1 hover:bg-gray-100 rounded"
+              disabled={isProcessingPayment}
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -96,7 +132,23 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
 
           {/* Contenido */}
           <div className="p-4 overflow-y-auto max-h-96">
-            {cartItems.length === 0 ? (
+            {isProcessingPayment ? (
+              <div className="text-center py-12">
+                <div className="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Procesando pago...</h3>
+                <p className="text-gray-600">Por favor espera mientras procesamos tu pedido</p>
+              </div>
+            ) : paymentComplete ? (
+              <div className="text-center py-12">
+                <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-green-800 mb-2">¡Pago completado!</h3>
+                <p className="text-gray-600">Tu pedido ha sido procesado exitosamente</p>
+              </div>
+            ) : cartItems.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-gray-400 mb-2">
                   <svg className="h-12 w-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +215,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Footer */}
-          {cartItems.length > 0 && (
+          {cartItems.length > 0 && !isProcessingPayment && !paymentComplete && (
             <div className="border-t p-4">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-lg font-semibold">Total:</span>
@@ -173,31 +225,46 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               </div>
               
               <div className="space-y-2">
-                <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
-                  Proceder al Pago
-                </button>
-                
                 {!isConfirmingClear ? (
-                  <button
-                    onClick={() => setIsConfirmingClear(true)}
-                    className="w-full text-gray-600 py-1 px-4 hover:text-red-600 transition-colors text-sm"
-                  >
-                    Vaciar carrito
-                  </button>
+                  <>
+                    <button 
+                      onClick={handleProceedToPayment}
+                      className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
+                    >
+                      Proceder al Pago
+                    </button>
+                    <button
+                      onClick={() => setIsConfirmingClear(true)}
+                      className="w-full text-gray-600 py-1 px-4 hover:text-red-600 transition-colors text-sm"
+                    >
+                      Vaciar carrito
+                    </button>
+                  </>
                 ) : (
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={handleClearCart}
-                      className="flex-1 bg-red-600 text-white py-1 px-3 rounded text-sm hover:bg-red-700"
-                    >
-                      Confirmar
-                    </button>
-                    <button
-                      onClick={() => setIsConfirmingClear(false)}
-                      className="flex-1 bg-gray-300 text-gray-700 py-1 px-3 rounded text-sm hover:bg-gray-400"
-                    >
-                      Cancelar
-                    </button>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-center mb-3">
+                      <svg className="h-5 w-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
+                      <h3 className="text-red-800 font-semibold">¿Vaciar carrito?</h3>
+                    </div>
+                    <p className="text-red-700 text-sm mb-4">
+                      Se eliminarán todos los productos del carrito. Esta acción no se puede deshacer.
+                    </p>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={handleClearCart}
+                        className="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                      >
+                        Sí, vaciar carrito
+                      </button>
+                      <button
+                        onClick={() => setIsConfirmingClear(false)}
+                        className="flex-1 bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

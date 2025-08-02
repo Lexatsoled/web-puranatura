@@ -112,7 +112,7 @@ const StorePage: React.FC = () => {
         </div>
 
         {/* Controls Bar */}
-        <div className="sticky top-[88px] bg-emerald-50/80 backdrop-blur-sm z-30 py-4 mb-8 rounded-lg">
+        <div className="bg-emerald-50/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
             {/* Search */}
             <div className="relative">
