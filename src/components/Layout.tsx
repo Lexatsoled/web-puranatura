@@ -1,8 +1,10 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import { NextSeo } from 'next-seo';
 import Header from './Header';
 import Footer from './Footer';
+import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
 
 // Lazy loading de componentes modales
 const CartModal = React.lazy(() => import('./CartModal'));

@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../types/product';
 import { useCartStore } from '../store/cartStore';
 import { OptimizedImage } from './OptimizedImage';
+import { useStableMemo, useStableCallback, withMemo } from '../hooks/usePerformance';
 
 interface ProductCardProps {
   product: Product;
@@ -21,26 +22,26 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   // Memoizar el estado del stock
-  const stockStatus = useMemo(() => {
+  const stockStatus = useStableMemo(() => {
     if (product.stock <= 0) return 'out-of-stock';
     if (product.stock <= 5) return 'low-stock';
     return 'in-stock';
   }, [product.stock]);
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = useStableCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isAddingToCart || stockStatus === 'out-of-stock') return;
     
     setIsAddingToCart(true);
     try {
-      await addToCart(product);
+      addToCart(product);
       // Aquí podríamos añadir una notificación de éxito
     } catch (error) {
       // Aquí podríamos añadir una notificación de error
     } finally {
       setIsAddingToCart(false);
     }
-  };
+  }, [addToCart, product, isAddingToCart, stockStatus]);
 
   return (
     <motion.div
@@ -181,4 +182,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+// Memoizar el componente con una función de comparación personalizada
+const arePropsEqual = (prevProps: ProductCardProps, nextProps: ProductCardProps) => {
+  return (
+    prevProps.product.id === nextProps.product.id &&
+    prevProps.product.stock === nextProps.product.stock &&
+    prevProps.product.price === nextProps.product.price &&
+    prevProps.priority === nextProps.priority
+  );
+};
+
+export default withMemo(ProductCard, arePropsEqual);

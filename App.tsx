@@ -8,14 +8,14 @@ import StorePage from './pages/StorePage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
-import { CartProvider } from './contexts/CartContext';
-import CartModal from './components/CartModal';
+import { NotificationProvider } from './src/contexts/NotificationContext';
+import CartModal from './src/components/CartModal';
 
 const App: React.FC = () => {
   const [isCartOpen, setCartOpen] = useState(false);
 
   return (
-    <CartProvider>
+    <NotificationProvider>
       <Layout onCartClick={() => setCartOpen(true)}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -28,7 +28,7 @@ const App: React.FC = () => {
         </Routes>
       </Layout>
       <CartModal isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
-    </CartProvider>
+    </NotificationProvider>
   );
 };
 
