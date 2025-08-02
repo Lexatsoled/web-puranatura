@@ -26,7 +26,7 @@ export const generateProductJsonLd = (product: Product, url: string): ProductJso
     '@type': 'Product',
     name: product.name,
     description: product.seoDescription || product.description,
-    image: product.images.map(img => img.url),
+    image: product.images.map(img => img.full),
     ...(product.brand && {
       brand: {
         '@type': 'Brand',

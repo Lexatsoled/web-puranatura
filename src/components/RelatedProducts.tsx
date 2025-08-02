@@ -64,7 +64,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
             >
               <div className="aspect-square relative">
                 <OptimizedImage
-                  src={product.images[0].url}
+                  src={product.images[0].full}
                   alt={product.name}
                   className="object-cover w-full h-full"
                   aspectRatio={1}

@@ -25,8 +25,8 @@ export interface Product {
 }
 
 export interface ProductImage {
-  url: string;
   thumbnail: string;
+  full: string;
   alt?: string;
 }
 

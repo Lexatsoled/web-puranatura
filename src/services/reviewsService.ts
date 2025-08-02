@@ -9,10 +9,10 @@ export const useReviewsService = () => {
     getProductReviews: (productId: string) =>
       api.get<Review[]>(`/products/${productId}/reviews`, {
         // Configuración específica de rate limiting para este endpoint
-        rateLimitConfig: {
-          maxRequests: 30,  // 30 solicitudes
-          timeWindow: 60000 // por minuto
-        }
+        // rateLimitConfig: {
+        //   maxRequests: 30,  // 30 solicitudes
+        //   timeWindow: 60000 // por minuto
+        // }
       }),
 
     // Crear una nueva reseña

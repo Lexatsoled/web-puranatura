@@ -1,17 +1,17 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { withLazyLoading } from '../hooks/usePerformance';
 import PageTransition from '../components/PageTransition';
 
 // Importación perezosa de páginas
-const HomePage = withLazyLoading(React.lazy(() => import('../pages/HomePage')));
-const StorePage = withLazyLoading(React.lazy(() => import('../pages/StorePage')));
+const HomePage = withLazyLoading(React.lazy(() => import('../../pages/HomePage')));
+const StorePage = withLazyLoading(React.lazy(() => import('../../pages/StorePage')));
 const ProductPage = withLazyLoading(React.lazy(() => import('../pages/ProductPage')));
-const BlogPage = withLazyLoading(React.lazy(() => import('../pages/BlogPage')));
-const AboutPage = withLazyLoading(React.lazy(() => import('../pages/AboutPage')));
-const ContactPage = withLazyLoading(React.lazy(() => import('../pages/ContactPage')));
-const ServicesPage = withLazyLoading(React.lazy(() => import('../pages/ServicesPage')));
-const TestimonialsPage = withLazyLoading(React.lazy(() => import('../pages/TestimonialsPage')));
+const BlogPage = withLazyLoading(React.lazy(() => import('../../pages/BlogPage')));
+const AboutPage = withLazyLoading(React.lazy(() => import('../../pages/AboutPage')));
+const ContactPage = withLazyLoading(React.lazy(() => import('../../pages/ContactPage')));
+const ServicesPage = withLazyLoading(React.lazy(() => import('../../pages/ServicesPage')));
+const TestimonialsPage = withLazyLoading(React.lazy(() => import('../../pages/TestimonialsPage')));
 
 const AppRoutes: React.FC = () => {
   return (

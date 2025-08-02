@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '../test/test-utils';
-import ProductCard from '../components/ProductCard';
+import { render, screen, fireEvent } from '../../test/test-utils';
+import ProductCard from '../ProductCard';
 
 const mockProduct = {
   id: '1',

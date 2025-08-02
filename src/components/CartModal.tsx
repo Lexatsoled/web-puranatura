@@ -1,7 +1,8 @@
 import React from 'react';
-import { useCart } from '../store/cartStore';
+import { useCartStore } from '../store/cartStore';
 import { OptimizedImage } from './OptimizedImage';
 import { AnimatePresence, motion } from 'framer-motion';
+import { CartItem } from '../types/cart';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -9,7 +10,7 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart } = useCartStore();
 
   if (!isOpen) return null;
 
@@ -95,7 +96,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             ) : (
               <>
                 <div className="flex-grow overflow-y-auto p-4 space-y-4">
-                  {cart.items.map((item) => (
+                  {cart.items.map((item: CartItem) => (
                     <motion.div
                       key={item.product.id}
                       layout

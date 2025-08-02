@@ -1,6 +1,7 @@
 import React from 'react';
-import { services } from '../data/services';
+import { services } from '../../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
+import { Service } from '../../types';
 
 const ServicesPage: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ const ServicesPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+          {services.map((service: Service, index: number) => (
             <div
               key={index}
               className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group transform hover:-translate-y-2 transition-transform duration-300"
@@ -39,18 +40,18 @@ const ServicesPage: React.FC = () => {
                 </h3>
                 <p className="text-gray-600 leading-relaxed">{service.description}</p>
                 
-                {service.benefits && service.benefits.length > 0 && (
+                {/* {service.benefits && service.benefits.length > 0 && (
                   <div className="mt-4">
                     <h4 className="font-semibold text-green-600 mb-2">Beneficios:</h4>
                     <ul className="list-disc list-inside text-gray-600 space-y-1">
-                      {service.benefits.map((benefit, idx) => (
+                      {service.benefits?.map((benefit: string, idx: number) => (
                         <li key={idx}>{benefit}</li>
                       ))}
                     </ul>
                   </div>
-                )}
+                )} */}
                 
-                <div className="mt-4 pt-4 border-t border-gray-100">
+                {/* <div className="mt-4 pt-4 border-t border-gray-100">
                   <div className="flex justify-between items-center">
                     {service.duration && (
                       <span className="text-gray-500 text-sm">
@@ -63,7 +64,7 @@ const ServicesPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

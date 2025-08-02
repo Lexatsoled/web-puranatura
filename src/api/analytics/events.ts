@@ -23,7 +23,7 @@ export default async function handler(req: Request, res: Response) {
     // Añadir información adicional
     const enrichedEvent = {
       ...event,
-      ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+      ip: Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : (req.headers['x-forwarded-for'] || req.socket.remoteAddress),
       userAgent: req.headers['user-agent'],
       referrer: req.headers.referer,
     };
@@ -41,7 +41,7 @@ export default async function handler(req: Request, res: Response) {
   }
 }
 
-async function storeEvent(event: ExtendedAnalyticsEvent & { 
+async function storeEvent(_event: ExtendedAnalyticsEvent & { 
   ip?: string; 
   userAgent?: string; 
   referrer?: string; 
@@ -77,7 +77,7 @@ async function processRealTimeEvent(event: ExtendedAnalyticsEvent) {
   }
 }
 
-async function updateProductViewCount(event: ExtendedAnalyticsEvent) {
+async function updateProductViewCount(_event: ExtendedAnalyticsEvent) {
   // Actualizar contadores de vistas de productos
   /*
   const { db } = await connectToDatabase();
@@ -88,7 +88,7 @@ async function updateProductViewCount(event: ExtendedAnalyticsEvent) {
   */
 }
 
-async function checkInventoryLevels(event: ExtendedAnalyticsEvent) {
+async function checkInventoryLevels(_event: ExtendedAnalyticsEvent) {
   // Verificar niveles de inventario y enviar alertas si es necesario
   /*
   const { db } = await connectToDatabase();

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { Cart, CartItem, Product } from '../types/cart';
+import { Cart } from '../types/cart';
+import { Product } from '../types/product';
 
 interface CartStore {
   cart: Cart;

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useCartStore } from '../store/cartStore';
+import { useCartStore } from '../cartStore';
 
 const mockProduct = {
   id: '1',
