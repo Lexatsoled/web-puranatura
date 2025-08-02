@@ -12,7 +12,6 @@ interface ProductCompareProps {
 
 const ProductCompare: React.FC<ProductCompareProps> = ({
   products,
-  onProductSelect,
   onRemoveProduct,
   maxProducts = 3,
 }) => {
@@ -118,7 +117,7 @@ const ProductCompare: React.FC<ProductCompareProps> = ({
                 {/* Cabecera del producto */}
                 <div className="relative aspect-square mb-4 rounded-lg overflow-hidden">
                   <OptimizedImage
-                    src={product.images[0].url}
+                    src={product.images[0].full}
                     alt={product.name}
                     className="object-cover w-full h-full"
                     aspectRatio={1}

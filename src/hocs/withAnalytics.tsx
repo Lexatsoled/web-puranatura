@@ -22,7 +22,7 @@ export function withAnalytics<P extends object>(
         : analyticsProps;
 
       trackEvent({
-        category: eventProps.eventCategory,
+        category: eventProps.eventCategory as any, // EventCategory cast
         action: eventProps.eventAction,
         label: eventProps.eventLabel,
         value: eventProps.eventValue,

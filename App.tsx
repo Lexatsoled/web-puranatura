@@ -9,7 +9,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
 import { NotificationProvider } from './src/contexts/NotificationContext';
-import CartModal from './src/components/CartModal';
+import CartModal from './components/CartModal';
 
 const App: React.FC = () => {
   const [isCartOpen, setCartOpen] = useState(false);

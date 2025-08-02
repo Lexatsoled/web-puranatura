@@ -43,7 +43,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   currencySymbol = '€',
   shippingCost = 0,
   taxRate = 0,
-  discountCode,
   maxQuantityPerItem = 99,
 }) => {
   // Memoizar cálculos costosos
@@ -53,7 +52,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     tax,
     total,
     totalItems,
-    totalWeight,
   } = useMemo(() => {
     const subtotal = items.reduce(
       (acc, item) => acc + item.price * item.quantity,

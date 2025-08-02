@@ -3,9 +3,16 @@ import { NextSeo, ProductJsonLd } from 'next-seo';
 import { useParams, useLocation } from 'react-router-dom';
 import { useSeo } from '../hooks/useSeo';
 import { motion } from 'framer-motion';
-import { Product, ProductImage } from '../types';
-import { getProductById } from '../data/products';
-import { generateProductJsonLd, generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
+import { ProductImage } from '../types';
+import { Product } from '../../types';
+import { products } from '../../data/products';
+import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
+
+// Helper function to get product by ID
+const getProductById = (id: string | undefined): Product | null => {
+  if (!id) return null;
+  return products.find(product => product.id === id) || null;
+};
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,9 +23,9 @@ const ProductPage: React.FC = () => {
 
   const seoConfig = useSeo({
     title: product?.name,
-    description: product?.seoDescription || product?.description,
+    description: product?.description,
     type: 'product',
-    image: product?.images[0]?.url,
+    image: product?.images[0]?.full,
   });
 
   if (!product) {
@@ -37,13 +44,12 @@ const ProductPage: React.FC = () => {
       <NextSeo {...seoConfig} />
       <ProductJsonLd
         productName={product.name}
-        images={product.images.map((img: ProductImage) => img.url)}
-        description={product.seoDescription || product.description}
-        brand={product.brand}
+        images={product.images.map((img: ProductImage) => img.full)}
+        description={product.description}
         offers={{
           price: product.price,
           priceCurrency: 'EUR',
-          availability: product.inStock ? 'InStock' : 'OutOfStock',
+          availability: 'InStock', // product.inStock ? 'InStock' : 'OutOfStock',
           url: currentUrl
         }}
       />
@@ -62,7 +68,7 @@ const ProductPage: React.FC = () => {
         >
           <div className="relative aspect-square rounded-lg overflow-hidden">
             <img
-              src={product.imageUrl}
+              src={product.images[0]?.full}
               alt={product.name}
               className="object-cover w-full h-full"
             />
@@ -75,7 +81,7 @@ const ProductPage: React.FC = () => {
               <p>{product.description}</p>
             </div>
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h2 className="text-xl font-semibold">Beneficios:</h2>
               <ul className="list-disc list-inside space-y-2">
                 {product.benefits?.map((benefit: string, index: number) => (
@@ -84,7 +90,7 @@ const ProductPage: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
             <button
               type="button"

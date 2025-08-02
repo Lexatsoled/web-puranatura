@@ -17,14 +17,13 @@ export const ProductImageComponent: React.FC<ProductImageProps> = ({
 }) => {
   return (
     <OptimizedImage
-      src={image.url}
+      src={image.full}
       alt={image.alt || ''}
       className={className}
       aspectRatio={1}
       blur={true}
       priority={priority}
       sizes={sizes}
-      quality={85}
     />
   );
 };

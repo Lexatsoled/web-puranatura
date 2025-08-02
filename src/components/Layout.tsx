@@ -1,14 +1,11 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { NextSeo } from 'next-seo';
 import Header from './Header';
-import Footer from './Footer';
-import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
+import Footer from '../../components/Footer';
 
 // Lazy loading de componentes modales
 const CartModal = React.lazy(() => import('./CartModal'));
-const SearchModal = React.lazy(() => import('./SearchModal'));
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
 
   // Manejar el scroll para efectos en el header
@@ -44,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Prevenir scroll cuando los modales están abiertos
   useEffect(() => {
-    if (isCartOpen || isSearchOpen) {
+    if (isCartOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -52,7 +49,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isCartOpen, isSearchOpen]);
+  }, [isCartOpen]);
 
   const pageTransitionVariants = {
     initial: {
@@ -62,42 +59,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     animate: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
-      },
     },
     exit: {
       opacity: 0,
       y: -20,
-      transition: {
-        duration: 0.2,
-        ease: 'easeIn',
-      },
     },
   };
-
-  // Error Boundary personalizado para los componentes lazy
-  const ErrorFallback = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50">
-      <div className="text-center">
-        <p className="text-red-600 mb-4">Hubo un error al cargar el contenido</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-        >
-          Recargar página
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header
-        isScrolled={isScrolled}
         onCartClick={() => setIsCartOpen(true)}
-        onSearchClick={() => setIsSearchOpen(true)}
       />
 
       <main className="flex-grow">
@@ -138,10 +110,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </motion.div>
             }
           >
-            <CartModal onClose={() => setIsCartOpen(false)} />
+            <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
           </Suspense>
         )}
 
+        {/* Search modal commented out until SearchModal component is implemented
         {isSearchOpen && (
           <Suspense
             fallback={
@@ -160,6 +133,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <SearchModal onClose={() => setIsSearchOpen(false)} />
           </Suspense>
         )}
+        */}
       </AnimatePresence>
 
       {/* Indicador de carga para transiciones de página */}

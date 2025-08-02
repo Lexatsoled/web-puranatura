@@ -192,7 +192,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
       </div>
 
       {/* Estilos para ocultar la barra de desplazamiento */}
-      <style jsx global>{`
+      <style>{`
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;

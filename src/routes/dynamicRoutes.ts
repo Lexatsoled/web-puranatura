@@ -66,13 +66,13 @@ export const productRoute: DynamicRoute<ProductParams> = {
       title: `${product.name} | PuraNatura`,
       description: product.seoDescription || product.description,
       ogType: 'product',
-      ogImage: product.images[0]?.url,
+      ogImage: product.images[0]?.full,
       structuredData: {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: product.name,
         description: product.description,
-        image: product.images.map(img => img.url),
+        image: product.images.map(img => img.full),
         offers: {
           '@type': 'Offer',
           price: product.price,
@@ -116,7 +116,7 @@ export const blogPostRoute: DynamicRoute<BlogPostParams> = {
   },
   async generateStaticPaths() {
     const posts = await fetch('/api/blog').then(res => res.json());
-    return posts.map(post => ({ slug: post.slug }));
+    return posts.map((post: { slug: string }) => ({ slug: post.slug }));
   },
 };
 

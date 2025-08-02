@@ -17,7 +17,6 @@ interface ImageGalleryProps {
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showLightbox, setShowLightbox] = useState(false);
 
   // Escuchar teclas para navegación
@@ -41,20 +40,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
   };
 
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    () => {
       if (isZoomed) {
-        const bounds = e.currentTarget.getBoundingClientRect();
-        const x = ((e.clientX - bounds.left) / bounds.width) * 100;
-        const y = ((e.clientY - bounds.top) / bounds.height) * 100;
-        setMousePosition({ x, y });
+        // Mouse position tracking for future zoom functionality
       }
     },
     [isZoomed]
   );
-
-  const toggleZoom = () => {
-    setIsZoomed(!isZoomed);
-  };
 
   return (
     <div className="relative">

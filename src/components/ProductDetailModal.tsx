@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Product } from '../types';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Product, ProductImage } from '../types';
 import { OptimizedImage } from './OptimizedImage';
-import { useCart } from '../store/cartStore';
+import { useCartStore } from '../store/cartStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductDetailModalProps {
@@ -22,9 +22,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const { addToCart } = useCart();
+  const { addToCart } = useCartStore();
 
   // Reset estado cuando el modal se abre
   useEffect(() => {
@@ -33,7 +31,6 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setQuantity(1);
       setIsZoomed(false);
       setIsAddingToCart(false);
-      setSelectedVariantIndex(0);
     }
   }, [isOpen]);
 
@@ -85,21 +82,13 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     setMousePosition({ x, y });
   }, [isZoomed]);
 
-  // Manejar cantidad
-  const handleQuantityChange = useCallback((delta: number) => {
-    setQuantity((prev) => {
-      const newQuantity = prev + delta;
-      return Math.max(1, Math.min(newQuantity, product.stock));
-    });
-  }, [product.stock]);
-
   // Añadir al carrito con manejo de errores
   const handleAddToCart = async () => {
     if (isAddingToCart) return;
     
     setIsAddingToCart(true);
     try {
-      await addToCart(product, quantity);
+      await addToCart(product as any, quantity);
       onAddToCartSuccess?.();
       onClose();
     } catch (error) {
@@ -110,12 +99,12 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
+  // const handleAddToCartSimple = () => {
+  //   addToCart(product, quantity);
+  //   onClose();
+  // };
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    onClose();
-  };
+  if (!isOpen) return null;
 
   return (
     <AnimatePresence>
@@ -160,7 +149,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       transition={{ type: "spring", damping: 25 }}
                     >
                       <OptimizedImage
-                        src={product.images[selectedImage]}
+                        src={product.images[selectedImage].full}
                         alt={product.name}
                         className="object-contain rounded-lg w-full h-full"
                         priority={selectedImage === 0}
@@ -169,7 +158,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                 </div>
                 <div className="flex space-x-4 mt-4 overflow-x-auto pb-2">
-                  {product.images.map((image: string, index: number) => (
+                  {product.images.map((image: ProductImage, index: number) => (
                     <motion.button
                       key={index}
                       whileHover={{ scale: 1.05 }}
@@ -182,7 +171,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       }`}
                     >
                       <OptimizedImage
-                        src={image}
+                        src={image.thumbnail}
                         alt={`${product.name} - Vista ${index + 1}`}
                         className="object-cover"
                         aspectRatio={1}
@@ -198,33 +187,34 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <h2 className="text-2xl font-bold text-gray-800">
                     {product.name}
                   </h2>
-                  {product.isNew && (
+                  {/* {product.isNew && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                       Nuevo
                     </span>
-                  )}
-                  {product.isBestSeller && (
+                  )} */}
+                  {/* {product.isBestSeller && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                       Más Vendido
                     </span>
-                  )}
+                  )} */}
                 </div>
                 <div className="mb-4">
                   <div className="text-2xl font-semibold text-green-600">
                     DOP ${product.price.toFixed(2)}
-                    {product.compareAtPrice && (
+                    {/* {product.compareAtPrice && (
                       <span className="ml-2 text-lg line-through text-gray-500">
                         DOP ${product.compareAtPrice.toFixed(2)}
                       </span>
-                    )}
+                    )} */}
                   </div>
-                  {product.stock !== undefined && (
-                    <p className={`text-sm mt-1 ${
-                      product.stock < 5 ? 'text-red-600' : 'text-green-600'
-                    }`}>
-                      {product.stock < 5 
-                        ? `¡Solo quedan ${product.stock} unidades!` 
-                        : 'En stock'}
+                  {product.inStock && (
+                    <p className="text-sm mt-1 text-green-600">
+                      En stock
+                    </p>
+                  )}
+                  {!product.inStock && (
+                    <p className="text-sm mt-1 text-red-600">
+                      Agotado
                     </p>
                   )}
                 </div>

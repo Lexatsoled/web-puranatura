@@ -12,7 +12,7 @@ export const productCategories = [
 export const products: Product[] = [
   // Vitaminas y Minerales
   {
-    id: 1,
+    id: "1",
     name: 'Vitamina C 1000mg',
     category: 'Vitaminas y Minerales',
     price: 24.99,
@@ -30,7 +30,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 2,
+    id: "2",
     name: 'Vitamina D3 10000 UI',
     category: 'Vitaminas y Minerales',
     price: 29.99,
@@ -48,7 +48,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 3,
+    id: "3",
     name: 'Vitamina K2',
     category: 'Vitaminas y Minerales',
     price: 27.99,
@@ -65,7 +65,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 4,
+    id: "4",
     name: 'Calcio Magnesio',
     category: 'Vitaminas y Minerales',
     price: 22.99,
@@ -84,7 +84,7 @@ export const products: Product[] = [
   },
   // Salud Articular
   {
-    id: 5,
+    id: "5",
     name: 'Glucosamina y Condroitina',
     category: 'Salud Articular',
     price: 34.99,
@@ -103,7 +103,7 @@ export const products: Product[] = [
   },
   // Salud Digestiva
   {
-    id: 6,
+    id: "6",
     name: 'Ultimate Flora',
     category: 'Salud Digestiva',
     price: 39.99,
@@ -117,7 +117,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 7,
+    id: "7",
     name: 'Digestive Duo',
     category: 'Salud Digestiva',
     price: 32.99,
@@ -134,7 +134,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 8,
+    id: "8",
     name: 'Cleanse More',
     category: 'Salud Digestiva',
     price: 28.99,
@@ -153,7 +153,7 @@ export const products: Product[] = [
   },
   // Suplementos Especializados
   {
-    id: 9,
+    id: "9",
     name: 'Ácido Hialurónico',
     category: 'Suplementos Especializados',
     price: 35.99,
@@ -170,7 +170,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 10,
+    id: "10",
     name: 'Triple Extracto de Hongos',
     category: 'Suplementos Especializados',
     price: 42.99,
@@ -188,7 +188,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 11,
+    id: "11",
     name: 'Mezcla Hígado',
     category: 'Suplementos Especializados',
     price: 31.99,
@@ -206,7 +206,7 @@ export const products: Product[] = [
   },
   // Salud Femenina
   {
-    id: 12,
+    id: "12",
     name: 'Menopause Plus',
     category: 'Salud Femenina',
     price: 37.99,
@@ -223,7 +223,7 @@ export const products: Product[] = [
     ],
   },
   {
-    id: 13,
+    id: "13",
     name: 'Cranberry Concentrado',
     category: 'Salud Femenina',
     price: 26.99,

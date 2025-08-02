@@ -28,7 +28,6 @@ export const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
   title,
 }) => {
   const ChartComponent = type === 'line' ? LineChart : BarChart;
-  const DataComponent = type === 'line' ? Line : Bar;
 
   return (
     <div className="w-full h-96 p-4">
@@ -48,12 +47,19 @@ export const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
           <YAxis />
           <Tooltip />
           <Legend />
-          <DataComponent
-            type="monotone"
-            dataKey={yKey}
-            stroke="#8884d8"
-            fill="#8884d8"
-          />
+          {type === 'line' ? (
+            <Line
+              type="monotone"
+              dataKey={yKey}
+              stroke="#8884d8"
+              fill="#8884d8"
+            />
+          ) : (
+            <Bar
+              dataKey={yKey}
+              fill="#8884d8"
+            />
+          )}
         </ChartComponent>
       </ResponsiveContainer>
     </div>
