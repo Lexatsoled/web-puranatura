@@ -1,6 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from './contexts/CartContext';
+import { useAuth } from './contexts/AuthContext';
+import AuthModal from './components/AuthModal';
+import UserMenu from './components/UserMenu';
 
 interface SimpleLayoutProps {
   children: ReactNode;
@@ -10,6 +13,8 @@ interface SimpleLayoutProps {
 const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) => {
   const location = useLocation();
   const { cartCount } = useCart();
+  const { isAuthenticated } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   
   const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
     const isActive = location.pathname === to;
@@ -97,60 +102,93 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
             🌿 PuraNatura
           </h1>
           
-          {/* Botón del carrito mejorado */}
-          <button
-            onClick={onCartClick}
-            style={{
-              backgroundColor: '#4ade80',
-              border: 'none',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '2rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '0.95rem',
-              fontWeight: '600',
-              boxShadow: '0 4px 12px rgba(74, 222, 128, 0.3)',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#22c55e';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(34, 197, 94, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#4ade80';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(74, 222, 128, 0.3)';
-            }}
-          >
-            <span style={{ fontSize: '1.2rem' }}>🛒</span>
-            <span>Mi Carrito</span>
-            {cartCount > 0 && (
-              <span style={{
-                backgroundColor: '#15803d',
+          {/* Controles del header - Autenticación y Carrito */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {/* Sistema de autenticación */}
+            {isAuthenticated ? (
+              <UserMenu />
+            ) : (
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '1.5rem',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                }}
+              >
+                <svg style={{ width: '18px', height: '18px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Iniciar Sesión
+              </button>
+            )}
+            
+            {/* Botón del carrito con estilo consistente */}
+            <button
+              onClick={onCartClick}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                borderRadius: '50%',
-                width: '24px',
-                height: '24px',
+                padding: '0.5rem 1rem',
+                borderRadius: '1.5rem',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                fontWeight: '600',
+                transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.8rem',
-                fontWeight: 'bold',
-                marginLeft: '0.25rem',
-                animation: 'pulse 2s infinite',
-                border: '2px solid #ffffff',
-                boxShadow: '0 2px 8px rgba(21, 128, 61, 0.4)'
-              }}>
-                {cartCount}
-              </span>
-            )}
-          </button>
+                gap: '0.5rem'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+            >
+              <span style={{ fontSize: '1.1rem' }}>🛒</span>
+              <span>Mi Carrito</span>
+              {cartCount > 0 && (
+                <span style={{
+                  backgroundColor: '#ffffff',
+                  color: '#16a34a',
+                  borderRadius: '50%',
+                  width: '22px',
+                  height: '22px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: '700',
+                  marginLeft: '0.25rem',
+                  animation: 'pulse 2s infinite',
+                  border: '1px solid rgba(255, 255, 255, 0.3)'
+                }}>
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
         
         <nav style={{ marginTop: '0.5rem' }}>
@@ -178,6 +216,12 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
       }}>
         <p style={{ margin: 0 }}>© 2025 PuraNatura - Terapias Naturales</p>
       </footer>
+
+      {/* Modal de autenticación */}
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </div>
   );
 };
