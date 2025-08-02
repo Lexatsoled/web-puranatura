@@ -8,6 +8,20 @@ export interface Product {
   benefits?: string[];
   inStock: boolean;
   featured?: boolean;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  brand?: string;
+  sku?: string;
+  ingredients?: string[];
+  nutrition?: {
+    servingSize: string;
+    servingsPerContainer: number;
+    nutritionalInfo: {
+      name: string;
+      amount: string;
+      dailyValue?: string;
+    }[];
+  };
 }
 
 export interface ProductImage {
