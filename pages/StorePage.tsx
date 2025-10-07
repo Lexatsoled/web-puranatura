@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { products, productCategories } from '../data/products';
+import { products, productCategories, systems } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import { SortOption } from '../src/types/product';
 import { useNavigationState } from '../src/hooks/useNavigationState';
@@ -17,40 +17,6 @@ const StorePage: React.FC = () => {
     saveNavigationState, 
     getNavigationState 
   } = useNavigationState();
-
-  // Sistemas sinérgicos disponibles
-  const synergisticSystems = [
-    {
-      id: 'energia-natural',
-      name: '⚡ Sistema Energía Natural',
-      productIds: ['3', 'pr-collagen-peptides', '2', '102', '105'] // Vitamina K2, Colágeno, Vitamina B12, CoQ10, Magnesio
-    },
-    {
-      id: 'anti-edad',
-      name: '🌿 Sistema Anti-Edad',
-      productIds: ['pr-collagen-peptides', '1', 'pr-bamboo-extract', '9', 'pr-vitamin-e'] // Colágeno, Vitamina C, Bambú, Ácido Hialurónico, Vitamina E
-    },
-    {
-      id: 'articular-avanzado',
-      name: '🏗️ Sistema Articular Avanzado',
-      productIds: ['5', 'pr-collagen-peptides', 'pr-bamboo-extract', 'pr-turmeric-advanced'] // Glucosamina+Condroitina, Colágeno, Bambú, Cúrcuma
-    },
-    {
-      id: 'inmunologico-avanzado',
-      name: '🛡️ Sistema Inmunológico Avanzado',
-      productIds: ['1', '4', '3', '10', '6'] // Vitamina C, Vitamina D3, Vitamina K2, Triple Extracto de Hongos, Ultimate Flora
-    },
-    {
-      id: 'cardiovascular-integral',
-      name: '❤️ Sistema Cardiovascular Integral',
-      productIds: ['102', '105', 'pr-iodine', '1', '4'] // CoQ10, Magnesio, Ajo, Vitamina C, Vitamina D3
-    },
-    {
-      id: 'oseo-mineral',
-      name: '🦴 Sistema Óseo Mineral',
-      productIds: ['8', '4', '3', '105', '1'] // Calcio+Magnesio, Vitamina D3, Vitamina K2, Magnesio, Vitamina C
-    }
-  ];
 
   // Manejar parámetros de URL para sistemas sinérgicos
   useEffect(() => {
@@ -130,12 +96,12 @@ const StorePage: React.FC = () => {
     // Filter by category or synergistic system
     if (selectedCategory !== 'todos' && selectedCategory !== 'Todos') {
       if (selectedCategory.startsWith('sistema-')) {
-        // Filtrar por sistema sinérgico
+        // Filtrar por sistema sinérgico usando systems de data/products
         const systemId = selectedCategory.replace('sistema-', '');
-        const system = synergisticSystems.find(s => s.id === systemId);
+        const system = systems.find(s => s.id === systemId);
         if (system) {
           filtered = filtered.filter(product => 
-            system.productIds.includes(product.id)
+            system.products.includes(product.id)
           );
         }
       } else {
@@ -259,7 +225,7 @@ const StorePage: React.FC = () => {
             >
               {/* Sistemas Sinérgicos */}
               <optgroup label="🧬 Sistemas Sinérgicos">
-                {synergisticSystems.map((system) => (
+                {systems.map((system) => (
                   <option key={`sistema-${system.id}`} value={`sistema-${system.id}`}>
                     {system.name}
                   </option>
