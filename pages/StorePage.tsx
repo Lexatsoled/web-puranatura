@@ -1,33 +1,155 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { products, productCategories } from '../data/products';
 import ProductCard from '../components/ProductCard';
-import ProductDetailModal from '../components/ProductDetailModal';
-import { Product } from '../types';
-
-type SortOption =
-  | 'name-asc'
-  | 'name-desc'
-  | 'price-asc'
-  | 'price-desc'
-  | 'default';
+import { SortOption } from '../src/types/product';
+import { useNavigationState } from '../src/hooks/useNavigationState';
+import { useSearchParams } from 'react-router-dom';
 
 const StorePage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
+  const { 
+    saveNavigationState, 
+    getNavigationState 
+  } = useNavigationState();
+
+  // Sistemas sinérgicos disponibles
+  const synergisticSystems = [
+    {
+      id: 'energia-natural',
+      name: '⚡ Sistema Energía Natural',
+      productIds: ['3', 'pr-collagen-peptides', '2', '102', '105'] // Vitamina K2, Colágeno, Vitamina B12, CoQ10, Magnesio
+    },
+    {
+      id: 'anti-edad',
+      name: '🌿 Sistema Anti-Edad',
+      productIds: ['pr-collagen-peptides', '1', 'pr-bamboo-extract', '9', 'pr-vitamin-e'] // Colágeno, Vitamina C, Bambú, Ácido Hialurónico, Vitamina E
+    },
+    {
+      id: 'articular-avanzado',
+      name: '🏗️ Sistema Articular Avanzado',
+      productIds: ['5', 'pr-collagen-peptides', 'pr-bamboo-extract', 'pr-turmeric-advanced'] // Glucosamina+Condroitina, Colágeno, Bambú, Cúrcuma
+    },
+    {
+      id: 'inmunologico-avanzado',
+      name: '🛡️ Sistema Inmunológico Avanzado',
+      productIds: ['1', '4', '3', '10', '6'] // Vitamina C, Vitamina D3, Vitamina K2, Triple Extracto de Hongos, Ultimate Flora
+    },
+    {
+      id: 'cardiovascular-integral',
+      name: '❤️ Sistema Cardiovascular Integral',
+      productIds: ['102', '105', 'pr-iodine', '1', '4'] // CoQ10, Magnesio, Ajo, Vitamina C, Vitamina D3
+    },
+    {
+      id: 'oseo-mineral',
+      name: '🦴 Sistema Óseo Mineral',
+      productIds: ['8', '4', '3', '105', '1'] // Calcio+Magnesio, Vitamina D3, Vitamina K2, Magnesio, Vitamina C
+    }
+  ];
+
+  // Manejar parámetros de URL para sistemas sinérgicos
+  useEffect(() => {
+    const sistema = searchParams.get('sistema');
+    if (sistema) {
+      setSelectedCategory(`sistema-${sistema}`);
+    }
+  }, [searchParams]);
+
+  // Restaurar estado al cargar la página (SIN MANEJAR SCROLL)
+  useEffect(() => {
+    const savedState = getNavigationState();
+    
+    if (savedState && savedState.fromProductPage) {
+      // Solo restaurar filtros y paginación - ScrollManager maneja el scroll
+      setSelectedCategory(savedState.selectedCategory);
+      setSearchTerm(savedState.searchTerm);
+      setSortOption(savedState.sortOption as SortOption);
+      setCurrentPage(savedState.currentPage);
+      setItemsPerPage(savedState.itemsPerPage);
+      
+      // NO limpiar el estado aquí - ScrollManager lo hará después del scroll
+    }
+  }, [getNavigationState]);
+
+  // Guardar estado cada vez que cambie algo
+  useEffect(() => {
+    // Solo guardar si no estamos en proceso de restaurar estado
+    const savedState = getNavigationState();
+    const isRestoring = savedState && savedState.fromProductPage;
+    
+    if (!isRestoring) {
+      const stateToSave = {
+        selectedCategory,
+        searchTerm,
+        sortOption,
+        currentPage,
+        itemsPerPage,
+      };
+      
+      saveNavigationState(stateToSave);
+    }
+  }, [selectedCategory, searchTerm, sortOption, currentPage, itemsPerPage, saveNavigationState, getNavigationState]);
+
+  // Guardar estado antes de navegar
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const stateToSave = {
+        selectedCategory,
+        searchTerm,
+        sortOption,
+        currentPage,
+        itemsPerPage,
+      };
+      
+      saveNavigationState(stateToSave);
+    };
+
+    // Guardar en cambios de página/navegación
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [selectedCategory, searchTerm, sortOption, currentPage, itemsPerPage, saveNavigationState]);
+
+  // Función para obtener todas las categorías hijas de una categoría padre
+  const getChildCategories = (parentId: string): string[] => {
+    return productCategories
+      .filter(cat => cat.parent === parentId)
+      .map(cat => cat.id);
+  };
+
   const processedProducts = useMemo(() => {
     let filtered = products;
 
-    // Filter by category
-    if (selectedCategory !== 'Todos') {
-      filtered = filtered.filter(
-        (product) => product.category === selectedCategory,
-      );
+    // Filter by category or synergistic system
+    if (selectedCategory !== 'todos' && selectedCategory !== 'Todos') {
+      if (selectedCategory.startsWith('sistema-')) {
+        // Filtrar por sistema sinérgico
+        const systemId = selectedCategory.replace('sistema-', '');
+        const system = synergisticSystems.find(s => s.id === systemId);
+        if (system) {
+          filtered = filtered.filter(product => 
+            system.productIds.includes(product.id)
+          );
+        }
+      } else {
+        // Filtrar por categoría tradicional
+        const childCategories = getChildCategories(selectedCategory);
+        const categoriesToSearch = childCategories.length > 0 
+          ? [...childCategories, selectedCategory] 
+          : [selectedCategory];
+        
+        filtered = filtered.filter(
+          (product) => product.categories && 
+          product.categories.some(cat => categoriesToSearch.includes(cat))
+        );
+      }
     }
 
     // Filter by search term
@@ -66,16 +188,6 @@ const StorePage: React.FC = () => {
 
   const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
 
-  const handleViewDetails = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProduct(null);
-  };
-
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
     setCurrentPage(1);
@@ -99,7 +211,7 @@ const StorePage: React.FC = () => {
   };
 
   return (
-    <div className="bg-emerald-50 py-12">
+    <div className="bg-emerald-100 py-12">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold font-display text-green-800">
@@ -112,7 +224,7 @@ const StorePage: React.FC = () => {
         </div>
 
         {/* Controls Bar */}
-        <div className="bg-emerald-50/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200">
+        <div className="bg-emerald-100/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
             {/* Search */}
             <div className="relative">
@@ -138,22 +250,36 @@ const StorePage: React.FC = () => {
                 />
               </svg>
             </div>
-            {/* Category */}
+            {/* Category with Systems */}
             <select
               value={selectedCategory}
               onChange={handleCategoryChange}
+              aria-label="Filtrar por categoría"
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
-              {productCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
+              {/* Sistemas Sinérgicos */}
+              <optgroup label="🧬 Sistemas Sinérgicos">
+                {synergisticSystems.map((system) => (
+                  <option key={`sistema-${system.id}`} value={`sistema-${system.id}`}>
+                    {system.name}
+                  </option>
+                ))}
+              </optgroup>
+              
+              {/* Categorías tradicionales */}
+              <optgroup label="📂 Categorías Tradicionales">
+                {productCategories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </optgroup>
             </select>
             {/* Sort */}
             <select
               value={sortOption}
               onChange={handleSortChange}
+              aria-label="Ordenar productos"
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
               <option value="default">Ordenar por defecto</option>
@@ -166,6 +292,7 @@ const StorePage: React.FC = () => {
             <select
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
+              aria-label="Productos por página"
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
               <option value={12}>12 por página</option>
@@ -181,7 +308,6 @@ const StorePage: React.FC = () => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onViewDetails={handleViewDetails}
               />
             ))}
           </div>
@@ -219,11 +345,6 @@ const StorePage: React.FC = () => {
           </div>
         )}
       </div>
-      <ProductDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        product={selectedProduct}
-      />
     </div>
   );
 };

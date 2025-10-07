@@ -220,9 +220,10 @@ const FAQSection: React.FC<FAQSectionProps> = ({
                       transition={{ duration: 0.2 }}
                     >
                       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                        <p className="text-gray-600 whitespace-pre-line">
-                          {item.answer}
-                        </p>
+                        <div 
+                          className="text-gray-600"
+                          dangerouslySetInnerHTML={{ __html: item.answer }}
+                        />
                         {item.tags && item.tags.length > 0 && (
                           <div className="mt-4 flex flex-wrap gap-2">
                             {item.tags.map((tag) => (

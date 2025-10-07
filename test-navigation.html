@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sistema de Navegación</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Sistema de Navegación Persistente</h1>
+    
+    <div class="test-section">
+        <h3>🎯 Flujo de Test</h3>
+        <ol>
+            <li>Simular usuario en tienda (página 3, categoría, scroll)</li>
+            <li>Simular ir a producto</li>
+            <li>Simular "Volver a la lista"</li>
+            <li>Verificar que el estado se restore correctamente</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h3>💾 Estado SessionStorage</h3>
+        <button onclick="simulateStoreNavigation()">1. Simular Navegación en Tienda</button>
+        <button onclick="simulateProductPage()">2. Ir a Producto</button>
+        <button onclick="simulateBackToStore()">3. Volver a la Lista</button>
+        <button onclick="clearState()">🗑️ Limpiar Estado</button>
+        
+        <div id="state-display" style="margin-top: 10px; padding: 10px; background: #f8f9fa;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>📍 Scroll Position</h3>
+        <button onclick="setScrollPosition(1200)">Simular Scroll en Posición 1200px</button>
+        <button onclick="checkScrollPosition()">Verificar Posición Actual</button>
+        
+        <div id="scroll-display" style="margin-top: 10px; padding: 10px; background: #f8f9fa;"></div>
+        
+        <!-- Crear contenido para hacer scroll -->
+        <div style="height: 2000px; background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); margin-top: 20px;">
+            <p style="text-align: center; padding-top: 50px;">Contenido largo para probar scroll</p>
+            <div style="position: absolute; top: 1200px; left: 50%; transform: translateX(-50%); background: yellow; padding: 10px;">
+                📍 Posición 1200px (donde debe volver el scroll)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'puranatura_navigation_state';
+        
+        function updateDisplay() {
+            const state = sessionStorage.getItem(STORAGE_KEY);
+            document.getElementById('state-display').innerHTML = 
+                state ? `<pre>${JSON.stringify(JSON.parse(state), null, 2)}</pre>` : 'No hay estado guardado';
+        }
+
+        function simulateStoreNavigation() {
+            const storeState = {
+                selectedCategory: 'vitaminas',
+                searchTerm: 'B12',
+                sortOption: 'name-asc',
+                currentPage: 3,
+                itemsPerPage: 12,
+                scrollPosition: window.scrollY,
+                fromProductPage: false
+            };
+            
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(storeState));
+            updateDisplay();
+            
+            document.querySelector('.test-section').className = 'test-section success';
+            alert('✅ Estado de tienda simulado: Categoría "vitaminas", página 3, búsqueda "B12"');
+        }
+
+        function simulateProductPage() {
+            // Simular ir a página de producto - no cambiar el estado
+            alert('👀 Simulando navegación a página de producto...');
+        }
+
+        function simulateBackToStore() {
+            const currentState = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+            if (currentState) {
+                currentState.fromProductPage = true;
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));
+                updateDisplay();
+                
+                alert('🔄 Simulando "Volver a la lista" - Estado marcado con fromProductPage: true');
+                
+                // Simular lo que haría el StorePage
+                setTimeout(() => {
+                    window.scrollTo({ top: currentState.scrollPosition, behavior: 'smooth' });
+                    alert(`📍 Scroll restaurado a posición: ${currentState.scrollPosition}px`);
+                }, 500);
+            }
+        }
+
+        function clearState() {
+            sessionStorage.removeItem(STORAGE_KEY);
+            updateDisplay();
+            alert('🗑️ Estado limpiado');
+        }
+
+        function setScrollPosition(pos) {
+            window.scrollTo({ top: pos, behavior: 'smooth' });
+            setTimeout(() => {
+                checkScrollPosition();
+            }, 1000);
+        }
+
+        function checkScrollPosition() {
+            const pos = window.scrollY;
+            document.getElementById('scroll-display').innerHTML = 
+                `Posición actual del scroll: <strong>${pos}px</strong>`;
+        }
+
+        // Inicializar display
+        updateDisplay();
+        checkScrollPosition();
+
+        // Actualizar posición de scroll en tiempo real
+        window.addEventListener('scroll', () => {
+            checkScrollPosition();
+        });
+    </script>
+</body>
+</html>

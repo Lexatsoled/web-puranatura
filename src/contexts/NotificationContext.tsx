@@ -94,7 +94,7 @@ const NotificationContainer: React.FC<{
               notification.type === 'error'
                 ? 'bg-red-50 border-l-4 border-red-500'
                 : notification.type === 'success'
-                ? 'bg-green-50 border-l-4 border-green-500'
+                ? 'bg-green-100 border-l-4 border-green-500'
                 : notification.type === 'warning'
                 ? 'bg-yellow-50 border-l-4 border-yellow-500'
                 : 'bg-blue-50 border-l-4 border-blue-500'

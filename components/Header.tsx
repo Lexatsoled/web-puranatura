@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useCartStore } from '../src/store/cartStore';
 
-interface HeaderProps {
-  onCartClick: () => void;
-}
-
-const pageLinks: { name: string; path: string }[] = [
+const menuItems: { name: string; path: string; highlight?: boolean }[] = [
   { name: 'Inicio', path: '/' },
   { name: 'Sobre Nosotros', path: '/sobre-nosotros' },
   { name: 'Servicios', path: '/servicios' },
+  { name: '⚡ Sistemas Sinérgicos', path: '/sistemas-sinergicos', highlight: true },
   { name: 'Tienda', path: '/tienda' },
   { name: 'Testimonios', path: '/testimonios' },
   { name: 'Blog', path: '/blog' },
   { name: 'Contacto', path: '/contacto' },
 ];
 
-const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
+const NavLink: React.FC<{ to: string; children: React.ReactNode; highlight?: boolean }> = ({ to, children, highlight }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
+
+  if (highlight) {
+    return (
+      <Link
+        to={to}
+        className={`px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:scale-105 ${
+          isActive ? 'ring-2 ring-green-300' : ''
+        }`}
+      >
+        {children}
+      </Link>
+    );
+  }
 
   return (
     <Link
@@ -30,9 +40,14 @@ const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, chil
   );
 };
 
-const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
-  const { cartCount } = useCart();
+const Header: React.FC = () => {
+  const { cart } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCartClick = () => {
+    navigate('/carrito');
+  };
 
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
@@ -41,16 +56,18 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
           PuraNatura
         </Link>
         <nav className="hidden lg:flex items-center space-x-2">
-          {pageLinks.map((link) => (
-            <NavLink key={link.path} to={link.path}>
-              {link.name}
+          {menuItems.map((item) => (
+            <NavLink key={item.path} to={item.path} highlight={item.highlight}>
+              {item.name}
             </NavLink>
           ))}
         </nav>
         <div className="flex items-center">
           <button
-            onClick={onCartClick}
+            onClick={handleCartClick}
             className="relative text-gray-600 hover:text-green-600 transition-colors duration-300 mr-4"
+            aria-label="Ver carrito de compras"
+            title="Carrito de compras"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -66,15 +83,17 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            {cartCount > 0 && (
+            {cart.count > 0 && (
               <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {cartCount}
+                {cart.count}
               </span>
             )}
           </button>
           <button
             className="lg:hidden text-gray-600"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Abrir menú de navegación"
+            title="Menú"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -96,14 +115,18 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
       {isMenuOpen && (
         <div className="lg:hidden bg-white/95">
           <nav className="flex flex-col items-center py-4">
-            {pageLinks.map((link) => (
+            {menuItems.map((item) => (
               <Link
-                key={link.path}
-                to={link.path}
+                key={item.path}
+                to={item.path}
                 onClick={() => setIsMenuOpen(false)}
-                className="block w-full text-center py-2 text-gray-700 hover:bg-green-100"
+                className={`block w-full text-center py-2 ${
+                  item.highlight
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold mx-2 my-1 rounded-lg'
+                    : 'text-gray-700 hover:bg-green-100'
+                }`}
               >
-                {link.name}
+                {item.name}
               </Link>
             ))}
           </nav>

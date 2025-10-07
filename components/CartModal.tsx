@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from '../contexts/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { useCartStore } from '../src/store/cartStore';
+import { showErrorNotification } from '../src/store/notificationStore';
+import './CartModal.css';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -8,18 +11,16 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const {
-    cartItems,
+    cart,
     removeFromCart,
     updateQuantity,
-    totalPrice,
     clearCart,
-    cartCount,
-  } = useCart();
+    hasItems,
+  } = useCartStore();
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentComplete, setPaymentComplete] = useState(false);
   
   // Prevenir scroll cuando el modal está abierto
   useEffect(() => {
@@ -27,10 +28,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
-      // Resetear estados cuando se cierre el modal
       setIsConfirmingClear(false);
-      setIsProcessingPayment(false);
-      setPaymentComplete(false);
     }
     return () => {
       document.body.style.overflow = 'unset';
@@ -50,14 +48,18 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
 
     if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('keydown', handleKeyDown);
     }
 
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, isConfirmingClear, onClose]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (newQuantity >= 1) {
+    if (newQuantity < 1) {
+      removeFromCart(productId);
+    } else {
       updateQuantity(productId, newQuantity);
     }
   };
@@ -65,213 +67,353 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const handleClearCart = () => {
     clearCart();
     setIsConfirmingClear(false);
+    onClose();
   };
 
-  const handleProceedToPayment = async () => {
-    setIsProcessingPayment(true);
-    
-    // Simular procesamiento de pago (3 segundos)
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    // Simular éxito o fallo aleatoriamente (90% éxito)
-    const paymentSuccess = Math.random() > 0.1;
-    
-    if (paymentSuccess) {
-      setPaymentComplete(true);
-      // Limpiar carrito después del pago exitoso
-      setTimeout(() => {
-        clearCart();
-        setPaymentComplete(false);
-        setIsProcessingPayment(false);
-        onClose();
-      }, 2000);
-    } else {
-      setIsProcessingPayment(false);
-      alert('Error en el procesamiento del pago. Por favor, inténtalo de nuevo.');
+  const handleCheckout = () => {
+    if (!hasItems()) {
+      showErrorNotification('Tu carrito está vacío');
+      return;
+    }
+    onClose();
+    navigate('/checkout');
+  };
+
+  const handleContinueShopping = () => {
+    onClose();
+    navigate('/tienda');
+  };
+
+  const formatPrice = (price: number) => {
+    return `RD$ ${price.toFixed(2)}`;
+  };
+
+  const calculateWeight = () => {
+    const totalWeight = cart.items.reduce((total, item) => {
+      // Estimamos 0.2 kg por producto (ajustable según producto real)
+      return total + (item.quantity * 0.2);
+    }, 0);
+    return totalWeight;
+  };
+
+  const calculateSavings = () => {
+    // Simulamos un ahorro del 15% como ejemplo
+    const originalTotal = cart.total / 0.85;
+    return originalTotal - cart.total;
+  };
+
+  const modalVariants = {
+    hidden: { 
+      opacity: 0,
+      scale: 0.75,
+      y: 100
+    },
+    visible: { 
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        type: "spring" as const,
+        damping: 25,
+        stiffness: 300
+      }
+    },
+    exit: { 
+      opacity: 0,
+      scale: 0.75,
+      y: 100,
+      transition: {
+        duration: 0.2
+      }
     }
   };
 
-  if (!isOpen) return null;
+  const backdropVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 }
+  };
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="text-xl font-semibold">
-              {isProcessingPayment 
-                ? 'Procesando Pago' 
-                : paymentComplete 
-                ? '¡Pago Exitoso!' 
-                : `Carrito (${cartCount} ${cartCount === 1 ? 'artículo' : 'artículos'})`
-              }
-            </h2>
-            <button
+      {isOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            {/* Backdrop */}
+            <motion.div
+              variants={backdropVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 rounded"
-              disabled={isProcessingPayment}
+            />
+
+            {/* Modal - Estilo Piping Rock Compacto */}
+            <motion.div
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="inline-block align-bottom bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full"
+              onClick={(e) => e.stopPropagation()}
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Contenido */}
-          <div className="p-4 overflow-y-auto max-h-96">
-            {isProcessingPayment ? (
-              <div className="text-center py-12">
-                <div className="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Procesando pago...</h3>
-                <p className="text-gray-600">Por favor espera mientras procesamos tu pedido</p>
-              </div>
-            ) : paymentComplete ? (
-              <div className="text-center py-12">
-                <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+              {/* Header Simple - Sin bordes */}
+              <div className="bg-white px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-normal text-gray-900">
+                    Carrito de Compras
+                  </h3>
+                  <button
+                    onClick={onClose}
+                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    aria-label="Cerrar carrito"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-                <h3 className="text-lg font-semibold text-green-800 mb-2">¡Pago completado!</h3>
-                <p className="text-gray-600">Tu pedido ha sido procesado exitosamente</p>
               </div>
-            ) : cartItems.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="text-gray-400 mb-2">
-                  <svg className="h-12 w-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                </div>
-                <p className="text-gray-600">Tu carrito está vacío</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div key={item.product.id} className="flex items-center space-x-3 border-b pb-3">
-                    <div className="flex-shrink-0">
-                      {item.product.images?.[0] && (
-                        <img
-                          src={item.product.images[0].thumbnail}
-                          alt={item.product.name}
-                          className="h-12 w-12 object-cover rounded"
-                        />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-gray-900 truncate">
-                        {item.product.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        €{item.product.price.toFixed(2)}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
-                        className="p-1 hover:bg-gray-100 rounded"
-                        disabled={item.quantity <= 1}
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                        </svg>
-                      </button>
-                      <span className="text-sm font-medium w-8 text-center">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                        className="p-1 hover:bg-gray-100 rounded"
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => removeFromCart(item.product.id)}
-                        className="p-1 hover:bg-red-100 text-red-600 rounded ml-2"
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
 
-          {/* Footer */}
-          {cartItems.length > 0 && !isProcessingPayment && !paymentComplete && (
-            <div className="border-t p-4">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-lg font-semibold">Total:</span>
-                <span className="text-lg font-bold text-green-600">
-                  €{totalPrice.toFixed(2)}
-                </span>
-              </div>
-              
-              <div className="space-y-2">
-                {!isConfirmingClear ? (
-                  <>
-                    <button 
-                      onClick={handleProceedToPayment}
-                      className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
-                    >
-                      Proceder al Pago
-                    </button>
-                    <button
-                      onClick={() => setIsConfirmingClear(true)}
-                      className="w-full text-gray-600 py-1 px-4 hover:text-red-600 transition-colors text-sm"
-                    >
-                      Vaciar carrito
-                    </button>
-                  </>
-                ) : (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex items-center mb-3">
-                      <svg className="h-5 w-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 15.5c-.77.833.192 2.5 1.732 2.5z" />
+              {/* Content - Estilo Lista Compacta */}
+              <div className="bg-white">
+                {cart.items.length === 0 ? (
+                  /* Empty Cart */
+                  <div className="text-center py-8 px-4">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                       </svg>
-                      <h3 className="text-red-800 font-semibold">¿Vaciar carrito?</h3>
                     </div>
-                    <p className="text-red-700 text-sm mb-4">
-                      Se eliminarán todos los productos del carrito. Esta acción no se puede deshacer.
-                    </p>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={handleClearCart}
-                        className="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
-                      >
-                        Sí, vaciar carrito
-                      </button>
-                      <button
-                        onClick={() => setIsConfirmingClear(false)}
-                        className="flex-1 bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
-                      >
-                        Cancelar
-                      </button>
+                    <h4 className="text-base font-medium text-gray-900 mb-1">Tu carrito está vacío</h4>
+                    <p className="text-sm text-gray-500 mb-4">¡Agrega algunos productos!</p>
+                    <button
+                      onClick={handleContinueShopping}
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded"
+                    >
+                      Explorar productos
+                    </button>
+                  </div>
+                ) : (
+                  /* Cart Items - Layout Piping Rock */
+                  <div>
+                    <div className="max-h-64 overflow-y-auto">
+                      {cart.items.map((item) => (
+                        <div
+                          key={item.product.id}
+                          className="flex items-start p-3 border-b border-gray-100 last:border-b-0"
+                        >
+                          {/* Product Image - Más pequeña */}
+                          <div className="flex-shrink-0 mr-3">
+                            <img
+                              src={item.product.images[0]?.thumbnail || item.product.images[0]?.full}
+                              alt={item.product.name}
+                              className="w-12 h-12 object-cover rounded"
+                            />
+                          </div>
+
+                          {/* Product Info - Layout vertical compacto */}
+                          <div className="flex-1 min-w-0">
+                            {/* Product Name */}
+                            <h4 className="text-sm font-normal text-gray-900 leading-tight mb-1 line-clamp-2">
+                              {item.product.name}
+                            </h4>
+                            
+                            {/* Weight Info */}
+                            <p className="text-xs text-gray-500 mb-1">
+                              Peso: {(item.quantity * 0.35).toFixed(1)} lb ({(item.quantity * 0.18).toFixed(2)} kg)
+                            </p>
+                            
+                            {/* Price Line */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center space-x-2">
+                                <span className="text-base font-bold text-red-600">
+                                  {formatPrice(item.product.price)}
+                                </span>
+                                {item.product.compareAtPrice && item.product.compareAtPrice > item.product.price && (
+                                  <span className="text-xs text-gray-400 line-through">
+                                    {formatPrice(item.product.compareAtPrice)}
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {/* Quantity Controls - Más compactos */}
+                              <div className="flex items-center">
+                                <button
+                                  onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                                  className="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 focus:outline-none disabled:opacity-50"
+                                  disabled={item.quantity <= 1}
+                                  title="Disminuir cantidad"
+                                  aria-label="Disminuir cantidad"
+                                >
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M20 12H4" />
+                                  </svg>
+                                </button>
+                                
+                                <span className="w-8 text-center text-sm font-medium text-gray-900">
+                                  {item.quantity}
+                                </span>
+                                
+                                <button
+                                  onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                                  className="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 focus:outline-none disabled:opacity-50"
+                                  disabled={item.quantity >= item.product.stock}
+                                  title="Aumentar cantidad"
+                                  aria-label="Aumentar cantidad"
+                                >
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                            
+                            {/* Remove Link */}
+                            <div className="text-right">
+                              <button
+                                onClick={() => removeFromCart(item.product.id)}
+                                className="text-xs text-gray-500 hover:text-red-600 underline"
+                              >
+                                Quitar
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Summary - Estilo Piping Rock */}
+                    <div className="bg-gray-50 border-t border-gray-200">
+                      {/* Weight and Total Section */}
+                      <div className="px-4 py-3 space-y-2">
+                        {/* Total */}
+                        <div className="text-center">
+                          <div className="text-sm text-gray-600 mb-1">Total</div>
+                          <div className="text-2xl font-bold text-red-600">
+                            {formatPrice(cart.total)}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Peso Est. {calculateWeight().toFixed(1)} lb ({(calculateWeight() * 0.45).toFixed(2)} kg)
+                          </div>
+                        </div>
+
+                        {/* Savings */}
+                        {calculateSavings() > 0 && (
+                          <div className="text-center py-2">
+                            <p className="text-sm font-bold text-green-600">
+                              ¡ Has ahorrado {formatPrice(calculateSavings())} !
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Free shipping progress */}
+                        {cart.total < 3000 && cart.total > 0 && (
+                          <div className="bg-blue-50 border border-blue-200 rounded p-2">
+                            <p className="text-xs text-blue-700 text-center mb-1">
+                              Añade {formatPrice(3000 - cart.total)} más para <strong>envío gratis</strong>
+                            </p>
+                            <div className="w-full bg-blue-200 rounded-full h-1.5">
+                              <div 
+                                className={`progress-bar bg-blue-600 h-1.5 rounded-full transition-all duration-300`}
+                                data-width={Math.round(Math.min((cart.total / 3000) * 100, 100))}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+
+                        {cart.total >= 3000 && (
+                          <div className="bg-green-100 border border-green-200 rounded p-2">
+                            <p className="text-xs text-green-700 text-center flex items-center justify-center">
+                              <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                              <strong>Envío gratis incluido</strong>
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Legal text */}
+                        <p className="text-xs text-gray-500 text-center leading-tight pt-2">
+                          Al realizar un pedido, acepta las Condiciones de uso y la Política de confidencialidad de Puranatura.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
-            </div>
-          )}
-        </motion.div>
-      </motion.div>
+
+              {/* Footer - Exactamente como Piping Rock */}
+              {cart.items.length > 0 && (
+                <div className="bg-white px-4 py-4 border-t border-gray-200">
+                  <div className="space-y-3">
+                    {/* Main Action Buttons */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => {
+                          onClose();
+                          navigate('/carrito');
+                        }}
+                        className="w-full py-2.5 px-4 border border-gray-400 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors"
+                      >
+                        Ver carrito
+                      </button>
+                      
+                      <button
+                        onClick={handleCheckout}
+                        className="w-full py-2.5 px-4 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none transition-colors"
+                      >
+                        Caja
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Confirmation Dialog */}
+              <AnimatePresence>
+                {isConfirmingClear && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.9, opacity: 0 }}
+                      className="bg-white rounded-lg p-6 m-4 max-w-sm w-full"
+                    >
+                      <h4 className="text-lg font-medium text-gray-900 mb-2">
+                        Confirmar acción
+                      </h4>
+                      <p className="text-sm text-gray-500 mb-4">
+                        ¿Estás seguro de que quieres vaciar el carrito? Esta acción no se puede deshacer.
+                      </p>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setIsConfirmingClear(false)}
+                          className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleClearCart}
+                          className="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        >
+                          Vaciar
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </div>
+      )}
     </AnimatePresence>
   );
 };

@@ -4,14 +4,13 @@ import Header from './Header';
 import Footer from './Footer';
 
 interface LayoutProps {
-  onCartClick: () => void;
   children?: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ onCartClick, children }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-emerald-50 text-gray-800">
-      <Header onCartClick={onCartClick} />
+    <div className="flex flex-col min-h-screen bg-emerald-100 text-gray-800">
+      <Header />
       <main className="flex-grow">
         {children || <Outlet />}
       </main>

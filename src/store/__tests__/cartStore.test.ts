@@ -7,7 +7,7 @@ const mockProduct = {
   price: 99.99,
   images: [{ full: 'test.jpg', thumbnail: 'test-thumb.jpg' }],
   description: 'Test Description',
-  category: 'Test Category',
+  categories: ['Test Category'],
   stock: 10,
   sku: 'TEST-001',
   tags: ['test'],

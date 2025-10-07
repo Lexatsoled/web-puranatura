@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { OptimizedBackgroundImage } from '../components/OptimizedBackgroundImage';
+import { useScrollToTop } from '../hooks/useScrollToTop';
 
 const HomePage: React.FC = () => {
+  // Reset scroll to top when accessing home page
+  useScrollToTop();
+
   return (
     <div>
       {/* Hero Section */}
@@ -16,7 +20,7 @@ const HomePage: React.FC = () => {
             Bienestar que Nace de la Tierra
           </h1>
           <p className="text-lg md:text-xl max-w-2xl mb-8">
-            En PuraNatura, creemos en el poder curativo de la naturaleza para
+            En Pureza Naturalis, creemos en el poder curativo de la naturaleza para
             restaurar el equilibrio de tu cuerpo y mente.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -37,7 +41,7 @@ const HomePage: React.FC = () => {
       </OptimizedBackgroundImage>
 
       {/* Featured Section */}
-      <section className="py-20 bg-emerald-50">
+      <section className="py-20 bg-emerald-100">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold font-display text-green-800 mb-4">
             Tu Camino Hacia la Salud Holística

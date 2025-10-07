@@ -32,7 +32,7 @@ export const categoryRoute: DynamicRoute<CategoryParams> = {
   path: '/tienda/categoria/:category',
   async getMetadata({ category }) {
     return {
-      title: `${category} | PuraNatura`,
+      title: `${category} | Pureza Naturalis`,
       description: `Descubre nuestra selección de productos naturales en la categoría ${category}. Productos de alta calidad para tu bienestar.`,
       ogType: 'website',
       structuredData: {
@@ -63,7 +63,7 @@ export const productRoute: DynamicRoute<ProductParams> = {
     const product = await fetch(`/api/products/${id}`).then(res => res.json()) as Product;
     
     return {
-      title: `${product.name} | PuraNatura`,
+      title: `${product.name} | Pureza Naturalis`,
       description: product.seoDescription || product.description,
       ogType: 'product',
       ogImage: product.images[0]?.full,
@@ -96,7 +96,7 @@ export const blogPostRoute: DynamicRoute<BlogPostParams> = {
     const post = await fetch(`/api/blog/${slug}`).then(res => res.json());
     
     return {
-      title: `${post.title} | Blog PuraNatura`,
+      title: `${post.title} | Blog Pureza Naturalis`,
       description: post.excerpt,
       ogType: 'article',
       ogImage: post.featuredImage,
@@ -109,7 +109,7 @@ export const blogPostRoute: DynamicRoute<BlogPostParams> = {
         datePublished: post.publishDate,
         author: {
           '@type': 'Organization',
-          name: 'PuraNatura',
+          name: 'Pureza Naturalis',
         },
       },
     };

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useCart } from '../contexts/CartContext';
-import { useWishlist } from '../contexts/WishlistContext';
+import { useCartStore } from '../src/store/cartStore';
+import { useWishlistStore } from '../src/store/wishlistStore';
 import { motion } from 'framer-motion';
 
 const WishlistPage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
-  const { addToCart } = useCart();
-  const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
+  const { addToCart } = useCartStore();
+  const { items: wishlistItems, removeItem, clearWishlist } = useWishlistStore();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   if (!isAuthenticated || !user) {
@@ -26,12 +26,12 @@ const WishlistPage: React.FC = () => {
   }
 
   const handleRemoveFromWishlist = (itemId: string) => {
-    removeFromWishlist(itemId);
+    removeItem(itemId);
     setSelectedItems(prev => prev.filter(id => id !== itemId));
   };
 
   const handleAddToCart = (item: any) => {
-    addToCart(item.product);
+    addToCart(item);
   };
 
   const handleSelectItem = (itemId: string) => {
@@ -52,18 +52,18 @@ const WishlistPage: React.FC = () => {
 
   const handleRemoveSelected = () => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar ${selectedItems.length} productos de tu lista de deseos?`)) {
-      selectedItems.forEach(itemId => removeFromWishlist(itemId));
+      selectedItems.forEach(itemId => removeItem(itemId));
       setSelectedItems([]);
     }
   };
 
   const handleAddSelectedToCart = () => {
     const selectedInStockItems = wishlistItems.filter(item =>
-      selectedItems.includes(item.id) && item.inStock
+      selectedItems.includes(item.id) && item.stock > 0
     );
 
     selectedInStockItems.forEach(item => {
-      addToCart(item.product);
+      addToCart(item);
     });
 
     if (selectedInStockItems.length > 0) {
@@ -71,13 +71,7 @@ const WishlistPage: React.FC = () => {
     }
   };
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date);
-  };
+  // Lista vacía
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -166,7 +160,7 @@ const WishlistPage: React.FC = () => {
                   
                   <div className="flex-shrink-0">
                     <img
-                      src={item.image}
+                      src={item.images[0]?.thumbnail || item.images[0]?.full}
                       alt={item.name}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
@@ -174,22 +168,17 @@ const WishlistPage: React.FC = () => {
                   
                   <div className="flex-grow">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-600">{item.category}</p>
+                    <p className="text-sm text-gray-600">{item.categories.join(', ')}</p>
                     <p className="text-xs text-gray-500 mt-1">
-                      Agregado el {formatDate(item.addedDate)}
+                      En lista de deseos
                     </p>
                     
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-lg font-bold text-green-700">
                         DOP ${item.price.toFixed(2)}
                       </span>
-                      {item.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through">
-                          DOP ${item.originalPrice.toFixed(2)}
-                        </span>
-                      )}
                       
-                      {!item.inStock && (
+                      {item.stock === 0 && (
                         <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
                           Agotado
                         </span>
@@ -200,14 +189,14 @@ const WishlistPage: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleAddToCart(item)}
-                      disabled={!item.inStock}
+                      disabled={item.stock === 0}
                       className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                        item.inStock
+                        item.stock > 0
                           ? 'bg-green-600 text-white hover:bg-green-700'
                           : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       }`}
                     >
-                      {item.inStock ? 'Agregar al carrito' : 'No disponible'}
+                      {item.stock > 0 ? 'Agregar al carrito' : 'No disponible'}
                     </button>
                     
                     <button
@@ -242,7 +231,7 @@ const WishlistPage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Total de productos:</span>
                 <span className="font-medium">
-                  {wishlistItems.length} productos • {wishlistItems.filter(item => item.inStock).length} disponibles
+                  {wishlistItems.length} productos • {wishlistItems.filter(item => item.stock > 0).length} disponibles
                 </span>
               </div>
               

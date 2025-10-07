@@ -221,7 +221,7 @@ const NotFound: React.FC<NotFoundProps> = ({
                       <Link
                         key={category.id}
                         to={`/category/${category.id}`}
-                        className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border border-gray-200"
+                        className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors border border-gray-200"
                       >
                         {category.name}
                       </Link>

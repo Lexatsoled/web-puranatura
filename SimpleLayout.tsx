@@ -1,20 +1,24 @@
 import React, { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useCart } from './contexts/CartContext';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useCartStore } from './src/store/cartStore';
 import { useAuth } from './contexts/AuthContext';
 import AuthModal from './components/AuthModal';
 import UserMenu from './components/UserMenu';
 
 interface SimpleLayoutProps {
   children: ReactNode;
-  onCartClick: () => void;
 }
 
-const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) => {
+const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
   const location = useLocation();
-  const { cartCount } = useCart();
+  const navigate = useNavigate();
+  const { cart } = useCartStore();
   const { isAuthenticated } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleCartClick = () => {
+    navigate('/carrito');
+  };
   
   const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
     const isActive = location.pathname === to;
@@ -93,14 +97,25 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
           width: '100%',
           maxWidth: '1200px'
         }}>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: '1.8rem', 
-            fontWeight: '700',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1
           }}>
-            🌿 PuraNatura
-          </h1>
+            <img 
+              src="/Logo Pureza Naturalis largo.jpg" 
+              alt="Pureza Naturalis" 
+              style={{ 
+                height: '70px', 
+                objectFit: 'contain',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                padding: '8px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+              }} 
+            />
+          </div>
           
           {/* Controles del header - Autenticación y Carrito */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -142,7 +157,7 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
             
             {/* Botón del carrito con estilo consistente */}
             <button
-              onClick={onCartClick}
+              onClick={handleCartClick}
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 border: '2px solid rgba(255, 255, 255, 0.3)',
@@ -167,8 +182,15 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
               }}
             >
               <span style={{ fontSize: '1.1rem' }}>🛒</span>
-              <span>Mi Carrito</span>
-              {cartCount > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: '1.2' }}>
+                <span>Mi Carrito</span>
+                {cart.count > 0 && (
+                  <span style={{ fontSize: '0.75rem', opacity: '0.9' }}>
+                    ${cart.total.toFixed(2)}
+                  </span>
+                )}
+              </div>
+              {cart.count > 0 && (
                 <span style={{
                   backgroundColor: '#ffffff',
                   color: '#16a34a',
@@ -184,7 +206,7 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
                   animation: 'pulse 2s infinite',
                   border: '1px solid rgba(255, 255, 255, 0.3)'
                 }}>
-                  {cartCount}
+                  {cart.count}
                 </span>
               )}
             </button>
@@ -195,6 +217,12 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
           <NavLink to="/">Inicio</NavLink>
           <NavLink to="/sobre-nosotros">Sobre Nosotros</NavLink>
           <NavLink to="/servicios">Servicios</NavLink>
+          <Link 
+            to="/sistemas-sinergicos"
+            className="px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            ⚡ Sistemas Sinérgicos
+          </Link>
           <NavLink to="/tienda">Tienda</NavLink>
           <NavLink to="/testimonios">Testimonios</NavLink>
           <NavLink to="/blog">Blog</NavLink>
@@ -214,7 +242,7 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children, onCartClick }) =>
         padding: '1rem', 
         textAlign: 'center' 
       }}>
-        <p style={{ margin: 0 }}>© 2025 PuraNatura - Terapias Naturales</p>
+        <p style={{ margin: 0 }}>© 2025 Pureza Naturalis - Terapias Naturales</p>
       </footer>
 
       {/* Modal de autenticación */}

@@ -16,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
     { id: '2', label: 'Sobre Nosotros', path: '/sobre-nosotros' },
     { id: '3', label: 'Servicios', path: '/servicios' },
     { id: '4', label: 'Tienda', path: '/tienda' },
+    { id: '8', label: 'Sistemas Sinérgicos', path: '/sistemas-sinergicos', highlight: true },
     { id: '5', label: 'Testimonios', path: '/testimonios' },
     { id: '6', label: 'Blog', path: '/blog' },
     { id: '7', label: 'Contacto', path: '/contacto' },
@@ -32,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <div className="text-2xl font-bold text-green-600">
-              PuraNatura
+              Pureza Naturalis
             </div>
           </Link>
 
@@ -42,11 +43,13 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
               <Link
                 key={item.id}
                 to={item.path}
-                className={`text-gray-700 hover:text-green-600 font-medium transition-colors ${
-                  location.pathname === item.path ? 'text-green-600' : ''
+                className={`font-medium transition-colors ${
+                  item.highlight 
+                    ? 'text-white bg-gradient-to-r from-green-500 to-emerald-600 px-3 py-2 rounded-full shadow-md hover:from-green-600 hover:to-emerald-700 transform hover:scale-105'
+                    : `text-gray-700 hover:text-green-600 ${location.pathname === item.path ? 'text-green-600' : ''}`
                 }`}
               >
-                {item.label}
+                {item.highlight && '⚡'} {item.label}
               </Link>
             ))}
           </div>

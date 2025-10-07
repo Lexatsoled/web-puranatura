@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Featured Section */}
-      <section className="py-20 bg-emerald-50">
+      <section className="py-20 bg-emerald-100">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold font-display text-green-800 mb-4">
             Tu Camino Hacia la Salud Holística

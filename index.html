@@ -3,14 +3,99 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PuraNatura - Terapias Naturales</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Pureza Naturalis - Terapias Naturales | Productos Naturales en República Dominicana</title>
+    <meta name="description" content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural." />
+    <meta name="keywords" content="terapias naturales, productos naturales, suplementos, vitaminas, hierbas medicinales, bienestar, salud natural, República Dominicana, Pureza Naturalis" />
+    <meta name="author" content="Pureza Naturalis" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://purezanaturalis.com/" />
+    <meta property="og:title" content="Pureza Naturalis - Terapias Naturales | Productos Naturales en República Dominicana" />
+    <meta property="og:description" content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural." />
+    <meta property="og:image" content="https://purezanaturalis.com/images/pureza-naturalis-og-image.jpg" />
+    <meta property="og:locale" content="es_DO" />
+    <meta property="og:site_name" content="Pureza Naturalis" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://purezanaturalis.com/" />
+    <meta property="twitter:title" content="Pureza Naturalis - Terapias Naturales | Productos Naturales en República Dominicana" />
+    <meta property="twitter:description" content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural." />
+    <meta property="twitter:image" content="https://purezanaturalis.com/images/pureza-naturalis-og-image.jpg" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://purezanaturalis.com/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Pureza Naturalis",
+      "description": "Tienda de terapias y productos naturales en República Dominicana",
+      "url": "https://purezanaturalis.com",
+      "logo": "https://purezanaturalis.com/Logo Pureza Naturalis largo.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "DO",
+        "addressRegion": "Distrito Nacional"
+      },
+      "openingHours": "Mo-Sa 08:00-18:00",
+      "telephone": "+1-809-000-0000",
+      "priceRange": "$$",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Productos Naturales",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Suplementos Naturales"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Vitaminas y Minerales"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Hierbas Medicinales"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- Performance optimizations -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
     <style>
       body {
         font-family: 'Montserrat', sans-serif;
@@ -39,7 +124,25 @@
         font-weight: 600;
         color: #1a202c; /* text-gray-900 */
       }
+      
+      /* Performance optimizations */
+      .blur-backdrop {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+      }
+      
+      /* Loading animation */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
     </style>
+
+    <!-- Import Maps for React -->
     <script type="importmap">
       {
         "imports": {
@@ -49,10 +152,20 @@
         }
       }
     </script>
+    
     <link rel="stylesheet" href="/index.css" />
   </head>
   <body class="bg-gray-50">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    
+    <!-- Google Analytics (replace with your GA4 ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
   </body>
 </html>
