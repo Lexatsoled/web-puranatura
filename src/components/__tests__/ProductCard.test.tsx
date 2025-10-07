@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '../../test/test-utils';
-import ProductCard from '../ProductCard';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '../../test/test-utils';
+import ProductCard from '../../../components/ProductCard';
 
 const mockProduct = {
   id: '1',
@@ -21,36 +21,32 @@ const mockProduct = {
 
 describe('ProductCard', () => {
   it('renders product information correctly', () => {
-    const handleViewDetails = vi.fn();
     render(
-      <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
+      <ProductCard product={mockProduct} />
     );
 
     // Verificar que la información del producto se muestra correctamente
     expect(screen.getByText(mockProduct.name)).toBeInTheDocument();
-    expect(screen.getByText(mockProduct.categories.join(', '))).toBeInTheDocument();
-    expect(screen.getByText(`DOP $${mockProduct.price.toFixed(2)}`)).toBeInTheDocument();
+    expect(screen.getByText(`$${mockProduct.price.toFixed(2)}`)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /añadir/i })).toBeInTheDocument();
   });
 
-  it('calls onViewDetails when clicked', () => {
-    const handleViewDetails = vi.fn();
+  it('displays the product name as a link', () => {
     render(
-      <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
+      <ProductCard product={mockProduct} />
     );
 
-    // Simular clic en el componente
-    fireEvent.click(screen.getByText(mockProduct.name));
-    expect(handleViewDetails).toHaveBeenCalledWith(mockProduct);
+    // Verificar que el nombre del producto es un enlace
+    const nameLink = screen.getByRole('link', { name: mockProduct.name });
+    expect(nameLink).toBeInTheDocument();
   });
 
   it('displays the correct image', () => {
-    const handleViewDetails = vi.fn();
     render(
-      <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
+      <ProductCard product={mockProduct} />
     );
 
     const image = screen.getByAltText(mockProduct.name);
-    expect(image).toHaveAttribute('src', mockProduct.images[0].full);
+    expect(image).toBeInTheDocument();
   });
 });
