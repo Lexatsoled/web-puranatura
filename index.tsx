@@ -11,10 +11,18 @@ if (!rootElement) {
   );
 }
 
+// Configurar basename para producción si es necesario
+const basename = import.meta.env.VITE_CLOUDFLARE_TUNNEL === 'true' ? '/' : '/';
+
+// SOLUCIÓN CRÍTICA: Deshabilitar scroll restoration automático de React Router
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </React.StrictMode>,

@@ -7,7 +7,7 @@ const mockProduct = {
   name: 'Test Product',
   description: 'Test Description',
   price: 99.99,
-  category: 'Test Category',
+  categories: ['Test Category'],
   images: [
     {
       full: 'test-image-full.jpg',
@@ -28,7 +28,7 @@ describe('ProductCard', () => {
 
     // Verificar que la información del producto se muestra correctamente
     expect(screen.getByText(mockProduct.name)).toBeInTheDocument();
-    expect(screen.getByText(mockProduct.category)).toBeInTheDocument();
+    expect(screen.getByText(mockProduct.categories.join(', '))).toBeInTheDocument();
     expect(screen.getByText(`DOP $${mockProduct.price.toFixed(2)}`)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /añadir/i })).toBeInTheDocument();
   });

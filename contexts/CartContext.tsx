@@ -1,5 +1,6 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { Product, CartItem } from '../types';
+import { Product } from '../src/types/product';
+import { CartItem } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface CartContextType {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { services } from '../../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
-import { Service } from '../../types';
+import { Service } from '../../src/types/services';
 
 const ServicesPage: React.FC = () => {
   return (
-    <div className="bg-emerald-50 py-16 md:py-24">
+    <div className="bg-emerald-100 py-16 md:py-24">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold font-display text-green-800">

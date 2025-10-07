@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import debounce from 'lodash/debounce';
-import { Product } from '../types';
+import { Product, ProductCategory } from '../types/product';
 
 interface FilterBarProps {
   products: Product[];
+  categories: ProductCategory[];
   onFilterChange: (filteredProducts: Product[]) => void;
 }
 
@@ -17,7 +18,7 @@ interface Filters {
   sortBy: 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
+const FilterBar: React.FC<FilterBarProps> = ({ products, categories: productCategories, onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     search: '',
@@ -28,8 +29,25 @@ const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
     sortBy: 'name-asc',
   });
 
+  // Función para obtener categorías hijas
+  const getChildCategories = (parentId: string): string[] => {
+    return productCategories
+      .filter(cat => cat.parent === parentId)
+      .map(cat => cat.id);
+  };
+
   const categories = useMemo(() => {
-    const cats = ['all', ...new Set(products.map((p) => p.category))];
+    const cats = ['all'];
+    const uniqueCats = new Set<string>();
+    
+    products.forEach(product => {
+      if (product.categories) {
+        product.categories.forEach((cat: string) => uniqueCats.add(cat));
+      }
+    });
+    
+    cats.push(...Array.from(uniqueCats));
+    
     return cats.map((cat) => ({
       value: cat,
       label: cat === 'all' ? 'Todas las categorías' : cat,
@@ -52,7 +70,15 @@ const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
 
       // Filtrar por categoría
       if (newFilters.category !== 'all') {
-        filtered = filtered.filter((p) => p.category === newFilters.category);
+        // Obtener categorías hijas si es una categoría padre
+        const childCategories = getChildCategories(newFilters.category);
+        const categoriesToSearch = childCategories.length > 0 
+          ? [...childCategories, newFilters.category] 
+          : [newFilters.category];
+          
+        filtered = filtered.filter((p) => 
+          p.categories && p.categories.some(cat => categoriesToSearch.includes(cat))
+        );
       }
 
       // Filtrar por precio
@@ -62,7 +88,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
 
       // Filtrar por stock
       if (newFilters.inStock) {
-        filtered = filtered.filter((p) => p.inStock);
+        filtered = filtered.filter((p) => p.stock > 0);
       }
 
       // Ordenar

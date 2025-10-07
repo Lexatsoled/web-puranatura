@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product } from '../types';
+import { Product } from '../src/types/product';
 
 interface WishlistItem {
   id: string;
@@ -71,7 +71,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
         name: product.name,
         price: product.price,
         image: product.images[0].full,
-        category: product.category,
+        category: product.categories ? product.categories.join(', ') : '',
         inStock: true, // Por defecto asumimos que está en stock
         addedDate: new Date(),
         product: product

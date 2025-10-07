@@ -118,7 +118,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           {product.name}
         </motion.h3>
-        <p className="text-sm text-gray-500 mb-3">{product.category}</p>
+        <p className="text-sm text-gray-500 mb-3">
+          {product.categories ? product.categories.join(', ') : ''}
+        </p>
 
         <div className="mt-auto flex justify-between items-center">
           <motion.p
