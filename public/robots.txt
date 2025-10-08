@@ -1,0 +1,81 @@
+# Robots.txt - Pureza Naturalis - Terapias Naturales
+# Optimizado para SEO y crawling eficiente
+
+# Permitir acceso a todos los bots por defecto
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://web.purezanaturalis.com/sitemap.xml
+
+# Rutas públicas importantes (alta prioridad para indexación)
+Allow: /store
+Allow: /blog
+Allow: /services
+Allow: /about
+Allow: /contact
+Allow: /product/
+Allow: /sistemas-sinergicos
+
+# Assets estáticos (permitir para mejorar UX en SERPs)
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.svg$
+
+# Bloquear rutas privadas (no deben indexarse)
+Disallow: /profile
+Disallow: /orders
+Disallow: /addresses
+Disallow: /wishlist
+Disallow: /cart
+Disallow: /checkout
+
+# Bloquear archivos de desarrollo
+Disallow: /admin/
+Disallow: /api/
+Disallow: /sw.js
+Disallow: /workbox-*.js
+Disallow: /manifest.webmanifest
+
+# Bloquear parámetros de búsqueda (evitar contenido duplicado)
+Disallow: /*?*
+Disallow: /*&*
+
+# Googlebot
+User-agent: Googlebot
+Crawl-delay: 0
+Allow: /
+Disallow: /profile
+Disallow: /orders
+Disallow: /cart
+
+# Googlebot Images
+User-agent: Googlebot-Image
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+
+# Bingbot
+User-agent: Bingbot
+Crawl-delay: 1
+
+# Redes sociales (Open Graph)
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Bloquear scrapers agresivos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
