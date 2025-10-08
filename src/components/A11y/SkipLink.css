@@ -1,0 +1,43 @@
+/**
+ * Skip Link Styles
+ * Visible solo al recibir focus (navegación por teclado)
+ */
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 9999;
+  padding: 12px 24px;
+  background-color: #16a34a; /* green-600 */
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0 0 8px 0;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fbbf24; /* amber-400 */
+  outline-offset: 2px;
+}
+
+.skip-link:hover,
+.skip-link:focus {
+  background-color: #15803d; /* green-700 */
+}
+
+/* Asegurar que el skip link esté por encima de todo */
+.skip-link:focus-visible {
+  top: 0;
+}
+
+/* Para navegadores que no soporten :focus-visible */
+@supports not selector(:focus-visible) {
+  .skip-link:focus {
+    top: 0;
+  }
+}

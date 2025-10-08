@@ -1,0 +1,358 @@
+/**
+ * Accessibility Global Styles
+ * Estilos globales para mejorar la accesibilidad WCAG 2.1 AA
+ */
+
+/* ====================================
+   1. VISUALLY HIDDEN (Screen Reader Only)
+   ==================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ====================================
+   2. FOCUS INDICATORS
+   ==================================== */
+
+/* Focus visible solo para navegación por teclado */
+:focus {
+  outline: none;
+}
+
+.keyboard-user *:focus {
+  outline: 3px solid #fbbf24; /* amber-400 */
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Focus dentro de componentes oscuros */
+.dark *:focus,
+.bg-gray-900 *:focus,
+.bg-green-900 *:focus {
+  outline-color: #60a5fa; /* blue-400 */
+}
+
+/* Focus en inputs y elementos de formulario */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #3b82f6; /* blue-500 */
+  outline-offset: 2px;
+}
+
+/* Focus en botones */
+button:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* Focus en links */
+a:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ====================================
+   3. CONTRAST IMPROVEMENTS
+   ==================================== */
+
+/* Aumentar contraste en textos secundarios */
+.text-gray-500 {
+  color: #6b7280; /* Asegurar ratio 4.5:1 */
+}
+
+.text-gray-400 {
+  color: #9ca3af; /* Para fondos oscuros */
+}
+
+/* Enlaces con suficiente contraste */
+a {
+  color: #059669; /* green-600 */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: #047857; /* green-700 */
+  text-decoration-thickness: 2px;
+}
+
+/* ====================================
+   4. REDUCED MOTION
+   ==================================== */
+
+/* Respetar preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Mantener animaciones esenciales para feedback */
+  button:active,
+  a:active {
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* ====================================
+   5. HIGH CONTRAST MODE
+   ==================================== */
+
+/* Soporte para modo de alto contraste de Windows */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+  
+  button,
+  input,
+  select,
+  textarea {
+    border: 2px solid currentColor !important;
+  }
+  
+  .bg-gray-50,
+  .bg-gray-100 {
+    background-color: white !important;
+  }
+  
+  .text-gray-500,
+  .text-gray-600,
+  .text-gray-700 {
+    color: black !important;
+  }
+}
+
+/* ====================================
+   6. KEYBOARD NAVIGATION
+   ==================================== */
+
+/* Indicador visual de elemento activo en listas */
+[role="listbox"] [aria-selected="true"],
+[role="option"][aria-selected="true"] {
+  background-color: #d1fae5; /* green-100 */
+  border-left: 4px solid #059669; /* green-600 */
+}
+
+/* Indicador en pestañas activas */
+[role="tab"][aria-selected="true"] {
+  border-bottom: 3px solid #059669;
+  font-weight: 600;
+}
+
+/* ====================================
+   7. TOUCH TARGET SIZE
+   ==================================== */
+
+/* Asegurar tamaño mínimo de 44x44px para elementos interactivos */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 16px;
+}
+
+/* Excepciones para botones pequeños en grupos */
+.btn-group button,
+.btn-sm {
+  min-height: 36px;
+  min-width: 36px;
+  padding: 6px 12px;
+}
+
+/* ====================================
+   8. FORM ACCESSIBILITY
+   ==================================== */
+
+/* Indicador visual de campo requerido */
+input:required,
+textarea:required,
+select:required {
+  border-left: 3px solid #ef4444; /* red-500 */
+}
+
+/* Indicador de error */
+.error input,
+.error textarea,
+.error select {
+  border-color: #ef4444;
+  background-color: #fef2f2; /* red-50 */
+}
+
+/* Indicador de éxito */
+.success input,
+.success textarea,
+.success select {
+  border-color: #10b981; /* green-500 */
+  background-color: #f0fdf4; /* green-50 */
+}
+
+/* ====================================
+   9. MODAL & OVERLAY ACCESSIBILITY
+   ==================================== */
+
+/* Prevenir scroll cuando modal está abierto */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Asegurar contraste en overlays */
+.modal-backdrop,
+.overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Focus trap container */
+.focus-manager-container {
+  outline: none;
+}
+
+/* ====================================
+   10. LOADING & SKELETON STATES
+   ==================================== */
+
+/* Animación de carga accesible */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeleton con animación reducida */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: #e5e7eb;
+  }
+}
+
+/* ====================================
+   11. RESPONSIVE TEXT SIZING
+   ==================================== */
+
+/* Permitir zoom de texto sin romper layout */
+html {
+  font-size: 100%;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+/* No limitar altura de línea */
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.5;
+}
+
+/* ====================================
+   12. COLOR BLINDNESS SUPPORT
+   ==================================== */
+
+/* No depender solo del color para información */
+.success::before {
+  content: "✓ ";
+  font-weight: bold;
+}
+
+.error::before {
+  content: "✗ ";
+  font-weight: bold;
+}
+
+.warning::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+/* ====================================
+   13. PRINT STYLES
+   ==================================== */
+
+@media print {
+  /* Ocultar elementos de navegación en impresión */
+  nav,
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Asegurar contraste en impresión */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Mostrar URLs de enlaces */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
