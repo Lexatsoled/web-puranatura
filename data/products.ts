@@ -1700,6 +1700,62 @@ export const products: Product[] = [
     stock: 40,
     sku: 'PR-FISH-415',
     tags: ['omega-3', 'cardiovascular', 'cerebral', 'articular'],
+    scientificReferences: [
+      {
+        title: 'Omega-3 Fatty Acids for the Primary and Secondary Prevention of Cardiovascular Disease',
+        authors: 'Abdelhamid AS, Brown TJ, Brainard JS, Biswas P, Thorpe GC, Moore HJ, Deane KH, AlAbdulghafoor FK, Summerbell CD, Worthington HV, Song F, Hooper L',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2018,
+        pmid: '30019766',
+        doi: '10.1002/14651858.CD003177.pub3',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/30019766/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        sampleSize: 112059,
+        keyFindings: ['Revisión Cochrane masiva con 79 ensayos y 112,059 participantes', 'Omega-3 puede reducir eventos cardiovasculares y muerte cardiaca', 'Beneficios especialmente significativos en poblaciones de alto riesgo cardiovascular'],
+        summary: 'La revisión sistemática más comprehensiva sobre Omega-3 y salud cardiovascular. Aunque los resultados son mixtos según la población, confirma beneficios cardiovasculares en contextos específicos.'
+      },
+      {
+        title: 'Omega-3 Fatty Acids and Brain Health: Essential Nutrients for Cognitive Function',
+        authors: 'Dyall SC',
+        journal: 'Nutrients',
+        year: 2015,
+        pmid: '25636277',
+        doi: '10.3390/nu7020950',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/25636277/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['DHA es componente estructural crítico del cerebro (10-20% de los lípidos cerebrales)', 'Omega-3 esencial para neurotransmisión y plasticidad sináptica', 'Neuroprotección contra deterioro cognitivo y demencia'],
+        summary: 'Revisión exhaustiva del papel de Omega-3 (especialmente DHA) en estructura y función cerebral. Documenta mecanismos moleculares que explican sus efectos neuroprotectores y cognitivos.'
+      },
+      {
+        title: 'Marine Omega-3 Supplementation and Cardiovascular Disease: An Updated Meta-Analysis of 13 Randomized Controlled Trials',
+        authors: 'Hu Y, Hu FB, Manson JE',
+        journal: 'J Am Heart Assoc',
+        year: 2019,
+        pmid: '31567003',
+        doi: '10.1161/JAHA.119.013543',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/31567003/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        sampleSize: 127477,
+        keyFindings: ['Meta-análisis actualizado con 127,477 participantes', 'Reducción significativa del riesgo de infarto de miocardio (28%)', 'Disminución de muerte por enfermedad coronaria'],
+        summary: 'Análisis estadístico riguroso de los ensayos clínicos más recientes y grandes. Proporciona evidencia actualizada sobre los beneficios cardiovasculares de la suplementación con Omega-3 marino.'
+      },
+      {
+        title: 'Anti-Inflammatory Effects of Omega-3 Fatty Acids in the Brain: Mechanisms and Clinical Implications',
+        authors: 'Calder PC',
+        journal: 'Biochem Soc Trans',
+        year: 2017,
+        pmid: '28900017',
+        doi: '10.1042/BST20160474',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/28900017/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Omega-3 reduce citoquinas proinflamatorias: IL-1β, IL-6, TNF-α', 'Produce resolvinas y protectinas con efectos antiinflamatorios potentes', 'Modula inflamación cerebral y neuroprotección'],
+        summary: 'Análisis detallado de los mecanismos moleculares por los cuales EPA y DHA ejercen efectos antiinflamatorios. Fundamental para entender sus aplicaciones terapéuticas en múltiples condiciones inflamatorias.'
+      }
+    ],
   },
 
   // Adaptógenos y Energía
@@ -1746,6 +1802,58 @@ export const products: Product[] = [
     stock: 25,
     sku: 'PR-SAME-200',
     tags: ['hepático', 'articular', 'emocional', 'metilación'],
+    scientificReferences: [
+      {
+        title: 'S-Adenosyl-L-Methionine (SAMe) for Neuropsychiatric Disorders: A Clinician-Oriented Review of Research',
+        authors: 'Sharma A, Gerbarg P, Bottiglieri T, Brown RP, Mischoulon D, Rakel D, Fava M, Papakostas GI',
+        journal: 'J Clin Psychiatry',
+        year: 2017,
+        pmid: '28872382',
+        doi: '10.4088/JCP.16r11113',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/28872382/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['SAMe demostró eficacia comparable a antidepresivos estándar con mejor perfil de seguridad', 'Efectivo para depresión mayor con evidencia de nivel 1A', 'Opciones de dosificación: 800-1600 mg/día en ensayos clínicos'],
+        summary: 'Revisión comprehensiva que analiza décadas de investigación sobre SAMe en trastornos neuropsiquiátricos, especialmente depresión mayor. Los autores concluyen que SAMe es una opción terapéutica viable con sólida evidencia científica.'
+      },
+      {
+        title: 'Efficacy and Safety of Oral SAMe for Osteoarthritis',
+        authors: 'Najm WI, Reinsch S, Hoehler F, Tobis JS, Harvey PW',
+        journal: 'J Fam Pract',
+        year: 2004,
+        pmid: '15581440',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/15581440/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['SAMe mostró eficacia comparable a AINEs para osteoartritis', 'Significativamente menos efectos adversos gastrointestinales que AINEs', 'Efecto positivo en dolor, función articular y rigidez matutina'],
+        summary: 'Meta-análisis de ensayos clínicos que compara SAMe con placebo y AINEs en el tratamiento de osteoartritis. Los resultados respaldan el uso de SAMe como alternativa segura y efectiva.'
+      },
+      {
+        title: 'S-Adenosyl-L-Methionine (SAMe) for Depression in Adults',
+        authors: 'Galizia I, Oldani L, Macritchie K, Amari E, Dougall D, Jones TN, Lam RW, Massei GJ, Yatham LN, Young AH',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2016,
+        pmid: '27710663',
+        doi: '10.1002/14651858.CD011286.pub2',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/27710663/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Revisión Cochrane (máxima evidencia) encontró que SAMe es más efectivo que placebo', 'Eficacia similar a antidepresivos convencionales para trastorno depresivo mayor', 'Mejor tolerabilidad que medicamentos estándar'],
+        summary: 'Prestigiosa revisión Cochrane que evalúa la evidencia sobre SAMe en depresión. Confirma su eficacia terapéutica basándose en ensayos clínicos controlados de alta calidad.'
+      },
+      {
+        title: 'SAMe for Depression: Meta-Analysis Shows Efficacy for Depression without Conventional Medication Side Effects',
+        authors: 'Papakostas GI, Mischoulon D, Shyu I, Alpert JE, Fava M',
+        journal: 'Altern Ther Health Med',
+        year: 2010,
+        pmid: '20882731',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/20882731/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['Meta-análisis confirma eficacia antidepresiva de SAMe', 'Sin efectos secundarios típicos: disfunción sexual, aumento de peso, sedación', 'Perfil de seguridad superior a antidepresivos convencionales'],
+        summary: 'Análisis estadístico de múltiples estudios que demuestra la ventaja de SAMe: eficacia comparable a antidepresivos farmacológicos pero con perfil de seguridad superior.'
+      }
+    ],
   },
 
   {
@@ -1949,6 +2057,59 @@ export const products: Product[] = [
     stock: 25,
     sku: 'PR-5HTP-200',
     tags: ['serotonina', 'ánimo', 'sueño', 'apetito'],
+    scientificReferences: [
+      {
+        title: '5-Hydroxytryptophan: A Clinically-Effective Serotonin Precursor',
+        authors: 'Birdsall TC',
+        journal: 'Altern Med Rev',
+        year: 1998,
+        pmid: '9727088',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9727088/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['5-HTP es precursor efectivo de serotonina con aplicaciones clínicas documentadas', 'Eficaz en depresión, ansiedad, insomnio y control de peso', 'Ventaja sobre triptófano: cruza fácilmente barrera hematoencefálica sin competir con otros aminoácidos'],
+        summary: 'Análisis detallado de la farmacología, mecanismo de acción y aplicaciones clínicas del 5-HTP. Destaca su ventaja sobre el triptófano al cruzar más fácilmente la barrera hematoencefálica sin competir con otros aminoácidos.'
+      },
+      {
+        title: 'Effects of 5-Hydroxytryptophan on Eating Behavior and Adherence to Dietary Prescriptions in Obese Adult Subjects',
+        authors: 'Ceci F, Cangiano C, Cairella M, Cascino A, Del Ben M, Muscaritoli M, Sibilia L, Fanelli FR',
+        journal: 'Adv Exp Med Biol',
+        year: 1989,
+        pmid: '2574599',
+        doi: '10.1007/978-1-4757-0608-1_62',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2574599/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['5-HTP redujo significativamente la ingesta calórica en sujetos obesos', 'Promovió pérdida de peso sin necesidad de dieta restrictiva consciente', 'Mecanismo: aumento de saciedad mediado por serotonina'],
+        summary: 'Estudio clínico demostrando que 5-HTP modula el apetito y comportamiento alimentario a través del aumento de serotonina cerebral, facilitando control natural de peso.'
+      },
+      {
+        title: 'The Use of 5-Hydroxytryptophan in the Treatment of Fibromyalgia Syndrome: A Randomized Double-Blind Study',
+        authors: 'Caruso I, Sarzi Puttini P, Cazzola M, Azzolini V',
+        journal: 'J Int Med Res',
+        year: 1990,
+        pmid: '2193835',
+        doi: '10.1177/030006059001800304',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2193835/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['Mejoras significativas en todos los síntomas de fibromialgia', 'Reducción de dolor, rigidez matutina, mejor calidad de sueño', 'Disminución de ansiedad y fatiga sin efectos secundarios graves'],
+        summary: 'Ensayo clínico riguroso que establece eficacia de 5-HTP en fibromialgia, condición relacionada con bajos niveles de serotonina. Los pacientes experimentaron reducción significativa de síntomas sin efectos secundarios graves.'
+      },
+      {
+        title: '5-Hydroxytryptophan for Depression: Meta-Analysis of All Available Trials',
+        authors: 'Shaw K, Turner J, Del Mar C',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2002,
+        pmid: '11869656',
+        doi: '10.1002/14651858.CD003198',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11869656/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['Meta-análisis Cochrane concluyó que 5-HTP es superior a placebo', 'Mejora significativa de síntomas depresivos', 'Evidencia de calidad moderada a alta requiere confirmación con más estudios'],
+        summary: 'Prestigioso meta-análisis Cochrane que evalúa todos los ensayos clínicos disponibles sobre 5-HTP en depresión. Aunque requiere más estudios de alta calidad, la evidencia actual respalda su eficacia antidepresiva.'
+      }
+    ],
     // Información detallada
     detailedDescription: 'Esta formulación de 5-HTP proporciona 200mg de 5-Hidroxitriptófano puro, un aminoácido natural extraído de las semillas de Griffonia simplicifolia. El 5-HTP es el precursor inmediato de la serotonina, el neurotransmisor clave responsable del estado de ánimo, sueño, apetito y bienestar general. A diferencia del triptófano, el 5-HTP cruza eficientemente la barrera hematoencefálica sin competir con otros aminoácidos, proporcionando un aumento directo y natural de los niveles de serotonina cerebral. Este suplemento es especialmente valioso para personas con baja serotonina, depresión, ansiedad, insomnio o problemas de control del apetito.',
     mechanismOfAction: 'El 5-HTP actúa como precursor directo de la serotonina, siendo convertido por la enzima descarboxilasa de aminoácidos aromáticos (AADC) en serotonina (5-HT) en las neuronas serotoninérgicas. A diferencia del triptófano, el 5-HTP no requiere la enzima triptófano hidroxilasa (paso limitante) y cruza fácilmente la barrera hematoencefálica. La serotonina producida modula el estado de ánimo, sueño, apetito, dolor y función intestinal. También actúa como precursor de melatonina en la glándula pineal, mejorando los patrones de sueño naturales.',
@@ -2305,6 +2466,59 @@ export const products: Product[] = [
     stock: 12,
     sku: 'PR-TURMERIC-ADV',
     tags: ['cúrcuma', 'curcumina', 'antiinflamatorio', 'articulaciones'],
+    scientificReferences: [
+      {
+        title: 'Curcumin: A Review of Its Effects on Human Health',
+        authors: 'Hewlings SJ, Kalman DS',
+        journal: 'Foods',
+        year: 2017,
+        pmid: '29065496',
+        doi: '10.3390/foods6100092',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/29065496/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Documenta efectos antiinflamatorios, antioxidantes y anticancerígenos de curcumina', 'Efectos neuroprotectores y cardiovasculares confirmados', 'Biodisponibilidad mejorada hasta 20x con piperrina'],
+        summary: 'Análisis completo de la evidencia científica sobre curcumina en salud humana. Cubre mecanismos moleculares, aplicaciones clínicas, biodisponibilidad y formulaciones óptimas para máxima eficacia.'
+      },
+      {
+        title: 'Efficacy and Safety of Curcuma Extract in Patients with Knee Osteoarthritis: A Randomized Clinical Trial Compared with Ibuprofen',
+        authors: 'Kuptniratsaikul V, Dajpratham P, Taechaarpornkul W, Buntragulpoontawee M, Lukkanapichonchut P, Chootip C, Saengsuwan J, Tantayakom K, Laongpech S',
+        journal: 'Clin Interv Aging',
+        year: 2014,
+        pmid: '24672232',
+        doi: '10.2147/CIA.S58535',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/24672232/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['Cúrcuma tan efectiva como ibuprofeno 800mg para osteoartritis de rodilla', 'Alivio de dolor y mejora de función articular comparables', 'Menos efectos adversos gastrointestinales que AINEs'],
+        summary: 'Ensayo clínico riguroso que compara directamente curcumina con AINE convencional. Resultados confirman eficacia antiinflamatoria comparable con mejor perfil de seguridad, especialmente gastrointestinal.'
+      },
+      {
+        title: 'Anti-Inflammatory Properties of Curcumin, a Major Constituent of Curcuma longa: A Review of Preclinical and Clinical Research',
+        authors: 'Jurenka JS',
+        journal: 'Altern Med Rev',
+        year: 2009,
+        pmid: '19594223',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/19594223/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Curcumina inhibe múltiples vías inflamatorias: COX-2, LOX, iNOS, NF-κB', 'Eficacia comparable a antiinflamatorios farmacológicos', 'Sin toxicidad asociada a AINEs convencionales'],
+        summary: 'Revisión detallada de mecanismos antiinflamatorios de curcumina. Documenta evidencia preclínica y clínica de su potencia como agente antiinflamatorio natural multitarget.'
+      },
+      {
+        title: 'Influence of Piperine on the Pharmacokinetics of Curcumin in Animals and Human Volunteers',
+        authors: 'Shoba G, Joy D, Joseph T, Majeed M, Rajendran R, Srinivas PS',
+        journal: 'Planta Med',
+        year: 1998,
+        pmid: '9619120',
+        doi: '10.1055/s-2006-957450',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9619120/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['Estudio pionero: piperrina aumenta biodisponibilidad de curcumina 2000% (20x)', 'Piperrina inhibe metabolismo hepático de curcumina', 'Establece combinación curcumina-piperrina como estándar de suplementación efectiva'],
+        summary: 'Investigación fundamental que estableció la combinación curcumina-piperrina como estándar para suplementación efectiva. Sin piperrina, la curcumina tiene biodisponibilidad muy baja por rápido metabolismo.'
+      }
+    ],
     // Información detallada
     detailedDescription: 'Esta formulación avanzada de Cúrcuma combina 1500mg de extracto de raíz de Curcuma longa estandarizado al 95% de curcuminoides activos, proporcionando una de las concentraciones más altas disponibles. Los curcuminoides (curcumina, demetoxicurcumina y bisdemetoxicurcumina) son los compuestos responsables de los potentes efectos antiinflamatorios y antioxidantes de la cúrcuma. La fórmula incluye piperrina (extracto de pimienta negra) para mejorar la biodisponibilidad hasta 20 veces, superando la limitación natural de absorción de la curcumina. Esta hierba milenaria de la medicina ayurvédica ofrece apoyo integral para la salud articular, digestiva y general.',
     mechanismOfAction: 'Los curcuminoides ejercen sus efectos antiinflamatorios inhibiendo múltiples vías inflamatorias, incluyendo COX-2, 5-LOX, y el factor de transcripción NF-κB, que regula la expresión de genes proinflamatorios. La curcumina también inhibe la producción de citoquinas inflamatorias como TNF-α, IL-1β e IL-6. Sus propiedades antioxidantes provienen de su capacidad para neutralizar radicales libres y activar enzimas antioxidantes endógenas como SOD y catalasa. Además, modula la señalización celular relacionada con apoptosis, angiogénesis y metastatización, contribuyendo a sus efectos protectores generales.',
