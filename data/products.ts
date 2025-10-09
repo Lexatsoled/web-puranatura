@@ -16,7 +16,7 @@ export const products: Product[] = [
   {
     id: "1",
     name: 'Vitamina C 1000mg',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 24.99,
     description:
       'Vitamina C de alta potencia para fortalecer el sistema inmunológico y promover la producción de colágeno.',
@@ -97,7 +97,7 @@ export const products: Product[] = [
   {
     id: "2",
     name: 'Vitamina D3 10000 UI',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 29.99,
     description:
       'Vitamina D3 de alta potencia para la salud ósea y el sistema inmunológico.',
@@ -178,7 +178,7 @@ export const products: Product[] = [
   {
     id: "3",
     name: 'Vitamina K2',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 27.99,
     description: 'Vitamina K2 para la salud ósea y cardiovascular.',
     images: [
@@ -256,7 +256,7 @@ export const products: Product[] = [
   {
     id: "4",
     name: 'Calcio Magnesio',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 22.99,
     description:
       'Combinación de calcio y magnesio para la salud ósea y muscular.',
@@ -343,7 +343,7 @@ export const products: Product[] = [
   {
     id: "5",
     name: 'Glucosamina y Condroitina',
-    category: 'salud-articular',
+    categories: ['salud-articular'],
     price: 34.99,
     description:
       'Fórmula completa para el mantenimiento y la salud de las articulaciones.',
@@ -435,7 +435,7 @@ export const products: Product[] = [
   {
     id: "6",
     name: 'Ultimate Flora',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 39.99,
     description:
       'Probiótico de amplio espectro para una salud digestiva óptima.',
@@ -521,7 +521,7 @@ export const products: Product[] = [
   {
     id: "7",
     name: 'Digestive Duo',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 32.99,
     description: 'Combinación de enzimas digestivas para una mejor digestión.',
     images: [
@@ -621,7 +621,7 @@ export const products: Product[] = [
   {
     id: "8",
     name: 'Cleanse More',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 28.99,
     description:
       'Fórmula natural para apoyar la limpieza intestinal y la regularidad.',
@@ -723,7 +723,7 @@ export const products: Product[] = [
   {
     id: "9",
     name: 'Ácido Hialurónico',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 35.99,
     description: 'Suplemento para el cuidado de la piel y las articulaciones.',
     images: [
@@ -813,7 +813,7 @@ export const products: Product[] = [
   {
     id: "10",
     name: 'Triple Extracto de Hongos',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 42.99,
     description:
       'Potente mezcla de hongos medicinales para el sistema inmunológico.',
@@ -910,7 +910,7 @@ export const products: Product[] = [
   {
     id: "11",
     name: 'Mezcla Hígado',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 31.99,
     description: 'Fórmula herbal para apoyar la función hepática.',
     images: [
@@ -1012,7 +1012,7 @@ export const products: Product[] = [
   {
     id: "12",
     name: 'Menopause Plus',
-    category: 'salud-femenina',
+    categories: ['salud-femenina'],
     price: 37.99,
     description: 'Fórmula natural para el apoyo durante la menopausia.',
     images: [
@@ -1129,7 +1129,7 @@ export const products: Product[] = [
   {
     id: "13",
     name: 'Cranberry Concentrado',
-    category: 'salud-femenina',
+    categories: ['salud-femenina'],
     price: 26.99,
     description: 'Concentrado de arándano para la salud del tracto urinario.',
     images: [
@@ -1223,7 +1223,7 @@ export const products: Product[] = [
   {
     id: "pr-alpha-gpc",
     name: 'Alpha GPC 200mg - 120 Cápsulas Vegetarianas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 893.37,
     description: 'Alpha GPC (Glicerofosfocolina) es un compuesto natural que apoya la función cognitiva y la salud cerebral. Ideal para mejorar la memoria y el rendimiento mental.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14653_1.jpg
@@ -1245,7 +1245,7 @@ export const products: Product[] = [
   {
     id: "pr-chlorophyll",
     name: 'Clorofila 60mg - 120 Cápsulas de Liberación Rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 864.73,
     description: 'Clorofila natural que actúa como un potente desintoxicante y antioxidante. Ayuda a purificar la sangre y apoya la salud digestiva.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14154_1.jpg
@@ -1267,7 +1267,7 @@ export const products: Product[] = [
   {
     id: "pr-konjac-fiber",
     name: 'Fibra de Raíz de Konjac - Glucomanano 600mg - 120 Cápsulas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 1789.74,
     description: 'Fibra natural de glucomanano que ayuda a la pérdida de peso, controla el apetito y mejora la salud digestiva. Absorbe agua formando un gel en el estómago.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14242_1.jpg
@@ -1289,7 +1289,7 @@ export const products: Product[] = [
   {
     id: "pr-tribulus",
     name: 'Ultra Tribulus Max 1000mg - 100 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 715.54,
     description: 'Extracto concentrado de Tribulus Terrestris que apoya la energía natural, la vitalidad y el rendimiento físico. Tradicionalmente usado para apoyar la salud masculina.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/1/11907_1.jpg
@@ -1311,7 +1311,7 @@ export const products: Product[] = [
   {
     id: "pr-inositol",
     name: 'Inositol 650mg - 180 Cápsulas de Liberación Rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 954.25,
     description: 'Inositol, un nutriente similar a las vitaminas B que apoya la función nerviosa, el metabolismo de las grasas y la salud mental. Beneficioso para el equilibrio hormonal.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14098_1.jpg
@@ -1333,7 +1333,7 @@ export const products: Product[] = [
   {
     id: "pr-magnesium-threonate",
     name: 'L-Treonato de Magnesio - 90 Cápsulas',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 3800.88,
     description: 'Forma avanzada de magnesio que puede cruzar la barrera hematoencefálica. Especialmente formulado para apoyar la función cognitiva y la salud cerebral.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17486_1.jpg
@@ -1356,7 +1356,7 @@ export const products: Product[] = [
   {
     id: "pr-fish-oil",
     name: 'Aceite de Pescado Omega-3 - 415mg - 200 Cápsulas Mini',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1014.03,
     description: 'Aceite de pescado purificado rico en ácidos grasos Omega-3 EPA y DHA. Apoya la salud cardiovascular, cerebral y articular. Cápsulas mini fáciles de tragar.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14633_1.jpg
@@ -1379,7 +1379,7 @@ export const products: Product[] = [
   {
     id: "pr-maca",
     name: 'Maca 4800mg - 150 Cápsulas de Liberación Rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1073.71,
     description: 'Extracto concentrado de raíz de Maca peruana. Adaptógeno natural que apoya la energía, resistencia y vitalidad. Tradicionalmente usado para equilibrar hormonas.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14404_1.jpg
@@ -1401,7 +1401,7 @@ export const products: Product[] = [
   {
     id: "pr-ashwagandha",
     name: 'Ashwagandha 4500mg - 120 Cápsulas de Liberación Rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 715.61,
     description: 'Extracto estandarizado de raíz de Ashwagandha. Adaptógeno ayurvédico que ayuda a manejar el estrés, apoya la energía y promueve un sueño reparador.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14230_1.jpg
@@ -1424,7 +1424,7 @@ export const products: Product[] = [
   {
     id: "pr-same",
     name: 'SAMe - Recuperimiento Entérico 200mg - 30 Tabletas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 595.64,
     description: 'S-Adenosil-L-Metionina con recubrimiento entérico para máxima absorción. Apoya la salud hepática, articular y el bienestar emocional.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14509_1.jpg
@@ -1446,7 +1446,7 @@ export const products: Product[] = [
   {
     id: "pr-bamboo-extract",
     name: 'Extracto de Bambú 3000mg - 250 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 952.56,
     description: 'Extracto concentrado de bambú, fuente natural de sílice. Apoya la salud de cabello, piel, uñas y tejido conectivo. Rico en minerales esenciales.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14158_1.jpg
@@ -1468,7 +1468,7 @@ export const products: Product[] = [
   {
     id: "pr-borage-oil",
     name: 'Aceite de Borraja (GLA) 1000mg - 120 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 714.42,
     description: 'Aceite de borraja rico en ácido gamma-linolénico (GLA). Apoya la salud de la piel, equilibrio hormonal y respuesta inflamatoria saludable.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14154_2.jpg
@@ -1490,18 +1490,18 @@ export const products: Product[] = [
   {
     id: "pr-liver-cleanse",
     name: '3-Day Liver Cleanse - 12 Cápsulas Vegetarianas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 891.66,
     description: 'Programa de limpieza hepática de 3 días con hierbas tradicionales. Diseñado para apoyar la función de desintoxicación natural del hígado.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16486_1.jpg
     images: [
       {
-        thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
-        full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
+        thumbnail: '/Jpeg/3-Day Liver Cleanse Anverso.jpg',
+        full: '/Jpeg/3-Day Liver Cleanse Anverso.jpg',
       },
       {
-        thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
-        full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
+        thumbnail: '/Jpeg/3-Day Liver Cleanse Reverso.jpg',
+        full: '/Jpeg/3-Day Liver Cleanse Reverso.jpg',
       },
     ],
     stock: 20,
@@ -1513,7 +1513,7 @@ export const products: Product[] = [
   {
     id: "pr-ashwa-melatonin",
     name: 'Ashwagandha Melatonin plus L-Theanine - 60 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 356.90,
     description: 'Fórmula sinérgica que combina Ashwagandha, Melatonina y L-Teanina para promover relajación profunda y sueño reparador de calidad.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17265_1.jpg
@@ -1532,7 +1532,7 @@ export const products: Product[] = [
   {
     id: "pr-basil-oil",
     name: 'Aceite Esencial de Albahaca Puro - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 356.90,
     description: 'Aceite esencial de albahaca 100% puro y natural. Ideal para aromaterapia, masajes y uso tópico diluido. Aroma fresco y revitalizante.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14001_1.jpg
@@ -1551,7 +1551,7 @@ export const products: Product[] = [
   {
     id: "pr-creatine",
     name: 'Creatina Micronizada 5000mg - 150 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1789.32,
     description: 'Creatina monohidrato micronizada de alta pureza. Apoya la fuerza muscular, potencia y recuperación en entrenamientos intensos.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14520_1.jpg
@@ -1574,7 +1574,7 @@ export const products: Product[] = [
   {
     id: "pr-chamomile-oil",
     name: 'Mezcla de Aceite Esencial de Manzanilla - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 318.72,
     description: 'Mezcla premium de aceite esencial de manzanilla. Conocido por sus propiedades calmantes y relajantes. Ideal para relajación y cuidado de la piel.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14008_1.jpg
@@ -1592,7 +1592,7 @@ export const products: Product[] = [
   {
     id: "pr-sandalwood-oil",
     name: 'Mezcla de Aceite Esencial de Sándalo - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 318.72,
     description: 'Mezcla exquisita de aceite esencial de sándalo. Aroma exótico y relajante, tradicionalmente usado en meditación y cuidado espiritual.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14045_1.jpg
@@ -1611,7 +1611,7 @@ export const products: Product[] = [
   {
     id: "pr-gaba",
     name: 'GABA (Ácido Gamma Aminobutírico) 750mg - 100 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1085.65,
     description: 'GABA, neurotransmisor inhibidor natural que promueve la calma y relajación. Apoya la reducción del estrés y un estado mental equilibrado.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14456_1.jpg
@@ -1633,7 +1633,7 @@ export const products: Product[] = [
   {
     id: "pr-5htp",
     name: '5-HTP 200mg - 180 Cápsulas de Liberación Rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 2815.88,
     description: '5-Hidroxitriptófano, precursor natural de la serotonina. Apoya el estado de ánimo positivo, sueño saludable y control del apetito.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14401_1.jpg
@@ -1656,7 +1656,7 @@ export const products: Product[] = [
   {
     id: "pr-turmeric-complex",
     name: 'Complejo de Cúrcuma Estandarizada con Pimienta Negra 1000mg - 180 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1909.29,
     description: 'Cúrcuma estandarizada con bioperina (pimienta negra) para máxima absorción. Potente antiinflamatorio natural y antioxidante.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14287_1.jpg
@@ -1678,7 +1678,7 @@ export const products: Product[] = [
   {
     id: "pr-coq10",
     name: 'CoQ10 100mg - 240 Cápsulas Blandas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1163.24,
     description: 'Coenzima Q10 de alta potencia para apoyar la salud cardiovascular y producción de energía celular. Antioxidante esencial para el corazón.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14198_1.jpg
@@ -1701,7 +1701,7 @@ export const products: Product[] = [
   {
     id: "pr-bacopa",
     name: 'Bacopa Monnieri 1000mg - 180 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 895.15,
     description: 'Extracto estandarizado de Bacopa Monnieri, hierba ayurvédica tradicionalmente usada para apoyar la memoria, concentración y función cognitiva.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14203_1.jpg
@@ -1723,7 +1723,7 @@ export const products: Product[] = [
   {
     id: "pr-pqq",
     name: 'PQQ Pirroloquinolina Quinona 20mg - 60 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1790.90,
     description: 'Pirroloquinolina Quinona, cofactor que apoya la biogénesis mitocondrial y función cerebral. Potente antioxidante para energía celular.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14589_1.jpg
@@ -1742,7 +1742,7 @@ export const products: Product[] = [
   {
     id: "pr-iodine",
     name: 'Ajo Inodoro 500mg - 200 Cápsulas Blandas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 793.64,
     description: 'Extracto concentrado de ajo sin olor, estandarizado en alicina. Apoya la salud cardiovascular y función inmunológica.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14156_1.jpg
@@ -1760,7 +1760,7 @@ export const products: Product[] = [
   {
     id: "pr-kudzu-root",
     name: 'Raíz de Kudzu 1600mg - 100 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 942.32,
     description: 'Extracto tradicional de raíz de Kudzu, hierba china usada para apoyar el bienestar general y función hepática saludable.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14348_1.jpg
@@ -1782,7 +1782,7 @@ export const products: Product[] = [
   {
     id: "pr-arnica-oil",
     name: 'Aceite de Árnica - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 536.26,
     description: 'Aceite de árnica puro para uso tópico. Tradicionalmente usado para apoyar la recuperación muscular y alivio de molestias menores.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14003_1.jpg
@@ -1801,7 +1801,7 @@ export const products: Product[] = [
   {
     id: "pr-apple-cider-vinegar",
     name: 'Dieta de Vinagre de Sidra de Manzana - 84 Cápsulas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 865.30,
     description: 'Vinagre de sidra de manzana concentrado en cápsulas convenientes. Apoya la digestión saludable y el metabolismo natural.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14089_1.jpg
@@ -1823,7 +1823,7 @@ export const products: Product[] = [
   {
     id: "pr-activated-charcoal",
     name: 'Carbón Activado 780mg - 180 Cápsulas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 495.05,
     description: 'Carbón activado de alta calidad para apoyo digestivo ocasional. Tradicionalmente usado para absorber gases y toxinas intestinales.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14126_1.jpg
@@ -1846,7 +1846,7 @@ export const products: Product[] = [
   {
     id: "pr-ashwagandha-240",
     name: 'Ashwagandha 4500mg - 240 Cápsulas (Presentación Grande)',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 2173.09,
     description: 'Presentación económica de Ashwagandha. Extracto estandarizado de raíz para manejo del estrés, energía y bienestar general a largo plazo.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14230_2.jpg
@@ -1865,7 +1865,7 @@ export const products: Product[] = [
   {
     id: "pr-soy-lecithin",
     name: 'Soya Lecithin 1200mg - 100 Softgels',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 149.19,
     description: 'Lecitina de soya rica en fosfatidilcolina. Apoya la función cerebral, metabolismo de grasas y salud celular.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14476_1.jpg
@@ -1887,7 +1887,7 @@ export const products: Product[] = [
   {
     id: "pr-clove-oil",
     name: 'Aceite Esencial de Clavo Puro - 59mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 356.50,
     description: 'Aceite esencial de clavo 100% puro. Conocido por sus propiedades antimicrobianas y uso tradicional en cuidado bucal.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14012_1.jpg
@@ -1906,7 +1906,7 @@ export const products: Product[] = [
   {
     id: "pr-cranberry-vitamin-c",
     name: 'Cranberry Plus Vitamin C 8400mg - 100 Softgels',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 149.19,
     description: 'Combinación potente de arándano rojo concentrado y vitamina C. Apoya la salud del tracto urinario y función inmunológica.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14189_1.jpg
@@ -1925,7 +1925,7 @@ export const products: Product[] = [
   {
     id: "pr-collagen-peptides",
     name: 'Collagen Grass Fed Peptides Powder Type I & III - 198g',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1197.14,
     description: 'Péptidos de colágeno alimentado con pasto, tipos I y III. Apoya la salud de piel, cabello, uñas y articulaciones. En polvo fácil de mezclar.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17234_1.jpg
@@ -1944,7 +1944,7 @@ export const products: Product[] = [
   {
     id: "pr-digestive-duo",
     name: 'Digestive Duo Probiotic + Multi Enzyme - 30 Cápsulas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 267.84,
     description: 'Combinación sinérgica de probióticos y enzimas digestivas múltiples. Apoya la digestión saludable y equilibrio de la flora intestinal.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16789_1.jpg
@@ -1963,7 +1963,7 @@ export const products: Product[] = [
   {
     id: "pr-liver-cleanse-3day",
     name: 'Limpieza del Hígado en 3 Días - Programa Completo',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 596.76,
     description: 'Programa completo de limpieza hepática de 3 días con mezcla de hierbas tradicionales para apoyar la función de desintoxicación natural.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16486_2.jpg
@@ -1982,7 +1982,7 @@ export const products: Product[] = [
   {
     id: "pr-chamomile-oil-blend",
     name: 'Mezcla de Aceite Esencial de Manzanilla (Presentación 6-pack) - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 319.98,
     description: 'Pack económico de aceite esencial de manzanilla. Ideal para uso regular en aromaterapia, relajación y cuidado natural de la piel.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14008_2.jpg
@@ -2000,7 +2000,7 @@ export const products: Product[] = [
   {
     id: "pr-sandalwood-oil-blend",
     name: 'Mezcla de Aceite Esencial de Sándalo (Presentación 6-pack) - 15mL',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 319.98,
     description: 'Pack económico de aceite esencial de sándalo. Perfecto para meditación, relajación profunda y prácticas espirituales regulares.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14045_2.jpg
@@ -2019,7 +2019,7 @@ export const products: Product[] = [
   {
     id: "pr-ashwa-melatonin-4pack",
     name: 'Ashwagandha Melatonin plus L-Theanine (Pack de 4) - 60 Cápsulas c/u',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 716.60,
     description: 'Pack económico de fórmula para sueño reparador. Combina adaptógenos y melatonina para un descanso profundo y reparador.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17265_2.jpg
@@ -2038,7 +2038,7 @@ export const products: Product[] = [
   {
     id: "pr-gaba-single",
     name: 'GABA (Ácido Gamma Aminobutírico) 750mg - 100 Cápsulas (Unidad)',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 1089.88,
     description: 'GABA individual para manejo del estrés y promoción de la calma mental. Neurotransmisor natural para equilibrio emocional.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14456_2.jpg
@@ -2061,7 +2061,7 @@ export const products: Product[] = [
   {
     id: "pr-mct-oil",
     name: 'Aceite de MCT (Triglicéridos de Cadena Media) 3600mg - 150 Cápsulas',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 760.34,
     description: 'Aceite de MCT para energía rápida y apoyo metabólico. Ideal para dietas cetogénicas y rendimiento mental sostenido.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17489_1.jpg
@@ -2080,7 +2080,7 @@ export const products: Product[] = [
   {
     id: "pr-calendula-extract",
     name: 'Extracto Líquido de Caléndula, Botella con Gotero de 4 fl oz (118 mL)',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 187.12,
     description: 'Extracto líquido de caléndula para apoyo en cuidado de la piel y bienestar general. Formato líquido de fácil absorción.',
     // URL PIPING ROCK: https://www.pipingrock.com/calendula/calendula-liquid-extract-4-fl-oz-118-ml-dropper-bottle-15024
@@ -2098,7 +2098,7 @@ export const products: Product[] = [
   {
     id: "pr-dhea-100mg-extra",
     name: 'DHEA, 100 mg, 100 Cápsulas (Presentación Adicional)',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 374.92,
     description: 'DHEA adicional para balance hormonal y vitalidad. Presentación alternativa del suplemento hormonal premium.',
     // URL PIPING ROCK: https://www.pipingrock.com/dhea/dhea-100-mg-100-capsules-1436
@@ -2116,7 +2116,7 @@ export const products: Product[] = [
   {
     id: "pr-licorice-root",
     name: 'Raíz de Regaliz 900 mg (por porción) 180 Cápsulas de liberación rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 156.42,
     description: 'Raíz de regaliz tradicional para apoyo respiratorio y digestivo. Hierba adaptógena con múltiples beneficios.',
     // URL PIPING ROCK: https://www.pipingrock.com/licorice-root/licorice-root-900-mg-180-quick-release-capsules-1088
@@ -2134,7 +2134,7 @@ export const products: Product[] = [
   {
     id: "pr-borage-oil",
     name: 'Aceite de Borraja (GLA) 1000 mg 120 Cápsulas blandas de liberación rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 124.62,
     description: 'Aceite de borraja rico en GLA para salud de la piel y balance hormonal femenino. Ácidos grasos esenciales.',
     // URL PIPING ROCK: https://www.pipingrock.com/borage-oil/borage-oil-gla-1000-mg-120-quick-release-softgels-1123
@@ -2152,7 +2152,7 @@ export const products: Product[] = [
   {
     id: "pr-vitamin-c-rosehips-extra",
     name: 'Vitamina C 1000 mg con Escaramujos, 250 cápsulas (Presentación Extra)',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 187.12,
     description: 'Vitamina C con escaramujos para potenciar la absorción. Presentación extra económica con bioflavonoides naturales.',
     // URL PIPING ROCK: https://www.pipingrock.com/vitamin-c/vitamin-c-1000-mg-with-rose-hips-250-caplets-1004
@@ -2170,7 +2170,7 @@ export const products: Product[] = [
   {
     id: "pr-saw-palmetto",
     name: 'Palmito Salvaje, 160 mg, 50 Cápsulas Blandas',
-    category: 'salud-masculina',
+    categories: ['salud-masculina'],
     price: 187.12,
     description: 'Palmito salvaje para salud prostática masculina. Extracto estandarizado con ácidos grasos y esteroles.',
     // URL PIPING ROCK: https://www.pipingrock.com/saw-palmetto/saw-palmetto-160-mg-50-softgels-1025
@@ -2188,7 +2188,7 @@ export const products: Product[] = [
   {
     id: "pr-l-serine",
     name: 'L-Serina 500 mg 90 Cápsulas de liberación rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 187.12,
     description: 'L-Serina para función cerebral y síntesis de neurotransmisores. Aminoácido esencial para salud neurológica.',
     // URL PIPING ROCK: https://www.pipingrock.com/l-serine/l-serine-500-mg-90-quick-release-capsules-17115
@@ -2206,7 +2206,7 @@ export const products: Product[] = [
   {
     id: "pr-menopause-plus-extra",
     name: 'Menopausia Plus, 60 Cápsulas Vegetarianas (Presentación Adicional)',
-    category: 'salud-femenina',
+    categories: ['salud-femenina'],
     price: 374.92,
     description: 'Fórmula completa para apoyo durante la menopausia. Presentación adicional con hierbas tradicionales y nutrientes.',
     // URL PIPING ROCK: https://www.pipingrock.com/womens-health/menopause-plus-60-vegetarian-capsules-1259
@@ -2228,7 +2228,7 @@ export const products: Product[] = [
   {
     id: "pr-apple-cider-vinegar",
     name: 'Vinagre de Sidra de Manzana, 450 mg, 120 Cápsulas',
-    category: 'salud-digestiva',
+    categories: ['salud-digestiva'],
     price: 156.42,
     description: 'Vinagre de sidra de manzana para apoyo digestivo y metabólico. Rico en ácido acético y enzimas naturales.',
     // URL PIPING ROCK: https://www.pipingrock.com/apple-cider-vinegar/apple-cider-vinegar-450-mg-120-capsules-1169
@@ -2246,7 +2246,7 @@ export const products: Product[] = [
   {
     id: "pr-nutmeg-oil",
     name: 'Aceite esencial de nuez moscada, puro (GC/MS Probado) 1/2 fl oz 15 mL Frasco con dosificador',
-    category: 'aceites-esenciales',
+    categories: ['aceites-esenciales'],
     price: 62.36,
     description: 'Aceite esencial puro de nuez moscada para aromaterapia. Probado por GC/MS para garantizar pureza y potencia.',
     // URL PIPING ROCK: https://www.pipingrock.com/essential-oils/pure-nutmeg-essential-oil-gc-ms-tested-1-2-fl-oz-15-ml-dropper-bottle-1844
@@ -2264,7 +2264,7 @@ export const products: Product[] = [
   {
     id: "pr-juniper-berry-oil",
     name: 'Aceite esencial de baya de enebro del Himalaya, puro (GC/MS Probado) 1/2 fl oz 15 mL Frasco con dosificador',
-    category: 'aceites-esenciales',
+    categories: ['aceites-esenciales'],
     price: 124.62,
     description: 'Aceite esencial de baya de enebro del Himalaya para aromaterapia. Calidad premium con certificación GC/MS.',
     // URL PIPING ROCK: https://www.pipingrock.com/essential-oils/pure-himalayan-juniper-berry-essential-oil-gc-ms-tested-1-2-fl-oz-15-ml-dropper-bottle-15457
@@ -2282,7 +2282,7 @@ export const products: Product[] = [
   {
     id: "pr-cinnamon-leaf-oil",
     name: 'Aceite esencial de hoja de canela, puro (GC/MS Probado) 2 fl oz 59 mL Botella/Frasco',
-    category: 'aceites-esenciales',
+    categories: ['aceites-esenciales'],
     price: 218.62,
     description: 'Aceite esencial de hoja de canela en presentación grande. Propiedades calmantes y aromáticas intensas.',
     // URL PIPING ROCK: https://www.pipingrock.com/essential-oils/pure-cinnamon-leaf-essential-oil-gc-ms-tested-2-fl-oz-59-ml-bottle-1795
@@ -2300,7 +2300,7 @@ export const products: Product[] = [
   {
     id: "pr-turmeric-advanced",
     name: 'Compuesto avanzado de cúrcuma y curcumina 1500 mg (por porción) 120 Cápsulas de liberación rápida',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 37.99,
     description: 'Fórmula avanzada de cúrcuma con curcumina concentrada. Máxima potencia antiinflamatoria con biodisponibilidad mejorada.',
     images: [
@@ -2322,7 +2322,7 @@ export const products: Product[] = [
   {
     id: "101",
     name: 'Ashwagandha 4500mg',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 29.99,
     description: 'Ashwagandha de alta potencia para reducir el estrés y mejorar la energía natural.',
     images: [
@@ -2343,7 +2343,7 @@ export const products: Product[] = [
   {
     id: "102",
     name: 'CoQ10 100mg',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 34.99,
     description: 'Coenzima Q10 para la salud cardiovascular y energía celular.',
     images: [
@@ -2364,7 +2364,7 @@ export const products: Product[] = [
   {
     id: "103",
     name: 'GABA 750mg',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 24.99,
     description: 'GABA para promover la relajación y mejorar la calidad del sueño.',
     images: [
@@ -2385,7 +2385,7 @@ export const products: Product[] = [
   {
     id: "104",
     name: 'L-Theanine 200mg',
-    category: 'suplementos-especializados',
+    categories: ['suplementos-especializados'],
     price: 26.99,
     description: 'L-Teanina para la relajación mental sin somnolencia.',
     images: [
@@ -2406,7 +2406,7 @@ export const products: Product[] = [
   {
     id: "105",
     name: 'Magnesium Citrate 400mg',
-    category: 'vitaminas-minerales',
+    categories: ['vitaminas-minerales'],
     price: 19.99,
     description: 'Citrato de magnesio de alta absorción para músculos y nervios.',
     images: [
