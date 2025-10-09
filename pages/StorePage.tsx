@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { products, productCategories, systems } from '../data/products';
+import { products, productCategories, systems } from '../src/data/products';
 import ProductCard from '../components/ProductCard';
 import { SortOption } from '../src/types/product';
 import { useNavigationState } from '../src/hooks/useNavigationState';

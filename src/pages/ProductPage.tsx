@@ -193,12 +193,18 @@ const ProductPage: React.FC = () => {
             
             <div className="mt-3">
               <p className="text-3xl text-gray-900 font-bold">
-                ${product.price.toFixed(2)}
+                {product.price.toFixed(2)} RDS
               </p>
               {product.priceNote && (
-                <p className="text-sm text-gray-600 mt-1">
-                  {product.priceNote}
-                </p>
+                <div className="text-sm text-gray-600 mt-1">
+                  {Array.isArray(product.priceNote) ? (
+                    product.priceNote.map((note, index) => (
+                      <p key={index}>{note}</p>
+                    ))
+                  ) : (
+                    <p>{product.priceNote}</p>
+                  )}
+                </div>
               )}
             </div>
 
@@ -296,7 +302,7 @@ const ProductPage: React.FC = () => {
                     : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                {inWishlist ? '❤️ En lista' : '🤍 Agregar a lista'}
+                {inWishlist ? '❤️ En lista de deseos' : '🤍 Agregar a mi lista de deseos'}
               </button>
             </div>
 
