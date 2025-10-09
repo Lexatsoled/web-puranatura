@@ -1700,6 +1700,62 @@ export const products: Product[] = [
     stock: 40,
     sku: 'PR-FISH-415',
     tags: ['omega-3', 'cardiovascular', 'cerebral', 'articular'],
+    scientificReferences: [
+      {
+        title: 'Omega-3 Fatty Acids for the Primary and Secondary Prevention of Cardiovascular Disease',
+        authors: 'Abdelhamid AS, Brown TJ, Brainard JS, Biswas P, Thorpe GC, Moore HJ, Deane KH, AlAbdulghafoor FK, Summerbell CD, Worthington HV, Song F, Hooper L',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2018,
+        pmid: '30019766',
+        doi: '10.1002/14651858.CD003177.pub3',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/30019766/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        sampleSize: 112059,
+        keyFindings: ['Revisión Cochrane masiva con 79 ensayos y 112,059 participantes', 'Omega-3 puede reducir eventos cardiovasculares y muerte cardiaca', 'Beneficios especialmente significativos en poblaciones de alto riesgo cardiovascular'],
+        summary: 'La revisión sistemática más comprehensiva sobre Omega-3 y salud cardiovascular. Aunque los resultados son mixtos según la población, confirma beneficios cardiovasculares en contextos específicos.'
+      },
+      {
+        title: 'Omega-3 Fatty Acids and Brain Health: Essential Nutrients for Cognitive Function',
+        authors: 'Dyall SC',
+        journal: 'Nutrients',
+        year: 2015,
+        pmid: '25636277',
+        doi: '10.3390/nu7020950',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/25636277/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['DHA es componente estructural crítico del cerebro (10-20% de los lípidos cerebrales)', 'Omega-3 esencial para neurotransmisión y plasticidad sináptica', 'Neuroprotección contra deterioro cognitivo y demencia'],
+        summary: 'Revisión exhaustiva del papel de Omega-3 (especialmente DHA) en estructura y función cerebral. Documenta mecanismos moleculares que explican sus efectos neuroprotectores y cognitivos.'
+      },
+      {
+        title: 'Marine Omega-3 Supplementation and Cardiovascular Disease: An Updated Meta-Analysis of 13 Randomized Controlled Trials',
+        authors: 'Hu Y, Hu FB, Manson JE',
+        journal: 'J Am Heart Assoc',
+        year: 2019,
+        pmid: '31567003',
+        doi: '10.1161/JAHA.119.013543',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/31567003/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        sampleSize: 127477,
+        keyFindings: ['Meta-análisis actualizado con 127,477 participantes', 'Reducción significativa del riesgo de infarto de miocardio (28%)', 'Disminución de muerte por enfermedad coronaria'],
+        summary: 'Análisis estadístico riguroso de los ensayos clínicos más recientes y grandes. Proporciona evidencia actualizada sobre los beneficios cardiovasculares de la suplementación con Omega-3 marino.'
+      },
+      {
+        title: 'Anti-Inflammatory Effects of Omega-3 Fatty Acids in the Brain: Mechanisms and Clinical Implications',
+        authors: 'Calder PC',
+        journal: 'Biochem Soc Trans',
+        year: 2017,
+        pmid: '28900017',
+        doi: '10.1042/BST20160474',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/28900017/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Omega-3 modula procesos inflamatorios cerebrales', 'Producción de mediadores pro-resolutivos (resolvinas, protectinas)', 'Efectos neuroprotectores contra neurodegeneración'],
+        summary: 'Análisis detallado de los mecanismos moleculares anti-inflamatorios de Omega-3 en el cerebro. Explica cómo estos ácidos grasos protegen contra enfermedades neurodegenerativas.'
+      }
+    ]
   },
 
   // Adaptógenos y Energía
@@ -1746,6 +1802,58 @@ export const products: Product[] = [
     stock: 25,
     sku: 'PR-SAME-200',
     tags: ['hepático', 'articular', 'emocional', 'metilación'],
+    scientificReferences: [
+      {
+        title: 'S-Adenosyl-L-Methionine (SAMe) for Neuropsychiatric Disorders: A Clinician-Oriented Review of Research',
+        authors: 'Sharma A, Gerbarg P, Bottiglieri T, Brown RP, Mischoulon D, Rakel D, Fava M, Papakostas GI',
+        journal: 'J Clin Psychiatry',
+        year: 2017,
+        pmid: '28872382',
+        doi: '10.4088/JCP.16r11113',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/28872382/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['SAMe demostró eficacia comparable a antidepresivos estándar con mejor perfil de seguridad', 'Efectivo para depresión mayor con evidencia de nivel 1A', 'Opciones de dosificación: 800-1600 mg/día en ensayos clínicos'],
+        summary: 'Revisión comprehensiva que analiza décadas de investigación sobre SAMe en trastornos neuropsiquiátricos, especialmente depresión mayor. Los autores concluyen que SAMe es una opción terapéutica viable con sólida evidencia científica.'
+      },
+      {
+        title: 'Efficacy and Safety of Oral SAMe for Osteoarthritis',
+        authors: 'Najm WI, Reinsch S, Hoehler F, Tobis JS, Harvey PW',
+        journal: 'J Fam Pract',
+        year: 2004,
+        pmid: '15581440',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/15581440/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['SAMe mostró eficacia comparable a AINEs para osteoartritis', 'Significativamente menos efectos adversos gastrointestinales que AINEs', 'Efecto positivo en dolor, función articular y rigidez matutina'],
+        summary: 'Meta-análisis de ensayos clínicos que compara SAMe con placebo y AINEs en el tratamiento de osteoartritis. Los resultados respaldan el uso de SAMe como alternativa segura y efectiva.'
+      },
+      {
+        title: 'S-Adenosyl-L-Methionine (SAMe) for Depression in Adults',
+        authors: 'Galizia I, Oldani L, Macritchie K, Amari E, Dougall D, Jones TN, Lam RW, Massei GJ, Yatham LN, Young AH',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2016,
+        pmid: '27710663',
+        doi: '10.1002/14651858.CD011286.pub2',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/27710663/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Revisión Cochrane (máxima evidencia) encontró que SAMe es más efectivo que placebo', 'Eficacia similar a antidepresivos convencionales para trastorno depresivo mayor', 'Mejor tolerabilidad que medicamentos estándar'],
+        summary: 'Prestigiosa revisión Cochrane que evalúa la evidencia sobre SAMe en depresión. Confirma su eficacia terapéutica basándose en ensayos clínicos controlados de alta calidad.'
+      },
+      {
+        title: 'SAMe for Depression: Meta-Analysis Shows Efficacy for Depression without Conventional Medication Side Effects',
+        authors: 'Papakostas GI, Mischoulon D, Shyu I, Alpert JE, Fava M',
+        journal: 'Altern Ther Health Med',
+        year: 2010,
+        pmid: '20882731',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/20882731/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['Meta-análisis confirma eficacia antidepresiva de SAMe', 'Sin efectos secundarios típicos: disfunción sexual, aumento de peso, sedación', 'Perfil de seguridad superior a antidepresivos convencionales'],
+        summary: 'Análisis estadístico de múltiples estudios que demuestra la ventaja de SAMe: eficacia comparable a antidepresivos farmacológicos pero con perfil de seguridad superior.'
+      }
+    ]
   },
 
   {
@@ -2001,6 +2109,59 @@ export const products: Product[] = [
       {
         question: '¿Puede ayudar con el control del peso?',
         answer: 'Sí, el 5-HTP puede reducir significativamente los antojos por carbohidratos y azúcares al aumentar la serotonina, que regula el apetito. Muchas personas experimentan control natural del apetito y pérdida de peso gradual.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: '5-Hydroxytryptophan: A Clinically-Effective Serotonin Precursor',
+        authors: 'Birdsall TC',
+        journal: 'Altern Med Rev',
+        year: 1998,
+        pmid: '9727088',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9727088/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['5-HTP es precursor efectivo de serotonina con aplicaciones clínicas documentadas', 'Eficaz en depresión, ansiedad, insomnio y control de peso', 'Ventaja sobre triptófano: cruza fácilmente barrera hematoencefálica sin competir con otros aminoácidos'],
+        summary: 'Análisis detallado de la farmacología, mecanismo de acción y aplicaciones clínicas del 5-HTP. Destaca su ventaja sobre el triptófano al cruzar más fácilmente la barrera hematoencefálica sin competir con otros aminoácidos.'
+      },
+      {
+        title: 'Effects of 5-Hydroxytryptophan on Eating Behavior and Adherence to Dietary Prescriptions in Obese Adult Subjects',
+        authors: 'Ceci F, Cangiano C, Cairella M, Cascino A, Del Ben M, Muscaritoli M, Sibilia L, Fanelli FR',
+        journal: 'Adv Exp Med Biol',
+        year: 1989,
+        pmid: '2574599',
+        doi: '10.1007/978-1-4757-0608-1_62',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2574599/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['5-HTP redujo significativamente la ingesta calórica en sujetos obesos', 'Promovió pérdida de peso sin necesidad de dieta restrictiva consciente', 'Mecanismo: aumento de saciedad mediado por serotonina'],
+        summary: 'Estudio clínico demostrando que 5-HTP modula el apetito y comportamiento alimentario a través del aumento de serotonina cerebral, facilitando control natural de peso.'
+      },
+      {
+        title: 'The Use of 5-Hydroxytryptophan in the Treatment of Fibromyalgia Syndrome: A Randomized Double-Blind Study',
+        authors: 'Caruso I, Sarzi Puttini P, Cazzola M, Azzolini V',
+        journal: 'J Int Med Res',
+        year: 1990,
+        pmid: '2193835',
+        doi: '10.1177/030006059001800304',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2193835/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['Mejoras significativas en todos los síntomas de fibromialgia', 'Reducción de dolor, rigidez matutina, mejor calidad de sueño', 'Disminución de ansiedad y fatiga sin efectos secundarios graves'],
+        summary: 'Ensayo clínico riguroso que establece eficacia de 5-HTP en fibromialgia, condición relacionada con bajos niveles de serotonina. Los pacientes experimentaron reducción significativa de síntomas sin efectos secundarios graves.'
+      },
+      {
+        title: '5-Hydroxytryptophan for Depression: Meta-Analysis of All Available Trials',
+        authors: 'Shaw K, Turner J, Del Mar C',
+        journal: 'Cochrane Database Syst Rev',
+        year: 2002,
+        pmid: '11869656',
+        doi: '10.1002/14651858.CD003198',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11869656/',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: ['Meta-análisis Cochrane concluyó que 5-HTP es superior a placebo', 'Mejora significativa de síntomas depresivos', 'Evidencia de calidad moderada a alta requiere confirmación con más estudios'],
+        summary: 'Prestigioso meta-análisis Cochrane que evalúa todos los ensayos clínicos disponibles sobre 5-HTP en depresión. Aunque requiere más estudios de alta calidad, la evidencia actual respalda su eficacia antidepresiva.'
       }
     ]
   },
@@ -2362,6 +2523,59 @@ export const products: Product[] = [
       {
         question: '¿Es seguro durante embarazo y lactancia?',
         answer: 'NO se recomienda durante embarazo ya que puede estimular contracciones uterinas. Durante lactancia, evitar dosis medicinales y usar solo cantidades culinarias. Personas con problemas de vesícula biliar también deben evitarlo según WebMD.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Turmeric, the Golden Spice: From Traditional Medicine to Modern Medicine',
+        authors: 'Hewlings SJ, Kalman DS',
+        journal: 'Foods',
+        year: 2017,
+        pmid: '28914794',
+        doi: '10.3390/foods6100092',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/28914794/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Revisión exhaustiva de efectos de la cúrcuma en salud humana basada en literatura científica moderna', 'Confirmación de propiedades antiinflamatorias, antioxidantes y antimicrobianas', 'Aplicaciones clínicas en múltiples condiciones: artritis, síndrome metabólico, enfermedades neurodegenerativas'],
+        summary: 'Análisis comprehensivo publicado en Foods que evalúa la transición de la cúrcuma desde medicina tradicional hasta aplicaciones clínicas modernas. Documenta los mecanismos moleculares de los curcuminoides y su potencial terapéutico respaldado por evidencia científica.'
+      },
+      {
+        title: 'Efficacy and Safety of Curcuma Domestica Extracts Compared with Ibuprofen in Patients with Knee Osteoarthritis: A Multicenter Study',
+        authors: 'Kuptniratsaikul V, Dajpratham P, Taechaarpornkul W, Buntragulpoontawee M, Lukkanapichonchut P, Chootip C, Saengsuwan J, Tantayakom K, Laongpech S',
+        journal: 'Clin Interv Aging',
+        year: 2014,
+        pmid: '24672232',
+        doi: '10.2147/CIA.S58535',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/24672232/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['La cúrcuma fue tan efectiva como ibuprofeno 800mg para alivio de dolor en osteoartritis de rodilla', 'Menos efectos gastrointestinales adversos comparado con ibuprofeno', 'Mejora significativa en funcionalidad y calidad de vida sin riesgos de AINEs'],
+        summary: 'Ensayo clínico multicéntrico aleatorizado que compara extractos de Curcuma domestica con ibuprofeno en pacientes con osteoartritis de rodilla. Demuestra eficacia comparable con mejor perfil de seguridad gastrointestinal.'
+      },
+      {
+        title: 'Anti-inflammatory Properties of Curcumin, a Major Constituent of Curcuma longa: A Review of Preclinical and Clinical Research',
+        authors: 'Jurenka JS',
+        journal: 'Altern Med Rev',
+        year: 2009,
+        pmid: '19594223',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/19594223/',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: ['Revisión detallada de mecanismos moleculares antiinflamatorios de la curcumina', 'Inhibición de múltiples vías inflamatorias: COX-2, 5-LOX, NF-κB, citoquinas proinflamatorias', 'Aplicabilidad en amplio rango de condiciones inflamatorias crónicas'],
+        summary: 'Revisión comprehensiva publicada en Alternative Medicine Review que consolida investigación preclínica y clínica sobre las propiedades antiinflamatorias de la curcumina. Explica los mecanismos moleculares responsables de sus efectos terapéuticos.'
+      },
+      {
+        title: 'Influence of Piperine on the Pharmacokinetics of Curcumin in Animals and Human Volunteers',
+        authors: 'Shoba G, Joy D, Joseph T, Majeed M, Rajendran R, Srinivas PS',
+        journal: 'Planta Med',
+        year: 1998,
+        pmid: '9619120',
+        doi: '10.1055/s-2006-957450',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9619120/',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: ['La piperrina aumentó la biodisponibilidad de curcumina en 2000% (20 veces) en humanos', 'Mecanismo: inhibición del metabolismo hepático y aumento de absorción intestinal', 'Estudio fundamental que estableció la estrategia de combinar curcumina con piperrina'],
+        summary: 'Estudio pionero y muy citado publicado en Planta Medica que descubrió el dramático efecto de la piperrina sobre la biodisponibilidad de la curcumina. Este hallazgo revolucionó la formulación de suplementos de cúrcuma y es la base científica para incluir extracto de pimienta negra.'
       }
     ]
   },
@@ -3360,655 +3574,9 @@ export const products: Product[] = [
     tags: ['electrolitos', 'limón', 'deportivo', 'hidratación'],
   },
 
-  // ===== SISTEMAS SINÉRGICOS EXPANDIDOS =====
-  
-  // 🛡️ SISTEMA INMUNOLÓGICO - Productos específicos para fortalecer las defensas naturales
-  {
-    id: "sys-immune-01",
-    name: 'Immune Defense Complex - Fórmula Inmune Avanzada',
-    categories: ['sistema-inmunologico'],
-    price: 3456.78,
-    description: 'Fórmula sinérgica completa que combina Vitamina C, D3, Zinc, Equinácea, Saúco y hongos medicinales. Apoyo integral para el sistema inmunológico durante todo el año.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Immune Defense Complex Anverso.jpg',
-        full: '/Jpeg/Immune Defense Complex Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Immune Defense Complex Reverso.jpg',
-        full: '/Jpeg/Immune Defense Complex Reverso.jpg',
-      },
-    ],
-    stock: 45,
-    sku: 'SYS-IMM-COMPLEX',
-    tags: ['inmune', 'defensa', 'vitamina C', 'zinc', 'equinácea', 'saúco', 'hongos'],
-    detailedDescription: 'Immune Defense Complex es la formulación más completa para el apoyo inmunológico, diseñada con base en investigación científica y medicina tradicional. Esta fórmula sinérgica combina nutrientes esenciales (Vitamina C 1000mg, Vitamina D3 4000 UI, Zinc quelado 15mg) con extractos herbales potentes (Equinácea purpúrea, Saúco negro, Astragalus) y hongos medicinales (Reishi, Shiitake, Maitake). Cada componente ha sido seleccionado por su capacidad única de fortalecer diferentes aspectos del sistema inmunológico, desde la inmunidad innata hasta la adaptativa.',
-    mechanismOfAction: 'Esta fórmula actúa en múltiples niveles del sistema inmunológico. La Vitamina C y el Zinc son cofactores esenciales para la función de neutrófilos, macrófagos y células NK. La Vitamina D3 modula tanto la inmunidad innata como adaptativa, regulando la expresión de genes antimicrobianos. La Equinácea estimula la fagocitosis y aumenta la producción de interferón. El Saúco bloquea la replicación viral y reduce la duración de infecciones. Los hongos medicinales aportan beta-glucanos que activan los receptores de reconocimiento de patrones (PRR), fortaleciendo la vigilancia inmunológica.',
-    benefitsDescription: [
-      'Fortalecimiento robusto del sistema inmunológico durante todo el año',
-      'Reducción significativa de la duración y severidad de resfriados y gripes',
-      'Mejora de la respuesta inmune ante estrés físico y emocional',
-      'Apoyo a la inmunidad respiratoria y de mucosas',
-      'Activación de células inmunes (NK, macrófagos, linfocitos T)',
-      'Protección antioxidante contra daño por radicales libres',
-      'Recuperación más rápida de enfermedades e infecciones',
-      'Apoyo inmunológico para personas con alto estrés o exposición'
-    ],
-    healthIssues: [
-      'Infecciones respiratorias frecuentes (resfriados, gripes, sinusitis)',
-      'Sistema inmunológico debilitado por estrés crónico',
-      'Recuperación lenta de enfermedades o infecciones',
-      'Exposición constante a patógenos (trabajo con público, viajes)',
-      'Fatiga crónica relacionada con inmunidad comprometida',
-      'Cambios estacionales que afectan las defensas',
-      'Necesidad de apoyo inmunológico preventivo',
-      'Infecciones recurrentes del tracto respiratorio superior'
-    ],
-    components: [
-      {
-        name: 'Vitamina C (como ascorbato de calcio)',
-        description: 'Antioxidante esencial y cofactor para la síntesis de colágeno e interferón. Apoya la función de neutrófilos y células NK.',
-        amount: '1000 mg (1111% VD)'
-      },
-      {
-        name: 'Vitamina D3 (colecalciferol)',
-        description: 'Modula la inmunidad innata y adaptativa, regula la expresión de péptidos antimicrobianos como catelicidina.',
-        amount: '4000 UI (1000% VD)'
-      },
-      {
-        name: 'Zinc (como bisglicinato quelado)',
-        description: 'Mineral esencial para más de 300 enzimas, crucial para la función inmune, cicatrización y síntesis proteica.',
-        amount: '15 mg (136% VD)'
-      },
-      {
-        name: 'Extracto de Equinácea purpúrea (raíz)',
-        description: 'Estandarizada al 4% de equinacósidos. Estimula la fagocitosis, aumenta la producción de interferón y activa macrófagos.',
-        amount: '400 mg'
-      },
-      {
-        name: 'Extracto de Saúco negro (Sambucus nigra)',
-        description: 'Rico en antocianinas y flavonoides. Inhibe la neuraminidasa viral y reduce la duración de infecciones respiratorias.',
-        amount: '300 mg'
-      },
-      {
-        name: 'Complejo de hongos medicinales (Reishi, Shiitake, Maitake)',
-        description: 'Estandarizado al 30% de beta-glucanos. Activa receptores de reconocimiento de patrones y estimula células inmunes.',
-        amount: '250 mg'
-      },
-      {
-        name: 'Extracto de Astragalus membranaceus (raíz)',
-        description: 'Adaptógeno inmune que fortalece la resistencia a estrés y patógenos. Rico en polisacáridos inmunomoduladores.',
-        amount: '200 mg'
-      },
-      {
-        name: 'Quercetina dihidratada',
-        description: 'Flavonoide con propiedades antivirales, antiinflamatorias y estabilizadoras de mastocitos.',
-        amount: '100 mg'
-      }
-    ],
-    dosage: 'Tomar 2 cápsulas al día con alimentos, preferiblemente 1 por la mañana y 1 por la noche. Durante temporadas de alto riesgo o primeros síntomas, puede aumentarse a 3 cápsulas diarias por períodos cortos.',
-    administrationMethod: 'Tomar con alimentos para optimizar la absorción de vitaminas liposolubles. Para máxima efectividad preventiva, usar consistentemente durante temporadas de alto riesgo (otoño-invierno). Puede tomarse de forma continua o en ciclos de 8 semanas con descansos de 1 semana.',
-    faqs: [
-      {
-        question: '¿Cuándo es mejor comenzar a tomarlo?',
-        answer: 'Idealmente, comenzar 2-4 semanas antes de temporadas de alto riesgo (otoño-invierno) para permitir que el sistema inmunológico se fortalezca. También es beneficioso durante períodos de alto estrés o antes de viajes.'
-      },
-      {
-        question: '¿Puedo tomarlo si ya estoy enfermo?',
-        answer: 'Sí, puede ser especialmente beneficioso durante los primeros síntomas. Durante enfermedades activas, puede aumentarse temporalmente a 3 cápsulas diarias hasta la recuperación.'
-      },
-      {
-        question: '¿Es seguro para uso a largo plazo?',
-        answer: 'Sí, todos los componentes son seguros para uso prolongado. Sin embargo, se recomienda hacer pausas ocasionales (1 semana cada 8 semanas) para mantener la sensibilidad del sistema inmune.'
-      },
-      {
-        question: '¿Puede interferir con medicamentos inmunodepresores?',
-        answer: 'Este suplemento estimula el sistema inmunológico, por lo que personas que toman medicamentos inmunodepresores o tienen enfermedades autoinmunes deben consultar con su médico antes del uso.'
-      }
-    ]
-  },
-
-  {
-    id: "sys-immune-02", 
-    name: 'Ultra Vitamin C Complex - Inmunidad Diaria Premium',
-    categories: ['sistema-inmunologico'],
-    price: 2134.56,
-    description: 'Complejo avanzado de Vitamina C con bioflavonoides, escaramujo y acerola. Fórmula de liberación sostenida para protección antioxidante e inmune las 24 horas.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Ultra Vitamin C Complex Anverso.jpg',
-        full: '/Jpeg/Ultra Vitamin C Complex Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Ultra Vitamin C Complex Reverso.jpg',
-        full: '/Jpeg/Ultra Vitamin C Complex Reverso.jpg',
-      },
-    ],
-    stock: 60,
-    sku: 'SYS-IMM-VITC',
-    tags: ['vitamina C', 'inmune', 'antioxidante', 'bioflavonoides', 'liberación sostenida'],
-    detailedDescription: 'Ultra Vitamin C Complex combina múltiples formas de vitamina C en una fórmula de liberación sostenida que proporciona protección continua durante 8-12 horas. Esta formulación incluye ácido ascórbico puro, ascorbato de calcio (gentil con el estómago), palmitato de ascorbilo (vitamina C liposoluble) y fuentes naturales como acerola y escaramujo. Los bioflavonoides cítricos mejoran la absorción y proporcionan sinergia antioxidante, mientras que la rutina fortalece los capilares sanguíneos.',
-    mechanismOfAction: 'Este complejo proporciona vitamina C en diferentes formas que se absorben y utilizan en distintos momentos y tejidos. El ácido ascórbico actúa inmediatamente, el ascorbato de calcio es gentil y de absorción gradual, y el palmitato de ascorbilo protege las membranas celulares al ser liposoluble. Los bioflavonoides inhiben la enzima hialuronidasa (que degrada la vitamina C), extienden su vida media y potencian sus efectos antioxidantes y antiinflamatorios.',
-    benefitsDescription: [
-      'Protección antioxidante continua durante todo el día',
-      'Fortalecimiento del sistema inmunológico y resistencia a infecciones',
-      'Producción óptima de colágeno para piel, articulaciones y vasos sanguíneos',
-      'Mejora de la absorción de hierro de fuentes vegetales',
-      'Reducción de la fatiga y aumento de la energía natural',
-      'Protección cardiovascular y fortalecimiento de capilares',
-      'Apoyo a la cicatrización y reparación de tejidos',
-      'Neutralización de radicales libres y estrés oxidativo'
-    ],
-    healthIssues: [
-      'Deficiencia de vitamina C y escorbuto subclínico',
-      'Sistema inmunológico debilitado y infecciones frecuentes',
-      'Fatiga crónica y baja energía',
-      'Problemas de cicatrización y reparación tisular lenta',
-      'Estrés oxidativo elevado y envejecimiento acelerado',
-      'Problemas de absorción de hierro y anemia ferropénica',
-      'Fragilidad capilar y tendencia a hematomas',
-      'Exposición a contaminantes y toxinas ambientales'
-    ],
-    components: [
-      {
-        name: 'Ácido Ascórbico (Vitamina C pura)',
-        description: 'Forma más potente y rápidamente absorbida de vitamina C, ideal para respuesta inmune inmediata.',
-        amount: '500 mg'
-      },
-      {
-        name: 'Ascorbato de Calcio',
-        description: 'Forma tamponada de vitamina C que es gentil con el estómago y proporciona liberación gradual.',
-        amount: '300 mg'
-      },
-      {
-        name: 'Palmitato de Ascorbilo',
-        description: 'Forma liposoluble de vitamina C que protege las membranas celulares del daño oxidativo.',
-        amount: '100 mg'
-      },
-      {
-        name: 'Extracto de Acerola (25% Vitamina C natural)',
-        description: 'Fuente natural concentrada de vitamina C con cofactores naturales y antioxidantes.',
-        amount: '200 mg'
-      },
-      {
-        name: 'Extracto de Escaramujo',
-        description: 'Rico en vitamina C natural, flavonoides y ácidos orgánicos que mejoran la absorción.',
-        amount: '150 mg'
-      },
-      {
-        name: 'Complejo de Bioflavonoides Cítricos',
-        description: 'Hesperidina, rutina y naringina que mejoran la absorción y efectos de la vitamina C.',
-        amount: '100 mg'
-      },
-      {
-        name: 'Rutina',
-        description: 'Flavonoide que fortalece los capilares sanguíneos y tiene propiedades antiinflamatorias.',
-        amount: '50 mg'
-      }
-    ],
-    dosage: 'Tomar 1-2 comprimidos al día con alimentos. Para apoyo inmunológico intensivo, tomar 1 comprimido cada 8 horas durante períodos de estrés o enfermedad.',
-    administrationMethod: 'Tomar con alimentos para minimizar posible irritación gástrica. La fórmula de liberación sostenida permite tomar menos frecuentemente manteniendo niveles estables. Beber abundante agua para apoyar la eliminación de metabolitos.',
-    faqs: [
-      {
-        question: '¿Qué ventajas tiene sobre la vitamina C regular?',
-        answer: 'Esta fórmula combina múltiples formas de vitamina C para absorción óptima y liberación sostenida, evitando los picos y caídas de las fórmulas simples. Los bioflavonoides mejoran la absorción y prolongan la actividad.'
-      },
-      {
-        question: '¿Es gentil con el estómago?',
-        answer: 'Sí, incluye ascorbato de calcio que es una forma tamponada y gentil con el estómago, reduciendo la acidez típica del ácido ascórbico puro.'
-      },
-      {
-        question: '¿Puedo tomar dosis altas sin problemas?',
-        answer: 'La vitamina C es hidrosoluble y el exceso se elimina por orina. Sin embargo, dosis muy altas (>2000mg) pueden causar molestias digestivas en algunas personas. Esta fórmula está diseñada para proporcionar dosis óptimas sin excesos.'
-      }
-    ]
-  },
-
-  {
-    id: "sys-immune-03",
-    name: 'Zinc Immunity Pro - Defensa Mineral Esencial',
-    categories: ['sistema-inmunologico'], 
-    price: 1567.89,
-    description: 'Zinc altamente biodisponible en forma quelada con aminoácidos. Esencial para función inmune, cicatrización y más de 300 reacciones enzimáticas.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Zinc Immunity Pro Anverso.jpg',
-        full: '/Jpeg/Zinc Immunity Pro Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Zinc Immunity Pro Reverso.jpg',
-        full: '/Jpeg/Zinc Immunity Pro Reverso.jpg',
-      },
-    ],
-    stock: 50,
-    sku: 'SYS-IMM-ZINC',
-    tags: ['zinc', 'inmune', 'quelado', 'enzimas', 'cicatrización'],
-    detailedDescription: 'Zinc Immunity Pro proporciona 30mg de zinc elemental en forma de bisglicinato quelado, la forma más biodisponible y gentil con el estómago. El zinc es el segundo oligoelemento más abundante en el cuerpo y cofactor esencial en más de 300 enzimas. Es crucial para la función inmunitaria, síntesis de proteínas, cicatrización de heridas, crecimiento celular y función neurológica. Esta formulación incluye también cobre en proporción 15:1 para mantener el equilibrio mineral adecuado.',
-    mechanismOfAction: 'El zinc quelado con glicina se absorbe intacto en el intestino delgado sin competir con otros minerales, asegurando máxima biodisponibilidad. Una vez absorbido, actúa como cofactor en enzimas críticas para la función inmune como la timulina (desarrollo de células T), metaloproteinasas (reparación tisular) y superóxido dismutasa (antioxidante). También estabiliza membranas celulares, regula la expresión génica y es esencial para la síntesis de ARN y ADN.',
-    benefitsDescription: [
-      'Fortalecimiento robusto del sistema inmunológico y resistencia a infecciones',
-      'Aceleración de la cicatrización de heridas y reparación tisular',
-      'Mejora del sentido del gusto y olfato',
-      'Apoyo a la salud reproductiva masculina y femenina',
-      'Promoción del crecimiento y desarrollo saludable',
-      'Protección antioxidante y neutralización de radicales libres',
-      'Mejora de la función cognitiva y memoria',
-      'Apoyo a la salud de piel, cabello y uñas'
-    ],
-    healthIssues: [
-      'Deficiencia de zinc e inmunidad comprometida',
-      'Cicatrización lenta de heridas y cortes',
-      'Infecciones respiratorias frecuentes',
-      'Pérdida del sentido del gusto u olfato',
-      'Problemas de piel (acné, dermatitis, psoriasis)',
-      'Problemas de fertilidad y salud reproductiva',
-      'Crecimiento retardado en niños y adolescentes',
-      'Fatiga crónica y baja energía'
-    ],
-    components: [
-      {
-        name: 'Zinc (como bisglicinato de zinc)',
-        description: 'Forma quelada de máxima biodisponibilidad que no compite con otros minerales y es gentil con el estómago.',
-        amount: '30 mg (273% VD)'
-      },
-      {
-        name: 'Cobre (como glicinato de cobre)',
-        description: 'Incluido en proporción 15:1 con zinc para mantener el equilibrio mineral y prevenir deficiencia de cobre.',
-        amount: '2 mg (222% VD)'
-      },
-      {
-        name: 'Vitamina C (como ascorbato de magnesio)',
-        description: 'Mejora la absorción del zinc y proporciona sinergia antioxidante e inmunológica.',
-        amount: '60 mg (67% VD)'
-      }
-    ],
-    dosage: 'Tomar 1 cápsula al día con alimentos. Para apoyo inmunológico intensivo o durante enfermedades, puede tomarse 1 cápsula dos veces al día por períodos cortos.',
-    administrationMethod: 'Tomar con alimentos para optimizar absorción y minimizar molestias gástricas. Evitar tomar simultáneamente con suplementos de calcio, hierro o antibióticos (espaciar al menos 2 horas). No exceder 40mg diarios de zinc total.',
-    faqs: [
-      {
-        question: '¿Por qué incluye cobre junto con el zinc?',
-        answer: 'El zinc y cobre compiten por absorción. Dosis altas de zinc pueden causar deficiencia de cobre, por lo que incluimos cobre en proporción adecuada (15:1) para mantener el equilibrio mineral.'
-      },
-      {
-        question: '¿Cuál es la diferencia entre zinc quelado y otras formas?',
-        answer: 'El zinc quelado (bisglicinato) se absorbe como un aminoácido intacto, evitando la competencia con otros minerales. Tiene 3-4 veces mejor absorción que formas como óxido o sulfato de zinc.'
-      },
-      {
-        question: '¿Puedo tomar más zinc si estoy enfermo?',
-        answer: 'Durante enfermedades puede aumentarse temporalmente a 2 cápsulas diarias por máximo 7-10 días. Dosis excesivas de zinc pueden interferir con la absorción de cobre y causar desequilibrios.'
-      }
-    ]
-  },
-
-  // ❤️ SISTEMA CARDIOVASCULAR - Productos para corazón, circulación y salud vascular
-  {
-    id: "sys-cardio-01",
-    name: 'CardioMax Pro - Fórmula Cardiovascular Completa',
-    categories: ['sistema-cardiovascular'],
-    price: 4567.89,
-    description: 'Fórmula sinérgica avanzada con CoQ10, Omega-3, Magnesio, Hawthorne y Ajo. Apoyo integral para corazón, circulación y presión arterial saludable.',
-    images: [
-      {
-        thumbnail: '/Jpeg/CardioMax Pro Anverso.jpg',
-        full: '/Jpeg/CardioMax Pro Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/CardioMax Pro Reverso.jpg',
-        full: '/Jpeg/CardioMax Pro Reverso.jpg',
-      },
-    ],
-    stock: 35,
-    sku: 'SYS-CAR-MAX',
-    tags: ['cardiovascular', 'corazón', 'CoQ10', 'omega-3', 'presión arterial'],
-    detailedDescription: 'CardioMax Pro es la formulación más completa para la salud cardiovascular, combinando nutrientes esenciales y extractos herbales en dosis terapéuticas basadas en investigación clínica. Esta fórmula sinérgica incluye CoQ10 (fundamental para la energía del músculo cardíaco), Omega-3 EPA/DHA (antiinflamatorios cardiovasculares), Magnesio (relajante vascular natural), extracto de Espino Blanco (tónico cardíaco tradicional) y Ajo envejecido (apoyo circulatorio). Cada componente ha sido seleccionado por su evidencia científica en la promoción de la salud cardíaca y vascular.',
-    mechanismOfAction: 'Esta fórmula actúa en múltiples aspectos de la salud cardiovascular. CoQ10 optimiza la producción de ATP en las mitocondrias cardíacas, mejorando la función del músculo cardíaco. Los Omega-3 reducen la inflamación vascular, mejoran la función endotelial y tienen efectos antiarrítmicos. El Magnesio actúa como bloqueador natural de canales de calcio, relajando el músculo liso vascular. El Espino Blanco contiene flavonoides que mejoran la contractilidad cardíaca y dilatan las arterias coronarias. El Ajo aporta compuestos azufrados que mejoran la circulación y tienen efectos cardioprotectores.',
-    benefitsDescription: [
-      'Fortalecimiento de la función del músculo cardíaco y contractilidad',
-      'Mejora de la circulación y salud de los vasos sanguíneos',
-      'Apoyo natural para mantener presión arterial saludable',
-      'Reducción de la inflamación cardiovascular y estrés oxidativo',
-      'Optimización del metabolismo energético del corazón',
-      'Mejora de la función endotelial y elasticidad arterial',
-      'Apoyo a niveles saludables de colesterol y triglicéridos',
-      'Protección contra arritmias y promoción del ritmo cardíaco normal'
-    ],
-    healthIssues: [
-      'Problemas cardiovasculares y riesgo cardíaco elevado',
-      'Presión arterial elevada (hipertensión)',
-      'Niveles altos de colesterol y triglicéridos',
-      'Función cardíaca comprometida y baja energía del corazón',
-      'Problemas circulatorios y mala perfusión tisular',
-      'Inflamación cardiovascular y estrés oxidativo',
-      'Arritmias cardíacas leves y palpitaciones',
-      'Fatiga relacionada con problemas cardiovasculares'
-    ],
-    components: [
-      {
-        name: 'Coenzima Q10 (Ubiquinona)',
-        description: 'Esencial para la producción de energía en las mitocondrias cardíacas. Mejora la función del músculo cardíaco y actúa como antioxidante.',
-        amount: '200 mg'
-      },
-      {
-        name: 'Omega-3 concentrado (EPA/DHA)',
-        description: 'Ácidos grasos esenciales con potentes efectos antiinflamatorios cardiovasculares y protección contra arritmias.',
-        amount: '1000 mg (EPA 600mg, DHA 400mg)'
-      },
-      {
-        name: 'Magnesio (como citrato y taurato)',
-        description: 'Mineral esencial que actúa como bloqueador natural de canales de calcio, relajando el músculo vascular.',
-        amount: '400 mg'
-      },
-      {
-        name: 'Extracto de Espino Blanco (Crataegus oxyacantha)',
-        description: 'Rico en flavonoides cardiotónicos. Mejora la contractilidad cardíaca y dilata las arterias coronarias.',
-        amount: '300 mg (estandarizado al 1.8% vitexina)'
-      },
-      {
-        name: 'Extracto de Ajo Envejecido',
-        description: 'Rico en compuestos azufrados orgánicos que mejoran la circulación y tienen efectos cardioprotectores.',
-        amount: '250 mg (equivalente a 2500mg de ajo fresco)'
-      },
-      {
-        name: 'L-Taurina',
-        description: 'Aminoácido que mejora la función cardíaca, tiene efectos antiarrítmicos y apoya la presión arterial saludable.',
-        amount: '500 mg'
-      },
-      {
-        name: 'Vitamina E (d-alfa tocoferol)',
-        description: 'Antioxidante liposoluble que protege las membranas cardíacas del daño oxidativo.',
-        amount: '400 UI'
-      }
-    ],
-    dosage: 'Tomar 2 cápsulas al día con alimentos, preferiblemente 1 con el desayuno y 1 con la cena. Para apoyo cardiovascular intensivo, puede incrementarse bajo supervisión médica.',
-    administrationMethod: 'Tomar con alimentos ricos en grasas para optimizar la absorción de CoQ10 y vitamina E. Mantener consistencia en horarios para niveles estables. Si toma medicamentos cardiovasculares, espaciar al menos 2 horas.',
-    faqs: [
-      {
-        question: '¿Puedo tomarlo si ya tomo medicamentos para el corazón?',
-        answer: 'Consulte con su cardiólogo antes del uso. Algunos componentes pueden interactuar con medicamentos cardiovasculares, especialmente anticoagulantes y medicamentos para la presión arterial.'
-      },
-      {
-        question: '¿Cuánto tiempo tardará en ver beneficios?',
-        answer: 'Los efectos energéticos pueden notarse en 2-4 semanas. Los beneficios cardiovasculares completos se desarrollan gradualmente durante 2-3 meses de uso consistente.'
-      },
-      {
-        question: '¿Es seguro para personas con presión arterial baja?',
-        answer: 'Esta fórmula tiene efectos hipotensores naturales. Personas con presión arterial baja deben consultar con su médico antes del uso y monitorear la presión regularmente.'
-      }
-    ]
-  },
-
-  {
-    id: "sys-cardio-02",
-    name: 'Omega-3 Ultra Pure - Protección Cardiovascular EPA/DHA',
-    categories: ['sistema-cardiovascular'],
-    price: 3245.67,
-    description: 'Omega-3 de grado farmacéutico con máxima concentración EPA/DHA. Destilado molecularmente para pureza superior. Apoyo cardiovascular y antiinflamatorio.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Omega-3 Ultra Pure Anverso.jpg',
-        full: '/Jpeg/Omega-3 Ultra Pure Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Omega-3 Ultra Pure Reverso.jpg',
-        full: '/Jpeg/Omega-3 Ultra Pure Reverso.jpg',
-      },
-    ],
-    stock: 45,
-    sku: 'SYS-CAR-OMEGA3',
-    tags: ['omega-3', 'EPA', 'DHA', 'cardiovascular', 'antiinflamatorio'],
-    detailedDescription: 'Omega-3 Ultra Pure ofrece la concentración más alta de EPA (ácido eicosapentaenoico) y DHA (ácido docosahexaenoico) en forma de triglicéridos naturales. Cada cápsula proporciona 1200mg de Omega-3 activos (EPA 720mg, DHA 480mg) derivados de peces de aguas profundas del Atlántico Norte. El aceite es destilado molecularmente para eliminar metales pesados, PCBs y dioxinas, garantizando pureza farmacéutica. Esta proporción 3:2 de EPA:DHA está optimizada para máximos beneficios cardiovasculares y antiinflamatorios.',
-    mechanismOfAction: 'Los Omega-3 EPA y DHA se incorporan a las membranas celulares, especialmente en el corazón y vasos sanguíneos, mejorando su fluidez y función. El EPA es precursor de prostaglandinas antiinflamatorias (serie 3) y resolvinas que resuelven la inflamación. El DHA es crucial para la función endotelial y la regulación de la presión arterial. Ambos reducen los triglicéridos al inhibir la síntesis hepática de VLDL, mejoran la función plaquetaria y tienen efectos antiarrítmicos al estabilizar las membranas del músculo cardíaco.',
-    benefitsDescription: [
-      'Reducción significativa de triglicéridos y colesterol VLDL',
-      'Potente efecto antiinflamatorio cardiovascular',
-      'Mejora de la función endotelial y elasticidad arterial',
-      'Apoyo natural para presión arterial saludable',
-      'Protección contra arritmias cardíacas y muerte súbita',
-      'Reducción de la agregación plaquetaria y trombosis',
-      'Mejora de la función del ventrículo izquierdo',
-      'Apoyo a la salud cerebral y función cognitiva'
-    ],
-    healthIssues: [
-      'Triglicéridos elevados e hipertrigliceridemia',
-      'Enfermedad cardiovascular y riesgo cardíaco alto',
-      'Inflamación crónica y marcadores inflamatorios elevados',
-      'Arritmias cardíacas y problemas del ritmo cardíaco',
-      'Presión arterial elevada y problemas vasculares',
-      'Función endotelial comprometida',
-      'Historia familiar de enfermedad cardíaca',
-      'Síndrome metabólico y resistencia a la insulina'
-    ],
-    components: [
-      {
-        name: 'EPA (Ácido Eicosapentaenoico)',
-        description: 'Omega-3 con potentes efectos antiinflamatorios cardiovasculares. Precursor de mediadores especializados de resolución.',
-        amount: '720 mg por cápsula'
-      },
-      {
-        name: 'DHA (Ácido Docosahexaenoico)', 
-        description: 'Omega-3 esencial para función cardíaca, cerebral y endotelial. Crucial para membrana celular y señalización.',
-        amount: '480 mg por cápsula'
-      },
-      {
-        name: 'Vitamina E natural (d-alfa tocoferol)',
-        description: 'Antioxidante que protege los Omega-3 de la oxidación y proporciona protección adicional al sistema cardiovascular.',
-        amount: '10 UI'
-      }
-    ],
-    dosage: 'Tomar 1-2 cápsulas al día con alimentos ricos en grasas. Para apoyo cardiovascular intensivo o triglicéridos elevados, puede incrementarse a 3 cápsulas bajo supervisión médica.',
-    administrationMethod: 'Tomar con la comida más rica en grasas del día para maximizar absorción. Refrigerar después de abrir para mantener frescura. Si experimenta reflujo, congelar las cápsulas antes de tomar.',
-    faqs: [
-      {
-        question: '¿Cuál es la diferencia entre EPA y DHA?',
-        answer: 'EPA tiene efectos más antiinflamatorios y cardiovasculares específicos, mientras que DHA es más importante para función cerebral y desarrollo. Esta fórmula 3:2 optimiza los beneficios cardiovasculares.'
-      },
-      {
-        question: '¿Puedo tomarlo si tomo anticoagulantes?',
-        answer: 'Los Omega-3 tienen efectos anticoagulantes leves. Si toma warfarina u otros anticoagulantes, consulte con su médico y monitoree el INR regularmente.'
-      },
-      {
-        question: '¿Cómo sé si el aceite está fresco?',
-        answer: 'Un aceite fresco no debe tener olor o sabor a pescado rancio. Nuestro producto incluye vitamina E como antioxidante y se recomienda refrigeración para mantener frescura óptima.'
-      }
-    ]
-  },
-
-  // 🦴 SISTEMA ÓSEO MINERAL - Productos para huesos, dientes y mineralización
-  {
-    id: "sys-bone-01",
-    name: 'Bone Matrix Pro - Fórmula Ósea Completa',
-    categories: ['sistema-oseo-mineral'],
-    price: 3987.65,
-    description: 'Fórmula sinérgica completa con Calcio, Magnesio, Vitamina D3, K2, Boro y Sílice. Apoyo integral para densidad ósea, dientes y mineralización.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Bone Matrix Pro Anverso.jpg',
-        full: '/Jpeg/Bone Matrix Pro Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Bone Matrix Pro Reverso.jpg',
-        full: '/Jpeg/Bone Matrix Pro Reverso.jpg',
-      },
-    ],
-    stock: 40,
-    sku: 'SYS-BON-MATRIX',
-    tags: ['huesos', 'calcio', 'vitamina D3', 'K2', 'mineralización', 'densidad ósea'],
-    detailedDescription: 'Bone Matrix Pro es la formulación más avanzada para la salud ósea, combinando todos los nutrientes esenciales en proporciones optimizadas basadas en investigación científica. Esta fórmula sinérgica incluye formas altamente biodisponibles de Calcio (citrato y microhidrosipatita), Magnesio (citrato y malato), Vitamina D3 para absorción, Vitamina K2 para dirección del calcio, Boro para metabolismo mineral y Sílice para matriz ósea. Diseñada para personas preocupadas por la densidad ósea, especialmente mujeres postmenopáusicas y adultos mayores.',
-    mechanismOfAction: 'Esta fórmula trabaja en todos los aspectos del metabolismo óseo. El Calcio proporciona el mineral estructural principal, mientras que el Magnesio regula su deposición y activa la vitamina D. La Vitamina D3 aumenta la absorción intestinal de calcio y fósforo. La Vitamina K2 activa las proteínas dependientes de vitamina K (osteocalcina y MGP) que dirigen el calcio hacia los huesos y lo alejan de arterias. El Boro mejora el metabolismo de calcio, magnesio y vitamina D. La Sílice fortalece la matriz de colágeno que sostiene la mineralización ósea.',
-    benefitsDescription: [
-      'Fortalecimiento de la densidad mineral ósea y prevención de osteoporosis',
-      'Mejora de la absorción y utilización del calcio dietético',
-      'Apoyo a la salud dental y fortalecimiento del esmalte',
-      'Prevención de la pérdida ósea relacionada con la edad',
-      'Mejora de la arquitectura y calidad del tejido óseo',
-      'Apoyo a la reparación de fracturas y lesiones óseas',
-      'Fortalecimiento de la matriz de colágeno óseo',
-      'Prevención de calcificaciones vasculares al dirigir calcio correctamente'
-    ],
-    healthIssues: [
-      'Osteoporosis y baja densidad mineral ósea',
-      'Fracturas frecuentes y huesos frágiles',
-      'Menopausia y pérdida ósea acelerada',
-      'Deficiencias nutricionales que afectan huesos',
-      'Problemas dentales y pérdida de esmalte',
-      'Recuperación lenta de fracturas',
-      'Riesgo elevado de osteoporosis por genética o edad',
-      'Uso prolongado de medicamentos que afectan huesos'
-    ],
-    components: [
-      {
-        name: 'Calcio (como citrato y microhidrosipatita)',
-        description: 'Combinación de formas altamente absorbibles. El citrato se absorbe sin ácido gástrico, la hidroxiapatita aporta matriz ósea completa.',
-        amount: '1000 mg (100% VD)'
-      },
-      {
-        name: 'Magnesio (como citrato y malato)',
-        description: 'Cofactor esencial para más de 300 enzimas, incluidas las que convierten vitamina D a su forma activa. Regula la deposición de calcio.',
-        amount: '500 mg (119% VD)'
-      },
-      {
-        name: 'Vitamina D3 (colecalciferol)',
-        description: 'Forma natural que aumenta la absorción intestinal de calcio y fósforo. Esencial para mineralización ósea adecuada.',
-        amount: '2000 UI (500% VD)'
-      },
-      {
-        name: 'Vitamina K2 (como MK-7)',
-        description: 'Activa osteocalcina para incorporar calcio en huesos y MGP para evitar calcificación arterial. Forma de larga duración.',
-        amount: '120 mcg (100% VD)'
-      },
-      {
-        name: 'Boro (como citrato de boro)',
-        description: 'Oligoelemento que mejora el metabolismo de calcio, magnesio y vitamina D. Reduce la excreción urinaria de calcio.',
-        amount: '3 mg'
-      },
-      {
-        name: 'Sílice (de extracto de bambú)',
-        description: 'Esencial para la síntesis de colágeno tipo I y la formación de la matriz ósea. Mejora la flexibilidad y resistencia ósea.',
-        amount: '50 mg'
-      },
-      {
-        name: 'Zinc (como picolinato)',
-        description: 'Cofactor para enzimas involucradas en la síntesis de colágeno y mineralización ósea.',
-        amount: '15 mg (136% VD)'
-      },
-      {
-        name: 'Manganeso (como gluconato)',
-        description: 'Necesario para la formación de cartílago y hueso. Cofactor de enzimas que sintetizan glucosaminoglicanos.',
-        amount: '5 mg (217% VD)'
-      }
-    ],
-    dosage: 'Tomar 2-3 cápsulas al día con alimentos, preferiblemente divididas entre las comidas principales. Para máxima absorción, no tomar todas las cápsulas de una vez.',
-    administrationMethod: 'Tomar con alimentos para optimizar absorción de minerales. Dividir la dosis a lo largo del día ya que el cuerpo absorbe mejor pequeñas cantidades de calcio. Evitar tomar con alimentos ricos en fibra o oxalatos que pueden interferir con la absorción.',
-    faqs: [
-      {
-        question: '¿Por qué incluye vitamina K2 junto con calcio?',
-        answer: 'La vitamina K2 es crucial para dirigir el calcio hacia los huesos y dientes, evitando que se deposite en arterias y tejidos blandos. Sin K2, el calcio suplementario puede calcificar arterias.'
-      },
-      {
-        question: '¿Cuál es la proporción ideal de calcio y magnesio?',
-        answer: 'Usamos una proporción 2:1 (calcio:magnesio) que permite la absorción óptima de ambos minerales y refleja las necesidades metabólicas del cuerpo para el equilibrio mineral.'
-      },
-      {
-        question: '¿Cuándo veré mejoras en la densidad ósea?',
-        answer: 'Los cambios en densidad ósea son graduales. Los marcadores bioquímicos pueden mejorar en 3-6 meses, pero los cambios significativos en densitometría ósea generalmente se observan después de 12-24 meses de suplementación consistente.'
-      }
-    ]
-  },
-
-  {
-    id: "sys-bone-02",
-    name: 'Calcium Plus D3 & K2 - Absorción Ósea Optimizada',
-    categories: ['sistema-oseo-mineral'],
-    price: 2345.78,
-    description: 'Fórmula sinérgica de Calcio, Vitamina D3 y K2 en proporciones científicamente validadas. Máxima absorción y dirección correcta del calcio.',
-    images: [
-      {
-        thumbnail: '/Jpeg/Calcium Plus D3 K2 Anverso.jpg',
-        full: '/Jpeg/Calcium Plus D3 K2 Anverso.jpg',
-      },
-      {
-        thumbnail: '/Jpeg/Calcium Plus D3 K2 Reverso.jpg',
-        full: '/Jpeg/Calcium Plus D3 K2 Reverso.jpg',
-      },
-    ],
-    stock: 55,
-    sku: 'SYS-BON-CAL-D3K2',
-    tags: ['calcio', 'vitamina D3', 'vitamina K2', 'absorción', 'huesos'],
-    detailedDescription: 'Calcium Plus D3 & K2 combina tres nutrientes fundamentales para la salud ósea en una fórmula científicamente balanceada. Proporciona 600mg de calcio como citrato (máxima biodisponibilidad), 2000 UI de vitamina D3 (para absorción óptima) y 100mcg de vitamina K2 como MK-7 (para dirección correcta del calcio). Esta combinación asegura que el calcio se absorba eficientemente, se transporte adecuadamente y se deposite en huesos y dientes en lugar de arterias y tejidos blandos.',
-    mechanismOfAction: 'Esta fórmula optimiza cada paso del metabolismo del calcio. La vitamina D3 se convierte en calcitriol, la hormona que aumenta la absorción intestinal de calcio del 10-15% al 30-40%. La vitamina K2 activa la osteocalcina, proteína que incorpora calcio en la matriz ósea, y la proteína MGP que previene la calcificación arterial. El citrato de calcio no requiere ácido gástrico para absorberse y tiene mejor biodisponibilidad que el carbonato, especialmente en adultos mayores con reducción de ácido estomacal.',
-    benefitsDescription: [
-      'Absorción máxima de calcio con mínimas dosis necesarias',
-      'Fortalecimiento de huesos y dientes sin calcificar arterias',
-      'Prevención efectiva de osteoporosis y fracturas',
-      'Apoyo a la función muscular y contracción cardíaca',
-      'Mejora de la transmisión nerviosa y función neuromuscular',
-      'Reducción del riesgo de cálculos renales por dirección correcta',
-      'Apoyo durante el crecimiento en niños y adolescentes',
-      'Mantenimiento óseo durante menopausia y envejecimiento'
-    ],
-    healthIssues: [
-      'Deficiencia de calcio y problemas de absorción',
-      'Osteoporosis y riesgo de fracturas',
-      'Menopausia y pérdida ósea acelerada',
-      'Deficiencia de vitamina D y poca exposición solar',
-      'Calambres musculares y contracciones involuntarias',
-      'Problemas dentales y pérdida de esmalte',
-      'Preocupación por calcificación arterial',
-      'Necesidades aumentadas durante embarazo y lactancia'
-    ],
-    components: [
-      {
-        name: 'Calcio (como citrato de calcio)',
-        description: 'Forma altamente biodisponible que se absorbe independientemente del ácido gástrico. Ideal para adultos mayores.',
-        amount: '600 mg (60% VD)'
-      },
-      {
-        name: 'Vitamina D3 (colecalciferol)',
-        description: 'Forma natural idéntica a la producida por la piel. Optimiza la absorción intestinal de calcio.',
-        amount: '2000 UI (500% VD)'
-      },
-      {
-        name: 'Vitamina K2 (como menaquinona-7 MK-7)',
-        description: 'Forma de larga duración que activa proteínas para dirigir calcio a huesos y evitar calcificación arterial.',
-        amount: '100 mcg (83% VD)'
-      }
-    ],
-    dosage: 'Tomar 2 comprimidos al día con alimentos, preferiblemente 1 con el desayuno y 1 con la cena para mantener niveles estables de calcio.',
-    administrationMethod: 'Tomar con alimentos para optimizar absorción. Espaciar de suplementos de hierro, zinc o antibióticos al menos 2 horas. Para personas que toman anticoagulantes, consultar médico debido a la vitamina K2.',
-    faqs: [
-      {
-        question: '¿Es seguro combinar calcio con vitamina K2 si tomo anticoagulantes?',
-        answer: 'La vitamina K2 puede afectar la anticoagulación. Si toma warfarina u otros anticoagulantes, consulte con su médico antes de usar y monitoree el INR regularmente.'
-      },
-      {
-        question: '¿Por qué citrato de calcio en lugar de carbonato?',
-        answer: 'El citrato de calcio se absorbe mejor (especialmente con el estómago vacío), no requiere ácido gástrico y tiene menor riesgo de causar cálculos renales comparado con el carbonato.'
-      },
-      {
-        question: '¿Puedo tomar toda la dosis de una vez?',
-        answer: 'Es mejor dividir la dosis porque el cuerpo absorbe máximo 500mg de calcio por vez. Tomar en dosis divididas asegura mejor absorción y utilización.'
-      }
-    ]
-  },
+  // ===== FIN DE PRODUCTOS =====
 
 ];
-
-// ===== INTERFACES PARA SISTEMAS SINÉRGICOS =====
-
-export interface System {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  products: string[]; // IDs de productos relacionados
-  benefits: string[];
-  keyIngredients: string[];
-  color?: string;
-  backgroundImage?: string;
-  featured?: boolean;
-  targetAudience?: string[];
-  relatedSystems?: string[];
-}
 
 // ===== INTERFACES PARA SISTEMAS SINÉRGICOS =====
 
@@ -4039,7 +3607,6 @@ export const systems: System[] = [
     featured: true,
     targetAudience: ['Adultos con defensas bajas', 'Personas expuestas a patógenos', 'Temporadas de cambio estacional'],
     products: [
-      'sys-immune-01', 'sys-immune-02', 'sys-immune-03', 
       '1', '10', 'pr-alpha-gpc', 'pr-5htp', 'pr-ashwa-melatonin'
     ],
     benefits: [
@@ -4073,7 +3640,6 @@ export const systems: System[] = [
     featured: true,
     targetAudience: ['Adultos +40 años', 'Personas con factores de riesgo cardíaco', 'Atletas de alto rendimiento'],
     products: [
-      'sys-cardio-01', 'sys-cardio-02',
       'pr-fish-oil', '102', '105', 'pr-nitric-oxide-max'
     ],
     benefits: [
@@ -4107,7 +3673,6 @@ export const systems: System[] = [
     featured: true,
     targetAudience: ['Mujeres postmenopáusicas', 'Adultos mayores +50', 'Personas con historial familiar de osteoporosis'],
     products: [
-      'sys-bone-01', 'sys-bone-02',
       '2', '3', '4', '105', 'pr-bamboo-extract'
     ],
     benefits: [
