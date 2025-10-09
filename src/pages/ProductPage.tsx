@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Product } from '../types/product';
-import { products } from '../../data/products';
+import { products } from '../data/products';
 import { useCartStore } from '../store/cartStore';
 import { useWishlistStore } from '../store/wishlistStore';
 import { generateProductSEO } from '../utils/seo';
@@ -195,6 +195,11 @@ const ProductPage: React.FC = () => {
               <p className="text-3xl text-gray-900 font-bold">
                 ${product.price.toFixed(2)}
               </p>
+              {product.priceNote && (
+                <p className="text-sm text-gray-600 mt-1">
+                  {product.priceNote}
+                </p>
+              )}
             </div>
 
             {/* Stock y disponibilidad - Solo mostrar disponibilidad general */}
