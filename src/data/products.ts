@@ -1909,12 +1909,12 @@ export const products: Product[] = [
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16486_1.jpg
     images: [
       {
-        thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
-        full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
+        thumbnail: '/Jpeg/3-Day Liver Cleanse Anverso.jpg',
+        full: '/Jpeg/3-Day Liver Cleanse Anverso.jpg',
       },
       {
-        thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
-        full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
+        thumbnail: '/Jpeg/3-Day Liver Cleanse Reverso.jpg',
+        full: '/Jpeg/3-Day Liver Cleanse Reverso.jpg',
       },
     ],
     stock: 20,
