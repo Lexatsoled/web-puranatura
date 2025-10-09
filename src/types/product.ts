@@ -41,7 +41,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  priceNote?: string; // Nota adicional sobre el precio (ej: precio por unidad)
+  priceNote?: string | string[]; // Nota adicional sobre el precio (ej: precio por unidad)
   categories: string[]; // CAMBIO: De category único a categories múltiples
   images: ProductImage[];
   stock: number;

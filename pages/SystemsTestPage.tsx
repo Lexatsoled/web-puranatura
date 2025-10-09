@@ -1,5 +1,5 @@
 import React from 'react';
-import { systems, getFeaturedSystems, getProductsBySystem } from '../data/products';
+import { systems, getFeaturedSystems, getProductsBySystem } from '../src/data/products';
 
 export const SystemsTestPage: React.FC = () => {
   const featuredSystems = getFeaturedSystems();

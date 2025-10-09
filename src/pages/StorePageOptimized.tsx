@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { products } from '../../data/products';
+import { products } from '../data/products';
 import ProductCard from '../../components/ProductCard';
 import FilterSidebar from '../components/FilterSidebar';
 import { useUIStore } from '../store/uiStore';

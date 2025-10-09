@@ -143,11 +143,11 @@ const ProductCard: React.FC<ProductCardProps> = memo(({
           <div className="mb-3">
             <div className="flex items-center gap-2">
               <p className="text-xl font-bold text-green-700">
-                DOP ${product.price.toFixed(2)}
+                {product.price.toFixed(2)} RD$
               </p>
               {hasDiscount && (
                 <p className="text-sm text-gray-400 line-through">
-                  DOP ${product.compareAtPrice!.toFixed(2)}
+                  {product.compareAtPrice!.toFixed(2)} RD$
                 </p>
               )}
             </div>

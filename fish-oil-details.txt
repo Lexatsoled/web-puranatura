@@ -1,0 +1,214 @@
+﻿
+>     id: "pr-fish-oil",
+      name: 'Aceite de Pescado Omega-3 - 415mg - 200 C├ípsulas Mini',
+      category: 'suplementos-especializados',
+      price: 1014.03,
+      description: 'Aceite de pescado purificado rico en ├ícidos grasos Omega-3 EPA y DHA. Apoya la salud cardiovascular, 
+cerebral y articular. C├ípsulas mini f├íciles de tragar.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14633_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Mini Omega-3 Fish Oil Lemon Anverso.jpg',
+          full: '/Jpeg/Mini Omega-3 Fish Oil Lemon Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Mini Omega-3 Fish Oil Lemon Reverso.jpg',
+          full: '/Jpeg/Mini Omega-3 Fish Oil Lemon Reverso.jpg',
+        },
+      ],
+      stock: 40,
+      sku: 'PR-FISH-415',
+      tags: ['omega-3', 'cardiovascular', 'cerebral', 'articular'],
+    },
+  
+    // Adapt├│genos y Energ├¡a
+    {
+      id: "pr-maca",
+      name: 'Maca 4800mg - 150 C├ípsulas de Liberaci├│n R├ípida',
+      category: 'suplementos-especializados',
+      price: 1073.71,
+      description: 'Extracto concentrado de ra├¡z de Maca peruana. Adapt├│geno natural que apoya la energ├¡a, resistencia 
+y vitalidad. Tradicionalmente usado para equilibrar hormonas.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14404_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Maca, 4800 mg Anverso.jpg',
+          full: '/Jpeg/Maca, 4800 mg Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Maca, 4800 mg Reverso.jpg',
+          full: '/Jpeg/Maca, 4800 mg Reverso.jpg',
+        },
+      ],
+      stock: 32,
+      sku: 'PR-MACA-4800',
+      tags: ['adapt├│geno', 'energ├¡a', 'hormonal', 'resistencia'],
+    },
+  
+    {
+      id: "pr-ashwagandha",
+      name: 'Ashwagandha 4500mg - 120 C├ípsulas de Liberaci├│n R├ípida',
+      category: 'suplementos-especializados',
+      price: 715.61,
+      description: 'Extracto estandarizado de ra├¡z de Ashwagandha. Adapt├│geno ayurv├®dico que ayuda a manejar el 
+estr├®s, apoya la energ├¡a y promueve un sue├▒o reparador.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14230_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Ashwagandha, 4500 mg Anverso.jpg',
+          full: '/Jpeg/Ashwagandha, 4500 mg Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Ashwagandha, 4500 mg Reverso.jpg',
+          full: '/Jpeg/Ashwagandha, 4500 mg Reverso.jpg',
+        },
+      ],
+      stock: 45,
+      sku: 'PR-ASHWA-4500',
+      tags: ['adapt├│geno', 'estr├®s', 'energ├¡a', 'sue├▒o'],
+    },
+  
+    // Salud Hep├ítica y Desintoxicaci├│n
+    {
+      id: "pr-same",
+      name: 'SAMe - Recuperimiento Ent├®rico 200mg - 30 Tabletas',
+      category: 'suplementos-especializados',
+      price: 595.64,
+      description: 'S-Adenosil-L-Metionina con recubrimiento ent├®rico para m├íxima absorci├│n. Apoya la salud hep├ítica, 
+articular y el bienestar emocional.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14509_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/SAM-e Enteric Coated Anverso.jpg',
+          full: '/Jpeg/SAM-e Enteric Coated Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/SAM-e Enteric Coated Reverso.jpg',
+          full: '/Jpeg/SAM-e Enteric Coated Reverso.jpg',
+        },
+      ],
+      stock: 25,
+      sku: 'PR-SAME-200',
+      tags: ['hep├ítico', 'articular', 'emocional', 'metilaci├│n'],
+    },
+  
+    {
+      id: "pr-bamboo-extract",
+      name: 'Extracto de Bamb├║ 3000mg - 250 C├ípsulas',
+      category: 'suplementos-especializados',
+      price: 952.56,
+      description: 'Extracto concentrado de bamb├║, fuente natural de s├¡lice. Apoya la salud de cabello, piel, u├▒as y 
+tejido conectivo. Rico en minerales esenciales.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14158_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Bamboo Extract, 3000 mg Anverso.jpg',
+          full: '/Jpeg/Bamboo Extract, 3000 mg Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Bamboo Extract, 3000 mg Reverso.jpg',
+          full: '/Jpeg/Bamboo Extract, 3000 mg Reverso.jpg',
+        },
+      ],
+      stock: 30,
+      sku: 'PR-BAMB-3000',
+      tags: ['s├¡lice', 'cabello', 'piel', 'u├▒as'],
+    },
+  
+    {
+      id: "pr-borage-oil",
+      name: 'Aceite de Borraja (GLA) 1000mg - 120 C├ípsulas',
+      category: 'suplementos-especializados',
+      price: 714.42,
+      description: 'Aceite de borraja rico en ├ícido gamma-linol├®nico (GLA). Apoya la salud de la piel, equilibrio 
+hormonal y respuesta inflamatoria saludable.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14154_2.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Borage Oil (GLA) Reverso.jpg',
+          full: '/Jpeg/Borage Oil (GLA) Reverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Borage Oil (GLA) Anverso.jpg',
+          full: '/Jpeg/Borage Oil (GLA) Anverso.jpg',
+        },
+      ],
+      stock: 28,
+      sku: 'PR-BOR-1000',
+      tags: ['GLA', 'piel', 'hormonal', 'inflamaci├│n'],
+    },
+  
+    {
+      id: "pr-liver-cleanse",
+      name: '3-Day Liver Cleanse - 12 C├ípsulas Vegetarianas',
+      category: 'salud-digestiva',
+      price: 891.66,
+      description: 'Programa de limpieza hep├ítica de 3 d├¡as con hierbas tradicionales. Dise├▒ado para apoyar la funci├│n 
+de desintoxicaci├│n natural del h├¡gado.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16486_1.jpg
+      images: [
+        {
+          thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
+          full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Anverso.jpg',
+        },
+        {
+          thumbnail: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
+          full: '/Jpeg/Milk Thistle, Dandelion & Yellow Dock Reverso.jpg',
+        },
+      ],
+      stock: 20,
+      sku: 'PR-LIVER-3D',
+      tags: ['h├¡gado', 'detox', 'limpieza', 'hierbas'],
+    },
+  
+    // Sue├▒o y Relajaci├│n
+    {
+      id: "pr-ashwa-melatonin",
+      name: 'Ashwagandha Melatonin plus L-Theanine - 60 C├ípsulas',
+      category: 'suplementos-especializados',
+      price: 356.90,
+      description: 'F├│rmula sin├®rgica que combina Ashwagandha, Melatonina y L-Teanina para promover relajaci├│n profunda 
+y sue├▒o reparador de calidad.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/7/17265_1.jpg
+      images: [
+        {
+          thumbnail: 'https://picsum.photos/300/300?random=ashwa-melatonin',
+          full: 'https://picsum.photos/600/600?random=ashwa-melatonin',
+        },
+      ],
+      stock: 35,
+      sku: 'PR-ASHMEL-60',
+      tags: ['sue├▒o', 'relajaci├│n', 'melatonina', 'adapt├│geno'],
+    },
+  
+    // Aceites Esenciales
+    {
+      id: "pr-basil-oil",
+      name: 'Aceite Esencial de Albahaca Puro - 15mL',
+      category: 'suplementos-especializados',
+      price: 356.90,
+      description: 'Aceite esencial de albahaca 100% puro y natural. Ideal para aromaterapia, masajes y uso t├│pico 
+diluido. Aroma fresco y revitalizante.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14001_1.jpg
+      images: [
+        {
+          thumbnail: 'https://picsum.photos/300/300?random=basil-oil',
+          full: 'https://picsum.photos/600/600?random=basil-oil',
+        },
+      ],
+      stock: 25,
+      sku: 'PR-BASIL-15',
+      tags: ['aceite esencial', 'aromaterapia', 'natural', 'albahaca'],
+    },
+  
+    // Deportes y Rendimiento
+    {
+      id: "pr-creatine",
+      name: 'Creatina Micronizada 5000mg - 150 C├ípsulas',
+      category: 'suplementos-especializados',
+      price: 1789.32,
+      description: 'Creatina monohidrato micronizada de alta pureza. Apoya la fuerza muscular, potencia y recuperaci├│n en 
+entrenamientos intensos.',
+      // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/4/14520_1.jpg
+
+
