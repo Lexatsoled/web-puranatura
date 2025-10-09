@@ -1904,8 +1904,8 @@ export const products: Product[] = [
     id: "pr-liver-cleanse",
     name: '3-Day Liver Cleanse - 12 Cápsulas Vegetarianas',
     categories: ['salud-digestiva'],
-    price: 1600,
-    priceNote: '$133.33 por cápsula',
+    price: 1500,
+    priceNote: 'Información Precio Comparativo: La cápsula le sale a 125 RD$',
     description: 'Programa de limpieza hepática de 3 días con hierbas tradicionales. Diseñado para apoyar la función de desintoxicación natural del hígado.',
     // IMAGEN PIPING ROCK: https://www.pipingrock.com/media/catalog/product/1/6/16486_1.jpg
     images: [
