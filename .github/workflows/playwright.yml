@@ -1,0 +1,236 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Build
+        run: npm run build
+
+      - name: Serve dist
+        run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+
+      - name: Wait for server
+        run: npx wait-on http://127.0.0.1:3000 -t 300000
+      
+      - name: System diagnostics
+        run: |
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+
+      - name: Run Playwright tests (with job-level retries)
+        env:
+          CI: true
+        run: |
+          set -e
+          attempts=3
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running Playwright suite..."
+            npx playwright test --workers=2 --reporter=list --retries=2 && break
+            echo "Playwright attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 10))s..."
+              sleep $((i * 10))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
+      
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-results
+          path: |
+            test-results/
+            playwright-report/
+            traces/
+            videos/
+          retention-days: 30
+
+      - name: Post PR diagnostics summary (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'test-results/e2e-results.json';
+            if (!fs.existsSync(path)) {
+              console.log('No e2e-results.json found.');
+              return;
+            }
+            const raw = fs.readFileSync(path, 'utf8');
+            let json;
+            try {
+              json = JSON.parse(raw);
+            } catch (err) {
+              console.log('Failed parsing JSON: ' + err.message);
+              return;
+            }
+            const failedTests = [];
+            function traverse(suite) {
+              if (suite.tests) {
+                for (const t of suite.tests) {
+                  if (t.status === 'failed') {
+                    failedTests.push({ title: t.title, location: t.location });
+                  }
+                }
+              }
+              if (suite.suites) {
+                suite.suites.forEach(traverse);
+              }
+            }
+            if (json.suites) json.suites.forEach(traverse);
+            if (failedTests.length) {
+              const body = `❌ E2E tests failed. Found ${failedTests.length} failing test(s):\n\n` + failedTests.map((t, idx) => `- ${idx+1}. ${t.title}`).join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } else {
+              console.log('No failed tests found in e2e-results.json');
+            }
+
+      - name: Re-run failing tests once (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          node -e "const fs=require('fs'); const path='test-results/e2e-results.json'; if(!fs.existsSync(path)){console.log('No results file'); process.exit(0);} const raw=fs.readFileSync(path,'utf8'); const json=JSON.parse(raw); const failed=[]; function traverse(s){ if(s.tests){ for(const t of s.tests){ if(t.status==='failed'){ let file=(t.location && t.location.file) || s.file || t.file; failed.push({file, title:t.title}); } } } if(s.suites) s.suites.forEach(traverse);} if(json.suites) json.suites.forEach(traverse); console.log(JSON.stringify(failed));" > failed_tests.json || true
+          if [ ! -s failed_tests.json ]; then echo "No failed tests to re-run" && exit 0; fi
+          echo "Found failed tests: $(cat failed_tests.json)"
+          node -e "const fs=require('fs'); const failed=JSON.parse(fs.readFileSync('failed_tests.json','utf8')); for(const f of failed.slice(0,10)){ console.log('Re-running', f.file, f.title); const cmd = 'npx playwright test ' + (f.file ? f.file : '') + ' -g "' + f.title.replace(/"/g,'\"') + '" --retries=0 --reporter=list'; console.log(cmd); try{ require('child_process').execSync(cmd,{stdio:'inherit'}); }catch(e){ console.error('Rerun failed', e.message); } } " || true
+
+  smoke-checkout:
+    name: E2E Smoke - Checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Build
+        run: npm run build
+      - name: Serve dist
+        run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+
+      - name: Wait for server
+        run: npx wait-on http://127.0.0.1:3000 -t 300000
+      - name: System diagnostics (smoke)
+        run: |
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+
+      - name: Run smoke Checkout Flow (with small job-level retry)
+        env:
+          CI: true
+        run: |
+          set -e
+          attempts=2
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running smoke 'Checkout Flow'..."
+            npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=2 --reporter=list && break
+            echo "Smoke Playwright attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
+      - name: Upload smoke artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: checkout-smoke-artifacts
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 30
+
+      - name: Re-run failed smoke test once (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          echo "Re-running smoke 'Checkout Flow' to gather more diagnostics..."
+          npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=0 --reporter=list || true
+
+      - name: Post PR diagnostics summary (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'test-results/e2e-results.json';
+            if (!fs.existsSync(path)) {
+              console.log('No e2e-results.json found.');
+              return;
+            }
+            const raw = fs.readFileSync(path, 'utf8');
+            let json;
+            try {
+              json = JSON.parse(raw);
+            } catch (err) {
+              console.log('Failed parsing JSON: ' + err.message);
+              return;
+            }
+            const failedTests = [];
+            function traverse(suite) {
+              if (suite.tests) {
+                for (const t of suite.tests) {
+                  if (t.status === 'failed') {
+                    failedTests.push({ title: t.title, location: t.location });
+                  }
+                }
+              }
+              if (suite.suites) {
+                suite.suites.forEach(traverse);
+              }
+            }
+            if (json.suites) json.suites.forEach(traverse);
+            if (failedTests.length) {
+              const body = `❌ E2E tests failed. Found ${failedTests.length} failing test(s):\n\n` + failedTests.map((t, idx) => `- ${idx+1}. ${t.title}`).join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } else {
+              console.log('No failed tests found in e2e-results.json');
+            }

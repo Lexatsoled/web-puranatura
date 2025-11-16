@@ -1,0 +1,23 @@
+# Nota: gitleaks>=8 espera fingerprints en este archivo.
+# Los patrones se documentan aquí y la allowlist efectiva vive en .gitleaks.toml.
+
+# Archivos de ejemplo/template (no contienen secretos reales)
+# *.example
+# *.template
+# *.sample
+# .env.example
+# backend/.env.example
+
+# Documentación
+# README.md
+# docs/**/*.md
+# *.md
+
+# Archivos de configuración conocidos (sin secretos)
+# package.json
+# package-lock.json
+# tsconfig.json
+
+# Reports y logs
+# reports/**
+# *.log

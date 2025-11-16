@@ -1,0 +1,1815 @@
+[
+  {
+    "page": "http://localhost:3000/tienda/producto/520",
+    "status": 200,
+    "srcsetWarnings": [],
+    "images": [
+      {
+        "tag": "img",
+        "src": "/logo-pureza-naturalis-largo_320.webp",
+        "srcset": null,
+        "outer": "<img src=\"/logo-pureza-naturalis-largo_320.webp\" alt=\"Pureza Naturalis\" loading=\"eager\" decoding=\"async\" class=\"h-[70px] object-contain bg-white rounded-xl p-2 shadow-md\">",
+        "candidates": [
+          {
+            "raw": "/logo-pureza-naturalis-largo_320.webp",
+            "url": "http://localhost:3000/logo-pureza-naturalis-largo_320.webp",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/placeholder-product.jpg",
+        "srcset": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<img src=\"/placeholder-product.jpg\" srcset=\"/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" alt=\"Electrolitos Sabor Limón 90 Cápsulas\" class=\"w-full h-full object-contain p-4 transition-all duration-300 ease-in-out\" loading=\"eager\" decoding=\"sync\" fetchpriority=\"auto\">",
+        "candidates": [
+          {
+            "raw": "/placeholder-product.jpg",
+            "url": "http://localhost:3000/placeholder-product.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Electrolyte (Lemon) Anverso.jpg",
+        "srcset": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_120.webp 120w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_160.webp 160w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Electrolyte (Lemon) Anverso.jpg\" srcset=\"/Jpeg/Electrolyte%20(Lemon)%20Anverso_120.webp 120w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_160.webp 160w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 1\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Electrolyte (Lemon) Anverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Electrolyte (Lemon) Reverso.jpg",
+        "srcset": "/Jpeg/Electrolyte%20(Lemon)%20Reverso_120.webp 120w, /Jpeg/Electrolyte%20(Lemon)%20Reverso_160.webp 160w, /Jpeg/Electrolyte%20(Lemon)%20Reverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Electrolyte (Lemon) Reverso.jpg\" srcset=\"/Jpeg/Electrolyte%20(Lemon)%20Reverso_120.webp 120w, /Jpeg/Electrolyte%20(Lemon)%20Reverso_160.webp 160w, /Jpeg/Electrolyte%20(Lemon)%20Reverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 2\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Electrolyte (Lemon) Reverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Reverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Reverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Reverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Reverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Reverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Reverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Reverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/avif\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w, /Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w, /Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/webp\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Electrolyte%20(Lemon)%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "http://localhost:3000/tienda/producto/519",
+    "status": 200,
+    "srcsetWarnings": [],
+    "images": [
+      {
+        "tag": "img",
+        "src": "/logo-pureza-naturalis-largo_320.webp",
+        "srcset": null,
+        "outer": "<img src=\"/logo-pureza-naturalis-largo_320.webp\" alt=\"Pureza Naturalis\" loading=\"eager\" decoding=\"async\" class=\"h-[70px] object-contain bg-white rounded-xl p-2 shadow-md\">",
+        "candidates": [
+          {
+            "raw": "/logo-pureza-naturalis-largo_320.webp",
+            "url": "http://localhost:3000/logo-pureza-naturalis-largo_320.webp",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/placeholder-product.jpg",
+        "srcset": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<img src=\"/placeholder-product.jpg\" srcset=\"/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" alt=\"Cleanse More 15 Días - 90 Cápsulas\" class=\"w-full h-full object-contain p-4 transition-all duration-300 ease-in-out\" loading=\"eager\" decoding=\"sync\" fetchpriority=\"auto\">",
+        "candidates": [
+          {
+            "raw": "/placeholder-product.jpg",
+            "url": "http://localhost:3000/placeholder-product.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Cleanse More Anverso.jpg",
+        "srcset": "/Jpeg/Cleanse%20More%20Anverso_120.webp 120w, /Jpeg/Cleanse%20More%20Anverso_160.webp 160w, /Jpeg/Cleanse%20More%20Anverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Cleanse More Anverso.jpg\" srcset=\"/Jpeg/Cleanse%20More%20Anverso_120.webp 120w, /Jpeg/Cleanse%20More%20Anverso_160.webp 160w, /Jpeg/Cleanse%20More%20Anverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 1\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Cleanse More Anverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Cleanse More Reverso.jpg",
+        "srcset": "/Jpeg/Cleanse%20More%20Reverso_120.webp 120w, /Jpeg/Cleanse%20More%20Reverso_160.webp 160w, /Jpeg/Cleanse%20More%20Reverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Cleanse More Reverso.jpg\" srcset=\"/Jpeg/Cleanse%20More%20Reverso_120.webp 120w, /Jpeg/Cleanse%20More%20Reverso_160.webp 160w, /Jpeg/Cleanse%20More%20Reverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 2\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Cleanse More Reverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Reverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Reverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Reverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Reverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Reverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Reverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Reverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/avif\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Cleanse%20More%20Anverso_320.webp 320w, /Jpeg/Cleanse%20More%20Anverso_480.webp 480w, /Jpeg/Cleanse%20More%20Anverso_640.webp 640w, /Jpeg/Cleanse%20More%20Anverso_768.webp 768w, /Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w, /Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w, /Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/webp\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Cleanse%20More%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "http://localhost:3000/tienda/producto/461",
+    "status": 200,
+    "srcsetWarnings": [],
+    "images": [
+      {
+        "tag": "img",
+        "src": "/logo-pureza-naturalis-largo_320.webp",
+        "srcset": null,
+        "outer": "<img src=\"/logo-pureza-naturalis-largo_320.webp\" alt=\"Pureza Naturalis\" loading=\"eager\" decoding=\"async\" class=\"h-[70px] object-contain bg-white rounded-xl p-2 shadow-md\">",
+        "candidates": [
+          {
+            "raw": "/logo-pureza-naturalis-largo_320.webp",
+            "url": "http://localhost:3000/logo-pureza-naturalis-largo_320.webp",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/placeholder-product.jpg",
+        "srcset": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<img src=\"/placeholder-product.jpg\" srcset=\"/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" alt=\"Glucosamina y Condroitina\" class=\"w-full h-full object-contain p-4 transition-all duration-300 ease-in-out\" loading=\"eager\" decoding=\"sync\" fetchpriority=\"auto\">",
+        "candidates": [
+          {
+            "raw": "/placeholder-product.jpg",
+            "url": "http://localhost:3000/placeholder-product.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Glucosamine Chondroitin Anverso.jpg",
+        "srcset": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_120.webp 120w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_160.webp 160w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Glucosamine Chondroitin Anverso.jpg\" srcset=\"/Jpeg/Glucosamine%20Chondroitin%20Anverso_120.webp 120w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_160.webp 160w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 1\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Glucosamine Chondroitin Anverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Glucosamine Chondroitin Reverso.jpg",
+        "srcset": "/Jpeg/Glucosamine%20Chondroitin%20Reverso_120.webp 120w, /Jpeg/Glucosamine%20Chondroitin%20Reverso_160.webp 160w, /Jpeg/Glucosamine%20Chondroitin%20Reverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Glucosamine Chondroitin Reverso.jpg\" srcset=\"/Jpeg/Glucosamine%20Chondroitin%20Reverso_120.webp 120w, /Jpeg/Glucosamine%20Chondroitin%20Reverso_160.webp 160w, /Jpeg/Glucosamine%20Chondroitin%20Reverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 2\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Glucosamine Chondroitin Reverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Reverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Reverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Reverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Reverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Reverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Reverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Reverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/avif\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w, /Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w, /Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/webp\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Glucosamine%20Chondroitin%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "http://localhost:3000/tienda/producto/466",
+    "status": 200,
+    "srcsetWarnings": [],
+    "images": [
+      {
+        "tag": "img",
+        "src": "/logo-pureza-naturalis-largo_320.webp",
+        "srcset": null,
+        "outer": "<img src=\"/logo-pureza-naturalis-largo_320.webp\" alt=\"Pureza Naturalis\" loading=\"eager\" decoding=\"async\" class=\"h-[70px] object-contain bg-white rounded-xl p-2 shadow-md\">",
+        "candidates": [
+          {
+            "raw": "/logo-pureza-naturalis-largo_320.webp",
+            "url": "http://localhost:3000/logo-pureza-naturalis-largo_320.webp",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/placeholder-product.jpg",
+        "srcset": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<img src=\"/placeholder-product.jpg\" srcset=\"/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" alt=\"Triple Extracto de Hongos\" class=\"w-full h-full object-contain p-4 transition-all duration-300 ease-in-out\" loading=\"eager\" decoding=\"sync\" fetchpriority=\"auto\">",
+        "candidates": [
+          {
+            "raw": "/placeholder-product.jpg",
+            "url": "http://localhost:3000/placeholder-product.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Triple_extacto_Hongos_Anverso.jpg",
+        "srcset": "/Jpeg/Triple_extacto_Hongos_Anverso_120.webp 120w, /Jpeg/Triple_extacto_Hongos_Anverso_160.webp 160w, /Jpeg/Triple_extacto_Hongos_Anverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Triple_extacto_Hongos_Anverso.jpg\" srcset=\"/Jpeg/Triple_extacto_Hongos_Anverso_120.webp 120w, /Jpeg/Triple_extacto_Hongos_Anverso_160.webp 160w, /Jpeg/Triple_extacto_Hongos_Anverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 1\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/triple_extracto_hongos_500x500.jpg",
+        "srcset": "/Jpeg/triple_extracto_hongos_500x500_120.webp 120w, /Jpeg/triple_extracto_hongos_500x500_160.webp 160w, /Jpeg/triple_extracto_hongos_500x500_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/triple_extracto_hongos_500x500.jpg\" srcset=\"/Jpeg/triple_extracto_hongos_500x500_120.webp 120w, /Jpeg/triple_extracto_hongos_500x500_160.webp 160w, /Jpeg/triple_extracto_hongos_500x500_240.webp 240w\" sizes=\"80px\" alt=\"Vista 2\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/triple_extracto_hongos_500x500.jpg",
+            "url": "http://localhost:3000/Jpeg/triple_extracto_hongos_500x500.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/triple_extracto_hongos_500x500_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/triple_extracto_hongos_500x500_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/triple_extracto_hongos_500x500_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/triple_extracto_hongos_500x500_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/triple_extracto_hongos_500x500_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/triple_extracto_hongos_500x500_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/avif\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w, /Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w, /Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w, /Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w, /Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w, /Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w, /Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/webp\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Triple_extacto_Hongos_Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "http://localhost:3000/tienda/producto/460",
+    "status": 200,
+    "srcsetWarnings": [],
+    "images": [
+      {
+        "tag": "img",
+        "src": "/logo-pureza-naturalis-largo_320.webp",
+        "srcset": null,
+        "outer": "<img src=\"/logo-pureza-naturalis-largo_320.webp\" alt=\"Pureza Naturalis\" loading=\"eager\" decoding=\"async\" class=\"h-[70px] object-contain bg-white rounded-xl p-2 shadow-md\">",
+        "candidates": [
+          {
+            "raw": "/logo-pureza-naturalis-largo_320.webp",
+            "url": "http://localhost:3000/logo-pureza-naturalis-largo_320.webp",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/placeholder-product.jpg",
+        "srcset": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<img src=\"/placeholder-product.jpg\" srcset=\"/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" alt=\"Calcio Magnesio\" class=\"w-full h-full object-contain p-4 transition-all duration-300 ease-in-out\" loading=\"eager\" decoding=\"sync\" fetchpriority=\"auto\">",
+        "candidates": [
+          {
+            "raw": "/placeholder-product.jpg",
+            "url": "http://localhost:3000/placeholder-product.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Calcium Magnesium Zinc Anverso.jpg",
+        "srcset": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_120.webp 120w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_160.webp 160w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Calcium Magnesium Zinc Anverso.jpg\" srcset=\"/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_120.webp 120w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_160.webp 160w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 1\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Calcium Magnesium Zinc Anverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "img",
+        "src": "/Jpeg/Calcium Magnesium Zinc Reverso.jpg",
+        "srcset": "/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_120.webp 120w, /Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_160.webp 160w, /Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_240.webp 240w",
+        "outer": "<img src=\"/Jpeg/Calcium Magnesium Zinc Reverso.jpg\" srcset=\"/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_120.webp 120w, /Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_160.webp 160w, /Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_240.webp 240w\" sizes=\"80px\" alt=\"Vista 2\" loading=\"lazy\" decoding=\"async\" class=\"w-16 h-16 object-contain p-1\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Calcium Magnesium Zinc Reverso.jpg",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso.jpg",
+            "descriptor": null,
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_120.webp 120w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_120.webp",
+            "descriptor": "120w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_160.webp 160w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_160.webp",
+            "descriptor": "160w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_240.webp 240w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Reverso_240.webp",
+            "descriptor": "240w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ],
+        "src_malformed": true
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/avif\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      },
+      {
+        "tag": "source",
+        "src": null,
+        "srcset": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+        "outer": "<source srcset=\"/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w, /Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w\" sizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\" type=\"image/webp\">",
+        "candidates": [
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp 320w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_320.webp",
+            "descriptor": "320w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp 480w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_480.webp",
+            "descriptor": "480w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp 640w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_640.webp",
+            "descriptor": "640w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp 768w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_768.webp",
+            "descriptor": "768w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp 1024w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1024.webp",
+            "descriptor": "1024w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso_1280.webp",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          },
+          {
+            "raw": "/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280 1280w",
+            "url": "http://localhost:3000/Jpeg/Calcium%20Magnesium%20Zinc%20Anverso.jpg%3Fw%3D1280",
+            "descriptor": "1280w",
+            "issues": [],
+            "check": {
+              "status": 200,
+              "ok": true
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

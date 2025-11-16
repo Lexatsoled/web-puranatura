@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Tipos de notificación
@@ -21,32 +21,41 @@ interface NotificationContextType {
   clearNotifications: () => void;
 }
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextType | undefined>(
+  undefined
+);
 
-export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const showNotification = useCallback(({ type, message, title, duration = 5000 }: Omit<Notification, 'id'>) => {
-    const id = Date.now().toString();
-    const notification: Notification = {
-      id,
-      type,
-      message,
-      title,
-      duration,
-    };
-
-    setNotifications((prev) => [...prev, notification]);
-
-    // Auto-remove notification after duration
-    setTimeout(() => {
-      removeNotification(id);
-    }, duration);
-  }, []);
-
   const removeNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((notification) => notification.id !== id));
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== id)
+    );
   }, []);
+
+  const showNotification = useCallback(
+    ({ type, message, title, duration = 5000 }: Omit<Notification, 'id'>) => {
+      const id = Date.now().toString();
+      const notification: Notification = {
+        id,
+        type,
+        message,
+        title,
+        duration,
+      };
+
+      setNotifications((prev) => [...prev, notification]);
+
+      // Auto-remove notification after duration
+      setTimeout(() => {
+        removeNotification(id);
+      }, duration);
+    },
+    [removeNotification]
+  );
 
   const clearNotifications = useCallback(() => {
     setNotifications([]);
@@ -62,19 +71,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       }}
     >
       {children}
-      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
+      <NotificationContainer
+        notifications={notifications}
+        onRemove={removeNotification}
+      />
     </NotificationContext.Provider>
   );
 };
 
-// Hook personalizado para usar las notificaciones
-export const useNotifications = () => {
-  const context = useContext(NotificationContext);
-  if (context === undefined) {
-    throw new Error('useNotifications debe ser usado dentro de un NotificationProvider');
-  }
-  return context;
-};
+export default NotificationContext;
 
 // Componente para mostrar las notificaciones
 const NotificationContainer: React.FC<{
@@ -94,10 +99,10 @@ const NotificationContainer: React.FC<{
               notification.type === 'error'
                 ? 'bg-red-50 border-l-4 border-red-500'
                 : notification.type === 'success'
-                ? 'bg-green-50 border-l-4 border-green-500'
-                : notification.type === 'warning'
-                ? 'bg-yellow-50 border-l-4 border-yellow-500'
-                : 'bg-blue-50 border-l-4 border-blue-500'
+                  ? 'bg-green-100 border-l-4 border-green-500'
+                  : notification.type === 'warning'
+                    ? 'bg-yellow-50 border-l-4 border-yellow-500'
+                    : 'bg-blue-50 border-l-4 border-blue-500'
             }`}
           >
             <div className="flex justify-between items-start">
@@ -108,10 +113,10 @@ const NotificationContainer: React.FC<{
                       notification.type === 'error'
                         ? 'text-red-800'
                         : notification.type === 'success'
-                        ? 'text-green-800'
-                        : notification.type === 'warning'
-                        ? 'text-yellow-800'
-                        : 'text-blue-800'
+                          ? 'text-green-800'
+                          : notification.type === 'warning'
+                            ? 'text-yellow-800'
+                            : 'text-blue-800'
                     }`}
                   >
                     {notification.title}
@@ -122,10 +127,10 @@ const NotificationContainer: React.FC<{
                     notification.type === 'error'
                       ? 'text-red-600'
                       : notification.type === 'success'
-                      ? 'text-green-600'
-                      : notification.type === 'warning'
-                      ? 'text-yellow-600'
-                      : 'text-blue-600'
+                        ? 'text-green-600'
+                        : notification.type === 'warning'
+                          ? 'text-yellow-600'
+                          : 'text-blue-600'
                   }`}
                 >
                   {notification.message}
@@ -137,14 +142,18 @@ const NotificationContainer: React.FC<{
                   notification.type === 'error'
                     ? 'text-red-500 hover:text-red-600'
                     : notification.type === 'success'
-                    ? 'text-green-500 hover:text-green-600'
-                    : notification.type === 'warning'
-                    ? 'text-yellow-500 hover:text-yellow-600'
-                    : 'text-blue-500 hover:text-blue-600'
+                      ? 'text-green-500 hover:text-green-600'
+                      : notification.type === 'warning'
+                        ? 'text-yellow-500 hover:text-yellow-600'
+                        : 'text-blue-500 hover:text-blue-600'
                 }`}
               >
                 <span className="sr-only">Cerrar notificación</span>
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"

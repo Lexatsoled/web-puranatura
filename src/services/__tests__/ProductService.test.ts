@@ -1,0 +1,458 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { ProductService } from '../ProductService';
+import { Product } from '../../types/product';
+
+// El test asume la existencia global de ProductRepository (expuesto desde vitest.setup.tsx)
+// Declaraciones para TypeScript en el entorno de tests
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const ProductRepository: any;
+type ProductFilters = any;
+type SortOption = any;
+
+// NOTE: No mocked ProductService here — tests exercise the real implementation
+// and mock ProductRepository functions instead.
+
+const mockProduct: Product = {
+  id: '1',
+  name: 'Test Product',
+  price: 29.99,
+  description: 'Test description',
+  categories: ['Test Category'],
+  images: [
+    {
+      full: '/test-image.jpg',
+      thumbnail: '/test-image-thumb.jpg',
+      alt: 'Test Product',
+    },
+  ],
+  stock: 10,
+  sku: 'TEST-001',
+  tags: ['tag1'],
+  rating: 4.5,
+  reviewCount: 10,
+  isNew: false,
+  isBestSeller: false,
+  compareAtPrice: 39.99,
+};
+
+describe('ProductService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('getProducts', () => {
+    it('returns products without filters or sorting', () => {
+      const mockProducts = [mockProduct];
+      vi.mocked(ProductRepository.getAll).mockReturnValue(mockProducts);
+
+      const result = ProductService.getProducts();
+
+      expect(ProductRepository.getAll).toHaveBeenCalled();
+      expect(result).toEqual(mockProducts);
+    });
+
+    it('applies filters when provided', () => {
+      const filters: ProductFilters = { category: 'Test Category' };
+      const mockFilteredProducts = [mockProduct];
+      vi.mocked(ProductRepository.getAll).mockReturnValue([mockProduct]);
+      vi.mocked(ProductRepository.filter).mockReturnValue(mockFilteredProducts);
+
+      const result = ProductService.getProducts(filters);
+
+      expect(ProductRepository.filter).toHaveBeenCalledWith(filters);
+      expect(result).toEqual(mockFilteredProducts);
+    });
+
+    it('applies sorting when provided', () => {
+      const sortBy: SortOption = 'price-asc';
+      const mockSortedProducts = [mockProduct];
+      vi.mocked(ProductRepository.getAll).mockReturnValue([mockProduct]);
+      vi.mocked(ProductRepository.sort).mockReturnValue(mockSortedProducts);
+
+      const result = ProductService.getProducts(undefined, sortBy);
+
+      expect(ProductRepository.sort).toHaveBeenCalledWith(
+        [mockProduct],
+        sortBy
+      );
+      expect(result).toEqual(mockSortedProducts);
+    });
+
+    it('applies both filters and sorting', () => {
+      const filters: ProductFilters = { category: 'Test Category' };
+      const sortBy: SortOption = 'name-asc';
+      const mockFilteredProducts = [mockProduct];
+      const mockSortedProducts = [mockProduct];
+
+      vi.mocked(ProductRepository.getAll).mockReturnValue([mockProduct]);
+      vi.mocked(ProductRepository.filter).mockReturnValue(mockFilteredProducts);
+      vi.mocked(ProductRepository.sort).mockReturnValue(mockSortedProducts);
+
+      const result = ProductService.getProducts(filters, sortBy);
+
+      expect(ProductRepository.filter).toHaveBeenCalledWith(filters);
+      expect(ProductRepository.sort).toHaveBeenCalledWith(
+        mockFilteredProducts,
+        sortBy
+      );
+      expect(result).toEqual(mockSortedProducts);
+    });
+  });
+
+  describe('getProductById', () => {
+    it('returns product when found', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(mockProduct);
+
+      const result = ProductService.getProductById('1');
+
+      expect(ProductRepository.getById).toHaveBeenCalledWith('1');
+      expect(result).toEqual(mockProduct);
+    });
+
+    it('throws error for invalid id', () => {
+      expect(() => ProductService.getProductById('')).toThrow(
+        'ID de producto inválido'
+      );
+      expect(() => ProductService.getProductById(null as any)).toThrow(
+        'ID de producto inválido'
+      );
+    });
+
+    it('throws error when product not found', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(undefined);
+
+      expect(() => ProductService.getProductById('999')).toThrow(
+        'Producto con ID 999 no encontrado'
+      );
+    });
+  });
+
+  describe('validateProductForCart', () => {
+    it('returns valid for product in stock', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(mockProduct);
+
+      const result = ProductService.validateProductForCart('1', 2);
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('returns invalid for out of stock product', () => {
+      const outOfStockProduct = { ...mockProduct, stock: 0 };
+      vi.mocked(ProductRepository.getById).mockReturnValue(outOfStockProduct);
+
+      const result = ProductService.validateProductForCart('1', 1);
+
+      expect(result.valid).toBe(false);
+      expect(result.message).toBe('Producto agotado');
+      expect(result.availableStock).toBe(0);
+    });
+
+    it('returns invalid for quantity <= 0', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(mockProduct);
+
+      const result = ProductService.validateProductForCart('1', 0);
+
+      expect(result.valid).toBe(false);
+      expect(result.message).toBe('Cantidad debe ser mayor a 0');
+    });
+
+    it('returns invalid for quantity > stock', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(mockProduct);
+
+      const result = ProductService.validateProductForCart('1', 15);
+
+      expect(result.valid).toBe(false);
+      expect(result.message).toBe('Solo hay 10 unidades disponibles');
+      expect(result.availableStock).toBe(10);
+    });
+
+    it('handles repository errors gracefully', () => {
+      vi.mocked(ProductRepository.getById).mockImplementation(() => {
+        throw new Error('Database error');
+      });
+
+      const result = ProductService.validateProductForCart('1', 1);
+
+      expect(result.valid).toBe(false);
+      expect(result.message).toBe('Database error');
+    });
+  });
+
+  describe('calculateDiscountedPrice', () => {
+    it('calculates discount correctly', () => {
+      const result = ProductService.calculateDiscountedPrice(mockProduct);
+
+      expect(result.originalPrice).toBe(39.99);
+      expect(result.finalPrice).toBe(29.99);
+      expect(result.discountPercentage).toBe(25);
+      expect(result.hasDiscount).toBe(true);
+    });
+
+    it('returns no discount when no compareAtPrice', () => {
+      const productWithoutDiscount = {
+        ...mockProduct,
+        compareAtPrice: undefined,
+      };
+
+      const result = ProductService.calculateDiscountedPrice(
+        productWithoutDiscount
+      );
+
+      expect(result.originalPrice).toBe(29.99);
+      expect(result.finalPrice).toBe(29.99);
+      expect(result.discountPercentage).toBe(0);
+      expect(result.hasDiscount).toBe(false);
+    });
+
+    it('returns no discount when compareAtPrice <= price', () => {
+      const productWithoutDiscount = { ...mockProduct, compareAtPrice: 20.0 };
+
+      const result = ProductService.calculateDiscountedPrice(
+        productWithoutDiscount
+      );
+
+      expect(result.hasDiscount).toBe(false);
+    });
+  });
+
+  describe('getRelatedProducts', () => {
+    it('returns related products when product exists', () => {
+      const relatedProducts = [{ ...mockProduct, id: '2' }];
+      vi.mocked(ProductRepository.getById).mockReturnValue(mockProduct);
+      vi.mocked(ProductRepository.getRelatedProducts).mockReturnValue(
+        relatedProducts
+      );
+
+      const result = ProductService.getRelatedProducts('1', 4);
+
+      expect(ProductRepository.getRelatedProducts).toHaveBeenCalledWith('1', 4);
+      expect(result).toEqual(relatedProducts);
+    });
+
+    it('returns empty array when product not found', () => {
+      vi.mocked(ProductRepository.getById).mockReturnValue(undefined);
+
+      const result = ProductService.getRelatedProducts('999', 4);
+
+      expect(result).toEqual([]);
+    });
+
+    it('handles repository errors gracefully', () => {
+      vi.mocked(ProductRepository.getById).mockImplementation(() => {
+        throw new Error('Database error');
+      });
+
+      const result = ProductService.getRelatedProducts('1', 4);
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('getFeaturedProducts', () => {
+    it('returns combined featured products', () => {
+      const featured = [mockProduct];
+      const newProducts = [{ ...mockProduct, id: '2', isNew: true }];
+      const bestSellers = [{ ...mockProduct, id: '3', isBestSeller: true }];
+
+      vi.mocked(ProductRepository.getFeatured).mockReturnValue(featured);
+      vi.mocked(ProductRepository.getNewProducts).mockReturnValue(newProducts);
+      vi.mocked(ProductRepository.getBestSellers).mockReturnValue(bestSellers);
+
+      const result = ProductService.getFeaturedProducts(8);
+
+      expect(result.length).toBeLessThanOrEqual(8);
+      expect(ProductRepository.getFeatured).toHaveBeenCalled();
+      expect(ProductRepository.getNewProducts).toHaveBeenCalled();
+      expect(ProductRepository.getBestSellers).toHaveBeenCalled();
+    });
+
+    it('removes duplicates from combined lists', () => {
+      const duplicateProduct = {
+        ...mockProduct,
+        isNew: true,
+        isBestSeller: true,
+      };
+      vi.mocked(ProductRepository.getFeatured).mockReturnValue([mockProduct]);
+      vi.mocked(ProductRepository.getNewProducts).mockReturnValue([
+        duplicateProduct,
+      ]);
+      vi.mocked(ProductRepository.getBestSellers).mockReturnValue([
+        duplicateProduct,
+      ]);
+
+      const result = ProductService.getFeaturedProducts(8);
+
+      // Should have only unique products
+      const uniqueIds = new Set(result.map((p) => p.id));
+      expect(uniqueIds.size).toBe(result.length);
+    });
+  });
+
+  describe('searchProducts', () => {
+    it('returns search results for valid query', () => {
+      const searchResults = [mockProduct];
+      vi.mocked(ProductRepository.search).mockReturnValue(searchResults);
+
+      const result = ProductService.searchProducts('test query');
+
+      expect(result.products).toEqual(searchResults);
+      expect(result.totalResults).toBe(1);
+      expect(result.searchTerm).toBe('test query');
+      expect(ProductRepository.search).toHaveBeenCalledWith('test query');
+    });
+
+    it('returns empty results for query too short', () => {
+      const result = ProductService.searchProducts('ab');
+
+      expect(result.products).toEqual([]);
+      expect(result.totalResults).toBe(0);
+      expect(result.searchTerm).toBe('ab');
+      expect(ProductRepository.search).not.toHaveBeenCalled();
+    });
+
+    it('returns empty results for empty query', () => {
+      const result = ProductService.searchProducts('');
+
+      expect(result.products).toEqual([]);
+      expect(result.totalResults).toBe(0);
+      expect(result.searchTerm).toBe('');
+    });
+
+    it('ranks results with term in name first', () => {
+      const productWithNameMatch = { ...mockProduct, name: 'Test Vitamin C' };
+      const productWithoutNameMatch = {
+        ...mockProduct,
+        id: '2',
+        name: 'Other Product',
+        description: 'Contains test ingredients',
+      };
+
+      vi.mocked(ProductRepository.search).mockReturnValue([
+        productWithoutNameMatch,
+        productWithNameMatch,
+      ]);
+
+      const result = ProductService.searchProducts('test');
+
+      expect(result.products[0]).toEqual(productWithNameMatch);
+      expect(result.products[1]).toEqual(productWithoutNameMatch);
+    });
+  });
+
+  describe('getProductStats', () => {
+    it('returns correct statistics', () => {
+      const allProducts = [
+        mockProduct,
+        { ...mockProduct, id: '2', stock: 0 }, // out of stock
+        { ...mockProduct, id: '3', isNew: true },
+        { ...mockProduct, id: '4', isBestSeller: true },
+      ];
+
+      vi.mocked(ProductRepository.getAll).mockReturnValue(allProducts);
+      vi.mocked(ProductRepository.getFeatured).mockReturnValue([
+        { ...mockProduct, id: '3' },
+      ]);
+      vi.mocked(ProductRepository.getNewProducts).mockReturnValue([
+        { ...mockProduct, id: '3' },
+      ]);
+      vi.mocked(ProductRepository.getBestSellers).mockReturnValue([
+        { ...mockProduct, id: '4' },
+      ]);
+
+      const result = ProductService.getProductStats();
+
+      expect(result.totalProducts).toBe(4);
+      expect(result.inStockProducts).toBe(3);
+      expect(result.outOfStockProducts).toBe(1);
+      expect(result.featuredProducts).toBe(1);
+      expect(result.newProducts).toBe(1);
+      expect(result.bestSellers).toBe(1);
+    });
+  });
+
+  describe('validateProduct', () => {
+    it('returns valid for correct product', () => {
+      const result = ProductService.validateProduct(mockProduct);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+
+    it('returns errors for invalid product', () => {
+      const invalidProduct = {
+        name: '',
+        price: -10,
+        categories: [],
+        images: [],
+      };
+
+      const result = ProductService.validateProduct(invalidProduct);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+
+    it('validates required fields', () => {
+      const invalidProduct = {};
+
+      const result = ProductService.validateProduct(invalidProduct);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain(
+        'ID de producto requerido y debe ser string'
+      );
+      expect(result.errors).toContain(
+        'Nombre de producto requerido y debe ser string'
+      );
+      expect(result.errors).toContain(
+        'Descripción de producto requerida y debe ser string'
+      );
+    });
+  });
+
+  describe('formatPrice', () => {
+    it('formats price with default currency', () => {
+      const result = ProductService.formatPrice(29.99);
+
+      expect(result).toBe('29.99 RDS');
+    });
+
+    it('formats price with custom currency', () => {
+      const result = ProductService.formatPrice(29.99, 'USD');
+
+      expect(result).toBe('29.99 USD');
+    });
+  });
+
+  describe('calculateUnitPrice', () => {
+    it('extracts unit price from priceNote', () => {
+      const productWithPriceNote = {
+        ...mockProduct,
+        priceNote: ['125 RDS por cápsula'],
+      };
+
+      const result = ProductService.calculateUnitPrice(productWithPriceNote);
+
+      expect(result).toBe('125 RDS');
+    });
+
+    it('returns null when no priceNote', () => {
+      const result = ProductService.calculateUnitPrice(mockProduct);
+
+      expect(result).toBe(null);
+    });
+
+    it('handles array priceNote', () => {
+      const productWithArrayPriceNote = {
+        ...mockProduct,
+        priceNote: ['125 RDS por unidad', 'otra nota'],
+      };
+
+      const result = ProductService.calculateUnitPrice(
+        productWithArrayPriceNote
+      );
+
+      expect(result).toBe('125 RDS');
+    });
+  });
+});

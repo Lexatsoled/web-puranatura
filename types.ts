@@ -1,33 +1,14 @@
-export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  description: string;
-  images: {
-    thumbnail: string;
-    full: string;
-  }[];
-}
+import { Product as ProductType } from './src/types/product';
+
+export type Product = ProductType;
 
 export interface CartItem {
   product: Product;
   quantity: number;
 }
 
-export interface Service {
-  title: string;
-  description: string;
-  imageUrl: string;
-}
-
-export interface Testimonial {
-  name: string;
-  text: string;
-  imageUrl?: string;
-}
-
 export interface BlogPost {
+  id: string;
   title: string;
   summary: string;
   imageUrl: string;

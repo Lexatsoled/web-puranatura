@@ -25,15 +25,18 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
     setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
   }, [images.length]);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setIsFullscreen(false);
-    } else if (e.key === 'ArrowRight') {
-      nextImage();
-    } else if (e.key === 'ArrowLeft') {
-      prevImage();
-    }
-  }, [nextImage, prevImage]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsFullscreen(false);
+      } else if (e.key === 'ArrowRight') {
+        nextImage();
+      } else if (e.key === 'ArrowLeft') {
+        prevImage();
+      }
+    },
+    [nextImage, prevImage]
+  );
 
   React.useEffect(() => {
     if (isFullscreen) {
@@ -51,10 +54,22 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
 
   if (!images || images.length === 0) {
     return (
-      <div className={`bg-gray-200 rounded-lg flex items-center justify-center ${className}`}>
+      <div
+        className={`bg-gray-200 rounded-lg flex items-center justify-center ${className}`}
+      >
         <div className="text-center text-gray-500">
-          <svg className="h-12 w-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg
+            className="h-12 w-12 mx-auto mb-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
           <p>Sin imágenes disponibles</p>
         </div>
@@ -77,7 +92,9 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
             onClick={() => setIsFullscreen(true)}
           >
             <OptimizedImage
-              src={images[selectedImage]?.full || images[selectedImage]?.thumbnail}
+              src={
+                images[selectedImage]?.full || images[selectedImage]?.thumbnail
+              }
               alt={`${productName} - Imagen ${selectedImage + 1}`}
               className="w-full h-full object-cover"
               priority={selectedImage === 0}
@@ -93,18 +110,40 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
               onClick={prevImage}
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 transition-all opacity-0 group-hover:opacity-100"
               aria-label="Imagen anterior"
+              title="Imagen anterior"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
             <button
               onClick={nextImage}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 transition-all opacity-0 group-hover:opacity-100"
               aria-label="Imagen siguiente"
+              title="Imagen siguiente"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </button>
           </>
@@ -121,7 +160,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
         <div className="grid grid-cols-4 gap-2">
           {images.map((image, index) => (
             <motion.button
-              key={index}
+              key={`thumb-${index}`}
               onClick={() => setSelectedImage(index)}
               className={`relative aspect-square rounded-md overflow-hidden transition-all ${
                 selectedImage === index
@@ -130,6 +169,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
               }`}
               whileHover={{ scale: selectedImage === index ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
+              aria-label={`Seleccionar miniatura ${index + 1}`}
             >
               <OptimizedImage
                 src={image.thumbnail || image.full}
@@ -160,9 +200,20 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
               onClick={() => setIsFullscreen(false)}
               className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
               aria-label="Cerrar pantalla completa"
+              title="Cerrar pantalla completa"
             >
-              <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-8 w-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
@@ -170,7 +221,9 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
-              src={images[selectedImage]?.full || images[selectedImage]?.thumbnail}
+              src={
+                images[selectedImage]?.full || images[selectedImage]?.thumbnail
+              }
               alt={`${productName} - Imagen ${selectedImage + 1}`}
               className="max-w-full max-h-full object-contain p-4"
               onClick={(e) => e.stopPropagation()}
@@ -185,9 +238,20 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
                   }}
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300"
                   aria-label="Imagen anterior"
+                  title="Imagen anterior"
                 >
-                  <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="h-8 w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                 </button>
                 <button
@@ -197,9 +261,20 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
                   }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300"
                   aria-label="Imagen siguiente"
+                  title="Imagen siguiente"
                 >
-                  <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    className="h-8 w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </>

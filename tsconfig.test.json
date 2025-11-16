@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "test/**/*",
+    "src/**/*",
+    "components/**/*",
+    "contexts/**/*",
+    "hooks/**/*",
+    "pages/**/*",
+    "data/**/*",
+    "vitest.setup.tsx"
+  ],
+  "exclude": ["test/components/**/*", "test/integration/**/*"]
+}

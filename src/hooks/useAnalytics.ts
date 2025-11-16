@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-type EventCategory = 
+export type EventCategory =
   | 'page_view'
   | 'product'
   | 'cart'
@@ -16,7 +16,7 @@ interface AnalyticsEvent {
   action: string;
   label?: string;
   value?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface PageViewEvent {
@@ -46,9 +46,13 @@ class AnalyticsService {
     if (typeof window !== 'undefined') {
       // Google Analytics
       if (process.env.REACT_APP_GA_ID) {
-        this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`);
+        this.loadScript(
+          `https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`
+        );
         window.dataLayer = window.dataLayer || [];
-        window.gtag = function(){window.dataLayer.push(arguments)};
+        window.gtag = function (...args) {
+          window.dataLayer.push(...args);
+        };
         window.gtag('js', new Date());
         window.gtag('config', process.env.REACT_APP_GA_ID);
       }
@@ -56,7 +60,11 @@ class AnalyticsService {
       // Facebook Pixel
       if (process.env.REACT_APP_FB_PIXEL_ID) {
         this.loadScript('https://connect.facebook.net/en_US/fbevents.js');
-        window.fbq = window.fbq || function(){(window.fbq.q = window.fbq.q || []).push(arguments)};
+        window.fbq =
+          window.fbq ||
+          function (...args) {
+            (window.fbq.q = window.fbq.q || []).push(...args);
+          };
         window.fbq('init', process.env.REACT_APP_FB_PIXEL_ID);
       }
     }
@@ -135,8 +143,8 @@ class AnalyticsService {
           sessionId: this.getSessionId(),
         }),
       });
-    } catch (error) {
-      console.error('Error logging analytics event:', error);
+    } catch {
+      // Silent fail - analytics no debe bloquear funcionalidad
     }
   }
 
@@ -157,7 +165,7 @@ export function useAnalytics() {
 
   useEffect(() => {
     analytics.init();
-  }, []);
+  }, [analytics]);
 
   // Seguimiento automático de vistas de página
   useEffect(() => {
@@ -166,11 +174,11 @@ export function useAnalytics() {
       title: document.title,
       referrer: document.referrer,
     });
-  }, [location]);
+  }, [location, analytics]);
 
   const trackEvent = useCallback((event: Omit<AnalyticsEvent, 'timestamp'>) => {
     analytics.trackEvent(event);
-  }, []);
+  }, [analytics]);
 
   return { trackEvent };
 }

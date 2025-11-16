@@ -1,0 +1,186 @@
+﻿{
+  "meta": {
+    "version": 2,
+    "severity_scale": ["info", "low", "medium", "high", "critical"],
+    "generated_at": "$(Get-Date -Format o)"
+  },
+  "findings": [
+    {
+      "id": "SEC-DBG-001",
+      "title": "Endpoint `/api/test/product/:id` expone la base SQLite sin autenticación",
+      "category": "security",
+      "subcategory": "data_exposure",
+      "severity": "critical",
+      "likelihood": 4,
+      "priority": 100,
+      "where": {
+        "file": "backend/src/routes/test.ts",
+        "line": 1,
+        "snippet": "const db = new Database('./data/store.db');\nconst product = db.prepare('SELECT * FROM products WHERE id = ?').get(Number(id));"
+      },
+      "evidence": "La ruta GET `/api/test/product/:id` se registra siempre que el servidor arranca y abre `./data/store.db` con better-sqlite3. No requiere autenticación ni controles de acceso y devuelve el registro completo desde el disco.",
+      "impact": "Permite extraer cualquier producto o pivotar contra la base SQLite en producción, evitando los controles de caché, rate limiting y sanitización, además de filtrar rutas de disco internas.",
+      "recommendation": "Eliminar la ruta o restringirla a entornos de desarrollo protegidos (`NODE_ENV === 'development'`) y tras `requireRole('admin')`. Exponer herramientas de depuración sólo mediante CLI o tunel SSH.",
+      "fix_example": "```diff\n-import Database from 'better-sqlite3';\n-export async function testRoutes(app: FastifyInstance) {\n-  app.get('/test/product/:id', async (request, reply) => {\n-    const db = new Database('./data/store.db');\n-    const product = db.prepare('SELECT * FROM products WHERE id = ?').get(Number(id));\n-    return reply.send({ product });\n-  });\n-}\n+import { requireRole } from '../middleware/auth.js';\n+export async function testRoutes(app: FastifyInstance) {\n+  if (process.env.NODE_ENV !== 'development') return;\n+  app.get('/test/product/:id', { preHandler: [requireRole('admin')] }, async (request, reply) => {\n+    const product = await productService.getProductById(id);\n+    return reply.send({ product });\n+  });\n+}\n```",
+      "references": [
+        "https://owasp.org/API-Security/editions/2023/en/0x08-v5-broken-function-level-authorization/"
+      ],
+      "tests": ["backend/src/routes/__tests__/test-route.spec.ts"],
+      "metrics": {"exploitable_poc": true, "user_impact": 5}
+    },
+    {
+      "id": "SEC-ANA-002",
+      "title": "`/api/admin/analytics/vitals` es público y revela Web Vitals con user-agent y referer",
+      "category": "security",
+      "subcategory": "access_control",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 48,
+      "where": {
+        "file": "backend/src/routes/analytics.ts",
+        "line": 10,
+        "snippet": "fastify.get('/admin/analytics/vitals', async () => {\n  const metrics = { lcp: calculateMetric('LCP'), ... };\n  return metrics;\n});"
+      },
+      "evidence": "La ruta GET no tiene `preHandler` ni rate-limit. Cualquiera puede descargar las métricas con user-agent, URL y timestamps almacenados en `vitalsStore`, lo que incluye potencialmente URLs sensibles.",
+      "impact": "Fuga de telemetría (PII ligera) y posibilidad de saturar la memoria enviando POST masivos, degradando observabilidad.",
+      "recommendation": "Agregar `requireRole('admin')`, reutilizar `createRateLimitConfig('admin')`, validar payload con Zod y limitar el buffer en memoria a 500 elementos purgando más antiguos.",
+      "fix_example": "```diff\n-fastify.get('/admin/analytics/vitals', async () => {\n+fastify.get('/admin/analytics/vitals', {\n+  preHandler: [requireRole('admin')],\n+  config: { rateLimit: createRateLimitConfig('admin') },\n+}, async () => {\n   return { ...metrics };\n });\n```",
+      "references": [
+        "https://owasp.org/API-Security/editions/2023/en/0x09-v6-mass-assignment/"
+      ],
+      "tests": ["backend/src/routes/__tests__/analytics-routes.spec.ts"],
+      "metrics": {"exploitable_poc": true, "user_impact": 3}
+    },
+    {
+      "id": "I18N-MOJI-003",
+      "title": "Mapa de mojibake reemplaza tildes por caracteres corruptos",
+      "category": "ux",
+      "subcategory": "encoding",
+      "severity": "high",
+      "likelihood": 4,
+      "priority": 48,
+      "where": {
+        "file": "src/utils/encoding.ts",
+        "line": 15,
+        "snippet": "'\\u00C3\\u00A1': 'ǭ',\n'\\u00C3\\u0089': '�%',\n'\\u00C3\\u00B1': '��'"
+      },
+      "evidence": "El mapa `MOJIBAKE_MAP` sustituyó cada secuencia 'Ã¡' por símbolos `ǭ|�%|��`. Por tanto, `normalizeText('EspaÃ±a')` produce `Espa��a` y la detección `hasMojibake` nunca limpia los mensajes de error en `checkoutStore`.",
+      "impact": "La interfaz muestra textos ilegibles ("Direcci��n de env��o"), lo que afecta la comprensión, genera desconfianza y rompe validaciones de WCAG.",
+      "recommendation": "Reescribir el mapa usando caracteres reales (`á`, `ñ`, `¿`). Añadir pruebas unitarias y automatizar `npm run check:encoding` en CI. Usar `TextDecoder('windows-1252', { fatal: false })` como fallback.",
+      "fix_example": "```diff\n-const MOJIBAKE_MAP = { '\\u00C3\\u00A1': 'ǭ', '\\u00C2\\u00BF': '��' };\n+const MOJIBAKE_MAP = { '\\u00C3\\u00A1': 'á', '\\u00C2\\u00BF': '¿' };\n```",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Glossary/Mojibake"
+      ],
+      "tests": ["src/utils/__tests__/encoding.test.ts"],
+      "metrics": {"user_impact": 3}
+    },
+    {
+      "id": "FUNC-CHECKOUT-004",
+      "title": "`checkoutStore.processOrder` nunca llama al backend y sólo guarda pedidos en localStorage",
+      "category": "reliability",
+      "subcategory": "transactions",
+      "severity": "high",
+      "likelihood": 5,
+      "priority": 80,
+      "where": {
+        "file": "src/store/checkoutStore.ts",
+        "line": 134,
+        "snippet": "await new Promise((resolve) => setTimeout(resolve, 2000));\nconst orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;"
+      },
+      "evidence": "El flujo de checkout simula un delay de 2 segundos, valida datos y luego persiste la orden en `localStorage`. Nunca consume `/api/v1/orders`, por lo que el backend no registra pedidos, no envía correos ni actualiza inventario.",
+      "impact": "Cualquier compra aparente en la UI se pierde; métricas, inventarios y pagos no se sincronizan, lo que equivale a 100% de fallos de pedido en producción.",
+      "recommendation": "Reutilizar `OrderService.placeOrder` con los datos del carrito, manejar errores HTTP y sólo confirmar al usuario cuando el backend responda 201. Conectar el service worker (background sync) como respaldo offline.",
+      "fix_example": "```diff\n-      await new Promise((resolve) => setTimeout(resolve, 2000));\n-      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;\n+      const response = await OrderService.placeOrder(buildPayload(cart));\n+      const orderId = response.orderId;\n```",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/API/Background_Synchronization_API"
+      ],
+      "tests": ["src/pages/__tests__/CheckoutPage.test.tsx", "e2e/checkout.spec.ts"],
+      "metrics": {"user_impact": 4}
+    },
+    {
+      "id": "API-VAL-005",
+      "title": "La ruta `/api/v1/products/system/:systemId` aplica un esquema de creación de producto en un GET",
+      "category": "functionality",
+      "subcategory": "validation",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "backend/src/routes/v1/products.ts",
+        "line": 132,
+        "snippet": "preHandler: [validateSchema('product.create', 'body'), validateSchema('product.filters', 'query')]"
+      },
+      "evidence": "El preHandler exige un body que cumpla `CreateProductSchema` aunque la petición es GET. Fastify responde 400 "Validación fallida" para cualquier request del módulo 'Sistemas Sinérgicos'.",
+      "impact": "La página `SistemasSinergicosPage.tsx` nunca puede cargar datos desde `/api/v1/products/system/:slug`, rompiendo la navegación y la conversión para ese segmento.",
+      "recommendation": "Eliminar la validación de body y mantener sólo `ProductFiltersSchema` para query params. Añadir prueba que reproduzca el bug.",
+      "fix_example": "```diff\n- preHandler: [validateSchema('product.create', 'body'), validateSchema('product.filters', 'query')],\n+ preHandler: [validateSchema('product.filters', 'query')],\n```",
+      "references": ["https://fastify.dev/docs/latest/Reference/Validation/#input-validation"],
+      "tests": ["backend/src/routes/v1/__tests__/products-system.spec.ts"],
+      "metrics": {"user_impact": 3}
+    },
+    {
+      "id": "PERF-SW-006",
+      "title": "El Service Worker sólo cachea `/api/products` y `/api/orders` sin versión, por lo que nunca intercepta `/api/v1/**`",
+      "category": "performance",
+      "subcategory": "pwa",
+      "severity": "medium",
+      "likelihood": 5,
+      "priority": 45,
+      "where": {
+        "file": "src/service-worker.ts",
+        "line": 18,
+        "snippet": "({ url }) => url.pathname.startsWith('/api/products')\n...\n({ url, request }) => url.pathname.startsWith('/api/orders') && request.method === 'POST'"
+      },
+      "evidence": "La versión actual de la API se sirve bajo `/api/v1/...`. El SW nunca cachea catálogo ni sincroniza órdenes porque los predicados no hacen match, anulando los beneficios offline y repitiendo requests costosas.",
+      "impact": "PWA sin funcionalidad: mayores tiempos de carga (LCP 34 s medido), reintentos fallidos cuando el usuario está offline y `BackgroundSyncPlugin` nunca persiste pedidos.",
+      "recommendation": "Actualizar los `registerRoute` a `/api/v1/products` y `/api/v1/orders`, o usar `url.pathname.includes('/api/v1/products')`. Regenerar el manifiesto y avisar al cliente para forzar `skipWaiting`.",
+      "fix_example": "```diff\n-({ url }) => url.pathname.startsWith('/api/products')\n+({ url }) => url.pathname.startsWith('/api/v1/products')\n```",
+      "references": ["https://developer.chrome.com/docs/workbox/"
+      ],
+      "tests": ["playwright/tests/offline-cart.spec.ts"],
+      "metrics": {"user_impact": 3}
+    },
+    {
+      "id": "PERF-IMG-007",
+      "title": "Construcción manual de `srcset` sólo soporta `.jpg` y genera entradas duplicadas para `.webp/.avif`",
+      "category": "performance",
+      "subcategory": "assets",
+      "severity": "medium",
+      "likelihood": 5,
+      "priority": 60,
+      "where": {
+        "file": "src/pages/CartPage.tsx",
+        "line": 159,
+        "snippet": "srcSet={`${(item.product.images[0]?.full || '').replace(/\\.(jpg|jpeg|png)$/i, '_320.webp')} 320w, ...`}"
+      },
+      "evidence": "`public/Jpeg` contiene mayormente `.webp/.avif`. El `.replace(/.(jpg|jpeg|png)$/i, '_320.webp')` no actúa y el navegador recibe un `srcset` con la misma URL repetida, lo que dispara advertencias y descarga imágenes de 2–5 MB (Lighthouse report `total-byte-weight` 5.96 MB).",
+      "impact": "LCP y FCP se disparan (34 s / 14 s). El intento de responsive images no funciona, por lo que usuarios móviles bajan assets innecesarios; además, el elemento `<source>` no apunta a `/public/optimized`.",
+      "recommendation": "Usar el helper `generateSrcSet`/`OptimizedImage` en todos los componentes y asegurar que los datos apunten a `/optimized/*.webp`. Añadir pruebas unitarias para rutas con espacios/comas.",
+      "fix_example": "```diff\n-<source srcSet={`${img.full.replace(/\\.(jpg|jpeg|png)$/i, '_320.webp')} 320w, ...`} />\n+<OptimizedImage src={img.full} alt={product.name} sizes=\"96px\" />\n```",
+      "references": ["https://web.dev/serve-responsive-images/"],
+      "tests": ["src/utils/__tests__/image.test.ts", "playwright/tests/product-images.spec.ts"],
+      "metrics": {"user_impact": 4}
+    },
+    {
+      "id": "SEO-SITEMAP-008",
+      "title": "`sitemapRoutes` devuelve arrays estáticos y no incluye ningún producto real",
+      "category": "maintainability",
+      "subcategory": "seo",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "backend/src/routes/sitemap.ts",
+        "line": 18,
+        "snippet": "const products: Product[] = [];\nconst categories = ['vitaminas', ...];\nconst urls = [...products.map(...)]"
+      },
+      "evidence": "La generación del sitemap ignora por completo la base de datos; sólo devuelve rutas estáticas `/products?category=...`. No hay `lastmod` ni URLs `/tienda/:slug`, impidiendo que los motores indexen el catálogo.",
+      "impact": "SEO prácticamente nulo para páginas de producto; disminuye tráfico orgánico y no informa cambios de stock/contenido.",
+      "recommendation": "Consultar Drizzle para obtener `products.id` + `updated_at`, cachear el XML y añadir `<lastmod>` real. Incluir `/blog`, `/servicios` y variantes `store/:id`.",
+      "fix_example": "```diff\n-const products: Product[] = [];\n+const products = await db.select({ id: productsTable.id, updatedAt: productsTable.updatedAt }).from(productsTable);\n```",
+      "references": ["https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap"],
+      "tests": ["backend/src/routes/__tests__/sitemap.spec.ts"],
+      "metrics": {"user_impact": 3}
+    }
+  ]
+}

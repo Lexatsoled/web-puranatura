@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 import { NextSeoProps } from 'next-seo';
 import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
 
@@ -11,8 +11,8 @@ interface SeoProps extends Partial<NextSeoProps> {
 }
 
 export const useSeo = (props: SeoProps = {}): NextSeoProps => {
-  const router = useRouter();
-  const currentUrl = `${DEFAULT_SEO_CONFIG.openGraph?.url}${router.asPath}`;
+  const location = useLocation();
+  const currentUrl = `${DEFAULT_SEO_CONFIG.openGraph?.url}${location.pathname}`;
 
   return {
     ...DEFAULT_SEO_CONFIG,

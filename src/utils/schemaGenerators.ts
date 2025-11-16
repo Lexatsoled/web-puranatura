@@ -20,13 +20,16 @@ interface ProductJsonLd {
   };
 }
 
-export const generateProductJsonLd = (product: Product, url: string): ProductJsonLd => {
+export const generateProductJsonLd = (
+  product: Product,
+  url: string
+): ProductJsonLd => {
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description: product.seoDescription || product.description,
-    image: product.images.map(img => img.full),
+    description: product.description || product.description,
+    image: product.images.map((img) => img.full),
     ...(product.brand && {
       brand: {
         '@type': 'Brand',
@@ -38,7 +41,7 @@ export const generateProductJsonLd = (product: Product, url: string): ProductJso
       '@type': 'Offer',
       price: product.price.toString(),
       priceCurrency: 'EUR',
-      availability: product.inStock
+      availability: product.stock
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
       url,

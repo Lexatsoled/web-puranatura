@@ -3,21 +3,20 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 interface OptimizedBackgroundImageProps {
   src: string;
+  alt: string;
   children: React.ReactNode;
   className?: string;
   overlayClassName?: string;
 }
 
-export const OptimizedBackgroundImage: React.FC<OptimizedBackgroundImageProps> = ({
-  src,
-  children,
-  className = '',
-  overlayClassName = '',
-}) => {
+export const OptimizedBackgroundImage: React.FC<
+  OptimizedBackgroundImageProps
+> = ({ src, alt, children, className = '', overlayClassName = '' }) => {
   return (
     <div className={`relative ${className}`}>
       <LazyLoadImage
         src={src}
+        alt={alt}
         effect="blur"
         className="absolute inset-0 w-full h-full object-cover"
         wrapperClassName="absolute inset-0"

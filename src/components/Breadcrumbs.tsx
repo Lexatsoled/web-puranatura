@@ -15,6 +15,13 @@ interface BreadcrumbsProps {
   structured?: boolean; // Para datos estructurados de Schema.org
 }
 
+/**
+ * Componente Breadcrumbs para navegación jerárquica con accesibilidad y Schema.org.
+ *
+ * @component
+ * @param {BreadcrumbsProps} props - Props para Breadcrumbs
+ * @returns {JSX.Element}
+ */
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   items,
   className = '',
@@ -73,7 +80,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
-      <nav aria-label="Breadcrumb" className={className}>
+      <nav aria-label="Ruta de navegación" className={className} role="navigation">
         <motion.ol
           className="flex items-center flex-wrap"
           variants={containerVariants}
@@ -82,7 +89,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
         >
           {items.map((item, index) => (
             <React.Fragment key={item.path}>
-              <motion.li variants={itemVariants} className="flex items-center">
+              <motion.li variants={itemVariants} className="flex items-center" role="listitem">
                 {item.isCurrentPage ? (
                   <span
                     className="text-gray-500 font-medium"
@@ -94,6 +101,8 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                   <Link
                     to={item.path}
                     className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
+                    aria-label={`Ir a ${item.label}`}
+                    title={`Ir a ${item.label}`}
                   >
                     {item.label}
                   </Link>
@@ -104,6 +113,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                   variants={itemVariants}
                   className="mx-2 text-gray-400"
                   aria-hidden="true"
+                  role="presentation"
                 >
                   {separator}
                 </motion.li>
@@ -114,10 +124,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
       </nav>
 
       {/* Breadcrumbs móvil */}
-      <nav
-        aria-label="Breadcrumb"
-        className={`md:hidden mt-2 ${className}`}
-      >
+      <nav aria-label="Ruta de navegación" className={`md:hidden mt-2 ${className}`} role="navigation">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -129,14 +136,16 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
               <Link
                 to={items[0].path}
                 className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
+                aria-label={`Ir a ${items[0].label}`}
+                title={`Ir a ${items[0].label}`}
               >
                 {items[0].label}
               </Link>
-              <span className="mx-2 text-gray-400" aria-hidden="true">
+              <span className="mx-2 text-gray-400" aria-hidden="true" role="presentation">
                 {separator}
               </span>
               <span className="text-gray-500">...</span>
-              <span className="mx-2 text-gray-400" aria-hidden="true">
+              <span className="mx-2 text-gray-400" aria-hidden="true" role="presentation">
                 {separator}
               </span>
               <span className="text-gray-500 font-medium" aria-current="page">
@@ -157,15 +166,14 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                   <Link
                     to={item.path}
                     className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
+                    aria-label={`Ir a ${item.label}`}
+                    title={`Ir a ${item.label}`}
                   >
                     {item.label}
                   </Link>
                 )}
                 {index < items.length - 1 && (
-                  <span
-                    className="mx-2 text-gray-400"
-                    aria-hidden="true"
-                  >
+                  <span className="mx-2 text-gray-400" aria-hidden="true" role="presentation">
                     {separator}
                   </span>
                 )}
