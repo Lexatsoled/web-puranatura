@@ -79,12 +79,6 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
   }) => {
     const index = rowIndex * columnCount + columnIndex;
 
-    if (index >= products.length) {
-      return null;
-    }
-
-    const product = products[index];
-
     // Calcular posición con padding
     const cellStyle = {
       ...style,
@@ -94,7 +88,17 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
       height: `${cardHeight}px`,
     };
 
+    if (index >= products.length) {
+      // Return an empty element to satisfy react-window's type expectations
+      // eslint-disable-next-line
+      return <div style={cellStyle} />;
+    }
+
+    const product = products[index];
+
+
     return (
+      {/* eslint-disable-next-line */}
       <div style={cellStyle} className={styles.gridCell} {...ariaAttributes}>
         <ProductCard product={product} />
       </div>

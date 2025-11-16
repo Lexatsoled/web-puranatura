@@ -1,8 +1,9 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect, type TestInfo } from '@playwright/test';
+import fs from 'fs';
 
 export const test = base.extend({
   // Override `page` fixture to add an init script before any navigation
-  page: async ({ page, testInfo }, use) => {
+  page: async ({ page }, use, testInfo) => {
     await page.addInitScript(() => {
       (function () {
         const disableOverlays = () => {
@@ -68,7 +69,6 @@ export const test = base.extend({
 
     // After the test ends, write logs to the test output directory for CI artifacts
     try {
-      const fs = require('fs');
       const outputDir = testInfo.outputPath('');
       const outPath = testInfo.outputPath('console.log');
       if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
