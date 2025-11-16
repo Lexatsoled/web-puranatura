@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold font-display mb-4">PuraNatura</h3>
+            <h3 className="text-xl font-bold font-display mb-4">Pureza Naturalis</h3>
             <p className="text-green-200">
               Tu santuario de bienestar y salud natural. Conectando con la
               esencia de la naturaleza para una vida plena.
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="mt-8 border-t border-green-700 pt-6 text-center text-green-300 text-sm">
           <p>
-            &copy; {new Date().getFullYear()} PuraNatura. Todos los derechos
+            &copy; {new Date().getFullYear()} Pureza Naturalis. Todos los derechos
             reservados.
           </p>
         </div>

@@ -1,8 +1,8 @@
-# 🌿 ANÁLISIS EXHAUSTIVO - PURANATURA WEB
+# 🌿 ANÁLISIS EXHAUSTIVO - Pureza Naturalis WEB
 
 ## 📊 RESUMEN EJECUTIVO
 
-Tu proyecto **PuraNatura** es una aplicación web moderna para medicina natural con tienda online. Utiliza tecnologías de vanguardia y tiene una base sólida, pero necesitaba correcciones importantes que ya hemos implementado.
+Tu proyecto **Pureza Naturalis** es una aplicación web moderna para medicina natural con tienda online. Utiliza tecnologías de vanguardia y tiene una base sólida, pero necesitaba correcciones importantes que ya hemos implementado.
 
 ## ✅ FORTALEZAS IDENTIFICADAS
 

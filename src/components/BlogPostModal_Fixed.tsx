@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BlogPost } from '../types/blog';
+import { BlogPost } from '../types';
 
 interface BlogPostModalProps {
   isOpen: boolean;

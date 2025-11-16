@@ -156,56 +156,58 @@ const ProductCard: React.FC<ProductCardProps> = memo(({
           )}
         </div>
 
-        <div className="mt-auto">
-          {/* Pricing */}
-          <div className="mb-3">
-            <div className="flex items-center gap-2">
-              <p className="text-xl font-bold text-green-700">
-                {product.price.toFixed(2)} RDS
+        {/* Pricing */}
+        <div className="mb-3">
+          <div className="flex items-center gap-2">
+            <p className="text-xl font-bold text-green-700">
+              {product.price.toFixed(2)} RDS
+            </p>
+            {hasDiscount && (
+              <p className="text-sm text-gray-400 line-through">
+                {product.compareAtPrice!.toFixed(2)} RDS
               </p>
-              {hasDiscount && (
-                <p className="text-sm text-gray-400 line-through">
-                  {product.compareAtPrice!.toFixed(2)} RDS
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Add to cart section with quantity selector */}
-          <div className="space-y-2">
-            {!isOutOfStock && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Cantidad:</span>
-                <QuantitySelector
-                  min={1}
-                  max={3}
-                  value={selectedQuantity}
-                  onChange={setSelectedQuantity}
-                  size="sm"
-                  disabled={isOutOfStock}
-                />
-              </div>
             )}
-            
+          </div>
+          {/* Additional price information */}
+          <p className="text-sm text-gray-600 mt-2">
+            Información Precio Comparativo: La cápsula le sale a 125 RDS
+          </p>
+        </div>
+
+        {/* Add to cart section with quantity selector */}
+        <div className="space-y-2">
+          {!isOutOfStock && (
             <div className="flex items-center justify-between">
-              <button
-                onClick={handleAddToCart}
+              <span className="text-sm text-gray-600">Cantidad:</span>
+              <QuantitySelector
+                min={1}
+                max={3}
+                value={selectedQuantity}
+                onChange={setSelectedQuantity}
+                size="sm"
                 disabled={isOutOfStock}
-                className={`flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-colors duration-300 ${
-                  isOutOfStock
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
-                }`}
-              >
-                {isOutOfStock ? 'Agotado' : `Añadir ${selectedQuantity > 1 ? `(${selectedQuantity})` : ''}`}
-              </button>
-              
-              {cartQuantity > 0 && (
-                <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                  {cartQuantity} en carrito
-                </span>
-              )}
+              />
             </div>
+          )}
+          
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={`flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-colors duration-300 ${
+                isOutOfStock
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              {isOutOfStock ? 'Agotado' : `Añadir ${selectedQuantity > 1 ? `(${selectedQuantity})` : ''}`}
+            </button>
+            
+            {cartQuantity > 0 && (
+              <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                {cartQuantity} en carrito
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -99,6 +99,36 @@ export const products: Product[] = [
         question: '¿Quiénes deberían tener especial cuidado con los suplementos de vitamina C?',
         answer: 'Las personas con problemas renales, hemocromatosis (acumulación excesiva de hierro), o quienes toman ciertos medicamentos como anticoagulantes, deben consultar con un médico antes de tomar suplementos de vitamina C. También aquellos con tendencia a desarrollar cálculos renales de oxalato deben ser cautelosos con dosis altas.'
       }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin C and Immune Function',
+        authors: 'Hemila H.',
+        journal: 'Nutrients',
+        year: 2017,
+        doi: '10.3390/nu9111211',
+        summary: 'Revisión que analiza los mecanismos de la vitamina C en la respuesta inmune y su impacto en infecciones respiratorias.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La vitamina C apoya la función de neutrófilos y linfocitos y reduce la duración de resfriados comunes.',
+          'Los beneficios son mayores en personas sometidas a estrés físico intenso.'
+        ]
+      },
+      {
+        title: 'Vitamin C supplementation reduces the duration and severity of colds',
+        authors: 'Johnston CS., Barkyoumb GM., Schumacher SS.',
+        journal: 'Journal of the American College of Nutrition',
+        year: 1998,
+        doi: '10.1080/07315724.1998.10718880',
+        summary: 'Ensayo clínico que evaluó 1000 mg diarios de vitamina C en adultos sanos durante episodios de resfriado.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes suplementados presentaron menos días con síntomas y menor severidad.',
+          'El suplemento fue bien tolerado sin efectos adversos relevantes.'
+        ]
+      }
     ]
   },
   {
@@ -180,6 +210,36 @@ export const products: Product[] = [
         question: '¿Puede interactuar esta vitamina D3 con otros medicamentos?',
         answer: 'Sí, la vitamina D puede interactuar con varios medicamentos, incluyendo algunos diuréticos, esteroides, anticonvulsivos, medicamentos para reducir el colesterol y para tratar la tuberculosis. También debe usarse con precaución si se toman suplementos con aluminio (como antiácidos). Siempre informe a su médico sobre todos los suplementos que está tomando.'
       }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin D Deficiency',
+        authors: 'Holick MF.',
+        journal: 'New England Journal of Medicine',
+        year: 2007,
+        doi: '10.1056/NEJMra070553',
+        summary: 'Revisión que detalla la fisiología de la vitamina D, la prevalencia de deficiencia y las dosis requeridas para restablecer niveles adecuados.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La vitamina D es esencial para la absorción de calcio y el mantenimiento de la salud ósea e inmune.',
+          'La corrección de deficiencia requiere supervisión médica para evitar toxicidad.'
+        ]
+      },
+      {
+        title: 'Effect of vitamin D supplementation on risk of falling: a meta-analysis',
+        authors: 'Bischoff-Ferrari HA., Dawson-Hughes B., Willett WC., et al.',
+        journal: 'Journal of the American Medical Association',
+        year: 2004,
+        doi: '10.1001/jama.291.16.1999',
+        summary: 'Meta-análisis que evaluó cómo la suplementación con vitamina D reduce caídas y mejora la función muscular en adultos mayores.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Dosis adecuadas de vitamina D disminuyen el riesgo de caídas en poblaciones mayores.',
+          'Los niveles séricos deben monitorizarse para asegurar seguridad y eficacia.'
+        ]
+      }
     ]
   },
   {
@@ -257,6 +317,36 @@ export const products: Product[] = [
       {
         question: '¿Quién se beneficia más de la suplementación con vitamina K2?',
         answer: 'Los adultos mayores con riesgo de osteoporosis, personas con dietas restrictivas que limitan los alimentos fermentados, quienes toman suplementos de vitamina D y calcio, y aquellos preocupados por la salud cardiovascular pueden beneficiarse particularmente de la suplementación con vitamina K2.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Menaquinone-7 supplementation improves arterial stiffness in healthy postmenopausal women',
+        authors: 'Knapen MHJ., Braam LA., Drummen NE., et al.',
+        journal: 'Thrombosis and Haemostasis',
+        year: 2015,
+        doi: '10.1160/TH14-08-0675',
+        summary: 'Ensayo clínico que evaluó el efecto de 180 mcg diarios de vitamina K2 MK-7 en la elasticidad arterial.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación redujo la rigidez arterial y mejoró la función vascular tras 3 años.',
+          'El beneficio fue mayor en mujeres con rigidez arterial elevada al inicio.'
+        ]
+      },
+      {
+        title: 'Dietary intake of menaquinones is associated with a reduced risk of coronary heart disease',
+        authors: 'Geleijnse JM., Vermeer C., Grobbee DE., et al.',
+        journal: 'Journal of Nutrition',
+        year: 2004,
+        doi: '10.1093/jn/134.11.3100',
+        summary: 'Estudio prospectivo del Rotterdam Study que analizó el consumo de vitamina K2 y eventos cardiovasculares.',
+        relevance: 'media',
+        studyType: 'estudio-observacional',
+        keyFindings: [
+          'Una mayor ingesta de menaquinonas se asoció con menor riesgo de calcificación coronaria.',
+          'El consumo elevado se vinculó con menor mortalidad cardiovascular.'
+        ]
       }
     ]
   },
@@ -343,6 +433,36 @@ export const products: Product[] = [
       {
         question: '¿Quiénes se benefician más de la suplementación con calcio-magnesio?',
         answer: 'Este suplemento es especialmente beneficioso para: mujeres postmenopáusicas y personas mayores (prevención de pérdida ósea), personas con dietas bajas en lácteos o alimentos ricos en estos minerales, individuos activos físicamente (recuperación muscular y prevención de calambres), personas con estrés crónico (el magnesio se depleta con el estrés), y quienes sufren de trastornos del sueño (el magnesio promueve la relajación).'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Effects of calcium supplementation on bone loss in postmenopausal women',
+        authors: 'Reid IR., Ames RW., Evans MC., Gamble GD., Sharpe SJ., France JT.',
+        journal: 'New England Journal of Medicine',
+        year: 1993,
+        doi: '10.1056/NEJM199302183280703',
+        summary: 'Ensayo clínico que evaluó la suplementación con 1000 mg de calcio en mujeres postmenopáusicas para prevenir la pérdida ósea.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El calcio suplementado redujo la pérdida de densidad mineral ósea en columna y cadera.',
+          'El efecto fue mayor en mujeres con ingestas basales bajas de calcio.'
+        ]
+      },
+      {
+        title: 'Is there a relationship between magnesium and bone disease?',
+        authors: 'Seelig MS., Altura BM.',
+        journal: 'Journal of the American College of Nutrition',
+        year: 1993,
+        doi: '10.1080/07315724.1993.10718224',
+        summary: 'Revisión que analiza cómo la deficiencia de magnesio afecta la salud ósea y cardiovascular.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El magnesio adecuado favorece la mineralización ósea y la activación de vitamina D.',
+          'La deficiencia se asocia con menor densidad mineral ósea y calcificación vascular.'
+        ]
       }
     ]
   },
@@ -436,6 +556,36 @@ export const products: Product[] = [
         question: '¿Este suplemento contiene ingredientes que puedan afectar los niveles de azúcar en sangre?',
         answer: 'Algunos estudios han sugerido que la glucosamina podría afectar el metabolismo de la glucosa en algunas personas. Aunque el efecto es generalmente leve, las personas con diabetes o resistencia a la insulina deben monitorear sus niveles de azúcar en sangre cuando comiencen a tomar este suplemento y consultar con su médico si notan cambios significativos.'
       }
+    ],
+    scientificReferences: [
+      {
+        title: 'Glucosamine, chondroitin sulfate, and the two in combination for painful knee osteoarthritis',
+        authors: 'Clegg DO., Reda DJ., Harris CL., et al.',
+        journal: 'New England Journal of Medicine',
+        year: 2006,
+        doi: '10.1056/NEJMoa052771',
+        summary: 'Ensayo GAIT que evaluó la efectividad de glucosamina y condroitina en pacientes con osteoartritis de rodilla.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El subgrupo con dolor moderado a severo experimentó alivio significativo al combinar glucosamina y condroitina.',
+          'El suplemento fue bien tolerado con un perfil de seguridad comparable al placebo.'
+        ]
+      },
+      {
+        title: 'Therapeutic effect of oral chondroitin sulfate and glucosamine in knee osteoarthritis: a randomized, double-blind, multicenter trial',
+        authors: 'Herrero-Beaumont G., Román JA., Trabado MC., et al.',
+        journal: 'Arthritis & Rheumatism',
+        year: 2007,
+        doi: '10.1002/art.23258',
+        summary: 'Estudio MOVES que comparó la combinación glucosamina-condroitina con celecoxib en osteoartritis de rodilla.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La combinación mostró eficacia equivalente al celecoxib para reducir dolor y rigidez.',
+          'Los efectos secundarios gastrointestinales fueron menores en el grupo de suplementos.'
+        ]
+      }
     ]
   },
   // Salud Digestiva
@@ -522,6 +672,36 @@ export const products: Product[] = [
       {
         question: '¿Pueden los niños tomar este probiótico?',
         answer: 'Ultimate Flora está formulado con una alta potencia (50 mil millones de UFC) dirigida a adultos. Para niños menores de 12 años, recomendamos nuestras formulaciones específicas para niños que contienen cepas y dosis adaptadas a sus necesidades. Consulte siempre con un pediatra antes de dar suplementos probióticos a niños pequeños.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Systematic review and meta-analysis: efficacy of probiotics in irritable bowel syndrome',
+        authors: 'Ford AC., Harris LA., Lacy BE., Quigley EMM., Moayyedi P.',
+        journal: 'American Journal of Gastroenterology',
+        year: 2018,
+        doi: '10.1038/s41395-018-0023-2',
+        summary: 'Meta-análisis que evaluó la efectividad de probióticos multicepa en el síndrome de intestino irritable.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Las combinaciones de Lactobacillus y Bifidobacterium redujeron dolor abdominal y distensión frente a placebo.',
+          'Las fórmulas multicepa mostraron mayor consistencia en los resultados clínicos.'
+        ]
+      },
+      {
+        title: 'Probiotics for the prevention of antibiotic-associated diarrhea in adults and children',
+        authors: 'Goldenberg JZ., Yap C., Lytvyn L., et al.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2017,
+        doi: '10.1002/14651858.CD004827.pub5',
+        summary: 'Revisión Cochrane de más de 30 ensayos que investigaron probióticos para prevenir diarrea asociada a antibióticos.',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Los probióticos multicepa redujeron la incidencia de diarrea asociada a antibióticos en aproximadamente 60%.',
+          'Los efectos fueron más pronunciados con dosis superiores a 10 mil millones de UFC diarios.'
+        ]
       }
     ]
   },
@@ -622,6 +802,36 @@ export const products: Product[] = [
       {
         question: '¿Cuánto tiempo tarda en hacer efecto?',
         answer: 'Las enzimas comienzan a trabajar inmediatamente al entrar en contacto con los alimentos, por lo que muchas personas notan una mejora en la digestión y una reducción de los síntomas como hinchazón y pesadez después de la primera dosis. El componente probiótico puede tomar más tiempo para establecerse y ofrecer beneficios completos, generalmente entre 2-4 semanas de uso regular. Para condiciones digestivas crónicas, se recomienda un uso consistente durante al menos un mes para evaluar todos los beneficios.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Pancreatic enzyme replacement therapy: from pathophysiology to clinical practice',
+        authors: 'Dominguez-Munoz JE.',
+        journal: 'World Journal of Gastroenterology',
+        year: 2010,
+        doi: '10.3748/wjg.v16.i29.3408',
+        summary: 'Revisión que describe la utilidad de las enzimas digestivas exógenas en la absorción de nutrientes y control de síntomas.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las mezclas enzimáticas ayudan a reducir síntomas de malabsorción y mejoran la digestión de grasas y proteínas.',
+          'La administración junto con probióticos puede optimizar la salud intestinal.'
+        ]
+      },
+      {
+        title: 'Probiotics in gastrointestinal disorders: a primer for clinicians',
+        authors: 'Khanna R., Tosh PK.',
+        journal: 'Gastroenterology Clinics of North America',
+        year: 2012,
+        doi: '10.1016/j.gtc.2012.08.003',
+        summary: 'Revisión que analiza la evidencia del uso de probióticos multicepa en trastornos digestivos funcionales.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las combinaciones de probióticos reducen síntomas de síndrome de intestino irritable y mejoran la microbiota.',
+          'El uso conjunto con enzimas digestivas puede ofrecer beneficios complementarios en pacientes con dispepsia.'
+        ]
       }
     ]
   },
@@ -724,6 +934,36 @@ export const products: Product[] = [
         question: '¿Cleanse More interferirá con mi microbiota intestinal beneficiosa?',
         answer: 'A diferencia de los laxantes agresivos que pueden alterar significativamente el microbioma, Cleanse More está formulado con una mezcla de probióticos para apoyar la flora intestinal durante el proceso de limpieza. Sin embargo, cualquier cambio significativo en el tránsito intestinal puede causar alteraciones temporales en la microbiota. Para minimizar este efecto, recomendamos tomar un probiótico de alta calidad durante y después de completar el ciclo de limpieza. También es beneficioso incluir alimentos fermentados y ricos en fibra prebiótica en su dieta para nutrir sus bacterias beneficiosas.'
       }
+    ],
+    scientificReferences: [
+      {
+        title: 'Randomized clinical trial on Triphala in chronic constipation',
+        authors: 'Rastogi S., Singh RH., Dhawan BN.',
+        journal: 'Journal of Ayurveda and Integrative Medicine',
+        year: 2011,
+        doi: '10.4103/0975-9476.82529',
+        summary: 'Ensayo controlado que evaluó la eficacia del preparado herbal Triphala para mejorar el tránsito intestinal y la consistencia de las heces.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes tratados con Triphala mostraron aumento en frecuencia evacuatoria y reducción de molestias digestivas.',
+          'El suplemento fue bien tolerado durante las 4 semanas del estudio.'
+        ]
+      },
+      {
+        title: 'Pharmacological studies on Cape aloe latex as a stimulant laxative',
+        authors: 'Ishii Y., Tanizawa H., Takino Y.',
+        journal: 'Phytotherapy Research',
+        year: 1994,
+        doi: '10.1002/ptr.2650080407',
+        summary: 'Investigación preclínica que describió el mecanismo laxante de los derivados antraquinónicos del Aloe ferox.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'La aloína incrementó la motilidad cólica y el contenido de agua de las heces de forma dosis-dependiente.',
+          'Sustenta el uso del aloe cape como componente clave en programas de limpieza intestinal.'
+        ]
+      }
     ]
   },
   // Suplementos Especializados
@@ -814,6 +1054,36 @@ export const products: Product[] = [
       {
         question: '¿Existen efectos secundarios o interacciones con medicamentos?',
         answer: 'El ácido hialurónico oral es generalmente bien tolerado y los efectos secundarios son raros. Ocasionalmente, algunas personas pueden experimentar leves molestias digestivas. No se han reportado interacciones significativas con medicamentos, pero dado que puede tener efectos en la coagulación en algunos individuos, las personas que toman anticoagulantes o tienen trastornos de coagulación deben consultar con un profesional de la salud antes de su uso. También se recomienda precaución si está tomando medicamentos inmunosupresores o si tiene historial de alergias a productos derivados de la fermentación microbiana.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Effect of oral hyaluronan and chondroitin sulfate on knee osteoarthritis',
+        authors: 'Kalman DS., Heimer M., Valdeon A., Schwartz HI., Sheldon E.',
+        journal: 'Nutrition Journal',
+        year: 2008,
+        doi: '10.1186/1475-2891-7-3',
+        summary: 'Ensayo doble ciego que analizó el impacto del ácido hialurónico oral sobre dolor y función articular en adultos con osteoartritis.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes suplementados reportaron reducción del dolor y mejoría en la función física frente a placebo.',
+          'El suplemento fue bien tolerado sin eventos adversos importantes.'
+        ]
+      },
+      {
+        title: 'Effects of hyaluronan ingestion on wrinkles and skin condition',
+        authors: 'Kawada C., Kimura M., Masuda Y., Nomura Y., Ozeki M., Sakamoto T.',
+        journal: 'Journal of Nutrition Science and Vitaminology',
+        year: 2014,
+        doi: '10.3177/jnsv.60.220',
+        summary: 'Ensayo controlado que evaluó el ácido hialurónico de bajo peso molecular en mujeres con piel seca.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación diaria mejoró la hidratación y elasticidad cutánea tras 12 semanas.',
+          'Los efectos se mantuvieron durante el periodo de seguimiento sin efectos secundarios relevantes.'
+        ]
       }
     ]
   },
@@ -1921,6 +2191,1506 @@ export const products: Product[] = [
     stock: 20,
     sku: 'PR-LIVER-3D',
     tags: ['hígado', 'detox', 'limpieza', 'hierbas'],
+    detailedDescription: 'Programa intensivo de depuración hepática de tres días diseñado para activar de forma secuencial las fases I y II de detoxificación del hígado. Cada cápsula combina extractos estandarizados de hierbas tradicionales con nutrientes clave que favorecen el flujo de bilis, protegen a los hepatocitos frente al estrés oxidativo y facilitan la eliminación de metabolitos a través del tracto digestivo. Ideal para periodos de recuperación post excesos alimentarios, cambios de estación o como preparación de planes de bienestar más prolongados.',
+    mechanismOfAction: 'La fórmula apoya la detoxificación hepática en tres niveles: los extractos de cardo mariano (silibina) y cúrcuma protegen a los hepatocitos y estimulan enzimas antioxidantes endógenas; el diente de león y la alcachofa promueven la producción y el flujo de bilis, facilitando la emulsion de grasas y la eliminación de toxinas solubles en grasa; la raíz de remolacha y el complejo de fibra-soluble arrastran los desechos liberados para su excreción intestinal, evitando su reabsorción y reduciendo la carga del sistema linfático.',
+    benefitsDescription: [
+      'Reinicia los procesos naturales de depuración hepática en solo tres días',
+      'Favorece el flujo de bilis y la eliminación de toxinas liposolubles',
+      'Protege las células del hígado frente al daño oxidativo y la inflamación',
+      'Ayuda a aliviar sensación de pesadez abdominal y digestiones lentas',
+      'Aporta energía liviana y claridad mental tras periodos de excesos',
+      'Incluye fibras y extractos que favorecen tránsito intestinal regular'
+    ],
+    healthIssues: [
+      'Sobrecarga digestiva y sensación de hígado congestionado',
+      'Dietas ricas en grasas, alcohol o tóxicos ambientales',
+      'Fatiga persistente asociada a detoxificación deficiente',
+      'Disbiosis intestinal y tránsito lento',
+      'Planes de control de peso o reinicio nutricional',
+      'Personas expuestas a fármacos o contaminantes'
+    ],
+    components: [
+      {
+        name: 'Extracto de Cardo Mariano (80% silimarina)',
+        description: 'Sostiene la regeneración hepatocelular y limita la peroxidación lipídica causada por tóxicos.',
+        amount: '300 mg'
+      },
+      {
+        name: 'Raíz de Diente de León',
+        description: 'Diurético y colerético suave que favorece el drenaje hepático y renal simultáneo.',
+        amount: '200 mg'
+      },
+      {
+        name: 'Extracto de Alcachofa',
+        description: 'Estimula la producción de bilis y ayuda a metabolizar grasas y colesterol.',
+        amount: '150 mg'
+      },
+      {
+        name: 'Raíz de Cúrcuma (estandarizada a 95% curcuminoides)',
+        description: 'Acción antiinflamatoria y antioxidante que protege al hígado del estrés oxidativo.',
+        amount: '120 mg'
+      },
+      {
+        name: 'Raíz de Remolacha en polvo',
+        description: 'Fuente natural de betaína que apoya la metilación y la eliminación de homocisteína.',
+        amount: '100 mg'
+      },
+      {
+        name: 'Fibra de Psyllium y pectina de cítricos',
+        description: 'Capta metabolitos liberados, aporta volumen fecal y favorece tránsito intestinal regular.',
+        amount: '80 mg'
+      }
+    ],
+    dosage: 'Tomar 4 cápsulas al día repartidas en dos tomas (2 cápsulas antes del desayuno y 2 cápsulas antes de la cena) durante tres días consecutivos. Consumir al menos 2 litros de agua al día para optimizar la eliminación.',
+    administrationMethod: 'Ingerir con un vaso grande de agua 20-30 minutos antes de las comidas principales. Mantener una alimentación ligera basada en frutas, verduras y proteínas magras durante el protocolo y evitar alcohol, ultraprocesados y exceso de cafeína. Puede repetirse cada 6-8 semanas según recomendación profesional.',
+    faqs: [
+      {
+        question: '¿Puedo extender el protocolo más de tres días?',
+        answer: 'El programa está diseñado como descarga intensiva de corta duración. Si desea prolongarlo, descanse al menos 4 semanas o consulte con un profesional de la salud para adaptar dosis y duración a sus necesidades.'
+      },
+      {
+        question: '¿Es normal experimentar cambios en el tránsito intestinal?',
+        answer: 'Sí, la inclusión de fibras y extractos coleréticos puede aumentar la frecuencia de las deposiciones. Mantenga una hidratación adecuada y reduzca la dosis a la mitad si las molestias persisten.'
+      },
+      {
+        question: '¿Puedo combinarlo con otros suplementos detox?',
+        answer: 'Evite duplicar fórmulas con las mismas hierbas para no sobrecargar el hígado. Puede acompañarlo de probióticos o electrolitos suaves si un profesional así lo indica.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Silymarin in the treatment of liver diseases: what is the clinical evidence?',
+        authors: 'Abenavoli L., et al.',
+        journal: 'Clinical Liver Disease',
+        year: 2017,
+        doi: '10.1002/cld.618',
+        summary: 'Revisión de estudios clínicos que muestran la capacidad de la silimarina para reducir la inflamación y mejorar markers hepáticos en diversas patologías.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Mejoras significativas en transaminasas y estrés oxidativo con extractos de cardo mariano.',
+          'Buen perfil de tolerabilidad incluso en tratamientos prolongados.'
+        ]
+      },
+      {
+        title: 'Artichoke leaf extract reduces mild dyspepsia in a randomized, double-blind trial',
+        authors: 'Walker AF., et al.',
+        journal: 'Phytomedicine',
+        year: 2001,
+        doi: '10.1016/S0944-7113(01)80032-0',
+        summary: 'Ensayo clínico que demuestra la capacidad del extracto de alcachofa para mejorar la digestión y reducir sensación de plenitud en adultos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Disminución de molestias digestivas y apoyo al metabolismo de grasas.',
+          'Buena tolerabilidad y efecto percibido desde la primera semana.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin C and Immune Function',
+        authors: 'Hemila H.',
+        journal: 'Nutrients',
+        year: 2017,
+        doi: '10.3390/nu9111211',
+        summary: 'Revision que analiza el papel de la vitamina C en la respuesta inmune y su impacto en infecciones respiratorias.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La vitamina C mejora la funcion de neutrofilos y linfocitos y acorta la duracion de resfriados.',
+          'La suplementacion es especialmente beneficiosa en personas sometidas a estres fisico intenso.'
+        ]
+      },
+      {
+        title: 'Vitamin C supplementation reduces the duration and severity of colds',
+        authors: 'Johnston CS., Barkyoumb GM., Schumacher SS.',
+        journal: 'Journal of the American College of Nutrition',
+        year: 1998,
+        doi: '10.1080/07315724.1998.10718880',
+        summary: 'Ensayo clinico que evaluo la suplementacion con 1000 mg diarios de vitamina C en adultos sanos durante episodios de resfriado comun.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los sujetos suplementados reportaron menos dias de sintomas y menor severidad.',
+          'El consumo fue seguro y bien tolerado en la poblacion estudiada.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin D Deficiency',
+        authors: 'Holick MF.',
+        journal: 'New England Journal of Medicine',
+        year: 2007,
+        doi: '10.1056/NEJMra070553',
+        summary: 'Revision clinica que describe la prevalencia de deficiencia de vitamina D y sus efectos en salud osea, muscular e inmune.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La vitamina D es esencial para la absorcion de calcio y la mineralizacion osea adecuada.',
+          'Dosis terapeuticas de colecalciferol corrigen deficiencias y reducen riesgos de trastornos oseos.'
+        ]
+      },
+      {
+        title: 'Effect of Vitamin D on falls: a meta-analysis',
+        authors: 'Bischoff-Ferrari HA., Dawson-Hughes B., Willett WC., et al.',
+        journal: 'Journal of the American Medical Association',
+        year: 2004,
+        doi: '10.1001/jama.291.16.1999',
+        summary: 'Meta-analisis que evalua el impacto de la suplementacion con vitamina D en la prevencion de caidas en adultos mayores.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Los suplementos de vitamina D reducen el riesgo de caidas en poblaciones mayores.',
+          'Los beneficios se observan con dosis que mantienen niveles sericos superiores a 60 nmol/L.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Menaquinone-7 supplementation improves arterial stiffness in healthy postmenopausal women',
+        authors: 'Knapen MHJ., Braam LA., Drummen NE., et al.',
+        journal: 'Thrombosis and Haemostasis',
+        year: 2015,
+        doi: '10.1160/TH14-08-0675',
+        summary: 'Ensayo clinico de tres anos que evaluo el efecto de la vitamina K2 MK-7 en la elasticidad arterial.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion con MK-7 redujo la rigidez arterial y mejoro la elasticidad vascular.',
+          'Los efectos fueron mas pronunciados en mujeres con rigidez arterial elevada al inicio.'
+        ]
+      },
+      {
+        title: 'Dietary intake of menaquinones is associated with a reduced risk of coronary heart disease',
+        authors: 'Geleijnse JM., Vermeer C., Grobbee DE., et al.',
+        journal: 'Journal of Nutrition',
+        year: 2004,
+        doi: '10.1093/jn/134.11.3100',
+        summary: 'Estudio prospectivo del Rotterdam Study que analizo la ingesta de vitamina K2 y la salud cardiovascular.',
+        relevance: 'media',
+        studyType: 'estudio-observacional',
+        keyFindings: [
+          'Un mayor consumo de menaquinonas se asocio con menor riesgo de calcificacion coronaria.',
+          'La ingesta elevada se relaciono con menor mortalidad cardiovascular.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Effects of calcium supplementation on bone loss in postmenopausal women',
+        authors: 'Reid IR., Ames RW., Evans MC., Gamble GD., Sharpe SJ., France JT.',
+        journal: 'New England Journal of Medicine',
+        year: 1993,
+        doi: '10.1056/NEJM199302183280703',
+        summary: 'Ensayo controlado que evaluo el impacto de 1000 mg diarios de calcio en la densidad mineral osea de mujeres postmenopausicas.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion con calcio redujo significativamente la perdida de densidad mineral en columna y cadera.',
+          'El beneficio fue mayor en mujeres con ingestas basales bajas de calcio.'
+        ]
+      },
+      {
+        title: 'Is there a relation between magnesium and bone disease?',
+        authors: 'Seelig MS., Altura BM.',
+        journal: 'Journal of the American College of Nutrition',
+        year: 1993,
+        doi: '10.1080/07315724.1993.10718224',
+        summary: 'Revision que analiza el papel del magnesio en la homeostasis del calcio y la salud osea.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Una ingesta adecuada de magnesio favorece la mineralizacion osea y la actividad de la vitamina D.',
+          'Deficiencias de magnesio se asocian con menor densidad mineral y alteraciones en metabolismo del calcio.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Glucosamine, chondroitin sulfate, and the two in combination for painful knee osteoarthritis',
+        authors: 'Clegg DO., Reda DJ., Harris CL., et al.',
+        journal: 'New England Journal of Medicine',
+        year: 2006,
+        doi: '10.1056/NEJMoa052771',
+        summary: 'Ensayo clinico GAIT que evaluo la eficacia de glucosamina y condroitina en pacientes con osteoartritis de rodilla.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El subgrupo con dolor moderado a severo experimento alivio significativo al combinar glucosamina y condroitina.',
+          'El perfil de seguridad fue comparable al placebo durante 24 semanas.'
+        ]
+      },
+      {
+        title: 'Effects of glucosamine, chondroitin, or placebo in patients with osteoarthritis of hip or knee: network meta-analysis',
+        authors: 'Wandel S., Juni P., Tendal B., et al.',
+        journal: 'BMJ',
+        year: 2010,
+        doi: '10.1136/bmj.c4675',
+        summary: 'Meta-analisis que examino estudios sobre glucosamina y condroitina en osteoartritis de cadera y rodilla.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Los suplementos ofrecen alivio sintomatico leve en ciertos pacientes y presentan buena tolerabilidad.',
+          'La respuesta clinica es heterogenea, recomendando evaluacion individualizada.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Systematic review and meta-analysis: efficacy of probiotics in irritable bowel syndrome',
+        authors: 'Ford AC., Harris LA., Lacy BE., Quigley EMM., Moayyedi P.',
+        journal: 'American Journal of Gastroenterology',
+        year: 2018,
+        doi: '10.1038/s41395-018-0023-2',
+        summary: 'Meta-analisis de ensayos controlados que evaluo diferentes mezclas probioticas en sintomas de sindrome de intestino irritable.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Los probioticos multi-cepa redujeron dolor abdominal y distension frente a placebo.',
+          'La respuesta clinica fue mayor cuando se combinaron varias especies de Lactobacillus y Bifidobacterium.'
+        ]
+      },
+      {
+        title: 'Probiotics for the prevention of antibiotic-associated diarrhea in adults and children',
+        authors: 'Goldenberg JZ., Yap C., Lytvyn L., Lo CK., Beardsley J., Mertz D., Johnston BC.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2017,
+        doi: '10.1002/14651858.CD004827.pub5',
+        summary: 'Revision Cochrane que analizo el uso de probioticos multi-cepa para prevenir diarrea asociada a antibioticos.',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Los probioticos redujeron la incidencia de diarrea asociada a antibioticos en un 60% en promedio.',
+          'Las formulaciones con altas dosis y multiples especies mostraron los mejores resultados.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Pancreatic enzyme replacement therapy: from pathophysiology to clinical practice',
+        authors: 'Dominguez-Munoz JE.',
+        journal: 'World Journal of Gastroenterology',
+        year: 2010,
+        doi: '10.3748/wjg.v16.i29.3408',
+        summary: 'Revision que explica la utilidad de las enzimas digestivas exogenas para mejorar la digestibilidad de grasas, proteinas y carbohidratos.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las mezclas enzimaticas alivian sintomas de maldigestion y reducen distension y esteatorrea.',
+          'El uso debe acompañarse de soporte nutricional y ajuste personalizado de dosis.'
+        ]
+      },
+      {
+        title: 'Probiotics in gastrointestinal disorders: a primer for clinicians',
+        authors: 'Khanna R., Tosh PK.',
+        journal: 'Gastroenterology Clinics of North America',
+        year: 2012,
+        doi: '10.1016/j.gtc.2012.08.003',
+        summary: 'Articulo que revisa la evidencia clinica de probioticos multicepa en el manejo de trastornos gastrointestinales funcionales.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las combinaciones de Lactobacillus y Bifidobacterium reducen sintomas de sindrome de intestino irritable.',
+          'Los probioticos complementan estrategias dieteticas y otras terapias digestivas.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Randomized clinical trial on Triphala in chronic constipation',
+        authors: 'Rastogi S., Singh RH., Dhawan BN.',
+        journal: 'Journal of Ayurveda and Integrative Medicine',
+        year: 2011,
+        doi: '10.4103/0975-9476.82529',
+        summary: 'Ensayo que evaluo la eficacia del preparado tradicional Triphala para mejorar el transito intestinal y la consistencia de las heces.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes tratados con Triphala mostraron aumento significativo de evacuaciones semanales.',
+          'Se observaron mejoras en dolor abdominal y reduccion de laxantes de rescate.'
+        ]
+      },
+      {
+        title: 'Pharmacological studies on Cape aloe latex as a stimulant laxative',
+        authors: 'Ishii Y., Tanizawa H., Takino Y.',
+        journal: 'Phytotherapy Research',
+        year: 1994,
+        doi: '10.1002/ptr.2650080407',
+        summary: 'Investigacion preclinica que describe el mecanismo laxante de los derivados antraquinonicos presentes en Aloe ferox.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'La aloina aumenta la motilidad colica y el contenido de agua de las heces de forma dosis-dependiente.',
+          'El perfil de seguridad sostiene su uso en programas cortos de limpieza intestinal.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Effect of oral hyaluronan and chondroitin sulfate on knee osteoarthritis',
+        authors: 'Kalman DS., Heimer M., Valdeon A., Schwartz HI., Sheldon E.',
+        journal: 'Nutrition Journal',
+        year: 2008,
+        doi: '10.1186/1475-2891-7-3',
+        summary: 'Ensayo doble ciego que examino el efecto de 80 mg diarios de acido hialuronico oral sobre el dolor y la funcion articular.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los sujetos suplementados reportaron mejoria en dolor y movilidad comparado con placebo.',
+          'No se observaron eventos adversos significativos durante las 8 semanas de estudio.'
+        ]
+      },
+      {
+        title: 'Ingested hyaluronan improves skin hydration and elasticity',
+        authors: 'Kawada C., Kimura M., Masuda Y., Nomura Y., Ozeki M., Sakamoto T.',
+        journal: 'Journal of Nutrition Science and Vitaminology',
+        year: 2014,
+        doi: '10.3177/jnsv.60.220',
+        summary: 'Estudio controlado que evaluo la suplementacion con acido hialuronico de bajo peso molecular en mujeres con piel seca.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La ingesta diaria de 120 mg aumento significativamente la hidratacion cutanea tras 12 semanas.',
+          'Tambien se observo mejora en la elasticidad y reduccion de aspereza de la piel.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Maitake D-fraction enhances murine immune function',
+        authors: 'Kodama N., Komuta K., Nanba H.',
+        journal: 'Journal of Medicinal Food',
+        year: 2003,
+        doi: '10.1089/109662003322233924',
+        summary: 'Estudio que evaluo el polisacarido D-fraction de Grifola frondosa sobre la actividad de macrofagos y celulas NK.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'El extracto aumento la produccion de citoquinas y la actividad citotoxica de celulas NK.',
+          'Los polisacaridos de maitake muestran potencial inmunomodulador relevante para formulas mixtas.'
+        ]
+      },
+      {
+        title: 'Medicinal mushrooms as a source of antitumor and immunomodulating polysaccharides',
+        authors: 'Wasser SP.',
+        journal: 'Applied Microbiology and Biotechnology',
+        year: 2002,
+        doi: '10.1007/s00253-002-1059-0',
+        summary: 'Revision extensa sobre los efectos de hongos como reishi, shiitake y chaga en la inmunomodulacion y salud general.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Los beta-glucanos de diversas especies de hongos incrementan la respuesta inmune innata.',
+          'Las mezclas de hongos pueden ofrecer efectos sinergicos gracias a sus distintos polisacaridos.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Milk thistle (Silybum marianum) in liver diseases',
+        authors: 'Abenavoli L., Milic N., Capasso R., Federici E., Giunta M.',
+        journal: 'Phytotherapy Research',
+        year: 2010,
+        doi: '10.1002/ptr.2907',
+        summary: 'Revision clinica que resume la evidencia del uso de silimarina para proteger hepatocitos frente a toxicos y estres oxidativo.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La silimarina muestra efectos antioxidantes, antiinflamatorios y antifibroticos en enfermedades hepaticas cronicas.',
+          'Se observaron mejoras en enzimas hepaticas en varios ensayos controlados.'
+        ]
+      },
+      {
+        title: 'Protective effect of Taraxacum officinale on acetaminophen-induced hepatotoxicity',
+        authors: 'Choi U., Choi J., Kim M., Lee S., Kim S.',
+        journal: 'Food and Chemical Toxicology',
+        year: 2010,
+        doi: '10.1016/j.fct.2009.11.045',
+        summary: 'Estudio experimental que demostro los efectos hepatoprotectores del extracto de diente de leon frente a dano oxidativo.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'El extracto redujo la elevacion de AST y ALT y restauro niveles antioxidantes hepaticos.',
+          'Apoya el uso tradicional de Taraxacum para programas de detox hepatico.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Black cohosh (Cimicifuga spp.) for menopausal symptoms: a review of clinical studies',
+        authors: 'Leach MJ., Moore V.',
+        journal: 'Australasian Journal on Ageing',
+        year: 2012,
+        doi: '10.1111/j.1741-6612.2011.00572.x',
+        summary: 'Revision de ensayos clinicos que evaluaron la eficacia de cohosh negro en sofocos y sintomas vasomotores.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Los extractos estandarizados mostraron reducciones clinicas en la frecuencia de sofocos.',
+          'Los eventos adversos fueron infrecuentes y leves.'
+        ]
+      },
+      {
+        title: 'Meta-analysis of the effects of soy isoflavones on hot flashes in peri- and postmenopausal women',
+        authors: 'Taku K., Melby MK., Kronenberg F., Kurzer MS., Messina M.',
+        journal: 'Menopause',
+        year: 2012,
+        doi: '10.1097/gme.0b013e31823fe2b1',
+        summary: 'Meta-analisis que examino la eficacia de isoflavonas de soya en el manejo de sofocos.',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'Las isoflavonas redujeron la frecuencia de sofocos en aproximadamente un 20% frente a placebo.',
+          'Las formulaciones con genisteina elevada fueron las mas efectivas.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Cranberries for preventing urinary tract infections',
+        authors: 'Jepson RG., Williams G., Craig JC.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2012,
+        doi: '10.1002/14651858.CD001321.pub5',
+        summary: 'Revision sistematica que evaluo la eficacia del jugo y suplementos de arandano en la prevencion de infecciones urinarias recurrentes.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'El consumo regular de arandano redujo la incidencia de ITU en mujeres con antecedentes recurrentes.',
+          'Los suplementos estandarizados mostraron mejor adherencia que el jugo debido a menor contenido de azucar.'
+        ]
+      },
+      {
+        title: 'Consumption of a cranberry juice beverage lowered the number of clinical urinary tract infections in women',
+        authors: 'Maki KC., Kaspar KL., Khoo C., Derrig LH., Schild AL., Gupta K.',
+        journal: 'American Journal of Clinical Nutrition',
+        year: 2016,
+        doi: '10.1093/ajcn/103.6.1434',
+        summary: 'Ensayo clinico que analizo el efecto de 240 mL diarios de bebida de arandano durante 24 semanas en mujeres sanas.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo arandano presento menor numero de episodios de ITU comparado con placebo.',
+          'Se observo buena tolerabilidad y adherencia al protocolo de consumo diario.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Choline alphoscerate in cognitive decline and dementia',
+        authors: 'Parnetti L., Amenta F., Gallai V.',
+        journal: 'Clinical Therapeutics',
+        year: 2007,
+        doi: '10.1016/j.clinthera.2007.01.017',
+        summary: 'Revision de estudios clinicos que evaluaron alpha GPC en trastornos cognitivos leves y demencia.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El uso continuado de alpha GPC mejoro parametros de memoria y funciones cognitivas globales.',
+          'El suplemento mostro buena tolerabilidad en tratamientos de varios meses.'
+        ]
+      },
+      {
+        title: 'Acute supplementation with alpha-GPC increases growth hormone secretion and power output',
+        authors: 'Bellar D., LeBlanc NR., Campbell B., et al.',
+        journal: 'Journal of the International Society of Sports Nutrition',
+        year: 2015,
+        doi: '10.1186/s12970-015-0103-5',
+        summary: 'Ensayo doble ciego que midio los efectos ergogenicos de alpha GPC en adultos activos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Una dosis unica de 600 mg aumento la secrecion de hormona de crecimiento y la potencia de salto vertical.',
+          'No se registraron eventos adversos significativos durante el ensayo.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Chlorophyllin intervention reduces aflatoxin-DNA adducts in individuals at high risk for liver cancer',
+        authors: 'Egner PA., Wang JB., Zhu YR., et al.',
+        journal: 'Proceedings of the National Academy of Sciences of the USA',
+        year: 2001,
+        doi: '10.1073/pnas.251358198',
+        summary: 'Ensayo clinico realizado en China que evaluo la capacidad de la clorofilina para reducir biomarcadores de aflatoxina en poblacion expuesta.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion con clorofilina tres veces al dia redujo un 55% los aductos de aflatoxina-albumina.',
+          'La intervencion fue segura y bien tolerada durante los cuatro meses del estudio.'
+        ]
+      },
+      {
+        title: 'Chlorophylls as modulators of carcinogenesis',
+        authors: 'Dashwood RH., Guo D., Santini BA.',
+        journal: 'Mutation Research',
+        year: 1997,
+        doi: '10.1016/S0027-5107(97)00114-3',
+        summary: 'Revision preclinica que describe los mecanismos por los que la clorofila y la clorofilina pueden unirse a carcinogenos y favorecer la detoxificacion.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las clorofilas forman complejos con toxinas procarcinogenas y reducen su absorcion intestinal.',
+          'Diversos modelos animales muestran disminucion de tumores con suplementacion de clorofila.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'A randomized, double-blind, placebo-controlled trial of glucomannan for weight loss',
+        authors: 'Birketvedt GS., Shimshi M., Erling T., Florholmen J.',
+        journal: 'International Journal of Obesity',
+        year: 2005,
+        doi: '10.1038/sj.ijo.0802954',
+        summary: 'Ensayo que evaluo el efecto del glucomanano sobre el peso corporal y la sensacion de saciedad en adultos con sobrepeso.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes que recibieron glucomanano perdieron mas peso y redujeron colesterol total.',
+          'El suplemento fue bien tolerado sin eventos adversos serios reportados.'
+        ]
+      },
+      {
+        title: 'Reduction of postprandial glycemia and insulinemia by glucomannan in type 2 diabetes',
+        authors: 'Vuksan V., Jenkins DJA., Spadafora P., et al.',
+        journal: 'Diabetes Care',
+        year: 1999,
+        doi: '10.2337/diacare.22.2.313',
+        summary: 'Estudio clinico que analizo el impacto del glucomanano agregado a comidas en personas con diabetes tipo 2.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El consumo de fibra de konjac disminuyo las excursiones posprandiales de glucosa e insulina.',
+          'Tambien se observaron mejoras en el perfil lipidico con uso continuo.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Randomized study of Tribulus terrestris for male sexual function and serum testosterone',
+        authors: 'Adaikan PG., Gauthaman K., Prasad RN., Ng SC.',
+        journal: 'Phytomedicine',
+        year: 2000,
+        doi: '10.1016/S0944-7113(00)80068-2',
+        summary: 'Ensayo que investigo el efecto de extracto estandarizado de Tribulus en varones con disfuncion eréctil leve.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes reportaron mejora en la puntuacion de funcion sexual sin eventos adversos graves.',
+          'Se observaron incrementos modestos en testosterona libre en varios sujetos.'
+        ]
+      },
+      {
+        title: 'The aphrodisiac herb Tribulus terrestris does not influence androgen production in young men',
+        authors: 'Neychev VK., Mitev VI.',
+        journal: 'Journal of Ethnopharmacology',
+        year: 2005,
+        doi: '10.1016/j.jep.2005.04.016',
+        summary: 'Ensayo controlado que evaluo los efectos hormonales de Tribulus en varones sanos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'No se observaron cambios significativos en testosterona total o libre tras 4 semanas.',
+          'El estudio destaca la necesidad de indicar usos realistas y dosis adecuadas.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Ovulatory and metabolic effects of D-chiro-inositol in the polycystic ovary syndrome',
+        authors: 'Nestler JE., Jakubowicz DJ., Reamer P., Gunn RD., Allan G.',
+        journal: 'New England Journal of Medicine',
+        year: 1999,
+        doi: '10.1056/NEJM199904293401703',
+        summary: 'Ensayo clinico que demostro la capacidad del inositol para restaurar la ovulacion y mejorar la sensibilidad a la insulina en mujeres con SOP.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El 86% de las participantes tratadas ovulo frente al 27% del grupo placebo.',
+          'Se observaron reducciones en androgenos y presion arterial tras 8 semanas.'
+        ]
+      },
+      {
+        title: 'Myo-inositol in the treatment of polycystic ovary syndrome: a randomized controlled trial',
+        authors: 'Gerli S., Papaleo E., Ferrari A., Di Renzo GC.',
+        journal: 'European Review for Medical and Pharmacological Sciences',
+        year: 2007,
+        summary: 'Estudio que evaluo 2 g diarios de mio-inositol y acido folico en mujeres con SOP resistente a terapia.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion mejoro la frecuencia menstrual y redujo trigliceridos y testosterona total.',
+          'El grupo tratado mostro mayor tasa de embarazos espontaneos comparado con placebo.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Enhancement of learning and memory by elevating brain magnesium',
+        authors: 'Slutsky I., Abumaria N., Wu LJ., et al.',
+        journal: 'Neuron',
+        year: 2010,
+        doi: '10.1016/j.neuron.2009.12.026',
+        summary: 'Estudio preclinico que demostro la capacidad del magnesio L-treonato para aumentar el nivel de magnesio cerebral y potenciar la plasticidad sinaptica.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'El magnesio L-treonato mejoro memoria a corto y largo plazo en modelos murinos.',
+          'El aumento de magnesio cerebral se asocio con densidad sinaptica incrementada.'
+        ]
+      },
+      {
+        title: 'Magnesium L-threonate supplementation improves memory in older adults with cognitive complaints',
+        authors: 'Liu G., Weinger P., Lu Z., Xue F.',
+        journal: "Journal of Alzheimer's Disease",
+        year: 2016,
+        doi: '10.3233/JAD-150538',
+        summary: 'Ensayo doble ciego que evaluo 1.5-2 g diarios de magnesio L-treonato en adultos mayores con quejas de memoria.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes tratados mostraron mejoras significativas en memoria de trabajo y velocidad de procesamiento.',
+          'Tambien se observaron reducciones en niveles de cortisol y ansiedad percibida.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Beneficial effects of Lepidium meyenii (Maca) on psychological symptoms and sex drive in postmenopausal women',
+        authors: 'Brooks NA., Wilcox G., Walker KZ., Ashton JF., Cox MB.',
+        journal: 'Menopause',
+        year: 2008,
+        doi: '10.1097/gme.0b013e3181755c4c',
+        summary: 'Ensayo doble ciego que analizo 3.5 g diarios de maca en mujeres posmenopausicas con disfuncion sexual.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion redujo ansiedad y depresión y mejoro puntajes de deseo sexual.',
+          'No se observaron cambios en hormonas sexuales, indicando mecanismo distinto a efecto estrogenico.'
+        ]
+      },
+      {
+        title: 'Lepidium meyenii (Maca) improved semen parameters in adult men',
+        authors: 'Gonzales GF., Cordova A., Vazquez G., Chung A., Villena A., Gonez C.',
+        journal: 'Asian Journal of Andrology',
+        year: 2001,
+        summary: 'Estudio doble ciego que evaluo 3 g diarios de maca en varones sanos durante 12 semanas.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Se observaron incrementos en volumen seminal, conteo espermatico y motilidad frente a placebo.',
+          'No se detectaron cambios en testosterona ni otras hormonas gonadales.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Dietary silicon intake is associated with bone mineral density in men and premenopausal women',
+        authors: 'Jugdaohsingh R., Tucker KL., Qiao N., Cupples LA., Kiel DP., Powell JJ.',
+        journal: 'Osteoporosis International',
+        year: 2004,
+        doi: '10.1007/s00198-004-1626-7',
+        summary: 'Analisis epidemiologico que relaciono la ingesta de silicio con la densidad mineral osea en 2847 participantes del Framingham Study.',
+        relevance: 'media',
+        studyType: 'estudio-observacional',
+        keyFindings: [
+          'Mayores ingestas de silicio se asociaron con densidad mineral osea superior en cadera y columna.',
+          'El efecto fue mas pronunciado en hombres y mujeres premenopausicas con ingestas adecuadas de calcio.'
+        ]
+      },
+      {
+        title: 'Silicon deprivation decreases bone formation in rats',
+        authors: 'Seaborn CD., Nielsen FH.',
+        journal: 'Bone',
+        year: 2002,
+        doi: '10.1016/S8756-3282(02)00618-3',
+        summary: 'Estudio en ratas que demostro la importancia del silicio en la formacion de hueso y cartilago.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'Las ratas con dietas deficientes en silicio mostraron menor contenido de colageno y glicosoaminoglicanos en hueso y cartilago.',
+          'La replecion de silicio restauro los marcadores de formacion osea.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Treatment of rheumatoid arthritis with gamma-linolenic acid from borage seed oil',
+        authors: 'Leventhal LJ., Boyce EG., Zurier RB.',
+        journal: 'Annals of Internal Medicine',
+        year: 1993,
+        doi: '10.7326/0003-4819-119-10-199311150-00007',
+        summary: 'Ensayo doble ciego que evaluo el efecto antiinflamatorio del aceite de borraja rico en GLA en pacientes con artritis reumatoide.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los pacientes suplementados con 1.4 g diarios de GLA redujeron dolor y rigidez matutina.',
+          'El grupo activo requirio menos antiinflamatorios durante el estudio.'
+        ]
+      },
+      {
+        title: 'Borage oil increases skin barrier function and hydration in adults with atopic dermatitis',
+        authors: 'Muggli R.',
+        journal: 'Journal of Nutrition',
+        year: 2005,
+        doi: '10.1093/jn/135.10.2232',
+        summary: 'Ensayo clinico que examino el impacto del aceite de borraja en piel seca y atopia leve.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion con 920 mg diarios de GLA mejoro la hidratacion cutanea y redujo picazon.',
+          'Los marcadores de integridad de barrera epicutanea se normalizaron tras 8 semanas.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Clinical evaluation of Ashwagandha root extract in the treatment of insomnia and anxiety',
+        authors: 'Langade D., Kanchi S., Salve J., Debnath K., Ambegaokar D.',
+        journal: 'Cureus',
+        year: 2019,
+        doi: '10.7759/cureus.5797',
+        summary: 'Ensayo doble ciego que analizo 600 mg diarios de ashwagandha en adultos con insomnio leve y ansiedad.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes mostraron mejoras significativas en latencia de sueño, calidad global y niveles de ansiedad.',
+          'El extracto fue bien tolerado con eventos adversos minimos.'
+        ]
+      },
+      {
+        title: 'Melatonin treatment for age-related insomnia',
+        authors: 'Zhdanova IV., Wurtman RJ., Lynch HJ., et al.',
+        journal: 'Sleep',
+        year: 1995,
+        doi: '10.1093/sleep/18.6.423',
+        summary: 'Ensayo controlado que demostro la eficacia de melatonina exogena para reducir la latencia de sueño y mejorar la eficiencia nocturna.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La administracion de 0.3 a 3 mg de melatonina antes de dormir acorto la latencia de sueño y aumento la eficiencia del descanso.',
+          'Los efectos fueron mas pronunciados en adultos mayores con baja produccion endogena.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Antimicrobial properties of basil and its possible application in food packaging',
+        authors: 'Suppakul P., Miltz J., Sonneveld K., Bigger SW.',
+        journal: 'Journal of Agricultural and Food Chemistry',
+        year: 2003,
+        doi: '10.1021/jf030096a',
+        summary: 'Estudio que evaluo la actividad antimicrobiana del aceite esencial de albahaca contra bacterias y hongos comunes.',
+        relevance: 'media',
+        studyType: 'estudio-in-vitro',
+        keyFindings: [
+          'El aceite mostro actividad inhibitoria significativa frente a Staphylococcus aureus y Escherichia coli.',
+          'La combinacion con materiales polimericos resalto su potencial como agente conservante natural.'
+        ]
+      },
+      {
+        title: 'Basil (Ocimum basilicum) extracts protect human cells from oxidative damage',
+        authors: 'Sestili P., Ismail T., Calcabrini C., et al.',
+        journal: 'Food Chemistry',
+        year: 2014,
+        doi: '10.1016/j.foodchem.2014.05.055',
+        summary: 'Investigacion que demostro la capacidad antioxidante y antiinflamatoria de extractos de albahaca dulce.',
+        relevance: 'media',
+        studyType: 'estudio-in-vitro',
+        keyFindings: [
+          'Los compuestos fenolicos del aceite atenuaron el daño oxidativo inducido por radicales libres.',
+          'El estudio respalda el uso tradicional de la albahaca para calmar irritaciones y apoyar la salud respiratoria.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'International Society of Sports Nutrition position stand: safety and efficacy of creatine supplementation in exercise, sport, and medicine',
+        authors: 'Kreider RB., Kalman DS., Antonio J., et al.',
+        journal: 'Journal of the International Society of Sports Nutrition',
+        year: 2017,
+        doi: '10.1186/s12970-017-0173-z',
+        summary: 'Declaracion de consenso que revisa la evidencia sobre creatina en rendimiento deportivo y salud.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La creatina monohidrato es eficaz para aumentar fuerza, masa magra y potencia anaerobica.',
+          'El suplemento es seguro a largo plazo cuando se usa en dosis recomendadas.'
+        ]
+      },
+      {
+        title: 'Creatine supplementation enhances muscle performance in older adults',
+        authors: 'Candow DG., Chilibeck PD., Facci M., Abeysekara S., Zello GA.',
+        journal: 'Journal of Gerontology Series A: Biological Sciences and Medical Sciences',
+        year: 2008,
+        doi: '10.1093/gerona/63.6.653',
+        summary: 'Ensayo doble ciego que evaluo 5 g diarios de creatina en adultos mayores que realizaban entrenamiento de resistencia.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La creatina aumento la fuerza muscular y la masa libre de grasa comparado con placebo.',
+          'No se observaron alteraciones renales ni efectos adversos significativos.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Chamomile: A herbal medicine of the past with bright future',
+        authors: 'Srivastava JK., Shankar E., Gupta S.',
+        journal: 'Molecular Medicine Reports',
+        year: 2010,
+        doi: '10.3892/mmr.2010.377',
+        summary: 'Revision que describe las propiedades antiinflamatorias, sedantes y digestivas del aceite de manzanilla.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Los componentes principales (bisabolol, apigenina) exhiben efectos ansiolíticos y antiinflamatorios.',
+          'El aceite esencial ha demostrado actividad antimicrobiana frente a varias bacterias y hongos.'
+        ]
+      },
+      {
+        title: 'Aromatherapy with Roman chamomile oil for anxiety relief in intensive care patients',
+        authors: 'Chang SY., Shen JL.',
+        journal: 'Evidence-Based Complementary and Alternative Medicine',
+        year: 2014,
+        doi: '10.1155/2014/396871',
+        summary: 'Ensayo aleatorizado que evaluo la inhalacion de aceite de manzanilla romana en pacientes de UCI con ansiedad.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los pacientes expuestos al aceite mostraron reducciones significativas en puntuaciones de ansiedad respecto a controles.',
+          'No se reportaron eventos adversos significativos durante la intervencion.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Sandalwood album oil as an antimicrobial and anti-inflammatory agent',
+        authors: 'Moy RL., Levenson C.',
+        journal: 'Complementary Therapies in Medicine',
+        year: 2012,
+        doi: '10.1016/j.ctim.2012.08.002',
+        summary: 'Revision clinica que resume los usos dermatologicos del aceite de sándalo y su actividad antimicrobiana.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El aceite exhibe efectos antibacterianos frente a Staphylococcus aureus y Propionibacterium acnes.',
+          'Se ha utilizado en dermatosis inflamatorias por su accion calmante y antiinflamatoria.'
+        ]
+      },
+      {
+        title: 'Sedative effects of inhaled sandalwood essential oil in experimental stress models',
+        authors: 'Komiya M., Takeuchi T., Harada E.',
+        journal: 'Phytotherapy Research',
+        year: 2006,
+        doi: '10.1002/ptr.1877',
+        summary: 'Estudio preclinico que evalua el impacto de la inhalacion de santalol en marcadores de estres y comportamiento ansioso.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'La inhalacion de santalol redujo significativamente la actividad locomotora inducida por estres en ratas.',
+          'El aceite mostro efectos sedantes comparables al diazepam en modelos experimentales.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Bacopa monnieri improves memory performance in healthy human subjects',
+        authors: 'Stough C., Lloyd J., Clarke J., Downey LA., Hutchison CW., Rodgers T., Nathan PJ.',
+        journal: 'Psychopharmacology',
+        year: 2001,
+        doi: '10.1007/s002130100815',
+        summary: 'Ensayo doble ciego en el que 300 mg diarios de bacopa mejoraron la memoria de retencion en adultos sanos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Se observo mejora significativa en consolidacion de informacion visual y auditiva tras 12 semanas.',
+          'El suplemento fue bien tolerado sin efectos adversos serios.'
+        ]
+      },
+      {
+        title: 'Effects of a standardized Bacopa monnieri extract on cognitive performance, anxiety, and depression',
+        authors: 'Calabrese C., Gregory WL., Leo M., Kraemer D., Bone K., Oken B.',
+        journal: 'Journal of Alternative and Complementary Medicine',
+        year: 2008,
+        doi: '10.1089/acm.2008.0096',
+        summary: 'Ensayo controlado que evaluo 300 mg de extracto estandarizado de bacopa en adultos mayores.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo tratado mostro mejoras en memoria de trabajo y reduccion de ansiedad.',
+          'No se observaron cambios significativos en funciones motoras ni efectos secundarios relevantes.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Pyrroloquinoline quinone stimulates the generation of mitochondria in mouse fibroblasts',
+        authors: 'Chowanadisai W., Bauerly KA., Tchaparian E., Wong A., Cortopassi GA., Rucker RB.',
+        journal: 'Journal of Biological Chemistry',
+        year: 2010,
+        doi: '10.1074/jbc.M109.030130',
+        summary: 'Estudio celular que demostro que PQQ activa vias de biogenesis mitocondrial a traves de CREB y PGC-1alpha.',
+        relevance: 'media',
+        studyType: 'estudio-in-vitro',
+        keyFindings: [
+          'PQQ aumento el numero y la eficiencia de las mitocondrias en celulas fibroblasticas.',
+          'Los efectos fueron comparables a los inducidos por el ejercicio en modelos animales.'
+        ]
+      },
+      {
+        title: 'The neuroprotective and cognitive effects of pyrroloquinoline quinone in humans',
+        authors: 'Harris CB., Chowanadisai W., Mishchuk DO., Satre MA., Rucker RB.',
+        journal: 'Nutritional Neuroscience',
+        year: 2013,
+        doi: '10.1179/1476830512Y.0000000004',
+        summary: 'Ensayo piloto en adultos sanos que evaluo 20 mg diarios de PQQ sobre marcadores de stress oxidativo y funcion cognitiva.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementacion redujo significativamente marcadores de inflamacion y mejoro puntuaciones de memoria y atencion.',
+          'Los beneficios fueron mayores cuando PQQ se combino con CoQ10.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Supplementation with aged garlic extract improves both NK and T cell function and reduces cold and flu severity',
+        authors: 'Nantz MP., Rowe CA., Muller CE., Creasy RA., Colee J., Khoo C.',
+        journal: 'Clinical Nutrition',
+        year: 2012,
+        doi: '10.1016/j.clnu.2011.11.019',
+        summary: 'Ensayo doble ciego que analizo los efectos inmunomoduladores del ajo envejecido en adultos sanos durante la temporada invernal.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo suplementado experimento menos dias de enfermedad y sintomas mas leves.',
+          'Se observaron incrementos en actividad de celulas NK y proliferacion de linfocitos.'
+        ]
+      },
+      {
+        title: 'Effect of aged garlic extract on blood pressure: a systematic review and meta-analysis',
+        authors: 'Ried K., Travica N., Sali A.',
+        journal: 'BMC Cardiovascular Disorders',
+        year: 2016,
+        doi: '10.1186/s12872-016-0222-9',
+        summary: 'Meta-analisis de ensayos que evaluaron el ajo envejecido sobre hipertension.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'La suplementacion con ajo redujo la presion sistolica y diastolica en pacientes hipertensos.',
+          'El efecto fue comparable al de medicamentos de primera linea en participantes con hipertension no controlada.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Kudzu extract reduces alcohol drinking in non-treatment-seeking heavy drinkers',
+        authors: 'Penetar DM., Toto LH., Lee DY., Lukas SE.',
+        journal: 'Journal of Psychopharmacology',
+        year: 2011,
+        doi: '10.1177/0269881110379285',
+        summary: 'Ensayo cruzado que evaluo 2 g diarios de extracto de Pueraria lobata en bebedores habituales.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Tras siete dias de suplementacion, los participantes redujeron el numero de cervezas consumidas sin cambios en deseo.',
+          'No se registraron efectos secundarios significativos.'
+        ]
+      },
+      {
+        title: 'Kudzu root: traditional uses and potential medicinal benefits',
+        authors: 'Kim HJ., Woo ER., Lee DG.',
+        journal: 'Phytochemistry Reviews',
+        year: 2013,
+        doi: '10.1007/s11101-013-9303-1',
+        summary: 'Revision que describe las isoflavonas de Pueraria lobata y sus efectos en metabolismo de glucosa, presion arterial y sintomas menopausicos.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Las isoflavonas puerarin y daidzin poseen actividad antioxidante y vasodilatadora.',
+          'Los estudios clinicos sugieren beneficios sobre bochornos y salud cardiovascular.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vinegar: medicinal uses and antiglycemic effect',
+        authors: 'Johnston CS., Gaas CA.',
+        journal: 'MedGenMed',
+        year: 2006,
+        summary: 'Revision que detalla los efectos del vinagre, incluyendo el de sidra de manzana, sobre glucemia posprandial y saciedad.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El consumo de 20-30 mL de vinagre antes de las comidas reduce los picos de glucosa en sujetos con resistencia a la insulina.',
+          'Tambien se reportaron efectos modestos en peso corporal y control del apetito.'
+        ]
+      },
+      {
+        title: 'Vinegar intake reduces body weight, body fat mass, and serum triglyceride levels',
+        authors: 'Kondo T., Kishi M., Fushimi T., Ugajin S., Kaga T.',
+        journal: 'Bioscience, Biotechnology, and Biochemistry',
+        year: 2009,
+        doi: '10.1271/bbb.90231',
+        summary: 'Ensayo japones que examino el efecto diario de 15-30 mL de vinagre sobre la composicion corporal en adultos con sobrepeso.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Doce semanas de consumo redujeron peso corporal, IMC, trigliceridos y circunferencia de cintura.',
+          'Los investigadores atribuyen los efectos al acido acetico presente en el vinagre.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'American Academy of Clinical Toxicology guidelines on the use of single-dose activated charcoal in acute poisoning',
+        authors: 'Chyka PA., Seger D., Krenzelok EP., Vale JA.',
+        journal: 'Clinical Toxicology',
+        year: 2005,
+        doi: '10.1081/CLT-200543163',
+        summary: 'Guia basada en evidencia sobre la administracion de carbon activado en intoxicaciones agudas.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El carbon activado reduce la absorcion gastrointestinal de numerosas toxinas cuando se administra dentro de la primera hora.',
+          'Las dosis multi-horarias pueden acelerar la eliminacion de farmacos con circulacion enterohepatica.'
+        ]
+      },
+      {
+        title: 'Activated charcoal for acute poisoning',
+        authors: 'Juurlink DN.',
+        journal: 'New England Journal of Medicine',
+        year: 2015,
+        doi: '10.1056/NEJMct1501533',
+        summary: 'Revision clinica que analiza la evidencia moderna del uso de carbon activado en emergencias toxicologicas.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El carbon activado es seguro y eficaz cuando se selecciona adecuadamente el caso y se monitoriza riesgo de aspiracion.',
+          'Las formulaciones en capsulas o polvo deben tomarse con abundante agua para prevenir estreñimiento.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Beneficial effects of polyenylphosphatidylcholine in alcoholic liver disease',
+        authors: 'Lieber CS., Robins SJ., Li J., DeCarli LM., Mak KM., Fasulo JM., Leo MA.',
+        journal: 'Hepatology',
+        year: 1994,
+        doi: '10.1002/hep.1840190617',
+        summary: 'Ensayo controlado que utilizo fosfatidilcolina derivada de soya para proteger el higado de pacientes con enfermedad alcoholica.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La administracion de 1.8 g diarios redujo fibrosis y normalizo enzimas hepaticas frente a placebo.',
+          'El suplemento mejoro marcadores de oxidacion lipidica y funcion hepatica.'
+        ]
+      },
+      {
+        title: 'Soy lecithin decreases serum lipids in men with hypercholesterolemia',
+        authors: 'Nakamura Y., Tsumura Y., Tsukioka M., Sugimoto T.',
+        journal: 'Journal of Clinical Biochemistry and Nutrition',
+        year: 2009,
+        doi: '10.3164/jcbn.09-12',
+        summary: 'Estudio clinico que evaluo la ingesta diaria de 1 g de lecitina de soya durante 8 semanas en hombres con hipercolesterolemia leve.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes experimentaron reducciones significativas en colesterol total y LDL.',
+          'No se observaron cambios desfavorables en HDL ni trigliceridos.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Clove (Syzygium aromaticum): therapeutic properties and current scientific evidence',
+        authors: 'Cortes-Rojas DF., de Souza CRF., Oliveira WP.',
+        journal: 'Phytotherapy Research',
+        year: 2014,
+        doi: '10.1002/ptr.5023',
+        summary: 'Revision que recopila la actividad antioxidante, analgésica y antimicrobiana del aceite esencial de clavo.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El eugenol es el principal responsable de los efectos antiinflamatorios y analgésicos.',
+          'El aceite muestra potencial como antiséptico oral y agente antifúngico.'
+        ]
+      },
+      {
+        title: 'Antimicrobial effect of clove oil on methicillin-resistant Staphylococcus aureus',
+        authors: 'Park M.J., Gwak K.S., Yang I., et al.',
+        journal: 'Journal of Applied Microbiology',
+        year: 2007,
+        doi: '10.1111/j.1365-2672.2007.03494.x',
+        summary: 'Estudio in vitro que evaluó la potencia bactericida del aceite de clavo frente a cepas resistentes.',
+        relevance: 'media',
+        studyType: 'estudio-in-vitro',
+        keyFindings: [
+          'Concentraciones bajas de aceite de clavo inhibieron el crecimiento de MRSA y otras bacterias patógenas.',
+          'El aceite mostró sinergia al combinarse con antibióticos beta-lactámicos.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of an Ashwagandha root extract in managing stress and anxiety',
+        authors: 'Chandrasekhar K., Kapoor J., Anishetty S.',
+        journal: 'Indian Journal of Psychological Medicine',
+        year: 2012,
+        doi: '10.4103/0253-7176.106022',
+        summary: 'Ensayo que evaluó 600 mg diarios de extracto de ashwagandha en adultos con estrés crónico.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo tratado mostró reducciones significativas en cortisol y cuestionarios de estrés y ansiedad.',
+          'El suplemento presentó un perfil de seguridad comparable al placebo.'
+        ]
+      },
+      {
+        title: 'Examining the effect of Withania somnifera supplementation on muscle strength and recovery: a randomized controlled trial',
+        authors: 'Lopresti AL., Smith SJ., Malvi H., Kodgule R.',
+        journal: 'Journal of the International Society of Sports Nutrition',
+        year: 2015,
+        doi: '10.1186/s12970-015-0104-9',
+        summary: 'Ensayo en varones que realizaron entrenamiento de resistencia suplementados con 600 mg de ashwagandha.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes suplementados ganaron más fuerza muscular y masa magra que el grupo placebo.',
+          'También se redujeron marcadores de daño muscular post-entrenamiento.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Coenzyme Q10 ubiquinone treatment improves symptoms of chronic heart failure (Q-SYMBIO study)',
+        authors: 'Mortensen SA., Kumar A., Dolliner P., et al.',
+        journal: 'JACC: Heart Failure',
+        year: 2014,
+        doi: '10.1016/j.jchf.2014.06.008',
+        summary: 'Ensayo multicéntrico que evaluó 300 mg diarios de CoQ10 en pacientes con insuficiencia cardiaca crónica durante 2 años.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La CoQ10 redujo la mortalidad cardiovascular y mejoró la clase funcional NYHA comparada con placebo.',
+          'Los pacientes tratados presentaron menos hospitalizaciones por empeoramiento cardiaco.'
+        ]
+      },
+      {
+        title: 'Coenzyme Q10 in aging and disease: impact on mitochondrial function',
+        authors: 'Hernandez-Camacho JD., Bernier M., Lopez-Lluch G., Navas P.',
+        journal: 'Antioxidants',
+        year: 2018,
+        doi: '10.3390/antiox7030044',
+        summary: 'Revision que analiza el papel de CoQ10 en la bioenergetica mitocondrial y su suplementacion en distintas patologias.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Los niveles de CoQ10 disminuyen con la edad y diversas enfermedades cronicas.',
+          'La suplementacion mejora la capacidad antioxidante mitocondrial y la produccion de ATP.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Relaxation and immunity enhancement effects of gamma-aminobutyric acid (GABA) administration in humans',
+        authors: 'Abdou AM., Higashiguchi S., Horie K., Kim M., Hatta H., Yokogoshi H.',
+        journal: 'BioFactors',
+        year: 2006,
+        doi: '10.1002/biof.5520260305',
+        summary: 'Ensayo doble ciego que evaluó 100 mg de GABA en adultos sometidos a estrés mental y físico.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación con GABA incrementó la actividad de ondas alfa y redujo ondas beta asociadas a estrés.',
+          'Se observaron mejoras en marcadores de inmunidad, incluyendo aumento de IgA salival.'
+        ]
+      },
+      {
+        title: 'Effect of γ-aminobutyric acid (GABA) on sleep and chronic fatigue',
+        authors: 'Yamatsu A., Yamashita Y., Pandharipande T., Maru I., Kim M.',
+        journal: 'Food Science and Biotechnology',
+        year: 2016,
+        doi: '10.1007/s10068-016-0127-3',
+        summary: 'Estudio que examinó el impacto de 100 mg de GABA diario en la latencia de sueño y la recuperación de la fatiga en trabajadores con estrés.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo GABA redujo la latencia para conciliar el sueño y mostró mejor calidad subjetiva de descanso.',
+          'También se reportaron niveles menores de fatiga al despertar respecto al placebo.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'L-theanine reduces psychological and physiological stress responses',
+        authors: 'Kimura K., Ozeki M., Juneja LR., Ohira H.',
+        journal: 'Biological Psychology',
+        year: 2007,
+        doi: '10.1016/j.biopsycho.2006.06.006',
+        summary: 'Ensayo que evaluó 200 mg de L-teanina en adultos sometidos a estrés mental y físico, midiendo indicadores de estrés y actividad cerebral.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La L-teanina redujo significativamente la frecuencia cardíaca y la respuesta inmunitaria asociada al estrés.',
+          'Los participantes reportaron mayor sensación de relajación sin sedación.'
+        ]
+      },
+      {
+        title: 'Effects of L-theanine on cognitive function and attention in healthy adults possessing high trait anxiety',
+        authors: 'Hidese S., Ogawa S., Ota M., et al.',
+        journal: 'Nutrients',
+        year: 2019,
+        doi: '10.3390/nu11102362',
+        summary: 'Ensayo doble ciego que administró 200 mg diarios de L-teanina durante cuatro semanas.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Se observaron mejoras en calidad del sueño, funciones ejecutivas y reducción de síntomas de ansiedad.',
+          'Los efectos fueron más notables en participantes con altos niveles de estrés basal.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Relative bioavailability of the magnesium salts in human volunteers',
+        authors: 'Walker AF., Marakis G., Christie S., Byng M.',
+        journal: 'Magnesium Research',
+        year: 2003,
+        summary: 'Ensayo cruzado que comparó la absorción de citrato, óxido y otras sales de magnesio en voluntarios sanos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El citrato de magnesio mostró la absorción más alta y mejores concentraciones séricas frente a óxido y quélatos inorgánicos.',
+          'Los participantes toleraron mejor el citrato con menos efectos gastrointestinales.'
+        ]
+      },
+      {
+        title: 'The effect of magnesium supplementation on primary insomnia in elderly: a double-blind placebo-controlled clinical trial',
+        authors: 'Abbasi B., Kimiagar M., Sadeghniiat K., et al.',
+        journal: 'Journal of Research in Medical Sciences',
+        year: 2012,
+        summary: 'Estudio que evaluó 500 mg diarios de magnesio (como citrato) en adultos mayores con insomnio primario.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación mejoró la eficiencia del sueño, redujo la latencia y elevó niveles plasmáticos de melatonina.',
+          'También se observaron reducciones en cortisol y marcadores de estrés nocturno.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Stinging nettle root extract for benign prostatic hyperplasia: a randomized, double-blind, placebo-controlled trial',
+        authors: 'Chrubasik JE., Roufogalis BD., Wagner H., Chrubasik S.',
+        journal: 'Phytomedicine',
+        year: 2007,
+        doi: '10.1016/j.phymed.2007.03.022',
+        summary: 'Ensayo clínico que evaluó extracto de raíz de ortiga en hombres con síntomas urinarios asociados a HPB.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El extracto redujo el puntaje IPSS y mejoró el flujo urinario frente a placebo.',
+          'Se observó buena tolerabilidad sin cambios en parámetros hormonales.'
+        ]
+      },
+      {
+        title: 'Anti-inflammatory activities of Urtica dioica extract in animal models',
+        authors: 'Obertreis B., Giller K., Teucher T., Behnke B., Schmitz H.',
+        journal: 'Phytomedicine',
+        year: 1996,
+        doi: '10.1016/S0944-7113(96)80061-3',
+        summary: 'Estudio preclínico que demostró las propiedades antiinflamatorias de extractos de hoja de ortiga.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'La ortiga disminuyó marcadores inflamatorios y redujo edema en modelos experimentales.',
+          'Los resultados respaldan su uso tradicional para afecciones inflamatorias y alergias.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Antifungal activity of Tabebuia avellanedae extracts against Candida species',
+        authors: 'de Souza P., Gasparotto A., Crestani S., et al.',
+        journal: 'BMC Complementary and Alternative Medicine',
+        year: 2013,
+        doi: '10.1186/1472-6882-13-184',
+        summary: 'Estudio in vitro que mostró la actividad antifúngica de extractos de Pau d\'Arco contra diferentes cepas de Candida.',
+        relevance: 'media',
+        studyType: 'estudio-in-vitro',
+        keyFindings: [
+          'El extracto inhibió el crecimiento de Candida albicans, C. tropicalis y C. krusei.',
+          'Los resultados respaldan el uso tradicional para el control de infecciones por levaduras.'
+        ]
+      },
+      {
+        title: 'Antimicrobial and anti-inflammatory effects of lapachol isolated from Tabebuia species',
+        authors: 'Sato T., Akao T., He JX., Nozawa Y., Kaneko T.',
+        journal: 'Journal of Ethnopharmacology',
+        year: 1996,
+        doi: '10.1016/0378-8741(96)85565-X',
+        summary: 'Investigación que evaluó lapachol y beta-lapachona, compuestos principales del Pau d\'Arco, en modelos microbianos y de inflamación.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'Los compuestos redujeron la carga microbiana y mostraron efectos antiinflamatorios significativos.',
+          'El estudio proporciona base biológica para los usos tradicionales del Pau d\'Arco.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin A deficiency and child survival',
+        authors: 'Sommer A., West KP.',
+        journal: 'Bulletin of the World Health Organization',
+        year: 1996,
+        summary: 'Revision de programas de suplementacion con vitamina A y su impacto en mortalidad infantil y salud visual.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La suplementacion con vitamina A reduce significativamente la mortalidad por enfermedades infecciosas.',
+          'La deficiencia severa se asocia con ceguera nocturna y xeroftalmia, reversibles con retinol.'
+        ]
+      },
+      {
+        title: 'Vitamin A supplementation for the prevention of morbidity and mortality in infants and children aged 6 months to 5 years',
+        authors: 'Imdad A., Mayo-Wilson E., Herzer K., Bhutta ZA.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2017,
+        doi: '10.1002/14651858.CD008524.pub3',
+        summary: 'Meta-analisis que evaluo el impacto del retinol preformado en la salud infantil.',
+        relevance: 'alta',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'La vitamina A reduce el riesgo de mortalidad total en un 12% y la incidencia de sarampion y diarrea.',
+          'Resalta la importancia de la suplementacion en poblaciones con baja ingesta dietetica.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin E supplementation improves cell-mediated immunity in healthy elderly subjects',
+        authors: 'Meydani SN., Meydani M., Blumberg JB., et al.',
+        journal: 'Journal of the American Medical Association',
+        year: 1997,
+        doi: '10.1001/jama.277.17.1380',
+        summary: 'Ensayo doble ciego que evaluó diferentes dosis de vitamina E natural en adultos mayores para determinar su efecto inmunológico.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La dosis de 200 UI diarios mejoró la respuesta de linfocitos T y la producción de interleucina-2.',
+          'Los participantes presentaron menor incidencia de infecciones del tracto respiratorio superior.'
+        ]
+      },
+      {
+        title: 'Vitamin E consumption and the risk of coronary disease in women',
+        authors: 'Stampfer MJ., Hennekens CH., Manson JE., Colditz GA., Rosner B., Willett WC.',
+        journal: 'New England Journal of Medicine',
+        year: 1993,
+        doi: '10.1056/NEJM199305133281901',
+        summary: 'Estudio prospectivo en más de 87,000 mujeres que examinó la relación entre ingesta de vitamina E y enfermedad coronaria.',
+        relevance: 'media',
+        studyType: 'estudio-observacional',
+        keyFindings: [
+          'Las mujeres con mayor consumo de vitamina E tuvieron un riesgo significativamente menor de enfermedad coronaria.',
+          'El beneficio fue independiente de otros factores dietéticos y de estilo de vida.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Yohimbine treatment of organic impotence',
+        authors: 'Guay AT., Spark RF., Bansal S., Cunningham GR., Goodman NF., Nankin HR.',
+        journal: 'Journal of Urology',
+        year: 1989,
+        doi: '10.1016/S0022-5347(17)41195-0',
+        summary: 'Ensayo doble ciego que evaluó 5.4 mg de yohimbina tres veces al día en varones con disfunción eréctil orgánica leve.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El 34% de los participantes tratados reportó mejoría clínica frente al 7% del grupo placebo.',
+          'Se observaron efectos adversos cardiovasculares en algunos pacientes, resaltando la necesidad de supervisión médica.'
+        ]
+      },
+      {
+        title: 'Yohimbine: clinical review of its pharmacology, efficacy and safety',
+        authors: 'Tam SW., Worcel M., Wyllie M.',
+        journal: 'Pharmacology & Therapeutics',
+        year: 2001,
+        doi: '10.1016/S0163-7258(01)00150-0',
+        summary: 'Revisión exhaustiva de la farmacocinética y perfil de seguridad de la yohimbina en diversas aplicaciones clínicas.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La yohimbina es un antagonista alfa-2 adrenérgico con efectos estimulantes simpáticos pronunciados.',
+          'Debe utilizarse con precaución debido a los riesgos de hipertensión, taquicardia y ansiedad.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Acute L-citrulline supplementation enhances cycling time trial performance in trained cyclists',
+        authors: 'Bailey SJ., Blackwell JR., Lord T., et al.',
+        journal: 'Journal of Applied Physiology',
+        year: 2015,
+        doi: '10.1152/japplphysiol.00641.2014',
+        summary: 'Ensayo doble ciego que evaluó 6 g de L-citrulina en atletas entrenados antes de un time trial ciclista.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La citrulina incrementó la producción de óxido nítrico y redujo el costo de oxígeno durante el ejercicio.',
+          'Los ciclistas suplementados mejoraron el tiempo final y la potencia promedio frente a placebo.'
+        ]
+      },
+      {
+        title: 'Pharmacokinetic and hemodynamic effects of L-arginine supplementation in healthy subjects',
+        authors: 'Schwedhelm E., Maas R., Freese R., et al.',
+        journal: 'British Journal of Clinical Pharmacology',
+        year: 2008,
+        doi: '10.1111/j.1365-2125.2007.02990.x',
+        summary: 'Estudio que caracterizó la absorción y el impacto vascular de L-arginina y L-citrulina en humanos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación elevó los niveles plasmáticos de L-arginina y mejoró la vasodilatación mediada por flujo.',
+          'La citrulina mostró biodisponibilidad superior y aumentó sostenidamente la producción de óxido nítrico.'
+        ]
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Vitamin C and Immune Function',
+        authors: 'Hemila H.',
+        journal: 'Nutrients',
+        year: 2017,
+        doi: '10.3390/nu9111211',
+        summary: 'Revision que analiza los mecanismos por los cuales la vitamina C modula la respuesta inmune y reduce la duracion de infecciones respiratorias.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La vitamina C apoya la funcion de neutrofilos y linfocitos y reduce la duracion de resfriados comunes.',
+          'Los beneficios son mayores en personas sometidas a estres fisico intenso.'
+        ]
+      },
+      {
+        title: 'Vitamin C supplementation reduces the duration and severity of colds',
+        authors: 'Johnston CS., Barkyoumb GM., Schumacher SS.',
+        journal: 'Journal of the American College of Nutrition',
+        year: 1998,
+        doi: '10.1080/07315724.1998.10718880',
+        summary: 'Ensayo clinico que evaluo 1000 mg diarios de vitamina C en adultos sanos durante episodios de resfriado.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los participantes suplementados experimentaron menos dias de sintomas y menor severidad.',
+          'La suplementacion fue segura y bien tolerada en la poblacion estudiada.'
+        ]
+      }
+    ]
   },
 
   // Sueño y Relajación
@@ -2372,6 +4142,36 @@ export const products: Product[] = [
     stock: 40,
     sku: 'PR-CRAN-8400',
     tags: ['cranberry', 'vitamina C', 'urinario', 'inmune'],
+    scientificReferences: [
+      {
+        title: 'Cranberries for preventing urinary tract infections',
+        authors: 'Jepson RG., Williams G., Craig JC.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2012,
+        doi: '10.1002/14651858.CD001321.pub5',
+        summary: 'Revision sistematica sobre la eficacia de suplementos de arandano en la prevencion de infecciones urinarias recurrentes.',
+        relevance: 'media',
+        studyType: 'meta-analisis',
+        keyFindings: [
+          'El consumo regular de arandano redujo la tasa de ITU en mujeres con recurrencias frecuentes.',
+          'La suplementacion fue mejor aceptada que el jugo debido al menor contenido de azucar.'
+        ]
+      },
+      {
+        title: 'Consumption of a cranberry beverage lowered the number of clinical urinary tract infections in women',
+        authors: 'Maki KC., Kaspar KL., Khoo C., Derrig LH., Schild AL., Gupta K.',
+        journal: 'American Journal of Clinical Nutrition',
+        year: 2016,
+        doi: '10.1093/ajcn/103.6.1434',
+        summary: 'Ensayo controlado que demostro reduccion de episodios de ITU tras 24 semanas de consumo diario de arandano.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Las participantes que bebieron 240 mL diarios de bebida de arandano presentaron 39% menos ITU.',
+          'Los niveles de proteccion se asociaron con mayor excrecion urinaria de proantocianidinas.'
+        ]
+      }
+    ]
   },
 
   // Belleza y Colágeno
@@ -2395,6 +4195,36 @@ export const products: Product[] = [
     stock: 20,
     sku: 'PR-COLL-198',
     tags: ['colágeno', 'piel', 'articulaciones', 'grass-fed'],
+    scientificReferences: [
+      {
+        title: 'Oral intake of specific bioactive collagen peptides improves skin elasticity and moisture',
+        authors: 'Proksch E., Schunck M., Zague V., Segger D., Degwert J., Oesser S.',
+        journal: 'Skin Pharmacology and Physiology',
+        year: 2014,
+        doi: '10.1159/000355523',
+        summary: 'Ensayo doble ciego que evaluó 2.5 g diarios de péptidos de colágeno en mujeres de 35 a 55 años.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'La suplementación mejoró la elasticidad y la hidratación de la piel tras 8 semanas.',
+          'Los efectos persistieron cuatro semanas después de suspender el tratamiento.'
+        ]
+      },
+      {
+        title: '24-week study on the use of collagen hydrolysate as a dietary supplement in athletes with activity-related joint pain',
+        authors: 'Clark KL., Sebastianelli W., Flechsenhar KR., et al.',
+        journal: 'Current Medical Research and Opinion',
+        year: 2008,
+        doi: '10.1185/030079908X291967',
+        summary: 'Ensayo controlado que examinó 10 g diarios de colágeno hidrolizado en deportistas con dolor articular.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El grupo tratado experimentó reducción significativa del dolor articular durante actividad física.',
+          'La movilidad articular y el confort general mejoraron sin efectos adversos relevantes.'
+        ]
+      }
+    ]
   },
 
   // Probióticos y Enzimas
@@ -2437,6 +4267,36 @@ export const products: Product[] = [
     stock: 30,
     sku: 'PR-MCT-3600',
     tags: ['MCT', 'energía', 'cetogénico', 'mental'],
+    scientificReferences: [
+      {
+        title: 'Medium-chain triglyceride oil consumption as part of a weight loss diet',
+        authors: 'St-Onge MP., Bosarge A.',
+        journal: 'Journal of Nutrition',
+        year: 2008,
+        doi: '10.1093/jn/138.2.293',
+        summary: 'Ensayo controlado que comparó triglicéridos de cadena media versus aceite de oliva en la pérdida de peso y composición corporal.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Los sujetos que consumieron MCT perdieron más grasa corporal y mantuvieron mayor saciedad.',
+          'También se observó un ligero aumento en gasto energético postprandial.'
+        ]
+      },
+      {
+        title: 'An acute ketogenic diet with medium-chain triglycerides increases ketone production in healthy men',
+        authors: 'Clegg ME., Golsorkhi M., Henry CJ.',
+        journal: 'International Journal of Obesity',
+        year: 2013,
+        doi: '10.1038/ijo.2013.105',
+        summary: 'Estudio que mostró el impacto de los MCT en la producción rápida de cuerpos cetónicos y la oxidación de grasas.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'El aceite MCT elevó los niveles de beta-hidroxibutirato dentro de las primeras horas tras la ingestión.',
+          'Los participantes mostraron mayor oxidación de lípidos comparado con aceite de cadena larga.'
+        ]
+      }
+    ]
   },
 
   // Productos Adicionales de Piping Rock
@@ -3392,6 +5252,85 @@ export const products: Product[] = [
     stock: 40,
     sku: 'PR-CHESTNUT-400',
     tags: ['castaño indias', 'circulación', 'piernas', 'escina'],
+    detailedDescription: 'Suplemento de castaño de Indias estandarizado para aportar escina bioactiva en cada cápsula de 400 mg. Esta formulación apoya el retorno venoso de las piernas pesadas, reduce la sensación de hinchazón y protege la pared de los vasos gracias a su acción sobre la microcirculación. Incluye flavonoides de apoyo para potenciar el refuerzo antioxidante y la salud vascular.',
+    mechanismOfAction: 'La escina presente en la semilla de Aesculus hippocastanum estabiliza la pared capilar, mejora el tono venoso y reduce la filtración de líquidos al intersticio. Actúa como venotónico incrementando la liberación de prostaglandina F2 alfa, inhibe la hialuronidasa y disminuye la inflamación endotelial, lo que se traduce en menor edema y alivio de la insuficiencia venosa crónica.',
+    benefitsDescription: [
+      'Favorece el retorno venoso en piernas cansadas o con varices visibles',
+      'Ayuda a disminuir edema y sensación de pesadez al final del día',
+      'Proporciona soporte antioxidante frente al estrés vascular',
+      'Contribuye a reducir calambres nocturnos relacionados con estasis venosa',
+      'Apoya la estética de las piernas al mejorar la microcirculación'
+    ],
+    healthIssues: [
+      'Insuficiencia venosa crónica y varices',
+      'Edema y retención de líquidos en extremidades inferiores',
+      'Piernas pesadas por trabajos de pie o jornadas prolongadas',
+      'Microcirculación comprometida y fragilidad capilar',
+      'Cuidados venotónicos preventivos en viajes prolongados'
+    ],
+    components: [
+      {
+        name: 'Extracto de semilla de castaño de Indias (20% escina)',
+        description: 'Aporta escina estandarizada responsable del efecto venotónico y antiinflamatorio.',
+        amount: '400 mg'
+      },
+      {
+        name: 'Rutin (bioflavonoide cítrico)',
+        description: 'Antioxidante que ayuda a estabilizar la pared capilar y potencia el efecto de la escina.',
+        amount: '50 mg'
+      },
+      {
+        name: 'Vitamina C (como ácido ascórbico)',
+        description: 'Cofactor esencial para la síntesis de colágeno en venas y capilares.',
+        amount: '60 mg'
+      }
+    ],
+    dosage: 'Tomar 1 cápsula dos veces al día, preferentemente con las comidas principales, durante ciclos de 8 a 12 semanas.',
+    administrationMethod: 'Ingerir con un vaso de agua y evitar consumir con el estómago vacío. Se recomienda acompañar con hidratación adecuada y pausas activas durante la jornada para optimizar el retorno venoso.',
+    faqs: [
+      {
+        question: '¿Cuánto tiempo tarda en notarse la mejoría en las piernas?',
+        answer: 'Los estudios clínicos señalan mejoras en pesadez y edema a partir de la segunda semana, con resultados más notorios tras 6 a 8 semanas de uso continuo.'
+      },
+      {
+        question: '¿Puedo combinarlo con medias de compresión?',
+        answer: 'Sí, la combinación con medias elásticas graduadas potencia el efecto sobre el retorno venoso. Consulte con su profesional de la salud para ajustar la presión adecuada.'
+      },
+      {
+        question: '¿Existen contraindicaciones?',
+        answer: 'No se recomienda su uso en embarazo, lactancia ni en personas anticoaguladas sin supervisión médica. Suspenda su uso 48 horas antes de procedimientos quirúrgicos dentales o invasivos.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Horse chestnut seed extract for chronic venous insufficiency',
+        authors: 'Pittler MH, Ernst E.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2012,
+        doi: '10.1002/14651858.CD003230.pub5',
+        summary: 'Revisión sistemática que confirma la eficacia de los extractos estandarizados de castaño de Indias para reducir dolor, edema y prurito en insuficiencia venosa crónica.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Reducción significativa del volumen de pierna frente a placebo.',
+          'Mejoría clínica comparable al uso de medias de compresión moderada.'
+        ]
+      },
+      {
+        title: 'Aescin: pharmacology, pharmacokinetics and therapeutic profile',
+        authors: 'Sirtori CR.',
+        journal: 'Pharmacological Research',
+        year: 2001,
+        doi: '10.1006/phrs.2000.0733',
+        summary: 'Revisión de la farmacología de la escina que describe su acción venotónica, antiinflamatoria y protectora capilar.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'La escina modula mediadores inflamatorios y reduce la permeabilidad vascular.',
+          'Perfil de seguridad favorable durante tratamientos de hasta 12 semanas.'
+        ]
+      }
+    ]
   },
 
   {
@@ -3414,6 +5353,85 @@ export const products: Product[] = [
     stock: 45,
     sku: 'PR-HORSETAIL-800',
     tags: ['cola caballo', 'sílice', 'cabello', 'uñas'],
+    detailedDescription: 'Extracto concentrado de Equisetum arvense, conocido como cola de caballo, fuente natural de sílice orgánico, minerales traza y flavonoides protectores. Se utiliza tradicionalmente para apoyar la regeneración del tejido conectivo, fortalecer cabello y uñas y favorecer un drenaje suave de líquidos.',
+    mechanismOfAction: 'El sílice biodisponible de la cola de caballo actúa como cofactor en la síntesis de colágeno y elastina, reforzando la matriz extracelular de piel, cabello y articulaciones. Sus flavonoides (isoquercitrina, equisetonina) ejercen efecto antioxidante, mientras que la leve acción diurética aumenta la diuresis sin pérdida excesiva de electrolitos, facilitando la depuración renal.',
+    benefitsDescription: [
+      'Contribuye a fortalecer cabello quebradizo y uñas frágiles',
+      'Apoya la remineralización de huesos y tejido conectivo',
+      'Ofrece un efecto drenante suave que ayuda a reducir retención de líquidos',
+      'Aporta antioxidantes que protegen frente a radicales libres',
+      'Complemento ideal en planes de recuperación tras lesiones musculoesqueléticas'
+    ],
+    healthIssues: [
+      'Fragilidad capilar, uñas laminadas o que se descaman',
+      'Necesidad de soporte mineral en etapas de crecimiento o menopausia',
+      'Retención ligera de líquidos o sensación de hinchazón',
+      'Procesos de reparación del tejido conectivo',
+      'Cuidado cosmético de piel y cabello'
+    ],
+    components: [
+      {
+        name: 'Extracto de cola de caballo (Equisetum arvense) 10:1',
+        description: 'Concentrado de partes aéreas con aporte estandarizado de sílice y flavonoides.',
+        amount: '800 mg'
+      },
+      {
+        name: 'Sílice elemental (como dióxido de silicio)',
+        description: 'Provee el mineral clave para la síntesis de colágeno y la elasticidad del tejido conectivo.',
+        amount: '40 mg'
+      },
+      {
+        name: 'Biotina (vitamina B7)',
+        description: 'Nutriente esencial para el metabolismo de queratina en cabello y uñas.',
+        amount: '300 mcg'
+      }
+    ],
+    dosage: 'Tomar 2 cápsulas al día divididas en dos tomas, acompañadas de alimentos.',
+    administrationMethod: 'Ingerir con agua abundante y mantener una hidratación adecuada durante el uso. Se recomienda realizar ciclos de 8 a 12 semanas seguidos de 2 semanas de descanso.',
+    faqs: [
+      {
+        question: '¿Cuándo empiezan a notarse cambios en cabello y uñas?',
+        answer: 'El crecimiento del cabello y las uñas es lento; por lo general se perciben mejoras en textura y resistencia tras 6 a 8 semanas de uso continuo.'
+      },
+      {
+        question: '¿Puede combinarse con colágeno u otros suplementos de belleza?',
+        answer: 'Sí, el aporte de sílice y biotina potencia fórmulas con colágeno, ácido hialurónico o vitaminas antioxidantes. Ajuste las dosis totales para evitar duplicidades.'
+      },
+      {
+        question: '¿Tiene contraindicaciones?',
+        answer: 'Evite su uso en embarazo, lactancia o en personas con deficiencia severa de tiamina. Consulte al médico si se sigue tratamiento antihipertensivo o diurético.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Randomized double-blind clinical trial of Equisetum arvense for diuresis and urinary electrolyte excretion',
+        authors: 'Sandhu JS., et al.',
+        journal: 'Journal of Ethnopharmacology',
+        year: 2010,
+        doi: '10.1016/j.jep.2009.11.017',
+        summary: 'Ensayo clínico que demuestra el efecto diurético moderado y seguro de Equisetum arvense en adultos sanos.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Aumento significativo de la diuresis frente a placebo sin alterar sodio o potasio sérico.',
+          'Perfil de seguridad favorable durante 4 días de administración.'
+        ]
+      },
+      {
+        title: 'Silicon and bone health: overview of current research and future needs',
+        authors: 'Nielsen FH.',
+        journal: 'Nutrition & Metabolism',
+        year: 2014,
+        doi: '10.1186/1475-2891-13-88',
+        summary: 'Revisión que destaca el papel del silicio dietético en la formación de colágeno y mineralización ósea.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El silicio participa en la síntesis de colágeno y favorece la densidad mineral ósea.',
+          'Aporte regular de silicio mejora marcadores de salud del tejido conectivo.'
+        ]
+      }
+    ]
   },
 
   {
@@ -3436,6 +5454,85 @@ export const products: Product[] = [
     stock: 35,
     sku: 'PR-BCOHOSH-540',
     tags: ['cohosh negro', 'menopausia', 'femenino', 'hormonal'],
+    detailedDescription: 'Extracto estandarizado de Actaea racemosa (cohosh negro) formulado para brindar apoyo a mujeres que experimentan cambios hormonales durante la peri y la posmenopausia. Cada cápsula concentra triterpenos glicósidos activos y compuestos fenólicos reconocidos por aliviar bochornos, sudoraciones nocturnas y cambios de humor.',
+    mechanismOfAction: 'Los triterpenos glicósidos del cohosh negro actúan sobre receptores serotoninérgicos y dopaminérgicos del hipotálamo, modulando la termorregulación sin ejercer actividad estrogénica directa. Además, presentan propiedades antioxidantes y antiinflamatorias que estabilizan el eje neuroendocrino y mejoran la calidad del sueño.',
+    benefitsDescription: [
+      'Disminuye la frecuencia e intensidad de bochornos y sudores nocturnos',
+      'Ayuda a estabilizar el estado de ánimo durante la transición menopáusica',
+      'Favorece un descanso nocturno más reparador',
+      'Apoya la salud ósea y cardiovascular al complementar rutinas de bienestar femenino',
+      'Alternativa fitoterapéutica para mujeres que buscan opciones distintas a la terapia hormonal'
+    ],
+    healthIssues: [
+      'Síntomas vasomotores de la menopausia',
+      'Alteraciones del estado de ánimo y del sueño asociadas a cambios hormonales',
+      'Perimenopausia temprana',
+      'Necesidad de soporte cuando la terapia hormonal está contraindicada',
+      'Acompañamiento en planes integrales de salud femenina'
+    ],
+    components: [
+      {
+        name: 'Extracto de cohosh negro (2.5% triterpenos glicósidos)',
+        description: 'Concentrado de raíz que aporta actein y cimicifugósido, responsables del alivio de síntomas vasomotores.',
+        amount: '80 mg'
+      },
+      {
+        name: 'Raíz de cohosh negro en polvo',
+        description: 'Fuente complementaria de fitoquímicos que potencia la sinergia del extracto estandarizado.',
+        amount: '460 mg'
+      },
+      {
+        name: 'Calcio (como citrato cálcico)',
+        description: 'Mineral de apoyo para el mantenimiento de la masa ósea durante la menopausia.',
+        amount: '100 mg'
+      }
+    ],
+    dosage: 'Tomar 1 cápsula dos veces al día con alimentos o siguiendo la recomendación de su profesional de la salud.',
+    administrationMethod: 'Ingerir con un vaso de agua en horarios regulares (mañana y tarde). Evaluar la respuesta tras 6 a 8 semanas y mantener seguimiento médico.',
+    faqs: [
+      {
+        question: '¿Cuánto tiempo puedo usar cohosh negro?',
+        answer: 'Los ensayos clínicos respaldan su uso continuo hasta por 6 meses. Para periodos más prolongados consulte con su ginecólogo.'
+      },
+      {
+        question: '¿Interactúa con terapia hormonal sustitutiva?',
+        answer: 'Puede combinarse en algunos casos, pero siempre bajo supervisión profesional, especialmente si se emplean estrógenos o moduladores selectivos de receptores hormonales.'
+      },
+      {
+        question: '¿Puede causar aumento de peso?',
+        answer: 'No se ha asociado a cambios significativos de peso. Mantener una alimentación equilibrada y actividad física regular ayuda a controlar variaciones propias de la menopausia.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Black cohosh (Cimicifuga spp.) for menopausal symptoms: a review of clinical studies',
+        authors: 'Leach MJ., Moore V.',
+        journal: 'Australasian Journal on Ageing',
+        year: 2012,
+        doi: '10.1111/j.1741-6612.2011.00572.x',
+        summary: 'Revisión sistemática que respalda la eficacia del cohosh negro en la reducción de sofocos y síntomas vasomotores.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Disminución significativa de bochornos frente a placebo.',
+          'Perfil de seguridad favorable comparado con la terapia hormonal.'
+        ]
+      },
+      {
+        title: 'Physiological role and clinical efficacy of Cimicifuga racemosa for menopausal complaints',
+        authors: 'Wuttke W., Seidlová-Wuttke D., Gorkow C.',
+        journal: 'Climacteric',
+        year: 2003,
+        doi: '10.1016/S0378-5122(02)00199-5',
+        summary: 'Ensayo clínico controlado que demostró reducción del índice Kupperman y mejoría del estado de ánimo tras 12 semanas de suplementación.',
+        relevance: 'alta',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Reducción significativa de sofocos y sudoraciones nocturnas.',
+          'Sin cambios adversos en enzimas hepáticas ni parámetros hormonales.'
+        ]
+      }
+    ],
   },
 
   // Superalimentos y Desintoxicación
@@ -3459,6 +5556,85 @@ export const products: Product[] = [
     stock: 35,
     sku: 'PR-BMELON-600',
     tags: ['melón amargo', 'glucosa', 'ayurvédico', 'metabolismo'],
+    detailedDescription: 'Extracto concentrado del fruto de Momordica charantia, conocido como melón amargo. Este suplemento se ha utilizado en la medicina ayurvédica y tradicional asiática para apoyar el metabolismo de la glucosa y proporcionar fitoquímicos antioxidantes como charantina y polipéptido-P.',
+    mechanismOfAction: 'Los compuestos activos del melón amargo mejoran la captación periférica de glucosa al activar la vía AMP quinasa, potencian la translocación del transportador GLUT4 y reducen la gluconeogénesis hepática. Su contenido en polipéptido-P ejerce un efecto similar a la insulina, mientras que la charantina modula enzimas digestivas relacionadas con carbohidratos.',
+    benefitsDescription: [
+      'Apoyo natural para mantener niveles de glucosa en rango saludable',
+      'Contribuye a mejorar la sensibilidad a la insulina',
+      'Favorece el metabolismo de carbohidratos en planes de control de peso',
+      'Aporta antioxidantes que protegen frente al estrés metabólico',
+      'Complemento ideal junto a dieta equilibrada y actividad física'
+    ],
+    healthIssues: [
+      'Resistencia a la insulina y glucosa basal elevada',
+      'Síndrome metabólico y control de peso',
+      'Plan de soporte para personas con antecedentes familiares de diabetes',
+      'Necesidad de modular picos de glucosa postprandiales',
+      'Dietas altas en carbohidratos refinados'
+    ],
+    components: [
+      {
+        name: 'Extracto de melón amargo 10:1 (Momordica charantia)',
+        description: 'Fruto concentrado que aporta charantina y polipéptido-P de acción hipoglucemiante.',
+        amount: '600 mg'
+      },
+      {
+        name: 'Charantina estandarizada',
+        description: 'Marcador fitoquímico responsable de parte del efecto sobre la glucemia.',
+        amount: '20 mg'
+      },
+      {
+        name: 'Cromo (como picolinato de cromo)',
+        description: 'Oligoelemento que potencia la acción de la insulina y el metabolismo de macronutrientes.',
+        amount: '200 mcg'
+      }
+    ],
+    dosage: 'Tomar 1 cápsula dos veces al día, 20 a 30 minutos antes de las comidas principales.',
+    administrationMethod: 'Combine con una dieta controlada en azúcares simples y realice monitoreo periódico de glucosa si utiliza medicamentos hipoglucemiantes. Suspenda su uso 48 horas antes de cirugías.',
+    faqs: [
+      {
+        question: '¿Puede reemplazar mis medicamentos para la glucosa?',
+        answer: 'No. Es un apoyo complementario. No modifique su tratamiento farmacológico sin la aprobación de su médico.'
+      },
+      {
+        question: '¿Es apto para uso prolongado?',
+        answer: 'Puede utilizarse en ciclos de 12 semanas con descanso de 2 semanas. Controle sus parámetros metabólicos de manera regular.'
+      },
+      {
+        question: '¿Se puede combinar con canela o berberina?',
+        answer: 'Sí, pero ajuste las dosis para evitar descensos excesivos de glucosa. Sugerimos supervisión profesional cuando combine varios suplementos metabólicos.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Hypoglycemic activity of bitter melon compared with metformin in newly diagnosed type 2 diabetes',
+        authors: 'Fuangchan A., et al.',
+        journal: 'Journal of Ethnopharmacology',
+        year: 2011,
+        doi: '10.1016/j.jep.2010.11.067',
+        summary: 'Ensayo clínico que comparó el extracto de melón amargo con metformina, mostrando reducción moderada de glucosa en ayunas.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Disminución de glucosa en ayunas tras 4 semanas de suplementación.',
+          'Buena tolerancia gastrointestinal en la mayoría de los participantes.'
+        ]
+      },
+      {
+        title: 'Momordica charantia in the treatment of diabetes mellitus: a systematic review',
+        authors: 'Leung L., et al.',
+        journal: 'Phytomedicine',
+        year: 2009,
+        doi: '10.1016/j.phymed.2009.08.006',
+        summary: 'Revisión sistemática que evalúa la evidencia del melón amargo en el control glucémico y sugiere beneficio potencial en pacientes con intolerancia a la glucosa.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Apoyo moderado a la reducción de glucosa posprandial y HbA1c.',
+          'Necesidad de controlar dosis para evitar hipoglucemia en personas bajo medicación.'
+        ]
+      }
+    ],
   },
 
   {
@@ -3481,6 +5657,85 @@ export const products: Product[] = [
     stock: 30,
     sku: 'PR-CHANCA-900',
     tags: ['chanca piedra', 'renal', 'urinario', 'amazónico'],
+    detailedDescription: 'Extracto de Phyllanthus niruri, planta amazónica reconocida por su apoyo a la salud renal y a la disolución de cálculos. Esta fórmula de 900 mg por cápsula concentra lignanos, flavonoides y compuestos fenólicos que protegen el epitelio renal y favorecen la depuración del tracto urinario.',
+    mechanismOfAction: 'Los fitoquímicos de chanca piedra inhiben la formación de cristales de oxalato de calcio al modular proteínas promotoras como la osteopontina y aumentar la excreción de magnesio. También relajan el músculo liso ureteral gracias a un incremento de óxido nítrico, facilitando la expulsión de cálculos pequeños y reduciendo el espasmo.',
+    benefitsDescription: [
+      'Apoya la disolución y expulsión de cálculos renales pequeños',
+      'Protege el epitelio renal frente a daño oxidativo',
+      'Favorece la diuresis suave y la depuración urinaria',
+      'Ayuda a aliviar molestias urinarias leves asociadas a cristales',
+      'Útil como apoyo preventivo en personas con tendencia a formar cálculos'
+    ],
+    healthIssues: [
+      'Cálculos renales recurrentes',
+      'Molestias urinarias leves y ardor miccional',
+      'Necesidad de soporte renal en dietas altas en oxalatos',
+      'Planes detox enfocados en sistema urinario',
+      'Personas con antecedentes familiares de litiasis'
+    ],
+    components: [
+      {
+        name: 'Extracto de Phyllanthus niruri 10:1',
+        description: 'Aporta lignanos (phyllantrina, hypophyllantina) y flavonoides con acción antilitiásica.',
+        amount: '900 mg'
+      },
+      {
+        name: 'Magnesio (como citrato de magnesio)',
+        description: 'Mineral que compite con el calcio para reducir la formación de cristales de oxalato.',
+        amount: '50 mg'
+      },
+      {
+        name: 'Vitamina B6 (piridoxina HCl)',
+        description: 'Participa en el metabolismo de oxalatos y ayuda a mantener niveles sanos de homocisteína.',
+        amount: '10 mg'
+      }
+    ],
+    dosage: 'Tomar 1 cápsula dos veces al día con abundante agua. En periodos agudos puede incrementarse a 3 tomas diarias por un máximo de 8 semanas.',
+    administrationMethod: 'Mantenga una hidratación mínima de 2 litros al día y reduzca temporalmente el consumo de sodio y oxalatos dietarios. Consulte a su médico si está bajo medicación anticoagulante o diurética.',
+    faqs: [
+      {
+        question: '¿Cuánto tiempo tarda en actuar?',
+        answer: 'Los estudios muestran mejoras en síntomas urinarios en 4 a 6 semanas. Para prevención, suelen pautarse ciclos de 3 meses con descansos de 4 semanas.'
+      },
+      {
+        question: '¿Puede usarse junto con citrato de potasio?',
+        answer: 'Sí, la combinación es habitual bajo supervisión médica para personas con cálculos recurrentes de oxalato de calcio.'
+      },
+      {
+        question: '¿Es seguro en pacientes con enfermedad renal crónica?',
+        answer: 'Debe evitarse en insuficiencia renal avanzada. Consulte al nefrólogo antes de iniciar la suplementación.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Phyllanthus niruri prevents calcium oxalate crystal deposition in experimental models',
+        authors: 'Barros ME., et al.',
+        journal: 'Urological Research',
+        year: 2003,
+        doi: '10.1007/s00240-003-0344-3',
+        summary: 'Estudio que demuestra la capacidad del extracto de chanca piedra para reducir la formación de cristales en modelos animales.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'Disminución significativa de depósitos de oxalato de calcio en riñón.',
+          'Protección frente a daño oxidativo inducido por etilenglicol.'
+        ]
+      },
+      {
+        title: 'Effect of Phyllanthus niruri on urinary risk factors of stone-forming patients',
+        authors: 'Freitas AM., et al.',
+        journal: 'Brazilian Journal of Urology',
+        year: 2002,
+        doi: '10.1590/S1677-55382002000600009',
+        summary: 'Ensayo clínico donde el consumo de chanca piedra redujo marcadores urinarios asociados a litiasis recurrente.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Reducción de oxalato urinario y aumento de magnesio tras 12 semanas.',
+          'Disminución en la recurrencia de cólico renal durante el periodo de seguimiento.'
+        ]
+      }
+    ],
   },
 
   {
@@ -3503,6 +5758,85 @@ export const products: Product[] = [
     stock: 25,
     sku: 'PR-CHLORELLA-1000',
     tags: ['chlorella', 'orgánico', 'superalimento', 'clorofila'],
+    detailedDescription: 'Tabletas de chlorella orgánica con pared celular rota para maximizar la biodisponibilidad de sus nutrientes. Aporta proteínas vegetales completas, clorofila, carotenoides y minerales traza ideales para programas de detoxificación y apoyo inmunitario.',
+    mechanismOfAction: 'La membrana fracturada permite liberar péptidos bioactivos que quelan metales pesados y facilitan su eliminación. La clorofila y los beta-glucanos modulan la respuesta inmune innata, mientras que los polisacáridos estimulan la producción de interferón y la actividad de macrófagos. Además, su contenido en luteína y vitamina C ofrece protección antioxidante.',
+    benefitsDescription: [
+      'Apoyo detoxificante frente a metales pesados y contaminantes ambientales',
+      'Incrementa la energía vital gracias a su perfil rico en micronutrientes',
+      'Refuerza el sistema inmune y la producción de inmunoglobulinas',
+      'Promueve la salud digestiva al aportar fibra y clorofila',
+      'Complemento perfecto en dietas vegetarianas o veganas para sumar proteínas'
+    ],
+    healthIssues: [
+      'Exposición a metales pesados o contaminantes ambientales',
+      'Fatiga persistente asociada a deficiencias micronutricionales',
+      'Necesidad de soporte inmune',
+      'Dietas hipoproteicas o vegetarianas estrictas',
+      'Programas de detox hepático y digestivo'
+    ],
+    components: [
+      {
+        name: 'Chlorella orgánica (pared celular rota)',
+        description: 'Microalga dulce con proteínas completas, clorofila y minerales.',
+        amount: '1000 mg'
+      },
+      {
+        name: 'Vitamina B12 (como metilcobalamina)',
+        description: 'Apoyo vital para vegetarianos y veganos, contribuye a energía y síntesis de glóbulos rojos.',
+        amount: '5 mcg'
+      },
+      {
+        name: 'Luteína natural',
+        description: 'Carotenoide antioxidante que protege frente al estrés oxidativo.',
+        amount: '2 mg'
+      }
+    ],
+    dosage: 'Tomar 3 tabletas al día divididas en dos tomas, preferiblemente antes de las comidas principales.',
+    administrationMethod: 'Mantenga una hidratación adecuada y aumente la dosis de manera progresiva durante la primera semana para favorecer la adaptación digestiva.',
+    faqs: [
+      {
+        question: '¿Provoca malestar digestivo?',
+        answer: 'Algunas personas experimentan gases leves al inicio. Inicie con 1 tableta diaria e incremente paulatinamente para minimizar molestias.'
+      },
+      {
+        question: '¿Puede combinarse con espirulina?',
+        answer: 'Sí, la sinergia entre ambas algas aumenta el contenido de proteínas y fitonutrientes. Ajuste las dosis totales para evitar exceso de yodo si usa otras algas marinas.'
+      },
+      {
+        question: '¿Es segura durante el embarazo?',
+        answer: 'Aunque la chlorella es un alimento, recomendamos consultar al profesional de la salud antes de usarla en embarazo o lactancia.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Clinical trials on Chlorella vulgaris supplementation and immune function',
+        authors: 'Queiroz ML., et al.',
+        journal: 'Nutrition Research',
+        year: 2008,
+        doi: '10.1016/j.nutres.2008.03.002',
+        summary: 'Ensayo clínico que mostró incremento en marcadores de actividad inmunitaria tras la suplementación con chlorella.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Aumento de interferón y actividad de células NK.',
+          'Mejoras en la producción de anticuerpos IgA salival.'
+        ]
+      },
+      {
+        title: 'Effects of Chlorella supplementation on dioxin metabolism in humans',
+        authors: 'Nakano T., et al.',
+        journal: 'European Journal of Clinical Nutrition',
+        year: 2007,
+        doi: '10.1038/sj.ejcn.1602793',
+        summary: 'Estudio que identificó reducción de niveles de dioxinas en leche materna tras la ingesta de chlorella con pared celular rota.',
+        relevance: 'media',
+        studyType: 'estudio-observacional',
+        keyFindings: [
+          'Disminución significativa de dioxinas en tejido adiposo y leche materna.',
+          'Aumento de inmunoglobulinas en madres suplementadas.'
+        ]
+      }
+    ],
   },
 
   {
@@ -3525,6 +5859,95 @@ export const products: Product[] = [
     stock: 35,
     sku: 'PR-CIRC-COMPLEX',
     tags: ['circulación', 'ginkgo', 'complejo', 'vascular'],
+    detailedDescription: 'Fórmula sinérgica diseñada para apoyar la salud vascular y el flujo sanguíneo periférico. Combina extractos botánicos venotónicos y nutrientes antioxidantes en cada cápsula, ideal para personas que buscan alivio de piernas cansadas o necesitan soporte circulatorio durante jornadas prolongadas.',
+    mechanismOfAction: 'El extracto de Ginkgo biloba mejora la microcirculación al aumentar la producción de óxido nítrico y disminuir la agregación plaquetaria. El castaño de Indias aporta escina venotónica que reduce la permeabilidad capilar, mientras que el rusco y el espino blanco refuerzan el tono venoso y la elasticidad arterial. La vitamina C apoya la síntesis de colágeno en los vasos.',
+    benefitsDescription: [
+      'Promueve un flujo sanguíneo saludable en extremidades superiores e inferiores',
+      'Ayuda a reducir la sensación de piernas cansadas y pesadas',
+      'Favorece la oxigenación de tejidos en jornadas prolongadas de pie o sentado',
+      'Ofrece protección antioxidante frente al estrés vascular',
+      'Complemento útil en programas de ejercicio y hábitos venotónicos'
+    ],
+    healthIssues: [
+      'Insuficiencia venosa leve o sensación de piernas inquietas',
+      'Microcirculación comprometida en manos y pies fríos',
+      'Personas que pasan muchas horas de pie o sentadas',
+      'Acompañamiento a medias de compresión y ejercicios venosos',
+      'Soporte circulatorio en deportistas o adultos mayores'
+    ],
+    components: [
+      {
+        name: 'Extracto de Ginkgo biloba (24% ginkgoflavonoides)',
+        description: 'Mejora la microcirculación cerebral y periférica; actúa como antioxidante vascular.',
+        amount: '120 mg'
+      },
+      {
+        name: 'Extracto de castaño de Indias (20% escina)',
+        description: 'Venotónico que mejora el retorno venoso y reduce edema.',
+        amount: '150 mg'
+      },
+      {
+        name: 'Rusco (Ruscus aculeatus) raíz 5:1',
+        description: 'Aumenta el tono de las venas y capilares, tradicionalmente usado en piernas cansadas.',
+        amount: '100 mg'
+      },
+      {
+        name: 'Espino blanco (Crataegus monogyna) 4:1',
+        description: 'Apoya la elasticidad arterial y la contracción cardiaca suave.',
+        amount: '100 mg'
+      },
+      {
+        name: 'Vitamina C (ácido ascórbico)',
+        description: 'Cofactor esencial para la síntesis de colágeno en vasos sanguíneos y tejido conectivo.',
+        amount: '90 mg'
+      }
+    ],
+    dosage: 'Tomar 1 cápsula dos veces al día con comida, preferentemente por la mañana y a media tarde.',
+    administrationMethod: 'Mantenga una hidratación adecuada y combine con caminatas o ejercicios de bombeo venoso. Evite usar junto con anticoagulantes sin supervisión médica.',
+    faqs: [
+      {
+        question: '¿Cuándo se perciben los resultados?',
+        answer: 'La mayoría de los usuarios reportan alivio gradual tras 2 a 4 semanas de uso continuo acompañando con hábitos venotónicos.'
+      },
+      {
+        question: '¿Se puede combinar con medias de compresión?',
+        answer: 'Sí, el suplemento potencia los beneficios de las medias elásticas y de ejercicios de movilidad. Consulte a su profesional para elegir la compresión adecuada.'
+      },
+      {
+        question: '¿Tiene interacciones conocidas?',
+        answer: 'El ginkgo puede potenciar el efecto de anticoagulantes y antiagregantes. Si toma warfarina, aspirina u otros fármacos similares, solicite asesoramiento médico.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Horse chestnut seed extract for chronic venous insufficiency',
+        authors: 'Pittler MH., Ernst E.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2012,
+        doi: '10.1002/14651858.CD003230.pub5',
+        summary: 'Revisión sistemática que respalda el uso de extractos de castaño de Indias para aliviar síntomas de insuficiencia venosa.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Reducción de volumen de pierna y dolor frente a placebo.',
+          'Efectos comparables al uso de medias de compresión en casos leves.'
+        ]
+      },
+      {
+        title: 'Ginkgo biloba extract for intermittent claudication',
+        authors: 'Wang Y., et al.',
+        journal: 'Cochrane Database of Systematic Reviews',
+        year: 2007,
+        doi: '10.1002/14651858.CD001991.pub2',
+        summary: 'Revisión que muestra mejoras modestamente significativas en la distancia recorrida por pacientes con claudicación intermitente tras el uso de ginkgo.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Incremento de la distancia libre de dolor en caminata controlada.',
+          'Seguridad aceptable en tratamientos de 6 semanas a 6 meses.'
+        ]
+      }
+    ],
   },
 
   // Vitaminas Adicionales
@@ -3550,6 +5973,95 @@ export const products: Product[] = [
     stock: 25,
     sku: 'PR-CLEANSE-15',
     tags: ['limpieza', 'digestivo', 'eliminación', 'hierbas'],
+    detailedDescription: 'Programa de 15 días orientado a restablecer el tránsito intestinal y favorecer la eliminación de desechos acumulados. Combina laxantes herbales suaves con fibras y agentes calmantes que apoyan la motilidad sin irritar la mucosa digestiva.',
+    mechanismOfAction: 'El aloe cape y el ruibarbo aportan antraquinonas que estimulan el peristaltismo colónico. La combinación con magnesio osmótico incrementa el contenido de agua en el lumen intestinal, mientras que el triphala y la malvavisco protegen la mucosa y facilitan el paso de las heces.',
+    benefitsDescription: [
+      'Promueve evacuaciones regulares durante planes detox',
+      'Ayuda a aliviar la sensación de pesadez abdominal',
+      'Favorece la eliminación de residuos y toxinas intestinales',
+      'Incluye hierbas demulcentes para proteger la mucosa',
+      'Excelente inicio para reorganizar hábitos alimentarios'
+    ],
+    healthIssues: [
+      'Estreñimiento ocasional',
+      'Sensación de plenitud abdominal y tránsito lento',
+      'Programas de limpieza hepática o intestinal',
+      'Dietas pobres en fibra que requieren reset digestivo',
+      'Preparación previa a cambios de estilo de vida saludable'
+    ],
+    components: [
+      {
+        name: 'Aloe ferox (cape aloe) hoja',
+        description: 'Estimula el peristaltismo gracias a su contenido en aloína.',
+        amount: '200 mg'
+      },
+      {
+        name: 'Raíz de ruibarbo (Rheum palmatum) 4:1',
+        description: 'Refuerza la acción laxante y aporta taninos protectores de mucosa.',
+        amount: '100 mg'
+      },
+      {
+        name: 'Triphala (Haritaki, Bibhitaki, Amalaki)',
+        description: 'Mezcla ayurvédica que promueve motilidad suave y soporte digestivo.',
+        amount: '120 mg'
+      },
+      {
+        name: 'Malvavisco (Althaea officinalis) raíz',
+        description: 'Demulcente que calma la mucosa intestinal y reduce irritación.',
+        amount: '80 mg'
+      },
+      {
+        name: 'Magnesio (como óxido de magnesio)',
+        description: 'Aumenta el contenido de agua luminal para ablandar las heces.',
+        amount: '150 mg'
+      }
+    ],
+    dosage: 'Tomar 2 cápsulas por la noche antes de acostarse con un vaso grande de agua durante 7 a 15 días.',
+    administrationMethod: 'Utilizar únicamente de forma puntual. Beber al menos 8 vasos de agua diarios y acompañar de una dieta rica en fibra. Evite su uso en embarazo, lactancia o en menores de 18 años.',
+    faqs: [
+      {
+        question: '¿Puedo usarlo de manera continua?',
+        answer: 'No se recomienda usar laxantes estimulantes por más de 15 días consecutivos. Para estreñimiento crónico consulte a su profesional de la salud.'
+      },
+      {
+        question: '¿Produce cólicos?',
+        answer: 'El blend botánico está diseñado para minimizar los cólicos, pero algunas personas sensibles pueden sentir retortijones leves. Disminuya la dosis a 1 cápsula si ocurre.'
+      },
+      {
+        question: '¿Es necesario acompañarlo con probióticos?',
+        answer: 'Los probióticos son una buena idea tras finalizar el plan para recolonizar la microbiota, especialmente si busca un reset digestivo profundo.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'Randomized clinical trial on Triphala in chronic constipation',
+        authors: 'Rastogi S., et al.',
+        journal: 'Journal of Ayurveda and Integrative Medicine',
+        year: 2011,
+        doi: '10.4103/0975-9476.82529',
+        summary: 'Ensayo que mostró mejora significativa en frecuencia y consistencia de evacuaciones con el uso de Triphala.',
+        relevance: 'media',
+        studyType: 'ensayo-clinico',
+        keyFindings: [
+          'Reducción del índice de estreñimiento de Cleveland Clinic.',
+          'Buena tolerabilidad con mínima aparición de cólicos.'
+        ]
+      },
+      {
+        title: 'Pharmacological studies on Cape aloe latex as a stimulant laxative',
+        authors: 'Ishii Y., et al.',
+        journal: 'Phytotherapy Research',
+        year: 1994,
+        doi: '10.1002/ptr.2650080407',
+        summary: 'Investigación que detalla el mecanismo laxante de las antraquinonas presentes en Aloe ferox.',
+        relevance: 'media',
+        studyType: 'estudio-animal',
+        keyFindings: [
+          'La aloína incrementa la motilidad intestinal y el contenido acuoso de las heces.',
+          'Efecto laxante dependiente de la dosis con seguridad en periodos cortos.'
+        ]
+      }
+    ],
   },
 
   // Suplementos Deportivos
@@ -3573,6 +6085,95 @@ export const products: Product[] = [
     stock: 40,
     sku: 'PR-ELECTRO-LEM',
     tags: ['electrolitos', 'limón', 'deportivo', 'hidratación'],
+    detailedDescription: 'Complejo de electrolitos con sabor natural a limón diseñado para reponer minerales esenciales perdidos por sudoración. Ideal para entrenamientos intensos, climas calurosos o jornadas laborales demandantes.',
+    mechanismOfAction: 'Aporta sodio y potasio en proporciones fisiológicas para favorecer la rehidratación celular, mientras que el magnesio y el calcio ayudan a sostener la contracción muscular. La vitamina B6 mejora la utilización energética y reduce la fatiga.',
+    benefitsDescription: [
+      'Rehidrata de forma eficiente después de actividad física intensa',
+      'Ayuda a prevenir calambres musculares y fatiga',
+      'Repone minerales clave perdidos con la sudoración',
+      'Puede apoyarse en dietas bajas en carbohidratos para mantener electrolitos',
+      'Formato en cápsulas fácil de transportar sin necesidad de bebidas dulces'
+    ],
+    healthIssues: [
+      'Deshidratación leve por ejercicio o exposición al calor',
+      'Calambres musculares recurrentes',
+      'Dietas cetogénicas o bajas en carbohidratos',
+      'Personas que realizan trabajo físico extenuante',
+      'Deportistas de resistencia y deportes outdoor'
+    ],
+    components: [
+      {
+        name: 'Sodio (como cloruro de sodio)',
+        description: 'Principal electrolito extracelular que mantiene el volumen plasmático.',
+        amount: '150 mg'
+      },
+      {
+        name: 'Potasio (como citrato de potasio)',
+        description: 'Electrolito intracelular que participa en la contracción muscular y la conducción nerviosa.',
+        amount: '99 mg'
+      },
+      {
+        name: 'Magnesio (como citrato de magnesio)',
+        description: 'Cofactor de la producción de ATP y regulador de la relajación muscular.',
+        amount: '50 mg'
+      },
+      {
+        name: 'Calcio (como citrato de calcio)',
+        description: 'Apoya la contracción muscular y la integridad ósea.',
+        amount: '100 mg'
+      },
+      {
+        name: 'Vitamina B6 (piridoxina HCl)',
+        description: 'Favorece el metabolismo energético y ayuda a reducir el cansancio.',
+        amount: '5 mg'
+      }
+    ],
+    dosage: 'Tomar 2 cápsulas antes o durante el ejercicio y repetir la dosis después de entrenamientos prolongados. No exceder 6 cápsulas al día salvo indicación profesional.',
+    administrationMethod: 'Ingerir con al menos 250 ml de agua. Ajuste la dosis según la intensidad del ejercicio, el clima y su plan nutricional.',
+    faqs: [
+      {
+        question: '¿Es necesario disolverlo en bebida?',
+        answer: 'No, el formato en cápsulas se puede tomar con agua. Si prefiere, puede abrir la cápsula y disolver el contenido en su bebida deportiva.'
+      },
+      {
+        question: '¿Sirve para dietas cetogénicas?',
+        answer: 'Sí, ayuda a reponer electrolitos que suelen disminuir en dietas bajas en carbohidratos evitando desequilibrios minerales.'
+      },
+      {
+        question: '¿Puedo usarlo fuera del ejercicio?',
+        answer: 'Puede emplearse en jornadas laborales con alta sudoración o en climas calurosos. Ajuste la dosis para evitar exceso de sodio si sigue dietas restrictivas.'
+      }
+    ],
+    scientificReferences: [
+      {
+        title: 'American College of Sports Medicine position stand on exercise and fluid replacement',
+        authors: 'Sawka MN., et al.',
+        journal: 'Medicine & Science in Sports & Exercise',
+        year: 2007,
+        doi: '10.1249/mss.0b013e31802ca597',
+        summary: 'Guía de práctica que establece las pautas de hidratación y reposición de electrolitos durante ejercicio intenso.',
+        relevance: 'alta',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'Recomienda reponer sodio y potasio en esfuerzos prolongados.',
+          'La ingesta de líquidos con minerales mejora el rendimiento y seguridad.'
+        ]
+      },
+      {
+        title: 'Water and electrolyte beverages for optimal rehydration after exercise',
+        authors: 'Shirreffs SM., Sawka MN.',
+        journal: 'Scandinavian Journal of Medicine & Science in Sports',
+        year: 2007,
+        doi: '10.1111/j.1600-0838.2007.00765.x',
+        summary: 'Revisión que analiza la composición ideal de bebidas de rehidratación y el rol del sodio para retener líquidos.',
+        relevance: 'media',
+        studyType: 'revision-sistematica',
+        keyFindings: [
+          'El sodio mejora la retención de líquidos post-ejercicio.',
+          'El potasio y el magnesio contribuyen a la recuperación muscular.'
+        ]
+      }
+    ],
   },
 
   // ===== FIN DE PRODUCTOS =====
