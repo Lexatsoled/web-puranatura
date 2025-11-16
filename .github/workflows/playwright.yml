@@ -19,7 +19,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
       
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
@@ -29,6 +29,9 @@ jobs:
 
       - name: Serve dist
         run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+
+      - name: Wait for server
+        run: npx wait-on http://127.0.0.1:3000 -t 300000
       
       - name: Run Playwright tests
         env:
@@ -58,13 +61,16 @@ jobs:
           node-version: '18'
           cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Build
         run: npm run build
       - name: Serve dist
         run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+
+      - name: Wait for server
+        run: npx wait-on http://127.0.0.1:3000 -t 300000
       - name: Run smoke Checkout Flow
         env:
           CI: true
