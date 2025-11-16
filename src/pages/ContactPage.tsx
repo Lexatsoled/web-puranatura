@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
+import { useSanitizedInput } from '@/hooks/useSanitizedInput';
+import { sanitizeFormValues } from '@/utils/sanitizer';
 
 const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const nameInput = useSanitizedInput('');
+  const emailInput = useSanitizedInput('', 'email');
+  const messageInput = useSanitizedInput('', 'text');
   const [status, setStatus] = useState('');
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí iría la lógica de envío del formulario (ej. a una API)
-    console.log('Formulario enviado:', formData);
+
+    const payload = sanitizeFormValues({
+      name: nameInput.value,
+      email: emailInput.value,
+      message: messageInput.value,
+    });
+
+    if (!payload.name || !payload.email || !payload.message) {
+      setStatus('Por favor completa todos los campos con información válida.');
+      return;
+    }
+
+    // Aquí iría la lógica de envío del formulario (ej. llamada a API)
     setStatus('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
-    setFormData({ name: '', email: '', message: '' });
+    nameInput.reset();
+    emailInput.reset();
+    messageInput.reset();
   };
 
   return (
@@ -27,69 +34,57 @@ const ContactPage: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold font-display text-green-800">
-            Ponte en Contacto
+            Hablemos sobre tu bienestar
           </h1>
           <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            ¿Tienes preguntas o quieres agendar una cita? Estamos aquí para
-            ayudarte.
+            Podemos orientarte en persona en Cotuí, por videollamada o mediante WhatsApp. Elige el canal que prefieras y
+            diseñemos juntos un plan natural que se adapte a tu día a día.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Formulario */}
           <div className="bg-white/60 backdrop-blur-sm p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold font-display text-green-700 mb-6">
-              Envíanos un mensaje
-            </h2>
+            <h2 className="text-2xl font-bold font-display text-green-700 mb-6">Envíanos un mensaje</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Nombre
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  Nombre completo
                 </label>
                 <input
                   type="text"
                   name="name"
                   id="name"
                   required
-                  value={formData.name}
-                  onChange={handleChange}
+                  value={nameInput.value}
+                  onChange={nameInput.onChange}
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Correo Electrónico
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Correo electrónico
                 </label>
                 <input
                   type="email"
                   name="email"
                   id="email"
                   required
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={emailInput.value}
+                  onChange={emailInput.onChange}
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Mensaje
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                  Cuéntanos cómo podemos ayudarte
                 </label>
                 <textarea
                   name="message"
                   id="message"
                   rows={5}
                   required
-                  value={formData.message}
-                  onChange={handleChange}
+                  value={messageInput.value}
+                  onChange={messageInput.onChange}
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 ></textarea>
               </div>
@@ -101,13 +96,10 @@ const ContactPage: React.FC = () => {
                   Enviar Mensaje
                 </button>
               </div>
-              {status && (
-                <p className="text-center text-green-600 mt-4">{status}</p>
-              )}
+              {status && <p className="text-center text-green-600 mt-4">{status}</p>}
             </form>
           </div>
 
-          {/* Mapa e Info */}
           <div>
             <div className="w-full h-64 md:h-80 rounded-lg overflow-hidden shadow-md mb-6">
               <iframe
@@ -121,14 +113,12 @@ const ContactPage: React.FC = () => {
                 title="Mapa de ubicación"
               ></iframe>
             </div>
-            <h3 className="text-xl font-bold text-green-700">Visítanos</h3>
-            <p className="text-gray-600 mt-2">
-              Calle de la Salud 123, Ensanche Paraíso
+            <h3 className="text-xl font-bold text-green-700">Datos de contacto directo</h3>
+            <p className="text-gray-600 mt-2">Tel: +1 849 243 4010</p>
+            <p className="text-gray-600">Email: lexatsoled@gmail.com</p>
+            <p className="text-gray-600">
+              Consultorio ubicado en las afueras de Cotuí, provincia Sánchez Ramírez, República Dominicana.
             </p>
-            <p className="text-gray-600">Santo Domingo, República Dominicana</p>
-
-            <h3 className="text-xl font-bold text-green-700 mt-6">Llámanos</h3>
-            <p className="text-gray-600 mt-2">Teléfono: (809) 555-1234</p>
           </div>
         </div>
       </div>

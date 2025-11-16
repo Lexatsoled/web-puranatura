@@ -14,7 +14,7 @@ const storeState = {
   currentPage: 3,
   itemsPerPage: 12,
   scrollPosition: 1200,
-  fromProductPage: false
+  fromProductPage: false,
 };
 
 sessionStorage.setItem(STORAGE_KEY, JSON.stringify(storeState));
@@ -41,9 +41,9 @@ if (savedState && savedState.fromProductPage) {
   console.log('🔄 Restaurando filtros:', {
     categoria: savedState.selectedCategory,
     busqueda: savedState.searchTerm,
-    pagina: savedState.currentPage
+    pagina: savedState.currentPage,
   });
-  
+
   // Simular limpiar estado
   sessionStorage.removeItem(STORAGE_KEY);
   console.log('🗑️ Estado limpiado después de restaurar');
@@ -53,4 +53,6 @@ if (savedState && savedState.fromProductPage) {
 }
 
 console.log('\n✅ TEST COMPLETADO');
-console.log('💡 Si ves todos los checkmarks, el sistema funciona correctamente');
+console.log(
+  '💡 Si ves todos los checkmarks, el sistema funciona correctamente'
+);

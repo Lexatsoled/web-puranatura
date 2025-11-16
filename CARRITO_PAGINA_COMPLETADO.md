@@ -3,6 +3,7 @@
 ## ✅ **Cambios Realizados:**
 
 ### **1. Nueva Página del Carrito (`/pages/CartPage.tsx`)**
+
 - **Diseño responsivo** con layout de 2 columnas en pantallas grandes
 - **Lista de productos** con imágenes, cantidades y precios
 - **Resumen del pedido** con cálculo de envío y total
@@ -12,12 +13,14 @@
 - **Confirmación para vaciar carrito**
 
 ### **2. Navegación Actualizada**
+
 - **Nueva ruta** `/carrito` añadida al enrutador
 - **Header actualizado** para navegar directamente a la página del carrito
 - **SimpleLayout modificado** para usar navegación en lugar de callback
 - **Layout component** actualizado para compatibilidad
 
 ### **3. Funcionalidades Implementadas**
+
 - ✅ **Vista de carrito vacío** con call-to-action
 - ✅ **Gestión de productos** (añadir, quitar, modificar cantidad)
 - ✅ **Cálculo automático** de subtotal, envío y total
@@ -27,6 +30,7 @@
 - ✅ **Diseño consistente** con el resto de la aplicación
 
 ### **4. Mejoras de UX**
+
 - **Información detallada** de cada producto (SKU, categoría)
 - **Stock limitado** mostrado cuando corresponde
 - **Breadcrumb visual** con "Continuar comprando"
@@ -34,6 +38,7 @@
 - **Responsive design** para móviles y tablets
 
 ### **5. Componentes Afectados**
+
 - `pages/CartPage.tsx` - ✨ **NUEVO**
 - `App.tsx` - Ruta añadida
 - `components/Header.tsx` - Navegación actualizada
@@ -53,20 +58,24 @@
 ## 🎯 **Características Destacadas:**
 
 ### **📱 Responsive Design**
+
 - Layout adaptativo para móviles, tablets y desktop
 - Columnas que se reorganizan según el tamaño de pantalla
 
 ### **💰 Cálculo Inteligente de Envío**
+
 - Envío gratis automático para pedidos ≥ DOP $3,000
 - Barra de progreso visual para motivar compras adicionales
 - Cálculo en tiempo real del total
 
 ### **🎨 Animaciones Suaves**
+
 - Entrada escalonada de productos
 - Transiciones fluidas al modificar cantidades
 - Modal de confirmación animado
 
 ### **🛡️ Validaciones**
+
 - Control de stock en tiempo real
 - Validación de carrito vacío antes del checkout
 - Confirmación antes de vaciar el carrito

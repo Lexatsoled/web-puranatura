@@ -1,7 +1,8 @@
 import React from 'react';
-import { services } from '../../data/services';
+import { Link } from 'react-router-dom';
+import { services } from '../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
-import { Service } from '../../src/types/services';
+import { Service } from '../types/services';
 
 const ServicesPage: React.FC = () => {
   return (
@@ -33,25 +34,35 @@ const ServicesPage: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity duration-300" />
               </div>
-              
+
               <div className="p-6 flex flex-col justify-center flex-grow">
+                <p className="text-sm text-gray-500 mb-1">{service.category}</p>
                 <h3 className="text-2xl font-bold text-green-700 font-display mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{service.description}</p>
-                
-                {/* {service.benefits && service.benefits.length > 0 && (
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+
+                {service.benefits && service.benefits.length > 0 && (
                   <div className="mt-4">
-                    <h4 className="font-semibold text-green-600 mb-2">Beneficios:</h4>
+                    <h4 className="font-semibold text-green-600 mb-2">
+                      Beneficios:
+                    </h4>
                     <ul className="list-disc list-inside text-gray-600 space-y-1">
-                      {service.benefits?.map((benefit: string, idx: number) => (
-                        <li key={idx}>{benefit}</li>
-                      ))}
+                      {service.benefits
+                        .slice(0, 3)
+                        .map((benefit: string, idx: number) => (
+                          <li key={idx}>{benefit}</li>
+                        ))}
+                      {service.benefits.length > 3 && (
+                        <li>+{service.benefits.length - 3} más</li>
+                      )}
                     </ul>
                   </div>
-                )} */}
-                
-                {/* <div className="mt-4 pt-4 border-t border-gray-100">
+                )}
+
+                <div className="mt-4 pt-4 border-t border-gray-100">
                   <div className="flex justify-between items-center">
                     {service.duration && (
                       <span className="text-gray-500 text-sm">
@@ -64,7 +75,15 @@ const ServicesPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                </div> */}
+                </div>
+                <div className="mt-auto pt-4">
+                  <Link
+                    to={`/servicios/${service.id}`}
+                    className="text-primary hover:text-secondary font-semibold transition-colors"
+                  >
+                    Ver detalles →
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

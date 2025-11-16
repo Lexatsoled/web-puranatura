@@ -1,0 +1,83 @@
+[
+  {
+    "type": "info",
+    "text": "[DEV] Service workers desregistrados y cachés limpiadas",
+    "location": {
+      "url": "http://localhost:3000/tienda/producto/461",
+      "lineNumber": 430,
+      "columnNumber": 18
+    }
+  },
+  {
+    "type": "debug",
+    "text": "[vite] connecting...",
+    "location": {
+      "url": "http://localhost:3000/@vite/client",
+      "lineNumber": 788,
+      "columnNumber": 8
+    }
+  },
+  {
+    "type": "info",
+    "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+    "location": {
+      "url": "http://localhost:3000/node_modules/.vite/deps/chunk-KDCVS43I.js?v=2aa91e9f",
+      "lineNumber": 21608,
+      "columnNumber": 24
+    }
+  },
+  {
+    "type": "log",
+    "text": "DIAGNOSTIC: index.tsx loaded successfully",
+    "location": {
+      "url": "http://localhost:3000/index.tsx?t=1762948303358",
+      "lineNumber": 14,
+      "columnNumber": 10
+    }
+  },
+  {
+    "type": "log",
+    "text": "DIAGNOSTIC: rootElement found: true",
+    "location": {
+      "url": "http://localhost:3000/index.tsx?t=1762948303358",
+      "lineNumber": 17,
+      "columnNumber": 10
+    }
+  },
+  {
+    "type": "log",
+    "text": "DIAGNOSTIC: React root created successfully",
+    "location": {
+      "url": "http://localhost:3000/index.tsx?t=1762948303358",
+      "lineNumber": 32,
+      "columnNumber": 10
+    }
+  },
+  {
+    "type": "log",
+    "text": "DIAGNOSTIC: About to render React app...",
+    "location": {
+      "url": "http://localhost:3000/index.tsx?t=1762948303358",
+      "lineNumber": 35,
+      "columnNumber": 10
+    }
+  },
+  {
+    "type": "log",
+    "text": "DIAGNOSTIC: React app rendered successfully",
+    "location": {
+      "url": "http://localhost:3000/index.tsx?t=1762948303358",
+      "lineNumber": 91,
+      "columnNumber": 10
+    }
+  },
+  {
+    "type": "debug",
+    "text": "[vite] connected.",
+    "location": {
+      "url": "http://localhost:3000/@vite/client",
+      "lineNumber": 911,
+      "columnNumber": 14
+    }
+  }
+]

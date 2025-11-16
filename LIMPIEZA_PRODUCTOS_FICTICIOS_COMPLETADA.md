@@ -26,29 +26,29 @@ Se han eliminado exitosamente **6 productos ficticios de prueba** (prefijo `sys-
 ### Sistema Inmunológico (3 productos)
 
 1. **sys-immune-01** - Immune Defense Complex  
-   *Fórmula Inmune Avanzada*
+   _Fórmula Inmune Avanzada_
 
 2. **sys-immune-02** - Ultra Vitamin C Complex  
-   *Inmunidad Diaria Premium*
+   _Inmunidad Diaria Premium_
 
 3. **sys-immune-03** - Zinc Immunity Pro  
-   *Defensa Mineral Esencial*
+   _Defensa Mineral Esencial_
 
 ### Sistema Cardiovascular (2 productos)
 
 4. **sys-cardio-01** - CardioMax Pro  
-   *Fórmula Cardiovascular Completa*
+   _Fórmula Cardiovascular Completa_
 
 5. **sys-cardio-02** - Omega-3 Ultra Pure  
-   *Protección Cardiovascular EPA/DHA*
+   _Protección Cardiovascular EPA/DHA_
 
 ### Sistema Óseo-Mineral (2 productos)
 
 6. **sys-bone-01** - Bone Matrix Pro  
-   *Soporte Estructural Avanzado*
+   _Soporte Estructural Avanzado_
 
 7. **sys-bone-02** - Calcium Plus D3 & K2  
-   *Fórmula de Densidad Ósea*
+   _Fórmula de Densidad Ósea_
 
 ---
 
@@ -66,9 +66,10 @@ Se creó `clean-products-v2.mjs` con la siguiente lógica:
 ```
 
 **Resultado:**
+
 ```
 ✅ Primera cierre de array: línea 3579
-✅ Interfaz correcta: línea 4213  
+✅ Interfaz correcta: línea 4213
 ✅ Líneas eliminadas: 633
 ✅ Archivo limpiado correctamente
 ```
@@ -78,6 +79,7 @@ Se creó `clean-products-v2.mjs` con la siguiente lógica:
 Se eliminaron referencias `sys-*` de 3 arrays de sistemas:
 
 #### Sistema Inmunológico
+
 ```typescript
 // ANTES:
 products: [
@@ -92,6 +94,7 @@ products: [
 ```
 
 #### Sistema Cardiovascular
+
 ```typescript
 // ANTES:
 products: [
@@ -106,6 +109,7 @@ products: [
 ```
 
 #### Sistema Óseo-Mineral
+
 ```typescript
 // ANTES:
 products: [
@@ -145,11 +149,13 @@ export interface System {
 ## ✅ Verificaciones Ejecutadas
 
 ### 1. Verificación de Limpieza
+
 ```bash
 node verify-cleanup.mjs
 ```
 
 **Resultados:**
+
 ```
 ✅ NO hay productos sys-* en el archivo
 ✅ Sistema inmunológico limpio
@@ -162,12 +168,14 @@ node verify-cleanup.mjs
 ```
 
 ### 2. Compilación TypeScript
+
 - ✅ Errores críticos resueltos
 - ⚠️ Solo 2 errores menores restantes (no bloquean compilación):
   - Warning en import de tipos
   - Warning implícito de tipo `any` en lambda
 
 ### 3. Servidor de Desarrollo
+
 ```
 ✅ VITE v6.3.6 ready in 521 ms
 ➜  Local:   http://localhost:3000/
@@ -176,12 +184,14 @@ node verify-cleanup.mjs
 ### 4. Integridad de Datos
 
 **Productos Reales: 85**
+
 - 39 productos con información completa (detailedDescription, components, dosage, faqs)
 - 4 productos con referencias científicas (16 estudios totales)
 - 32 productos con información básica
 - 10 productos numéricos legacy
 
 **Sistemas Sinérgicos: Limpios**
+
 - ✅ Todas las referencias apuntan a productos reales
 - ✅ No hay enlaces rotos
 - ✅ Todas las imágenes válidas
@@ -200,11 +210,12 @@ Los 6 productos `sys-*` fueron identificados como **ficticios** porque:
 ### Comparación: Productos Reales vs Ficticios
 
 **Productos Reales** (ejemplo):
+
 ```
 ✅ Calcium Magnesium Zinc
    → Anverso.jpg, Reverso.jpg, múltiples .webp
 
-✅ Mini Omega-3 Fish Oil Lemon  
+✅ Mini Omega-3 Fish Oil Lemon
    → Anverso.jpg, Reverso.jpg, múltiples .webp
 
 ✅ Immune Probiotic Go Pack
@@ -212,6 +223,7 @@ Los 6 productos `sys-*` fueron identificados como **ficticios** porque:
 ```
 
 **Productos Ficticios** (eliminados):
+
 ```
 ❌ sys-immune-01, sys-immune-02, sys-immune-03
    → Sin imágenes en public/Jpeg/
@@ -233,17 +245,17 @@ Los 6 productos `sys-*` fueron identificados como **ficticios** porque:
 ✅ **Mejor experiencia de usuario** - No más productos sin imágenes  
 ✅ **Código más mantenible** - 14.5% menos líneas  
 ✅ **Datos consistentes** - 100% de productos verificados  
-✅ **Referencias válidas** - Todos los enlaces funcionan  
+✅ **Referencias válidas** - Todos los enlaces funcionan
 
 ### Métricas de Calidad
 
-| Métrica | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| Total productos | 91 | 85 | -6 ficticios |
-| Líneas código | 4,476 | 3,826 | -650 (-14.5%) |
-| Productos sin imagen | 6 | 0 | ✅ 100% |
-| Referencias rotas | 6 | 0 | ✅ 100% |
-| Sistemas limpios | 0/3 | 3/3 | ✅ 100% |
+| Métrica              | Antes | Después | Mejora        |
+| -------------------- | ----- | ------- | ------------- |
+| Total productos      | 91    | 85      | -6 ficticios  |
+| Líneas código        | 4,476 | 3,826   | -650 (-14.5%) |
+| Productos sin imagen | 6     | 0       | ✅ 100%       |
+| Referencias rotas    | 6     | 0       | ✅ 100%       |
+| Sistemas limpios     | 0/3   | 3/3     | ✅ 100%       |
 
 ---
 
@@ -251,7 +263,7 @@ Los 6 productos `sys-*` fueron identificados como **ficticios** porque:
 
 ### Por Categoría
 
-**Productos Piping Rock (pr-*)**: 53 productos reales  
+**Productos Piping Rock (pr-\*)**: 53 productos reales  
 Incluye: Omega-3, SAMe, 5-HTP, Turmeric, Maca, Bambú, etc.
 
 **Productos Numéricos (legacy)**: 10 productos  
@@ -260,9 +272,10 @@ Productos históricos con identificadores numéricos.
 **Productos con Información Completa**: 39  
 Con detailedDescription, components, dosage, faqs completos.
 
-**Productos con Referencias Científicas**: 4  
+**Productos con Referencias Científicas**: 4
+
 - pr-fish-oil (4 estudios)
-- pr-same (4 estudios)  
+- pr-same (4 estudios)
 - pr-5htp (4 estudios)
 - pr-turmeric-advanced (4 estudios)
 
@@ -303,6 +316,6 @@ La limpieza de los 6 productos ficticios `sys-*` se completó exitosamente. El c
 
 ---
 
-*Documento generado automáticamente durante la limpieza de datos*  
-*Fecha de limpieza: 2025*  
-*Versión del archivo: src/data/products.ts (3,826 líneas)*
+_Documento generado automáticamente durante la limpieza de datos_  
+_Fecha de limpieza: 2025_  
+_Versión del archivo: src/data/products.ts (3,826 líneas)_

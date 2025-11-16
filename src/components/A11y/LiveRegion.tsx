@@ -58,27 +58,4 @@ const LiveRegion: React.FC<LiveRegionProps> = ({
 
 export default LiveRegion;
 
-/**
- * Hook para usar Live Region fácilmente
- */
-export function useLiveRegion() {
-  const [message, setMessage] = React.useState('');
-  const [priority, setPriority] = React.useState<'polite' | 'assertive'>('polite');
-
-  const announce = React.useCallback((text: string, urgent: boolean = false) => {
-    setPriority(urgent ? 'assertive' : 'polite');
-    setMessage(text);
-
-    // Auto-limpiar después de 5 segundos
-    setTimeout(() => {
-      setMessage('');
-    }, 5000);
-  }, []);
-
-  return {
-    announce,
-    LiveRegionComponent: () => (
-      <LiveRegion message={message} priority={priority} />
-    ),
-  };
-}
+// Nota: el hook useLiveRegion se movió a src/hooks/useLiveRegion.ts

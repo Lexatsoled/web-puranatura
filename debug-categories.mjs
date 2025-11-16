@@ -8,25 +8,29 @@ console.log(`Total productos: ${products.length}`);
 
 // 2. Verificar categorías disponibles
 console.log('\nCategorías disponibles:');
-productCategories.forEach(cat => {
+productCategories.forEach((cat) => {
   console.log(`- ID: "${cat.id}" | Nombre: "${cat.name}"`);
 });
 
 // 3. Verificar productos con vitaminas-minerales
-const vitaminasProducts = products.filter(p => 
-  p.categories && p.categories.includes('vitaminas-minerales')
+const vitaminasProducts = products.filter(
+  (p) => p.categories && p.categories.includes('vitaminas-minerales')
 );
 
-console.log(`\nProductos con categoría "vitaminas-minerales": ${vitaminasProducts.length}`);
+console.log(
+  `\nProductos con categoría "vitaminas-minerales": ${vitaminasProducts.length}`
+);
 if (vitaminasProducts.length > 0) {
   console.log('Primeros 3 productos:');
-  vitaminasProducts.slice(0, 3).forEach(p => {
+  vitaminasProducts.slice(0, 3).forEach((p) => {
     console.log(`- ${p.name} | Categorías: [${p.categories?.join(', ')}]`);
   });
 }
 
 // 4. Verificar si algún producto tiene problemas
-const productosProblematicos = products.filter(p => !p.categories || p.categories.length === 0);
+const productosProblematicos = products.filter(
+  (p) => !p.categories || p.categories.length === 0
+);
 console.log(`\nProductos sin categorías: ${productosProblematicos.length}`);
 
 console.log('\n=== FIN DEBUG ===');

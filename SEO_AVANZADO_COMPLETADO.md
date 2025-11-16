@@ -4,13 +4,13 @@
 
 ### Implementaciones Completadas
 
-| Componente | Estado | Descripción |
-|------------|--------|-------------|
-| **sitemap.xml Dinámico** | ✅ Completo | Generador automático con 11+ URLs, prioridades y frecuencias |
-| **robots.txt Optimizado** | ✅ Completo | Configuración avanzada con reglas por bot, assets permitidos |
+| Componente                    | Estado      | Descripción                                                    |
+| ----------------------------- | ----------- | -------------------------------------------------------------- |
+| **sitemap.xml Dinámico**      | ✅ Completo | Generador automático con 11+ URLs, prioridades y frecuencias   |
+| **robots.txt Optimizado**     | ✅ Completo | Configuración avanzada con reglas por bot, assets permitidos   |
 | **Structured Data (JSON-LD)** | ✅ Completo | 5 schemas implementados (Product, Organization, WebSite, etc.) |
-| **Meta Tags Dinámicos** | ✅ Completo | Hook useMetaTags para Open Graph, Twitter Cards, Canonical |
-| **Script Generator** | ✅ Completo | npm run generate-sitemap para actualización automática |
+| **Meta Tags Dinámicos**       | ✅ Completo | Hook useMetaTags para Open Graph, Twitter Cards, Canonical     |
+| **Script Generator**          | ✅ Completo | npm run generate-sitemap para actualización automática         |
 
 ### Impacto SEO Proyectado
 
@@ -37,12 +37,14 @@ Con SEO Avanzado (3 meses):
 ### Características
 
 ✅ **Generación Automática**
+
 - Script TypeScript que parsea el proyecto
 - Detecta páginas estáticas y dinámicas
 - Extrae productos y posts del blog
 - Calcula prioridades y frecuencias
 
 ✅ **URLs Incluidas (11+ rutas)**
+
 ```xml
 Priority 1.0: Homepage (/)
 Priority 0.9: Store (/store)
@@ -53,6 +55,7 @@ Priority 0.3: User pages (profile, orders, wishlist, etc.)
 ```
 
 ✅ **Metadatos**
+
 - `<lastmod>`: Fecha de última modificación (ISO 8601)
 - `<changefreq>`: daily, weekly, monthly según tipo de página
 - `<priority>`: 0.1 - 1.0 según importancia
@@ -83,6 +86,7 @@ Priority 0.3: User pages (profile, orders, wishlist, etc.)
 **Ubicación:** `scripts/generateSitemap.ts`
 
 **Funciones:**
+
 1. `loadProducts()` - Carga productos desde data/products
 2. `loadBlogPosts()` - Carga posts desde data/blog
 3. `generateSitemapUrls()` - Genera array de URLs con metadatos
@@ -90,6 +94,7 @@ Priority 0.3: User pages (profile, orders, wishlist, etc.)
 5. `generateSitemap()` - Función principal con logging
 
 **Uso:**
+
 ```bash
 # Generar sitemap manualmente
 npm run generate-sitemap
@@ -99,6 +104,7 @@ npm run seo:build
 ```
 
 **Output:**
+
 ```
 🗺️  Generando sitemap.xml...
 
@@ -129,6 +135,7 @@ npm run seo:build
 ### Características
 
 **✅ Configuración por Bot**
+
 - **Googlebot**: Crawl-delay 0 (máxima prioridad)
 - **Googlebot-Image**: Acceso completo a imágenes
 - **Bingbot**: Crawl-delay 1 (moderado)
@@ -136,6 +143,7 @@ npm run seo:build
 - **Scrapers agresivos**: Bloqueados (AhrefsBot, SemrushBot, etc.)
 
 **✅ Rutas Públicas (Allow)**
+
 ```
 /store              - Tienda principal
 /blog               - Blog
@@ -148,6 +156,7 @@ npm run seo:build
 ```
 
 **✅ Rutas Privadas (Disallow)**
+
 ```
 /profile            - Perfil de usuario
 /orders             - Pedidos
@@ -160,6 +169,7 @@ npm run seo:build
 ```
 
 **✅ Prevención de Contenido Duplicado**
+
 ```
 Disallow: /*?*      - URLs con query params
 Disallow: /*&*      - URLs con múltiples params
@@ -239,6 +249,7 @@ Disallow: /
 **Para:** Páginas de productos individuales
 
 **Rich Snippets Incluyen:**
+
 - ⭐ Rating y reseñas
 - 💰 Precio
 - ✅ Disponibilidad (In Stock / Out of Stock)
@@ -246,17 +257,19 @@ Disallow: /
 - 🖼️ Imágenes (principal + galería)
 
 **Código:**
+
 ```tsx
 import { ProductStructuredData } from '@/components/StructuredData';
 
 // En ProductDetailModal.tsx
-<ProductStructuredData 
+<ProductStructuredData
   product={product}
   url={`https://web.purezanaturalis.com/product/${product.id}`}
-/>
+/>;
 ```
 
 **Output JSON-LD:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -285,6 +298,7 @@ import { ProductStructuredData } from '@/components/StructuredData';
 ```
 
 **Resultado en Google:**
+
 ```
 ┌─────────────────────────────────────────────┐
 │ Vitamina C 1000mg - Pureza Naturalis       │
@@ -300,6 +314,7 @@ import { ProductStructuredData } from '@/components/StructuredData';
 **Para:** About Page, Contact Page
 
 **Incluye:**
+
 - Nombre de la organización
 - Logo
 - Descripción
@@ -308,14 +323,16 @@ import { ProductStructuredData } from '@/components/StructuredData';
 - Redes sociales
 
 **Código:**
+
 ```tsx
 import { OrganizationStructuredData } from '@/components/StructuredData';
 
 // En AboutPage.tsx
-<OrganizationStructuredData />
+<OrganizationStructuredData />;
 ```
 
 **Output:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -341,20 +358,23 @@ import { OrganizationStructuredData } from '@/components/StructuredData';
 **Para:** Homepage
 
 **Incluye:**
+
 - Nombre del sitio
 - URL
 - Descripción
 - **SearchAction** (cuadro de búsqueda en Google)
 
 **Código:**
+
 ```tsx
 import { WebSiteStructuredData } from '@/components/StructuredData';
 
 // En HomePage.tsx
-<WebSiteStructuredData />
+<WebSiteStructuredData />;
 ```
 
 **Output:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -373,6 +393,7 @@ import { WebSiteStructuredData } from '@/components/StructuredData';
 ```
 
 **Resultado en Google:**
+
 ```
 ┌─────────────────────────────────────────────┐
 │ Pureza Naturalis - Terapias Naturales      │
@@ -389,25 +410,34 @@ import { WebSiteStructuredData } from '@/components/StructuredData';
 **Para:** Navegación jerárquica
 
 **Incluye:**
+
 - Ruta completa de navegación
 - URLs de cada paso
 
 **Código:**
+
 ```tsx
 import { BreadcrumbStructuredData } from '@/components/StructuredData';
 
 // En ProductPage.tsx
-<BreadcrumbStructuredData 
+<BreadcrumbStructuredData
   items={[
     { name: 'Home', url: 'https://web.purezanaturalis.com/' },
     { name: 'Store', url: 'https://web.purezanaturalis.com/store' },
-    { name: 'Vitaminas', url: 'https://web.purezanaturalis.com/store?cat=vitaminas' },
-    { name: 'Vitamina C 1000mg', url: 'https://web.purezanaturalis.com/product/vitamina-c' }
+    {
+      name: 'Vitaminas',
+      url: 'https://web.purezanaturalis.com/store?cat=vitaminas',
+    },
+    {
+      name: 'Vitamina C 1000mg',
+      url: 'https://web.purezanaturalis.com/product/vitamina-c',
+    },
   ]}
-/>
+/>;
 ```
 
 **Output:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -442,6 +472,7 @@ import { BreadcrumbStructuredData } from '@/components/StructuredData';
 ```
 
 **Resultado en Google:**
+
 ```
 Home > Store > Vitaminas > Vitamina C 1000mg
  ↑ Breadcrumbs navegables en Google
@@ -452,6 +483,7 @@ Home > Store > Vitaminas > Vitamina C 1000mg
 **Para:** Posts del blog
 
 **Incluye:**
+
 - Título y descripción
 - Autor
 - Fecha de publicación
@@ -459,21 +491,23 @@ Home > Store > Vitaminas > Vitamina C 1000mg
 - Publisher info
 
 **Código:**
+
 ```tsx
 import { BlogPostingStructuredData } from '@/components/StructuredData';
 
 // En BlogPostPage.tsx
-<BlogPostingStructuredData 
+<BlogPostingStructuredData
   title="Beneficios de la Vitamina C"
   description="Descubre cómo la vitamina C puede mejorar tu salud..."
   author="Dr. Juan Pérez"
   datePublished="2025-01-15"
   image="/blog/vitamina-c-hero.jpg"
   url="https://web.purezanaturalis.com/blog/beneficios-vitamina-c"
-/>
+/>;
 ```
 
 **Output:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -512,12 +546,13 @@ import { BlogPostingStructuredData } from '@/components/StructuredData';
 ✅ Descripción y título personalizados por página
 
 **Uso:**
+
 ```tsx
 import { useMetaTags } from '@/components/StructuredData';
 
 function ProductPage() {
   const { setMetaTags } = useMetaTags();
-  
+
   useEffect(() => {
     setMetaTags({
       title: `${product.name} - Pureza Naturalis`,
@@ -527,38 +562,52 @@ function ProductPage() {
       type: 'product'
     });
   }, [product]);
-  
+
   return (/* ... */);
 }
 ```
 
 **Tags Generados:**
+
 ```html
 <!-- Título y descripción -->
 <title>Vitamina C 1000mg - Pureza Naturalis</title>
-<meta name="description" content="Vitamina C de alta potencia...">
+<meta name="description" content="Vitamina C de alta potencia..." />
 
 <!-- Open Graph (Facebook, LinkedIn) -->
-<meta property="og:title" content="Vitamina C 1000mg - Pureza Naturalis">
-<meta property="og:description" content="Vitamina C de alta potencia...">
-<meta property="og:image" content="https://web.purezanaturalis.com/products/vitamina-c.jpg">
-<meta property="og:url" content="https://web.purezanaturalis.com/product/vitamina-c">
-<meta property="og:type" content="product">
-<meta property="og:site_name" content="Pureza Naturalis">
+<meta property="og:title" content="Vitamina C 1000mg - Pureza Naturalis" />
+<meta property="og:description" content="Vitamina C de alta potencia..." />
+<meta
+  property="og:image"
+  content="https://web.purezanaturalis.com/products/vitamina-c.jpg"
+/>
+<meta
+  property="og:url"
+  content="https://web.purezanaturalis.com/product/vitamina-c"
+/>
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="Pureza Naturalis" />
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Vitamina C 1000mg - Pureza Naturalis">
-<meta name="twitter:description" content="Vitamina C de alta potencia...">
-<meta name="twitter:image" content="https://web.purezanaturalis.com/products/vitamina-c.jpg">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Vitamina C 1000mg - Pureza Naturalis" />
+<meta name="twitter:description" content="Vitamina C de alta potencia..." />
+<meta
+  name="twitter:image"
+  content="https://web.purezanaturalis.com/products/vitamina-c.jpg"
+/>
 
 <!-- Canonical URL (evita contenido duplicado) -->
-<link rel="canonical" href="https://web.purezanaturalis.com/product/vitamina-c">
+<link
+  rel="canonical"
+  href="https://web.purezanaturalis.com/product/vitamina-c"
+/>
 ```
 
 **Resultado al Compartir:**
 
 **Facebook/LinkedIn:**
+
 ```
 ┌───────────────────────────────────────────┐
 │ [Imagen grande del producto]              │
@@ -572,6 +621,7 @@ function ProductPage() {
 ```
 
 **Twitter:**
+
 ```
 ┌───────────────────────────────────────────┐
 │ Pureza Naturalis @purezanaturalis         │
@@ -594,6 +644,7 @@ function ProductPage() {
 ### Fase 1: Páginas Principales ✅
 
 **Completadas:**
+
 - ✅ Homepage: WebSite schema + Organization
 - ✅ Store: Meta tags dinámicos
 - ✅ About: Organization schema
@@ -602,37 +653,44 @@ function ProductPage() {
 ### Fase 2: Productos (Pendiente integración)
 
 **Por hacer:**
+
 ```tsx
 // src/components/ProductDetailModal.tsx
-import { ProductStructuredData, useMetaTags } from '@/components/StructuredData';
+import {
+  ProductStructuredData,
+  useMetaTags,
+} from '@/components/StructuredData';
 
 function ProductDetailModal({ product }) {
   const { setMetaTags } = useMetaTags();
-  
+
   useEffect(() => {
     // Meta tags dinámicos
     setMetaTags({
       title: `${product.name} - Pureza Naturalis`,
       description: product.description,
       image: product.image,
-      type: 'product'
+      type: 'product',
     });
   }, [product]);
-  
+
   return (
     <>
       {/* Structured data */}
       <ProductStructuredData product={product} />
-      
+
       {/* Breadcrumbs */}
-      <BreadcrumbStructuredData 
+      <BreadcrumbStructuredData
         items={[
           { name: 'Home', url: 'https://web.purezanaturalis.com/' },
           { name: 'Store', url: 'https://web.purezanaturalis.com/store' },
-          { name: product.name, url: `https://web.purezanaturalis.com/product/${product.id}` }
+          {
+            name: product.name,
+            url: `https://web.purezanaturalis.com/product/${product.id}`,
+          },
         ]}
       />
-      
+
       {/* Resto del modal... */}
     </>
   );
@@ -642,25 +700,29 @@ function ProductDetailModal({ product }) {
 ### Fase 3: Blog (Pendiente implementación)
 
 **Por hacer:**
+
 ```tsx
 // src/pages/BlogPostPage.tsx
-import { BlogPostingStructuredData, useMetaTags } from '@/components/StructuredData';
+import {
+  BlogPostingStructuredData,
+  useMetaTags,
+} from '@/components/StructuredData';
 
 function BlogPostPage({ post }) {
   const { setMetaTags } = useMetaTags();
-  
+
   useEffect(() => {
     setMetaTags({
       title: `${post.title} - Blog Pureza Naturalis`,
       description: post.excerpt,
       image: post.image,
-      type: 'article'
+      type: 'article',
     });
   }, [post]);
-  
+
   return (
     <>
-      <BlogPostingStructuredData 
+      <BlogPostingStructuredData
         title={post.title}
         description={post.excerpt}
         author={post.author}
@@ -668,7 +730,7 @@ function BlogPostPage({ post }) {
         image={post.image}
         url={`https://web.purezanaturalis.com/blog/${post.slug}`}
       />
-      
+
       {/* Resto del post... */}
     </>
   );
@@ -682,12 +744,14 @@ function BlogPostPage({ post }) {
 ### Herramientas de Validación
 
 #### 1. Google Rich Results Test
+
 ```
 URL: https://search.google.com/test/rich-results
 Uso: Validar structured data de productos y blogs
 ```
 
 **Pasos:**
+
 1. Abrir la herramienta
 2. Ingresar URL del producto o post
 3. Verificar que aparece "Product" o "BlogPosting"
@@ -695,6 +759,7 @@ Uso: Validar structured data de productos y blogs
 5. Confirmar que todos los campos obligatorios están presentes
 
 **Campos Validados:**
+
 - ✅ name (obligatorio)
 - ✅ image (obligatorio)
 - ✅ offers.price (obligatorio)
@@ -703,30 +768,35 @@ Uso: Validar structured data de productos y blogs
 - ⚠️ review (opcional pero recomendado)
 
 #### 2. Schema Markup Validator
+
 ```
 URL: https://validator.schema.org/
 Uso: Validar sintaxis JSON-LD
 ```
 
 **Pasos:**
+
 1. Copiar JSON-LD generado
 2. Pegar en el validador
 3. Revisar errores de sintaxis
 4. Confirmar que el schema es válido
 
 #### 3. Google Search Console
+
 ```
 URL: https://search.google.com/search-console
 Uso: Monitorear indexación y rich snippets
 ```
 
 **Métricas a Revisar:**
+
 - **Cobertura**: % de páginas indexadas
 - **Rendimiento**: CTR promedio (debe aumentar 2-3x)
 - **Rich Results**: Productos con rich snippets
 - **Sitemaps**: Sitemap submitted y procesado
 
 **Pasos:**
+
 1. Agregar propiedad (https://web.purezanaturalis.com)
 2. Verificar ownership (DNS TXT record o HTML file)
 3. Submit sitemap: `https://web.purezanaturalis.com/sitemap.xml`
@@ -734,12 +804,14 @@ Uso: Monitorear indexación y rich snippets
 5. Revisar "Enhancement" → "Products" para rich snippets
 
 #### 4. Bing Webmaster Tools
+
 ```
 URL: https://www.bing.com/webmasters
 Uso: Indexación en Bing
 ```
 
 **Pasos:**
+
 1. Agregar sitio
 2. Verificar ownership
 3. Submit sitemap
@@ -752,6 +824,7 @@ Uso: Indexación en Bing
 ### KPIs a Monitorear
 
 #### Indexación
+
 ```
 Baseline: 60-70% de páginas indexadas
 Target: 95-100% en 1 mes
@@ -762,6 +835,7 @@ Cómo medir:
 ```
 
 #### CTR (Click-Through Rate)
+
 ```
 Baseline: 1-2% CTR promedio
 Target: 3-5% en 3 meses (+150-250%)
@@ -772,6 +846,7 @@ Cómo medir:
 ```
 
 #### Rich Snippets
+
 ```
 Baseline: 0% de productos con rich snippets
 Target: 40-60% en 2 meses
@@ -782,6 +857,7 @@ Cómo medir:
 ```
 
 #### Tráfico Orgánico
+
 ```
 Baseline: ~100 visitas/mes
 Target: 150-200 visitas/mes (+50-100%) en 3 meses
@@ -792,6 +868,7 @@ Cómo medir:
 ```
 
 #### Posicionamiento de Keywords
+
 ```
 Target Keywords:
 1. "productos naturales [país]"
@@ -807,18 +884,21 @@ Herramientas:
 ### Timeline Esperado
 
 **Mes 1:**
+
 - ✅ Sitemap submitted e indexado
 - ✅ 80-90% de páginas indexadas
 - ⏳ Rich snippets en testing (0-10%)
 - ⏳ CTR sin cambio significativo (+0-5%)
 
 **Mes 2:**
+
 - ✅ 95-100% de páginas indexadas
 - ✅ 30-40% de rich snippets activos
 - ✅ CTR +10-20%
 - ✅ Tráfico orgánico +15-25%
 
 **Mes 3:**
+
 - ✅ 100% de páginas indexadas
 - ✅ 40-60% de rich snippets activos
 - ✅ CTR +150-250% (objetivo cumplido)
@@ -831,15 +911,17 @@ Herramientas:
 ### Inmediatos (Deploy)
 
 1. **Verificar Archivos**
+
    ```bash
    # Sitemap debe estar accesible
    https://web.purezanaturalis.com/sitemap.xml
-   
+
    # Robots.txt debe estar accesible
    https://web.purezanaturalis.com/robots.txt
    ```
 
 2. **Google Search Console**
+
    ```
    - Agregar propiedad
    - Verificar ownership
@@ -909,16 +991,19 @@ Herramientas:
 ## ✅ Checklist de Completación
 
 ### Archivos Creados
+
 - [x] scripts/generateSitemap.ts - Generador de sitemap
 - [x] src/components/StructuredData.tsx - Schemas JSON-LD + useMetaTags
 - [x] public/sitemap.xml - Sitemap generado (11 URLs)
 - [x] public/robots.txt - Robots.txt optimizado (actualizado)
 
 ### Scripts Agregados (package.json)
+
 - [x] npm run generate-sitemap - Generar sitemap manualmente
 - [x] npm run seo:build - Generar sitemap + build
 
 ### Componentes SEO
+
 - [x] ProductStructuredData - Schema de productos
 - [x] OrganizationStructuredData - Schema de organización
 - [x] WebSiteStructuredData - Schema del sitio web
@@ -927,6 +1012,7 @@ Herramientas:
 - [x] useMetaTags hook - Meta tags dinámicos
 
 ### Configuración
+
 - [x] robots.txt optimizado con reglas por bot
 - [x] Sitemap con prioridades y frecuencias
 - [x] Canonical URLs automáticos
@@ -934,6 +1020,7 @@ Herramientas:
 - [x] Twitter Cards
 
 ### Validación
+
 - [x] TypeScript: 0 errores
 - [x] Build: Exitoso
 - [x] Sitemap: Generado correctamente
@@ -1026,5 +1113,6 @@ ROI anual: $600 - $2400/año (sin costo recurrente)
 **Progreso del Roadmap:** 8/10 (80%) 🎯
 
 **Próximas tareas:**
+
 - Tarea #9: Accessibility Audit (WCAG 2.1 AA)
 - Tarea #10: Error Boundaries + Error Tracking

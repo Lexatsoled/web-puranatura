@@ -1,15 +1,19 @@
 /// <reference types="vite-plugin-pwa/client" />
 
 declare module 'virtual:pwa-register/react' {
-  import type { Ref } from 'react';
-  
+
   export interface RegisterSWOptions {
     immediate?: boolean;
     onNeedRefresh?: () => void;
     onOfflineReady?: () => void;
-    onRegistered?: (registration: ServiceWorkerRegistration | undefined) => void;
-    onRegisteredSW?: (swUrl: string, registration: ServiceWorkerRegistration | undefined) => void;
-    onRegisterError?: (error: any) => void;
+    onRegistered?: (
+      registration: ServiceWorkerRegistration | undefined
+    ) => void;
+    onRegisteredSW?: (
+      swUrl: string,
+      registration: ServiceWorkerRegistration | undefined
+    ) => void;
+    onRegisterError?: (error: unknown) => void;
   }
 
   export function useRegisterSW(options?: RegisterSWOptions): {
@@ -21,22 +25,25 @@ declare module 'virtual:pwa-register/react' {
 
 declare global {
   interface Window {
-    workbox: any;
-    requestIdleCallback(callback: IdleRequestCallback, options?: IdleRequestOptions): number;
+    workbox: unknown;
+    requestIdleCallback(
+      callback: IdleRequestCallback,
+      options?: IdleRequestOptions
+    ): number;
     cancelIdleCallback(handle: number): void;
   }
-  
+
   interface WindowEventMap {
-    'beforeinstallprompt': BeforeInstallPromptEvent;
+    beforeinstallprompt: BeforeInstallPromptEvent;
   }
-  
+
   type IdleRequestCallback = (deadline: IdleDeadline) => void;
-  
+
   interface IdleDeadline {
     didTimeout: boolean;
     timeRemaining(): number;
   }
-  
+
   interface IdleRequestOptions {
     timeout?: number;
   }

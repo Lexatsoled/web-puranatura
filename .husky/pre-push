@@ -1,0 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Ejecuta la validación completa antes de hacer push.
+# Para saltarlo puntualmente: SKIP_VALIDATE_PR=1 git push
+
+if [ "$SKIP_VALIDATE_PR" = "1" ]; then
+  echo "[pre-push] SKIP_VALIDATE_PR=1 → saltando validate:pr"
+  exit 0
+fi
+
+npm run validate:pr || exit 1
+

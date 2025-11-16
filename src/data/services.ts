@@ -75,9 +75,9 @@ export const services: Service[] = [
       
       <p>Nuestro objetivo es complementar la medicina convencional, ofreciendo un enfoque más holístico que considere todos los aspectos de tu bienestar para lograr una salud óptima y sostenible.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1576671081837-49000212a370?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 90,
-    price: 75.00,
+    price: 75.0,
     category: 'Consulta',
     benefits: [
       'Enfoque holístico personalizado',
@@ -91,8 +91,10 @@ export const services: Service[] = [
       'Pacientes que requieren medicación de emergencia',
       'Casos donde se necesita cirugía urgente',
     ],
-    whatToExpect: 'Durante tu primera consulta, dedicaremos 90 minutos a conocerte completamente. Revisaremos tu historia clínica, hábitos de vida, alimentación y estado emocional. Recibirás un plan personalizado con recomendaciones específicas para tu situación.',
-    preparation: 'Trae contigo tu historial médico reciente, lista de medicamentos actuales, y un diario de alimentación de los últimos 3 días. Viste ropa cómoda y ven con mente abierta para explorar nuevas perspectivas sobre tu salud.',
+    whatToExpect:
+      'Durante tu primera consulta, dedicaremos 90 minutos a conocerte completamente. Revisaremos tu historia clínica, hábitos de vida, alimentación y estado emocional. Recibirás un plan personalizado con recomendaciones específicas para tu situación.',
+    preparation:
+      'Trae contigo tu historial médico reciente, lista de medicamentos actuales, y un diario de alimentación de los últimos 3 días. Viste ropa cómoda y ven con mente abierta para explorar nuevas perspectivas sobre tu salud.',
   },
   {
     id: 'fitoterapia',
@@ -131,7 +133,7 @@ export const services: Service[] = [
       
       <h3>Especialidades Terapéuticas</h3>
       
-      <h4>🌿 Sistema Digestivo</h4>
+      <h4>🌱 Sistema Digestivo</h4>
       <ul>
         <li><strong>Manzanilla (Matricaria chamomilla):</strong> Antiinflamatoria, antiespasmódica, ideal para gastritis y colitis</li>
         <li><strong>Regaliz (Glycyrrhiza glabra):</strong> Protector de mucosas, efectivo contra úlceras pépticas</li>
@@ -179,14 +181,17 @@ export const services: Service[] = [
       
       <h3>Protocolos de Tratamiento</h3>
       
-      <h4>Fase Aguda (1-2 semanas)</h4>
-      <p>Tratamiento intensivo con plantas de acción rápida para aliviar síntomas inmediatos.</p>
+      <h4>💊 Protocolo Anti-Estrés (4 semanas)</h4>
+      <p><strong>Semana 1-2:</strong> Difusión de lavanda 20 min/día + baño con bergamota 2x/semana</p>
+      <p><strong>Semana 3-4:</strong> Masaje semanal con mezcla personalizada + inhalación de emergencia</p>
       
-      <h4>Fase de Consolidación (4-6 semanas)</h4>
-      <p>Estabilización con plantas reguladoras que restauran el equilibrio fisiológico.</p>
+      <h4>⚡ Mezcla Energizante Matutina</h4>
+      <p><strong>Fórmula:</strong> Romero (35%) + Menta (25%) + Limón (25%) + Eucalipto (15%)</p>
+      <p><strong>Efecto:</strong> Aumenta alerta mental, mejora concentración, energiza sin nerviosismo</p>
       
-      <h4>Fase de Mantenimiento (3-6 meses)</h4>
-      <p>Prevención de recaídas con plantas adaptógenas y nutritivas que fortalecen el terreno biológico.</p>
+      <h4>🛡️ Mezcla Inmuno-Protectora</h4>
+      <p><strong>Fórmula:</strong> Ravintsara (30%) + Árbol de Té (25%) + Tomillo (20%) + Limón (25%)</p>
+      <p><strong>Efecto:</strong> Fortalece defensas, purifica ambiente, previene infecciones</p>
       
       <h3>Seguridad y Contraindicaciones</h3>
       <p>Aunque naturales, las plantas medicinales son potentes y requieren uso responsable:</p>
@@ -204,9 +209,9 @@ export const services: Service[] = [
       
       <p>La fitoterapia moderna representa una síntesis perfecta entre tradición y ciencia, ofreciendo alternativas naturales respaldadas por investigación rigurosa para tu bienestar integral.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 60,
-    price: 60.00,
+    price: 60.0,
     category: 'Terapia',
     benefits: [
       'Tratamientos naturales personalizados',
@@ -221,8 +226,10 @@ export const services: Service[] = [
       'Interacciones con medicamentos anticoagulantes',
       'Trastornos hepáticos graves (para ciertas plantas)',
     ],
-    whatToExpect: 'En tu consulta, realizaremos una evaluación detallada de tu estado de salud, historial médico y objetivos terapéuticos. Recibirás un protocolo personalizado con plantas específicas, dosificaciones precisas y seguimiento para optimizar resultados.',
-    preparation: 'Trae tu historial médico completo, lista de medicamentos actuales y suplementos. Si tienes análisis de sangre recientes, tráelos también. Evita alcohol 24 horas antes de la consulta para una evaluación más precisa.',
+    whatToExpect:
+      'En tu consulta, realizaremos una evaluación detallada de tu estado de salud, historial médico y objetivos terapéuticos. Recibirás un protocolo personalizado con plantas específicas, dosificaciones precisas y seguimiento para optimizar resultados.',
+    preparation:
+      'Trae tu historial médico completo, lista de medicamentos actuales y suplementos. Si tienes análisis de sangre recientes, tráelos también. Evita alcohol 24 horas antes de la consulta para una evaluación más precisa.',
   },
   {
     id: 'aromaterapia',
@@ -253,7 +260,7 @@ export const services: Service[] = [
         <li>Descongestión de mucosas</li>
       </ul>
       
-      <h4>🩸 Sistémico</h4>
+      <h4>💧 Sistémico</h4>
       <ul>
         <li>Absorción transdérmica durante masajes</li>
         <li>Circulación sistémica y distribución en tejidos</li>
@@ -263,16 +270,16 @@ export const services: Service[] = [
       
       <h3>Métodos de Aplicación Terapéutica</h3>
       
-      <h4>🌬️ Difusión Ambiental</h4>
+      <h4> diffuser_with_steam Difusión Ambiental</h4>
       <p>Utilizamos difusores ultrasónicos que preservan las propiedades moleculares de los aceites mientras crean atmósferas terapéuticas específicas.</p>
       
-      <h4>💆‍♀️ Masaje Aromático</h4>
+      <h4> massage_person Masaje Aromático</h4>
       <p>Combinamos aceites esenciales con aceites portadores para tratamientos que integran beneficios táctiles y aromáticos.</p>
       
-      <h4>🛁 Baños Aromáticos</h4>
+      <h4> bathtub Baños Aromáticos</h4>
       <p>Inmersión terapéutica que permite absorción transdérmica mientras se inhalan los vapores curativos.</p>
       
-      <h4>🧘‍♀️ Inhalación Directa</h4>
+      <h4> woman_getting_massage Inhalación Directa</h4>
       <p>Técnicas de respiración consciente con aceites específicos para efectos inmediatos sobre estado mental y emocional.</p>
       
       <h3>Aceites Esenciales y Sus Aplicaciones</h3>
@@ -293,7 +300,7 @@ export const services: Service[] = [
         <li><strong>Eucalipto (Eucalyptus globulus):</strong> Despeja mente y vías respiratorias</li>
       </ul>
       
-      <h4>🌿 Para Sistema Respiratorio</h4>
+      <h4>🌳 Para Sistema Respiratorio</h4>
       <ul>
         <li><strong>Árbol de Té (Melaleuca alternifolia):</strong> Antimicrobiano potente, ideal para infecciones</li>
         <li><strong>Ravintsara (Cinnamomum camphora):</strong> Antiviral excepcional, fortalece inmunidad</li>
@@ -325,7 +332,7 @@ export const services: Service[] = [
       
       <h3>Protocolos de Tratamiento</h3>
       
-      <h4>🎯 Protocolo Anti-Estrés (4 semanas)</h4>
+      <h4>🧘 Protocolo Anti-Estrés (4 semanas)</h4>
       <p><strong>Semana 1-2:</strong> Difusión de lavanda 20 min/día + baño con bergamota 2x/semana</p>
       <p><strong>Semana 3-4:</strong> Masaje semanal con mezcla personalizada + inhalación de emergencia</p>
       
@@ -363,7 +370,7 @@ export const services: Service[] = [
       <h4>👶 Uso Pediátrico</h4>
       <p>Diluciones específicas según edad. Evitar mentol en menores de 3 años. Preferir aceites suaves como lavanda y manzanilla.</p>
       
-      <h4>🔆 Fotosensibilización</h4>
+      <h4>☀️ Fotosensibilización</h4>
       <p>Cítricos (bergamota, limón, lima) pueden causar manchas con exposición solar. No aplicar 12 horas antes de sol directo.</p>
       
       <h3>Integración con Otras Terapias</h3>
@@ -377,9 +384,9 @@ export const services: Service[] = [
       
       <p>La aromaterapia moderna combina arte olfativo milenario con neurociencia contemporánea, ofreciendo herramientas precisas para el bienestar integral a través del poder transformador de los aromas naturales.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 60,
-    price: 65.00,
+    price: 65.0,
     category: 'Terapia',
     benefits: [
       'Equilibrio emocional inmediato',
@@ -394,8 +401,10 @@ export const services: Service[] = [
       'Asma severo (precaución con inhalaciones)',
       'Alergias conocidas a plantas específicas',
     ],
-    whatToExpect: 'Durante la sesión, seleccionaremos aceites específicos según tu estado emocional y objetivos terapéuticos. Experimentarás relajación profunda mientras los aromas actúan sobre tu sistema nervioso. Recibirás mezclas personalizadas para uso doméstico.',
-    preparation: 'Evita perfumes o productos aromáticos fuertes el día de la sesión. Informa sobre alergias, asma o sensibilidades. Ven con ropa cómoda y mente abierta para experimentar el poder transformador de los aromas naturales.',
+    whatToExpect:
+      'Durante la sesión, seleccionaremos aceites específicos según tu estado emocional y objetivos terapéuticos. Experimentarás relajación profunda mientras los aromas actúan sobre tu sistema nervioso. Recibirás mezclas personalizadas para uso doméstico.',
+    preparation:
+      'Evita perfumes o productos aromáticos fuertes el día de la sesión. Informa sobre alergias, asma o sensibilidades. Ven con ropa cómoda y mente abierta para experimentar el poder transformador de los aromas naturales.',
   },
   {
     id: 'reflexologia-podal',
@@ -418,7 +427,7 @@ export const services: Service[] = [
         <li><strong>Neuroplasticidad:</strong> Estimula nuevas conexiones neurales a través del tacto terapéutico</li>
       </ul>
       
-      <h4>🩸 Sistema Circulatorio</h4>
+      <h4>💧 Sistema Circulatorio</h4>
       <ul>
         <li>Mejora circulación sanguínea y linfática</li>
         <li>Reduce edemas y retención de líquidos</li>
@@ -436,7 +445,7 @@ export const services: Service[] = [
       
       <h3>Mapas Reflejos Detallados</h3>
       
-      <h4>👤 Pie Derecho - Lado Derecho del Cuerpo</h4>
+      <h4>🦶 Pie Derecho - Lado Derecho del Cuerpo</h4>
       
       <h5>🧠 Zona de la Cabeza (Dedos del Pie)</h5>
       <ul>
@@ -455,7 +464,7 @@ export const services: Service[] = [
         <li><strong>Borde externo:</strong> Brazo, hombro, costillas</li>
       </ul>
       
-      <h5>🫄 Zona Abdominal (Arco Medio)</h5>
+      <h5> abdomen Zona Abdominal (Arco Medio)</h5>
       <ul>
         <li><strong>Borde interno:</strong> Columna vertebral, médula espinal</li>
         <li><strong>Centro:</strong> Estómago, páncreas, duodeno</li>
@@ -463,7 +472,7 @@ export const services: Service[] = [
         <li><strong>Área superior:</strong> Glándulas suprarrenales</li>
       </ul>
       
-      <h5>🦴 Zona Pélvica (Talón)</h5>
+      <h5>🍑 Zona Pélvica (Talón)</h5>
       <ul>
         <li><strong>Talón interno:</strong> Útero, próstata, vejiga</li>
         <li><strong>Talón externo:</strong> Ovarios, testículos</li>
@@ -471,7 +480,7 @@ export const services: Service[] = [
         <li><strong>Tendón Aquiles:</strong> Coxis, recto</li>
       </ul>
       
-      <h4>👤 Pie Izquierdo - Lado Izquierdo del Cuerpo</h4>
+      <h4>🦶 Pie Izquierdo - Lado Izquierdo del Cuerpo</h4>
       
       <h5>Especialidades del Pie Izquierdo:</h5>
       <ul>
@@ -483,7 +492,7 @@ export const services: Service[] = [
       
       <h3>Técnicas de Estimulación</h3>
       
-      <h4>✋ Técnica del Pulgar</h4>
+      <h4>✍️ Técnica del Pulgar</h4>
       <p><strong>Aplicación:</strong> Presión firme y constante con la yema del pulgar</p>
       <p><strong>Movimiento:</strong> Pequeños círculos en sentido horario</p>
       <p><strong>Intensidad:</strong> 3-7 en escala de 10, según tolerancia</p>
@@ -506,13 +515,13 @@ export const services: Service[] = [
       
       <h3>Protocolos Terapéuticos Específicos</h3>
       
-      <h4>💤 Protocolo Anti-Estrés e Insomnio</h4>
+      <h4>💖 Protocolo Anti-Estrés e Insomnio</h4>
       <p><strong>Duración:</strong> 45-60 minutos</p>
       <p><strong>Secuencia:</strong></p>
       <ul>
         <li>Relajación general (10 min): Masaje completo para preparar</li>
         <li>Sistema nervioso (15 min): Dedo gordo, zona cerebral, plexo solar</li>
-        <li>Glándulas endocrinas (10 min): Hipófisis, tiroides, suprarrenales</li>
+        <li>Glóndulas endocrinas (10 min): Hipófisis, tiroides, suprarrenales</li>
         <li>Sistema digestivo (10 min): Estómago, intestinos para serotonina</li>
         <li>Finalización (10 min): Técnicas de integración y equilibrio</li>
       </ul>
@@ -537,7 +546,7 @@ export const services: Service[] = [
         <li>Nervios (10 min): Alivio del dolor neurálgico</li>
       </ul>
       
-      <h4>🫀 Protocolo Cardiovascular</h4>
+      <h4>❤️ Protocolo Cardiovascular</h4>
       <p><strong>Objetivos:</strong> Mejorar circulación, regular presión arterial</p>
       <p><strong>Puntos clave:</strong></p>
       <ul>
@@ -565,7 +574,7 @@ export const services: Service[] = [
       
       <h3>Beneficios Específicos por Sistema</h3>
       
-      <h4>🧘‍♀️ Sistema Nervioso</h4>
+      <h4>🧠 Sistema Nervioso</h4>
       <ul>
         <li>Reducción 40-60% en niveles de cortisol</li>
         <li>Mejora calidad del sueño en 80% de casos</li>
@@ -573,7 +582,7 @@ export const services: Service[] = [
         <li>Aumento de concentración y claridad mental</li>
       </ul>
       
-      <h4>🩸 Sistema Circulatorio</h4>
+      <h4>💧 Sistema Circulatorio</h4>
       <ul>
         <li>Mejora de 20-30% en circulación periférica</li>
         <li>Reducción de edemas en extremidades</li>
@@ -581,7 +590,7 @@ export const services: Service[] = [
         <li>Optimización del retorno venoso</li>
       </ul>
       
-      <h4>🛡️ Sistema Inmunológico</h4>
+      <h4>💪 Sistema Inmunológico</h4>
       <ul>
         <li>Fortalecimiento de defensas naturales</li>
         <li>Reducción de infecciones recurrentes</li>
@@ -603,221 +612,13 @@ export const services: Service[] = [
       <ul>
         <li><strong>Diabetes:</strong> Presión suave, monitoreo de sensibilidad</li>
         <li><strong>Osteoporosis:</strong> Técnicas adaptadas, presión reducida</li>
-        <li><strong>Medicación:</strong> Posible modificación de efectos</li>
+        <li><strong>Medicaciín:</strong> Posible modificación de efectos</li>
         <li><strong>Embarazo:</strong> Evitar puntos que estimulen contracciones</li>
-      </ul>
-      
-      <h3>Integración con Medicina Convencional</h3>
-      <p>La reflexología podal es altamente compatible con tratamientos médicos convencionales:</p>
-      <ul>
-        <li><strong>Complementa medicación:</strong> Sin interferencias farmacológicas</li>
-        <li><strong>Acelera recuperación:</strong> Post-cirugía, post-tratamientos</li>
-        <li><strong>Reduce efectos secundarios:</strong> Quimioterapia, medicación crónica</li>
-        <li><strong>Mejora adherencia:</strong> Bienestar general que motiva autocuidado</li>
-      </ul>
-      
-      <p>La reflexología podal representa una ventana terapéutica excepcional hacia la salud integral, ofreciendo un método no invasivo, natural y profundamente efectivo para activar los poderes curativos innatos del organismo.</p>
-    `,
-    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
-    duration: 60,
-    price: 55.00,
-    category: 'Terapia Manual',
-    benefits: [
-      'Mejora circulación sanguínea y linfática',
-      'Reducción significativa del estrés',
-      'Equilibrio del sistema nervioso',
-      'Estimulación de autocuración natural',
-      'Alivio de dolores y tensiones',
-    ],
-    contraindications: [
-      'Trombosis venosa profunda',
-      'Infecciones del pie',
-      'Fracturas no consolidadas',
-      'Embarazo primer trimestre',
-    ],
-    whatToExpect: 'Durante la sesión, trabajaremos meticulosamente cada zona refleja de tus pies. Sentirás presiones específicas que pueden generar sensaciones particulares en áreas corporales correspondientes. Es normal experimentar relajación profunda y sensaciones de "despertar" en diferentes órganos.',
-    preparation: 'Usa ropa cómoda que permita acceso fácil a pies y piernas hasta rodillas. Mantén pies limpios y uñas cortas. Evita comidas pesadas 2 horas antes. Informa sobre condiciones médicas, medicamentos o cirugías recientes.',
-  },
-  {
-    id: 'terapia-craneosacral',
-    title: 'Terapia Cráneosacral',
-    slug: 'terapia-craneosacral',
-    description:
-      'Técnica manual sutil que trabaja con el sistema cráneosacral para liberar restricciones en membranas y tejidos que rodean el sistema nervioso central, promoviendo la autocuración natural del organismo.',
-    detailedContent: `
-      <h2>El Sistema Cráneosacral: Centro de Vitalidad</h2>
-      <p>El sistema cráneosacral comprende las membranas y el líquido cefalorraquídeo que rodean y protegen el cerebro y la médula espinal. Este sistema tiene su propio ritmo fisiológico, distinto del cardíaco y respiratorio, que refleja el estado de salud del sistema nervioso central.</p>
-      
-      <h3>Anatomía y Fisiología del Sistema</h3>
-      
-      <h4>🧠 Componentes Anatómicos</h4>
-      <ul>
-        <li><strong>Huesos del Cráneo:</strong> 22 huesos móviles interconectados por suturas</li>
-        <li><strong>Sacro y Cóccix:</strong> Base de la columna que completa el sistema</li>
-        <li><strong>Meninges:</strong> Duramadre, aracnoides y piamadre que protegen el SNC</li>
-        <li><strong>Líquido Cefalorraquídeo (LCR):</strong> Fluido vital que nutre y protege</li>
-        <li><strong>Membranas de Tensión Recíproca:</strong> Red fascial que conecta todo el sistema</li>
-      </ul>
-      
-      <h4>💧 El Ritmo Cráneosacral</h4>
-      <p>El LCR tiene un ciclo de producción y reabsorción que crea un ritmo sutil de 6-12 ciclos por minuto. Este ritmo puede ser palpado por manos entrenadas y refleja:</p>
-      <ul>
-        <li><strong>Amplitud:</strong> Fuerza vital del sistema</li>
-        <li><strong>Simetría:</strong> Equilibrio entre hemisferios</li>
-        <li><strong>Calidad:</strong> Fluidez y vitalidad del movimiento</li>
-        <li><strong>Ritmo:</strong> Regularidad y consistencia</li>
-      </ul>
-      
-      <h3>Principios Terapéuticos Fundamentales</h3>
-      
-      <h4>🌊 Motilidad Inherente</h4>
-      <p>Cada tejido del cuerpo tiene un movimiento rítmico inherente que refleja su vitalidad. La terapia busca restaurar esta motilidad natural cuando está comprometida.</p>
-      
-      <h4>🔄 Autocorrección</h4>
-      <p>El cuerpo posee una sabiduría innata para curarse. Nuestro papel es facilitar y no dirigir este proceso natural de sanación.</p>
-      
-      <h4>✋ Contacto Mínimo, Efecto Máximo</h4>
-      <p>Utilizamos un toque extremadamente suave (5 gramos de presión, equivalente al peso de una moneda) para acceder a cambios profundos en el sistema.</p>
-      
-      <h4>🎯 Escucha Tisular</h4>
-      <p>Las manos actúan como "órganos de percepción" que sienten patrones de tensión, restricción y liberación en los tejidos.</p>
-      
-      <h3>Técnicas Terapéuticas Específicas</h3>
-      
-      <h4>🎭 Liberación de Base de Cráneo</h4>
-      <p><strong>Objetivo:</strong> Descomprimir la unión cráneo-cervical donde se concentran tensiones</p>
-      <p><strong>Técnica:</strong> Contacto suave en occipucio, tracción mínima para crear espacio</p>
-      <p><strong>Efectos:</strong> Mejora circulación LCR, reduce cefaleas, libera tensión cervical</p>
-      
-      <h4>🌀 Descompresión del Esfenoides</h4>
-      <p><strong>Localización:</strong> Hueso central del cráneo, "silla turca" de la hipófisis</p>
-      <p><strong>Importancia:</strong> Centro de movimiento craneal, influye en todo el sistema hormonal</p>
-      <p><strong>Técnica:</strong> Contacto temporal bilateral, facilitación de movimiento natural</p>
-      
-      <h4>🦴 Movilización Sacral</h4>
-      <p><strong>Conexión:</strong> El sacro es la base del sistema cráneosacral</p>
-      <p><strong>Técnica:</strong> Contacto en sacro, sincronización con ritmo craneal</p>
-      <p><strong>Beneficios:</strong> Equilibra todo el sistema, mejora función pélvica</p>
-      
-      <h4>🧘‍♀️ Técnica de Still Point</h4>
-      <p><strong>Definición:</strong> Pausa terapéutica en el ritmo cráneosacral</p>
-      <p><strong>Inducción:</strong> Restricción suave del movimiento natural hasta que se detiene</p>
-      <p><strong>Efecto:</strong> Reseteo del sistema, profunda relajación, liberación de restricciones</p>
-      
-      <h4>🌊 Desenrollado Fascial</h4>
-      <p><strong>Concepto:</strong> Liberación de patrones de tensión acumulados en fascias</p>
-      <p><strong>Proceso:</strong> Seguimiento del movimiento espontáneo de los tejidos</p>
-      <p><strong>Resultado:</strong> Restauración de la continuidad fascial y función óptima</p>
-      
-      <h3>Protocolos de Evaluación</h3>
-      
-      <h4>🔍 Evaluación de 10 Pasos</h4>
-      <ol>
-        <li><strong>Evaluación General:</strong> Observación postural y patrones de tensión</li>
-        <li><strong>Inducción:</strong> Establecimiento de contacto y sintonización</li>
-        <li><strong>Diafragmas:</strong> Evaluación de diafragma pélvico, respiratorio, torácico superior y tentorio</li>
-        <li><strong>Tubo Dural:</strong> Movilidad de la duramadre espinal</li>
-        <li><strong>Base de Cráneo:</strong> Libertad de movimiento occipito-atlantal</li>
-        <li><strong>Esfenoides:</strong> Motilidad del hueso central</li>
-        <li><strong>Temporales:</strong> Simetría y amplitud del movimiento</li>
-        <li><strong>Parietales:</strong> Flexión y extensión craneal</li>
-        <li><strong>Frontal:</strong> Integración anterior del cráneo</li>
-        <li><strong>Integración:</strong> Armonización de todo el sistema</li>
-      </ol>
-      
-      <h3>Aplicaciones Terapéuticas Específicas</h3>
-      
-      <h4>🤕 Cefaleas y Migrañas</h4>
-      <p><strong>Mecanismo:</strong> Compresiones craneales y restricciones durales causan presión intracraneal</p>
-      <p><strong>Enfoque:</strong> Liberación de suturas, descompresión vascular, equilibrio del LCR</p>
-      <p><strong>Resultados:</strong> 70-80% reducción en frecuencia e intensidad de cefaleas</p>
-      
-      <h4>😰 Trastornos del Estado de Ánimo</h4>
-      <p><strong>Conexión:</strong> Sistema nervioso autónomo y regulación emocional</p>
-      <p><strong>Técnicas:</strong> Still points, liberación de diafragmas, armonización del ritmo</p>
-      <p><strong>Beneficios:</strong> Reducción de ansiedad, mejora del humor, mayor estabilidad emocional</p>
-      
-      <h4>😴 Trastornos del Sueño</h4>
-      <p><strong>Fisiopatología:</strong> Desregulación del sistema nervioso autónomo</p>
-      <p><strong>Intervención:</strong> Activación parasimpática, equilibrio pineal</p>
-      <p><strong>Resultados:</strong> Mejora calidad y profundidad del sueño</p>
-      
-      <h4>🧠 Trauma Craneal y Conmoción</h4>
-      <p><strong>Problemas:</strong> Restricciones durales, compresiones óseas, alteración del LCR</p>
-      <p><strong>Tratamiento:</strong> Liberación gradual de restricciones, restauración del ritmo</p>
-      <p><strong>Recuperación:</strong> Aceleración de la curación neurológica</p>
-      
-      <h4>👶 Pediatría Especializada</h4>
-      <p><strong>Trauma de Nacimiento:</strong> Compresiones por parto difícil</p>
-      <p><strong>Cólicos Infantiles:</strong> Compresión del nervio vago</p>
-      <p><strong>Hiperactividad:</strong> Desregulación del sistema nervioso</p>
-      <p><strong>Enfoque:</strong> Técnicas ultra-suaves adaptadas a la delicadeza infantil</p>
-      
-      <h3>Fases del Tratamiento</h3>
-      
-      <h4>🔄 Fase de Evaluación (Sesiones 1-2)</h4>
-      <ul>
-        <li>Mapeo completo de restricciones</li>
-        <li>Establecimiento del patrón de salud</li>
-        <li>Identificación de prioridades terapéuticas</li>
-        <li>Respuesta inicial del sistema</li>
-      </ul>
-      
-      <h4>🛠️ Fase de Liberación (Sesiones 3-8)</h4>
-      <ul>
-        <li>Trabajo sistemático de restricciones primarias</li>
-        <li>Liberación de compensaciones secundarias</li>
-        <li>Restauración de la motilidad inherente</li>
-        <li>Integración de cambios neurológicos</li>
-      </ul>
-      
-      <h4>🌟 Fase de Integración (Sesiones 9-12)</h4>
-      <ul>
-        <li>Estabilización de nuevos patrones</li>
-        <li>Optimización de la función global</li>
-        <li>Prevención de recurrencias</li>
-        <li>Autocuidado y mantenimiento</li>
-      </ul>
-      
-      <h3>Respuestas Terapéuticas</h3>
-      
-      <h4>⚡ Liberaciones Inmediatas</h4>
-      <ul>
-        <li><strong>Calor local:</strong> Aumento de circulación en área tratada</li>
-        <li><strong>Relajación profunda:</strong> Activación parasimpática</li>
-        <li><strong>Sensaciones de "apertura":</strong> Liberación de restricciones</li>
-        <li><strong>Movimientos espontáneos:</strong> Autocorrección tisular</li>
-      </ul>
-      
-      <h4>🌱 Cambios Progresivos</h4>
-      <ul>
-        <li><strong>Mejora postural:</strong> Alineación natural sin esfuerzo</li>
-        <li><strong>Respiración más profunda:</strong> Liberación diafragmática</li>
-        <li><strong>Mayor claridad mental:</strong> Optimización del LCR</li>
-        <li><strong>Estabilidad emocional:</strong> Regulación del SNA</li>
-      </ul>
-      
-      <h3>Contraindicaciones y Precauciones</h3>
-      
-      <h4>🚫 Contraindicaciones Absolutas</h4>
-      <ul>
-        <li>Fractura craneal reciente (menos de 6 meses)</li>
-        <li>Aneurisma cerebral agudo</li>
-        <li>Herniación cerebral aguda</li>
-        <li>Hemorragia intracraneal activa</li>
-      </ul>
-      
-      <h4>⚠️ Precauciones Especiales</h4>
-      <ul>
-        <li><strong>Epilepsia:</strong> Técnicas modificadas, evitar still points prolongados</li>
-        <li><strong>Medicación psiquiátrica:</strong> Posibles cambios en efectos</li>
-        <li><strong>Embarazo:</strong> Técnicas adaptadas, evitar sacro en primer trimestre</li>
-        <li><strong>Edad avanzada:</strong> Presión ultra-suave, sesiones más cortas</li>
       </ul>
       
       <h3>Investigación y Evidencia Científica</h3>
       
-      <h4>📊 Estudios Clínicos</h4>
+      <h4>📚 Estudios Clínicos</h4>
       <ul>
         <li><strong>Cefaleas tensionales:</strong> 85% mejora significativa (Journal of Bodywork)</li>
         <li><strong>Fibromialgia:</strong> Reducción 40% en intensidad del dolor</li>
@@ -825,7 +626,7 @@ export const services: Service[] = [
         <li><strong>Depresión post-parto:</strong> Reducción significativa de síntomas</li>
       </ul>
       
-      <h4>🔬 Mecanismos Validados</h4>
+      <h4>⚙️ Mecanismos Validados</h4>
       <ul>
         <li>Modulación del tono vagal</li>
         <li>Regulación del eje hipotálamo-hipófisis-suprarrenal</li>
@@ -844,9 +645,9 @@ export const services: Service[] = [
       
       <p>La terapia cráneosacral representa un arte refinado de escucha corporal que honra la sabiduría innata del organismo, facilitando profundos procesos de autocuración a través del tacto consciente y la presencia terapéutica.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 90,
-    price: 75.00,
+    price: 75.0,
     category: 'Terapia Manual',
     benefits: [
       'Liberación profunda de tensiones cráneo-cervicales',
@@ -861,8 +662,10 @@ export const services: Service[] = [
       'Hemorragia intracraneal',
       'Herniación cerebral aguda',
     ],
-    whatToExpect: 'Durante la sesión, permanecerás vestido mientras aplico un toque extremadamente suave en cabeza, cuello y sacro. Puedes experimentar sensaciones de calor, relajación profunda, o movimientos sutiles. Muchas personas entran en estados meditativos profundos.',
-    preparation: 'Usa ropa cómoda y holgada. Evita alcohol y estimulantes 24 horas antes. Informa sobre medicación neurológica, trauma craneal previo o cirugías. Ven con mente abierta para experimentar sutilezas terapéuticas profundas.',
+    whatToExpect:
+      'Durante la sesión, permanecerás vestido mientras aplico un toque extremadamente suave en cabeza, cuello y sacro. Puedes experimentar sensaciones de calor, relajación profunda, o movimientos sutiles. Muchas personas entran en estados meditativos profundos.',
+    preparation:
+      'Usa ropa cómoda y holgada. Evita alcohol y estimulantes 24 horas antes. Informa sobre medicación neurológica, trauma craneal previo o cirugías. Ven con mente abierta para experimentar sutilezas terapéuticas profundas.',
   },
   {
     id: 'quiromasaje',
@@ -876,7 +679,7 @@ export const services: Service[] = [
       
       <h3>Fundamentos Científicos</h3>
       
-      <h4>🔬 Efectos Fisiológicos del Masaje</h4>
+      <h4>⚙️ Efectos Fisiológicos del Masaje</h4>
       
       <h5>Sistema Circulatorio</h5>
       <ul>
@@ -904,7 +707,7 @@ export const services: Service[] = [
       
       <h3>Técnicas Fundamentales</h3>
       
-      <h4>✋ Effleurage (Pases Largos)</h4>
+      <h4>✍️ Effleurage (Pases Largos)</h4>
       <p><strong>Descripción:</strong> Movimientos deslizantes, suaves y rítmicos con palma completa</p>
       <p><strong>Objetivos:</strong></p>
       <ul>
@@ -933,7 +736,7 @@ export const services: Service[] = [
         <li><strong>Fricción profunda:</strong> Para adherencias y cicatrices</li>
       </ul>
       
-      <h4>🥁 Percusión (Tapotement)</h4>
+      <h4>👋 Percusión (Tapotement)</h4>
       <p><strong>Técnicas:</strong></p>
       <ul>
         <li><strong>Palmoteo:</strong> Con palmas cóncavas, estimulante suave</li>
@@ -944,7 +747,7 @@ export const services: Service[] = [
       
       <h3>Especialidades Terapéuticas</h3>
       
-      <h4>🔧 Quiromasaje Descontracturante</h4>
+      <h4>🛠️ Quiromasaje Descontracturante</h4>
       <p><strong>Protocolo Específico:</strong></p>
       <ol>
         <li><strong>Evaluación postural (5 min):</strong> Identificación de patrones tensionales</li>
@@ -954,12 +757,12 @@ export const services: Service[] = [
         <li><strong>Integración (5 min):</strong> Movimientos suaves de finalización</li>
       </ol>
       
-      <h4>🏃‍♂️ Masaje Deportivo</h4>
+      <h4>🏃 Masaje Deportivo</h4>
       <p><strong>Pre-competición:</strong> Activación neuromuscular, calentamiento</p>
       <p><strong>Post-esfuerzo:</strong> Recuperación, eliminación de ácido láctico</p>
       <p><strong>Mantenimiento:</strong> Prevención de lesiones, optimización del rendimiento</p>
       
-      <h4>🧘‍♀️ Masaje de Relajación</h4>
+      <h4>😴 Masaje de Relajación</h4>
       <p><strong>Características:</strong></p>
       <ul>
         <li>Ritmo lento y constante</li>
@@ -1005,9 +808,9 @@ export const services: Service[] = [
       
       <p>El quiromasaje representa una síntesis perfecta entre conocimiento anatómico, habilidad manual y sensibilidad terapéutica, ofreciendo un enfoque integral para la salud del sistema musculoesquelético.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 60,
-    price: 60.00,
+    price: 60.0,
     category: 'Masaje',
     benefits: [
       'Liberación profunda de contracturas musculares',
@@ -1022,8 +825,10 @@ export const services: Service[] = [
       'Fracturas no consolidadas',
       'Lesiones cutáneas graves',
     ],
-    whatToExpect: 'Durante la sesión, aplicaré diferentes técnicas manuales adaptadas a tus necesidades específicas. Sentirás una presión variable que puede generar algunas molestias en zonas tensas, seguidas de alivio y relajación. Es normal experimentar somnolencia post-tratamiento.',
-    preparation: 'Ven con ropa interior cómoda o ropa deportiva. Evita comidas pesadas 2 horas antes. Informa sobre lesiones previas, medicación anticoagulante o condiciones médicas. Hidrátate bien antes y después de la sesión.',
+    whatToExpect:
+      'Durante la sesión, aplicaré diferentes técnicas manuales adaptadas a tus necesidades específicas. Sentirás una presión variable que puede generar algunas molestias en zonas tensas, seguidas de alivio y relajación. Es normal experimentar somnolencia post-tratamiento.',
+    preparation:
+      'Ven con ropa interior cómoda o ropa deportiva. Evita comidas pesadas 2 horas antes. Informa sobre lesiones previas, medicación anticoagulante o condiciones médicas. Hidrátate bien antes y después de la sesión.',
   },
   {
     id: 'reiki',
@@ -1033,18 +838,18 @@ export const services: Service[] = [
       'Ancestral arte de sanación energética japonés que canaliza la energía vital universal a través de la imposición de manos, promoviendo la autocuración, el equilibrio de chakras y la armonización integral del ser.',
     detailedContent: `
       <h2>La Sabiduría Ancestral del Reiki</h2>
-      <p>El Reiki (霊気) es un sistema de sanación energética que significa "energía espiritual" o "energía vital universal". Desarrollado por el Dr. Mikao Usui en Japón en 1922, combina técnicas meditativas, imposición de manos y canalización de energía para promover la autocuración y el equilibrio integral.</p>
+      <p>El Reiki (éœŠæ°—) es un sistema de sanación energética que significa "energía espiritual" o "energía vital universal". Desarrollado por el Dr. Mikao Usui en Japón en 1922, combina técnicas meditativas, imposición de manos y canalización de energía para promover la autocuración y el equilibrio integral.</p>
       
       <h3>Los Cinco Principios del Reiki</h3>
       <p>La filosofía del Reiki se fundamenta en cinco principios que guían tanto la práctica como la vida cotidiana:</p>
       
-      <h4>🌅 Solo por hoy, no te enfades</h4>
+      <h4>🌳 Solo por hoy, no te enfades</h4>
       <p>La ira bloquea el flujo de energía vital. Cultivamos la paciencia y la comprensión como caminos hacia la sanación emocional.</p>
       
-      <h4>🌿 Solo por hoy, no te preocupes</h4>
+      <h4>🙏 Solo por hoy, no te preocupes</h4>
       <p>La preocupación excesiva agota la energía. Desarrollamos confianza en el proceso natural de la vida y en nuestra capacidad de adaptación.</p>
       
-      <h4>🙏 Solo por hoy, sé agradecido</h4>
+      <h4>✨ Solo por hoy, sé agradecido</h4>
       <p>La gratitud eleva nuestra vibración energética y atrae experiencias positivas. Reconocemos las bendiciones presentes en cada momento.</p>
       
       <h4>💼 Solo por hoy, trabaja honestamente</h4>
@@ -1159,7 +964,7 @@ export const services: Service[] = [
       
       <h3>Técnicas de Tratamiento</h3>
       
-      <h4>✋ Posiciones de Manos Tradicionales</h4>
+      <h4>✍️ Posiciones de Manos Tradicionales</h4>
       
       <h5>Posiciones Frontales (30-45 min)</h5>
       <ol>
@@ -1175,7 +980,7 @@ export const services: Service[] = [
         <li><strong>Piernas:</strong> Glúteos, isquiotibiales, pantorrillas (3 posiciones)</li>
       </ol>
       
-      <h4>🎯 Técnicas Especializadas</h4>
+      <h4>✨ Técnicas Especializadas</h4>
       
       <h5>Byosen (Escaneado Energético)</h5>
       <p>Técnica de diagnóstico energético que detecta áreas de desequilibrio a través de sensaciones en las manos del practicante.</p>
@@ -1191,7 +996,7 @@ export const services: Service[] = [
       
       <h3>Beneficios Terapéuticos Documentados</h3>
       
-      <h4>📊 Evidencia Científica</h4>
+      <h4>📚 Evidencia Científica</h4>
       <ul>
         <li><strong>Ansiedad:</strong> Reducción significativa en escalas validadas (estudios controlados)</li>
         <li><strong>Dolor crónico:</strong> Disminución 25-40% en intensidad</li>
@@ -1200,7 +1005,7 @@ export const services: Service[] = [
         <li><strong>Sistema inmune:</strong> Fortalecimiento de defensas naturales</li>
       </ul>
       
-      <h4>🩺 Aplicaciones Clínicas</h4>
+      <h4>🏥 Aplicaciones Clínicas</h4>
       <ul>
         <li><strong>Hospitales:</strong> Complemento en cuidados paliativos</li>
         <li><strong>Oncología:</strong> Apoyo durante quimioterapia y radioterapia</li>
@@ -1222,7 +1027,7 @@ export const services: Service[] = [
       <h5>Fase 3: Integración (10-15 min)</h5>
       <p>Sellado energético, ancla de la nueva vibración, regreso gradual a la consciencia ordinaria.</p>
       
-      <h4>💫 Sensaciones Comunes Durante el Tratamiento</h4>
+      <h4>🌟 Sensaciones Comunes Durante el Tratamiento</h4>
       <ul>
         <li><strong>Calor o frío:</strong> Movimiento de energía en áreas específicas</li>
         <li><strong>Hormigueo:</strong> Activación de centros energéticos</li>
@@ -1233,7 +1038,7 @@ export const services: Service[] = [
       
       <h3>Reiki a Distancia</h3>
       
-      <h4>🌐 Principios Cuánticos</h4>
+      <h4>🌌 Principios Cuánticos</h4>
       <p>La sanación a distancia se fundamenta en principios de física cuántica:</p>
       <ul>
         <li><strong>No-localidad:</strong> Conexión instantánea más allá del espacio-tiempo</li>
@@ -1242,7 +1047,7 @@ export const services: Service[] = [
         <li><strong>Campo mórfico:</strong> Información compartida en el campo universal</li>
       </ul>
       
-      <h4>🕘 Protocolo de Sesión a Distancia</h4>
+      <h4>⏱️ Protocolo de Sesión a Distancia</h4>
       <ol>
         <li><strong>Preparación:</strong> Meditación, conexión, establecimiento de intención</li>
         <li><strong>Invocación:</strong> Activación de símbolos sagrados</li>
@@ -1261,7 +1066,7 @@ export const services: Service[] = [
         <li><strong>Plantas sagradas:</strong> Salvia, palo santo, copal</li>
       </ul>
       
-      <h4>🧘‍♀️ Prácticas Diarias</h4>
+      <h4>🧘 Prácticas Diarias</h4>
       <ul>
         <li><strong>Autotratamiento:</strong> 30 minutos diarios mínimo</li>
         <li><strong>Meditación Gassho:</strong> Conexión con la fuente</li>
@@ -1281,9 +1086,9 @@ export const services: Service[] = [
       
       <p>El Reiki trasciende las limitaciones de la sanación física para abrazar la totalidad del ser humano: cuerpo, mente, emociones y espíritu, ofreciendo un camino de transformación y despertar a través del amor universal.</p>
     `,
-    imageUrl: 'https://images.unsplash.com/photo-1591343395902-e4bb246c4952?w=400&h=300&fit=crop&crop=center&auto=format&q=80',
+    imageUrl: '/images/og-image.jpg',
     duration: 60,
-    price: 70.00,
+    price: 70.0,
     category: 'Terapia Energética',
     benefits: [
       'Equilibrio profundo de los chakras',
@@ -1298,7 +1103,9 @@ export const services: Service[] = [
       'Resistencia absoluta a terapias energéticas',
       'Intoxicación severa por sustancias',
     ],
-    whatToExpect: 'Durante la sesión permanecerás vestido y relajado mientras coloco mis manos suavemente sobre diferentes áreas de tu cuerpo. Puedes experimentar sensaciones de calor, frío, hormigueo o profunda paz. Muchas personas experimentan liberaciones emocionales o estados meditativos.',
-    preparation: 'Usa ropa cómoda y holgada, preferiblemente de fibras naturales. Mantén la mente abierta y receptiva. Evita alcohol y drogas 24 horas antes. Hidrátate bien y ven con intención clara de sanación. Informa sobre marcapasos o implantes electrónicos.',
+    whatToExpect:
+      'Durante la sesión permanecerás vestido y relajado mientras coloco mis manos suavemente sobre diferentes áreas de tu cuerpo. Puedes experimentar sensaciones de calor, frío, hormigueo o profunda paz. Muchas personas experimentan liberaciones emocionales o estados meditativos.',
+    preparation:
+      'Usa ropa cómoda y holgada, preferiblemente de fibras naturales. Mantén la mente abierta y receptiva. Evita alcohol y drogas 24 horas antes. Hidrátate bien y ven con intención clara de sanación. Informa sobre marcapasos o implantes electrónicos.',
   },
 ];

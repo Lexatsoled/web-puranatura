@@ -1,6 +1,7 @@
 # 🚀 Guía de Despliegue y Producción
 
 ## 📋 Tabla de Contenidos
+
 - [Preparación para Producción](#preparación-para-producción)
 - [Build y Optimización](#build-y-optimización)
 - [Despliegue en Vercel](#despliegue-en-vercel)
@@ -28,7 +29,7 @@ VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 VITE_GOOGLE_TAG_MANAGER_ID=GTM-XXXXXXX
 
 # SEO
-VITE_SITE_URL=https://purezanaturalis.com
+VITE_SITE_URL=https://web.purezanaturalis.com
 VITE_SITE_NAME=Pureza Naturalis
 
 # Performance
@@ -45,19 +46,19 @@ export default defineConfig({
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true
-      }
+        drop_debugger: true,
+      },
     },
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          ui: ['framer-motion']
-        }
-      }
-    }
-  }
+          ui: ['framer-motion'],
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -81,6 +82,7 @@ npx vite-bundle-analyzer dist
 ### Optimizaciones Aplicadas
 
 **📊 Bundle Splitting:**
+
 - ✅ Vendor chunk: 183KB (React, librerías)
 - ✅ Data chunk: 354KB (productos, contenido)
 - ✅ UI chunk: 116KB (componentes UI)
@@ -88,6 +90,7 @@ npx vite-bundle-analyzer dist
 - ✅ Components: 52KB (componentes base)
 
 **🚀 Performance:**
+
 - ✅ Code splitting automático
 - ✅ Tree shaking activado
 - ✅ Compresión Gzip/Brotli
@@ -286,11 +289,13 @@ www → proyecto-xyz.netlify.app
 ### SSL Certificate
 
 **Vercel:**
+
 - ✅ SSL automático via Let's Encrypt
 - ✅ Renovación automática
 - ✅ HTTP/2 y HTTP/3 habilitado
 
 **Netlify:**
+
 - ✅ SSL automático incluido
 - ✅ HTTPS redirect automático
 - ✅ Custom certificates supportados
@@ -347,14 +352,14 @@ import { gtag } from 'ga-gtag';
 export const initGA = () => {
   gtag('config', process.env.VITE_GOOGLE_ANALYTICS_ID, {
     page_title: document.title,
-    page_location: window.location.href
+    page_location: window.location.href,
   });
 };
 
 export const trackEvent = (action: string, category: string) => {
   gtag('event', action, {
     event_category: category,
-    event_label: window.location.pathname
+    event_label: window.location.pathname,
   });
 };
 ```
@@ -373,11 +378,11 @@ lhci autorun --upload.target=temporary-public-storage
 
 ```typescript
 // Sentry configuration
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 
 Sentry.init({
   dsn: process.env.VITE_SENTRY_DSN,
-  environment: process.env.VITE_APP_ENV
+  environment: process.env.VITE_APP_ENV,
 });
 ```
 
@@ -394,9 +399,9 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -407,7 +412,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - run: npm ci
       - run: npm run type-check
       - run: npm run lint
@@ -424,10 +429,10 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - run: npm ci
       - run: npm run build:prod
-      
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
@@ -440,11 +445,13 @@ jobs:
 ### Auto-Deployment
 
 **Vercel:**
+
 - ✅ Git integration automático
 - ✅ Preview deployments en PRs
 - ✅ Production deploy en merge a main
 
 **Netlify:**
+
 - ✅ Deploy automático desde Git
 - ✅ Branch previews
 - ✅ Deploy notifications
@@ -460,7 +467,7 @@ jobs:
 npx playwright test --config=playwright.config.production.ts
 
 # Performance testing
-npx lighthouse https://purezanaturalis.com --view
+npx lighthouse https://web.purezanaturalis.com --view
 ```
 
 ### Monitoring Checklist
@@ -482,6 +489,7 @@ npx lighthouse https://purezanaturalis.com --view
 ### Errores Comunes
 
 **Build Failures:**
+
 ```bash
 # Limpiar cache
 npm run validate
@@ -491,6 +499,7 @@ npm run build:prod
 ```
 
 **DNS Issues:**
+
 ```bash
 # Verificar propagación DNS
 nslookup purezanaturalis.com
@@ -498,6 +507,7 @@ dig purezanaturalis.com
 ```
 
 **SSL Problems:**
+
 ```bash
 # Verificar SSL
 openssl s_client -connect purezanaturalis.com:443
@@ -510,7 +520,7 @@ openssl s_client -connect purezanaturalis.com:443
 npx vite-bundle-analyzer dist
 
 # Lighthouse audit
-npx lighthouse https://purezanaturalis.com --output=html
+npx lighthouse https://web.purezanaturalis.com --output=html
 ```
 
 ---
@@ -524,6 +534,6 @@ npx lighthouse https://purezanaturalis.com --output=html
 
 ---
 
-*🚀 **Deploy Status:** Production Ready*  
-*📅 **Última actualización:** 2024-10-07*  
-*👨‍💻 **DevOps:** dev@purezanaturalis.com*
+_🚀 **Deploy Status:** Production Ready_  
+_📅 **Última actualización:** 2024-10-07_  
+_👨‍💻 **DevOps:** dev@purezanaturalis.com_

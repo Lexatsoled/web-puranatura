@@ -1,9 +1,9 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartStore } from './src/store/cartStore';
-import { useAuth } from './contexts/AuthContext';
-import AuthModal from './components/AuthModal';
-import UserMenu from './components/UserMenu';
+import { useAuth } from './src/hooks/useAuth';
+import AuthModal from './src/components/AuthModal';
+import UserMenu from './src/components/UserMenu';
 
 interface SimpleLayoutProps {
   children: ReactNode;
@@ -19,24 +19,18 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
   const handleCartClick = () => {
     navigate('/carrito');
   };
-  
-  const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
+
+  const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({
+    to,
+    children,
+  }) => {
     const isActive = location.pathname === to;
     return (
-      <Link 
-        to={to} 
-        className="nav-link"
-        style={{ 
-          margin: '0 1.5rem', 
-          color: isActive ? '#fbbf24' : 'white',
-          textDecoration: 'none',
-          fontWeight: isActive ? '700' : '500',
-          fontSize: '1rem',
-          padding: '0.5rem 0',
-          position: 'relative',
-          transition: 'all 0.3s ease'
-        }}
-      >
+      <Link
+        to={to}
+        className={`nav-link mx-6 text-white/90 text-base py-2 relative transition-all duration-300 ${
+          isActive ? 'font-bold text-white' : 'font-medium hover:text-white'
+        }`}>
         {children}
       </Link>
     );
@@ -51,16 +45,16 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
           }
-          
+
           .nav-link {
             position: relative;
             transition: all 0.3s ease;
           }
-          
+
           .nav-link:hover {
             transform: translateY(-2px);
           }
-          
+
           .nav-link::after {
             content: '';
             position: absolute;
@@ -72,51 +66,44 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
             transition: all 0.3s ease;
             transform: translateX(-50%);
           }
-          
+
           .nav-link:hover::after {
             width: 100%;
           }
         `}
       </style>
-      
+
       {/* Header con navegación funcional y carrito */}
-      <header style={{ 
-        backgroundColor: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-        background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-        color: 'white', 
-        padding: '1rem', 
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          width: '100%',
-          maxWidth: '1200px'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center',
+      <header
+        role="banner"
+        className="bg-primary text-white p-4 flex flex-col items-center shadow-lg"
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            flex: 1
-          }}>
-            <img 
-              src="/Logo Pureza Naturalis largo.jpg" 
-              alt="Pureza Naturalis" 
-              style={{ 
-                height: '70px', 
-                objectFit: 'contain',
-                backgroundColor: 'white',
-                borderRadius: '12px',
-                padding: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-              }} 
-            />
+            width: '100%',
+            maxWidth: '1200px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
+          >
+            <img
+              src="/logo-pureza-naturalis-largo_320.webp"
+              alt="Pureza Naturalis"
+              loading="eager"
+              decoding="async"
+              className="h-[70px] object-contain bg-white rounded-xl p-2 shadow-md"
+            />{' '}
           </div>
-          
+
           {/* Controles del header - Autenticación y Carrito */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {/* Sistema de autenticación */}
@@ -125,64 +112,40 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
-                  color: 'white',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '1.5rem',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                }}
+                className="bg-white border-2 border-white/50 text-primary px-4 py-2 rounded-full cursor-pointer text-sm font-semibold transition-all duration-300 flex items-center gap-2 hover:bg-green-100 hover:border-white/70"
               >
-                <svg style={{ width: '18px', height: '18px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <svg
+                  style={{ width: '18px', height: '18px' }}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
                 </svg>
                 Iniciar Sesión
               </button>
             )}
-            
+
             {/* Botón del carrito con estilo consistente */}
             <button
               onClick={handleCartClick}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                padding: '0.5rem 1rem',
-                borderRadius: '1.5rem',
-                cursor: 'pointer',
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-              }}
+              aria-label={`Carrito de compras, ${cart.count} artículos, total ${cart.total.toFixed(2)} dólares`}
+              className="bg-white border-2 border-white/50 text-primary px-4 py-2 rounded-full cursor-pointer text-sm font-semibold transition-all duration-300 flex items-center gap-2 hover:bg-green-100 hover:border-white/70"
             >
               <span style={{ fontSize: '1.1rem' }}>🛒</span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: '1.2' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  lineHeight: '1.2',
+                }}
+              >
                 <span>Mi Carrito</span>
                 {cart.count > 0 && (
                   <span style={{ fontSize: '0.75rem', opacity: '0.9' }}>
@@ -191,64 +154,67 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
                 )}
               </div>
               {cart.count > 0 && (
-                <span style={{
-                  backgroundColor: '#ffffff',
-                  color: '#16a34a',
-                  borderRadius: '50%',
-                  width: '22px',
-                  height: '22px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.75rem',
-                  fontWeight: '700',
-                  marginLeft: '0.25rem',
-                  animation: 'pulse 2s infinite',
-                  border: '1px solid rgba(255, 255, 255, 0.3)'
-                }}>
+                <span
+                  style={{
+                    backgroundColor: '#ffffff',
+                    color: '#16a34a',
+                    borderRadius: '50%',
+                    width: '22px',
+                    height: '22px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: '700',
+                    marginLeft: '0.25rem',
+                    animation: 'pulse 2s infinite',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                  }}
+                >
                   {cart.count}
                 </span>
               )}
             </button>
           </div>
         </div>
-        
-        <nav style={{ marginTop: '0.5rem' }}>
+
+        <nav
+          role="navigation"
+          aria-label="Navegación principal"
+          style={{ marginTop: '0.5rem' }}
+        >
           <NavLink to="/">Inicio</NavLink>
           <NavLink to="/sobre-nosotros">Sobre Nosotros</NavLink>
           <NavLink to="/servicios">Servicios</NavLink>
-          <Link 
-            to="/sistemas-sinergicos"
-            className="px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            ⚡ Sistemas Sinérgicos
-          </Link>
+          <NavLink to="/sistemas-sinergicos">⚡ Sistemas Sinérgicos</NavLink>
           <NavLink to="/tienda">Tienda</NavLink>
           <NavLink to="/testimonios">Testimonios</NavLink>
           <NavLink to="/blog">Blog</NavLink>
           <NavLink to="/contacto">Contacto</NavLink>
         </nav>
       </header>
-      
+
       {/* Contenido principal */}
-      <main style={{ minHeight: 'calc(100vh - 120px)' }}>
+      <main
+        id="main-content"
+        role="main"
+        style={{ minHeight: 'calc(100vh - 120px)' }}
+      >
         {children}
       </main>
-      
+
       {/* Footer */}
-      <footer style={{ 
-        backgroundColor: '#065f46', 
-        color: 'white', 
-        padding: '1rem', 
-        textAlign: 'center' 
-      }}>
-        <p style={{ margin: 0 }}>© 2025 Pureza Naturalis - Terapias Naturales</p>
+      <footer
+        role="contentinfo"
+        className="bg-primary text-white p-4 text-center"
+      >
+        <p className="m-0">© 2025 Pureza Naturalis - Terapias Naturales</p>
       </footer>
 
       {/* Modal de autenticación */}
-      <AuthModal 
-        isOpen={isAuthModalOpen} 
-        onClose={() => setIsAuthModalOpen(false)} 
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </div>
   );

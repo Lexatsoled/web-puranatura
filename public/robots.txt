@@ -1,5 +1,5 @@
 # Robots.txt - Pureza Naturalis - Terapias Naturales
-# Optimizado para SEO y crawling eficiente
+# Optimizado para SEO y rastreo eficiente
 
 # Permitir acceso a todos los bots por defecto
 User-agent: *
@@ -9,12 +9,12 @@ Allow: /
 Sitemap: https://web.purezanaturalis.com/sitemap.xml
 
 # Rutas públicas importantes (alta prioridad para indexación)
-Allow: /store
+Allow: /
+Allow: /tienda
 Allow: /blog
-Allow: /services
-Allow: /about
-Allow: /contact
-Allow: /product/
+Allow: /servicios
+Allow: /sobre-nosotros
+Allow: /contacto
 Allow: /sistemas-sinergicos
 
 # Assets estáticos (permitir para mejorar UX en SERPs)
@@ -27,11 +27,11 @@ Allow: /*.png$
 Allow: /*.svg$
 
 # Bloquear rutas privadas (no deben indexarse)
-Disallow: /profile
-Disallow: /orders
-Disallow: /addresses
-Disallow: /wishlist
-Disallow: /cart
+Disallow: /perfil
+Disallow: /pedidos
+Disallow: /direcciones
+Disallow: /lista-deseos
+Disallow: /carrito
 Disallow: /checkout
 
 # Bloquear archivos de desarrollo
@@ -49,9 +49,9 @@ Disallow: /*&*
 User-agent: Googlebot
 Crawl-delay: 0
 Allow: /
-Disallow: /profile
-Disallow: /orders
-Disallow: /cart
+Disallow: /perfil
+Disallow: /pedidos
+Disallow: /carrito
 
 # Googlebot Images
 User-agent: Googlebot-Image
@@ -79,3 +79,4 @@ Disallow: /
 
 User-agent: MJ12bot
 Disallow: /
+

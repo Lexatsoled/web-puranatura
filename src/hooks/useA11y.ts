@@ -1,6 +1,6 @@
 /**
  * Hook de Accesibilidad - Utilidades WCAG 2.1 AA
- * 
+ *
  * Proporciona funcionalidades para:
  * - Gestión de focus
  * - Trap de focus en modales
@@ -82,34 +82,40 @@ export function useScreenReaderAnnounce() {
     }
 
     return () => {
-      if (announcerRef.current && document.body.contains(announcerRef.current)) {
+      if (
+        announcerRef.current &&
+        document.body.contains(announcerRef.current)
+      ) {
         document.body.removeChild(announcerRef.current);
         announcerRef.current = null;
       }
     };
   }, []);
 
-  const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    if (!announcerRef.current) return;
+  const announce = useCallback(
+    (message: string, priority: 'polite' | 'assertive' = 'polite') => {
+      if (!announcerRef.current) return;
 
-    // Actualizar prioridad
-    announcerRef.current.setAttribute('aria-live', priority);
+      // Actualizar prioridad
+      announcerRef.current.setAttribute('aria-live', priority);
 
-    // Limpiar y establecer nuevo mensaje
-    announcerRef.current.textContent = '';
-    setTimeout(() => {
-      if (announcerRef.current) {
-        announcerRef.current.textContent = message;
-      }
-    }, 100);
+      // Limpiar y establecer nuevo mensaje
+      announcerRef.current.textContent = '';
+      setTimeout(() => {
+        if (announcerRef.current) {
+          announcerRef.current.textContent = message;
+        }
+      }, 100);
 
-    // Limpiar después de 5 segundos
-    setTimeout(() => {
-      if (announcerRef.current) {
-        announcerRef.current.textContent = '';
-      }
-    }, 5000);
-  }, []);
+      // Limpiar después de 5 segundos
+      setTimeout(() => {
+        if (announcerRef.current) {
+          announcerRef.current.textContent = '';
+        }
+      }, 5000);
+    },
+    []
+  );
 
   return announce;
 }
@@ -183,7 +189,10 @@ export function useFocusRestore(isActive: boolean) {
     } else {
       // Restaurar el focus cuando se cierra
       setTimeout(() => {
-        if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+        if (
+          previousFocusRef.current &&
+          typeof previousFocusRef.current.focus === 'function'
+        ) {
           previousFocusRef.current.focus();
         }
         previousFocusRef.current = null;

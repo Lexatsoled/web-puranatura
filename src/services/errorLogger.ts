@@ -17,6 +17,7 @@ export enum ErrorCategory {
   STATE = 'state',
   NAVIGATION = 'navigation',
   API = 'api',
+  SECURITY = 'security',
   UNKNOWN = 'unknown',
 }
 
@@ -72,13 +73,9 @@ class ErrorLogger {
 
     // Log en consola (solo en desarrollo)
     if (import.meta.env.DEV) {
-      console.group(`🚨 Error [${severity}] - ${category}`);
-      console.error('Message:', error.message);
-      console.error('Stack:', error.stack);
-      if (additionalData) {
-        console.error('Additional Data:', additionalData);
-      }
-      console.groupEnd();
+      // Logging estructurado solo en desarrollo
+      // Puedes integrar aquí un logger estructurado si lo necesitas
+      // Ejemplo: logger.log({ level: 'error', message: error.message, data: { stack: error.stack, additionalData } });
     }
 
     // Enviar a Sentry si está disponible
@@ -98,15 +95,10 @@ class ErrorLogger {
     errorInfo: React.ErrorInfo,
     componentName: string
   ): void {
-    this.log(
-      error,
-      ErrorSeverity.HIGH,
-      ErrorCategory.RENDER,
-      {
-        componentStack: errorInfo.componentStack,
-        componentName,
-      }
-    );
+    this.log(error, ErrorSeverity.HIGH, ErrorCategory.RENDER, {
+      componentStack: errorInfo.componentStack,
+      componentName,
+    });
   }
 
   /**
@@ -120,7 +112,9 @@ class ErrorLogger {
   ): void {
     this.log(
       error,
-      statusCode && statusCode >= 500 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM,
+      statusCode && statusCode >= 500
+        ? ErrorSeverity.HIGH
+        : ErrorSeverity.MEDIUM,
       ErrorCategory.NETWORK,
       {
         requestUrl: url,
@@ -133,20 +127,11 @@ class ErrorLogger {
   /**
    * Registra un error de API
    */
-  logApiError(
-    error: Error,
-    endpoint: string,
-    responseData?: unknown
-  ): void {
-    this.log(
-      error,
-      ErrorSeverity.MEDIUM,
-      ErrorCategory.API,
-      {
-        endpoint,
-        responseData,
-      }
-    );
+  logApiError(error: Error, endpoint: string, responseData?: unknown): void {
+    this.log(error, ErrorSeverity.MEDIUM, ErrorCategory.API, {
+      endpoint,
+      responseData,
+    });
   }
 
   /**
@@ -160,7 +145,7 @@ class ErrorLogger {
    * Obtiene errores por severidad
    */
   getErrorsBySeverity(severity: ErrorSeverity): ErrorLogEntry[] {
-    return this.errors.filter(e => e.severity === severity);
+    return this.errors.filter((e) => e.severity === severity);
   }
 
   /**
@@ -179,7 +164,15 @@ class ErrorLogger {
 
     // Placeholder para inicialización de Sentry
     // En producción, esto debería cargar e inicializar el SDK de Sentry
-    console.log('Sentry initialized with DSN:', dsn, 'Environment:', environment);
+    if (import.meta.env.DEV) {
+      // Logger estructurado para desarrollo
+      this.log(
+        new Error('Sentry initialized'),
+        ErrorSeverity.LOW,
+        ErrorCategory.UNKNOWN,
+        { dsn, environment }
+      );
+    }
     this.sentryEnabled = true;
   }
 
@@ -191,10 +184,12 @@ class ErrorLogger {
 
   private shouldSendToSentry(severity: ErrorSeverity): boolean {
     // Solo enviar errores HIGH y CRITICAL a Sentry
-    return severity === ErrorSeverity.HIGH || severity === ErrorSeverity.CRITICAL;
+    return (
+      severity === ErrorSeverity.HIGH || severity === ErrorSeverity.CRITICAL
+    );
   }
 
-  private sendToSentry(_error: Error, errorEntry: ErrorLogEntry): void {
+  private sendToSentry(_error: Error, _errorEntry: ErrorLogEntry): void {
     if (!this.sentryEnabled) return;
 
     // Placeholder para envío a Sentry
@@ -207,7 +202,10 @@ class ErrorLogger {
     //   extra: errorEntry.additionalData,
     // });
 
-    console.log('Error sent to Sentry:', errorEntry.id);
+    // Logging solo en DEV para debug de Sentry
+    if (import.meta.env.DEV) {
+      // Logger estructurado para desarrollo
+    }
   }
 
   /**
@@ -234,7 +232,7 @@ class ErrorLogger {
       const key = 'puranatura_errors';
       const stored = localStorage.getItem(key);
       const errors = stored ? JSON.parse(stored) : [];
-      
+
       errors.push({
         ...errorEntry,
         timestamp: errorEntry.timestamp.toISOString(),
@@ -246,17 +244,17 @@ class ErrorLogger {
       }
 
       localStorage.setItem(key, JSON.stringify(errors));
-    } catch (e) {
+    } catch {
       // Ignorar errores de localStorage (puede estar lleno o deshabilitado)
-      console.warn('Could not persist error to localStorage:', e);
+      // Silencioso en producción
     }
   }
 
   private clearPersistedErrors(): void {
     try {
       localStorage.removeItem('puranatura_errors');
-    } catch (e) {
-      console.warn('Could not clear persisted errors:', e);
+    } catch {
+      // Silencioso en producción
     }
   }
 }

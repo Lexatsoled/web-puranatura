@@ -1,0 +1,72 @@
+import React, { memo, useCallback } from 'react';
+import { Product } from '../types/product';
+import { usePrefetchImage } from '../hooks/usePrefetch';
+import ProductImage from './ProductImage';
+import ProductInfo from './ProductInfo';
+import ProductActions from './ProductActions';
+
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = memo(({
+  product,
+}) => {
+  const { prefetchImages } = usePrefetchImage();
+
+  // Función para actualizar scroll position antes de navegar al producto
+  const handleProductClick = useCallback(() => {
+    // Actualizar la posición de scroll en sessionStorage antes de navegar
+    const STORAGE_KEY = 'puranatura_navigation_state';
+    const savedState = sessionStorage.getItem(STORAGE_KEY);
+
+    if (savedState) {
+      try {
+        const state = JSON.parse(savedState);
+        state.scrollPosition = window.scrollY;
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        // Ignore parsing errors
+      }
+    }
+  }, []);
+
+  // Prefetch de todas las imágenes del producto cuando el usuario hace hover
+  const handleMouseEnter = useCallback(() => {
+    // Precargar todas las imágenes del producto para la página de detalle
+    const imagesToPrefetch = product.images.map(img =>
+      typeof img === 'string' ? img : img.full
+    );
+    prefetchImages(imagesToPrefetch);
+  }, [product.images, prefetchImages]);
+
+  return (
+    <article
+      className="bg-white rounded-lg shadow-md overflow-hidden group transform hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
+      role="article"
+      aria-labelledby={`product-title-${product.id}`}
+      aria-describedby={`product-description-${product.id}`}
+    >
+      {/* Imagen del producto */}
+      <ProductImage
+        product={product}
+        onProductClick={handleProductClick}
+      />
+
+      {/* Información del producto */}
+      <ProductInfo
+        product={product}
+        onProductClick={handleProductClick}
+      />
+
+      {/* Acciones del producto */}
+      <ProductActions
+        product={product}
+        onMouseEnter={handleMouseEnter}
+      />
+    </article>
+  );
+});
+
+ProductCard.displayName = 'ProductCard';
+export default ProductCard;

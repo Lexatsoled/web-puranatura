@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import DOMPurify from 'dompurify';
 import { BlogPost } from '../types/blog';
 
 interface BlogPostModalProps {
@@ -8,7 +9,11 @@ interface BlogPostModalProps {
   onClose: () => void;
 }
 
-const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) => {
+const BlogPostModal: React.FC<BlogPostModalProps> = ({
+  isOpen,
+  post,
+  onClose,
+}) => {
   // Prevenir scroll del body cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
@@ -16,7 +21,7 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -67,7 +72,7 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
                   />
                 </div>
               )}
-              
+
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 transition-all"
@@ -94,16 +99,18 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {post.title}
               </h1>
-              
+
               <div className="text-gray-600 mb-6 border-l-4 border-green-500 pl-4">
                 <p className="italic">{post.summary}</p>
               </div>
-              
+
               <div className="prose prose-lg max-w-none">
                 {/* Renderizar contenido del post */}
-                <div 
+                <div
                   className="text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(post.content),
+                  }}
                 />
               </div>
             </div>

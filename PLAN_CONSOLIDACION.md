@@ -5,6 +5,7 @@
 ### DECISIONES TOMADAS:
 
 #### 1. HomePage - Mantener versión SRC
+
 - ✅ **src/pages/HomePage.tsx** es superior:
   - Usa OptimizedBackgroundImage (mejor performance)
   - Tiene useScrollToTop hook
@@ -14,6 +15,7 @@
 - ❌ **pages/HomePage.tsx** será eliminada (versión legacy con imagen hardcodeada)
 
 #### 2. ServicesPage - Mantener versión ROOT
+
 - ✅ **pages/ServicesPage.tsx** es superior:
   - Tiene Link to="/servicios/${service.id}" (navegación funcional)
   - Muestra duración y precio
@@ -22,6 +24,7 @@
 - ❌ **src/pages/ServicesPage.tsx** será eliminada (versión incompleta sin Links, código comentado)
 
 #### 3. CartContext - Mantener versión ROOT
+
 - ✅ **contexts/CartContext.tsx** es la versión COMPLETA:
   - addToCart, removeFromCart, updateQuantity, clearCart
   - Usa useLocalStorage para persistencia
@@ -104,6 +107,7 @@ cp -r types .backup-consolidation/
 ### 3.1 App.tsx - Actualizar TODOS los imports
 
 **ANTES:**
+
 ```tsx
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -134,6 +138,7 @@ import SimpleLayout from './SimpleLayout';
 ```
 
 **DESPUÉS:**
+
 ```tsx
 import { CartProvider } from './src/contexts/CartContext';
 import { AuthProvider } from './src/contexts/AuthContext';
@@ -166,6 +171,7 @@ import SimpleLayout from './SimpleLayout';
 ### 3.2 Todas las páginas ROOT - Actualizar antes de mover
 
 Cada archivo `pages/*.tsx` debe actualizar:
+
 - `../contexts/` → `../src/contexts/`
 - `../data/` → `../src/data/`
 - `../hooks/` → `../src/hooks/`
@@ -173,11 +179,13 @@ Cada archivo `pages/*.tsx` debe actualizar:
 ### 3.3 SimpleLayout.tsx - Actualizar imports
 
 **ANTES:**
+
 ```tsx
 import { useAuth } from './contexts/AuthContext';
 ```
 
 **DESPUÉS:**
+
 ```tsx
 import { useAuth } from './src/contexts/AuthContext';
 ```
@@ -185,6 +193,7 @@ import { useAuth } from './src/contexts/AuthContext';
 ### 3.4 Tests - Actualizar imports
 
 #### test/integration/App.test.tsx:
+
 ```tsx
 // ANTES:
 import App from '../App';
@@ -201,7 +210,8 @@ import { NotificationProvider } from '../src/contexts/NotificationContext';
 import { AuthProvider } from '../src/contexts/AuthContext';
 ```
 
-#### test/components/*.test.tsx:
+#### test/components/\*.test.tsx:
+
 ```tsx
 // ANTES:
 import { AuthProvider } from '../../contexts/AuthContext';
@@ -213,6 +223,7 @@ import ProductCard from '../../src/components/ProductCard';
 ```
 
 #### test/hooks/useLocalStorage.test.ts:
+
 ```tsx
 // ANTES:
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -241,23 +252,20 @@ rm -rf types/
 ### tsconfig.json
 
 **ANTES:**
+
 ```jsonc
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["./*"],
+    },
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test/components",
-    "test/integration"
-  ]
+  "exclude": ["node_modules", "dist", "test/components", "test/integration"],
 }
 ```
 
 **DESPUÉS:**
+
 ```jsonc
 {
   "compilerOptions": {
@@ -270,13 +278,10 @@ rm -rf types/
       "@types/*": ["./src/types/*"],
       "@data/*": ["./src/data/*"],
       "@store/*": ["./src/store/*"],
-      "@utils/*": ["./src/utils/*"]
-    }
+      "@utils/*": ["./src/utils/*"],
+    },
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "exclude": ["node_modules", "dist"],
 }
 ```
 
@@ -295,8 +300,8 @@ export default defineConfig({
       '@data': path.resolve(__dirname, './src/data'),
       '@store': path.resolve(__dirname, './src/store'),
       '@utils': path.resolve(__dirname, './src/utils'),
-    }
-  }
+    },
+  },
 });
 ```
 

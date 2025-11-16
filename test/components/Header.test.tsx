@@ -2,19 +2,18 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from '../../src/contexts/CartContext';
 import Header from '../../src/components/Header';
+import { vi } from 'vitest';
 
 const TestProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <BrowserRouter>
-      <CartProvider>
-        {children}
-      </CartProvider>
+      <CartProvider>{children}</CartProvider>
     </BrowserRouter>
   );
 };
 
 describe('Header Component', () => {
-  const mockOnCartClick = jest.fn();
+  const mockOnCartClick = vi.fn();
 
   it('renders header correctly', () => {
     render(
@@ -33,8 +32,21 @@ describe('Header Component', () => {
       </TestProviders>
     );
 
-    const logo = screen.getByAltText(/pureza naturalis/i);
+    const logo = screen.getByAltText('Pureza Naturalis');
     expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute('src', '/logo-pureza-naturalis-largo_320.webp');
+  });
+
+  it('renders the logo and site name', () => {
+    render(
+      <TestProviders>
+        <Header onCartClick={mockOnCartClick} />
+      </TestProviders>
+    );
+
+    const logo = screen.getByAltText('Pureza Naturalis');
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute('src', '/logo-pureza-naturalis-largo_320.webp');
   });
 
   it('shows navigation menu', () => {
@@ -56,7 +68,7 @@ describe('Header Component', () => {
       </TestProviders>
     );
 
-    const cartButton = screen.getByRole('button', { name: /carrito/i });
+    const cartButton = screen.getByRole('button', { name: 'Carrito' });
     expect(cartButton).toBeInTheDocument();
   });
 });

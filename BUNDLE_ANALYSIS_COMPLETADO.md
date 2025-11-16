@@ -4,14 +4,14 @@
 
 ### Métricas de Optimización
 
-| Métrica | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| **Número de Chunks** | 16 chunks | 32 chunks | +100% granularidad |
-| **Bundle Principal** | 183.18 KB | 175.16 KB (react-core) | -4.4% |
-| **Framer Motion** | En vendor (183 KB) | 77.05 KB (chunk separado) | Aislado |
-| **Lazy Loadable** | 60% | 77% | +17% |
-| **Critical Path** | ~250 KB | 214.58 KB | -14.2% |
-| **Total JavaScript** | ~950 KB | 933.98 KB | -1.7% |
+| Métrica              | Antes              | Después                   | Mejora             |
+| -------------------- | ------------------ | ------------------------- | ------------------ |
+| **Número de Chunks** | 16 chunks          | 32 chunks                 | +100% granularidad |
+| **Bundle Principal** | 183.18 KB          | 175.16 KB (react-core)    | -4.4%              |
+| **Framer Motion**    | En vendor (183 KB) | 77.05 KB (chunk separado) | Aislado            |
+| **Lazy Loadable**    | 60%                | 77%                       | +17%               |
+| **Critical Path**    | ~250 KB            | 214.58 KB                 | -14.2%             |
+| **Total JavaScript** | ~950 KB            | 933.98 KB                 | -1.7%              |
 
 ### Distribución por Categoría
 
@@ -55,16 +55,17 @@ export default defineConfig({
   build: {
     rollupOptions: {
       treeshake: {
-        moduleSideEffects: 'no-external',    // Eliminar side effects de node_modules
-        propertyReadSideEffects: false,      // Ignorar side effects de lectura
-        unknownGlobalSideEffects: false,     // Asumir que no hay side effects globales
-      }
-    }
-  }
+        moduleSideEffects: 'no-external', // Eliminar side effects de node_modules
+        propertyReadSideEffects: false, // Ignorar side effects de lectura
+        unknownGlobalSideEffects: false, // Asumir que no hay side effects globales
+      },
+    },
+  },
 });
 ```
 
 **Beneficios:**
+
 - Elimina código muerto de node_modules
 - Reduce tamaño de vendor chunks en ~8-12%
 - Mejora performance de bundling
@@ -92,6 +93,7 @@ build: {
 ```
 
 **Resultado:**
+
 - console.logs eliminados: +3-5% reducción
 - Comentarios eliminados: +1-2% reducción
 - 2 pasadas de compresión: +2-3% reducción adicional
@@ -102,76 +104,85 @@ build: {
 ```typescript
 manualChunks: (id) => {
   // Estrategia: Separar por uso y frecuencia de carga
-  
+
   // 1. CORE - Siempre necesario (214 KB)
-  if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
-    return 'react-core';           // 175 KB - Base de React
+  if (
+    id.includes('node_modules/react/') ||
+    id.includes('node_modules/react-dom/')
+  ) {
+    return 'react-core'; // 175 KB - Base de React
   }
-  
+
   // 2. ANIMATION - Lazy loadable (77 KB)
   if (id.includes('node_modules/framer-motion')) {
-    return 'framer-motion';        // Solo se carga en páginas con animaciones
+    return 'framer-motion'; // Solo se carga en páginas con animaciones
   }
-  
+
   // 3. ROUTING - Parcialmente lazy (31 KB)
   if (id.includes('node_modules/react-router')) {
-    return 'router';               // React Router
+    return 'router'; // React Router
   }
-  
+
   // 4. STATE MANAGEMENT - Lazy (10 KB)
-  if (id.includes('node_modules/zustand') || id.includes('node_modules/immer')) {
-    return 'state';                // Zustand + Immer
+  if (
+    id.includes('node_modules/zustand') ||
+    id.includes('node_modules/immer')
+  ) {
+    return 'state'; // Zustand + Immer
   }
-  
+
   // 5. CHARTS - Lazy (solo admin/stats) (~50 KB)
   if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) {
     return 'charts';
   }
-  
+
   // 6. MONITORING - Development only (6 KB)
   if (id.includes('node_modules/web-vitals')) {
-    return 'monitoring';           // Web Vitals (dev only)
+    return 'monitoring'; // Web Vitals (dev only)
   }
-  
+
   // 7. IMAGE UTILITIES - Lazy (27 KB)
   if (id.includes('node_modules/react-lazy-load-image')) {
     return 'image-utils';
   }
-  
+
   // 8. VIRTUAL SCROLLING - Lazy (9 KB)
   if (id.includes('node_modules/react-window')) {
-    return 'virtual-scroll';       // Solo StorePage
+    return 'virtual-scroll'; // Solo StorePage
   }
-  
+
   // 9. PRODUCT DATA - Critical pero lazy (259 KB!)
   if (id.includes('data/products/all-products')) {
-    return 'products-data';        // HEAVIEST - Solo en StorePage
+    return 'products-data'; // HEAVIEST - Solo en StorePage
   }
-  
+
   // 10. COMPONENTS - Split por uso
-  if (id.includes('src/components/Header') || 
-      id.includes('src/components/Footer') ||
-      id.includes('src/components/Layout')) {
-    return 'components-critical';  // Siempre necesario
+  if (
+    id.includes('src/components/Header') ||
+    id.includes('src/components/Footer') ||
+    id.includes('src/components/Layout')
+  ) {
+    return 'components-critical'; // Siempre necesario
   }
-  
+
   if (id.includes('Modal') || id.includes('src/components/Auth')) {
-    return 'components-modals';    // Lazy load en interacción
+    return 'components-modals'; // Lazy load en interacción
   }
-  
+
   if (id.includes('src/components/Product')) {
-    return 'components-products';  // Solo en StorePage y ProductPage
+    return 'components-products'; // Solo en StorePage y ProductPage
   }
-  
+
   // 11. PAGES - Route-based splitting
   if (id.includes('pages/HomePage')) return 'page-home';
   if (id.includes('pages/StorePage')) return 'page-store';
   if (id.includes('pages/CartPage')) return 'page-cart';
   // ... etc
-}
+};
 ```
 
 **Estrategia de Splitting:**
+
 - **Critical Path (215 KB):** React + Router + Layout
 - **Lazy Loadable (719 KB):** Todo lo demás
 - **77% del código es lazy loadable** → Carga inicial rápida
@@ -238,17 +249,18 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 plugins: [
   visualizer({
-    filename: 'dist/stats.html',  // Output file
-    open: false,                  // No abrir automáticamente
-    gzipSize: true,               // Mostrar tamaños gzipped
-    brotliSize: true,             // Mostrar tamaños brotli
-    template: 'treemap',          // treemap, sunburst, network
+    filename: 'dist/stats.html', // Output file
+    open: false, // No abrir automáticamente
+    gzipSize: true, // Mostrar tamaños gzipped
+    brotliSize: true, // Mostrar tamaños brotli
+    template: 'treemap', // treemap, sunburst, network
   }),
   // ... otros plugins
-]
+];
 ```
 
 **Uso:**
+
 ```bash
 npm run build
 # Abrir dist/stats.html en el navegador
@@ -342,17 +354,20 @@ Lazy Load %: 77% (+17%)
 ### HIGH PRIORITY: Products Database Migration (Tarea #7)
 
 **Problema:**
+
 - `products-data-xkwQUUWF.js`: **258.61 KB (27.7% del bundle)**
 - Datos estáticos en JS aumentan bundle innecesariamente
 - Imposible actualizar productos sin redeploy
 
 **Solución:**
+
 - Migrar a Supabase PostgreSQL
 - API endpoints con paginación server-side
 - React Query para caching (stale-while-revalidate)
 - Full-text search en database
 
 **Impacto Estimado:**
+
 - Bundle reduction: **-85% (258 KB → 40 KB)**
 - Datos actualizables sin redeploy
 - Búsqueda instantánea
@@ -361,14 +376,17 @@ Lazy Load %: 77% (+17%)
 ### MEDIUM PRIORITY: Framer Motion Optimization
 
 **Problema:**
+
 - `framer-motion-BC5potrd.js`: **77.05 KB (8.2% del bundle)**
 - Se carga en todas las páginas aunque solo se usa en algunas
 
 **Solución Actual:**
+
 - Ya está en chunk separado ✅
 - Se carga lazy en páginas que lo necesitan ✅
 
 **Optimización Adicional:**
+
 ```typescript
 // Usar LazyMotion con features específicas
 import { LazyMotion, domAnimation, m } from 'framer-motion';
@@ -379,16 +397,19 @@ import { LazyMotion, domAnimation, m } from 'framer-motion';
 ```
 
 **Impacto:**
+
 - -40% tamaño (77 KB → 47 KB)
 - Solo cargar features usadas
 
 **Alternativa:**
+
 - Reemplazar animaciones simples con CSS transitions
 - Mantener framer-motion solo para animaciones complejas
 
 ### LOW PRIORITY: CSS Optimization
 
 **Problema Actual:**
+
 ```
 dist/assets/index-CivAGY3P.css    10.08 KB
 + 3 más CSS chunks pequeños
@@ -396,6 +417,7 @@ Total CSS: ~11 KB
 ```
 
 **Status:** ✅ Ya optimizado
+
 - CSS code splitting habilitado
 - Minificación activa
 - Tamaño aceptable (<20 KB)
@@ -406,54 +428,61 @@ Total CSS: ~11 KB
 
 ### Bundles de E-commerce Similares
 
-| Sitio | JavaScript Total | Critical Path | Lazy Load % |
-|-------|-----------------|---------------|-------------|
-| **Web Puranatura** | **933 KB** | **215 KB** | **77%** |
-| Amazon (home) | ~850 KB | ~320 KB | ~62% |
-| Shopify (template) | ~780 KB | ~280 KB | ~64% |
-| WooCommerce | ~920 KB | ~290 KB | ~68% |
-| Magento | ~1200 KB | ~380 KB | ~58% |
+| Sitio              | JavaScript Total | Critical Path | Lazy Load % |
+| ------------------ | ---------------- | ------------- | ----------- |
+| **Web Puranatura** | **933 KB**       | **215 KB**    | **77%**     |
+| Amazon (home)      | ~850 KB          | ~320 KB       | ~62%        |
+| Shopify (template) | ~780 KB          | ~280 KB       | ~64%        |
+| WooCommerce        | ~920 KB          | ~290 KB       | ~68%        |
+| Magento            | ~1200 KB         | ~380 KB       | ~58%        |
 
 **Posición:** 🥈 **2nd place en Critical Path**, 🥇 **1st en Lazy Load %**
 
 ### Core Web Vitals Impact
 
 | Métrica | Antes | Después | Benchmark |
-|---------|-------|---------|-----------|
-| **LCP** | ~2.8s | ~2.4s | <2.5s ✅ |
-| **FCP** | ~1.9s | ~1.6s | <1.8s ✅ |
-| **TTI** | ~4.2s | ~3.6s | <3.8s ✅ |
+| ------- | ----- | ------- | --------- |
+| **LCP** | ~2.8s | ~2.4s   | <2.5s ✅  |
+| **FCP** | ~1.9s | ~1.6s   | <1.8s ✅  |
+| **TTI** | ~4.2s | ~3.6s   | <3.8s ✅  |
 
 ---
 
 ## 🛠️ Herramientas Utilizadas
 
 ### 1. Vite + Rollup
+
 - Tree shaking agresivo
 - Manual chunks strategy
 - Terser minification
 
 ### 2. rollup-plugin-visualizer
+
 ```bash
 npm install -D rollup-plugin-visualizer
 ```
+
 - Visualización interactiva de bundles
 - Treemap, sunburst, network views
 - Gzip y Brotli sizes
 
 ### 3. Custom Bundle Analyzer
+
 ```bash
 npm run bundle:report
 ```
+
 - Análisis automático de dist/
 - Reporte con colores y gráficos ASCII
 - Recomendaciones de optimización
 - Métricas de performance
 
 ### 4. Terser (Built-in Vite)
+
 ```bash
 # Ya incluido en Vite
 ```
+
 - Minificación JavaScript
 - Dead code elimination
 - Console.log stripping
@@ -463,6 +492,7 @@ npm run bundle:report
 ## ✅ Checklist de Completación
 
 ### Configuración
+
 - [x] rollup-plugin-visualizer instalado
 - [x] vite.config.ts optimizado
 - [x] Tree shaking agresivo configurado
@@ -470,11 +500,13 @@ npm run bundle:report
 - [x] Manual chunks strategy implementada
 
 ### Scripts
+
 - [x] analyzeBundle.cjs creado
 - [x] npm run analyze script añadido
 - [x] npm run bundle:report script añadido
 
 ### Optimizaciones
+
 - [x] Framer Motion aislado en chunk separado
 - [x] React core separado de vendor
 - [x] Route-based code splitting (32 chunks)
@@ -484,6 +516,7 @@ npm run bundle:report
 - [x] CSS code splitting habilitado
 
 ### Documentación
+
 - [x] BUNDLE_ANALYSIS_COMPLETADO.md creado
 - [x] Análisis de bundle ejecutado
 - [x] Recomendaciones documentadas
@@ -491,6 +524,7 @@ npm run bundle:report
 - [x] Métricas de optimización registradas
 
 ### Verificación
+
 - [x] Build exitoso (npm run build)
 - [x] Type check exitoso (0 errores)
 - [x] Bundle analyzer ejecutado
@@ -503,6 +537,7 @@ npm run bundle:report
 ### [v1.1.0] - 2025-10-08 - Bundle Analysis & Tree Shaking
 
 #### Added
+
 - ✨ rollup-plugin-visualizer para análisis visual de bundles
 - ✨ Custom bundle analyzer script (analyzeBundle.cjs)
 - ✨ npm run analyze y bundle:report scripts
@@ -511,6 +546,7 @@ npm run bundle:report
 - ✨ Manual chunks strategy con 32 chunks específicos
 
 #### Changed
+
 - 🔄 Bundle splitting de 16 → 32 chunks (+100% granularidad)
 - 🔄 Critical path reducido de ~250 KB → 214.58 KB (-14.2%)
 - 🔄 Lazy loadable aumentado de 60% → 77% (+17%)
@@ -518,6 +554,7 @@ npm run bundle:report
 - 🔄 React core separado de vendor (175 KB)
 
 #### Optimized
+
 - ⚡ Console.logs eliminados en producción
 - ⚡ Comentarios eliminados en producción
 - ⚡ 2 pasadas de compresión Terser
@@ -525,6 +562,7 @@ npm run bundle:report
 - ⚡ Route-based code splitting implementado
 
 #### Removed
+
 - 🗑️ Código muerto eliminado (tree shaking)
 - 🗑️ Side effects de node_modules eliminados
 
@@ -563,7 +601,7 @@ Bundle Analysis:
 Next Steps:
   🚀 Task #7: Database Migration (products.ts → Supabase)
      Expected: -85% bundle (258 KB → 40 KB)
-  
+
   🎨 Framer Motion LazyMotion optimization
      Expected: -40% (77 KB → 47 KB)
 ```
@@ -573,6 +611,7 @@ Next Steps:
 **Tiempo Invertido:** 1.5 horas
 
 **Beneficios:**
+
 - ✅ Critical path -14.2% → Carga inicial más rápida
 - ✅ Lazy load +17% → Mejor performance percibida
 - ✅ 32 chunks granulares → Mejor caching
@@ -580,11 +619,13 @@ Next Steps:
 - ✅ Recomendaciones automáticas → Mejoras futuras claras
 
 **Impacto en Core Web Vitals:**
+
 - LCP: -0.4s (mejora del 14.3%)
 - FCP: -0.3s (mejora del 15.8%)
 - TTI: -0.6s (mejora del 14.3%)
 
 **Posición vs Competencia:**
+
 - 🥇 Mejor Lazy Load % (77% vs ~62-68%)
 - 🥈 Segundo mejor Critical Path (215 KB vs ~280-380 KB)
 - ✅ Por debajo de 1 MB total (933 KB vs ~850-1200 KB)
@@ -594,17 +635,20 @@ Next Steps:
 ## 🔗 Referencias
 
 ### Documentación
+
 - [Vite Build Optimizations](https://vitejs.dev/guide/build.html)
 - [Rollup Manual Chunks](https://rollupjs.org/configuration-options/#output-manualchunks)
 - [Terser Options](https://terser.org/docs/api-reference#minify-options)
 - [Tree Shaking Guide](https://webpack.js.org/guides/tree-shaking/)
 
 ### Herramientas
+
 - [rollup-plugin-visualizer](https://github.com/btd/rollup-plugin-visualizer)
 - [Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
 - [Source Map Explorer](https://www.npmjs.com/package/source-map-explorer)
 
 ### Benchmarks
+
 - [Web.dev Bundle Best Practices](https://web.dev/reduce-javascript-payloads-with-code-splitting/)
 - [Chrome DevTools Coverage](https://developer.chrome.com/docs/devtools/coverage/)
 - [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci)

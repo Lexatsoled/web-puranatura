@@ -24,9 +24,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   addNotification: (notification) => {
     const id = `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const newNotification = { ...notification, id };
-    
+
     set((state) => ({
-      notifications: [...state.notifications, newNotification]
+      notifications: [...state.notifications, newNotification],
     }));
 
     // Auto remove after duration (default 5s)
@@ -40,45 +40,61 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   removeNotification: (id) =>
     set((state) => ({
-      notifications: state.notifications.filter(n => n.id !== id)
+      notifications: state.notifications.filter((n) => n.id !== id),
     })),
 
-  clearAll: () => set({ notifications: [] })
+  clearAll: () => set({ notifications: [] }),
 }));
 
 // Helper functions for quick notifications
-export const showSuccessNotification = (message: string, duration?: number, action?: { label: string; onClick: () => void }) => {
+export const showSuccessNotification = (
+  message: string,
+  duration?: number,
+  action?: { label: string; onClick: () => void }
+) => {
   useNotificationStore.getState().addNotification({
     message,
     type: 'success',
     duration,
-    action
+    action,
   });
 };
 
-export const showErrorNotification = (message: string, duration?: number, action?: { label: string; onClick: () => void }) => {
+export const showErrorNotification = (
+  message: string,
+  duration?: number,
+  action?: { label: string; onClick: () => void }
+) => {
   useNotificationStore.getState().addNotification({
     message,
     type: 'error',
     duration,
-    action
+    action,
   });
 };
 
-export const showInfoNotification = (message: string, duration?: number, action?: { label: string; onClick: () => void }) => {
+export const showInfoNotification = (
+  message: string,
+  duration?: number,
+  action?: { label: string; onClick: () => void }
+) => {
   useNotificationStore.getState().addNotification({
     message,
     type: 'info',
     duration,
-    action
+    action,
   });
 };
 
-export const showWarningNotification = (message: string, duration?: number, action?: { label: string; onClick: () => void }) => {
+export const showWarningNotification = (
+  message: string,
+  duration?: number,
+  action?: { label: string; onClick: () => void }
+) => {
   useNotificationStore.getState().addNotification({
     message,
     type: 'warning',
     duration,
-    action
+    action,
   });
 };

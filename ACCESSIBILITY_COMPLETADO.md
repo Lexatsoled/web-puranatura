@@ -3,6 +3,7 @@
 ## 📊 Resumen de Resultados
 
 ### Estado Final
+
 - ✅ **Componentes base de accesibilidad**: 100% Implementados
 - ✅ **Estilos globales A11y**: 100% Implementados
 - ✅ **Layout principal mejorado**: Roles ARIA y Skip Link
@@ -10,6 +11,7 @@
 - ⏳ **Testing automatizado**: Pendiente (documentado)
 
 ### Métricas Alcanzadas
+
 - **WCAG 2.1 Nivel A**: ~85% cumplimiento
 - **WCAG 2.1 Nivel AA**: ~65% cumplimiento
 - **Componentes A11y creados**: 7 nuevos componentes
@@ -21,9 +23,11 @@
 ## 🎯 Componentes Implementados
 
 ### 1. **Skip Link** ✅
+
 **Archivo**: `src/components/A11y/SkipLink.tsx` + `.css`
 
 **Implementación**:
+
 ```tsx
 <SkipLink />
 // Permite saltar al contenido principal con Tab
@@ -32,6 +36,7 @@
 ```
 
 **Beneficios**:
+
 - Usuarios de teclado pueden bypass la navegación
 - Mejora significativa para screen readers
 - WCAG 2.4.1 (Bypass Blocks) cumplido
@@ -41,9 +46,11 @@
 ---
 
 ### 2. **Focus Manager** ✅
+
 **Archivo**: `src/components/A11y/FocusManager.tsx`
 
 **Implementación**:
+
 ```tsx
 <FocusManager isActive={isModalOpen} restoreFocus autoFocus>
   {/* Contenido del modal */}
@@ -51,12 +58,14 @@
 ```
 
 **Características**:
+
 - Focus trap automático dentro del contenedor
 - Navegación circular con Tab/Shift+Tab
 - Restauración automática del focus al cerrar
 - Auto-focus en primer elemento
 
 **Beneficios**:
+
 - Previene que el focus escape del modal
 - Cumple WCAG 2.1.2 (No Keyboard Trap)
 - Cumple WCAG 2.4.3 (Focus Order)
@@ -66,9 +75,11 @@
 ---
 
 ### 3. **Visually Hidden** ✅
+
 **Archivo**: `src/components/A11y/VisuallyHidden.tsx`
 
 **Implementación**:
+
 ```tsx
 <VisuallyHidden>
   Texto solo para screen readers
@@ -80,12 +91,14 @@
 ```
 
 **Uso con clase CSS**:
+
 ```tsx
 <span className="sr-only">Solo para screen readers</span>
 <span className="sr-only-focusable">Visible al recibir focus</span>
 ```
 
 **Beneficios**:
+
 - Proporciona contexto adicional para screen readers
 - No afecta el diseño visual
 - Técnica W3C validada (Técnica C7)
@@ -95,31 +108,35 @@
 ---
 
 ### 4. **Live Region** ✅
+
 **Archivo**: `src/components/A11y/LiveRegion.tsx`
 
 **Implementación**:
+
 ```tsx
 // Como componente
-<LiveRegion 
-  message="Producto añadido al carrito" 
-  priority="polite" 
+<LiveRegion
+  message="Producto añadido al carrito"
+  priority="polite"
   role="status"
   clearAfter={5000}
-/>
+/>;
 
 // Como hook
 const { announce, LiveRegionComponent } = useLiveRegion();
 announce('Búsqueda completada', false); // false = polite
-<LiveRegionComponent />
+<LiveRegionComponent />;
 ```
 
 **Características**:
+
 - Prioridades: `polite` (cortés) o `assertive` (urgente)
 - Roles: `status`, `alert`, `log`
 - Auto-limpieza después de 5 segundos
 - Hook personalizado para facilitar uso
 
 **Beneficios**:
+
 - Anuncia cambios dinámicos a screen readers
 - Cumple WCAG 4.1.3 (Status Messages) Nivel AA
 - No interrumpe la navegación del usuario
@@ -129,33 +146,40 @@ announce('Búsqueda completada', false); // false = polite
 ---
 
 ### 5. **Accessibility Hooks** ✅
+
 **Archivo**: `src/hooks/useA11y.ts`
 
 #### Hooks disponibles:
 
 **`useFocusTrap(isActive: boolean)`**
+
 - Gestiona focus trap en modales
 - Retorna ref del contenedor
 
 **`useScreenReaderAnnounce()`**
+
 - Retorna función `announce(message, priority)`
 - Crea/gestiona elemento aria-live dinámicamente
 
 **`useKeyboardNavigation<T>(items, onSelect, isActive)`**
+
 - Navegación con flechas ↑↓
 - Selección con Enter/Space
 - Saltar con Home/End
 - Escape para cancelar
 
 **`useFocusRestore(isActive: boolean)`**
+
 - Guarda elemento con focus antes de abrir modal
 - Restaura al cerrar
 
 **`useKeyboardUser()`**
+
 - Detecta si usuario navega con teclado
 - Añade clase `.keyboard-user` al body
 
 **`useSkipLink()`**
+
 - Función para saltar al contenido principal
 
 **Resultado**: 6 hooks listos para usar en componentes existentes y nuevos.
@@ -163,11 +187,13 @@ announce('Búsqueda completada', false); // false = polite
 ---
 
 ### 6. **Global Accessibility Styles** ✅
+
 **Archivo**: `src/styles/accessibility.css`
 
 #### Categorías implementadas:
 
 **1. Visually Hidden (.sr-only)**
+
 ```css
 .sr-only {
   position: absolute;
@@ -178,12 +204,14 @@ announce('Búsqueda completada', false); // false = polite
 ```
 
 **2. Focus Indicators**
+
 - Outline 3px en #fbbf24 (amber-400)
 - Offset de 2px
 - Solo visible para `.keyboard-user`
 - Ajustes para fondos oscuros
 
 **3. Reduced Motion**
+
 ```css
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -195,52 +223,65 @@ announce('Búsqueda completada', false); // false = polite
 ```
 
 **4. High Contrast Mode**
+
 ```css
 @media (prefers-contrast: high) {
   * {
     border-color: currentColor !important;
   }
-  button, input, select, textarea {
+  button,
+  input,
+  select,
+  textarea {
     border: 2px solid currentColor !important;
   }
 }
 ```
 
 **5. Touch Target Size**
+
 - Mínimo 44x44px para elementos interactivos
 - Excepciones para botones pequeños (36x36px)
 
 **6. Form Accessibility**
+
 - Campos requeridos: Borde izquierdo rojo
 - Estados error/success: Color + icono
 - No depender solo del color
 
 **7. Keyboard Navigation**
+
 - Indicadores visuales para elementos seleccionados
 - Pestañas activas con borde inferior
 
 **8. Modal & Overlay**
+
 - Body sin scroll cuando modal abierto
 - Overlay con contraste 0.75
 
 **9. Loading States**
+
 - Animaciones accesibles
 - Respetan `prefers-reduced-motion`
 
 **10. Responsive Text**
+
 - Font-size base: 100%
 - Line-height mínimo: 1.5
 
 **11. Color Blindness Support**
+
 - Iconos antes de mensajes (✓ ✗ ⚠)
 - No depender solo del color
 
 **12. Print Styles**
+
 - Ocultar navegación
 - Alto contraste
 - Mostrar URLs de enlaces
 
 **13. Focus Manager Container**
+
 ```css
 .focus-manager-container {
   outline: none;
@@ -256,6 +297,7 @@ announce('Búsqueda completada', false); // false = polite
 ### SimpleLayout.tsx ✅
 
 **Roles ARIA añadidos**:
+
 ```tsx
 <header role="banner">
   {/* Logo y controles */}
@@ -275,8 +317,9 @@ announce('Búsqueda completada', false); // false = polite
 ```
 
 **ARIA Labels**:
+
 ```tsx
-<button 
+<button
   aria-label={`Carrito de compras, ${cart.count} artículos, total ${cart.total.toFixed(2)} dólares`}
 >
   {/* Contenido visual del botón */}
@@ -284,6 +327,7 @@ announce('Búsqueda completada', false); // false = polite
 ```
 
 **Beneficios**:
+
 - Estructura semántica clara
 - Screen readers pueden identificar regiones
 - Carrito tiene descripción completa
@@ -297,11 +341,13 @@ announce('Búsqueda completada', false); // false = polite
 **Mejoras implementadas**:
 
 1. **Skip Link añadido**:
+
 ```tsx
 <SkipLink />
 ```
 
 2. **Detector de navegación por teclado**:
+
 ```tsx
 useEffect(() => {
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -309,11 +355,11 @@ useEffect(() => {
       document.body.classList.add('keyboard-user');
     }
   };
-  
+
   const handleMouseDown = () => {
     document.body.classList.remove('keyboard-user');
   };
-  
+
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('mousedown', handleMouseDown);
   // ...
@@ -321,6 +367,7 @@ useEffect(() => {
 ```
 
 **Beneficios**:
+
 - Focus indicators solo visibles cuando se usa teclado
 - Mejora UX visual sin sacrificar accesibilidad
 
@@ -331,11 +378,13 @@ useEffect(() => {
 ### index.html ✅
 
 **Meta tag añadido**:
+
 ```html
 <meta name="color-scheme" content="light" />
 ```
 
 **Beneficios**:
+
 - Indica esquema de color preferido
 - Mejora soporte para modo oscuro futuro
 
@@ -347,32 +396,32 @@ useEffect(() => {
 
 ### ✅ Nivel A (Mínimo) - 85% Cumplimiento
 
-| Criterio | Título | Estado | Notas |
-|----------|--------|--------|-------|
-| **1.1.1** | Contenido no textual | ✅ | Alt text en imágenes |
-| **1.3.1** | Info y relaciones | ✅ | Roles ARIA, estructura semántica |
-| **2.1.1** | Teclado | ✅ | Navegación completa implementada |
-| **2.1.2** | Sin trampas teclado | ✅ | FocusManager con Escape |
-| **2.4.1** | Bypass blocks | ✅ | Skip Link implementado |
-| **2.4.2** | Título de página | ✅ | Títulos descriptivos en HTML |
-| **2.4.3** | Orden del focus | ✅ | Focus Manager + tabindex |
-| **2.4.4** | Propósito del enlace | ✅ | Textos descriptivos |
-| **3.1.1** | Idioma de la página | ✅ | `<html lang="es">` |
-| **4.1.1** | Parsing | ✅ | HTML válido |
-| **4.1.2** | Name, Role, Value | ✅ | ARIA labels + roles |
+| Criterio  | Título               | Estado | Notas                            |
+| --------- | -------------------- | ------ | -------------------------------- |
+| **1.1.1** | Contenido no textual | ✅     | Alt text en imágenes             |
+| **1.3.1** | Info y relaciones    | ✅     | Roles ARIA, estructura semántica |
+| **2.1.1** | Teclado              | ✅     | Navegación completa implementada |
+| **2.1.2** | Sin trampas teclado  | ✅     | FocusManager con Escape          |
+| **2.4.1** | Bypass blocks        | ✅     | Skip Link implementado           |
+| **2.4.2** | Título de página     | ✅     | Títulos descriptivos en HTML     |
+| **2.4.3** | Orden del focus      | ✅     | Focus Manager + tabindex         |
+| **2.4.4** | Propósito del enlace | ✅     | Textos descriptivos              |
+| **3.1.1** | Idioma de la página  | ✅     | `<html lang="es">`               |
+| **4.1.1** | Parsing              | ✅     | HTML válido                      |
+| **4.1.2** | Name, Role, Value    | ✅     | ARIA labels + roles              |
 
 ### ✅ Nivel AA (Objetivo) - 65% Cumplimiento
 
-| Criterio | Título | Estado | Notas |
-|----------|--------|--------|-------|
-| **1.4.3** | Contraste mínimo | ⏳ | 70% - Revisar grises |
-| **1.4.5** | Imágenes de texto | ✅ | Sin imágenes de texto |
-| **2.4.5** | Múltiples vías | ✅ | Nav, búsqueda, breadcrumbs |
-| **2.4.6** | Encabezados | ✅ | Labels descriptivos |
-| **2.4.7** | Focus visible | ✅ | Indicadores implementados |
-| **3.2.3** | Navegación consistente | ✅ | Header en todas las páginas |
-| **3.2.4** | Identificación consistente | ✅ | Iconos/labels consistentes |
-| **4.1.3** | Mensajes de estado | ✅ | Live regions |
+| Criterio  | Título                     | Estado | Notas                       |
+| --------- | -------------------------- | ------ | --------------------------- |
+| **1.4.3** | Contraste mínimo           | ⏳     | 70% - Revisar grises        |
+| **1.4.5** | Imágenes de texto          | ✅     | Sin imágenes de texto       |
+| **2.4.5** | Múltiples vías             | ✅     | Nav, búsqueda, breadcrumbs  |
+| **2.4.6** | Encabezados                | ✅     | Labels descriptivos         |
+| **2.4.7** | Focus visible              | ✅     | Indicadores implementados   |
+| **3.2.3** | Navegación consistente     | ✅     | Header en todas las páginas |
+| **3.2.4** | Identificación consistente | ✅     | Iconos/labels consistentes  |
+| **4.1.3** | Mensajes de estado         | ✅     | Live regions                |
 
 ---
 
@@ -405,6 +454,7 @@ useEffect(() => {
 ## 🎯 Patrones ARIA Implementados
 
 ### 1. **Modal Dialog Pattern**
+
 ```tsx
 <FocusManager isActive={isOpen} restoreFocus>
   <div role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -415,17 +465,15 @@ useEffect(() => {
 ```
 
 ### 2. **Live Region Pattern**
+
 ```tsx
-<div 
-  role="status" 
-  aria-live="polite" 
-  aria-atomic="true"
->
+<div role="status" aria-live="polite" aria-atomic="true">
   {message}
 </div>
 ```
 
 ### 3. **Skip Link Pattern**
+
 ```tsx
 <a href="#main-content" className="skip-link">
   Saltar al contenido principal
@@ -437,6 +485,7 @@ useEffect(() => {
 ```
 
 ### 4. **Keyboard Navigation Pattern**
+
 ```tsx
 const handleKeyDown = (e: KeyboardEvent) => {
   switch (e.key) {
@@ -455,6 +504,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 ## 🚀 Mejoras de Rendimiento
 
 ### Impacto en Bundle Size:
+
 ```
 Componentes A11y: +3.5 KB (gzip)
 Estilos A11y: +1.2 KB (gzip)
@@ -463,6 +513,7 @@ Total: +6.8 KB (~0.7% del total)
 ```
 
 ### Impacto en Performance:
+
 - **FCP**: Sin cambios
 - **LCP**: Sin cambios
 - **TTI**: +10ms (despreciable)
@@ -473,16 +524,18 @@ Total: +6.8 KB (~0.7% del total)
 ## 📊 Comparativa Antes/Después
 
 ### Antes:
+
 - ❌ Sin Skip Link
 - ❌ Sin Focus Management
 - ❌ Sin Live Regions
 - ❌ Focus outlines globales siempre visibles
 - ❌ Sin soporte para Reduced Motion
 - ❌ Sin roles ARIA en layout
-- ⚠️  Contraste inconsistente
-- ⚠️  Touch targets pequeños
+- ⚠️ Contraste inconsistente
+- ⚠️ Touch targets pequeños
 
 ### Después:
+
 - ✅ Skip Link funcional
 - ✅ Focus Management con componente reutilizable
 - ✅ Live Regions con hook personalizado
@@ -499,20 +552,16 @@ Total: +6.8 KB (~0.7% del total)
 ### Para Modales:
 
 **Antes**:
+
 ```tsx
-<div className="modal">
-  {/* Contenido */}
-</div>
+<div className="modal">{/* Contenido */}</div>
 ```
 
 **Después**:
+
 ```tsx
 <FocusManager isActive={isOpen} restoreFocus>
-  <div 
-    role="dialog" 
-    aria-modal="true" 
-    aria-labelledby="modal-title"
-  >
+  <div role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <h2 id="modal-title">Título</h2>
     {/* Contenido */}
   </div>
@@ -522,11 +571,15 @@ Total: +6.8 KB (~0.7% del total)
 ### Para Notificaciones:
 
 **Antes**:
+
 ```tsx
-{message && <div className="notification">{message}</div>}
+{
+  message && <div className="notification">{message}</div>;
+}
 ```
 
 **Después**:
+
 ```tsx
 <LiveRegion message={message} priority="polite" role="status" />
 ```
@@ -534,6 +587,7 @@ Total: +6.8 KB (~0.7% del total)
 ### Para Botones de Acción:
 
 **Antes**:
+
 ```tsx
 <button onClick={handleClick}>
   <svg>...</svg>
@@ -541,11 +595,9 @@ Total: +6.8 KB (~0.7% del total)
 ```
 
 **Después**:
+
 ```tsx
-<button 
-  onClick={handleClick}
-  aria-label="Añadir al carrito"
->
+<button onClick={handleClick} aria-label="Añadir al carrito">
   <svg aria-hidden="true">...</svg>
 </button>
 ```
@@ -555,17 +607,20 @@ Total: +6.8 KB (~0.7% del total)
 ## 🔍 Testing Realizado
 
 ### ✅ Compilación:
+
 ```bash
 npm run type-check  # ✅ 0 errores
 npm run build       # ✅ Exitoso (19.49s)
 ```
 
 ### ✅ Manual Testing:
+
 - Navegación por teclado (Tab, Shift+Tab, Enter, Escape)
 - Skip Link funcional
 - Focus indicators visibles solo con teclado
 
 ### ⏳ Pendiente:
+
 - [ ] Testing con NVDA/JAWS
 - [ ] Auditoría con axe-core
 - [ ] Lighthouse Accessibility score
@@ -577,6 +632,7 @@ npm run build       # ✅ Exitoso (19.49s)
 ## 📚 Recursos de Referencia
 
 ### Documentación consultada:
+
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [WebAIM Articles](https://webaim.org/articles/)
@@ -584,6 +640,7 @@ npm run build       # ✅ Exitoso (19.49s)
 - [MDN Web Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
 
 ### Herramientas recomendadas:
+
 - **axe DevTools**: Auditoría automatizada
 - **WAVE**: Evaluación de accesibilidad visual
 - **Lighthouse**: Métricas de accesibilidad
@@ -596,18 +653,21 @@ npm run build       # ✅ Exitoso (19.49s)
 ## 🎉 Logros Principales
 
 ### Componentes Base 100% ✅
+
 - 7 componentes nuevos de accesibilidad
 - 6 hooks personalizados
 - 400+ líneas de estilos CSS
 - Documentación completa
 
 ### Layout Principal 100% ✅
+
 - Roles ARIA en header/nav/main/footer
 - Skip Link implementado
 - ARIA labels en botones
 - ID en contenido principal
 
 ### Estilos Globales 100% ✅
+
 - .sr-only utility class
 - Focus indicators inteligentes
 - Reduced Motion support
@@ -617,6 +677,7 @@ npm run build       # ✅ Exitoso (19.49s)
 - Print styles
 
 ### Patrones ARIA 100% ✅
+
 - Modal Dialog
 - Live Region
 - Skip Link
@@ -656,6 +717,7 @@ npm run build       # ✅ Exitoso (19.49s)
 ### Testing exhaustivo (estimado 2-3 horas):
 
 1. **Auditoría automatizada**:
+
    ```bash
    npm install --save-dev @axe-core/react
    npm install --save-dev axe-playwright
@@ -687,6 +749,7 @@ npm run build       # ✅ Exitoso (19.49s)
 ## 📊 Métricas Finales Fase 1
 
 ### Código:
+
 - **Archivos creados**: 7
 - **Archivos modificados**: 4
 - **Líneas de código**: ~1,015
@@ -695,16 +758,19 @@ npm run build       # ✅ Exitoso (19.49s)
 - **Estilos CSS**: 400+ líneas
 
 ### WCAG 2.1:
+
 - **Nivel A**: 85% cumplimiento
 - **Nivel AA**: 65% cumplimiento
 - **Criterios cumplidos**: 19/50 aplicables
 
 ### Performance:
+
 - **Bundle size increase**: +6.8 KB (0.7%)
 - **TTI increase**: +10ms (despreciable)
 - **Build time**: Sin cambios (19.49s)
 
 ### Accesibilidad:
+
 - **Skip Link**: ✅ Implementado
 - **Focus Management**: ✅ Componente listo
 - **Live Regions**: ✅ Hook + componente
@@ -726,12 +792,14 @@ La **Fase 1 de la Auditoría de Accesibilidad** se ha completado exitosamente co
 - ✅ **65% de WCAG 2.1 Nivel AA** cumplido
 
 ### Impacto Estimado:
+
 - **Usuarios con discapacidad**: +300% mejora en usabilidad
 - **SEO**: Mejora esperada (estructura semántica)
 - **Lighthouse Accessibility**: 75 → 90+ (estimado)
 - **Legal compliance**: Mayor cumplimiento con normativas de accesibilidad
 
 ### Próximos Pasos Recomendados:
+
 1. **Fase 2**: Integrar componentes en modales existentes (3-4h)
 2. **Testing**: Auditoría con herramientas + screen readers (2-3h)
 3. **Contraste**: Revisar y ajustar colores (1h)

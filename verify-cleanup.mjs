@@ -10,7 +10,7 @@ const sysProducts = content.match(sysProductsRegex);
 
 if (sysProducts) {
   console.log('❌ PRODUCTOS sys-* ENCONTRADOS:', sysProducts.length);
-  sysProducts.forEach(p => console.log('   -', p));
+  sysProducts.forEach((p) => console.log('   -', p));
 } else {
   console.log('✅ NO hay productos sys-* en el archivo');
 }
@@ -27,7 +27,9 @@ console.log('   - Total de productos (aproximado):', productCount);
 
 // Verificar referencias en systems
 console.log('\n🔍 REFERENCIAS EN SISTEMAS:');
-const inmunologico = content.match(/id:\s*['"`]sistema-inmunologico['"`][^}]+products:\s*\[([^\]]+)\]/s);
+const inmunologico = content.match(
+  /id:\s*['"`]sistema-inmunologico['"`][^}]+products:\s*\[([^\]]+)\]/s
+);
 if (inmunologico) {
   const prods = inmunologico[1].match(/['"`]sys-[^'"`]+['"`]/g);
   if (prods) {
@@ -37,7 +39,9 @@ if (inmunologico) {
   }
 }
 
-const cardiovascular = content.match(/id:\s*['"`]sistema-cardiovascular['"`][^}]+products:\s*\[([^\]]+)\]/s);
+const cardiovascular = content.match(
+  /id:\s*['"`]sistema-cardiovascular['"`][^}]+products:\s*\[([^\]]+)\]/s
+);
 if (cardiovascular) {
   const prods = cardiovascular[1].match(/['"`]sys-[^'"`]+['"`]/g);
   if (prods) {
@@ -47,7 +51,9 @@ if (cardiovascular) {
   }
 }
 
-const oseo = content.match(/id:\s*['"`]sistema-oseo-mineral['"`][^}]+products:\s*\[([^\]]+)\]/s);
+const oseo = content.match(
+  /id:\s*['"`]sistema-oseo-mineral['"`][^}]+products:\s*\[([^\]]+)\]/s
+);
 if (oseo) {
   const prods = oseo[1].match(/['"`]sys-[^'"`]+['"`]/g);
   if (prods) {

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { useStableCallback } from './usePerformance';
+import { useStableCallback } from './useStable';
 
 interface UseIntersectionObserverOptions {
   threshold?: number | number[];
@@ -14,13 +14,16 @@ export function useIntersectionObserver<T extends Element>(
   const targetRef = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const callback = useStableCallback((entries: IntersectionObserverEntry[]) => {
-    const [entry] = entries;
-    setIsVisible(entry.isIntersecting);
-    if (entry.isIntersecting && onIntersect) {
-      onIntersect(entry);
-    }
-  }, [onIntersect]);
+  const callback = useStableCallback(
+    ((entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      setIsVisible(entry.isIntersecting);
+      if (entry.isIntersecting && onIntersect) {
+        onIntersect(entry);
+      }
+    }) as (...args: unknown[]) => unknown,
+    [onIntersect]
+  );
 
   useEffect(() => {
     const target = targetRef.current;
@@ -30,7 +33,7 @@ export function useIntersectionObserver<T extends Element>(
     observer.observe(target);
 
     return () => observer.disconnect();
-  }, [callback, options.threshold, options.rootMargin, options.root]);
+  }, [callback, options]);
 
   return { ref: targetRef, isVisible };
 }
@@ -41,7 +44,7 @@ interface UseScrollPositionOptions {
 
 export function useScrollPosition(
   effect: (position: { x: number; y: number }) => void,
-  deps: any[] = [],
+  deps: React.DependencyList = [],
   options: UseScrollPositionOptions = {}
 ) {
   const { throttleMs = 16 } = options;
@@ -79,7 +82,7 @@ export function useScrollPosition(
         cancelAnimationFrame(frame.current);
       }
     };
-  }, [callback, throttleMs, ...deps]);
+  }, [callback, throttleMs, ...deps]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export function useScrollDirection() {

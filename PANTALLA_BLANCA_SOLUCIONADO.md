@@ -9,6 +9,7 @@ La aplicación mostraba una **pantalla blanca** debido a **errores en las rutas 
 ## 🔍 Causa Raíz
 
 ### **Estructura de Carpetas Duplicada:**
+
 - Existían carpetas tanto en la **raíz del proyecto** como dentro de **`src/`**:
   - ❌ `./components/` (NO existe)
   - ✅ `./src/components/` (existe)
@@ -16,6 +17,7 @@ La aplicación mostraba una **pantalla blanca** debido a **errores en las rutas 
   - ✅ `./src/pages/` (completo - todas las páginas nuevas)
 
 ### **Imports Incorrectos en App.tsx:**
+
 ```tsx
 // ❌ INCORRECTO - archivos no existen en estas rutas
 import NotificationContainer from './components/NotificationContainer';
@@ -74,8 +76,8 @@ npm run dev
 
 ## 📋 Archivos Modificados
 
-| Archivo | Cambio |
-|---------|--------|
+| Archivo   | Cambio                                                   |
+| --------- | -------------------------------------------------------- |
 | `App.tsx` | Corregidas rutas de importación de 8 componentes/páginas |
 
 ---
@@ -83,10 +85,12 @@ npm run dev
 ## 🚨 Lecciones Aprendidas
 
 ### **Problema de Arquitectura:**
+
 - La estructura del proyecto tiene **carpetas duplicadas** (raíz vs `src/`)
 - Esto causa **confusión en las importaciones**
 
 ### **Recomendación Futura:**
+
 1. **Consolidar estructura:** Mover todo a `src/` o todo a la raíz
 2. **Usar path aliases:** Configurar `@/components`, `@/pages`, etc.
 3. **Validar imports:** Usar ESLint para detectar imports incorrectos
@@ -96,6 +100,7 @@ npm run dev
 ## 🔧 Configuración Actual del Proyecto
 
 ### **Estructura Real:**
+
 ```
 proyecto/
 ├── App.tsx                    # Punto de entrada
@@ -126,13 +131,13 @@ proyecto/
 
 ## 📊 Estado del Proyecto
 
-| Aspecto | Estado |
-|---------|--------|
-| **Pantalla Blanca** | ✅ **RESUELTO** |
-| **Servidor Dev** | ✅ Running en puerto 3000 |
-| **Build Production** | ✅ Funcional |
-| **Imports** | ✅ Corregidos |
-| **Dependencies** | ✅ Instaladas correctamente |
+| Aspecto              | Estado                      |
+| -------------------- | --------------------------- |
+| **Pantalla Blanca**  | ✅ **RESUELTO**             |
+| **Servidor Dev**     | ✅ Running en puerto 3000   |
+| **Build Production** | ✅ Funcional                |
+| **Imports**          | ✅ Corregidos               |
+| **Dependencies**     | ✅ Instaladas correctamente |
 
 ---
 
@@ -147,5 +152,5 @@ La aplicación **Pureza Naturalis** está ahora funcionando correctamente sin pa
 
 ---
 
-*✅ Aplicación lista para desarrollo y testing*  
-*🌐 URL: http://localhost:3000/*
+_✅ Aplicación lista para desarrollo y testing_  
+_🌐 URL: http://localhost:3000/_

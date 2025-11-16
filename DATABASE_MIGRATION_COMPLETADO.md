@@ -1,6 +1,7 @@
 # ✅ DATABASE MIGRATION - PRODUCTOS A SUPABASE - COMPLETADO
 
 > **⚠️ NOTA IMPORTANTE:** Esta tarea está completada en términos de **planificación, documentación y esquema**. La implementación del código está **preparada pero no integrada** para evitar romper la funcionalidad actual. La migración real requiere:
+>
 > 1. Cuenta de Supabase configurada
 > 2. Variables de entorno establecidas
 > 3. Datos migrados a la base de datos
@@ -12,14 +13,14 @@
 
 ### Infraestructura Implementada
 
-| Componente | Estado | Descripción |
-|------------|--------|-------------|
-| **Schema SQL** | ✅ Completo | 10 tablas, índices, full-text search, RLS |
-| **Supabase Client** | ✅ Configurado | Cliente TypeScript con validación |
-| **Products API Service** | ✅ Implementado | CRUD + búsqueda + paginación + fallback |
-| **React Query Hooks** | ✅ Creados | 8 hooks custom con caching inteligente |
-| **Query Provider** | ✅ Listo | Configuración optimizada + devtools |
-| **Migración de Datos** | ⏳ Pendiente | Requiere configuración de Supabase por usuario |
+| Componente               | Estado          | Descripción                                    |
+| ------------------------ | --------------- | ---------------------------------------------- |
+| **Schema SQL**           | ✅ Completo     | 10 tablas, índices, full-text search, RLS      |
+| **Supabase Client**      | ✅ Configurado  | Cliente TypeScript con validación              |
+| **Products API Service** | ✅ Implementado | CRUD + búsqueda + paginación + fallback        |
+| **React Query Hooks**    | ✅ Creados      | 8 hooks custom con caching inteligente         |
+| **Query Provider**       | ✅ Listo        | Configuración optimizada + devtools            |
+| **Migración de Datos**   | ⏳ Pendiente    | Requiere configuración de Supabase por usuario |
 
 ### Reducción de Bundle Proyectada
 
@@ -31,7 +32,7 @@ Antes (data/products.ts):
 Después (Supabase):
   API calls on-demand          ~5-10 KB (solo metadata inicial)
   Total JavaScript:            ~680 KB (-27% reducción)
-  
+
 🎯 Reducción estimada: -254 KB (-85% del archivo de productos)
 ```
 
@@ -157,9 +158,9 @@ idx_product_tags_tag                 -- Tag search
 ```sql
 -- Búsqueda automática en español
 search_vector tsvector GENERATED ALWAYS AS (
-  to_tsvector('spanish', 
-    coalesce(name, '') || ' ' || 
-    coalesce(description, '') || ' ' || 
+  to_tsvector('spanish',
+    coalesce(name, '') || ' ' ||
+    coalesce(description, '') || ' ' ||
     coalesce(detailed_description, '') || ' ' ||
     coalesce(sku, '')
   )
@@ -172,6 +173,7 @@ ORDER BY ts_rank(search_vector, plainto_tsquery('spanish', 'vitamina c')) DESC;
 ```
 
 **Ventajas:**
+
 - 🚀 **10-100x más rápido** que `LIKE %query%`
 - 🌐 Soporta búsqueda en español (stemming, stop words)
 - 🎯 Ranking por relevancia
@@ -189,6 +191,7 @@ CREATE POLICY "Public read access for products" ON products
 ```
 
 **Beneficios:**
+
 - 🔒 Seguridad a nivel de fila
 - 👥 Control granular de acceso
 - 🛡️ Protección contra SQL injection
@@ -208,6 +211,7 @@ CREATE FUNCTION search_products(
 ```
 
 **Ventajas:**
+
 - ⚡ Ejecución en servidor (más rápida)
 - 🔧 Lógica compleja centralizada
 - 📊 Reduce transferencia de datos
@@ -216,7 +220,7 @@ CREATE FUNCTION search_products(
 
 ```sql
 CREATE VIEW products_full AS
-SELECT 
+SELECT
   p.*,
   json_agg(categories) AS categories,
   json_agg(images) AS images,
@@ -228,6 +232,7 @@ GROUP BY p.id;
 ```
 
 **Beneficios:**
+
 - 🎯 Una sola query para todos los datos
 - 🧹 Código cliente más limpio
 - 🚀 Optimizado por PostgreSQL
@@ -248,8 +253,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true,      // Persist auth across page reloads
-    autoRefreshToken: true,     // Auto-refresh expired tokens
+    persistSession: true, // Persist auth across page reloads
+    autoRefreshToken: true, // Auto-refresh expired tokens
   },
   db: {
     schema: 'public',
@@ -265,6 +270,7 @@ export const Tables = {
 ```
 
 **Features:**
+
 - ✅ Validación de environment variables
 - ✅ TypeScript type safety
 - ✅ Constantes centralizadas
@@ -324,15 +330,15 @@ try {
 
 **API Functions:**
 
-| Función | Descripción | Parámetros |
-|---------|-------------|------------|
-| `getCategories()` | Obtener todas las categorías | - |
-| `getProducts(params)` | Lista paginada con filtros | `ProductQueryParams` |
-| `getProductById(id)` | Producto individual | `id: string` |
-| `getFeaturedProducts(limit)` | Productos destacados | `limit?: number` |
-| `getProductsByCategory(id, limit)` | Productos por categoría | `categoryId, limit` |
-| `searchProducts(query, params)` | Búsqueda full-text | `query, params` |
-| `getProductStats()` | Estadísticas generales | - |
+| Función                            | Descripción                  | Parámetros           |
+| ---------------------------------- | ---------------------------- | -------------------- |
+| `getCategories()`                  | Obtener todas las categorías | -                    |
+| `getProducts(params)`              | Lista paginada con filtros   | `ProductQueryParams` |
+| `getProductById(id)`               | Producto individual          | `id: string`         |
+| `getFeaturedProducts(limit)`       | Productos destacados         | `limit?: number`     |
+| `getProductsByCategory(id, limit)` | Productos por categoría      | `categoryId, limit`  |
+| `searchProducts(query, params)`    | Búsqueda full-text           | `query, params`      |
+| `getProductStats()`                | Estadísticas generales       | -                    |
 
 ### 3. React Query Hooks
 
@@ -348,8 +354,8 @@ export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
-    staleTime: Infinity,        // Nunca stale
-    gcTime: Infinity,           // Nunca eliminar del cache
+    staleTime: Infinity, // Nunca stale
+    gcTime: Infinity, // Nunca eliminar del cache
   });
 };
 
@@ -358,8 +364,8 @@ export const useProducts = (params?: ProductQueryParams) => {
   return useQuery({
     queryKey: ['products', 'list', params],
     queryFn: () => getProducts(params),
-    staleTime: 5 * 60 * 1000,   // Fresh por 5 minutos
-    gcTime: 10 * 60 * 1000,     // En cache 10 minutos
+    staleTime: 5 * 60 * 1000, // Fresh por 5 minutos
+    gcTime: 10 * 60 * 1000, // En cache 10 minutos
   });
 };
 
@@ -370,24 +376,27 @@ export const useProduct = (id: string) => {
     queryFn: () => getProductById(id),
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    enabled: Boolean(id),       // Solo fetch si hay ID
+    enabled: Boolean(id), // Solo fetch si hay ID
   });
 };
 
 // Hook: Búsqueda (cache 2min)
-export const useProductSearch = (query: string, params?: ProductQueryParams) => {
+export const useProductSearch = (
+  query: string,
+  params?: ProductQueryParams
+) => {
   return useQuery({
     queryKey: ['products', 'list', { ...params, search: query }],
     queryFn: () => searchProducts(query, params),
-    staleTime: 2 * 60 * 1000,   // Resultados cambian más seguido
-    enabled: query.length >= 2,  // Min 2 caracteres
+    staleTime: 2 * 60 * 1000, // Resultados cambian más seguido
+    enabled: query.length >= 2, // Min 2 caracteres
   });
 };
 
 // Hook: Prefetch (optimistic loading)
 export const usePrefetchProduct = () => {
   const queryClient = useQueryClient();
-  
+
   return {
     prefetchProduct: async (id: string) => {
       await queryClient.prefetchQuery({
@@ -412,14 +421,14 @@ export const usePrefetchProduct = () => {
 
 **Estrategias de Cache:**
 
-| Tipo de Dato | Stale Time | GC Time | Estrategia |
-|--------------|------------|---------|------------|
-| Categorías | ∞ (infinito) | ∞ | Cache permanente (raramente cambian) |
-| Productos Lista | 5 min | 10 min | Stale-while-revalidate |
-| Producto Individual | 10 min | 30 min | Lazy loading con refetch |
-| Búsqueda | 2 min | 5 min | Cache corto (resultados dinámicos) |
-| Featured | 15 min | 30 min | Cache largo (estable) |
-| Stats | 30 min | 1 hora | Cache muy largo (pocas actualizaciones) |
+| Tipo de Dato        | Stale Time   | GC Time | Estrategia                              |
+| ------------------- | ------------ | ------- | --------------------------------------- |
+| Categorías          | ∞ (infinito) | ∞       | Cache permanente (raramente cambian)    |
+| Productos Lista     | 5 min        | 10 min  | Stale-while-revalidate                  |
+| Producto Individual | 10 min       | 30 min  | Lazy loading con refetch                |
+| Búsqueda            | 2 min        | 5 min   | Cache corto (resultados dinámicos)      |
+| Featured            | 15 min       | 30 min  | Cache largo (estable)                   |
+| Stats               | 30 min       | 1 hora  | Cache muy largo (pocas actualizaciones) |
 
 ### 4. Query Provider
 
@@ -449,6 +458,7 @@ export const QueryProvider: React.FC = ({ children }) => {
 ```
 
 **Features:**
+
 - ✅ Configuración optimizada para e-commerce
 - ✅ React Query Devtools (dev only)
 - ✅ Retry automático con backoff exponencial
@@ -461,6 +471,7 @@ export const QueryProvider: React.FC = ({ children }) => {
 ### Paso 1: Configurar Supabase
 
 1. **Crear proyecto en Supabase**
+
    ```bash
    # Ir a https://supabase.com/dashboard
    # Crear nuevo proyecto
@@ -468,6 +479,7 @@ export const QueryProvider: React.FC = ({ children }) => {
    ```
 
 2. **Ejecutar schema SQL**
+
    ```bash
    # En Supabase Dashboard:
    # SQL Editor > New Query
@@ -476,10 +488,11 @@ export const QueryProvider: React.FC = ({ children }) => {
    ```
 
 3. **Configurar variables de entorno**
+
    ```bash
    # Copiar .env.example a .env
    cp .env.example .env
-   
+
    # Editar .env con tus credenciales
    VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
    VITE_SUPABASE_ANON_KEY=tu_anon_key_aqui
@@ -515,10 +528,10 @@ import { useProducts, useCategories } from '../hooks/useProducts';
 const StorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('todos');
   const [page, setPage] = useState(1);
-  
+
   // Fetch categorías (cache infinito)
   const { data: categories } = useCategories();
-  
+
   // Fetch productos con paginación
   const { data, isLoading, error } = useProducts({
     category: selectedCategory,
@@ -527,21 +540,21 @@ const StorePage = () => {
     sortBy: 'name',
     sortOrder: 'asc',
   });
-  
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage error={error} />;
-  
+
   return (
     <div>
-      <CategoryFilter 
-        categories={categories} 
+      <CategoryFilter
+        categories={categories}
         selected={selectedCategory}
         onChange={setSelectedCategory}
       />
-      
+
       <ProductGrid products={data?.data || []} />
-      
-      <Pagination 
+
+      <Pagination
         currentPage={page}
         totalPages={data?.totalPages || 1}
         onPageChange={setPage}
@@ -559,23 +572,23 @@ import { useProductSearch } from '../hooks/useProducts';
 
 const ProductSearch = () => {
   const [query, setQuery] = useState('');
-  
+
   // Búsqueda automática con debounce
   const { data, isLoading } = useProductSearch(query, {
     pageSize: 20,
   });
-  
+
   return (
     <div>
-      <input 
+      <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Buscar productos..."
       />
-      
+
       {isLoading && <Spinner />}
-      
-      <SearchResults 
+
+      <SearchResults
         results={data?.data || []}
         total={data?.total || 0}
       />
@@ -595,50 +608,48 @@ import { products, productCategories } from '../data/products';
 
 async function migrate() {
   console.log('🚀 Starting migration...');
-  
+
   // 1. Migrate categories
-  const { error: catError } = await supabase
-    .from('product_categories')
-    .upsert(productCategories.map(cat => ({
+  const { error: catError } = await supabase.from('product_categories').upsert(
+    productCategories.map((cat) => ({
       id: cat.id,
       name: cat.name,
-    })));
-  
+    }))
+  );
+
   if (catError) throw catError;
   console.log('✅ Categories migrated');
-  
+
   // 2. Migrate products
   for (const product of products) {
     // Insert main product
-    const { error: prodError } = await supabase
-      .from('products')
-      .upsert({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        description: product.description,
-        // ... etc
-      });
-    
+    const { error: prodError } = await supabase.from('products').upsert({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      // ... etc
+    });
+
     if (prodError) throw prodError;
-    
+
     // Insert images
     if (product.images) {
-      const { error: imgError } = await supabase
-        .from('product_images')
-        .insert(product.images.map((img, idx) => ({
+      const { error: imgError } = await supabase.from('product_images').insert(
+        product.images.map((img, idx) => ({
           product_id: product.id,
           thumbnail: img.thumbnail,
           full: img.full,
           sort_order: idx,
-        })));
-      
+        }))
+      );
+
       if (imgError) throw imgError;
     }
-    
+
     console.log(`✅ Migrated: ${product.name}`);
   }
-  
+
   console.log('🎉 Migration complete!');
 }
 
@@ -661,18 +672,19 @@ npm run migrate:products
 
 ### Performance
 
-| Métrica | Antes (Local) | Después (Supabase) | Mejora |
-|---------|---------------|-------------------|--------|
-| **Bundle Size** | 933.98 KB | ~680 KB | -27% |
-| **products-data** | 258.61 KB | ~5-10 KB | -95% |
-| **Initial Load** | Todo el catálogo | Solo metadata | -85% datos |
-| **Search Speed** | O(n) linear | O(log n) indexed | 10-100x |
-| **First Paint** | ~2.4s | ~1.8s | -25% |
-| **Time to Interactive** | ~3.6s | ~2.8s | -22% |
+| Métrica                 | Antes (Local)    | Después (Supabase) | Mejora     |
+| ----------------------- | ---------------- | ------------------ | ---------- |
+| **Bundle Size**         | 933.98 KB        | ~680 KB            | -27%       |
+| **products-data**       | 258.61 KB        | ~5-10 KB           | -95%       |
+| **Initial Load**        | Todo el catálogo | Solo metadata      | -85% datos |
+| **Search Speed**        | O(n) linear      | O(log n) indexed   | 10-100x    |
+| **First Paint**         | ~2.4s            | ~1.8s              | -25%       |
+| **Time to Interactive** | ~3.6s            | ~2.8s              | -22%       |
 
 ### Escalabilidad
 
 #### Antes (Local Data)
+
 ```
 ❌ 142 productos = 258 KB
 ❌ 500 productos = ~910 KB
@@ -681,6 +693,7 @@ npm run migrate:products
 ```
 
 #### Después (Supabase)
+
 ```
 ✅ 142 productos = 10 KB inicial + lazy load
 ✅ 500 productos = 10 KB inicial + lazy load
@@ -690,27 +703,27 @@ npm run migrate:products
 
 ### Funcionalidad
 
-| Feature | Local Data | Supabase |
-|---------|------------|----------|
-| Búsqueda | `includes()` simple | Full-text con ranking |
-| Filtros | Client-side (lento) | Server-side (rápido) |
-| Ordenamiento | Client-side | Server-side + indexed |
-| Paginación | Slice array | Server-side real |
-| Actualización | Redeploy completo | Update en segundos |
-| Admin Panel | Imposible | Fácil con RLS |
-| Multi-idioma | Difícil | Fácil con i18n |
-| A/B Testing | No | Sí |
+| Feature       | Local Data          | Supabase              |
+| ------------- | ------------------- | --------------------- |
+| Búsqueda      | `includes()` simple | Full-text con ranking |
+| Filtros       | Client-side (lento) | Server-side (rápido)  |
+| Ordenamiento  | Client-side         | Server-side + indexed |
+| Paginación    | Slice array         | Server-side real      |
+| Actualización | Redeploy completo   | Update en segundos    |
+| Admin Panel   | Imposible           | Fácil con RLS         |
+| Multi-idioma  | Difícil             | Fácil con i18n        |
+| A/B Testing   | No                  | Sí                    |
 
 ### Operaciones
 
-| Operación | Antes | Después |
-|-----------|-------|---------|
-| **Añadir producto** | Editar TS → Build → Deploy (10 min) | Insert SQL (10 seg) |
-| **Actualizar precio** | Editar TS → Build → Deploy (10 min) | Update SQL (5 seg) |
-| **Cambiar stock** | Editar TS → Build → Deploy (10 min) | Update SQL (5 seg) |
-| **Búsqueda admin** | grep en archivo (lento) | SQL query (instantáneo) |
-| **Backup** | Git (full repo) | Supabase auto-backup |
-| **Rollback** | Git revert → Deploy | SQL rollback (instant) |
+| Operación             | Antes                               | Después                 |
+| --------------------- | ----------------------------------- | ----------------------- |
+| **Añadir producto**   | Editar TS → Build → Deploy (10 min) | Insert SQL (10 seg)     |
+| **Actualizar precio** | Editar TS → Build → Deploy (10 min) | Update SQL (5 seg)      |
+| **Cambiar stock**     | Editar TS → Build → Deploy (10 min) | Update SQL (5 seg)      |
+| **Búsqueda admin**    | grep en archivo (lento)             | SQL query (instantáneo) |
+| **Backup**            | Git (full repo)                     | Supabase auto-backup    |
+| **Rollback**          | Git revert → Deploy                 | SQL rollback (instant)  |
 
 ---
 
@@ -728,7 +741,7 @@ export const getProducts = async (params) => {
     console.info('📦 Using local products (Supabase not configured)');
     return filterLocalProducts(params);
   }
-  
+
   try {
     // Try Supabase first
     const { data, error } = await supabase.from('products').select('*');
@@ -743,6 +756,7 @@ export const getProducts = async (params) => {
 ```
 
 **Ventajas:**
+
 - ✅ **Zero downtime**: Si Supabase falla, usa datos locales
 - ✅ **Desarrollo sin setup**: Funciona sin configurar Supabase
 - ✅ **Testing fácil**: No requiere conexión a DB
@@ -750,18 +764,19 @@ export const getProducts = async (params) => {
 
 ### Estados de la Aplicación
 
-| Estado | Supabase | Fallback | Comportamiento |
-|--------|----------|----------|----------------|
-| **Producción** | ✅ Configurado | ❌ No usado | 100% Supabase |
-| **Development** | ✅ Configurado | ⏸️ Standby | Supabase + fallback en error |
-| **Sin configurar** | ❌ No config | ✅ Activo | 100% local data |
-| **Network error** | ⚠️ Error | ✅ Activo | Fallback automático |
+| Estado             | Supabase       | Fallback    | Comportamiento               |
+| ------------------ | -------------- | ----------- | ---------------------------- |
+| **Producción**     | ✅ Configurado | ❌ No usado | 100% Supabase                |
+| **Development**    | ✅ Configurado | ⏸️ Standby  | Supabase + fallback en error |
+| **Sin configurar** | ❌ No config   | ✅ Activo   | 100% local data              |
+| **Network error**  | ⚠️ Error       | ✅ Activo   | Fallback automático          |
 
 ---
 
 ## 📦 Archivos Creados
 
 ### 1. Database Schema
+
 ```
 supabase/
 └── schema.sql (385 líneas)
@@ -774,6 +789,7 @@ supabase/
 ```
 
 ### 2. Configuration
+
 ```
 src/lib/
 └── supabase.ts (90 líneas)
@@ -784,6 +800,7 @@ src/lib/
 ```
 
 ### 3. API Service
+
 ```
 src/services/
 └── productsApi.ts (400+ líneas)
@@ -794,6 +811,7 @@ src/services/
 ```
 
 ### 4. React Query Hooks
+
 ```
 src/hooks/
 └── useProducts.ts (220 líneas)
@@ -804,6 +822,7 @@ src/hooks/
 ```
 
 ### 5. Query Provider
+
 ```
 src/providers/
 └── QueryProvider.tsx (70 líneas)
@@ -813,6 +832,7 @@ src/providers/
 ```
 
 ### 6. Environment Template
+
 ```
 .env.example (35 líneas)
     ├── Supabase credentials
@@ -825,6 +845,7 @@ src/providers/
 ## ✅ Checklist de Completación
 
 ### Infrastructure
+
 - [x] Supabase schema SQL creado (10 tablas)
 - [x] Índices optimizados (12 índices)
 - [x] Full-text search configurado
@@ -833,6 +854,7 @@ src/providers/
 - [x] Views para queries complejas
 
 ### Client Code
+
 - [x] Supabase client configurado
 - [x] Products API service implementado
 - [x] React Query hooks creados (8 hooks)
@@ -841,6 +863,7 @@ src/providers/
 - [x] TypeScript types completos
 
 ### Documentation
+
 - [x] .env.example con instrucciones
 - [x] DATABASE_MIGRATION_COMPLETADO.md
 - [x] Schema SQL documentado
@@ -848,6 +871,7 @@ src/providers/
 - [x] Guía de implementación
 
 ### Testing & Validation
+
 - [ ] ⏳ Configurar Supabase project (requiere usuario)
 - [ ] ⏳ Ejecutar schema SQL
 - [ ] ⏳ Script de migración de datos
@@ -928,6 +952,7 @@ Escalabilidad:       +10,000% (142 → 14,200 productos sin impacto)
 **Tiempo invertido:** 4 horas setup + 1 hora migración = **5 horas**
 
 **Beneficios:**
+
 - ✅ Bundle -27% → Mejora LCP/FCP permanente
 - ✅ Búsqueda 10-100x más rápida → Mejor UX
 - ✅ Actualizar producto: 10 min → 30 seg → **95% menos tiempo**
@@ -935,6 +960,7 @@ Escalabilidad:       +10,000% (142 → 14,200 productos sin impacto)
 - ✅ Datos dinámicos → Sin redeploy
 
 **Tiempo ahorrado por operación:**
+
 - Añadir producto: 9.5 min ahorrados × 10 productos/mes = **95 min/mes**
 - Update precio: 9.5 min × 50 updates/mes = **475 min/mes (8h)**
 - **Total:** ~10 horas ahorradas por mes
@@ -946,17 +972,20 @@ Escalabilidad:       +10,000% (142 → 14,200 productos sin impacto)
 ## 🔗 Referencias
 
 ### Documentación
+
 - [Supabase Documentation](https://supabase.com/docs)
 - [PostgreSQL Full-Text Search](https://www.postgresql.org/docs/current/textsearch.html)
 - [TanStack Query (React Query)](https://tanstack.com/query/latest)
 - [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security)
 
 ### Herramientas
+
 - [Supabase Dashboard](https://supabase.com/dashboard)
 - [React Query Devtools](https://tanstack.com/query/latest/docs/devtools)
 - [PostgreSQL EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)
 
 ### Tutoriales
+
 - [Supabase + React Query Tutorial](https://supabase.com/docs/guides/getting-started/tutorials/with-react)
 - [PostgreSQL Performance Tuning](https://wiki.postgresql.org/wiki/Performance_Optimization)
 - [Full-Text Search Best Practices](https://supabase.com/docs/guides/database/full-text-search)

@@ -1,5 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Hook: useNavigationState
+ * Propósito: Guardar y restaurar el estado de navegación de la tienda (filtros,
+ *            página actual y posición de scroll), para que al volver desde la
+ *            ficha de producto el usuario continúe exactamente donde estaba.
+ * API expuesta:
+ *  - saveNavigationState: persiste filtros/paginación y scroll actual
+ *  - getNavigationState: lee el estado persistido
+ *  - returnToStore: marca procedencia y navega a la tienda
+ *  - clearNavigationState / clearFromProductPageFlag: limpieza selectiva
+ *  - isFromProductPage: indica si se debe restaurar estado al cargar la tienda
+ */
+
 export interface StoreNavigationState {
   selectedCategory: string;
   searchTerm: string;
@@ -16,13 +29,15 @@ export const useNavigationState = () => {
   const navigate = useNavigate();
 
   // Guardar estado actual de la tienda
-  const saveNavigationState = (state: Omit<StoreNavigationState, 'scrollPosition' | 'fromProductPage'>) => {
+  const saveNavigationState = (
+    state: Omit<StoreNavigationState, 'scrollPosition' | 'fromProductPage'>
+  ) => {
     const navigationState: StoreNavigationState = {
       ...state,
       scrollPosition: window.scrollY,
       fromProductPage: false,
     };
-    
+
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(navigationState));
   };
 

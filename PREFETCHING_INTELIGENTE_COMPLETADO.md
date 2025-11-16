@@ -9,14 +9,16 @@
 ## 📊 RESULTADOS ALCANZADOS
 
 ### Performance Improvements
-| Métrica | Sin Prefetch | Con Prefetch | Mejora |
-|---------|--------------|--------------|--------|
-| **Navegación Home → Store** | ~800ms | ~150ms | **-81% ⚡** |
-| **Hover → Click (Imagen)** | ~300ms | ~0ms | **Instant** |
-| **Time to Interactive (2nd page)** | ~1.2s | ~0.4s | **-67%** |
-| **User Perception** | Visible delay | Instant | **Perfect** |
+
+| Métrica                            | Sin Prefetch  | Con Prefetch | Mejora      |
+| ---------------------------------- | ------------- | ------------ | ----------- |
+| **Navegación Home → Store**        | ~800ms        | ~150ms       | **-81% ⚡** |
+| **Hover → Click (Imagen)**         | ~300ms        | ~0ms         | **Instant** |
+| **Time to Interactive (2nd page)** | ~1.2s         | ~0.4s        | **-67%**    |
+| **User Perception**                | Visible delay | Instant      | **Perfect** |
 
 ### Build Verification
+
 ```bash
 ✓ TypeScript: 0 errors
 ✓ Build time: 14.66s
@@ -41,6 +43,7 @@
 Sistema modular de hooks para diferentes estrategias de prefetching:
 
 #### usePrefetchImage
+
 Precarga imágenes cuando es probable que el usuario las necesite.
 
 ```typescript
@@ -49,7 +52,7 @@ export const usePrefetchImage = () => {
 
   const prefetchImage = useCallback((src: string) => {
     if (!src || prefetchedImages.current.has(src)) return;
-    
+
     const img = new Image();
     img.src = src; // Browser automatically caches
     prefetchedImages.current.add(src);
@@ -60,18 +63,20 @@ export const usePrefetchImage = () => {
 ```
 
 **Características**:
+
 - ✅ Deduplicación automática (Set tracking)
 - ✅ No bloquea el thread principal
 - ✅ Usa cache nativo del navegador
 - ✅ Perfecto para hover states
 
 **Uso en ProductCard**:
+
 ```typescript
 const { prefetchImages } = usePrefetchImage();
 
 const handleMouseEnter = useCallback(() => {
   // Precargar todas las imágenes del producto
-  const imagesToPrefetch = product.images.map(img => 
+  const imagesToPrefetch = product.images.map(img =>
     typeof img === 'string' ? img : img.full
   );
   prefetchImages(imagesToPrefetch);
@@ -85,6 +90,7 @@ return (
 ```
 
 #### useIntersectionPrefetch
+
 Precarga recursos cuando elementos están cerca del viewport (200px antes).
 
 ```typescript
@@ -121,22 +127,23 @@ export const useIntersectionPrefetch = (
 ```
 
 **Ventajas**:
+
 - 🎯 Precarga anticipada pero no agresiva
 - 📉 Reduce perceived lag
 - 🔄 Ejecuta solo una vez por elemento
 - 💾 Memory efficient
 
 #### useIdlePrefetch
+
 Precarga en background cuando el navegador está idle (usa requestIdleCallback).
 
 ```typescript
 export const useIdlePrefetch = (callback: () => void, delay: number = 2000) => {
   useEffect(() => {
     if ('requestIdleCallback' in window) {
-      const idleCallbackId = window.requestIdleCallback(
-        () => callback(),
-        { timeout: delay }
-      );
+      const idleCallbackId = window.requestIdleCallback(() => callback(), {
+        timeout: delay,
+      });
       return () => window.cancelIdleCallback(idleCallbackId);
     } else {
       // Fallback para navegadores sin soporte
@@ -148,6 +155,7 @@ export const useIdlePrefetch = (callback: () => void, delay: number = 2000) => {
 ```
 
 **Uso en HomePage**:
+
 ```typescript
 useIdlePrefetch(() => {
   // Lazy import de páginas principales cuando el navegador está idle
@@ -157,12 +165,14 @@ useIdlePrefetch(() => {
 ```
 
 **Ventajas**:
+
 - ⏱️ No interfiere con carga inicial
 - 🧠 Aprovecha tiempo muerto del navegador
 - 🎯 Perfecto para rutas probables
 - 📱 Mobile-friendly (respeta recursos limitados)
 
 #### usePrefetchData
+
 Precarga datos de API con baja prioridad.
 
 ```typescript
@@ -184,6 +194,7 @@ export const usePrefetchData = () => {
 ```
 
 **Características**:
+
 - 📡 Priority: low (no compite con requests críticos)
 - 💾 force-cache (usa HTTP cache)
 - 🔇 Silent failures (prefetch es opcional)
@@ -215,10 +226,10 @@ const RoutePrefetcher: React.FC = () => {
 
   useEffect(() => {
     const predictedRoutes = getPredictedRoutes(location.pathname);
-    
+
     // Delay para no interferir con carga actual
     setTimeout(() => {
-      predictedRoutes.forEach(route => {
+      predictedRoutes.forEach((route) => {
         const chunkPath = ROUTE_CHUNKS[route];
         if (chunkPath) prefetchChunk(chunkPath);
       });
@@ -230,6 +241,7 @@ const RoutePrefetcher: React.FC = () => {
 ```
 
 **Lógica de predicción**:
+
 1. Usuario navega a ruta A
 2. Sistema identifica rutas probables B, C, D
 3. Después de 1.5s (carga inicial completa)
@@ -237,6 +249,7 @@ const RoutePrefetcher: React.FC = () => {
 5. Cuando usuario navega a B → carga instantánea
 
 **Ventajas**:
+
 - 🧠 Inteligente: basado en patrones reales
 - ⚡ No bloquea navegación actual
 - 📦 Prefetch de chunks completos
@@ -265,11 +278,13 @@ Hints estáticos para navegador en el `<head>`:
 ```
 
 **Tipos de hints**:
+
 - **preconnect**: Establece conexión TCP/TLS anticipadamente
 - **dns-prefetch**: Resuelve DNS antes de que se solicite
 - **prefetch**: Descarga recurso con baja prioridad
 
 **Impacto medido**:
+
 - DNS resolution: -50ms
 - TLS handshake: -100ms
 - First byte time: -70ms
@@ -288,14 +303,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleMouseEnter = useCallback(() => {
     // Precargar TODAS las imágenes del producto
-    const imagesToPrefetch = product.images.map(img => 
+    const imagesToPrefetch = product.images.map(img =>
       typeof img === 'string' ? img : img.full
     );
     prefetchImages(imagesToPrefetch);
   }, [product.images, prefetchImages]);
 
   return (
-    <div 
+    <div
       className="..."
       onMouseEnter={handleMouseEnter}
     >
@@ -306,12 +321,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 ```
 
 **Comportamiento**:
+
 1. Usuario hace hover sobre ProductCard
 2. Todas las imágenes del producto se precargan
 3. Cuando usuario hace click → imágenes ya cached
 4. Carga de ProductDetailModal: instantánea
 
 **Métricas**:
+
 - Image load time en modal: 300ms → 0ms
 - Perceived instant: 100% de casos
 - Network overhead: Mínimo (solo si hace hover)
@@ -321,6 +338,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 ## 🎯 ESTRATEGIAS DE PREFETCH
 
 ### 1. Aggressive Prefetch (Hover)
+
 **Trigger**: Mouse hover sobre elemento  
 **Target**: Imágenes, recursos pequeños  
 **Timing**: Inmediato  
@@ -328,6 +346,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 **Trade-off**: Puede desperdiciar bandwidth si no hace click
 
 ### 2. Predictive Prefetch (Route Patterns)
+
 **Trigger**: Navegación a ruta A  
 **Target**: Chunks JS de rutas probables  
 **Timing**: 1.5s después de navegación  
@@ -335,6 +354,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 **Trade-off**: Requiere buen mapeo de patrones
 
 ### 3. Idle Prefetch (Background)
+
 **Trigger**: requestIdleCallback  
 **Target**: Rutas principales, datos no críticos  
 **Timing**: Cuando navegador está idle  
@@ -342,6 +362,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 **Trade-off**: Menos predictible (depende de user activity)
 
 ### 4. Intersection Prefetch (Viewport)
+
 **Trigger**: Elemento cerca de viewport (200px)  
 **Target**: Productos, componentes lazy-loaded  
 **Timing**: Antes de entrar en viewport  
@@ -355,6 +376,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 ### User Experience Metrics
 
 **Perceived Performance**:
+
 ```
 Navegación Home → Store:
   Sin prefetch: 800ms (visible delay)
@@ -373,6 +395,7 @@ Second Page TTI:
 ```
 
 **Network Usage**:
+
 ```
 Overhead por prefetch: +15% bandwidth
 Pero: -40% perceived load time
@@ -380,6 +403,7 @@ ROI: Positivo en 90% de sesiones
 ```
 
 **Cache Hit Rate**:
+
 ```
 Image prefetch hit rate: 85%
 Route prefetch hit rate: 72%
@@ -389,6 +413,7 @@ Overall efficiency: Excellent ✅
 ### Technical Metrics
 
 **Bundle Size**:
+
 ```
 usePrefetch.ts: 2.1 KB (0.8 KB gzipped)
 RoutePrefetcher.tsx: 1.8 KB (0.7 KB gzipped)
@@ -397,6 +422,7 @@ Impact: Negligible vs benefits
 ```
 
 **Memory Usage**:
+
 ```
 Tracking Sets (dedupe): ~100 bytes/route
 Image cache: Handled by browser
@@ -409,6 +435,7 @@ Memory footprint: Minimal ✓
 ## 💡 PATRONES DE USO
 
 ### Patrón 1: Hover Prefetch (High Confidence)
+
 ```typescript
 // Use cuando la probabilidad de click es alta (>70%)
 const handleMouseEnter = () => {
@@ -417,6 +444,7 @@ const handleMouseEnter = () => {
 ```
 
 ### Patrón 2: Route Prediction (Medium Confidence)
+
 ```typescript
 // Use para rutas con patrones claros
 ROUTE_PREDICTIONS = {
@@ -425,6 +453,7 @@ ROUTE_PREDICTIONS = {
 ```
 
 ### Patrón 3: Idle Background (Low Priority)
+
 ```typescript
 // Use para recursos "nice to have"
 useIdlePrefetch(() => {
@@ -433,11 +462,15 @@ useIdlePrefetch(() => {
 ```
 
 ### Patrón 4: Viewport Anticipation (Progressive)
+
 ```typescript
 // Use para listas largas con scroll
-const ref = useIntersectionPrefetch(() => {
-  loadNextProducts();
-}, { rootMargin: '200px' });
+const ref = useIntersectionPrefetch(
+  () => {
+    loadNextProducts();
+  },
+  { rootMargin: '200px' }
+);
 ```
 
 ---
@@ -451,7 +484,7 @@ const ref = useIntersectionPrefetch(() => {
 setTimeout(prefetch, 3000); // Esperar más
 
 // Aggressive (desktop/fast connections)
-setTimeout(prefetch, 500);  // Prefetch rápido
+setTimeout(prefetch, 500); // Prefetch rápido
 
 // Adaptive (recomendado)
 const delay = navigator.connection?.effectiveType === '4g' ? 1000 : 3000;
@@ -461,10 +494,10 @@ const delay = navigator.connection?.effectiveType === '4g' ? 1000 : 3000;
 
 ```typescript
 // Mobile (pantalla pequeña, menos anticipación)
-rootMargin: '100px'
+rootMargin: '100px';
 
 // Desktop (pantalla grande, más anticipación)
-rootMargin: '300px'
+rootMargin: '300px';
 
 // Adaptativo
 const margin = window.innerWidth > 1024 ? '300px' : '100px';
@@ -487,6 +520,7 @@ fetch(url, { priority: 'low' }); // ✅ Recomendado para prefetch
 ### Chrome DevTools - Network Tab
 
 **Verificar Prefetch**:
+
 ```
 1. Abrir DevTools → Network
 2. Hacer hover sobre ProductCard
@@ -495,6 +529,7 @@ fetch(url, { priority: 'low' }); // ✅ Recomendado para prefetch
 ```
 
 **Verificar Cache Hits**:
+
 ```
 1. Hover sobre producto
 2. Click para abrir modal
@@ -505,6 +540,7 @@ fetch(url, { priority: 'low' }); // ✅ Recomendado para prefetch
 ### Performance Monitor
 
 **Métricas a monitorear**:
+
 ```javascript
 // Time to Interactive en segunda navegación
 performance.mark('nav-start');
@@ -515,6 +551,7 @@ performance.measure('navigation', 'nav-start', 'nav-end');
 ```
 
 **Lighthouse Audit**:
+
 ```
 ✓ First Contentful Paint: <1.5s
 ✓ Time to Interactive: <3.5s
@@ -533,6 +570,7 @@ performance.measure('navigation', 'nav-start', 'nav-end');
 **Causa**: Prefetch agresivo sin filtrado
 
 **Solución**:
+
 ```typescript
 // Añadir tracking de hovers
 const hoverStartTime = useRef<number>(0);
@@ -543,7 +581,7 @@ const handleMouseEnter = () => {
 
 const handleMouseLeave = () => {
   const hoverDuration = Date.now() - hoverStartTime.current;
-  
+
   // Solo prefetch si hover > 300ms (intención genuina)
   if (hoverDuration > 300) {
     prefetchImages(product.images);
@@ -558,6 +596,7 @@ const handleMouseLeave = () => {
 **Causa**: API no soportada
 
 **Solución**:
+
 ```typescript
 // Fallback incluido en hook
 if ('requestIdleCallback' in window) {
@@ -574,9 +613,10 @@ if ('requestIdleCallback' in window) {
 **Causa**: Prefetch ejecutándose demasiado pronto
 
 **Solución**:
+
 ```typescript
 // Detectar conexión lenta
-const isSlowConnection = 
+const isSlowConnection =
   navigator.connection?.effectiveType === 'slow-2g' ||
   navigator.connection?.effectiveType === '2g';
 
@@ -591,12 +631,14 @@ if (!isSlowConnection) {
 ## 📚 REFERENCIAS Y DOCUMENTACIÓN
 
 ### Official Documentation
+
 - [Resource Hints (W3C)](https://www.w3.org/TR/resource-hints/)
 - [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 - [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
 - [Fetch Priority API](https://web.dev/fetch-priority/)
 
 ### Best Practices
+
 - [Prefetching Strategies (web.dev)](https://web.dev/link-prefetch/)
 - [Optimizing Resource Loading](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/loading-third-party-javascript)
 - [Adaptive Loading (Google Chrome Labs)](https://github.com/GoogleChromeLabs/adaptive-loading)
@@ -606,6 +648,7 @@ if (!isSlowConnection) {
 ## 📝 CHANGELOG
 
 ### v1.0.0 - 8 Octubre 2025
+
 - ✅ usePrefetch hooks collection creado
   - usePrefetchImage ✓
   - useIntersectionPrefetch ✓
@@ -624,18 +667,21 @@ if (!isSlowConnection) {
 ## 🎯 IMPACT SUMMARY
 
 ### Developer Experience
+
 - ✅ **Modular hooks**: Reutilizables en toda la app
 - ✅ **TypeScript safe**: Full type coverage
 - ✅ **Zero config**: Works out of the box
 - ✅ **Flexible**: Multiple strategies disponibles
 
 ### User Experience
+
 - ⚡ **Navigation**: 81% más rápida (percibida)
 - 🖼️ **Images**: Carga instantánea en hover
 - 📱 **Mobile**: Respeta conexiones limitadas
 - 🎯 **Predictive**: Anticipa intenciones del usuario
 
 ### Business Impact
+
 - 📈 **Engagement**: +25% session duration (proyectado)
 - 💰 **Conversion**: +10% checkout completion (proyectado)
 - 🏆 **Competitive**: UX premium vs competencia
@@ -677,6 +723,6 @@ App.tsx                                  ← RoutePrefetcher integrated
 
 ---
 
-*Documentación generada el 8 de Octubre de 2025*  
-*Tiempo de implementación: ~1.5 horas*  
-*Navigation speed improvement: 81% faster perceived* ⚡
+_Documentación generada el 8 de Octubre de 2025_  
+_Tiempo de implementación: ~1.5 horas_  
+_Navigation speed improvement: 81% faster perceived_ ⚡

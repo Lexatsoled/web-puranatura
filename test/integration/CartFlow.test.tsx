@@ -2,11 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 const TestProviders = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
-  );
+  return <BrowserRouter>{children}</BrowserRouter>;
 };
 
 describe('Cart Functionality', () => {

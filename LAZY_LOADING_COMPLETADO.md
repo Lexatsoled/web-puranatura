@@ -5,11 +5,13 @@
 ### Bundle Sizes - Comparación
 
 #### **ANTES** (Carga estática):
+
 ```
 dist/assets/data-ChGhtG-p.js         356.18 kB │ gzip: 95.38 kB
 ```
 
 #### **DESPUÉS** (Lazy Loading):
+
 ```
 dist/assets/data-HQwAo-C_.js          91.45 kB │ gzip: 26.54 kB  ✅ Initial bundle
 dist/assets/products-data-xkwQUUWF.js 264.81 kB │ gzip: 69.80 kB  ⏳ Lazy loaded
@@ -17,12 +19,12 @@ dist/assets/products-data-xkwQUUWF.js 264.81 kB │ gzip: 69.80 kB  ⏳ Lazy loa
 
 ### 🎯 Métricas de Mejora
 
-| Métrica | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| **Initial bundle (data)** | 356 KB | 91.45 KB | **-74.3%** ✅ |
-| **Gzip (data)** | 95 KB | 26.54 KB | **-72.1%** ✅ |
-| **Carga inicial total** | ~570 KB | ~400 KB | **-30%** ✅ |
-| **Time to Interactive** | ~4.2s | ~2.8s (est.) | **-33%** 🚀 |
+| Métrica                   | Antes   | Después      | Mejora        |
+| ------------------------- | ------- | ------------ | ------------- |
+| **Initial bundle (data)** | 356 KB  | 91.45 KB     | **-74.3%** ✅ |
+| **Gzip (data)**           | 95 KB   | 26.54 KB     | **-72.1%** ✅ |
+| **Carga inicial total**   | ~570 KB | ~400 KB      | **-30%** ✅   |
+| **Time to Interactive**   | ~4.2s   | ~2.8s (est.) | **-33%** 🚀   |
 
 ---
 
@@ -63,6 +65,7 @@ Return products to component
 ## 🔧 Cambios Técnicos Implementados
 
 ### 1. **src/data/products.ts** (Main entry)
+
 ```typescript
 // Solo exporta funciones de carga dinámica
 export { productCategories } from './products/categories';
@@ -73,6 +76,7 @@ export { loadSystems, loadSystemById, ... } from './products/systemLoader';
 ```
 
 ### 2. **src/data/products/loader.ts** (Product loader)
+
 ```typescript
 let productCache: Map<string, Product[]> | null = null;
 
@@ -83,13 +87,14 @@ export async function loadProductsByCategory(category: string): Promise<Product[
 
   // ⏳ DYNAMIC IMPORT - Code splitting point
   const { products } = await import('./all-products');
-  
+
   // Cache and return
   ...
 }
 ```
 
 ### 3. **src/data/products/systemLoader.ts** (System loader)
+
 ```typescript
 let systemsCache: System[] | null = null;
 
@@ -98,13 +103,14 @@ export async function loadSystems(): Promise<System[]> {
 
   // ⏳ DYNAMIC IMPORT - Code splitting point
   const { systems } = await import('./all-products');
-  
+
   systemsCache = systems;
   return systemsCache;
 }
 ```
 
 ### 4. **vite.config.ts** (Build configuration)
+
 ```typescript
 manualChunks: (id) => {
   // Separate large data into its own chunk
@@ -121,6 +127,7 @@ manualChunks: (id) => {
 ## 📝 Componentes Actualizados
 
 ### ✅ StorePage.tsx
+
 ```typescript
 const [products, setProducts] = useState<Product[]>([]);
 const [systems, setSystems] = useState<System[]>([]);
@@ -128,18 +135,18 @@ const [loading, setLoading] = useState(true);
 
 useEffect(() => {
   setLoading(true);
-  Promise.all([
-    loadProductsByCategory(selectedCategory),
-    loadSystems()
-  ]).then(([loadedProducts, loadedSystems]) => {
-    setProducts(loadedProducts);
-    setSystems(loadedSystems);
-    setLoading(false);
-  });
+  Promise.all([loadProductsByCategory(selectedCategory), loadSystems()]).then(
+    ([loadedProducts, loadedSystems]) => {
+      setProducts(loadedProducts);
+      setSystems(loadedSystems);
+      setLoading(false);
+    }
+  );
 }, [selectedCategory]);
 ```
 
 ### ✅ ProductPage.tsx
+
 ```typescript
 const [product, setProduct] = useState<Product | null>(null);
 const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -157,6 +164,7 @@ useEffect(() => {
 ```
 
 ### ✅ StorePageOptimized.tsx
+
 ```typescript
 const [products, setProducts] = useState<Product[]>([]);
 const [loading, setLoading] = useState(true);
@@ -167,18 +175,18 @@ useEffect(() => {
 ```
 
 ### ✅ SystemsTestPage.tsx
+
 ```typescript
 const [systems, setSystems] = useState<System[]>([]);
 const [featuredSystems, setFeaturedSystems] = useState<System[]>([]);
 
 useEffect(() => {
-  Promise.all([
-    loadSystems(),
-    loadFeaturedSystems()
-  ]).then(([allSystems, featured]) => {
-    setSystems(allSystems);
-    setFeaturedSystems(featured);
-  });
+  Promise.all([loadSystems(), loadFeaturedSystems()]).then(
+    ([allSystems, featured]) => {
+      setSystems(allSystems);
+      setFeaturedSystems(featured);
+    }
+  );
 }, []);
 ```
 
@@ -210,13 +218,13 @@ if (loading) {
 
 ### Lighthouse Scores (Estimados)
 
-| Categoría | Antes | Después | Mejora |
-|-----------|-------|---------|--------|
-| **Performance** | 75 | 90 | +15 pts ⬆️ |
-| **First Contentful Paint** | 2.8s | 1.8s | -1.0s ⬇️ |
-| **Time to Interactive** | 4.2s | 2.8s | -1.4s ⬇️ |
-| **Speed Index** | 3.5s | 2.4s | -1.1s ⬇️ |
-| **Total Blocking Time** | 480ms | 280ms | -200ms ⬇️ |
+| Categoría                  | Antes | Después | Mejora     |
+| -------------------------- | ----- | ------- | ---------- |
+| **Performance**            | 75    | 90      | +15 pts ⬆️ |
+| **First Contentful Paint** | 2.8s  | 1.8s    | -1.0s ⬇️   |
+| **Time to Interactive**    | 4.2s  | 2.8s    | -1.4s ⬇️   |
+| **Speed Index**            | 3.5s  | 2.4s    | -1.1s ⬇️   |
+| **Total Blocking Time**    | 480ms | 280ms   | -200ms ⬇️  |
 
 ### Real User Impact
 
@@ -241,6 +249,7 @@ if (loading) {
    - Lightweight (solo metadatos)
 
 3. **Cache Management**
+
 ```typescript
 // Clear cache
 clearProductCache();
@@ -287,27 +296,32 @@ npm run build
 ## 🎯 Próximos Pasos de Optimización
 
 ### 1. Image Optimization (3-4 horas)
+
 - Implementar WebP con fallback
 - Lazy loading para imágenes below-the-fold
 - Responsive images con srcset
 - **Impacto**: -40% en tamaño de imágenes
 
 ### 2. Virtual Scrolling (2-3 horas)
+
 - react-window para lista de productos
 - Renderiza solo productos visibles
 - **Impacto**: Mejora en listas de 100+ productos
 
 ### 3. Service Worker / PWA (4-5 horas)
+
 - Cache estratégico de assets
 - Offline capability
 - **Impacto**: Instant loads en visitas repetidas
 
 ### 4. Prefetching Inteligente (1-2 horas)
+
 - Preload productos cuando usuario hover en categoría
 - Predictive loading basado en navegación
 - **Impacto**: Percepción de carga instantánea
 
 ### 5. Performance Monitoring (1-2 horas)
+
 - Implementar Web Vitals
 - Real User Monitoring (RUM)
 - **Impacto**: Métricas reales de usuarios
@@ -353,11 +367,13 @@ npm run build
 ## 🔗 Archivos Modificados
 
 ### Creados:
+
 - `src/data/products/categories.ts`
 - `src/data/products/loader.ts`
 - `src/data/products/systemLoader.ts`
 
 ### Modificados:
+
 - `src/data/products.ts`
 - `src/data/products/all-products.ts`
 - `src/pages/StorePage.tsx`

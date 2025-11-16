@@ -1,5 +1,6 @@
 # 📊 Documentación de Componentes
-*Pureza Naturalis - Guía de Componentes React*
+
+_Pureza Naturalis - Guía de Componentes React_
 
 ## 🎯 Introducción
 
@@ -14,24 +15,27 @@ Esta documentación describe todos los componentes React disponibles en la aplic
 Modal para gestionar el carrito de compras con funcionalidades completas.
 
 **Props:**
+
 ```typescript
 interface CartModalProps {
-  isOpen: boolean;           // Estado de visibilidad del modal
-  onClose: () => void;       // Función para cerrar el modal
+  isOpen: boolean; // Estado de visibilidad del modal
+  onClose: () => void; // Función para cerrar el modal
 }
 ```
 
 **Uso:**
+
 ```tsx
 import CartModal from '@/components/CartModal';
 
-<CartModal 
-  isOpen={isCartModalOpen} 
-  onClose={() => setIsCartModalOpen(false)} 
-/>
+<CartModal
+  isOpen={isCartModalOpen}
+  onClose={() => setIsCartModalOpen(false)}
+/>;
 ```
 
 **Características:**
+
 - ✅ Gestión completa del carrito
 - ✅ Cálculo automático de totales
 - ✅ Selector de cantidad
@@ -45,24 +49,24 @@ import CartModal from '@/components/CartModal';
 Tarjeta de producto con información completa y acciones.
 
 **Props:**
+
 ```typescript
 interface ProductCardProps {
-  product: Product;          // Objeto producto completo
-  className?: string;        // Clases CSS adicionales
+  product: Product; // Objeto producto completo
+  className?: string; // Clases CSS adicionales
 }
 ```
 
 **Uso:**
+
 ```tsx
 import ProductCard from '@/components/ProductCard';
 
-<ProductCard 
-  product={productData}
-  className="hover:shadow-lg"
-/>
+<ProductCard product={productData} className="hover:shadow-lg" />;
 ```
 
 **Características:**
+
 - ✅ Imagen optimizada con lazy loading
 - ✅ Información de precios y descuentos
 - ✅ Badges de características (orgánico, vegano, etc.)
@@ -76,20 +80,23 @@ import ProductCard from '@/components/ProductCard';
 Cabecera principal con navegación y funcionalidades.
 
 **Props:**
+
 ```typescript
 interface HeaderProps {
-  className?: string;        // Clases CSS adicionales
+  className?: string; // Clases CSS adicionales
 }
 ```
 
 **Uso:**
+
 ```tsx
 import Header from '@/components/Header';
 
-<Header className="shadow-lg" />
+<Header className="shadow-lg" />;
 ```
 
 **Características:**
+
 - ✅ Logo responsive
 - ✅ Menú de navegación
 - ✅ Carrito con contador
@@ -103,20 +110,23 @@ import Header from '@/components/Header';
 Pie de página con información y enlaces importantes.
 
 **Props:**
+
 ```typescript
 interface FooterProps {
-  className?: string;        // Clases CSS adicionales
+  className?: string; // Clases CSS adicionales
 }
 ```
 
 **Uso:**
+
 ```tsx
 import Footer from '@/components/Footer';
 
-<Footer className="bg-gray-900" />
+<Footer className="bg-gray-900" />;
 ```
 
 **Características:**
+
 - ✅ Enlaces de navegación
 - ✅ Información de contacto
 - ✅ Redes sociales
@@ -129,16 +139,18 @@ import Footer from '@/components/Footer';
 Notificación toast para acciones del carrito.
 
 **Props:**
+
 ```typescript
 interface CartNotificationProps {
-  isVisible: boolean;        // Visibilidad de la notificación
+  isVisible: boolean; // Visibilidad de la notificación
   type: 'success' | 'error'; // Tipo de notificación
-  message: string;           // Mensaje a mostrar
-  onClose: () => void;       // Función para cerrar
+  message: string; // Mensaje a mostrar
+  onClose: () => void; // Función para cerrar
 }
 ```
 
 **Uso:**
+
 ```tsx
 import CartNotification from '@/components/CartNotification';
 
@@ -147,10 +159,11 @@ import CartNotification from '@/components/CartNotification';
   type="success"
   message="Producto agregado al carrito"
   onClose={() => setShowNotification(false)}
-/>
+/>;
 ```
 
 **Características:**
+
 - ✅ Animaciones suaves
 - ✅ Auto-cierre configurable
 - ✅ Tipos visuales (success, error, info)
@@ -163,15 +176,17 @@ import CartNotification from '@/components/CartNotification';
 Modal detallado para visualizar información completa del producto.
 
 **Props:**
+
 ```typescript
 interface ProductDetailModalProps {
-  product: Product | null;   // Producto a mostrar (null si cerrado)
-  isOpen: boolean;           // Estado de visibilidad
-  onClose: () => void;       // Función para cerrar
+  product: Product | null; // Producto a mostrar (null si cerrado)
+  isOpen: boolean; // Estado de visibilidad
+  onClose: () => void; // Función para cerrar
 }
 ```
 
 **Uso:**
+
 ```tsx
 import ProductDetailModal from '@/components/ProductDetailModal';
 
@@ -179,10 +194,11 @@ import ProductDetailModal from '@/components/ProductDetailModal';
   product={selectedProduct}
   isOpen={isModalOpen}
   onClose={() => setIsModalOpen(false)}
-/>
+/>;
 ```
 
 **Características:**
+
 - ✅ Galería de imágenes con zoom
 - ✅ Información nutricional completa
 - ✅ Referencias científicas
@@ -196,17 +212,19 @@ import ProductDetailModal from '@/components/ProductDetailModal';
 Selector numérico para cantidad de productos.
 
 **Props:**
+
 ```typescript
 interface QuantitySelectorProps {
-  quantity: number;          // Cantidad actual
+  quantity: number; // Cantidad actual
   onQuantityChange: (qty: number) => void; // Callback de cambio
-  min?: number;              // Cantidad mínima (default: 1)
-  max?: number;              // Cantidad máxima (default: 99)
-  className?: string;        // Clases CSS adicionales
+  min?: number; // Cantidad mínima (default: 1)
+  max?: number; // Cantidad máxima (default: 99)
+  className?: string; // Clases CSS adicionales
 }
 ```
 
 **Uso:**
+
 ```tsx
 import QuantitySelector from '@/components/QuantitySelector';
 
@@ -215,10 +233,11 @@ import QuantitySelector from '@/components/QuantitySelector';
   onQuantityChange={setItemQuantity}
   min={1}
   max={10}
-/>
+/>;
 ```
 
 **Características:**
+
 - ✅ Botones + / - intuitivos
 - ✅ Input directo con validación
 - ✅ Límites configurables
@@ -233,25 +252,28 @@ import QuantitySelector from '@/components/QuantitySelector';
 Hook para gestionar datos en localStorage con TypeScript.
 
 **Signatura:**
+
 ```typescript
 function useLocalStorage<T>(
-  key: string,               // Clave de localStorage
-  initialValue: T            // Valor inicial por defecto
-): [T, (value: T | ((val: T) => T)) => void]
+  key: string, // Clave de localStorage
+  initialValue: T // Valor inicial por defecto
+): [T, (value: T | ((val: T) => T)) => void];
 ```
 
 **Uso:**
+
 ```tsx
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const [cartItems, setCartItems] = useLocalStorage('cart', []);
 const [userPrefs, setUserPrefs] = useLocalStorage('preferences', {
   theme: 'light',
-  language: 'es'
+  language: 'es',
 });
 ```
 
 **Características:**
+
 - ✅ TypeScript completamente tipado
 - ✅ Sincronización automática
 - ✅ Manejo de errores
@@ -266,6 +288,7 @@ const [userPrefs, setUserPrefs] = useLocalStorage('preferences', {
 Contexto global para gestión del carrito de compras.
 
 **API:**
+
 ```typescript
 interface CartContextType {
   items: CartItem[];
@@ -279,6 +302,7 @@ interface CartContextType {
 ```
 
 **Uso:**
+
 ```tsx
 import { useCart } from '@/contexts/CartContext';
 
@@ -292,14 +316,19 @@ const { items, addItem, removeItem } = useCart();
 Sistema de notificaciones global.
 
 **API:**
+
 ```typescript
 interface NotificationContextType {
-  showNotification: (message: string, type: 'success' | 'error' | 'info') => void;
+  showNotification: (
+    message: string,
+    type: 'success' | 'error' | 'info'
+  ) => void;
   hideNotification: () => void;
 }
 ```
 
 **Uso:**
+
 ```tsx
 import { useNotification } from '@/contexts/NotificationContext';
 
@@ -314,6 +343,7 @@ showNotification('Operación exitosa!', 'success');
 ### Clases CSS Predefinidas
 
 **Colores de marca:**
+
 ```css
 .text-primary    /* Verde principal #16a34a */
 .bg-primary      /* Fondo verde principal */
@@ -322,6 +352,7 @@ showNotification('Operación exitosa!', 'success');
 ```
 
 **Utilidades comunes:**
+
 ```css
 .card-shadow     /* Sombra para tarjetas */
 .transition-all  /* Transiciones suaves */
@@ -333,11 +364,21 @@ showNotification('Operación exitosa!', 'success');
 
 ```css
 /* Mobile First */
-@media (min-width: 640px)  { /* sm */ }
-@media (min-width: 768px)  { /* md */ }
-@media (min-width: 1024px) { /* lg */ }
-@media (min-width: 1280px) { /* xl */ }
-@media (min-width: 1536px) { /* 2xl */ }
+@media (min-width: 640px) {
+  /* sm */
+}
+@media (min-width: 768px) {
+  /* md */
+}
+@media (min-width: 1024px) {
+  /* lg */
+}
+@media (min-width: 1280px) {
+  /* xl */
+}
+@media (min-width: 1536px) {
+  /* 2xl */
+}
 ```
 
 ---
@@ -347,6 +388,7 @@ showNotification('Operación exitosa!', 'success');
 ### Agregar Nuevos Componentes
 
 1. **Crear el componente:**
+
 ```tsx
 // components/MyComponent.tsx
 interface MyComponentProps {
@@ -365,6 +407,7 @@ export default function MyComponent({ title, children }: MyComponentProps) {
 ```
 
 2. **Agregar tipos (si es necesario):**
+
 ```typescript
 // src/types/components.ts
 export interface MyComponentProps {
@@ -374,6 +417,7 @@ export interface MyComponentProps {
 ```
 
 3. **Crear tests:**
+
 ```tsx
 // test/components/MyComponent.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -390,17 +434,20 @@ describe('MyComponent', () => {
 ### Mejores Prácticas
 
 **📝 Naming Conventions:**
+
 - Componentes: `PascalCase`
 - Hooks: `camelCase` con prefijo `use`
 - Archivos: `PascalCase.tsx` para componentes
 - Props: Interfaces terminadas en `Props`
 
 **🔧 Performance:**
+
 - Usar `React.memo()` para componentes pesados
 - Implementar `useMemo()` y `useCallback()` cuando sea necesario
 - Lazy loading para componentes grandes
 
 **♿ Accesibilidad:**
+
 - Siempre incluir `aria-label` en botones icónicos
 - Usar elementos semánticos (`button`, `nav`, `main`)
 - Implementar navegación por teclado
@@ -416,5 +463,5 @@ describe('MyComponent', () => {
 
 ---
 
-*📧 **Desarrollo:** dev@purezanaturalis.com*  
-*📝 **Documentación actualizada:** 2024-10-07*
+_📧 **Desarrollo:** dev@purezanaturalis.com_  
+_📝 **Documentación actualizada:** 2024-10-07_

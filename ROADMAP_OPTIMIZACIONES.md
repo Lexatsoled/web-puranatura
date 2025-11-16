@@ -8,6 +8,7 @@
 ## 📊 Estado Actual del Proyecto
 
 ### ✅ Completado
+
 - [x] Lazy Loading de productos y sistemas
 - [x] Code Splitting optimizado
 - [x] Bundle inicial reducido 74% (356 KB → 91 KB)
@@ -17,6 +18,7 @@
 - [x] Build optimizado funcionando
 
 ### 📈 Métricas Actuales (Estimadas)
+
 - **Lighthouse Performance**: ~90/100
 - **Bundle size (gzip)**: 26.5 KB (data) + 57.85 KB (vendor) = ~84 KB inicial
 - **Time to Interactive**: ~2.8s
@@ -35,7 +37,9 @@
 **Dificultad**: Media
 
 ### Problema Actual
+
 Las imágenes representan ~60-70% del peso total de la página:
+
 - Formato JPEG/PNG sin optimizar
 - Imágenes full-size cargadas incluso en móvil
 - Sin lazy loading para imágenes below-the-fold
@@ -44,6 +48,7 @@ Las imágenes representan ~60-70% del peso total de la página:
 ### Solución Propuesta
 
 #### A) Conversión a WebP con fallback
+
 ```typescript
 // components/OptimizedImage.tsx
 interface OptimizedImageProps {
@@ -54,16 +59,16 @@ interface OptimizedImageProps {
   className?: string;
 }
 
-export const OptimizedImage: React.FC<OptimizedImageProps> = ({ 
-  src, alt, width, height, className 
+export const OptimizedImage: React.FC<OptimizedImageProps> = ({
+  src, alt, width, height, className
 }) => {
   const webpSrc = src.replace(/\.(jpg|png)$/, '.webp');
-  
+
   return (
     <picture>
       <source srcSet={webpSrc} type="image/webp" />
-      <img 
-        src={src} 
+      <img
+        src={src}
         alt={alt}
         width={width}
         height={height}
@@ -76,6 +81,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
 ```
 
 #### B) Responsive Images con srcset
+
 ```typescript
 const srcSet = `
   ${src}-small.webp 400w,
@@ -85,13 +91,14 @@ const srcSet = `
 ```
 
 #### C) Script de conversión automática
+
 ```bash
 # scripts/convertToWebP.ts
 import sharp from 'sharp';
 
 async function convertImages() {
   const images = await glob('public/**/*.{jpg,png}');
-  
+
   for (const img of images) {
     await sharp(img)
       .webp({ quality: 85 })
@@ -101,6 +108,7 @@ async function convertImages() {
 ```
 
 ### Métricas Esperadas
+
 - Reducción tamaño imágenes: **-40%**
 - LCP improvement: **-1.5s**
 - Total page weight: **-200KB**
@@ -114,7 +122,9 @@ async function convertImages() {
 **Dificultad**: Media
 
 ### Problema Actual
+
 `StorePage.tsx` renderiza TODOS los productos (142) simultáneamente:
+
 - 142 componentes `ProductCard` montados
 - Alto uso de memoria (~50MB)
 - Render time: ~500ms
@@ -137,7 +147,7 @@ const StorePage: React.FC = () => {
   const Cell = ({ columnIndex, rowIndex, style }) => {
     const index = rowIndex * columnCount + columnIndex;
     if (index >= filteredProducts.length) return null;
-    
+
     return (
       <div style={style}>
         <ProductCard product={filteredProducts[index]} />
@@ -161,6 +171,7 @@ const StorePage: React.FC = () => {
 ```
 
 ### Métricas Esperadas
+
 - Componentes renderizados: 142 → **~12** (solo visibles)
 - Render time: 500ms → **50ms** (-90%)
 - Memory usage: 50MB → **15MB** (-70%)
@@ -177,6 +188,7 @@ const StorePage: React.FC = () => {
 ### Funcionalidades
 
 #### A) Cache Strategy
+
 ```javascript
 // public/sw.js
 const CACHE_NAME = 'puranatura-v1';
@@ -193,6 +205,7 @@ const urlsToCache = [
 ```
 
 #### B) Offline Capability
+
 ```typescript
 // Página offline con productos en caché
 if (!navigator.onLine) {
@@ -201,6 +214,7 @@ if (!navigator.onLine) {
 ```
 
 #### C) Manifest PWA
+
 ```json
 // public/manifest.json
 {
@@ -218,6 +232,7 @@ if (!navigator.onLine) {
 ```
 
 ### Métricas Esperadas
+
 - **Segunda visita**: Load time 2.8s → **0.3s** (-89%)
 - **Offline capability**: Sí ✅
 - **Install prompt**: Sí (Add to Home Screen)
@@ -234,6 +249,7 @@ if (!navigator.onLine) {
 ### Estrategias
 
 #### A) Hover Prefetch
+
 ```typescript
 // Precargar productos cuando hover en categoría
 const handleCategoryHover = (category: string) => {
@@ -243,7 +259,7 @@ const handleCategoryHover = (category: string) => {
   }
 };
 
-<button 
+<button
   onMouseEnter={() => handleCategoryHover('aminoacidos')}
   onClick={() => setCategory('aminoacidos')}
 >
@@ -252,35 +268,41 @@ const handleCategoryHover = (category: string) => {
 ```
 
 #### B) Intersection Observer Prefetch
+
 ```typescript
 // Precargar siguiente página antes de llegar al final
 useEffect(() => {
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      // Usuario cerca del final, precargar siguiente página
-      preloadCategories(['siguiente_categoria']);
-    }
-  }, { threshold: 0.5 });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        // Usuario cerca del final, precargar siguiente página
+        preloadCategories(['siguiente_categoria']);
+      }
+    },
+    { threshold: 0.5 }
+  );
 
   observer.observe(lastProductRef.current);
 }, []);
 ```
 
 #### C) Predictive Loading
+
 ```typescript
 // Basado en navegación histórica del usuario
 const predictNextCategory = (currentCategory: string) => {
   // Si está en "vitaminas", probablemente vaya a "minerales"
   const patterns = {
-    'vitaminas': ['minerales', 'aminoacidos'],
-    'minerales': ['vitaminas', 'energia'],
+    vitaminas: ['minerales', 'aminoacidos'],
+    minerales: ['vitaminas', 'energia'],
   };
-  
+
   return patterns[currentCategory] || [];
 };
 ```
 
 ### Métricas Esperadas
+
 - **Perceived load time**: -80% (carga mientras navega)
 - **Cache hit rate**: 60% → **90%**
 
@@ -316,16 +338,17 @@ getTTFB(sendToAnalytics);
 ```
 
 ### Dashboard de Métricas
+
 ```typescript
 // pages/admin/PerformanceDashboard.tsx
 const PerformanceDashboard = () => {
   const metrics = usePerformanceMetrics();
-  
+
   return (
     <div>
-      <MetricCard 
-        title="Largest Contentful Paint" 
-        value={metrics.lcp} 
+      <MetricCard
+        title="Largest Contentful Paint"
+        value={metrics.lcp}
         threshold={2500}
         good={2500}
         needsImprovement={4000}
@@ -337,6 +360,7 @@ const PerformanceDashboard = () => {
 ```
 
 ### Métricas a Trackear
+
 - **LCP** (Largest Contentful Paint): < 2.5s
 - **FID** (First Input Delay): < 100ms
 - **CLS** (Cumulative Layout Shift): < 0.1
@@ -368,6 +392,7 @@ export default defineConfig({
 ### Optimizaciones Comunes
 
 #### A) Imports específicos
+
 ```typescript
 // ❌ Malo: importa toda la librería
 import _ from 'lodash';
@@ -377,6 +402,7 @@ import debounce from 'lodash/debounce';
 ```
 
 #### B) Dynamic imports para rutas
+
 ```typescript
 // Lazy load páginas poco usadas
 const AdminPage = lazy(() => import('./pages/AdminPage'));
@@ -384,6 +410,7 @@ const SystemsTestPage = lazy(() => import('./pages/SystemsTestPage'));
 ```
 
 ### Objetivo
+
 - Identificar y eliminar: **-10-15% bundle adicional**
 
 ---
@@ -397,6 +424,7 @@ const SystemsTestPage = lazy(() => import('./pages/SystemsTestPage'));
 ### Migración a Supabase
 
 #### Ventajas
+
 - ✅ Productos editables sin rebuild
 - ✅ Búsqueda server-side (rápida)
 - ✅ Filtros complejos en DB
@@ -426,6 +454,7 @@ CREATE INDEX idx_products_price ON products(price);
 ```
 
 #### API Client
+
 ```typescript
 // services/supabase.ts
 import { createClient } from '@supabase/supabase-js';
@@ -437,12 +466,13 @@ export async function getProductsByCategory(category: string) {
     .from('products')
     .select('*')
     .contains('categories', [category]);
-    
+
   return data;
 }
 ```
 
 ### Métricas Esperadas
+
 - **Bundle data chunk**: 265 KB → **5 KB** (-98%)
 - **Initial load**: -250 KB
 - **Update products**: Rebuild 20min → **Instant**
@@ -458,15 +488,16 @@ export async function getProductsByCategory(category: string) {
 ### Implementaciones
 
 #### A) Dynamic Sitemap
+
 ```typescript
 // scripts/generateSitemap.ts
 async function generateSitemap() {
   const products = await loadProductsByCategory('todos');
-  
+
   const urls = [
     { url: '/', priority: 1.0 },
     { url: '/tienda', priority: 0.9 },
-    ...products.map(p => ({
+    ...products.map((p) => ({
       url: `/producto/${p.id}`,
       priority: 0.8,
       lastmod: p.updatedAt,
@@ -475,13 +506,17 @@ async function generateSitemap() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${urls.map(u => `
+      ${urls
+        .map(
+          (u) => `
         <url>
           <loc>https://puranatura.com${u.url}</loc>
           <priority>${u.priority}</priority>
           <lastmod>${u.lastmod || new Date().toISOString()}</lastmod>
         </url>
-      `).join('')}
+      `
+        )
+        .join('')}
     </urlset>
   `;
 
@@ -490,6 +525,7 @@ async function generateSitemap() {
 ```
 
 #### B) Structured Data (JSON-LD)
+
 ```typescript
 // components/ProductStructuredData.tsx
 export const ProductStructuredData = ({ product }: { product: Product }) => {
@@ -514,7 +550,7 @@ export const ProductStructuredData = ({ product }: { product: Product }) => {
   };
 
   return (
-    <script 
+    <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
     />
@@ -523,6 +559,7 @@ export const ProductStructuredData = ({ product }: { product: Product }) => {
 ```
 
 ### Métricas Esperadas
+
 - **Rich Snippets**: Sí (★★★★★ 4.8 en resultados)
 - **Search ranking**: +10-15 posiciones
 - **Organic traffic**: +50%
@@ -538,9 +575,10 @@ export const ProductStructuredData = ({ product }: { product: Product }) => {
 ### Checklist WCAG 2.1 AA
 
 #### A) Keyboard Navigation
+
 ```typescript
 // Todos los elementos interactivos accesibles por teclado
-<button 
+<button
   onClick={handleClick}
   onKeyDown={(e) => e.key === 'Enter' && handleClick()}
   tabIndex={0}
@@ -549,6 +587,7 @@ export const ProductStructuredData = ({ product }: { product: Product }) => {
 ```
 
 #### B) ARIA Labels
+
 ```typescript
 <nav aria-label="Navegación principal">
   <ul role="list">
@@ -560,13 +599,19 @@ export const ProductStructuredData = ({ product }: { product: Product }) => {
 ```
 
 #### C) Color Contrast
+
 ```css
 /* Asegurar ratio mínimo 4.5:1 */
-.text-primary { color: #047857; } /* ✅ 5.2:1 */
-.text-gray-600 { color: #4b5563; } /* ✅ 7.1:1 */
+.text-primary {
+  color: #047857;
+} /* ✅ 5.2:1 */
+.text-gray-600 {
+  color: #4b5563;
+} /* ✅ 7.1:1 */
 ```
 
 #### D) Screen Reader Testing
+
 ```bash
 # Usar herramientas
 npm install --save-dev @axe-core/react
@@ -583,6 +628,7 @@ test('should not have accessibility violations', async () => {
 ```
 
 ### Métricas Esperadas
+
 - **Lighthouse Accessibility**: 85 → **100**
 - **Keyboard navigation**: 100% funcional
 - **Screen reader**: Totalmente navegable
@@ -629,16 +675,14 @@ class ErrorBoundary extends React.Component {
 ```
 
 ### Integración Sentry
+
 ```typescript
 // main.tsx
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 
 Sentry.init({
-  dsn: "YOUR_SENTRY_DSN",
-  integrations: [
-    new Sentry.BrowserTracing(),
-    new Sentry.Replay(),
-  ],
+  dsn: 'YOUR_SENTRY_DSN',
+  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
   tracesSampleRate: 0.1,
   replaysSessionSampleRate: 0.1,
 });
@@ -649,6 +693,7 @@ Sentry.init({
 ## 📅 CRONOGRAMA SUGERIDO
 
 ### Semana 1 (20-25 horas)
+
 - ✅ Día 1-2: **Image Optimization** (4h)
 - ✅ Día 3: **Virtual Scrolling** (3h)
 - ✅ Día 4-5: **Service Worker + PWA** (5h)
@@ -656,6 +701,7 @@ Sentry.init({
 - ✅ Día 7: **Performance Monitoring** (2h)
 
 ### Semana 2 (20-25 horas)
+
 - ✅ Día 8: **Bundle Analysis** (2h)
 - ✅ Día 9-10: **SEO Avanzado** (4h)
 - ✅ Día 11-12: **Accessibility Audit** (5h)
@@ -663,6 +709,7 @@ Sentry.init({
 - ✅ Día 14: Testing y ajustes finales (4h)
 
 ### Semana 3 (Opcional - Gran impacto)
+
 - ✅ Día 15-20: **Database Migration** (10h)
 
 ---
@@ -671,20 +718,21 @@ Sentry.init({
 
 ### Métricas Target (TOP 0.1%)
 
-| Métrica | Actual | Target | Mejora |
-|---------|--------|--------|--------|
-| **Lighthouse Performance** | 90 | **98-100** | +8-10 |
-| **LCP** | 1.8s | **< 1.2s** | -0.6s |
-| **FID** | 50ms | **< 20ms** | -30ms |
-| **CLS** | 0.05 | **< 0.05** | ✅ |
-| **TTI** | 2.8s | **< 2.0s** | -0.8s |
-| **Bundle (gzip)** | 84 KB | **< 60 KB** | -24 KB |
-| **Page Weight** | ~600 KB | **< 300 KB** | -50% |
-| **Lighthouse PWA** | 0 | **100** | +100 |
-| **Lighthouse SEO** | 85 | **100** | +15 |
-| **Lighthouse A11y** | 85 | **100** | +15 |
+| Métrica                    | Actual  | Target       | Mejora |
+| -------------------------- | ------- | ------------ | ------ |
+| **Lighthouse Performance** | 90      | **98-100**   | +8-10  |
+| **LCP**                    | 1.8s    | **< 1.2s**   | -0.6s  |
+| **FID**                    | 50ms    | **< 20ms**   | -30ms  |
+| **CLS**                    | 0.05    | **< 0.05**   | ✅     |
+| **TTI**                    | 2.8s    | **< 2.0s**   | -0.8s  |
+| **Bundle (gzip)**          | 84 KB   | **< 60 KB**  | -24 KB |
+| **Page Weight**            | ~600 KB | **< 300 KB** | -50%   |
+| **Lighthouse PWA**         | 0       | **100**      | +100   |
+| **Lighthouse SEO**         | 85      | **100**      | +15    |
+| **Lighthouse A11y**        | 85      | **100**      | +15    |
 
 ### Resultado Esperado
+
 **TOP 0.1% mundial** = Lighthouse 100/100/100/100 + Core Web Vitals ALL GREEN ✅
 
 ---
@@ -692,6 +740,7 @@ Sentry.init({
 ## 💡 RECOMENDACIONES ADICIONALES
 
 ### Quick Wins (< 1 hora cada uno)
+
 1. ⚡ Preconnect a CDNs: `<link rel="preconnect" href="https://cdn.example.com">`
 2. ⚡ Font-display: swap para fuentes
 3. ⚡ Comprimir CSS/JS adicional con Brotli
@@ -699,6 +748,7 @@ Sentry.init({
 5. ⚡ Implement skeleton screens para mejor UX
 
 ### Futuro (Post TOP 0.1%)
+
 - 🌐 Internacionalización (i18n)
 - 🔐 Authentication completa
 - 💳 Pasarela de pago real

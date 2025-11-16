@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import { act } from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useLocalStorage } from '../../src/hooks/useLocalStorage';
 
@@ -22,20 +23,28 @@ describe('useLocalStorage', () => {
     const { result } = renderHook(() => useLocalStorage('test-key', 'initial'));
 
     // Actualizamos el valor
-    result.current[1]('new value');
+    await act(async () => {
+      result.current[1]('new value');
+    });
 
     expect(result.current[0]).toBe('new value');
-    expect(JSON.parse(window.localStorage.getItem('test-key') || '')).toBe('new value');
+    expect(JSON.parse(window.localStorage.getItem('test-key') || 'null')).toBe(
+      'new value'
+    );
   });
 
   it('should handle errors when localStorage is not available', () => {
     const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const mockGetItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-      throw new Error('localStorage not available');
-    });
+    // En el entorno de tests usamos un mock global de localStorage (vitest.setup.tsx),
+    // por eso es más fiable espiar sobre globalThis.localStorage directamente.
+    const mockGetItem = vi
+      .spyOn(globalThis.localStorage as any, 'getItem')
+      .mockImplementation(() => {
+        throw new Error('localStorage not available');
+      });
 
     const { result } = renderHook(() => useLocalStorage('test-key', 'initial'));
-    
+
     expect(result.current[0]).toBe('initial');
     expect(mockConsoleError).toHaveBeenCalled();
 

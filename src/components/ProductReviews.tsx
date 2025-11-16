@@ -20,16 +20,24 @@ interface ProductReviewsProps {
   onAddReview?: (review: Omit<Review, 'id' | 'date'>) => Promise<void>;
 }
 
-const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews, onAddReview }) => {
+const ProductReviews: React.FC<ProductReviewsProps> = ({
+  reviews,
+  onAddReview,
+}) => {
   const [helpfulReviews, setHelpfulReviews] = useState<Set<string>>(new Set());
-  const [reportedReviews, setReportedReviews] = useState<Set<string>>(new Set());
+  const [reportedReviews, setReportedReviews] = useState<Set<string>>(
+    new Set()
+  );
   const [isWritingReview, setIsWritingReview] = useState(false);
-  
-  const averageRating = useMemo(() => 
-    reviews.length > 0 
-      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-      : 0
-  , [reviews]);
+
+  const averageRating = useMemo(
+    () =>
+      reviews.length > 0
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) /
+          reviews.length
+        : 0,
+    [reviews]
+  );
 
   return (
     <div className="py-8">
@@ -127,15 +135,17 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews, onAddReview })
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setHelpfulReviews(prev => {
-                    const newSet = new Set(prev);
-                    if (prev.has(review.id)) {
-                      newSet.delete(review.id);
-                    } else {
-                      newSet.add(review.id);
-                    }
-                    return newSet;
-                  })}
+                  onClick={() =>
+                    setHelpfulReviews((prev) => {
+                      const newSet = new Set(prev);
+                      if (prev.has(review.id)) {
+                        newSet.delete(review.id);
+                      } else {
+                        newSet.add(review.id);
+                      }
+                      return newSet;
+                    })
+                  }
                   className={`text-sm flex items-center ${
                     helpfulReviews.has(review.id)
                       ? 'text-green-600 font-medium'
@@ -144,7 +154,9 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews, onAddReview })
                 >
                   <svg
                     className="w-4 h-4 mr-1"
-                    fill={helpfulReviews.has(review.id) ? "currentColor" : "none"}
+                    fill={
+                      helpfulReviews.has(review.id) ? 'currentColor' : 'none'
+                    }
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -158,22 +170,27 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews, onAddReview })
                   {helpfulReviews.has(review.id) ? 'Marcado como útil' : 'Útil'}
                   {review.helpfulCount && (
                     <span className="ml-1 text-xs text-gray-500">
-                      ({review.helpfulCount + (helpfulReviews.has(review.id) ? 1 : 0)})
+                      (
+                      {review.helpfulCount +
+                        (helpfulReviews.has(review.id) ? 1 : 0)}
+                      )
                     </span>
                   )}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setReportedReviews(prev => {
-                    const newSet = new Set(prev);
-                    if (prev.has(review.id)) {
-                      newSet.delete(review.id);
-                    } else {
-                      newSet.add(review.id);
-                    }
-                    return newSet;
-                  })}
+                  onClick={() =>
+                    setReportedReviews((prev) => {
+                      const newSet = new Set(prev);
+                      if (prev.has(review.id)) {
+                        newSet.delete(review.id);
+                      } else {
+                        newSet.add(review.id);
+                      }
+                      return newSet;
+                    })
+                  }
                   className={`text-sm ${
                     reportedReviews.has(review.id)
                       ? 'text-red-600 font-medium'
@@ -209,7 +226,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews, onAddReview })
             >
               <motion.div
                 className="bg-white rounded-lg p-6 w-full max-w-lg"
-                onClick={e => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
               >
                 <ReviewForm
                   onSubmit={async (review) => {

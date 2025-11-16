@@ -2,7 +2,7 @@
 // Este script creará un HTML que puedes abrir en el navegador para convertir las imágenes
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path'); // Not used in this script
 
 const htmlContent = `
 <!DOCTYPE html>

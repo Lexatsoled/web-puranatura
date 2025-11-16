@@ -1,0 +1,108 @@
+Auditoría completada: generé los artefactos solicitados (inventory.json, architecture-map.md, findings.json, fix-plan.md, regression-suite.md, metrics-dashboard.md) y revisé 1 664 archivos útiles (>95 % del árbol, dejando fuera sólo node_modules, /dist y /public/optimized).
+
+Fortalezas observadas
+
+Persistencia robusta de sesiones: backend/src/services/sessionService.ts (lines 15-140) hashea refresh tokens, detecta reuse y permite revocar familias completas.
+Cliente HTTP con reintentos: src/services/apiClient.ts (lines 4-70) refresca tokens automáticamente y evita filtrar credenciales al front.
+Capa de protección CSRF y rate limiting ya integrada (backend/src/plugins/csrf.ts y backend/src/config/rateLimitRules.ts), lo que reduce superficie de ataques en rutas nuevas.
+Hallazgos principales (ver detalles en findings.json)
+
+backend/src/routes/test.ts (lines 8-15) expone /api/test/product/:id sin auth y abre ./data/store.db directamente (crit).
+backend/src/routes/analytics.ts (lines 15-49) deja público /api/admin/analytics/vitals, filtrando Web Vitals + PII ligera (high).
+src/utils/encoding.ts (lines 16-40) sustituye Ã¡→ǭ, rompiendo normalizeText y dejando mojibake en toda la UI (high).
+src/store/checkoutStore.ts (lines 134-203) nunca llama a /api/v1/orders, simula el pedido y sólo lo guarda en localStorage (high).
+backend/src/routes/v1/products.ts (lines 140-156) valida un cuerpo inexistente en /system/:systemId y responde 400 a todas las llamadas (med).
+src/service-worker.ts (lines 22-93) intercepta /api/products//api/orders sin versión; las rutas reales /api/v1/** quedan fuera, anulando cache y background sync (med).
+src/pages/CartPage.tsx (lines 159-170) (y equivalentes) generan srcset sólo para .jpg, duplican URLs .webp y descargan >5 MB por página (med).
+backend/src/routes/sitemap.ts (lines 19-45) construye un sitemap estático; no hay ninguna URL real de productos para SEO (med).
+Métricas y entregables
+
+Baseline Lighthouse: LCP 34.53 s, FCP 14.17 s, CLS 0.051 (metrics-dashboard.md).
+regression-suite.md define unit/integration/e2e/perf/a11y cases alineados con cada fix (checkout real, analytics 403, SW offline, encoding tests).
+fix-plan.md orquesta las fases F1–F4 con IDs, diffs sugeridos, pruebas y métricas de éxito.
+architecture-map.md documenta capas, límites de confianza y entrypoints (HTTP, SW, cron, CLI).
+Pruebas ejecutadas: no se corrieron suites automáticas en esta pasada; quedan detalladas para implementación en la Fase 4.
+
+CoVe (self-check): verifiqué cada hallazgo contra el código fuente (ej. /system/:systemId falla incluso antes de llegar a productService, y checkoutStore nunca importa OrderService), y confirmé los valores de Lighthouse y total-byte-weight consultando directamente los reportes JSON.
+
+Reflexión: no pude medir P95 de la API (requires k6 en ejecución real); lo dejé señalado en metrics-dashboard.md para instrumentarlo antes de declarar mejoras de performance.
+
+Resumen numérico final
+
+Archivos analizados: 1 664 (excluidos artefactos generados).
+Hallazgos por severidad: critical 1 · high 3 · medium 4 · low/info 0.
+Top‑5 riesgos actuales:
+/api/test/product/:id sin controles (backend/src/routes/test.ts (line 8)).
+Checkout sin backend → pedidos perdidos (src/store/checkoutStore.ts (line 134)).
+/api/admin/analytics/vitals público (backend/src/routes/analytics.ts (line 44)).
+Normalizador de texto corrupto (src/utils/encoding.ts (line 16)).
+Service Worker que no cachea /api/v1/** (src/service-worker.ts (line 22)).
+Próximos pasos sugeridos:
+Ejecutar Fase 1 del plan (S1–S4) para cerrar huecos críticos.
+Aplicar P1–P3 (checkout real, SW, imágenes) y medir nuevamente Lighthouse/LCP.
+Implementar sitemap dinámico y limpieza de mojibake (Fase 3).
+Automatizar la suite descrita en regression-suite.md y los scripts de métricas (Fase 4).
+Repetir la auditoría rápida tras cada fase para actualizar findings.json y cerrar hallazgos.
+Esfuérzate: se requiere tu mejor versión. Tus instrucciones son planos; deben ser impecables.
+
+
+
+
+Plan Maestro
+
+Fase 0 – Preparación y gobierno
+
+Objetivos: instalar dependencias (npm install en raíz y backend), revisar inventory.json y cargar instrucciones específicas en Instrucciones_Plan_Ejecucion/.
+Entregables: lectura de README.md y 01_Codex_Primary.md para fijar checkpoints globales y scripts de verificación (npm run lint, npm run type-check, npm run test:ci).
+Checkpoint: bitácora creada; workspace limpio; sin pruebas pendientes.
+Fase 1 – Seguridad crítica (GPT‑4.1)
+
+Guía: Instrucciones_Plan_Ejecucion/02_GPT-4.1_Seguridad_y_Backend.md.
+Tareas:
+Blindar/eliminar /api/test/product/:id (backend/src/routes/test.ts) y registrar la ruta sólo en dev con requireRole('admin'). Añadir test backend/src/routes/__tests__/test-route.spec.ts.
+Proteger /api/admin/analytics/vitals con autenticación + rate-limit, sanitizar payload (≤10 KB) y limitar vitalsStore a 500 entradas (backend/src/routes/analytics.ts).
+Conectar src/store/checkoutStore.ts a OrderService.placeOrder y actualizar pruebas (src/pages/__tests__/CheckoutPage.test.tsx, nuevo E2E checkout).
+Arreglar el preHandler de /api/v1/products/system/:systemId.
+Scripts: npm run lint, npm run test:ci, backend/npm run test:ci, npm run test:e2e -- --grep checkout.
+Checkpoint: pruebas unitarias y E2E verdes + log de pedido creado en base de datos.
+Fase 2 – Flujo de compra y validaciones compartidas
+
+Coordinación Codex + GPT‑4.1 y GPT‑5‑Mini (ver archivos de instrucciones).
+Acciones clave: validar que los cambios de checkout se integran con el fix del endpoint /system/:systemId, documentar mensajes de error, ajustar stores para manejo robusto de errores.
+Checkpoint: npm run test:e2e completo, sin regresiones en ProductStore.
+Fase 3 – Experiencia offline, encoding e imágenes (GPT‑5‑Mini)
+
+Guía: Instrucciones_Plan_Ejecucion/03_GPT-5-Mini_Optimizacion_UI.md.
+Tareas:
+Reparar MOJIBAKE_MAP y agregar pruebas (src/utils/__tests__/encoding.test.ts). Ejecutar npm run check:encoding y limpiar textos corruptos (checkout, datasets).
+Actualizar src/service-worker.ts para interceptar /api/v1/**, asegurar BackgroundSyncPlugin y precache correcto.
+Migrar componentes (CartPage.tsx, CheckoutPage.tsx, BlogPage.tsx, BlogPostPage.tsx, ServicePage.tsx, components/SystemCard.tsx) al uso de OptimizedImage/generateSrcSet y apuntar a /public/optimized.
+Scripts: npm run check:encoding, npx vitest src/utils/encoding.test.ts, npm run build, Lighthouse smoke opcional (npm run analyze).
+Checkpoint: 0 advertencias de encoding y total-byte-weight reducido ≥30 %.
+Fase 4 – SEO, automatización y métricas (Grok Code Fast 1)
+
+Guía: Instrucciones_Plan_Ejecucion/04_Grok_Code_Fast_Scripts_Tests.md.
+Tareas:
+Generar sitemap dinámico desde la base de datos (backend/src/routes/sitemap.ts), cachearlo y añadir pruebas (backend/src/routes/__tests__/sitemap.spec.ts).
+Crear scripts/collect_metrics.ts que ejecute Lighthouse y k6, guardando resultados en reports/.
+Añadir comandos npm (metrics:collect, test:k6:products) y actualizar regression-suite.md/metrics-dashboard.md.
+Checkpoint: npm run metrics:collect produce archivos nuevos + GET /sitemap.xml incluye productos reales.
+Fase 5 – Integración y regresión global (Codex)
+
+Ejecutar todo el set de pruebas (npm run lint, npm run type-check, npm run test:ci, npm run test:e2e, npm run check:encoding, npm run analyze, npm run metrics:collect).
+Actualizar findings.json (estado resuelto), metrics-dashboard.md (post-fix) y adjuntar evidencias.
+Checkpoint final: CI verde, documentación al día, git status limpio.
+Modularidad y paralelismo
+
+Las instrucciones separadas por agente (carpeta Instrucciones_Plan_Ejecucion/) permiten repartir tareas sin perder contexto.
+Fases 1 y 2 dependen entre sí; Fase 3 puede comenzar tras validar seguridad. Fase 4 puede correr en paralelo al final de Fase 3 si checkout ya está estable.
+Resumen de archivos creados
+
+Instrucciones_Plan_Ejecucion/README.md
+Instrucciones_Plan_Ejecucion/01_Codex_Primary.md
+Instrucciones_Plan_Ejecucion/02_GPT-4.1_Seguridad_y_Backend.md
+Instrucciones_Plan_Ejecucion/03_GPT-5-Mini_Optimizacion_UI.md
+Instrucciones_Plan_Ejecucion/04_Grok_Code_Fast_Scripts_Tests.md
+Todos incluyen descripción de tareas, pasos concretos, dependencias, comandos y criterios de verificación como solicitaste.
+
+Esfuérzate: se requiere tu mejor versión. Tus instrucciones son planos; deben ser impecables.

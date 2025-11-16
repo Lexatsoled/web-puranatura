@@ -1,0 +1,279 @@
+import type { Page } from '@playwright/test';
+import { test, expect } from './test-fixtures';
+import { ProductsPage } from './pages/ProductsPage';
+import { CartPage } from './pages/CartPage';
+import { clearCart, seedCart } from './helpers/cart-helper';
+
+const CART_STORAGE_KEY = 'pureza-naturalis-cart-storage';
+
+const waitForFonts = (page: Page) =>
+  page.waitForFunction(() => (document as any).fonts && (document as any).fonts.status === 'loaded', { timeout: 120000 });
+
+async function waitForCartNotification(page: Page) {
+  const patterns = [/producto a[ñn]adido/i, /una unidad m[áa]s de/i, /1 en carrito/i];
+  for (const pattern of patterns) {
+    try {
+      await page.getByText(pattern).waitFor({ state: 'visible', timeout: 3000 });
+      return;
+    } catch {
+      // try next pattern
+    }
+  }
+}
+
+async function addProductToCartFlow(page: Page, searchTerm = 'vitamina c') {
+  // Prefer seeding the cart via backend API to avoid flaky UI interactions
+  // that have been observed on mobile devices (overlays blocking clicks).
+  // Seeding still exercises the backend and populates the persisted cart
+  // state so the rest of the checkout flow can proceed deterministically.
+  await seedCart(page, { quantity: 1 });
+}
+
+async function readCartState(page: Page) {
+  return page.evaluate((storageKey) => {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) {
+      return { count: 0, total: 0 };
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      const state = parsed.state ?? parsed;
+      return {
+        count: Number(state?.cart?.count ?? 0),
+        total: Number(state?.cart?.total ?? 0),
+      };
+    } catch {
+      return { count: 0, total: 0 };
+    }
+  }, CART_STORAGE_KEY);
+}
+
+test.describe('Checkout Flow', () => {
+  test('should complete full checkout process', async ({ page }) => {
+    await waitForFonts(page);
+    await page.route('**/api/v1/orders', async (route, request) => {
+      if (request.method() === 'POST') {
+        await route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            orderId: 'TEST-123',
+          }),
+        });
+        return;
+      }
+      await route.continue();
+    });
+
+    await addProductToCartFlow(page, 'vitamina c');
+
+    // Delayed diagnostic: verify that the seeded cart persisted into localStorage
+
+    const cartPage = new CartPage(page);
+    await cartPage.goto({ expectItems: true });
+
+    // DIAGNOSTIC: verify that the seeded cart persisted into localStorage (now that we are on the app origin)
+    try {
+      const seededRaw = await page.evaluate(() => localStorage.getItem('pureza-naturalis-cart-storage'));
+      // Log a truncated preview for debugging in CI logs
+      // eslint-disable-next-line no-console
+      console.log('[E2E-DIAG] seededCartRaw:', seededRaw ? seededRaw.slice(0, 1500) : '<empty>');
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log('[E2E-DIAG] seededCartRaw: <evaluate-error>');
+    }
+
+    let itemCount = await cartPage.getItemCount();
+    // Retry reseeding a couple of times when itemCount is zero to handle
+    // intermittent persistence issues on some browsers (WebKit). Each
+    // attempt waits slightly longer before re-checking.
+    if (itemCount === 0) {
+      for (let attempt = 0; attempt < 3 && itemCount === 0; attempt++) {
+        try {
+          await seedCart(page, { quantity: 1 });
+          // Allow the app time to read persisted state and render
+          await cartPage.goto({ expectItems: true, timeout: 20000 });
+          // allow small buffer for client-side state writes
+          await page.waitForTimeout(300 * (attempt + 1));
+          itemCount = await cartPage.getItemCount();
+        } catch (e) {
+          // ignore fallback error — continue to next attempt
+        }
+      }
+    }
+    expect(itemCount).toBeGreaterThan(0);
+
+    await cartPage.checkout();
+    await expect(page).toHaveURL(/\/checkout/);
+
+    const nameInput = page.getByLabel(/nombre/i);
+    await nameInput.waitFor({ state: 'visible', timeout: 10000 });
+    await nameInput.fill('Test User');
+    await page.waitForTimeout(300);
+
+    const lastNameInput = page.getByLabel(/apellido/i);
+    if ((await lastNameInput.count()) > 0) {
+      await lastNameInput.fill('Tester');
+    }
+
+    const addressInput = page.locator('input[name="street"], input#street').first();
+    if ((await addressInput.count()) > 0) {
+      await addressInput.fill('Calle Test 123');
+    }
+
+    const cityInput = page.getByLabel(/ciudad/i);
+    if ((await cityInput.count()) > 0) {
+      await cityInput.fill('Santo Domingo');
+    }
+
+    const provinceSelect = page.getByRole('combobox', { name: /provincia/i }).first();
+    if ((await provinceSelect.count()) > 0) {
+      try {
+        await provinceSelect.selectOption({ label: 'Santo Domingo' });
+      } catch {
+        // ignore if option not present
+      }
+    }
+
+    const zipInput = page.getByLabel(/c[oó]digo postal|postal/i);
+    if ((await zipInput.count()) > 0) {
+      await zipInput.fill('28001');
+    }
+
+    const phoneInput = page.getByLabel(/tel[eé]fono|phone/i).first();
+    if ((await phoneInput.count()) > 0) {
+      await phoneInput.fill('+1 (809) 123-4567');
+    }
+
+    const continueBtn = page.getByRole('button', { name: /continuar al pago|continuar/i }).first();
+    if ((await continueBtn.count()) > 0) {
+      await continueBtn.waitFor({ state: 'visible', timeout: 10000 });
+      await continueBtn.click();
+    }
+
+    const paymentHeading = page.getByRole('heading', { name: /m[eé]todo de pago/i }).first();
+    await paymentHeading.waitFor({ state: 'visible', timeout: 10000 });
+
+    const paymentOption = page.getByRole('radio', { name: /tarjeta de cr/i }).first();
+    await paymentOption.waitFor({ state: 'visible', timeout: 10000 });
+    await paymentOption.check();
+
+    const reviewButton = page.getByRole('button', { name: /revisar pedido/i }).first();
+    await reviewButton.waitFor({ state: 'visible', timeout: 10000 });
+    await reviewButton.click();
+
+    await page.getByRole('heading', { name: /revisar pedido/i }).waitFor({ state: 'visible', timeout: 10000 });
+
+    const notesInput = page.getByLabel(/notas del pedido/i).first();
+    if ((await notesInput.count()) > 0) {
+      await notesInput.fill('Entrega E2E - favor avisar al llegar');
+    }
+
+    const termsCheckbox = page.getByRole('checkbox', { name: /he le[ií]do y acepto|t[eé]rminos/i }).first();
+    if ((await termsCheckbox.count()) > 0) {
+      await termsCheckbox.check();
+    }
+
+    const reviewContinueBtn = page.getByRole('button', { name: /realizar pedido/i }).first();
+    await reviewContinueBtn.waitFor({ state: 'visible', timeout: 10000 });
+    await reviewContinueBtn.click();
+
+    await expect(page.getByRole('heading', { name: /todo listo/i })).toBeVisible({ timeout: 15000 });
+
+    const confirmBtn = page.getByRole('button', { name: /confirmar pedido|confirm order|place order|finalizar compra/i }).first();
+    await confirmBtn.waitFor({ state: 'visible', timeout: 10000 });
+    await confirmBtn.click();
+
+    await expect
+      .poll(
+        async () =>
+          await page.evaluate(({ ordersKey, id }) => {
+            try {
+              const raw = localStorage.getItem(ordersKey);
+              if (!raw) return 0;
+              const parsed = JSON.parse(raw);
+              if (!Array.isArray(parsed)) return 0;
+              return parsed.filter((order: any) => order?.id === id).length;
+            } catch {
+              return 0;
+            }
+          }, { ordersKey: 'pureza-naturalis-orders', id: 'TEST-123' }),
+      )
+      .toBeGreaterThan(0);
+
+    // Robust confirmation: poll localStorage for the created order and
+    // also wait for the confirmation heading to be visible. Increase
+    // timeouts to tolerate small redirects or delayed client-side
+    // state writes.
+    await expect
+      .poll(
+        async () =>
+          await page.evaluate(({ ordersKey, id }) => {
+            try {
+              const raw = localStorage.getItem(ordersKey);
+              if (!raw) return 0;
+              const parsed = JSON.parse(raw);
+              if (!Array.isArray(parsed)) return 0;
+              return parsed.filter((order: any) => order?.id === id).length;
+            } catch {
+              return 0;
+            }
+          }, { ordersKey: 'pureza-naturalis-orders', id: 'TEST-123' }),
+      )
+      .toBeGreaterThan(0, { timeout: 30000 });
+
+    await expect(page.getByRole('heading', { name: /pedido confirmado/i })).toBeVisible({ timeout: 45000 });
+  });
+
+  test('should validate empty cart checkout', async ({ page }) => {
+    await waitForFonts(page);
+    await clearCart(page);
+    const cartPage = new CartPage(page);
+    await cartPage.goto({ expectItems: false });
+
+    await expect(cartPage.emptyCartMessage).toBeVisible();
+
+    const checkoutBtnCount = await cartPage.checkoutButton.count();
+    if (checkoutBtnCount > 0) {
+      const clicked = await cartPage.checkout();
+      if (clicked) {
+        await page.getByText(/tu carrito está vacío/i).waitFor({ state: 'visible', timeout: 5000 });
+      }
+    } else {
+      await expect(cartPage.checkoutButton).toHaveCount(0);
+    }
+  });
+
+  test('should update cart quantities', async ({ page }) => {
+    await waitForFonts(page);
+    await addProductToCartFlow(page, 'vitamina c');
+
+    const cartPage = new CartPage(page);
+    await cartPage.goto({ expectItems: true });
+
+    const initialCount = await cartPage.getItemCount();
+    expect(initialCount).toBeGreaterThan(0);
+
+    await cartPage.waitForQuantityControls();
+    const initialState = await readCartState(page);
+    const baseCount = Math.max(initialState.count, initialCount);
+    const initialTotalText = (await cartPage.totalAmount.textContent()) ?? '';
+
+    await cartPage.increaseQuantity();
+    const expectedCount = baseCount + 1;
+
+    await cartPage.waitForQuantityControls();
+    await cartPage.waitForCount(expectedCount);
+
+    const updatedQuantity = await cartPage.getDisplayedQuantity();
+    expect(updatedQuantity).toBeGreaterThanOrEqual(expectedCount);
+
+    const updatedState = await readCartState(page);
+    expect(updatedState.count).toBe(expectedCount);
+    expect(updatedState.total).toBeGreaterThan(initialState.total);
+
+    const updatedTotalText = (await cartPage.totalAmount.textContent()) ?? '';
+    expect(updatedTotalText.trim()).not.toEqual(initialTotalText.trim());
+  });
+});

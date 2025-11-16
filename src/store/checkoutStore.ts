@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { Cart } from '../types/cart';
 import { showSuccessNotification, showErrorNotification } from './notificationStore';
+import orderService, { type CreateOrderData } from '../services/orderService';
+import { errorLogger, ErrorSeverity, ErrorCategory } from '../services/errorLogger';
 
 export interface ShippingAddress {
   id: string;
@@ -45,7 +47,7 @@ interface CheckoutStore {
   orderNotes: string;
   agreedToTerms: boolean;
   orderSummary: OrderSummary;
-  
+
   // Actions
   setCurrentStep: (step: number) => void;
   nextStep: () => void;
@@ -55,9 +57,11 @@ interface CheckoutStore {
   setOrderNotes: (notes: string) => void;
   setAgreedToTerms: (agreed: boolean) => void;
   calculateOrderSummary: (cart: Cart) => void;
-  processOrder: (cart: Cart) => Promise<{ success: boolean; orderId?: string; error?: string }>;
+  processOrder: (
+    cart: Cart
+  ) => Promise<{ success: boolean; orderId?: string; error?: string }>;
   resetCheckout: () => void;
-  
+
   // Validation
   isStepValid: (step: number) => boolean;
   canProceedToNextStep: () => boolean;
@@ -65,6 +69,120 @@ interface CheckoutStore {
 
 const SHIPPING_RATE = 150; // DOP
 const TAX_RATE = 0.18; // 18% ITBIS
+const ORDERS_STORAGE_KEY = 'pureza-naturalis-orders';
+
+const safeParseJSON = (value: string | null) => {
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+};
+
+const persistOrderRecord = (
+  orderId: string,
+  cart: Cart,
+  shippingAddress: ShippingAddress,
+  paymentMethod: PaymentMethod,
+  orderNotes: string,
+  orderSummary: OrderSummary,
+) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    const normalizedItems = cart.items.map((item) => {
+      const images =
+        Array.isArray(item.product.images) && item.product.images.length > 0
+          ? item.product.images.map((img) => ({
+              full: img.full ?? img.thumbnail ?? '/placeholder-product.jpg',
+              thumbnail: img.thumbnail,
+              alt: img.alt,
+            }))
+          : [{ full: '/placeholder-product.jpg' }];
+
+      return {
+        product: {
+          name: item.product.name,
+          price: item.product.price,
+          images,
+        },
+        quantity: item.quantity,
+      };
+    });
+
+    const newOrder = {
+      id: orderId,
+      date: new Date().toISOString(),
+      items: normalizedItems,
+      shippingAddress,
+      paymentMethod: {
+        type: paymentMethod.type,
+      },
+      orderNotes: orderNotes?.trim() ?? '',
+      summary: {
+        subtotal: orderSummary.subtotal,
+        shipping: orderSummary.shipping,
+        tax: orderSummary.tax,
+        discount: orderSummary.discount,
+        total: orderSummary.total,
+      },
+      status: 'confirmed',
+    };
+
+    const existingOrders = safeParseJSON(localStorage.getItem(ORDERS_STORAGE_KEY));
+    const orders = Array.isArray(existingOrders) ? existingOrders : [];
+    orders.push(newOrder);
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  } catch (err) {
+    errorLogger.log(err instanceof Error ? err : new Error('Failed to persist order'), ErrorSeverity.LOW, ErrorCategory.STATE, {
+      scope: 'checkout.persistOrderRecord',
+    });
+  }
+};
+
+const mapCartToOrderPayload = (
+  cart: Cart,
+  shippingAddress: ShippingAddress,
+  paymentMethod: PaymentMethod,
+  orderNotes: string,
+  orderSummary: OrderSummary,
+): CreateOrderData => ({
+  items: cart.items.map((item) => ({
+    productId: String(item.product.id),
+    productName: item.product.name,
+    productImage: item.product.images?.[0]?.full,
+    variantId: item.product.sku,
+    variantName: item.product.name,
+    price: item.product.price,
+    quantity: item.quantity,
+  })),
+  shippingAddress: {
+    firstName: shippingAddress.firstName,
+    lastName: shippingAddress.lastName,
+    company: shippingAddress.company,
+    street: shippingAddress.street,
+    apartment: shippingAddress.apartment,
+    city: shippingAddress.city,
+    state: shippingAddress.state,
+    postalCode: shippingAddress.postalCode,
+    country: shippingAddress.country,
+    phone: shippingAddress.phone,
+  },
+  paymentMethod: {
+    type: paymentMethod.type,
+  },
+  orderNotes: orderNotes?.trim() || undefined,
+  summary: {
+    subtotal: orderSummary.subtotal,
+    shipping: orderSummary.shipping,
+    tax: orderSummary.tax,
+    discount: orderSummary.discount ?? 0,
+    total: orderSummary.total,
+  },
+});
 
 export const useCheckoutStore = create<CheckoutStore>((set, get) => ({
   // Initial state
@@ -84,14 +202,14 @@ export const useCheckoutStore = create<CheckoutStore>((set, get) => ({
 
   // Step navigation
   setCurrentStep: (step) => set({ currentStep: step }),
-  
+
   nextStep: () => {
     const currentStep = get().currentStep;
     if (get().canProceedToNextStep() && currentStep < 4) {
       set({ currentStep: currentStep + 1 });
     }
   },
-  
+
   previousStep: () => {
     const currentStep = get().currentStep;
     if (currentStep > 1) {
@@ -127,59 +245,28 @@ export const useCheckoutStore = create<CheckoutStore>((set, get) => ({
   // Order processing
   processOrder: async (cart) => {
     set({ isProcessing: true });
-
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { shippingAddress, paymentMethod, agreedToTerms, orderNotes, orderSummary } = get();
+      if (!shippingAddress) throw new Error('Dirección de envío requerida');
+      if (!paymentMethod) throw new Error('Método de pago requerido');
+      if (!agreedToTerms) throw new Error('Debe aceptar los términos y condiciones');
+      if (cart.items.length === 0) throw new Error('El carrito está vacío');
 
-      // Validate required fields
-      const { shippingAddress, paymentMethod, agreedToTerms } = get();
-      
-      if (!shippingAddress) {
-        throw new Error('Dirección de envío requerida');
-      }
-      
-      if (!paymentMethod) {
-        throw new Error('Método de pago requerido');
-      }
-      
-      if (!agreedToTerms) {
-        throw new Error('Debe aceptar los términos y condiciones');
-      }
+      const payload = mapCartToOrderPayload(cart, shippingAddress, paymentMethod, orderNotes, orderSummary);
 
-      if (cart.items.length === 0) {
-        throw new Error('El carrito está vacío');
-      }
-
-      // Generate order ID
-      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      // Save order to localStorage (simulate database)
-      const order = {
-        id: orderId,
-        date: new Date().toISOString(),
-        items: cart.items,
-        shippingAddress,
-        paymentMethod,
-        orderNotes: get().orderNotes,
-        summary: get().orderSummary,
-        status: 'pending',
-      };
-
-      const existingOrders = JSON.parse(localStorage.getItem('pureza-naturalis-orders') || '[]');
-      existingOrders.push(order);
-      localStorage.setItem('pureza-naturalis-orders', JSON.stringify(existingOrders));
-
-      showSuccessNotification(`¡Pedido #${orderId} realizado con éxito!`);
-
-      set({ isProcessing: false });
-      return { success: true, orderId };
-
+      const response = await orderService.placeOrder(payload);
+      persistOrderRecord(response.orderId, cart, shippingAddress, paymentMethod, orderNotes, orderSummary);
+      showSuccessNotification(`¡Pedido #${response.orderId} realizado con éxito!`);
+      return { success: true, orderId: response.orderId };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error al procesar el pedido';
-      showErrorNotification(errorMessage);
+      const normalizedError = error instanceof Error ? error : new Error('Error al procesar el pedido');
+      showErrorNotification(normalizedError.message);
+      errorLogger.log(normalizedError, ErrorSeverity.HIGH, ErrorCategory.API, {
+        scope: 'checkout.processOrder',
+      });
+      return { success: false, error: normalizedError.message };
+    } finally {
       set({ isProcessing: false });
-      return { success: false, error: errorMessage };
     }
   },
 
@@ -204,7 +291,7 @@ export const useCheckoutStore = create<CheckoutStore>((set, get) => ({
   // Validation
   isStepValid: (step) => {
     const state = get();
-    
+
     switch (step) {
       case 1: // Shipping
         return !!state.shippingAddress;
@@ -224,3 +311,4 @@ export const useCheckoutStore = create<CheckoutStore>((set, get) => ({
     return get().isStepValid(currentStep);
   },
 }));
+

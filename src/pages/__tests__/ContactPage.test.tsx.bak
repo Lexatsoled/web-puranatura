@@ -1,0 +1,77 @@
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
+import { BrowserRouter } from 'react-router-dom';
+import ContactPage from '../ContactPage';
+
+describe('ContactPage', () => {
+  it('renders contact information', () => {
+    render(
+      <BrowserRouter>
+        <ContactPage />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Hablemos sobre tu bienestar')).toBeInTheDocument();
+    expect(screen.getByText('Tel: +1 849 243 4010')).toBeInTheDocument();
+    expect(screen.getByText('Email: lexatsoled@gmail.com')).toBeInTheDocument();
+    expect(screen.getByText(/Consultorio ubicado en las afueras de Cotuí/i)).toBeInTheDocument();
+  });
+
+  it('renders the contact form', () => {
+    render(
+      <BrowserRouter>
+        <ContactPage />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByLabelText('Nombre completo')).toBeInTheDocument();
+    expect(screen.getByLabelText('Correo electrónico')).toBeInTheDocument();
+    expect(screen.getByLabelText('Cuéntanos cómo podemos ayudarte')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Enviar Mensaje' })).toBeInTheDocument();
+  });
+
+  it('validates the contact form', () => {
+    render(
+      <BrowserRouter>
+        <ContactPage />
+      </BrowserRouter>
+    );
+
+    const submitButton = screen.getByRole('button', { name: 'Enviar Mensaje' });
+    fireEvent.click(submitButton);
+
+    // Assuming the form has HTML5 validation, we can check for the :invalid pseudo-class
+    // or for error messages if they are rendered.
+    // For simplicity, we'll just check that the form is still there.
+    expect(screen.getByLabelText('Nombre completo')).toBeRequired();
+    expect(screen.getByLabelText('Correo electrónico')).toBeRequired();
+    expect(screen.getByLabelText('Cuéntanos cómo podemos ayudarte')).toBeRequired();
+  });
+
+  // This test would require a mock for the form submission service
+  it('submits the form with valid data', async () => {
+    const mockSetStatus = vi.fn();
+    vi.spyOn(React, 'useState').mockImplementationOnce((initialState) => [
+      initialState,
+      mockSetStatus,
+    ]);
+
+    render(
+      <BrowserRouter>
+        <ContactPage />
+      </BrowserRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Test User' } });
+    fireEvent.change(screen.getByLabelText('Correo electrónico'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Cuéntanos cómo podemos ayudarte'), { target: { value: 'Test message' } });
+
+    const submitButton = screen.getByRole('button', { name: 'Enviar mensaje' });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockSetStatus).toHaveBeenCalledWith('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+    });
+  });
+});
+
