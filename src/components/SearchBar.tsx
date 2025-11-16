@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OptimizedImage } from './OptimizedImage';
 import debounce from 'lodash/debounce';
@@ -23,6 +23,13 @@ interface SearchBarProps {
   isLoading?: boolean;
 }
 
+/**
+ * SearchBar component for product/category search with accessibility and best practices.
+ *
+ * @component
+ * @param {SearchBarProps} props - Props for SearchBar
+ * @returns {JSX.Element}
+ */
 const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
   onResultClick,
@@ -40,7 +47,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   // Cerrar al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -50,17 +60,18 @@ const SearchBar: React.FC<SearchBarProps> = ({
   }, []);
 
   // Búsqueda con debounce
-  const debouncedSearch = useCallback(
-    debounce(async (searchQuery: string) => {
-      if (searchQuery.length >= 2) {
-        const searchResults = await onSearch(searchQuery);
-        setResults(searchResults);
-        setIsOpen(true);
-      } else {
-        setResults([]);
-      }
-    }, 300),
-    [onSearch]
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(async (searchQuery: string) => {
+        if (searchQuery.length >= 2) {
+          const searchResults = await onSearch(searchQuery);
+          setResults(searchResults);
+          setIsOpen(true);
+        } else {
+          setResults([]);
+        }
+      }, 300),
+    [onSearch, setResults, setIsOpen]
   );
 
   // Manejar cambios en la búsqueda
@@ -77,9 +88,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex((prev) =>
-          prev < results.length - 1 ? prev + 1 : prev
-        );
+        setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
         break;
       case 'ArrowUp':
         e.preventDefault();
@@ -105,7 +114,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative" ref={searchRef}>
+    <div className="relative" ref={searchRef} role="search" aria-label="Buscar productos y categorías">
       <div className="relative">
         <input
           type="text"
@@ -116,6 +125,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholder="Buscar productos, categorías..."
           className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
           aria-label="Campo de búsqueda"
+          aria-autocomplete="list"
+          {...(isOpen && results.length > 0 ? { 'aria-controls': 'searchbar-results' } : {})}
+          {...(isOpen && activeIndex >= 0 && results[activeIndex] ? { 'aria-activedescendant': `searchbar-result-${results[activeIndex].id}` } : {})}
         />
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg
@@ -153,6 +165,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
             className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-[80vh] overflow-y-auto"
+            id="searchbar-results"
+            role="listbox"
+            aria-label="Resultados de búsqueda"
           >
             {query.length < 2 ? (
               // Mostrar búsquedas recientes y productos populares
@@ -163,11 +178,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
                       Búsquedas recientes
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {recentSearches.map((search, index) => (
+                      {recentSearches.map((search, _index) => (
                         <button
-                          key={index}
+                          key={`recent-${search}`}
                           onClick={() => setQuery(search)}
                           className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                          aria-label={`Buscar: ${search}`}
+                          title={`Buscar: ${search}`}
                         >
                           {search}
                         </button>
@@ -184,7 +201,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                     <div className="grid grid-cols-2 gap-4">
                       {categories.map((category) => (
                         <button
-                          key={category.id}
+                          key={`cat-${category.id}`}
                           onClick={() =>
                             handleResultClick({
                               type: 'category',
@@ -195,6 +212,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
                             })
                           }
                           className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                          aria-label={`Ir a categoría: ${category.name}`}
+                          title={`Ir a categoría: ${category.name}`}
                         >
                           {category.image && (
                             <div className="w-10 h-10 rounded-lg overflow-hidden mr-3">
@@ -223,7 +242,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                     <div className="grid grid-cols-1 gap-4">
                       {popularProducts.map((product) => (
                         <button
-                          key={product.id}
+                          key={`prod-${product.id}`}
                           onClick={() =>
                             handleResultClick({
                               type: 'product',
@@ -235,6 +254,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
                             })
                           }
                           className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                          aria-label={`Ir a producto: ${product.name}`}
+                          title={`Ir a producto: ${product.name}`}
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden mr-3">
                             <OptimizedImage
@@ -261,16 +282,22 @@ const SearchBar: React.FC<SearchBarProps> = ({
             ) : results.length > 0 ? (
               // Mostrar resultados de búsqueda
               <div className="py-2">
-                {results.map((result, index) => (
+                {results.map((result, _index) => (
                   <motion.button
                     key={result.id}
+                    id={`searchbar-result-${result.id}`}
                     onClick={() => handleResultClick(result)}
                     className={`w-full flex items-center px-4 py-2 text-left ${
-                      index === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
+                      _index === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
                     }`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: _index * 0.05 }}
+                    role="option"
+                    aria-selected={_index === activeIndex ? "true" : "false"}
+                    tabIndex={-1}
+                    aria-label={result.title}
+                    title={result.title}
                   >
                     {result.image && (
                       <div className="w-10 h-10 rounded-lg overflow-hidden mr-3">
@@ -283,7 +310,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
                       </div>
                     )}
                     <div>
-                      <div className="text-sm text-gray-700">{result.title}</div>
+                      <div className="text-sm text-gray-700">
+                        {result.title}
+                      </div>
                       {result.subtitle && (
                         <div className="text-xs text-gray-500">
                           {result.subtitle}
@@ -295,7 +324,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
               </div>
             ) : (
               // Mostrar mensaje de no resultados
-              <div className="p-4 text-center text-gray-500">
+              <div className="p-4 text-center text-gray-500" role="alert" aria-live="polite">
                 No se encontraron resultados para "{query}"
               </div>
             )}

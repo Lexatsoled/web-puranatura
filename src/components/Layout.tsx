@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
-import Footer from '../../components/Footer';
+import Footer from './Footer';
 
 // Lazy loading de componentes modales
 const CartModal = React.lazy(() => import('./CartModal'));
@@ -68,9 +68,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header
-        onCartClick={() => setIsCartOpen(true)}
-      />
+      <Header onCartClick={() => setIsCartOpen(true)} />
 
       <main className="flex-grow">
         <AnimatePresence mode="wait">
@@ -110,7 +108,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </motion.div>
             }
           >
-            <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+            <CartModal
+              isOpen={isCartOpen}
+              onClose={() => setIsCartOpen(false)}
+            />
           </Suspense>
         )}
 
@@ -147,8 +148,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           >
             <motion.div
               className="h-full bg-green-400"
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
               transition={{ duration: 0.3 }}
             />
           </motion.div>

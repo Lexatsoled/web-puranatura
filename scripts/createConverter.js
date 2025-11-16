@@ -1,0 +1,248 @@
+// Script simple para convertir imágenes usando Canvas API del navegador
+// Este script creará un HTML que puedes abrir en el navegador para convertir las imágenes
+
+const fs = require('fs');
+// const path = require('path'); // Not used in this script
+
+const htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Imágenes a JPEG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .drop-zone {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+        }
+        .drop-zone.dragover {
+            background-color: #e3f2fd;
+            border-color: #0056b3;
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #007bff;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .settings {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Conversor de Imágenes a JPEG</h1>
+        <p>Arrastra y suelta las imágenes WEBP/AVIF aquí para convertirlas a JPEG optimizado</p>
+        
+        <div class="settings">
+            <h3>⚙️ Configuración</h3>
+            <label>Calidad JPEG: <input type="range" id="quality" min="60" max="100" value="85"> <span id="qualityValue">85</span>%</label><br><br>
+            <label>Ancho máximo: <input type="number" id="maxWidth" value="800" min="100" max="2000"> px</label>
+        </div>
+        
+        <div class="drop-zone" id="dropZone">
+            <p>📁 Arrastra y suelta las imágenes aquí</p>
+            <p>o</p>
+            <input type="file" id="fileInput" multiple accept=".webp,.avif,.png,.jpg,.jpeg" style="display: none;">
+            <button onclick="document.getElementById('fileInput').click()">Seleccionar Archivos</button>
+        </div>
+        
+        <div class="progress" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div id="results"></div>
+        
+        <button id="downloadAll" style="display: none;">📥 Descargar Todas las Imágenes</button>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const results = document.getElementById('results');
+        const downloadAll = document.getElementById('downloadAll');
+        const qualitySlider = document.getElementById('quality');
+        const qualityValue = document.getElementById('qualityValue');
+        const maxWidthInput = document.getElementById('maxWidth');
+        
+        let convertedImages = [];
+        
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value;
+        });
+        
+        // Drag and drop functionality
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        async function handleFiles(files) {
+            const fileArray = Array.from(files);
+            if (fileArray.length === 0) return;
+            
+            progressContainer.style.display = 'block';
+            results.innerHTML = '';
+            convertedImages = [];
+            
+            for (let i = 0; i < fileArray.length; i++) {
+                const file = fileArray[i];
+                const progress = ((i + 1) / fileArray.length) * 100;
+                progressBar.style.width = progress + '%';
+                
+                try {
+                    const convertedBlob = await convertToJpeg(file);
+                    const fileName = file.name.replace(/\\.[^/.]+$/, '') + '.jpg';
+                    
+                    convertedImages.push({
+                        blob: convertedBlob,
+                        name: fileName
+                    });
+                    
+                    addResult(fileName, 'success', \`✅ Convertido: \${file.name} → \${fileName}\`);
+                } catch (error) {
+                    addResult(file.name, 'error', \`❌ Error: \${error.message}\`);
+                }
+            }
+            
+            if (convertedImages.length > 0) {
+                downloadAll.style.display = 'block';
+            }
+        }
+        
+        function convertToJpeg(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                img.onload = () => {
+                    const maxWidth = parseInt(maxWidthInput.value);
+                    const quality = parseInt(qualitySlider.value) / 100;
+                    
+                    // Calcular nuevas dimensiones
+                    let { width, height } = img;
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Fondo blanco para transparencias
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, width, height);
+                    
+                    // Dibujar imagen
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    canvas.toBlob(resolve, 'image/jpeg', quality);
+                };
+                
+                img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+                img.src = URL.createObjectURL(file);
+            });
+        }
+        
+        function addResult(fileName, type, message) {
+            const div = document.createElement('div');
+            div.className = \`result \${type === 'error' ? 'error' : ''}\`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        downloadAll.addEventListener('click', async () => {
+            for (const img of convertedImages) {
+                const url = URL.createObjectURL(img.blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = img.name;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                // Pequeña pausa para evitar problemas con múltiples descargas
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        });
+    </script>
+</body>
+</html>
+`;
+
+// Guardar el archivo HTML
+fs.writeFileSync('convertidor-imagenes.html', htmlContent);
+console.log('✅ Creado convertidor-imagenes.html');
+console.log('🌐 Abre este archivo en tu navegador para convertir las imágenes');
+console.log('📁 Las imágenes convertidas se descargarán automáticamente');

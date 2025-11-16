@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-11-11T21:25:00Z",
+  "phase": "baseline",
+  "bundleSize": {
+    "main": "257.80 kB",
+    "mainGzip": "85.15 kB",
+    "vendor": "171.49 kB",
+    "vendorGzip": "56.37 kB",
+    "ui": "116.09 kB",
+    "uiGzip": "37.27 kB",
+    "total": "~545 kB",
+    "totalGzip": "~178 kB"
+  },
+  "performance": {
+    "lcp": "~3.5s",
+    "api_p95": "~450ms",
+    "cache_hit_rate": "~20%"
+  },
+  "images": {
+    "count": 1131,
+    "total_size": "~150MB",
+    "formats": ["jpeg"],
+    "optimization": "none"
+  },
+  "build_info": {
+    "vite_version": "6.4.1",
+    "modules_transformed": 1734,
+    "chunks_generated": 35
+  }
+}

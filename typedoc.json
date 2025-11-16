@@ -1,0 +1,25 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src"],
+  "out": "docs/api",
+  "name": "Pureza Naturalis V3",
+  "includeVersion": true,
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "hideGenerator": true,
+  "readme": "none",
+  "theme": "default",
+  "plugin": ["typedoc-plugin-markdown"],
+  "githubPages": false,
+  "categorizeByGroup": true,
+  "categoryOrder": ["Components", "Services", "Utils", "Types", "Hooks"],
+  "sort": ["source-order", "visibility"],
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "lang": "en"
+}

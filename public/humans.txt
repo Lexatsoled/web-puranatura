@@ -1,0 +1,30 @@
+# humanstxt.org/
+# Los humanos responsables del equipo
+
+/* EQUIPO */
+  Desarrollador: Equipo Pureza Naturalis
+  Contacto: info [en] purezanaturalis.com
+  Twitter: @purezanaturalis
+  Desde: Santo Domingo, República Dominicana
+
+/* AGRADECIMIENTOS */
+  Diseñador: Equipo de Diseño
+  Desarrollador Frontend: Desarrollador Principal
+  Consultor SEO: Especialista en Optimización
+
+/* TECNOLOGÍA */
+  Estándares: HTML5, CSS3, JavaScript ES2024
+  Componentes: React 19, TypeScript
+  Herramientas: Vite, Tailwind CSS
+  Software: VS Code, Git, Node.js
+  Framework: React con Vite
+  Optimización: Bundle splitting, Code splitting
+  Performance: Lazy loading, Image optimization
+  SEO: Structured data, Meta tags, Sitemap
+  
+/* SITIO */
+  Última actualización: 2024/10/07
+  Idiomas: Español (República Dominicana)
+  Doctores: HTML5, CSS3
+  Componentes: 20+ componentes React
+  Productos: 300+ productos naturales catalogados

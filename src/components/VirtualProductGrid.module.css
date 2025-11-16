@@ -1,0 +1,29 @@
+/* VirtualProductGrid Styles */
+
+.gridCell {
+  /* Posicionamiento y dimensiones se aplican vía inline styles (requerido por react-window) */
+  position: relative;
+  box-sizing: border-box;
+}
+
+.scrollContainer {
+  overflow-x: hidden;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 10px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}

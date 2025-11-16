@@ -1,0 +1,48 @@
+/* Progress bar styling for cart modal */
+.progress-bar[data-width] {
+  width: calc(var(--progress-width, 0) * 1%);
+}
+
+/* Dynamic width classes */
+.progress-bar[data-width='0'] {
+  width: 0%;
+}
+.progress-bar[data-width='10'] {
+  width: 10%;
+}
+.progress-bar[data-width='20'] {
+  width: 20%;
+}
+.progress-bar[data-width='30'] {
+  width: 30%;
+}
+.progress-bar[data-width='40'] {
+  width: 40%;
+}
+.progress-bar[data-width='50'] {
+  width: 50%;
+}
+.progress-bar[data-width='60'] {
+  width: 60%;
+}
+.progress-bar[data-width='70'] {
+  width: 70%;
+}
+.progress-bar[data-width='80'] {
+  width: 80%;
+}
+.progress-bar[data-width='90'] {
+  width: 90%;
+}
+.progress-bar[data-width='100'] {
+  width: 100%;
+}
+
+/* Text truncation for product names */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

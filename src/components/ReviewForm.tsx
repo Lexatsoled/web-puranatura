@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { sanitizeFormValues } from '@/utils/sanitizer';
 
 interface ReviewFormData {
   userName: string;
@@ -22,7 +23,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
     comment: '',
     productId: '',
     verified: true, // Asumimos que si el usuario puede escribir una reseña, está verificado
-    userImage: undefined
+    userImage: undefined,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredStar, setHoveredStar] = useState<number | null>(null);
@@ -33,9 +34,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
 
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
-    } catch (error) {
-      console.error('Error al enviar la reseña:', error);
+      const sanitizedReview = sanitizeFormValues(formData);
+      await onSubmit(sanitizedReview);
+    } catch {
+      // Error handled by parent
     } finally {
       setIsSubmitting(false);
     }
@@ -125,9 +127,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
           disabled={isSubmitting}
           className={`
             px-4 py-2 text-sm font-medium text-white rounded-md
-            ${isSubmitting
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-green-600 hover:bg-green-700'
+            ${
+              isSubmitting
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-green-600 hover:bg-green-700'
             }
           `}
         >

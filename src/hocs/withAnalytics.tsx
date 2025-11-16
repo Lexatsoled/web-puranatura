@@ -1,12 +1,13 @@
 import React from 'react';
 import { useAnalytics } from '../hooks/useAnalytics';
+import type { EventCategory } from '../hooks/useAnalytics';
 
 interface WithAnalyticsProps {
-  eventCategory: string;
+  eventCategory: EventCategory;
   eventAction: string;
   eventLabel?: string;
   eventValue?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function withAnalytics<P extends object>(
@@ -17,12 +18,13 @@ export function withAnalytics<P extends object>(
     const { trackEvent } = useAnalytics();
 
     const handleAnalytics = () => {
-      const eventProps = typeof analyticsProps === 'function' 
-        ? analyticsProps(props) 
-        : analyticsProps;
+      const eventProps =
+        typeof analyticsProps === 'function'
+          ? analyticsProps(props)
+          : analyticsProps;
 
       trackEvent({
-        category: eventProps.eventCategory as any, // EventCategory cast
+        category: eventProps.eventCategory,
         action: eventProps.eventAction,
         label: eventProps.eventLabel,
         value: eventProps.eventValue,
@@ -30,19 +32,14 @@ export function withAnalytics<P extends object>(
       });
     };
 
-    return (
-      <WrappedComponent
-        {...props}
-        onAnalytics={handleAnalytics}
-      />
-    );
+    return <WrappedComponent {...props} onAnalytics={handleAnalytics} />;
   };
 }
 
 // HOC específico para productos
-export function withProductAnalytics<P extends { product: { id: string; name: string; price: number } }>(
-  WrappedComponent: React.ComponentType<P>
-) {
+export function withProductAnalytics<
+  P extends { product: { id: string; name: string; price: number } },
+>(WrappedComponent: React.ComponentType<P>) {
   return withAnalytics(WrappedComponent, (props: P) => ({
     eventCategory: 'product',
     eventAction: 'view',

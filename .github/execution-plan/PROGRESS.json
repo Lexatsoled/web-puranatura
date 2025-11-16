@@ -1,0 +1,103 @@
+{
+  "project": "Pureza Naturalis V3 - Depuración y Robustez",
+  "start_date": "2025-11-07",
+  "current_phase": 1,
+  "last_updated": "2025-11-07T00:00:00Z",
+  "phases": {
+    "phase1": {
+      "name": "Seguridad Crítica",
+      "status": "NOT_STARTED",
+      "tasks_total": 12,
+      "tasks_completed": 0,
+      "tasks_in_progress": 0,
+      "tasks_blocked": 0,
+      "progress_percent": 0,
+      "start_date": null,
+      "end_date": null,
+      "blockers": []
+    },
+    "phase2": {
+      "name": "Backend Robusto + Performance",
+      "status": "NOT_STARTED",
+      "tasks_total": 12,
+      "tasks_completed": 0,
+      "tasks_in_progress": 0,
+      "tasks_blocked": 0,
+      "progress_percent": 0,
+      "start_date": null,
+      "end_date": null,
+      "blockers": []
+    },
+    "phase3": {
+      "name": "Refinamiento y Optimización",
+      "status": "NOT_STARTED",
+      "tasks_total": 11,
+      "tasks_completed": 0,
+      "tasks_in_progress": 0,
+      "tasks_blocked": 0,
+      "progress_percent": 0,
+      "start_date": null,
+      "end_date": null,
+      "blockers": []
+    }
+  },
+  "tasks": {
+    "TASK-001": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-002": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-003": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-004": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-005": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-006": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-007": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-008": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-009": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-010": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-011": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-012": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-013": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-014": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-015": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-016": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-017": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-018": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-019": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-020": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-021": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-022": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-023": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-024": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-025": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-026": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-027": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-028": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-029": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-030": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-031": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-032": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-033": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-034": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null},
+    "TASK-035": {"status": "NOT_STARTED", "assignee": "GPT-5", "reviewer": "Copilot", "last_update": null}
+  },
+  "metrics": {
+    "security": {
+      "tracked_secrets": null,
+      "local_storage_orders": null,
+      "csrf_block_rate": null,
+      "pii_in_logs": null
+    },
+    "performance": {
+      "image_payload_mb": 29.59,
+      "lcp_seconds": null,
+      "inp_ms": null,
+      "cls": null,
+      "api_404_rate": null
+    },
+    "quality": {
+      "duplicated_components": null,
+      "test_coverage_percent": null,
+      "axe_violations": null,
+      "eslint_errors": null,
+      "typescript_errors": null
+    }
+  }
+}

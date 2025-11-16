@@ -1,0 +1,11 @@
+{
+  "name": "@pureza/gitleaks-shim",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "gitleaks": "cli.js"
+  },
+  "dependencies": {
+    "gitleaks-secret-scanner": "^1.2.2"
+  }
+}

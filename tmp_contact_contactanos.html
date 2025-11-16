@@ -1,0 +1,444 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } from "/@react-refresh";
+injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;</script>
+
+    <script type="module" src="/@vite/client"></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Content Security Policy - Protege contra XSS y ataques de inyección -->
+    <!-- NOTA: CSP via meta tags tiene limitaciones. frame-ancestors solo funciona en headers HTTP -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      img-src 'self' data: https: blob:;
+      font-src 'self' https://fonts.gstatic.com data:;
+  connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.purezanaturalis.com http://localhost:3001;
+  frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps https://www.google.com/maps/embed http://localhost:3000;
+      worker-src 'self' blob:;
+      manifest-src 'self';
+      base-uri 'self';
+      form-action 'self';
+      upgrade-insecure-requests;
+    " />
+    <!-- Security Headers via HTML meta tags -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- Permissions-Policy: solo certain features válidas en meta tags -->
+    <meta http-equiv="Permissions-Policy" content="accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), microphone=(), payment=(self), usb=(), xr-spatial-tracking=()" />
+    <script>
+      // Limpieza de Service Workers SOLO en desarrollo y una única vez
+      (function () {
+        try {
+          var isLocal =
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1';
+          if (!isLocal || !('serviceWorker' in navigator)) return;
+          if (sessionStorage.getItem('sw_cleanup_done')) return;
+          (async () => {
+            try {
+              const regs = await navigator.serviceWorker.getRegistrations();
+              const hadAny = regs && regs.length > 0;
+              await Promise.all((regs || []).map((r) => r.unregister()));
+              if (window.caches && caches.keys) {
+                const keys = await caches.keys();
+                await Promise.all(keys.map((k) => caches.delete(k)));
+              }
+              sessionStorage.setItem('sw_cleanup_done', '1');
+              // Si realmente había SW, recarga silenciosa sin afectar history
+              if (hadAny) location.replace(location.href.split('#')[0]);
+            } catch {}
+          })();
+        } catch {}
+      })();
+    </script>
+    <title>
+      Pureza Naturalis - Terapias Naturales | Productos Naturales en República
+      Dominicana
+    </title>
+    <meta
+      name="description"
+      content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural."
+    />
+
+    <meta name="author" content="Pureza Naturalis" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="keywords" content="vitaminas, suplementos, productos naturales, salud, terapias naturales, hierbas medicinales, República Dominicana" />
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="DO" />
+    <meta name="geo.placename" content="República Dominicana" />
+    <meta name="geo.position" content="18.735693;-70.162651" />
+    
+    <!-- Google Site Verification (placeholder) -->
+    <!-- <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE" /> -->
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://web.purezanaturalis.com/" />
+    <meta
+      property="og:title"
+      content="Pureza Naturalis - Terapias Naturales | Productos Naturales en República Dominicana"
+    />
+    <meta
+      property="og:description"
+      content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural."
+    />
+    <meta property="og:image" content="https://web.purezanaturalis.com/logo-pureza-naturalis-largo_1024.webp" />
+    <meta property="og:locale" content="es_DO" />
+    <meta property="og:site_name" content="Pureza Naturalis" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://web.purezanaturalis.com/" />
+    <meta
+      property="twitter:title"
+      content="Pureza Naturalis - Terapias Naturales | Productos Naturales en República Dominicana"
+    />
+    <meta
+      property="twitter:description"
+      content="Descubre Pureza Naturalis, tu tienda de terapias y productos naturales en República Dominicana. Suplementos, vitaminas, hierbas medicinales y más para tu bienestar natural."
+    />
+    <meta property="twitter:image" content="https://web.purezanaturalis.com/logo-pureza-naturalis-largo_1024.webp" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://web.purezanaturalis.com/" />
+    <script>
+      // Sólo cargar manifest en producción (evita error en dev)
+      (function () {
+        var isLocal =
+          location.hostname === 'localhost' ||
+          location.hostname === '127.0.0.1';
+        if (!isLocal) {
+          var link = document.createElement('link');
+          link.rel = 'manifest';
+          link.href = '/manifest.webmanifest';
+          document.head.appendChild(link);
+        }
+      })();
+    </script>
+    <script defer src="/js/ga.js" data-ga-id="GA_MEASUREMENT_ID"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Pureza Naturalis",
+        "description": "Tienda de terapias y productos naturales en República Dominicana",
+        "url": "https://web.purezanaturalis.com",
+        "logo": "https://web.purezanaturalis.com/logo-pureza-naturalis-largo_1024.webp",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "DO",
+          "addressRegion": "Distrito Nacional"
+        },
+        "openingHours": "Mo-Sa 08:00-18:00",
+        "telephone": "+1-809-000-0000",
+        "priceRange": "$$",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Productos Naturales",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Suplementos Naturales"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Vitaminas y Minerales"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Hierbas Medicinales"
+              }
+            }
+          ]
+        }
+      }
+    </script>
+
+    <!-- Critical CSS inlined for above-the-fold content -->
+    <style>
+      /* Critical CSS for Core Web Vitals */
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f9fafb;
+      }
+
+      /* Above-the-fold layout */
+      .hero-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .hero-content {
+        text-align: center;
+        max-width: 800px;
+        padding: 2rem;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .hero-button {
+        background: white;
+        color: #14532d;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s;
+      }
+
+      .hero-button:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Loading states */
+      .loading-skeleton {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* Prevent layout shift */
+      .aspect-ratio-16-9 {
+        aspect-ratio: 16 / 9;
+      }
+
+      .aspect-ratio-1-1 {
+        aspect-ratio: 1 / 1;
+      }
+    </style>
+
+    <!-- Fonts self-hosted via @fontsource (see index.tsx imports) -->
+
+    <!-- Preload critical images -->
+    <link rel="preload" href="/logo-pureza-naturalis-largo_320.webp" as="image" type="image/webp">
+    <!-- Hero background is not critical above-the-fold; prefetch to avoid preload warnings -->
+    <link rel="prefetch" href="/images/hero-background.webp" as="image" type="image/webp">
+
+    <!-- No external font CSS; shipped in bundle -->
+
+    <!-- Remove dev-only preloads (index.css/src) -->
+
+    <!-- Custom styles with performance optimizations -->
+    <style>
+      /* Font fallbacks for better LCP */
+      body {
+        font-family:
+          'Montserrat',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          'Roboto',
+          sans-serif;
+        font-display: swap;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .font-display {
+        font-family:
+          'Playfair Display', Georgia, 'Times New Roman', serif;
+        font-display: swap;
+      }
+
+      /* Content styles */
+      .blog-content p {
+        margin-bottom: 1rem;
+      }
+      .blog-content ul {
+        list-style-position: inside;
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+      }
+      .blog-content li {
+        margin-bottom: 0.5rem;
+      }
+      .blog-content strong {
+        font-weight: 600;
+        color: #1a202c;
+      }
+
+      /* Performance optimizations */
+      .blur-backdrop {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+      }
+
+      /* Optimized loading animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      /* Prevent layout shifts */
+      .stable-layout {
+        min-height: 200px; /* Reserve space for content */
+      }
+
+      /* Critical resource loading */
+      .critical-resource {
+        content-visibility: auto;
+        contain-intrinsic-size: 200px;
+      }
+
+      /* Image optimization */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* Loading states */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+
+      /* Fixes: ensure correct keyframes and flex alignment */
+      .hero-section {
+        align-items: center;
+      }
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+    </style>
+
+    <!-- Import Maps removidos: Vite gestiona dependencias en dev/build -->
+
+    <!-- Dev CSS import no requerido; CSS se importa desde index.tsx -->
+
+    <!-- En desarrollo en localhost, desregistrar cualquier SW previo para evitar interferencias -->
+    <script>
+      if (
+        location.hostname === 'localhost' ||
+        location.hostname === '127.0.0.1'
+      ) {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker
+            .getRegistrations()
+            .then((rs) => rs.forEach((r) => r.unregister()))
+            .then(
+              () =>
+                caches &&
+                caches
+                  .keys()
+                  .then((keys) => keys.forEach((k) => caches.delete(k)))
+            )
+            .catch(() => {});
+          console.info(
+            '[DEV] Service workers desregistrados y cachés limpiadas'
+          );
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-gray-50">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx?t=1762947457772"></script>
+    <!-- Defer non-critical JavaScript -->
+    <script defer src="/js/init.js"></script>
+  </body>
+</html>

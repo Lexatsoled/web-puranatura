@@ -39,14 +39,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
     }
   };
 
-  const handleMouseMove = useCallback(
-    () => {
-      if (isZoomed) {
-        // Mouse position tracking for future zoom functionality
-      }
-    },
-    [isZoomed]
-  );
+  const handleMouseMove = useCallback(() => {
+    if (isZoomed) {
+      // Mouse position tracking for future zoom functionality
+    }
+  }, [isZoomed]);
 
   return (
     <div className="relative">
@@ -58,13 +55,16 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
       >
         <OptimizedImage
           src={images[currentImageIndex].url}
-          alt={images[currentImageIndex].alt || `${productName} - Imagen ${currentImageIndex + 1}`}
+          alt={
+            images[currentImageIndex].alt ||
+            `${productName} - Imagen ${currentImageIndex + 1}`
+          }
           className={`w-full h-full object-cover transition-transform duration-200 ${
             isZoomed ? 'scale-150' : ''
           }`}
           aspectRatio={1}
         />
-        
+
         {/* Controles de navegación */}
         {images.length > 1 && (
           <>
@@ -74,7 +74,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
                 handlePrevImage();
               }}
               className={`absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 transition-opacity ${
-                currentImageIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white'
+                currentImageIndex === 0
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-white'
               }`}
               disabled={currentImageIndex === 0}
               aria-label="Imagen anterior"
@@ -168,7 +170,10 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
               <div className="relative w-full aspect-square">
                 <OptimizedImage
                   src={images[currentImageIndex].url}
-                  alt={images[currentImageIndex].alt || `${productName} - Imagen ${currentImageIndex + 1}`}
+                  alt={
+                    images[currentImageIndex].alt ||
+                    `${productName} - Imagen ${currentImageIndex + 1}`
+                  }
                   className="w-full h-full object-contain"
                   aspectRatio={1}
                 />

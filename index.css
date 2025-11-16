@@ -1,3 +1,184 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Progress bar styles */
+[data-progress] {
+  width: calc(var(--progress, 0) * 1%);
+}
+
+[data-progress='0'] {
+  --progress: 0;
+}
+[data-progress='10'] {
+  --progress: 10;
+}
+[data-progress='20'] {
+  --progress: 20;
+}
+[data-progress='30'] {
+  --progress: 30;
+}
+[data-progress='40'] {
+  --progress: 40;
+}
+[data-progress='50'] {
+  --progress: 50;
+}
+[data-progress='60'] {
+  --progress: 60;
+}
+[data-progress='70'] {
+  --progress: 70;
+}
+[data-progress='80'] {
+  --progress: 80;
+}
+[data-progress='90'] {
+  --progress: 90;
+}
+[data-progress='100'] {
+  --progress: 100;
+}
+
+/* Accessibility: Global contrast improvements for green text - WCAG AA compliant */
+.text-green-500,
+.text-emerald-500 {
+  color: #166534 !important; /* Darker green for better contrast */
+}
+.text-green-600,
+.text-emerald-600 {
+  color: #14532d !important; /* Even darker for primary text */
+}
+.hover\:text-green-800:hover,
+.hover\:text-emerald-800:hover {
+  color: #064e3b !important;
+}
+.bg-green-50 .text-green-700,
+.bg-emerald-50 .text-emerald-700 {
+  color: #064e3b !important;
+}
+.bg-green-100 .text-green-700,
+.bg-emerald-100 .text-emerald-700 {
+  color: #064e3b !important;
+}
+.prose a,
+a.text-green-600,
+a.text-emerald-600 {
+  color: #064e3b !important;
+}
+/* Stronger a11y contrast mapping for green palette - WCAG AAA compliant */
+.text-green-500,
+.text-emerald-500,
+.hover\:text-green-500:hover,
+.hover\:text-emerald-500:hover {
+  color: #166534 !important;
+}
+.text-green-600,
+.text-emerald-600,
+.hover\:text-green-600:hover,
+.hover\:text-emerald-600:hover {
+  color: #14532d !important;
+}
+.text-green-700,
+.text-emerald-700 {
+  color: #064e3b !important;
+}
+.bg-green-50 .text-green-600,
+.bg-emerald-50 .text-emerald-600 {
+  color: #064e3b !important;
+}
+.bg-green-100 .text-green-600,
+.bg-emerald-100 .text-emerald-600 {
+  color: #064e3b !important;
+}
+
+/* ==========================================
+   ACCESSIBILITY - WCAG 2.1 AA
+   ========================================== */
+
+/* Screen Reader Only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid #0056b3;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* High contrast focus for buttons */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #0056b3;
+  outline-offset: 3px;
+}
+
+/* WCAG AA Color Tokens (4.5:1 contrast minimum) */
+:root {
+  --a11y-text-primary: #1a1a1a;      /* 16.9:1 on white ✓ */
+  --a11y-text-secondary: #4a4a4a;    /* 9.7:1 on white ✓ */
+  --a11y-link: #0056b3;               /* 8.6:1 on white ✓ */
+  --a11y-link-hover: #003d82;         /* 11.4:1 on white ✓ */
+  --a11y-success: #0f5132;            /* 7.1:1 on white ✓ */
+  --a11y-error: #842029;              /* 7.9:1 on white ✓ */
+  --a11y-warning: #664d03;            /* 8.5:1 on white ✓ */
+  --a11y-focus: #0056b3;              /* Focus outline color */
+}
+
+/* Ensure sufficient contrast on interactive elements */
+.btn-primary {
+  background-color: var(--a11y-link);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--a11y-link-hover);
+}
+
+.text-error {
+  color: var(--a11y-error);
+}
+
+.text-success {
+  color: var(--a11y-success);
+}
+
+.text-warning {
+  color: var(--a11y-warning);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --a11y-text-primary: #000000;
+    --a11y-link: #0000EE;
+    --a11y-focus: #FF00FF;
+  }
+
+  *:focus-visible {
+    outline-width: 4px;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npx http-server ./dist -p 4173 -a 127.0.0.1",
+      "url": ["http://localhost:4173"],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "first-contentful-paint": ["error", { "maxNumericValue": 2000 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 300 }],
+        "max-potential-fid": ["error", { "maxNumericValue": 100 }],
+        "speed-index": ["error", { "maxNumericValue": 3000 }],
+        "interactive": ["error", { "maxNumericValue": 3500 }],
+        
+        "performance-budget": ["error", {
+          "maxNumericValue": 0,
+          "budgets": [
+            {
+              "resourceType": "script",
+              "budget": 300
+            },
+            {
+              "resourceType": "stylesheet",
+              "budget": 50
+            },
+            {
+              "resourceType": "image",
+              "budget": 200
+            },
+            {
+              "resourceType": "total",
+              "budget": 600
+            }
+          ]
+        }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

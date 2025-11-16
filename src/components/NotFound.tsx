@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Product } from '../types';
 
-interface NotFoundProps {
-  suggestedProducts?: Product[];
-  searchQuery?: string;
-  onSearch?: (query: string) => void;
-  popularCategories?: { id: string; name: string }[];
-}
-
+/**
+ * Componente NotFound para mostrar página de error 404 con sugerencias y accesibilidad.
+ *
+ * @component
+ * @param {NotFoundProps} props - Props para NotFound
+ * @returns {JSX.Element}
+ */
 const NotFound: React.FC<NotFoundProps> = ({
   suggestedProducts = [],
   searchQuery,
@@ -53,7 +52,7 @@ const NotFound: React.FC<NotFoundProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50" role="main" aria-label="Página no encontrada">
       <motion.div
         className="max-w-3xl w-full space-y-8 text-center"
         variants={containerVariants}
@@ -69,10 +68,10 @@ const NotFound: React.FC<NotFoundProps> = ({
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2" id="notfound-title">
             Página no encontrada
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600" aria-labelledby="notfound-title">
             Lo sentimos, la página que buscas no existe o ha sido movida.
           </p>
         </motion.div>
@@ -87,6 +86,7 @@ const NotFound: React.FC<NotFoundProps> = ({
                 onChange={(e) => onSearch(e.target.value)}
                 placeholder="Intenta buscar lo que necesitas..."
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                aria-label="Buscar en el sitio"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <svg
@@ -94,6 +94,7 @@ const NotFound: React.FC<NotFoundProps> = ({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -109,10 +110,12 @@ const NotFound: React.FC<NotFoundProps> = ({
 
         {/* Enlaces rápidos */}
         <motion.div variants={itemVariants}>
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center space-x-4" role="navigation" aria-label="Enlaces rápidos">
             <Link
               to="/"
               className="text-green-600 hover:text-green-700 font-medium flex items-center"
+              aria-label="Ir a inicio"
+              title="Ir a inicio"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -132,6 +135,8 @@ const NotFound: React.FC<NotFoundProps> = ({
             <Link
               to="/store"
               className="text-green-600 hover:text-green-700 font-medium flex items-center"
+              aria-label="Ir a tienda"
+              title="Ir a tienda"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -151,6 +156,8 @@ const NotFound: React.FC<NotFoundProps> = ({
             <Link
               to="/contact"
               className="text-green-600 hover:text-green-700 font-medium flex items-center"
+              aria-label="Ir a contacto"
+              title="Ir a contacto"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -179,54 +186,61 @@ const NotFound: React.FC<NotFoundProps> = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
               className="mt-12"
+              aria-label="Sugerencias de productos y categorías"
             >
               {suggestedProducts.length > 0 && (
                 <div className="mb-8">
-                  <h2 className="text-lg font-medium text-gray-900 mb-4">
+                  <h2 className="text-lg font-medium text-gray-900 mb-4" id="notfound-sugerencias">
                     Productos que te podrían interesar
                   </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4" aria-labelledby="notfound-sugerencias">
                     {suggestedProducts.slice(0, 3).map((product) => (
-                      <Link
-                        key={product.id}
-                        to={`/product/${product.id}`}
-                        className="group block"
-                      >
-                        <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                          <img
-                            src={product.images[0].thumbnail}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        <h3 className="mt-2 text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm text-green-600">
-                          DOP ${product.price.toFixed(2)}
-                        </p>
-                      </Link>
+                      <li key={`suggested-${product.id}`} role="listitem">
+                        <Link
+                          to={`/product/${product.id}`}
+                          className="group block"
+                          aria-label={`Ver producto ${product.name}`}
+                          title={`Ver producto ${product.name}`}
+                        >
+                          <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                            <img
+                              src={product.images[0].thumbnail}
+                              alt={product.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <h3 className="mt-2 text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">
+                            {product.name}
+                          </h3>
+                          <p className="text-sm text-green-600">
+                            DOP ${product.price.toFixed(2)}
+                          </p>
+                        </Link>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               )}
 
               {popularCategories.length > 0 && (
                 <div>
-                  <h2 className="text-lg font-medium text-gray-900 mb-4">
+                  <h2 className="text-lg font-medium text-gray-900 mb-4" id="notfound-categorias">
                     Categorías populares
                   </h2>
-                  <div className="flex flex-wrap justify-center gap-2">
+                  <ul className="flex flex-wrap justify-center gap-2" aria-labelledby="notfound-categorias">
                     {popularCategories.map((category) => (
-                      <Link
-                        key={category.id}
-                        to={`/category/${category.id}`}
-                        className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border border-gray-200"
-                      >
-                        {category.name}
-                      </Link>
+                      <li key={`cat-${category.id}`} role="listitem">
+                        <Link
+                          to={`/category/${category.id}`}
+                          className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors border border-gray-200"
+                          aria-label={`Ver categoría ${category.name}`}
+                          title={`Ver categoría ${category.name}`}
+                        >
+                          {category.name}
+                        </Link>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               )}
             </motion.div>
@@ -238,3 +252,10 @@ const NotFound: React.FC<NotFoundProps> = ({
 };
 
 export default NotFound;
+
+interface NotFoundProps {
+  suggestedProducts?: Array<{ id: string; name: string; price: number; images: { thumbnail: string }[] }>;
+  searchQuery?: string;
+  onSearch?: (query: string) => void;
+  popularCategories?: Array<{ id: string; name: string }>;
+}

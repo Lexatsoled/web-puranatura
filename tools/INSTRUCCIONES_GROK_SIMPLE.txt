@@ -1,0 +1,270 @@
+INSTRUCCIONES PARA GROK AI - FASE 2 PUREZA NATURALIS V3
+
+TU MISIÓN:
+Ejecutar automáticamente "FASE 2: Rendimiento & UX" - un conjunto de 5 tareas de optimización para mejorar performance 30-50% en 1-2 semanas.
+
+CONTEXTO:
+- Proyecto: Pureza Naturalis V3 (e-commerce React + Fastify)
+- Fase 1 (Seguridad): ✅ COMPLETADA
+- Fase 2 (Performance): 🚀 COMIENZA HOY
+- Tu rol: Ejecutar de forma automatizada y coordinada
+
+========================
+LAS 5 TAREAS DE FASE 2
+========================
+
+1. PERF-IMG-001: Optimizar Imágenes (picture element)
+   Target: LCP 3.5s → 2.4s (↓30%)
+   - Implementar <picture> con AVIF/WebP/JPEG
+   - Convertir 1,131 JPGs a AVIF (80% reducción)
+   - Agregar srcset con 2x, 3x resoluciones
+   - Archivos: src/components/ProductImage.tsx, scripts/optimize-images.js
+
+2. PERF-BUNDLE-001: Reducir Bundle Size
+   Target: 450KB → 350KB (↓30%)
+   - Tree-shaking en Vite
+   - Code splitting por rutas (lazy load)
+   - Remover deps no usadas (lodash, moment.js)
+   - Archivos: vite.config.ts, src/main.tsx
+
+3. PERF-CACHE-001: Estrategias Caché HTTP + Redis
+   Target: TTFB 400ms → 200-300ms, Hit Rate >60%
+   - HTTP headers (Cache-Control, ETag, Last-Modified)
+   - Redis backend caching
+   - Client-side localStorage caching
+   - Archivos: backend/src/plugins/cacheHeaders.ts, backend/src/plugins/redisCache.ts
+
+4. PERF-N+1-001: Eliminar N+1 Queries
+   Target: API P95 450ms → 280ms (↓38%), 11+ queries → 2-3 (↓82%)
+   - Drizzle ORM JOINs en lugar de lazy loading
+   - Query profiling (X-Query-Count header)
+   - Indexes en claves foráneas
+   - Archivos: backend/src/routes/v1/products.ts
+
+5. UX-ERROR-001: Mejorar Manejo de Errores
+   Target: Error Recovery >90%, Support Tickets ↓30%
+   - Custom error hook con auto-retry
+   - Exponential backoff (100ms, 200ms, 400ms)
+   - Error Boundary component con mensajes contextuales
+   - Archivos: src/hooks/useErrorBoundary.ts, src/components/ErrorBoundary.tsx
+
+========================
+RECURSOS A TU DISPOSICIÓN
+========================
+
+Tu kit contiene:
+- ./tools/README_KIT_FASE_2.md (Índice maestro - LEER PRIMERO)
+- ./tools/FASE_2_IMPLEMENTATION_GUIDE.md (Guía paso-a-paso)
+- ./tools/FASE_2_SETUP.ps1 (Setup inicial)
+- ./tools/FASE_2_VALIDATE.ps1 (Validador automático)
+- ./tools/FASE_2_MONITOR.ps1 (Dashboard en vivo)
+- ./tools/FASE_2_ROLLBACK.ps1 (Reversa automática)
+- ./tools/tests/*.test.ts (5 test suites automáticos)
+
+También disponibles:
+- ./CHECKLIST_FASE_2.md (Checklist operativo)
+- ./FASE_2_PLAN.md (Plan estratégico)
+- ./REFERENCIA_RAPIDA.md (Quick reference)
+
+========================
+FLUJO RECOMENDADO
+========================
+
+DÍA 1: PREPARACIÓN (1-2 horas)
+─────────────────────────────
+1. Leer documentación en este orden:
+   a) ./tools/README_KIT_FASE_2.md (30 min)
+   b) ./tools/FASE_2_IMPLEMENTATION_GUIDE.md (30 min)
+   c) ./CHECKLIST_FASE_2.md (15 min)
+
+2. Ejecutar setup:
+   .\tools\FASE_2_SETUP.ps1
+   (Esperar a completar: 10-15 min)
+   Verificar: ./tools/metrics/baseline.json existe
+
+3. Verificar ambiente:
+   git checkout fase-2
+   npm run build
+   npm run test
+
+DÍAS 2-5: IMPLEMENTACIÓN (4 días)
+─────────────────────────────────
+Para cada tarea (en orden o paralelo):
+
+1. Leer instrucciones específicas
+   → ./tools/FASE_2_IMPLEMENTATION_GUIDE.md (Sección PERF-IMG-001, etc)
+
+2. Implementar según instrucciones
+   → Copiar código de ejemplo de guía
+   → Hacer cambios en archivos especificados
+
+3. Ejecutar tests
+   → npm run test -- tools/tests/perf-img.test.ts
+   (Repetir hasta que PASEN todos)
+
+4. Validar tarea
+   → .\tools\FASE_2_VALIDATE.ps1 -Task perf-img-001
+   (Score debe ser 100%)
+
+5. Monitorear métricas
+   → .\tools\FASE_2_MONITOR.ps1
+   (Verificar que mejoran vs baseline)
+
+6. Commit cambios
+   → git add -A
+   → git commit -m "feat: PERF-IMG-001 image optimization with picture element"
+
+DÍAS 6-7: VALIDACIÓN Y MERGE (1-2 días)
+────────────────────────────────────────
+1. Validar todas las tareas:
+   .\tools\FASE_2_VALIDATE.ps1 -CheckAll
+   (Resultado: 5/5 tareas PASSED con 100%)
+
+2. Ver dashboard final:
+   .\tools\FASE_2_MONITOR.ps1 -ShowDetails
+   (Verificar: LCP 2.3s, Bundle 320KB, API P95 280ms, Cache Hit 65%)
+
+3. Crear Pull Request
+   git push origin fase-2
+   (En GitHub/GitLab: crear PR con resumen de métricas)
+
+4. Merge a main
+   git checkout main
+   git merge fase-2 --no-ff
+   git push origin main
+
+========================
+COMANDOS CLAVE
+========================
+
+SETUP Y CONFIGURACIÓN:
+.\tools\FASE_2_SETUP.ps1
+
+VALIDACIÓN:
+.\tools\FASE_2_VALIDATE.ps1 -Task perf-img-001     (una tarea)
+.\tools\FASE_2_VALIDATE.ps1 -CheckAll               (todas)
+
+MONITOREO:
+.\tools\FASE_2_MONITOR.ps1                           (cada 30s)
+.\tools\FASE_2_MONITOR.ps1 -Interval 10 -ShowDetails (cada 10s con detalles)
+
+ROLLBACK (SI ALGO FALLA):
+.\tools\FASE_2_ROLLBACK.ps1 -RevertLastCommit -Commits 3    (revertir 3 commits)
+.\tools\FASE_2_ROLLBACK.ps1 -Task perf-bundle-001          (revertir tarea)
+.\tools\FASE_2_ROLLBACK.ps1 -CleanBuild                     (limpiar y reconstruir)
+
+TESTS:
+npm run test -- tools/tests/perf-img.test.ts       (test específico)
+npm run test:fase2                                  (suite completa)
+
+GIT:
+git checkout fase-2                                 (cambiar a rama)
+git add -A && git commit -m "descripción"          (commit cambios)
+git push origin fase-2                              (push rama)
+git checkout main && git merge fase-2 --no-ff      (merge a main)
+
+========================
+CÓMO PROCEDER ANTE PROBLEMAS
+========================
+
+SI UN TEST FALLA:
+1. Ejecutar con verbose:
+   npm run test -- tools/tests/TASK.test.ts --reporter=verbose
+
+2. Revisar la guía:
+   ./tools/FASE_2_IMPLEMENTATION_GUIDE.md (sección correspondiente)
+
+3. Si persiste:
+   .\tools\FASE_2_ROLLBACK.ps1 -Task TASK_ID
+   (empezar tarea de nuevo)
+
+SI MÉTRICAS NO MEJORAN:
+1. Verificar cambios están en lugar:
+   git diff
+
+2. Monitorear:
+   .\tools\FASE_2_MONITOR.ps1 -ShowDetails
+
+3. Comparar con baseline:
+   cat ./tools/metrics/baseline.json
+
+SI NECESITAS REVERTIR:
+.\tools\FASE_2_ROLLBACK.ps1 -RevertLastCommit -Commits 5  (revertir commits)
+.\tools\FASE_2_ROLLBACK.ps1 -FullRollback                  (último recurso)
+
+========================
+DEFINICIÓN DE "HECHO"
+========================
+
+Fase 2 está COMPLETADA cuando:
+
+✅ .\tools\FASE_2_VALIDATE.ps1 -CheckAll muestra 5/5 PASSED
+✅ npm run test:fase2 todos pasan
+✅ Métricas mejoran ≥30% (vs baseline):
+   - LCP: 3.5s → 2.4s ✅
+   - Bundle: 450KB → 320KB ✅
+   - API P95: 450ms → 280ms ✅
+   - Cache Hit: 20% → 60%+ ✅
+   - Queries: 11+ → 2-3 ✅
+✅ Pull Request aprobado
+✅ Mergeado a main sin conflictos
+✅ Deployment exitoso
+
+========================
+INICIO INMEDIATO
+========================
+
+Ejecuta AHORA en terminal:
+
+cd c:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3
+
+1. .\tools\FASE_2_SETUP.ps1
+
+2. cat ./tools/README_KIT_FASE_2.md
+
+3. Seguir el flujo de "DÍAS 2-5: IMPLEMENTACIÓN"
+
+========================
+IMPORTANTE
+========================
+
+✅ DEBES:
+- Leer toda la documentación antes de empezar
+- Ejecutar tests automáticos para cada tarea
+- Validar con FASE_2_VALIDATE.ps1 antes de pasar a siguiente
+- Hacer commits descriptivos después de cada tarea
+- Monitorear métricas en tiempo real
+
+❌ NO DEBES:
+- Cambios sin validación previa
+- Omitir tests automáticos
+- Comprometer seguridad por performance (Fase 1 debe mantenerse)
+- Modificar DB sin backup
+- Commits sin mensaje descriptivo
+
+========================
+RECURSOS DE REFERENCIA
+========================
+
+Documentación completa en: ./tools/
+
+Si necesitas:
+- Setup help → ./tools/README_KIT_FASE_2.md
+- Cómo implementar → ./tools/FASE_2_IMPLEMENTATION_GUIDE.md
+- Validación verbose → .\tools\FASE_2_VALIDATE.ps1 -Verbose
+- Rollback help → .\tools\FASE_2_ROLLBACK.ps1
+- Quick reference → ./REFERENCIA_RAPIDA.md
+- Checklist → ./CHECKLIST_FASE_2.md
+
+========================
+¡ESTÁS LISTO PARA COMENZAR!
+========================
+
+Próximo paso: Abre PowerShell y ejecuta:
+
+cd c:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3
+.\tools\FASE_2_SETUP.ps1
+
+Después: Lee ./tools/README_KIT_FASE_2.md
+
+¡Buena suerte con Fase 2!

@@ -1,6 +1,26 @@
+/**
+ * Componente de sección de preguntas frecuentes (FAQ) interactiva.
+ * Propósito: Mostrar una lista filtrable y expandible de preguntas frecuentes con búsqueda y categorización.
+ * Lógica: Gestiona estado de elementos activos, filtros de búsqueda y categoría, con animaciones suaves.
+ * Entradas: items (FAQItem[]), categories (string[]), defaultCategory (string), onContactSupport (función).
+ * Salidas: JSX de la sección completa de FAQ con filtros y elementos expandibles.
+ * Dependencias: React hooks, framer-motion para animaciones, DOMPurify para sanitización.
+ * Efectos secundarios: dangerouslySetInnerHTML con contenido sanitizado.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import DOMPurify from 'dompurify';
 
+/**
+ * Define la estructura de un elemento FAQ.
+ * Propósito: Estructurar datos de preguntas frecuentes con metadatos para filtrado.
+ * Lógica: Contiene pregunta, respuesta, categoría y etiquetas opcionales.
+ * Entradas: Ninguna (es una interfaz de tipos).
+ * Salidas: Ninguna (es una interfaz de tipos).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
 interface FAQItem {
   id: string;
   question: string;
@@ -9,10 +29,28 @@ interface FAQItem {
   tags?: string[];
 }
 
+/**
+ * Define el conteo de elementos por categoría.
+ * Propósito: Mantener un registro del número de elementos en cada categoría.
+ * Lógica: Objeto con claves de categoría y valores numéricos.
+ * Entradas: Ninguna (es una interfaz de tipos).
+ * Salidas: Ninguna (es una interfaz de tipos).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
 interface FAQCategoryCount {
   [key: string]: number;
 }
 
+/**
+ * Props del componente FAQSection.
+ * Propósito: Definir las propiedades necesarias para configurar la sección de FAQ.
+ * Lógica: Especifica items, categorías disponibles, categoría por defecto y callback opcional.
+ * Entradas: items, categories, defaultCategory, onContactSupport.
+ * Salidas: Ninguna (es una interfaz de tipos).
+ * Dependencias: FAQItem interface.
+ * Efectos secundarios: Ninguno.
+ */
 interface FAQSectionProps {
   items: FAQItem[];
   categories: string[];
@@ -20,6 +58,15 @@ interface FAQSectionProps {
   onContactSupport?: () => void;
 }
 
+/**
+ * Componente funcional FAQSection.
+ * Propósito: Renderizar una sección interactiva de preguntas frecuentes con filtros y animaciones.
+ * Lógica: Gestiona estados de búsqueda, categoría y elementos activos, calcula filtros y renderiza lista expandible.
+ * Entradas: Props desestructuradas (items, categories, defaultCategory, onContactSupport).
+ * Salidas: JSX de la sección completa de FAQ.
+ * Dependencias: useState, useMemo, motion, AnimatePresence, DOMPurify.
+ * Efectos secundarios: dangerouslySetInnerHTML con contenido sanitizado.
+ */
 const FAQSection: React.FC<FAQSectionProps> = ({
   items,
   categories,
@@ -30,7 +77,15 @@ const FAQSection: React.FC<FAQSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
 
-  // Calcular el conteo de items por categoría
+  /**
+   * Cálculo memoizado del conteo de items por categoría.
+   * Propósito: Contar elementos por categoría para mostrar en los botones de filtro.
+   * Lógica: Reduce el array de items acumulando conteos por categoría.
+   * Entradas: items (FAQItem[]).
+   * Salidas: categoryCount (FAQCategoryCount).
+   * Dependencias: items.
+   * Efectos secundarios: Ninguno.
+   */
   const categoryCount: FAQCategoryCount = useMemo(() => {
     return items.reduce((acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + 1;
@@ -38,7 +93,15 @@ const FAQSection: React.FC<FAQSectionProps> = ({
     }, {} as FAQCategoryCount);
   }, [items]);
 
-  // Filtrar y ordenar los items
+  /**
+   * Filtrado y ordenamiento memoizado de los items.
+   * Propósito: Aplicar filtros de búsqueda y categoría, ordenar alfabéticamente.
+   * Lógica: Filtra por búsqueda (pregunta, respuesta, tags) y categoría, luego ordena por pregunta.
+   * Entradas: items, searchQuery, selectedCategory.
+   * Salidas: filteredItems (FAQItem[]).
+   * Dependencias: items, searchQuery, selectedCategory.
+   * Efectos secundarios: Ninguno.
+   */
   const filteredItems = useMemo(() => {
     return items
       .filter((item) => {
@@ -58,6 +121,15 @@ const FAQSection: React.FC<FAQSectionProps> = ({
       .sort((a, b) => a.question.localeCompare(b.question));
   }, [items, searchQuery, selectedCategory]);
 
+  /**
+   * Variantes de animación para el contenedor de elementos FAQ.
+   * Propósito: Definir animaciones de entrada escalonada para la lista de elementos.
+   * Lógica: Configura opacidad y transición con stagger para animaciones secuenciales.
+   * Entradas: Ninguna (objeto de configuración).
+   * Salidas: containerVariants (objeto).
+   * Dependencias: Ninguna.
+   * Efectos secundarios: Ninguno.
+   */
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -68,18 +140,46 @@ const FAQSection: React.FC<FAQSectionProps> = ({
     },
   };
 
+  /**
+   * Variantes de animación para elementos individuales FAQ.
+   * Propósito: Definir animaciones de entrada para cada elemento de la lista.
+   * Lógica: Configura opacidad y movimiento vertical para entrada suave.
+   * Entradas: Ninguna (objeto de configuración).
+   * Salidas: itemVariants (objeto).
+   * Dependencias: Ninguna.
+   * Efectos secundarios: Ninguno.
+   */
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
 
+  /**
+   * Función para alternar el estado de expansión de un elemento FAQ.
+   * Propósito: Cambiar entre mostrar/ocultar la respuesta de una pregunta frecuente.
+   * Lógica: Si el itemId coincide con el activo, lo desactiva; de lo contrario, lo activa.
+   * Entradas: itemId (string).
+   * Salidas: Ninguna.
+   * Dependencias: activeItemId, setActiveItemId.
+   * Efectos secundarios: Actualiza estado de activeItemId.
+   */
   const toggleItem = (itemId: string) => {
     setActiveItemId(activeItemId === itemId ? null : itemId);
   };
 
+  /**
+   * Renderizado principal del componente FAQSection.
+   * Propósito: Mostrar la interfaz completa de preguntas frecuentes con filtros y elementos interactivos.
+   * Lógica: Estructura layout con header, búsqueda, filtros de categoría y lista animada de elementos.
+   * Entradas: Estados calculados (filteredItems, categoryCount, etc.) y props.
+   * Salidas: JSX completo del componente.
+   * Dependencias: motion, AnimatePresence, DOMPurify, estados del componente.
+   * Efectos secundarios: dangerouslySetInnerHTML con contenido sanitizado.
+   */
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        {/* Encabezado de la sección */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             ¿Cómo podemos ayudarte?
@@ -89,7 +189,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           </p>
         </div>
 
-        {/* Barra de búsqueda */}
+        {/* Campo de búsqueda */}
         <div className="mb-8">
           <div className="relative">
             <input
@@ -115,7 +215,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           </div>
         </div>
 
-        {/* Navegación por categorías */}
+        {/* Filtros por categoría */}
         <div className="mb-8 overflow-x-auto">
           <div className="flex space-x-2 min-w-max">
             <button
@@ -144,7 +244,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           </div>
         </div>
 
-        {/* Lista de preguntas */}
+        {/* Lista animada de elementos FAQ */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -152,10 +252,8 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           className="space-y-4"
         >
           {filteredItems.length === 0 ? (
-            <motion.div
-              variants={itemVariants}
-              className="text-center py-12"
-            >
+            /* Estado vacío: no se encontraron resultados */
+            <motion.div variants={itemVariants} className="text-center py-12">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400 mb-4"
                 fill="none"
@@ -182,6 +280,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
               )}
             </motion.div>
           ) : (
+            /* Lista de elementos FAQ filtrados */
             filteredItems.map((item) => (
               <motion.div
                 key={item.id}
@@ -220,9 +319,12 @@ const FAQSection: React.FC<FAQSectionProps> = ({
                       transition={{ duration: 0.2 }}
                     >
                       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                        <p className="text-gray-600 whitespace-pre-line">
-                          {item.answer}
-                        </p>
+                        <div
+                          className="text-gray-600"
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(item.answer),
+                          }}
+                        />
                         {item.tags && item.tags.length > 0 && (
                           <div className="mt-4 flex flex-wrap gap-2">
                             {item.tags.map((tag) => (
@@ -244,16 +346,14 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           )}
         </motion.div>
 
-        {/* Sección de ayuda adicional */}
+        {/* Sección de contacto adicional cuando hay resultados */}
         {onContactSupport && filteredItems.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-12 text-center"
           >
-            <p className="text-gray-600 mb-4">
-              ¿No encuentras lo que buscas?
-            </p>
+            <p className="text-gray-600 mb-4">¿No encuentras lo que buscas?</p>
             <button
               onClick={onContactSupport}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors"

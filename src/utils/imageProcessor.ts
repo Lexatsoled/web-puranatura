@@ -14,12 +14,7 @@ async function processImage(
   outputPath: string,
   options: ProcessImageOptions = {}
 ) {
-  const {
-    width,
-    height,
-    quality = 80,
-    format = 'webp',
-  } = options;
+  const { width, height, quality = 80, format = 'webp' } = options;
 
   try {
     let imageProcess = sharp(inputPath);
@@ -52,8 +47,8 @@ async function processImage(
     await imageProcess.toFile(outputPath);
 
     return true;
-  } catch (error) {
-    console.error('Error processing image:', error);
+  } catch {
+    // errorLogger.log(undefined, 'error', 'image-processing') // (opcional: log centralizado)
     return false;
   }
 }
@@ -61,7 +56,7 @@ async function processImage(
 async function processProductImages(inputDir: string, outputDir: string) {
   try {
     const files = await fs.readdir(inputDir);
-    
+
     for (const file of files) {
       if (file.match(/\.(jpg|jpeg|png)$/i)) {
         const inputPath = path.join(inputDir, file);
@@ -75,10 +70,14 @@ async function processProductImages(inputDir: string, outputDir: string) {
             format: 'webp',
           }),
           // Miniatura WebP
-          processImage(inputPath, path.join(outputDir, `${baseName}-thumb.webp`), {
-            width: 200,
-            format: 'webp',
-          }),
+          processImage(
+            inputPath,
+            path.join(outputDir, `${baseName}-thumb.webp`),
+            {
+              width: 200,
+              format: 'webp',
+            }
+          ),
           // Versión AVIF
           processImage(inputPath, path.join(outputDir, `${baseName}.avif`), {
             width: 800,
@@ -89,8 +88,8 @@ async function processProductImages(inputDir: string, outputDir: string) {
     }
 
     return true;
-  } catch (error) {
-    console.error('Error processing product images:', error);
+  } catch {
+    // errorLogger.log(undefined, 'error', 'image-processing') // (opcional: log centralizado)
     return false;
   }
 }
