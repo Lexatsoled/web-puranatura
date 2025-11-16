@@ -81,7 +81,7 @@ jobs:
             const fs = require('fs');
             const path = 'test-results/e2e-results.json';
             if (!fs.existsSync(path)) {
-              core.info('No e2e-results.json found.');
+              console.log('No e2e-results.json found.');
               return;
             }
             const raw = fs.readFileSync(path, 'utf8');
@@ -89,7 +89,7 @@ jobs:
             try {
               json = JSON.parse(raw);
             } catch (err) {
-              core.info('Failed parsing JSON: ' + err.message);
+              console.log('Failed parsing JSON: ' + err.message);
               return;
             }
             const failedTests = [];
@@ -115,7 +115,7 @@ jobs:
                 body,
               });
             } else {
-              core.info('No failed tests found in e2e-results.json');
+              console.log('No failed tests found in e2e-results.json');
             }
 
       - name: Re-run failing tests once (if failures)
@@ -198,7 +198,7 @@ jobs:
             const fs = require('fs');
             const path = 'test-results/e2e-results.json';
             if (!fs.existsSync(path)) {
-              core.info('No e2e-results.json found.');
+              console.log('No e2e-results.json found.');
               return;
             }
             const raw = fs.readFileSync(path, 'utf8');
@@ -206,7 +206,7 @@ jobs:
             try {
               json = JSON.parse(raw);
             } catch (err) {
-              core.info('Failed parsing JSON: ' + err.message);
+              console.log('Failed parsing JSON: ' + err.message);
               return;
             }
             const failedTests = [];
@@ -232,5 +232,5 @@ jobs:
                 body,
               });
             } else {
-              core.info('No failed tests found in e2e-results.json');
+              console.log('No failed tests found in e2e-results.json');
             }
