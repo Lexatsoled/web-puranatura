@@ -118,6 +118,14 @@ jobs:
               core.info('No failed tests found in e2e-results.json');
             }
 
+      - name: Re-run failing tests once (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          node -e "const fs=require('fs'); const path='test-results/e2e-results.json'; if(!fs.existsSync(path)){console.log('No results file'); process.exit(0);} const raw=fs.readFileSync(path,'utf8'); const json=JSON.parse(raw); const failed=[]; function traverse(s){ if(s.tests){ for(const t of s.tests){ if(t.status==='failed'){ let file=(t.location && t.location.file) || s.file || t.file; failed.push({file, title:t.title}); } } } if(s.suites) s.suites.forEach(traverse);} if(json.suites) json.suites.forEach(traverse); console.log(JSON.stringify(failed));" > failed_tests.json || true
+          if [ ! -s failed_tests.json ]; then echo "No failed tests to re-run" && exit 0; fi
+          echo "Found failed tests: $(cat failed_tests.json)"
+          node -e "const fs=require('fs'); const failed=JSON.parse(fs.readFileSync('failed_tests.json','utf8')); for(const f of failed.slice(0,10)){ console.log('Re-running', f.file, f.title); const cmd = 'npx playwright test ' + (f.file ? f.file : '') + ' -g "' + f.title.replace(/"/g,'\"') + '" --retries=0 --reporter=list'; console.log(cmd); try{ require('child_process').execSync(cmd,{stdio:'inherit'}); }catch(e){ console.error('Rerun failed', e.message); } } " || true
+
   smoke-checkout:
     name: E2E Smoke - Checkout
     runs-on: ubuntu-latest
