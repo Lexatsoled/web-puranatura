@@ -72,6 +72,52 @@ jobs:
             videos/
           retention-days: 30
 
+      - name: Post PR diagnostics summary (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'test-results/e2e-results.json';
+            if (!fs.existsSync(path)) {
+              core.info('No e2e-results.json found.');
+              return;
+            }
+            const raw = fs.readFileSync(path, 'utf8');
+            let json;
+            try {
+              json = JSON.parse(raw);
+            } catch (err) {
+              core.info('Failed parsing JSON: ' + err.message);
+              return;
+            }
+            const failedTests = [];
+            function traverse(suite) {
+              if (suite.tests) {
+                for (const t of suite.tests) {
+                  if (t.status === 'failed') {
+                    failedTests.push({ title: t.title, location: t.location });
+                  }
+                }
+              }
+              if (suite.suites) {
+                suite.suites.forEach(traverse);
+              }
+            }
+            if (json.suites) json.suites.forEach(traverse);
+            if (failedTests.length) {
+              const body = `❌ E2E tests failed. Found ${failedTests.length} failing test(s):\n\n` + failedTests.map((t, idx) => `- ${idx+1}. ${t.title}`).join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } else {
+              core.info('No failed tests found in e2e-results.json');
+            }
+
   smoke-checkout:
     name: E2E Smoke - Checkout
     runs-on: ubuntu-latest
@@ -128,3 +174,49 @@ jobs:
             test-results/
             playwright-report/
           retention-days: 30
+
+      - name: Post PR diagnostics summary (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'test-results/e2e-results.json';
+            if (!fs.existsSync(path)) {
+              core.info('No e2e-results.json found.');
+              return;
+            }
+            const raw = fs.readFileSync(path, 'utf8');
+            let json;
+            try {
+              json = JSON.parse(raw);
+            } catch (err) {
+              core.info('Failed parsing JSON: ' + err.message);
+              return;
+            }
+            const failedTests = [];
+            function traverse(suite) {
+              if (suite.tests) {
+                for (const t of suite.tests) {
+                  if (t.status === 'failed') {
+                    failedTests.push({ title: t.title, location: t.location });
+                  }
+                }
+              }
+              if (suite.suites) {
+                suite.suites.forEach(traverse);
+              }
+            }
+            if (json.suites) json.suites.forEach(traverse);
+            if (failedTests.length) {
+              const body = `❌ E2E tests failed. Found ${failedTests.length} failing test(s):\n\n` + failedTests.map((t, idx) => `- ${idx+1}. ${t.title}`).join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } else {
+              core.info('No failed tests found in e2e-results.json');
+            }
