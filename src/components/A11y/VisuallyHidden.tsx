@@ -12,18 +12,15 @@ interface VisuallyHiddenProps {
   focusable?: boolean;
 }
 
-const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ 
-  children, 
+const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({
+  children,
   as = 'span',
-  focusable = false 
+  focusable = false,
 }) => {
   const Component = as;
-  
+
   return (
-    <Component
-      className="sr-only"
-      {...(focusable ? { tabIndex: 0 } : {})}
-    >
+    <Component className="sr-only" {...(focusable ? { tabIndex: 0 } : {})}>
       {children}
     </Component>
   );

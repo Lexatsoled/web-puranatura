@@ -3,7 +3,11 @@
  * Captura errores no manejados y promesas rechazadas
  */
 
-import { errorLogger, ErrorSeverity, ErrorCategory } from '../services/errorLogger';
+import {
+  errorLogger,
+  ErrorSeverity,
+  ErrorCategory,
+} from '../services/errorLogger';
 
 /**
  * Inicializa los manejadores globales de errores
@@ -24,29 +28,26 @@ export function initializeGlobalErrorHandlers(): void {
   });
 
   // Manejar promesas rechazadas no manejadas
-  window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
-    const error = event.reason instanceof Error 
-      ? event.reason 
-      : new Error(String(event.reason));
+  window.addEventListener(
+    'unhandledrejection',
+    (event: PromiseRejectionEvent) => {
+      const error =
+        event.reason instanceof Error
+          ? event.reason
+          : new Error(String(event.reason));
 
-    errorLogger.log(
-      error,
-      ErrorSeverity.MEDIUM,
-      ErrorCategory.UNKNOWN,
-      {
+      errorLogger.log(error, ErrorSeverity.MEDIUM, ErrorCategory.UNKNOWN, {
         type: 'unhandledRejection',
         reason: event.reason,
-      }
-    );
+      });
 
-    // Prevenir que el error se propague a la consola (opcional)
-    // event.preventDefault();
-  });
+      // Prevenir que el error se propague a la consola (opcional)
+      // event.preventDefault();
+    }
+  );
 
   // Log de información del entorno
-  if (import.meta.env.DEV) {
-    console.log('✅ Global error handlers initialized');
-  }
+  // Mensaje de inicialización eliminado para cumplimiento estricto
 }
 
 /**
@@ -91,10 +92,9 @@ export function createFetchWithErrorHandling() {
 /**
  * Wrapper para funciones async que maneja errores automáticamente
  */
-export function withErrorHandling<T extends (...args: unknown[]) => Promise<unknown>>(
-  fn: T,
-  errorCategory: ErrorCategory = ErrorCategory.UNKNOWN
-): T {
+export function withErrorHandling<
+  T extends (...args: unknown[]) => Promise<unknown>,
+>(fn: T, errorCategory: ErrorCategory = ErrorCategory.UNKNOWN): T {
   return (async (...args: unknown[]) => {
     try {
       return await fn(...args);

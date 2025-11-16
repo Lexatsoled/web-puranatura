@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { SortOption } from '../types/product';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '../store/uiStore';
 
@@ -29,7 +30,7 @@ const FilterSidebar: React.FC = () => {
     'Productos Naturales',
     'Homeopatía',
     'Tés e Infusiones',
-    'Cuidado Personal'
+    'Cuidado Personal',
   ];
 
   const sortOptions = [
@@ -91,8 +92,18 @@ const FilterSidebar: React.FC = () => {
                 title="Cerrar filtros"
                 aria-label="Cerrar panel de filtros"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -105,7 +116,7 @@ const FilterSidebar: React.FC = () => {
             </label>
             <select
               value={productFilters.sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               aria-label="Ordenar productos por"
             >
@@ -119,7 +130,9 @@ const FilterSidebar: React.FC = () => {
 
           {/* Categories */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Categorías</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">
+              Categorías
+            </h4>
             <div className="space-y-2">
               {categories.map((category) => (
                 <label key={category} className="flex items-center">
@@ -137,7 +150,9 @@ const FilterSidebar: React.FC = () => {
 
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Rango de Precio</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">
+              Rango de Precio
+            </h4>
             <div className="space-y-3">
               <div className="flex gap-2">
                 <input
@@ -158,14 +173,17 @@ const FilterSidebar: React.FC = () => {
                 />
               </div>
               <div className="text-xs text-gray-500">
-                DOP ${productFilters.priceRange[0]} - DOP ${productFilters.priceRange[1]}
+                DOP ${productFilters.priceRange[0]} - DOP $
+                {productFilters.priceRange[1]}
               </div>
             </div>
           </div>
 
           {/* Stock & Sale filters */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Disponibilidad</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">
+              Disponibilidad
+            </h4>
             <div className="space-y-2">
               <label className="flex items-center">
                 <input
@@ -174,7 +192,9 @@ const FilterSidebar: React.FC = () => {
                   onChange={toggleInStock}
                   className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                 />
-                <span className="ml-2 text-sm text-gray-600">Solo en stock</span>
+                <span className="ml-2 text-sm text-gray-600">
+                  Solo en stock
+                </span>
               </label>
               <label className="flex items-center">
                 <input
@@ -190,7 +210,9 @@ const FilterSidebar: React.FC = () => {
 
           {/* Tags */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Etiquetas</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">
+              Etiquetas
+            </h4>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"

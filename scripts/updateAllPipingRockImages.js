@@ -25,7 +25,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=bamboo-extract',
         full: 'https://picsum.photos/600/600?random=bamboo-extract',
       },
-    ],`
+    ],`,
   },
   // Borage Oil
   {
@@ -41,7 +41,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=borage-oil',
         full: 'https://picsum.photos/600/600?random=borage-oil',
       },
-    ],`
+    ],`,
   },
   // Liver Cleanse
   {
@@ -57,7 +57,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=liver-cleanse',
         full: 'https://picsum.photos/600/600?random=liver-cleanse',
       },
-    ],`
+    ],`,
   },
   // Ashwagandha Melatonin
   {
@@ -73,7 +73,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=ashwa-melatonin',
         full: 'https://picsum.photos/600/600?random=ashwa-melatonin',
       },
-    ],`
+    ],`,
   },
   // Basil Oil
   {
@@ -89,7 +89,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=basil-oil',
         full: 'https://picsum.photos/600/600?random=basil-oil',
       },
-    ],`
+    ],`,
   },
   // Creatine
   {
@@ -105,7 +105,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=creatine',
         full: 'https://picsum.photos/600/600?random=creatine',
       },
-    ],`
+    ],`,
   },
   // Chamomile Oil
   {
@@ -121,7 +121,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=chamomile-oil',
         full: 'https://picsum.photos/600/600?random=chamomile-oil',
       },
-    ],`
+    ],`,
   },
   // Sandalwood Oil
   {
@@ -137,7 +137,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=sandalwood-oil',
         full: 'https://picsum.photos/600/600?random=sandalwood-oil',
       },
-    ],`
+    ],`,
   },
   // GABA
   {
@@ -153,7 +153,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=gaba',
         full: 'https://picsum.photos/600/600?random=gaba',
       },
-    ],`
+    ],`,
   },
   // 5-HTP
   {
@@ -169,7 +169,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=5htp',
         full: 'https://picsum.photos/600/600?random=5htp',
       },
-    ],`
+    ],`,
   },
   // Turmeric Complex
   {
@@ -185,7 +185,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=turmeric',
         full: 'https://picsum.photos/600/600?random=turmeric',
       },
-    ],`
+    ],`,
   },
   // CoQ10
   {
@@ -201,7 +201,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=coq10',
         full: 'https://picsum.photos/600/600?random=coq10',
       },
-    ],`
+    ],`,
   },
   // Bacopa
   {
@@ -217,7 +217,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=bacopa',
         full: 'https://picsum.photos/600/600?random=bacopa',
       },
-    ],`
+    ],`,
   },
   // PQQ
   {
@@ -233,7 +233,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=pqq',
         full: 'https://picsum.photos/600/600?random=pqq',
       },
-    ],`
+    ],`,
   },
   // Garlic (Ajo)
   {
@@ -249,7 +249,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=garlic',
         full: 'https://picsum.photos/600/600?random=garlic',
       },
-    ],`
+    ],`,
   },
   // Kudzu Root
   {
@@ -265,7 +265,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=kudzu',
         full: 'https://picsum.photos/600/600?random=kudzu',
       },
-    ],`
+    ],`,
   },
   // Arnica Oil
   {
@@ -281,7 +281,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=arnica-oil',
         full: 'https://picsum.photos/600/600?random=arnica-oil',
       },
-    ],`
+    ],`,
   },
   // Apple Cider Vinegar
   {
@@ -297,7 +297,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=apple-cider-vinegar',
         full: 'https://picsum.photos/600/600?random=apple-cider-vinegar',
       },
-    ],`
+    ],`,
   },
   // Activated Charcoal
   {
@@ -313,7 +313,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=activated-charcoal',
         full: 'https://picsum.photos/600/600?random=activated-charcoal',
       },
-    ],`
+    ],`,
   },
   // Ashwagandha 240
   {
@@ -329,7 +329,7 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=ashwagandha-240',
         full: 'https://picsum.photos/600/600?random=ashwagandha-240',
       },
-    ],`
+    ],`,
   },
   // Soy Lecithin
   {
@@ -345,8 +345,8 @@ const allPipingRockReplacements = [
         thumbnail: 'https://picsum.photos/300/300?random=soy-lecithin',
         full: 'https://picsum.photos/600/600?random=soy-lecithin',
       },
-    ],`
-  }
+    ],`,
+  },
 ];
 
 // Aplicar todos los reemplazos
@@ -355,7 +355,10 @@ let changesCount = 0;
 
 allPipingRockReplacements.forEach((replacement, index) => {
   if (updatedContent.includes(replacement.original)) {
-    updatedContent = updatedContent.replace(replacement.original, replacement.replacement);
+    updatedContent = updatedContent.replace(
+      replacement.original,
+      replacement.replacement
+    );
     changesCount++;
     console.log(`✅ Reemplazo ${index + 1} aplicado`);
   } else {
@@ -368,7 +371,9 @@ fs.writeFileSync(productsFile, updatedContent, 'utf8');
 
 console.log(`\n🎉 Proceso completado:`);
 console.log(`- ${changesCount} reemplazos aplicados`);
-console.log(`- ${allPipingRockReplacements.length - changesCount} reemplazos ya existían o no se encontraron`);
+console.log(
+  `- ${allPipingRockReplacements.length - changesCount} reemplazos ya existían o no se encontraron`
+);
 console.log(`\n📝 Todos los productos de Piping Rock ahora tienen:`);
 console.log(`   • Imágenes placeholder funcionales`);
 console.log(`   • Comentarios con las URLs originales de Piping Rock`);

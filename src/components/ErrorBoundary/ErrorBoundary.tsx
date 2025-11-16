@@ -55,16 +55,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.setState({
       errorInfo,
     });
-
-    // Log en consola (desarrollo)
-    if (import.meta.env.DEV) {
-      console.error('Error Boundary caught an error:', error, errorInfo);
-    }
   }
 
   componentDidUpdate(prevProps: ErrorBoundaryProps): void {
     // Reset automático si cambian las props (opcional)
-    if (this.props.resetOnPropsChange && prevProps.children !== this.props.children) {
+    if (
+      this.props.resetOnPropsChange &&
+      prevProps.children !== this.props.children
+    ) {
       this.reset();
     }
   }
@@ -91,9 +89,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <div className="error-boundary-icon">⚠️</div>
             <h2 className="error-boundary-title">Algo salió mal</h2>
             <p className="error-boundary-message">
-              Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta recargar la página.
+              Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta
+              recargar la página.
             </p>
-            
+
             {import.meta.env.DEV && this.state.error && (
               <details className="error-boundary-details">
                 <summary>Detalles del error (solo desarrollo)</summary>

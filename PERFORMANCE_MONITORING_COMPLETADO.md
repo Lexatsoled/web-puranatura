@@ -9,15 +9,17 @@
 ## 📊 RESULTADOS ALCANZADOS
 
 ### Sistema Implementado
-| Componente | Funcionalidad | Estado |
-|------------|---------------|--------|
-| **useWebVitals Hook** | Monitoreo automático de 5 métricas | ✅ Functional |
-| **WebVitalsMonitor** | Panel visual en desarrollo | ✅ Integrated |
-| **WebVitalsReport** | Dashboard de métricas | ✅ Created |
-| **Analytics Integration** | Envío a GA4/Analytics | ✅ Ready |
-| **localStorage Cache** | Histórico de métricas | ✅ Working |
+
+| Componente                | Funcionalidad                      | Estado        |
+| ------------------------- | ---------------------------------- | ------------- |
+| **useWebVitals Hook**     | Monitoreo automático de 5 métricas | ✅ Functional |
+| **WebVitalsMonitor**      | Panel visual en desarrollo         | ✅ Integrated |
+| **WebVitalsReport**       | Dashboard de métricas              | ✅ Created    |
+| **Analytics Integration** | Envío a GA4/Analytics              | ✅ Ready      |
+| **localStorage Cache**    | Histórico de métricas              | ✅ Working    |
 
 ### Métricas Monitoreadas
+
 ```
 ✅ LCP (Largest Contentful Paint)    - Target: ≤2.5s
 ✅ FCP (First Contentful Paint)      - Target: ≤1.8s
@@ -27,6 +29,7 @@
 ```
 
 ### Build Verification
+
 ```bash
 ✓ TypeScript: 0 errors
 ✓ Build time: 34.66s
@@ -55,10 +58,10 @@ Hook principal para monitoreo de Core Web Vitals con características avanzadas.
 ```typescript
 export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
   const {
-    onMetric,                    // Callback personalizado
-    sendToAnalytics = false,     // Auto-envío a GA4
-    debug = false,               // Logs en consola
-    reportInterval,              // Reportes periódicos
+    onMetric, // Callback personalizado
+    sendToAnalytics = false, // Auto-envío a GA4
+    debug = false, // Logs en consola
+    reportInterval, // Reportes periódicos
   } = options;
 
   // Monitorear todas las métricas
@@ -94,11 +97,11 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
 
 ```typescript
 export const WEB_VITALS_THRESHOLDS = {
-  LCP: { good: 2500, poor: 4000 },      // ms
-  FCP: { good: 1800, poor: 3000 },      // ms
-  CLS: { good: 0.1, poor: 0.25 },       // score
-  TTFB: { good: 800, poor: 1800 },      // ms
-  INP: { good: 200, poor: 500 },        // ms
+  LCP: { good: 2500, poor: 4000 }, // ms
+  FCP: { good: 1800, poor: 3000 }, // ms
+  CLS: { good: 0.1, poor: 0.25 }, // score
+  TTFB: { good: 800, poor: 1800 }, // ms
+  INP: { good: 200, poor: 500 }, // ms
 } as const;
 
 export const getMetricRating = (
@@ -106,13 +109,14 @@ export const getMetricRating = (
   value: number
 ): MetricRating => {
   const threshold = WEB_VITALS_THRESHOLDS[metricName];
-  if (value <= threshold.good) return 'good';          // 🟢
+  if (value <= threshold.good) return 'good'; // 🟢
   if (value <= threshold.poor) return 'needs-improvement'; // 🟡
-  return 'poor';                                       // 🔴
+  return 'poor'; // 🔴
 };
 ```
 
 **Ratings según Google**:
+
 - 🟢 **Good**: En el rango óptimo para UX
 - 🟡 **Needs Improvement**: Funcional pero mejorable
 - 🔴 **Poor**: Impacto negativo en UX, requiere atención
@@ -139,6 +143,7 @@ const saveMetricToStorage = (metric: WebVitalMetric) => {
 ```
 
 **Ventajas**:
+
 - 📊 Histórico persistente entre sesiones
 - 📈 Análisis de tendencias
 - 💾 No requiere backend
@@ -171,6 +176,7 @@ const sendMetricToAnalytics = (metric: WebVitalMetric) => {
 ```
 
 **Soporta**:
+
 - ✅ Google Analytics 4 (gtag)
 - ✅ Vercel Analytics
 - ✅ Fácilmente extensible a otros servicios
@@ -187,15 +193,17 @@ Panel visual flotante para monitoreo en tiempo real durante desarrollo.
 
 ```typescript
 export const WebVitalsMonitor: React.FC = () => {
-  const [metrics, setMetrics] = useState<Map<string, WebVitalMetric>>(new Map());
+  const [metrics, setMetrics] = useState<Map<string, WebVitalMetric>>(
+    new Map()
+  );
   const [isVisible, setIsVisible] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
   // Solo visible en dev o con ?debug=vitals
   useEffect(() => {
     const isDev = import.meta.env.DEV;
-    const hasDebugParam = new URLSearchParams(window.location.search)
-      .get('debug') === 'vitals';
+    const hasDebugParam =
+      new URLSearchParams(window.location.search).get('debug') === 'vitals';
     setIsVisible(isDev || hasDebugParam);
   }, []);
 
@@ -212,6 +220,7 @@ export const WebVitalsMonitor: React.FC = () => {
 ```
 
 **Funcionalidades**:
+
 - 📊 **Métricas en tiempo real** con color-coding
 - 📈 **Estadísticas agregadas**: avg, min, max, P75
 - 🧹 **Clear data**: Resetear histórico
@@ -249,6 +258,7 @@ Dashboard completo para análisis detallado de métricas históricas.
 #### Secciones Principales
 
 **1. Stats Cards Grid**
+
 ```typescript
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   {stats.map(({ name, stats }) => (
@@ -258,6 +268,7 @@ Dashboard completo para análisis detallado de métricas históricas.
 ```
 
 Muestra para cada métrica:
+
 - 📊 Valor P75 (percentil 75)
 - 📈 Promedio y rango (min-max)
 - 🎯 Rating con color visual
@@ -265,6 +276,7 @@ Muestra para cada métrica:
 - 📦 Número de samples
 
 **2. Metric History (Gráfica de Barras)**
+
 ```typescript
 <MetricHistory metricName={selectedMetric} metrics={metrics} />
 ```
@@ -275,6 +287,7 @@ Muestra para cada métrica:
 - 🔄 Selector de métrica (LCP/FCP/CLS/TTFB/INP)
 
 **3. Data Table**
+
 ```typescript
 <table>
   <thead>
@@ -293,6 +306,7 @@ Muestra para cada métrica:
 ```
 
 **4. Export/Clear Actions**
+
 ```typescript
 <button onClick={handleExport}>
   📥 Export JSON
@@ -321,7 +335,7 @@ const App: React.FC = () => {
     <AuthProvider>
       <CartProvider>
         {/* ... routes ... */}
-        
+
         {/* Monitor flotante (solo dev) */}
         <WebVitalsMonitor />
       </CartProvider>
@@ -331,6 +345,7 @@ const App: React.FC = () => {
 ```
 
 **Comportamiento**:
+
 - ✅ Monitoreo activo en todas las páginas
 - ✅ Envío automático a analytics en producción
 - ✅ Monitor visual solo en desarrollo
@@ -341,20 +356,24 @@ const App: React.FC = () => {
 ## 📈 CORE WEB VITALS EXPLICADOS
 
 ### LCP (Largest Contentful Paint)
+
 **Qué mide**: Tiempo hasta que el contenido principal es visible
 
 **Elementos que cuenta**:
+
 - `<img>` elements
 - `<video>` posters
 - Background images
 - Block-level text
 
 **Umbrales**:
+
 - 🟢 Good: ≤2.5s
 - 🟡 Needs Improvement: 2.5s-4.0s
 - 🔴 Poor: ≥4.0s
 
 **Cómo mejorarlo**:
+
 ```typescript
 // 1. Preload de imágenes críticas
 <link rel="preload" href="hero.jpg" as="image" />
@@ -371,20 +390,24 @@ const App: React.FC = () => {
 ---
 
 ### FCP (First Contentful Paint)
+
 **Qué mide**: Tiempo hasta que el primer contenido es visible
 
 **Cuenta**:
+
 - Primer texto
 - Primera imagen
 - Primer SVG
 - Primer canvas no-white
 
 **Umbrales**:
+
 - 🟢 Good: ≤1.8s
 - 🟡 Needs Improvement: 1.8s-3.0s
 - 🔴 Poor: ≥3.0s
 
 **Cómo mejorarlo**:
+
 ```typescript
 // 1. Reducir JS inicial
 import('./HeavyComponent').then(...);
@@ -399,20 +422,24 @@ import('./HeavyComponent').then(...);
 ---
 
 ### CLS (Cumulative Layout Shift)
+
 **Qué mide**: Estabilidad visual durante la carga
 
 **Causas comunes**:
+
 - Imágenes sin dimensiones
 - Ads/embeds sin espacio reservado
 - Fonts con FOIT/FOUT
 - Contenido dinámico insertado
 
 **Umbrales**:
+
 - 🟢 Good: ≤0.1
 - 🟡 Needs Improvement: 0.1-0.25
 - 🔴 Poor: ≥0.25
 
 **Cómo mejorarlo**:
+
 ```typescript
 // 1. Dimensiones explícitas para imágenes
 <img width="800" height="600" src="image.jpg" />
@@ -436,9 +463,11 @@ import('./HeavyComponent').then(...);
 ---
 
 ### TTFB (Time to First Byte)
+
 **Qué mide**: Tiempo hasta recibir primer byte del servidor
 
 **Componentes**:
+
 - DNS lookup
 - TCP connection
 - TLS handshake
@@ -446,11 +475,13 @@ import('./HeavyComponent').then(...);
 - Network latency
 
 **Umbrales**:
+
 - 🟢 Good: ≤800ms
 - 🟡 Needs Improvement: 800ms-1.8s
 - 🔴 Poor: ≥1.8s
 
 **Cómo mejorarlo**:
+
 ```typescript
 // 1. CDN para assets estáticos
 // 2. Server-side caching
@@ -467,19 +498,23 @@ import('./HeavyComponent').then(...);
 ---
 
 ### INP (Interaction to Next Paint)
+
 **Qué mide**: Respuesta a interacciones del usuario
 
 **Tipos de interacciones**:
+
 - Clicks
 - Taps
 - Keyboard inputs
 
 **Umbrales**:
+
 - 🟢 Good: ≤200ms
 - 🟡 Needs Improvement: 200ms-500ms
 - 🔴 Poor: ≥500ms
 
 **Cómo mejorarlo**:
+
 ```typescript
 // 1. Debounce/throttle para inputs
 const debouncedSearch = useMemo(
@@ -532,7 +567,7 @@ useWebVitals({
     // Custom logic
     if (metric.rating === 'poor') {
       console.error(`⚠️ Poor ${metric.name}: ${metric.value}ms`);
-      
+
       // Enviar alerta
       sendAlert({
         title: `Poor ${metric.name}`,
@@ -628,7 +663,7 @@ http://localhost:5173/?vitals=report
 
 ```javascript
 // En DevTools Console
-window.gtag // Debe existir si GA4 está configurado
+window.gtag; // Debe existir si GA4 está configurado
 
 // Disparar métrica manualmente
 gtag('event', 'LCP', {
@@ -650,11 +685,13 @@ gtag('event', 'LCP', {
 **Síntoma**: Hook ejecuta pero no hay métricas
 
 **Causas posibles**:
+
 1. Navegador no soporta APIs
 2. Extensions bloqueando (AdBlock)
 3. Page hidden al cargar
 
 **Solución**:
+
 ```typescript
 // Añadir verificación de soporte
 if ('PerformanceObserver' in window) {
@@ -673,6 +710,7 @@ if ('PerformanceObserver' in window) {
 **Causa**: Límite de localStorage (5-10MB)
 
 **Solución**:
+
 ```typescript
 // Ya implementado en hook
 const MAX_METRICS = 100; // Limita a últimas 100
@@ -694,6 +732,7 @@ try {
 **Causa**: Dev server sin optimizaciones
 
 **Solución**:
+
 ```bash
 # Testear en build de producción
 npm run build
@@ -708,6 +747,7 @@ npm run preview
 ## 📚 REFERENCIAS Y DOCUMENTACIÓN
 
 ### Official Documentation
+
 - [Web Vitals (web.dev)](https://web.dev/vitals/)
 - [web-vitals library (npm)](https://www.npmjs.com/package/web-vitals)
 - [Core Web Vitals Report (Google)](https://support.google.com/webmasters/answer/9205520)
@@ -716,6 +756,7 @@ npm run preview
 - [Optimize INP](https://web.dev/optimize-inp/)
 
 ### Tools
+
 - [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci)
 - [PageSpeed Insights](https://pagespeed.web.dev/)
 - [Chrome User Experience Report](https://developers.google.com/web/tools/chrome-user-experience-report)
@@ -725,6 +766,7 @@ npm run preview
 ## 📝 CHANGELOG
 
 ### v1.0.0 - 8 Octubre 2025
+
 - ✅ web-vitals library integrada
 - ✅ useWebVitals hook creado
   - Monitoreo de 5 métricas (LCP, FCP, CLS, TTFB, INP)
@@ -751,18 +793,21 @@ npm run preview
 ## 🎯 IMPACT SUMMARY
 
 ### Developer Experience
+
 - ✅ **Zero config**: Funciona automáticamente
 - ✅ **Visual feedback**: Monitor en tiempo real
 - ✅ **Debug mode**: Logs detallados en dev
 - ✅ **Dashboard**: Análisis histórico completo
 
 ### User Experience
+
 - 📊 **Measurable**: Métricas cuantificables
 - 🎯 **Actionable**: Ratings claros (good/poor)
 - 📈 **Trending**: Histórico para ver mejoras
 - 🔄 **Continuous**: Monitoreo constante
 
 ### Business Impact
+
 - 📊 **Data-driven**: Decisiones basadas en datos reales
 - 🎯 **Goal tracking**: Seguimiento de objetivos de performance
 - 💰 **ROI**: Correlación entre performance y conversión
@@ -804,6 +849,6 @@ package.json                            ← web-vitals dependency
 
 ---
 
-*Documentación generada el 8 de Octubre de 2025*  
-*Tiempo de implementación: ~1 hora*  
-*Performance monitoring: 5 Core Web Vitals tracked* 📊
+_Documentación generada el 8 de Octubre de 2025_  
+_Tiempo de implementación: ~1 hora_  
+_Performance monitoring: 5 Core Web Vitals tracked_ 📊

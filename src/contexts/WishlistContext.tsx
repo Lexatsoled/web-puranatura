@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { Product } from '@/types/product';
 
 interface WishlistItem {
@@ -22,21 +22,17 @@ interface WishlistContextType {
   wishlistCount: number;
 }
 
-const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
-
-export const useWishlist = () => {
-  const context = useContext(WishlistContext);
-  if (!context) {
-    throw new Error('useWishlist must be used within a WishlistProvider');
-  }
-  return context;
-};
+const WishlistContext = createContext<WishlistContextType | undefined>(
+  undefined
+);
 
 interface WishlistProviderProps {
   children: React.ReactNode;
 }
 
-export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) => {
+export const WishlistProvider: React.FC<WishlistProviderProps> = ({
+  children,
+}) => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
 
   // Cargar lista de deseos desde localStorage al inicializar
@@ -44,15 +40,28 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     const savedWishlist = localStorage.getItem('puranatura-wishlist');
     if (savedWishlist) {
       try {
-        const parsedWishlist = JSON.parse(savedWishlist);
-        // Convertir fechas de string a Date
-        const wishlistWithDates = parsedWishlist.map((item: any) => ({
-          ...item,
-          addedDate: new Date(item.addedDate)
-        }));
+        const parsedWishlist = JSON.parse(savedWishlist) as Array<
+          Partial<WishlistItem> & { addedDate?: string }
+        >;
+        // Convertir fechas de string a Date y garantizar el tipo
+        const wishlistWithDates: WishlistItem[] = parsedWishlist
+          .filter((item): item is WishlistItem & { addedDate?: string } =>
+            Boolean(item && item.id && item.name && item.price && item.image)
+          )
+          .map((item) => ({
+            id: item.id as string,
+            name: item.name as string,
+            price: item.price as number,
+            originalPrice: item.originalPrice as number | undefined,
+            image: item.image as string,
+            category: (item.category as string) || '',
+            inStock: Boolean(item.inStock),
+            addedDate: item.addedDate ? new Date(item.addedDate) : new Date(),
+            product: item.product as Product,
+          }));
         setWishlistItems(wishlistWithDates);
-      } catch (error) {
-        console.error('Error loading wishlist from localStorage:', error);
+      } catch {
+        // Error loading wishlist - start with empty list
       }
     }
   }, []);
@@ -63,8 +72,10 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
   }, [wishlistItems]);
 
   const addToWishlist = (product: Product) => {
-    const isAlreadyInWishlist = wishlistItems.some(item => item.id === product.id);
-    
+    const isAlreadyInWishlist = wishlistItems.some(
+      (item) => item.id === product.id
+    );
+
     if (!isAlreadyInWishlist) {
       const wishlistItem: WishlistItem = {
         id: product.id,
@@ -74,19 +85,19 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
         category: product.categories ? product.categories.join(', ') : '',
         inStock: true, // Por defecto asumimos que está en stock
         addedDate: new Date(),
-        product: product
+        product: product,
       };
 
-      setWishlistItems(prev => [...prev, wishlistItem]);
+      setWishlistItems((prev) => [...prev, wishlistItem]);
     }
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlistItems(prev => prev.filter(item => item.id !== productId));
+    setWishlistItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
   const isInWishlist = (productId: string): boolean => {
-    return wishlistItems.some(item => item.id === productId);
+    return wishlistItems.some((item) => item.id === productId);
   };
 
   const clearWishlist = () => {
@@ -101,7 +112,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     removeFromWishlist,
     isInWishlist,
     clearWishlist,
-    wishlistCount
+    wishlistCount,
   };
 
   return (
@@ -110,3 +121,5 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     </WishlistContext.Provider>
   );
 };
+
+export default WishlistContext;

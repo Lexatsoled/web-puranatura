@@ -12,10 +12,7 @@
     "hooks/**/*",
     "pages/**/*",
     "data/**/*",
-    "vitest.setup.ts"
+    "vitest.setup.tsx"
   ],
-  "exclude": [
-    "test/components/**/*",
-    "test/integration/**/*"
-  ]
+  "exclude": ["test/components/**/*", "test/integration/**/*"]
 }

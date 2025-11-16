@@ -24,7 +24,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=konjac-fiber',
         full: 'https://picsum.photos/600/600?random=konjac-fiber',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -39,7 +39,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=tribulus',
         full: 'https://picsum.photos/600/600?random=tribulus',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -54,7 +54,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=inositol',
         full: 'https://picsum.photos/600/600?random=inositol',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -69,7 +69,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=magnesium-threonate',
         full: 'https://picsum.photos/600/600?random=magnesium-threonate',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -84,7 +84,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=fish-oil',
         full: 'https://picsum.photos/600/600?random=fish-oil',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -99,7 +99,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=maca',
         full: 'https://picsum.photos/600/600?random=maca',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -114,7 +114,7 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=ashwagandha',
         full: 'https://picsum.photos/600/600?random=ashwagandha',
       },
-    ],`
+    ],`,
   },
   {
     original: `images: [
@@ -129,8 +129,8 @@ const replacements = [
         thumbnail: 'https://picsum.photos/300/300?random=same',
         full: 'https://picsum.photos/600/600?random=same',
       },
-    ],`
-  }
+    ],`,
+  },
 ];
 
 // Aplicar los reemplazos
@@ -139,7 +139,10 @@ let changesCount = 0;
 
 replacements.forEach((replacement, index) => {
   if (updatedContent.includes(replacement.original)) {
-    updatedContent = updatedContent.replace(replacement.original, replacement.replacement);
+    updatedContent = updatedContent.replace(
+      replacement.original,
+      replacement.replacement
+    );
     changesCount++;
     console.log(`✅ Reemplazo ${index + 1} aplicado`);
   } else {
@@ -152,7 +155,9 @@ fs.writeFileSync(productsFile, updatedContent, 'utf8');
 
 console.log(`\n🎉 Proceso completado:`);
 console.log(`- ${changesCount} reemplazos aplicados`);
-console.log(`- ${replacements.length - changesCount} reemplazos ya existían o no se encontraron`);
+console.log(
+  `- ${replacements.length - changesCount} reemplazos ya existían o no se encontraron`
+);
 console.log(`\n📝 Ahora todos los productos de Piping Rock tienen:`);
 console.log(`   • Imágenes placeholder funcionales`);
 console.log(`   • Comentarios con las URLs originales de Piping Rock`);

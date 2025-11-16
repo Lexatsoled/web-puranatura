@@ -1,36 +1,40 @@
-// Centralized type exports - Single source of truth for all interfaces
+/**
+ * Archivo centralizado de exportaciones de tipos - Fuente única de verdad para todas las interfaces.
+ * Propósito: Proporcionar un punto único de importación para todos los tipos de la aplicación.
+ * Lógica: Reexporta tipos desde módulos específicos organizados por dominio.
+ * Entradas: Ninguna (solo exportaciones).
+ * Salidas: Tipos disponibles para importación en otros módulos.
+ * Dependencias: Módulos de tipos específicos (product, cart, blog, services, system).
+ * Efectos secundarios: Ninguno.
+ */
 
-// Product-related types
+// Tipos relacionados con productos
 export type {
   Product,
   ProductImage,
   ProductSEO,
   ProductCategory,
   ProductFilters,
-  SortOption
+  SortOption,
 } from './product';
 
-// Cart-related types
-export type {
-  CartItem,
-  Cart,
-  CartContextType
-} from './cart';
+// Tipos relacionados con el carrito de compras
+export type { CartItem, Cart, CartContextType } from './cart';
 
-// Blog-related types
-export type {
-  BlogPost,
-  BlogFilters
-} from './blog';
+// Tipos relacionados con el blog
+export type { BlogPost, BlogFilters } from './blog';
 
-// Service-related types
-export type {
-  Service,
-  Testimonial
-} from './services';
+// Tipos relacionados con servicios
+export type { Service, Testimonial } from './services';
 
-// System-related types
+// Tipos relacionados con sistemas
+export type { System, SystemFilters } from './system';
+
+// Tipos legacy (a remover después de la migración)
 export type {
-  System,
-  SystemFilters
-} from './system';
+  Product as LegacyProduct,
+  ProductImage as LegacyProductImage,
+  BlogPost as LegacyBlogPost,
+  Service as LegacyService,
+  Testimonial as LegacyTestimonial,
+} from '../types';

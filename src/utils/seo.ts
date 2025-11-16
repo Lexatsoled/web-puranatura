@@ -1,53 +1,82 @@
 import { Product, ProductSEO } from '../types/product';
 
+/**
+ * Utilidades SEO (en cliente)
+ * Objetivo: Generar metadatos SEO coherentes y seguros para productos y páginas,
+ *           y ofrecer helpers para inyectarlos en el <head> cuando sea necesario.
+ * Piezas principales:
+ *  - generateProductSEO: Crea metadatos a partir de un Product (robusto ante datos inconsistentes)
+ *  - generateCategorySEO / generatePageSEO: Plantillas para otras vistas
+ *  - generateMetaTags: Serializa tags HTML listos para insertar
+ *  - useSEO: Hook que aplica título, meta y JSON-LD en efectos del navegador
+ */
+
 export const generateProductSEO = (product: Product): ProductSEO => {
-  const baseUrl = 'https://purezanaturalis.com';
+  const baseUrl = 'https://web.purezanaturalis.com';
+  const safeCategories = Array.isArray(product.categories)
+    ? product.categories.filter((c): c is string => typeof c === 'string')
+    : [];
+  const safeTags = Array.isArray(product.tags)
+    ? product.tags.filter((t): t is string => typeof t === 'string')
+    : [];
+  const description =
+    typeof product.description === 'string'
+      ? product.description.length > 155
+        ? `${product.description.substring(0, 155)}...`
+        : product.description
+      : '';
 
   return {
     title: `${product.name} - Pureza Naturalis | Terapias Naturales`,
-    description: product.description.length > 155 
-      ? `${product.description.substring(0, 155)}...` 
-      : product.description,
+    description,
     keywords: [
       product.name.toLowerCase(),
-      ...(product.categories ? product.categories.map(cat => cat.toLowerCase()) : []),
+      ...safeCategories.map((cat) => cat.toLowerCase()),
       'terapias naturales',
       'productos naturales',
       'República Dominicana',
-      ...product.tags.map(tag => tag.toLowerCase()),
+      ...safeTags.map((tag) => tag.toLowerCase()),
     ],
     canonicalUrl: `${baseUrl}/tienda/producto/${product.id}`,
     openGraph: {
       title: `${product.name} - Pureza Naturalis`,
-      description: product.description,
-      image: product.images[0]?.full || `${baseUrl}/default-product.jpg`,
+      description:
+        typeof product.description === 'string' ? product.description : '',
+      image: product.images?.[0]?.full || `${baseUrl}/default-product.jpg`,
       type: 'product',
     },
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: product.name,
-      description: product.description,
-      image: product.images.map(img => img.full),
+      description:
+        typeof product.description === 'string' ? product.description : '',
+      image: (product.images || []).map((img) => img.full),
       brand: product.brand || 'Pureza Naturalis',
       manufacturer: product.manufacturer || 'Pureza Naturalis',
       offers: {
         '@type': 'Offer',
         price: product.price,
         priceCurrency: 'DOP',
-        availability: product.stock > 0 
-          ? 'https://schema.org/InStock' 
-          : 'https://schema.org/OutOfStock',
+        availability:
+          product.stock > 0
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
         seller: {
           '@type': 'Organization',
-          name: 'Pureza Naturalis'
-        }
+          name: 'Pureza Naturalis',
+        },
       },
     },
   };
 };
 
-export const generateCategorySEO = (categoryName: string, productCount: number) => {
+export const generateCategorySEO = (
+  categoryName: string,
+  productCount: number
+) => {
+  // Etiqueta: SEO por categoría
+  // Propósito: Metadatos básicos para páginas de categoría, incluyendo conteo
   return {
     title: `${categoryName} - Pureza Naturalis | Terapias Naturales`,
     description: `Descubre nuestra selección de ${productCount} productos de ${categoryName.toLowerCase()}. Productos naturales de alta calidad para tu bienestar en República Dominicana.`,
@@ -57,12 +86,18 @@ export const generateCategorySEO = (categoryName: string, productCount: number) 
       'terapias naturales',
       'bienestar',
       'salud natural',
-      'República Dominicana'
+      'República Dominicana',
     ],
   };
 };
 
-export const generatePageSEO = (pageName: string, description: string, keywords: string[] = []) => {
+export const generatePageSEO = (
+  pageName: string,
+  description: string,
+  keywords: string[] = []
+) => {
+  // Etiqueta: SEO genérico de página
+  // Propósito: Plantilla flexible para vistas informativas
   return {
     title: `${pageName} - Pureza Naturalis | Terapias Naturales`,
     description,
@@ -73,13 +108,15 @@ export const generatePageSEO = (pageName: string, description: string, keywords:
       'productos naturales',
       'bienestar',
       'salud natural',
-      'República Dominicana'
+      'República Dominicana',
     ],
   };
 };
 
 // Meta tags para insertar en el head
 export const generateMetaTags = (seo: ProductSEO) => {
+  // Etiqueta: Serialización de metatags
+  // Propósito: Construir strings listos para insertar en <head>
   const tags = [];
 
   if (seo.title) {
@@ -89,7 +126,9 @@ export const generateMetaTags = (seo: ProductSEO) => {
 
   if (seo.description) {
     tags.push(`<meta name="description" content="${seo.description}" />`);
-    tags.push(`<meta property="og:description" content="${seo.description}" />`);
+    tags.push(
+      `<meta property="og:description" content="${seo.description}" />`
+    );
   }
 
   if (seo.keywords && seo.keywords.length > 0) {
@@ -102,7 +141,9 @@ export const generateMetaTags = (seo: ProductSEO) => {
 
   if (seo.openGraph) {
     if (seo.openGraph.image) {
-      tags.push(`<meta property="og:image" content="${seo.openGraph.image}" />`);
+      tags.push(
+        `<meta property="og:image" content="${seo.openGraph.image}" />`
+      );
     }
     if (seo.openGraph.type) {
       tags.push(`<meta property="og:type" content="${seo.openGraph.type}" />`);
@@ -110,7 +151,9 @@ export const generateMetaTags = (seo: ProductSEO) => {
   }
 
   if (seo.jsonLd) {
-    tags.push(`<script type="application/ld+json">${JSON.stringify(seo.jsonLd)}</script>`);
+    tags.push(
+      `<script type="application/ld+json">${JSON.stringify(seo.jsonLd)}</script>`
+    );
   }
 
   return tags.join('\n');
@@ -118,6 +161,8 @@ export const generateMetaTags = (seo: ProductSEO) => {
 
 // Hook personalizado para SEO
 export const useSEO = (seo: ProductSEO) => {
+  // Etiqueta: Hook de aplicación de SEO
+  // Propósito: Sincronizar título y metadatos con el documento en cliente
   React.useEffect(() => {
     // Update document title
     if (seo.title) {

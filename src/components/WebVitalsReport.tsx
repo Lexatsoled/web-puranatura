@@ -9,7 +9,7 @@ import {
 /**
  * WebVitalsReport - Página de reporte de métricas
  * Accesible en /admin/vitals o con ?vitals=report
- * 
+ *
  * Muestra:
  * - Resumen de métricas actuales
  * - Histórico con gráficas simples
@@ -17,14 +17,16 @@ import {
  * - Opciones de export/clear
  */
 export const WebVitalsReport: React.FC = () => {
-  const [metrics, setMetrics] = useState<ReturnType<typeof getStoredMetrics>>([]);
+  const [metrics, setMetrics] = useState<ReturnType<typeof getStoredMetrics>>(
+    []
+  );
   const [selectedMetric, setSelectedMetric] = useState<string>('LCP');
 
   useEffect(() => {
     setMetrics(getStoredMetrics());
   }, []);
 
-  const metricNames = ['LCP', 'FCP', 'CLS', 'TTFB', 'INP'];
+  const metricNames = ['LCP', 'FCP', 'CLS', 'FID', 'TBT'];
   const stats = metricNames.map((name) => ({
     name,
     stats: getMetricsStats(name),
@@ -59,7 +61,8 @@ export const WebVitalsReport: React.FC = () => {
                 📊 Web Vitals Report
               </h1>
               <p className="text-gray-600">
-                Monitoreo de Core Web Vitals · {metrics.length} métricas registradas
+                Monitoreo de Core Web Vitals · {metrics.length} métricas
+                registradas
               </p>
             </div>
             <div className="flex gap-3">
@@ -125,7 +128,8 @@ export const WebVitalsReport: React.FC = () => {
               No hay métricas registradas
             </h2>
             <p className="text-gray-600 mb-6">
-              Las métricas se recolectarán automáticamente mientras navegas por la aplicación.
+              Las métricas se recolectarán automáticamente mientras navegas por
+              la aplicación.
             </p>
             <a
               href="/"
@@ -158,17 +162,38 @@ const StatsCard: React.FC<StatsCardProps> = ({ name, stats }) => {
     );
   }
 
-  const threshold = WEB_VITALS_THRESHOLDS[name as keyof typeof WEB_VITALS_THRESHOLDS];
+  const threshold =
+    WEB_VITALS_THRESHOLDS[name as keyof typeof WEB_VITALS_THRESHOLDS];
   const rating = stats.rating;
 
   const ratingConfig = {
-    good: { color: 'green', icon: '🟢', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
-    'needs-improvement': { color: 'yellow', icon: '🟡', bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700' },
-    poor: { color: 'red', icon: '🔴', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
+    good: {
+      color: 'green',
+      icon: '🟢',
+      bg: 'bg-green-50',
+      border: 'border-green-200',
+      text: 'text-green-700',
+    },
+    'needs-improvement': {
+      color: 'yellow',
+      icon: '🟡',
+      bg: 'bg-yellow-50',
+      border: 'border-yellow-200',
+      text: 'text-yellow-700',
+    },
+    poor: {
+      color: 'red',
+      icon: '🔴',
+      bg: 'bg-red-50',
+      border: 'border-red-200',
+      text: 'text-red-700',
+    },
   }[rating];
 
   return (
-    <div className={`rounded-lg shadow-md p-6 border-2 ${ratingConfig.bg} ${ratingConfig.border}`}>
+    <div
+      className={`rounded-lg shadow-md p-6 border-2 ${ratingConfig.bg} ${ratingConfig.border}`}
+    >
       <div className="flex items-center justify-between mb-4">
         <h3 className={`text-lg font-bold ${ratingConfig.text}`}>{name}</h3>
         <span className="text-2xl">{ratingConfig.icon}</span>
@@ -199,7 +224,8 @@ const StatsCard: React.FC<StatsCardProps> = ({ name, stats }) => {
 
       <div className="mt-4 pt-4 border-t border-current border-opacity-20">
         <div className="text-xs text-gray-600">
-          Good: ≤{formatValue(name, threshold.good)} | Poor: ≥{formatValue(name, threshold.poor)}
+          Good: ≤{formatValue(name, threshold.good)} | Poor: ≥
+          {formatValue(name, threshold.poor)}
         </div>
       </div>
     </div>
@@ -214,10 +240,11 @@ interface MetricHistoryProps {
   metrics: ReturnType<typeof getStoredMetrics>;
 }
 
-const MetricHistory: React.FC<MetricHistoryProps> = ({ metricName, metrics }) => {
-  const filtered = metrics
-    .filter((m) => m.name === metricName)
-    .slice(-50); // Últimas 50
+const MetricHistory: React.FC<MetricHistoryProps> = ({
+  metricName,
+  metrics,
+}) => {
+  const filtered = metrics.filter((m) => m.name === metricName).slice(-50); // Últimas 50
 
   if (filtered.length === 0) {
     return (
@@ -227,7 +254,8 @@ const MetricHistory: React.FC<MetricHistoryProps> = ({ metricName, metrics }) =>
     );
   }
 
-  const threshold = WEB_VITALS_THRESHOLDS[metricName as keyof typeof WEB_VITALS_THRESHOLDS];
+  const threshold =
+    WEB_VITALS_THRESHOLDS[metricName as keyof typeof WEB_VITALS_THRESHOLDS];
   const maxValue = Math.max(...filtered.map((m) => m.value), threshold.poor);
 
   return (
@@ -260,10 +288,12 @@ const MetricHistory: React.FC<MetricHistoryProps> = ({ metricName, metrics }) =>
 
         {/* Threshold Lines Reference */}
         <div className="mt-2 flex justify-between text-xs text-gray-600">
-          <span>Sample {filtered.length - 50} - {filtered.length}</span>
           <span>
-            🟢 ≤{formatValue(metricName, threshold.good)} | 
-            🔴 ≥{formatValue(metricName, threshold.poor)}
+            Sample {filtered.length - 50} - {filtered.length}
+          </span>
+          <span>
+            🟢 ≤{formatValue(metricName, threshold.good)} | 🔴 ≥
+            {formatValue(metricName, threshold.poor)}
           </span>
         </div>
       </div>
@@ -281,29 +311,36 @@ const MetricHistory: React.FC<MetricHistoryProps> = ({ metricName, metrics }) =>
             </tr>
           </thead>
           <tbody>
-            {filtered.reverse().slice(0, 20).map((metric, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2">{filtered.length - index}</td>
-                <td className="px-4 py-2 font-semibold">
-                  {formatValue(metricName, metric.value)}
-                </td>
-                <td className="px-4 py-2">
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    metric.rating === 'good' ? 'bg-green-100 text-green-700' :
-                    metric.rating === 'needs-improvement' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-red-100 text-red-700'
-                  }`}>
-                    {metric.rating}
-                  </span>
-                </td>
-                <td className="px-4 py-2 text-gray-600">
-                  {formatValue(metricName, metric.delta)}
-                </td>
-                <td className="px-4 py-2 text-gray-600">
-                  {new Date(metric.timestamp).toLocaleTimeString()}
-                </td>
-              </tr>
-            ))}
+            {filtered
+              .reverse()
+              .slice(0, 20)
+              .map((metric, index) => (
+                <tr key={index} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-2">{filtered.length - index}</td>
+                  <td className="px-4 py-2 font-semibold">
+                    {formatValue(metricName, metric.value)}
+                  </td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`px-2 py-1 rounded text-xs ${
+                        metric.rating === 'good'
+                          ? 'bg-green-100 text-green-700'
+                          : metric.rating === 'needs-improvement'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-red-100 text-red-700'
+                      }`}
+                    >
+                      {metric.rating}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-gray-600">
+                    {formatValue(metricName, metric.delta)}
+                  </td>
+                  <td className="px-4 py-2 text-gray-600">
+                    {new Date(metric.timestamp).toLocaleTimeString()}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

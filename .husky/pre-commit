@@ -1,0 +1,22 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Ensure local binaries (including the gitleaks shim) are available
+export PATH="$PWD/node_modules/.bin:$PATH"
+
+# Scan staged changes for potential secrets before any other checks
+echo "[SECURITY] Scanning for secrets..."
+if command -v gitleaks >/dev/null 2>&1; then
+  npx gitleaks protect --staged --verbose --no-color 2>&1 || {
+    echo "[BLOCKED] Gitleaks detected potential secrets in staged files."
+    echo "          Revisa la salida anterior y elimina datos sensibles antes de commitear."
+    exit 1
+  }
+  echo "[OK] No se detectaron secretos en los cambios staged."
+else
+  echo "[WARN] Gitleaks no se encontró en el entorno. Se omite el escaneo."
+  echo "       Instálalo con: npm install --save-dev gitleaks (o consulta la documentación oficial)."
+fi
+
+npm run check:encoding || exit 1
+npx lint-staged

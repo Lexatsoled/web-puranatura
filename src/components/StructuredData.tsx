@@ -1,9 +1,9 @@
 /**
  * SEO Structured Data - JSON-LD Components
- * 
+ *
  * Componentes para generar structured data compatible con schema.org
  * que permite rich snippets en Google Search Results.
- * 
+ *
  * Tipos implementados:
  * - Product (productos individuales)
  * - Organization (info de la empresa)
@@ -33,8 +33,17 @@ interface Product {
   }>;
 }
 
+// JSON value type for structured data
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
 interface StructuredDataProps {
-  data: Record<string, any>;
+  data: JsonValue;
 }
 
 /**
@@ -51,14 +60,14 @@ export const StructuredData: React.FC<StructuredDataProps> = ({ data }) => {
 
 /**
  * Product Schema - Para páginas de productos
- * 
+ *
  * Rich snippets incluyen:
  * - Imagen del producto
  * - Precio
  * - Disponibilidad
  * - Rating y reseñas
  * - Marca
- * 
+ *
  * Ejemplo de uso:
  * <ProductStructuredData product={product} />
  */
@@ -67,25 +76,27 @@ interface ProductStructuredDataProps {
   url?: string;
 }
 
-export const ProductStructuredData: React.FC<ProductStructuredDataProps> = ({ 
+export const ProductStructuredData: React.FC<ProductStructuredDataProps> = ({
   product,
-  url 
+  url,
 }) => {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.image ? [
-      `https://web.purezanaturalis.com${product.image}`,
-      // Agregar más imágenes si existen
-      ...(product.gallery || []).map((img: string) => 
-        `https://web.purezanaturalis.com${img}`
-      )
-    ] : [],
+    image: product.image
+      ? [
+          `https://web.purezanaturalis.com${product.image}`,
+          // Agregar más imágenes si existen
+          ...(product.gallery || []).map(
+            (img: string) => `https://web.purezanaturalis.com${img}`
+          ),
+        ]
+      : [],
     brand: {
       '@type': 'Brand',
-      name: product.brand || 'Pureza Naturalis'
+      name: product.brand || 'Pureza Naturalis',
     },
     offers: {
       '@type': 'Offer',
@@ -95,9 +106,10 @@ export const ProductStructuredData: React.FC<ProductStructuredDataProps> = ({
       priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
         .toISOString()
         .split('T')[0], // Válido por 1 año
-      availability: product.stock > 0
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
+      availability:
+        product.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
     ...(product.rating && {
@@ -107,25 +119,26 @@ export const ProductStructuredData: React.FC<ProductStructuredDataProps> = ({
         bestRating: 5,
         worstRating: 1,
         ratingCount: product.reviews?.length || 1,
-      }
+      },
     }),
-    ...(product.reviews && product.reviews.length > 0 && {
-      review: product.reviews.map((review: any) => ({
-        '@type': 'Review',
-        author: {
-          '@type': 'Person',
-          name: review.author || 'Cliente Verificado'
-        },
-        datePublished: review.date || new Date().toISOString().split('T')[0],
-        reviewBody: review.text,
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: review.rating,
-          bestRating: 5,
-          worstRating: 1
-        }
-      }))
-    })
+    ...(product.reviews &&
+      product.reviews.length > 0 && {
+        review: product.reviews.map((review) => ({
+          '@type': 'Review',
+          author: {
+            '@type': 'Person',
+            name: review.author || 'Cliente Verificado',
+          },
+          datePublished: review.date || new Date().toISOString().split('T')[0],
+          reviewBody: review.text,
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: review.rating,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        })),
+      }),
   };
 
   return <StructuredData data={structuredData} />;
@@ -138,9 +151,9 @@ interface OrganizationStructuredDataProps {
   url?: string;
 }
 
-export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProps> = ({ 
-  url = 'https://web.purezanaturalis.com' 
-}) => {
+export const OrganizationStructuredData: React.FC<
+  OrganizationStructuredDataProps
+> = ({ url = 'https://web.purezanaturalis.com' }) => {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -148,22 +161,23 @@ export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProp
     alternateName: 'Pureza Naturalis',
     url: url,
     logo: `${url}/logo.png`,
-    description: 'Productos naturales y terapias holísticas para tu bienestar. Suplementos naturales, vitaminas, minerales y productos orgánicos de la más alta calidad.',
+    description:
+      'Productos naturales y terapias holísticas para tu bienestar. Suplementos naturales, vitaminas, minerales y productos orgánicos de la más alta calidad.',
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'ES' // Ajustar según ubicación
+      addressCountry: 'ES', // Ajustar según ubicación
     },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
-      availableLanguage: ['Spanish', 'English']
+      availableLanguage: ['Spanish', 'English'],
     },
     sameAs: [
       // Redes sociales (agregar cuando estén disponibles)
       'https://www.facebook.com/purezanaturalis',
       'https://www.instagram.com/purezanaturalis',
-      'https://twitter.com/purezanaturalis'
-    ]
+      'https://twitter.com/purezanaturalis',
+    ],
   };
 
   return <StructuredData data={structuredData} />;
@@ -176,23 +190,24 @@ interface WebSiteStructuredDataProps {
   url?: string;
 }
 
-export const WebSiteStructuredData: React.FC<WebSiteStructuredDataProps> = ({ 
-  url = 'https://web.purezanaturalis.com' 
+export const WebSiteStructuredData: React.FC<WebSiteStructuredDataProps> = ({
+  url = 'https://web.purezanaturalis.com',
 }) => {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Pureza Naturalis - Terapias Naturales',
     url: url,
-    description: 'Tu tienda online de productos naturales, suplementos, vitaminas y terapias holísticas. Mejora tu bienestar con productos naturales de calidad.',
+    description:
+      'Tu tienda online de productos naturales, suplementos, vitaminas y terapias holísticas. Mejora tu bienestar con productos naturales de calidad.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${url}/store?search={search_term_string}`
+        urlTemplate: `${url}/store?search={search_term_string}`,
       },
-      'query-input': 'required name=search_term_string'
-    }
+      'query-input': 'required name=search_term_string',
+    },
   };
 
   return <StructuredData data={structuredData} />;
@@ -210,9 +225,9 @@ interface BreadcrumbStructuredDataProps {
   items: BreadcrumbItem[];
 }
 
-export const BreadcrumbStructuredData: React.FC<BreadcrumbStructuredDataProps> = ({ 
-  items 
-}) => {
+export const BreadcrumbStructuredData: React.FC<
+  BreadcrumbStructuredDataProps
+> = ({ items }) => {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -220,8 +235,8 @@ export const BreadcrumbStructuredData: React.FC<BreadcrumbStructuredDataProps> =
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.url
-    }))
+      item: item.url,
+    })),
   };
 
   return <StructuredData data={structuredData} />;
@@ -240,14 +255,16 @@ interface BlogPostingStructuredDataProps {
   url: string;
 }
 
-export const BlogPostingStructuredData: React.FC<BlogPostingStructuredDataProps> = ({ 
+export const BlogPostingStructuredData: React.FC<
+  BlogPostingStructuredDataProps
+> = ({
   title,
   description,
   author,
   datePublished,
   dateModified,
   image,
-  url
+  url,
 }) => {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -256,7 +273,7 @@ export const BlogPostingStructuredData: React.FC<BlogPostingStructuredDataProps>
     description: description,
     author: {
       '@type': 'Person',
-      name: author
+      name: author,
     },
     datePublished: datePublished,
     dateModified: dateModified || datePublished,
@@ -266,13 +283,13 @@ export const BlogPostingStructuredData: React.FC<BlogPostingStructuredDataProps>
       name: 'Pureza Naturalis',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://web.purezanaturalis.com/logo.png'
-      }
+        url: 'https://web.purezanaturalis.com/logo.png',
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': url
-    }
+      '@id': url,
+    },
   };
 
   return <StructuredData data={structuredData} />;
@@ -280,10 +297,10 @@ export const BlogPostingStructuredData: React.FC<BlogPostingStructuredDataProps>
 
 /**
  * Hook para generar meta tags dinámicos
- * 
+ *
  * Ejemplo de uso:
  * const { setMetaTags } = useMetaTags();
- * 
+ *
  * useEffect(() => {
  *   setMetaTags({
  *     title: 'Producto - Pureza Naturalis',
@@ -292,75 +309,4 @@ export const BlogPostingStructuredData: React.FC<BlogPostingStructuredDataProps>
  *   });
  * }, []);
  */
-interface MetaTagsOptions {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
-  type?: 'website' | 'article' | 'product';
-}
-
-export const useMetaTags = () => {
-  const setMetaTags = React.useCallback((options: MetaTagsOptions) => {
-    const {
-      title = 'Pureza Naturalis - Terapias Naturales',
-      description = 'Productos naturales y terapias holísticas para tu bienestar',
-      image = '/og-image.jpg',
-      url = window.location.href,
-      type = 'website'
-    } = options;
-
-    // Actualizar título
-    document.title = title;
-
-    // Helper para actualizar o crear meta tag
-    const updateMetaTag = (property: string, content: string, useProperty = false) => {
-      const selector = useProperty 
-        ? `meta[property="${property}"]`
-        : `meta[name="${property}"]`;
-      
-      let element = document.querySelector(selector);
-      
-      if (!element) {
-        element = document.createElement('meta');
-        if (useProperty) {
-          element.setAttribute('property', property);
-        } else {
-          element.setAttribute('name', property);
-        }
-        document.head.appendChild(element);
-      }
-      
-      element.setAttribute('content', content);
-    };
-
-    // Meta tags estándar
-    updateMetaTag('description', description);
-
-    // Open Graph (Facebook, LinkedIn)
-    updateMetaTag('og:title', title, true);
-    updateMetaTag('og:description', description, true);
-    updateMetaTag('og:image', `https://web.purezanaturalis.com${image}`, true);
-    updateMetaTag('og:url', url, true);
-    updateMetaTag('og:type', type, true);
-    updateMetaTag('og:site_name', 'Pureza Naturalis', true);
-
-    // Twitter Card
-    updateMetaTag('twitter:card', 'summary_large_image');
-    updateMetaTag('twitter:title', title);
-    updateMetaTag('twitter:description', description);
-    updateMetaTag('twitter:image', `https://web.purezanaturalis.com${image}`);
-
-    // Canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = url;
-
-  }, []);
-
-  return { setMetaTags };
-};
+// useMetaTags hook moved to src/hooks/useMetaTags.ts

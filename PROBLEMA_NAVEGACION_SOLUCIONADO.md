@@ -1,10 +1,13 @@
 # 🔧 **Problema de Navegación Resuelto**
 
 ## ❌ **Problema Identificado**
+
 Al hacer clic en los botones "+" o "-" del selector de cantidad en las tarjetas de producto del escaparate, el usuario era redirigido a la página individual del producto en lugar de cambiar la cantidad.
 
 ## 🔍 **Causa del Problema**
+
 El problema ocurría porque:
+
 - Las tarjetas de producto están envueltas en un componente `<Link>` que redirige a la página del producto
 - Los botones del selector de cantidad no tenían `e.stopPropagation()`
 - El evento de clic se propagaba desde los botones al Link padre
@@ -12,6 +15,7 @@ El problema ocurría porque:
 ## ✅ **Solución Implementada**
 
 ### **1. Eventos stopPropagation en botones**
+
 ```tsx
 const handleDecrease = (e: React.MouseEvent) => {
   e.stopPropagation(); // ← Evita propagación al Link padre
@@ -33,6 +37,7 @@ const handleIncrease = (e: React.MouseEvent) => {
 ```
 
 ### **2. Protección del input numérico**
+
 ```tsx
 <input
   type="number"
@@ -47,8 +52,9 @@ const handleIncrease = (e: React.MouseEvent) => {
 ```
 
 ### **3. Contenedor protegido**
+
 ```tsx
-<div 
+<div
   className="..."
   onClick={(e) => e.stopPropagation()} // ← Protección a nivel contenedor
 >
@@ -57,13 +63,16 @@ const handleIncrease = (e: React.MouseEvent) => {
 ```
 
 ## 🎯 **Resultado**
+
 - ✅ Los botones "+" y "-" ahora cambian la cantidad correctamente
 - ✅ No hay redirección accidental a la página del producto
 - ✅ El input numérico funciona sin problemas
 - ✅ La navegación sigue funcionando al hacer clic fuera del selector
 
 ## 🚀 **Experiencia de Usuario Mejorada**
+
 Los usuarios ahora pueden:
+
 - Incrementar/decrementar cantidad directamente desde el escaparate
 - Ver la cantidad seleccionada en tiempo real
 - Añadir múltiples unidades con un solo clic

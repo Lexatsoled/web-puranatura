@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "scanned_at": "2025-11-11T00:00:00Z",
+    "root": "Pureza-Naturalis-V3",
+    "coverage_percentage": 95,
+    "total_files_scanned": 540,
+    "total_modules": 10,
+    "analyzer": "Arquitecto Principal de Auditoría"
+  },
+  "modules": [
+    {
+      "id": "frontend-core",
+      "name": "Frontend Core",
+      "description": "SPA principal, routing, main entry",
+      "type": "React + Vite",
+      "files": [
+        "index.tsx",
+        "App.tsx",
+        "index.css",
+        "index.html"
+      ],
+      "entry_point": "index.tsx",
+      "dependencies": ["react", "react-router-dom", "zustand"],
+      "size_kb": 45
+    },
+    {
+      "id": "frontend-pages",
+      "name": "Frontend Pages",
+      "description": "Páginas principales: Home, Product, Cart, etc",
+      "type": "React Components",
+      "files": [
+        "src/pages/HomePage.tsx",
+        "src/pages/ProductPage.tsx",
+        "src/pages/CartPage.tsx",
+        "src/pages/CheckoutPage.tsx",
+        "src/pages/BlogPage.tsx"
+      ],
+      "entry_points": ["HomePage", "ProductPage"],
+      "dependencies": ["react-router-dom", "@tanstack/react-query"],
+      "size_kb": 320
+    },
+    {
+      "id": "frontend-components",
+      "name": "Frontend Components",
+      "description": "Componentes reutilizables: Cards, Headers, Forms",
+      "type": "React Components",
+      "files": [
+        "src/components/ProductCard.tsx",
+        "src/components/ImageZoom.tsx",
+        "src/components/Header.tsx",
+        "src/components/ProductImage.tsx",
+        "src/components/QuantitySelector.tsx"
+      ],
+      "critical_files": ["ImageZoom.tsx", "ProductCard.tsx"],
+      "size_kb": 280
+    },
+    {
+      "id": "frontend-store",
+      "name": "Frontend State (Zustand)",
+      "description": "Estado global: carrito, wishlist, usuario",
+      "type": "State Management",
+      "files": [
+        "src/store/cartStore.ts",
+        "src/store/wishlistStore.ts",
+        "src/store/index.ts"
+      ],
+      "size_kb": 25
+    },
+    {
+      "id": "frontend-api",
+      "name": "Frontend API Client",
+      "description": "Cliente HTTP con axios, interceptores",
+      "type": "API Client",
+      "files": [
+        "src/utils/api.ts",
+        "src/utils/authErrorHandler.ts",
+        "src/utils/authMapper.ts"
+      ],
+      "security_relevant": true,
+      "size_kb": 15
+    },
+    {
+      "id": "frontend-forms",
+      "name": "Frontend Forms & Validation",
+      "description": "Validación con React Hook Form y Zod",
+      "type": "Form Management",
+      "files": [
+        "src/schemas/validationSchemas.ts",
+        "src/hooks/useFormValidation.ts"
+      ],
+      "security_relevant": true,
+      "size_kb": 30
+    },
+    {
+      "id": "frontend-pwa",
+      "name": "Frontend PWA & SW",
+      "description": "Service Worker, Workbox, PWA features",
+      "type": "PWA",
+      "files": [
+        "src/service-worker.ts",
+        "vite.config.ts (PWA plugin)"
+      ],
+      "size_kb": 40
+    },
+    {
+      "id": "backend-api",
+      "name": "Backend API (Fastify)",
+      "description": "Servidor REST: routes, controllers, middleware",
+      "type": "Fastify + TypeScript",
+      "files": [
+        "backend/src/app.ts",
+        "backend/src/routes/v1/products.ts",
+        "backend/src/routes/auth.ts",
+        "backend/src/plugins/securityHeaders.ts",
+        "backend/src/plugins/rateLimit.ts"
+      ],
+      "security_relevant": true,
+      "size_kb": 180
+    },
+    {
+      "id": "backend-db",
+      "name": "Backend Database (Drizzle)",
+      "description": "ORM, esquema, seeders",
+      "type": "Database",
+      "files": [
+        "backend/src/db/client.ts",
+        "backend/src/db/schema.ts",
+        "backend/src/db/seed.ts",
+        "backend/database.sqlite"
+      ],
+      "security_relevant": true,
+      "size_kb": 350
+    },
+    {
+      "id": "backend-logging",
+      "name": "Backend Logging & Monitoring",
+      "description": "Sentry, Winston, Prometheus, error tracking",
+      "type": "Observability",
+      "files": [
+        "backend/src/config/logger.ts",
+        "src/sentry.ts",
+        "backend/src/plugins/prometheus.ts"
+      ],
+      "size_kb": 35
+    }
+  ],
+  "file_summary": {
+    "frontend": {
+      "tsx_files": 125,
+      "ts_files": 45,
+      "total_size_kb": 850,
+      "key_metrics": {
+        "components": 78,
+        "pages": 12,
+        "hooks": 34,
+        "utils": 28
+      }
+    },
+    "backend": {
+      "ts_files": 98,
+      "js_files": 15,
+      "total_size_kb": 420,
+      "key_metrics": {
+        "routes": 8,
+        "plugins": 12,
+        "middleware": 6,
+        "services": 14
+      }
+    },
+    "config": {
+      "json_files": 12,
+      "yaml_files": 2,
+      "js_files": 8,
+      "total_size_kb": 45
+    },
+    "tests": {
+      "unit_tests": 85,
+      "e2e_tests": 24,
+      "a11y_tests": 12,
+      "total_size_kb": 190
+    },
+    "docs": {
+      "markdown_files": 45,
+      "html_files": 8,
+      "total_size_kb": 520
+    }
+  },
+  "critical_dependencies": [
+    {
+      "name": "dompurify",
+      "version": "^3.2.6",
+      "purpose": "XSS sanitization",
+      "status": "✅ Updated",
+      "vulnerability_check": "npm audit"
+    },
+    {
+      "name": "@sentry/react",
+      "version": "^10.23.0",
+      "purpose": "Error tracking",
+      "status": "✅ Updated",
+      "vulnerability_check": "npm audit"
+    },
+    {
+      "name": "zod",
+      "version": "^3.23.8",
+      "purpose": "Schema validation",
+      "status": "✅ Updated",
+      "vulnerability_check": "npm audit"
+    },
+    {
+      "name": "react-hook-form",
+      "version": "^7.61.1",
+      "purpose": "Form management",
+      "status": "✅ Updated",
+      "vulnerability_check": "npm audit"
+    },
+    {
+      "name": "@tanstack/react-query",
+      "version": "^5.90.5",
+      "purpose": "Data fetching/caching",
+      "status": "✅ Updated",
+      "vulnerability_check": "npm audit"
+    }
+  ],
+  "large_files": [
+    {
+      "path": "Imagenes Piping Rock/",
+      "size_mb": 1131,
+      "type": "JPG Images",
+      "optimization_needed": true,
+      "recommendation": "Use WebP/AVIF in public/optimized/"
+    },
+    {
+      "path": "backend/database.sqlite",
+      "size_kb": 340,
+      "type": "SQLite Database",
+      "status": "Active",
+      "optimization_needed": false
+    },
+    {
+      "path": "dist/",
+      "size_mb": 8.5,
+      "type": "Build Output",
+      "status": "Generated",
+      "note": "Gzip analyzed"
+    }
+  ],
+  "security_relevant_files": [
+    "backend/src/plugins/securityHeaders.ts",
+    "backend/src/db/seed.ts",
+    "src/utils/api.ts",
+    "src/schemas/validationSchemas.ts",
+    "index.html",
+    ".env.example",
+    ".gitleaks.toml",
+    "backend/src/routes/auth.ts"
+  ],
+  "configuration_files": [
+    {
+      "path": "package.json",
+      "purpose": "Dependencies",
+      "status": "✅ Audited"
+    },
+    {
+      "path": "tsconfig.json",
+      "purpose": "TypeScript config",
+      "status": "✅ Strict"
+    },
+    {
+      "path": "vite.config.ts",
+      "purpose": "Build config",
+      "status": "✅ Optimized"
+    },
+    {
+      "path": "tailwind.config.js",
+      "purpose": "Styling",
+      "status": "✅ Custom"
+    },
+    {
+      "path": ".env.example",
+      "purpose": "Environment template",
+      "status": "⚠️ Needs update"
+    },
+    {
+      "path": ".eslintrc",
+      "purpose": "Linting",
+      "status": "✅ Strict"
+    },
+    {
+      "path": "prettier.config.js",
+      "purpose": "Code formatting",
+      "status": "✅ Active"
+    }
+  ],
+  "test_coverage": {
+    "unit_tests": {
+      "count": 85,
+      "status": "✅ Running",
+      "framework": "Vitest"
+    },
+    "e2e_tests": {
+      "count": 24,
+      "status": "⚠️ Partial",
+      "framework": "Playwright"
+    },
+    "a11y_tests": {
+      "count": 12,
+      "status": "⚠️ Partial",
+      "framework": "Jest-Axe"
+    },
+    "estimated_coverage": "65%"
+  },
+  "entrypoints": [
+    {
+      "name": "Frontend SPA",
+      "url": "/",
+      "method": "GET",
+      "authentication": "None",
+      "module": "frontend-core"
+    },
+    {
+      "name": "Product API",
+      "url": "/api/v1/products",
+      "method": "GET",
+      "authentication": "None",
+      "module": "backend-api"
+    },
+    {
+      "name": "Auth Login",
+      "url": "/api/auth/login",
+      "method": "POST",
+      "authentication": "Email/Password",
+      "module": "backend-api",
+      "rate_limit": "5 req/min"
+    },
+    {
+      "name": "Checkout",
+      "url": "/api/orders",
+      "method": "POST",
+      "authentication": "JWT",
+      "module": "backend-api",
+      "rate_limit": "10 req/min"
+    }
+  ],
+  "audit_status": {
+    "files_analyzed": 540,
+    "files_skipped": 32,
+    "coverage_rate": "95%",
+    "issues_found": 28,
+    "critical_issues": 0,
+    "high_issues": 2,
+    "medium_issues": 8,
+    "low_issues": 18,
+    "timestamp": "2025-11-11T00:00:00Z"
+  }
+}

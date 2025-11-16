@@ -1,0 +1,34 @@
+name: CI - Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  unit-and-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Run unit tests (Vitest - src/utils)
+        run: |
+          npx vitest run src/utils --run --reporter dot
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright smoke tests (chromium)
+        run: |
+          npx playwright test e2e/contact-iframe.spec.ts e2e/product-srcset.spec.ts --project=chromium --reporter=dot

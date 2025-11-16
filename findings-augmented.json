@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "version": 2,
+    "generated_at": "2025-11-11T00:00:00Z",
+    "severity_scale": ["info","low","medium","high","critical"]
+  },
+  "summary": {
+    "files_analyzed_estimate": 3833,
+    "modules": ["frontend-app","backend-api","backend-db","assets","ci-cd","tooling","documentation"]
+  },
+  "findings": [
+    {
+      "id": "IMG-SRCSET-001",
+      "title": "srcset malformado y paths no codificados (espacios/commas) en imágenes de producto",
+      "category": "performance",
+      "subcategory": "assets/srcset",
+      "severity": "high",
+      "likelihood": 5,
+      "priority": 25,
+      "where": { "files": ["src/utils/image.ts","src/components/OptimizedImage.tsx","src/components/ProductImage.tsx","public/**" ] },
+      "evidence": "Registros y capturas muestran 'Failed parsing "srcset" attribute' y srcset con candidatos sin descriptors o con rutas que contienen espacios/comas no codificados (por ejemplo 'CoQ10, 100 mg Anverso.webp').",
+      "impact": "Navegadores descartan candidatos srcset o fallan en resolver rutas → imágenes en blanco, peor LCP y experiencia inconsistente.",
+      "recommendation": "Centralizar la generación de srcset en `src/utils/image.ts`: (1) percent-encode cada segmento de path (encodeURIComponent), (2) normalizar tokens del srcset para incluir descriptor 'w' cuando falte y omitir candidatos vacíos, (3) evitar doble-encoding en componentes. Añadir pruebas unitarias para normalizeSrcSet().",
+      "fix_example": "Propuesta de diff (TS):\n*** Update File: src/utils/image.ts\n@@\n- function encodePath(p){ return encodeURI(p); }\n+ function encodePath(p){ return p.split('/').map(encodeURIComponent).join('/'); }\n@@\n- // build srcset naive\n+ // build srcset normalized (trim, add 'w' if missing, drop empty)\n+ export function normalizeSrcSet(srcset){ /* implementación: ver propuesta en fix-plan.md */ }\n\nEn componentes: usar generateSrcSet(...) y pasar undefined cuando no hay candidatos, no "".",
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset","https://web.dev/serve-responsive-images/"],
+      "tests": ["unit-normalizeSrcSet.spec.ts","e2e-product-image-loading.spec.ts"]
+    },
+    {
+      "id": "CSP-FRAME-001",
+      "title": "Meta CSP y headers bloquean iframes de Google Maps en Contact page",
+      "category": "security",
+      "subcategory": "csp/headers",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 16,
+      "where": { "files": ["index.html","src/utils/security/cspConfig.ts","src/config/securityHeaders.ts","src/utils/security/sslConfig.ts"] },
+      "evidence": "Console: 'Refused to frame \"https://www.google.com/maps/...\" because it violates the following Content Security Policy directive: "frame-src 'none'"'. Meta tag index.html contiene frame-src 'none' en algunos entornos.",
+      "impact": "Contact page map embed no se carga → mala UX y posible pérdida de conversiones/contactos.",
+      "recommendation": "Permitir dominios de Google Maps en frame-src durante desarrollo y producción cuando se use mapa: añadir 'https://www.google.com' 'https://maps.google.com' 'https://www.google.com/maps' y 'https://www.google.com/maps/embed'; mantener 'frame-ancestors' y otras directivas estrictas. Preferir server headers en lugar de meta tag para environments controlados.",
+      "fix_example": "Diff ejemplo: index.html meta CSP: agregar frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps/embed; y actualizar src/utils/security/cspConfig.ts para derivar política según env.",
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP","https://owasp.org/www-project-secure-headers/"],
+      "tests": ["manual-verify-contact-iframe.spec.ts"]
+    },
+    {
+      "id": "SEC-SEED-001-RECONFIRM",
+      "title": "Credenciales de seed estáticas detectadas",
+      "category": "security",
+      "subcategory": "secrets",
+      "severity": "medium",
+      "likelihood": 3,
+      "priority": 12,
+      "where": { "files": ["backend/src/db/seed.ts"] },
+      "evidence": "seed.ts usa contraseñas estáticas 'test123' en versión analizada (ver findings.json existente).",
+      "recommendation": "Generar contraseñas aleatorias en runtime o leer desde ENV para dev; documentar en README 'never run seed in prod'. Añadir check en CI que bloquee seeds en prod env.",
+      "fix_example": "ver findings.json: usar crypto.randomBytes y print/guardar en secure vault si necesario.",
+      "references": ["OWASP Proactive Controls: C1 Secure Design"],
+      "tests": ["unit-seed-no-static-password.spec.ts"]
+    },
+    {
+      "id": "A11Y-001",
+      "title": "Imágenes y controles sin textos alternativos o sin roles claros",
+      "category": "accessibility",
+      "subcategory": "images/forms",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 16,
+      "where": { "files": ["src/components/ProductImage.tsx","src/components/OptimizedImage.tsx","src/components/ImageZoom.tsx"] },
+      "evidence": "Componente ProductImage a veces renderiza <img> con src/placeholder sin `alt` significativo o con alt vacío. Vistas favorecen imágenes decorativas sin aria-hidden ni role apropiado.",
+      "recommendation": "Garantizar 'alt' descriptivo para imágenes de producto; usar alt="" y aria-hidden="true" solo para imágenes puramente decorativas; verificar foco/keyboard en galerías e introducir landmarks y skip-links si faltan.",
+      "fix_example": "En ProductImage.tsx:\n```diff\n- <img src={src} alt="" />\n+ <img src={src} alt={product?.name || 'Imagen de producto'} />\n```",
+      "references": ["https://www.w3.org/WAI/tutorials/images/"],
+      "tests": ["a11y-image-alt.spec.ts"]
+    },
+    {
+      "id": "QA-TESTS-001",
+      "title": "Cobertura de tests insuficiente en paths críticos (imágenes, routing, forms)",
+      "category": "quality",
+      "subcategory": "tests",
+      "severity": "medium",
+      "likelihood": 5,
+      "priority": 20,
+      "where": { "files": ["src/**","backend/**"] },
+      "evidence": "No se detecta suite e2e amplia; hay Playwright/Lighthouse workflows pero pocos specs en repo para cubrir product pages, image loading y Contact form.",
+      "recommendation": "Agregar e2e (Playwright) para Product page, Contact page (iframe + submit), y tests unit para normalizeSrcSet y image utilities. Integrar en CI y bloquear merges si pruebas críticas fallan.",
+      "fix_example": "Agregar `tests/e2e/product-image.spec.ts` con pasos: abrir /tienda/producto/:id, comprobar que al menos una imagen 200 OK y que no hay warnings de srcset en console.",
+      "references": ["https://playwright.dev/"],
+      "tests": ["e2e-product-image.spec.ts","unit-normalizeSrcSet.spec.ts"]
+    }
+  ],
+  "notes": {
+    "limitations": "Este archivo es una agregación automatizada + auditoría heurística. Para confirmación runtime se necesitan ejecución de tests e inspección de Network en navegador real.",
+    "next_steps": ["Corregir srcset encoding y añadir tests unit/e2e","Actualizar CSP y validar Contact page","Renombrar o crear alias para archivos con caracteres problemáticos si se requiere compatibilidad con hosting que no decodifica segmentos"]
+  }
+}

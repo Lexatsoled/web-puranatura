@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { getCDNUrl } from '../utils/cdn';
+import { generateSrcSet, PRODUCT_IMAGE_SIZES, normalizeSrcSet } from '../utils/image';
 
 interface OptimizedImageProps {
   src: string;
@@ -46,12 +48,15 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     onError?.();
   }, [onError]);
 
-  // Calcular dimensiones basadas en aspectRatio
   const finalWidth = width || '100%';
-  const finalHeight = height || (aspectRatio ? `${100 / aspectRatio}%` : '100%');
+  const finalHeight =
+    height || (aspectRatio ? `${100 / aspectRatio}%` : '100%');
 
-  // Generar srcSet automático si no se proporciona
-  const autoSrcSet = srcSet || generateSrcSet(src);
+  const resolvedSrc = useMemo(() => getCDNUrl(src), [src]);
+  const autoSrcSet = useMemo(
+    () => normalizeSrcSet(srcSet || generateSrcSet(src)),
+    [srcSet, src],
+  );
 
   if (hasError) {
     return (
@@ -79,13 +84,13 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <LazyLoadImage
-        src={src}
+        src={resolvedSrc}
         alt={alt}
         width={finalWidth}
         height={finalHeight}
         effect={blur && !priority ? 'blur' : undefined}
         srcSet={autoSrcSet}
-        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+        sizes={sizes || PRODUCT_IMAGE_SIZES}
         afterLoad={handleLoad}
         onError={handleError}
         className={`transition-opacity duration-300 ${
@@ -98,8 +103,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         }}
         loading={priority ? 'eager' : 'lazy'}
       />
-      
-      {/* Loading placeholder */}
+
       {!isLoaded && !hasError && (
         <div
           className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center"
@@ -123,22 +127,5 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     </div>
   );
 };
-
-// Función auxiliar para generar srcSet
-function generateSrcSet(src: string): string {
-  if (!src) return '';
-  
-  const baseUrl = src.split('?')[0];
-  const extension = baseUrl.split('.').pop();
-  const baseName = baseUrl.replace(`.${extension}`, '');
-  
-  return [
-    `${baseName}_320.${extension} 320w`,
-    `${baseName}_640.${extension} 640w`,
-    `${baseName}_768.${extension} 768w`,
-    `${baseName}_1024.${extension} 1024w`,
-    `${src} 1200w`
-  ].join(', ');
-}
 
 export default OptimizedImage;

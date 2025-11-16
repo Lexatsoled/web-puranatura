@@ -1,9 +1,27 @@
+/**
+ * Define las imágenes asociadas a un producto.
+ * Propósito: Estructurar las URLs de imágenes del producto en diferentes formatos.
+ * Lógica: Proporciona URLs para imagen completa y miniatura, con texto alternativo opcional.
+ * Entradas: Ninguna (es una estructura de datos).
+ * Salidas: Ninguna (es una estructura de datos).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
 export interface ProductImage {
   full: string;
   thumbnail: string;
   alt?: string;
 }
 
+/**
+ * Define la configuración SEO para un producto.
+ * Propósito: Estructurar metadatos para optimización en motores de búsqueda y redes sociales.
+ * Lógica: Incluye títulos, descripciones, palabras clave y datos estructurados para mejorar el posicionamiento.
+ * Entradas: Ninguna (es una estructura de datos).
+ * Salidas: Ninguna (es una estructura de datos).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
 export interface ProductSEO {
   title?: string;
   description?: string;
@@ -36,6 +54,15 @@ export interface ProductSEO {
   };
 }
 
+/**
+ * Define la estructura completa de un producto en el sistema.
+ * Propósito: Representar toda la información necesaria de un producto para su visualización y gestión.
+ * Lógica: Combina información básica, comercial, técnica y científica del producto en una sola interfaz.
+ * Entradas: Ninguna (es una estructura de datos).
+ * Salidas: Ninguna (es una estructura de datos).
+ * Dependencias: Depende de ProductImage y ProductSEO.
+ * Efectos secundarios: Ninguno.
+ */
 export interface Product {
   id: string;
   name: string;
@@ -74,7 +101,7 @@ export interface Product {
   mechanismOfAction?: string; // Mecanismo de acción
   benefitsDescription?: string[]; // Beneficios descritos
   healthIssues?: string[]; // Problemas de salud que puede ayudar
-  components?: { 
+  components?: {
     name: string;
     description: string;
     amount?: string;
@@ -95,12 +122,28 @@ export interface Product {
     url?: string;
     summary: string;
     relevance: 'alta' | 'media' | 'baja';
-    studyType: 'ensayo-clinico' | 'revision-sistematica' | 'meta-analisis' | 'estudio-observacional' | 'in-vitro' | 'animal';
+    studyType:
+      | 'ensayo-clinico'
+      | 'revision-sistematica'
+      | 'meta-analisis'
+      | 'estudio-observacional'
+      | 'in-vitro'
+      | 'animal'
+      | 'estudio-animal';
     sampleSize?: number;
     keyFindings: string[];
   }[]; // Referencias científicas que respaldan la información del producto
 }
 
+/**
+ * Define las opciones disponibles para ordenar productos.
+ * Propósito: Proporcionar un tipo seguro para las opciones de ordenamiento en listados de productos.
+ * Lógica: Enumera todas las formas posibles de ordenar productos por diferentes criterios.
+ * Entradas: Ninguna (es un tipo enumerado).
+ * Salidas: Ninguna (es un tipo enumerado).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
 export type SortOption =
   | 'default'
   | 'name-asc'
@@ -111,6 +154,15 @@ export type SortOption =
   | 'newest'
   | 'best-sellers';
 
+/**
+ * Define los filtros disponibles para buscar y filtrar productos.
+ * Propósito: Estructurar los criterios de filtrado para consultas de productos.
+ * Lógica: Proporciona campos opcionales para filtrar productos por diferentes atributos.
+ * Entradas: Ninguna (es una estructura de datos).
+ * Salidas: Ninguna (es una estructura de datos).
+ * Dependencias: Depende del tipo SortOption.
+ * Efectos secundarios: Ninguno.
+ */
 export interface ProductFilters {
   category?: string;
   priceRange?: {
@@ -126,9 +178,18 @@ export interface ProductFilters {
   brand?: string;
 }
 
-export type ProductCategory = { 
-  id: string; 
-  name: string; 
+/**
+ * Define la estructura de una categoría de producto.
+ * Propósito: Representar las categorías jerárquicas para organizar productos.
+ * Lógica: Incluye información básica, jerarquía, apariencia visual y metadatos SEO.
+ * Entradas: Ninguna (es una estructura de datos).
+ * Salidas: Ninguna (es una estructura de datos).
+ * Dependencias: Ninguna.
+ * Efectos secundarios: Ninguno.
+ */
+export type ProductCategory = {
+  id: string;
+  name: string;
   description?: string;
   image?: string;
   level?: number; // Jerarquía: 0=meta, 1=primaria, 2=funcional
@@ -141,4 +202,3 @@ export type ProductCategory = {
     keywords?: string[];
   };
 };
-

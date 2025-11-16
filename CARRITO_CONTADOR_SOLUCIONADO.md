@@ -10,12 +10,14 @@ El contador del carrito seguía mostrando números incluso después de vaciarlo 
 ## ✅ **Solución Implementada**
 
 ### **Unificación del Sistema de Estado**
+
 - **Antes**: SimpleLayout usaba `cartCount` del CartContext
 - **Después**: SimpleLayout usa `cart.count` del CartStore (Zustand)
 
 ### **Cambios Realizados**
 
 **SimpleLayout.tsx:**
+
 ```typescript
 // ANTES:
 import { useCart } from './contexts/CartContext';
@@ -45,7 +47,7 @@ const { cart } = useCartStore();
 ## 🔄 **Estado Actual**
 
 - ✅ CartPage usa Zustand Store
-- ✅ SimpleLayout usa Zustand Store  
+- ✅ SimpleLayout usa Zustand Store
 - ✅ Header usa Zustand Store
 - ✅ Sincronización completa
 - ✅ Persistencia unificada

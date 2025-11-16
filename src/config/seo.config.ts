@@ -3,15 +3,16 @@ import { DefaultSeoProps } from 'next-seo';
 export const DEFAULT_SEO_CONFIG: DefaultSeoProps = {
   titleTemplate: '%s | Pureza Naturalis - Terapias Naturales',
   defaultTitle: 'Pureza Naturalis - Terapias Naturales y Suplementos',
-  description: 'Descubre nuestra selección de terapias naturales y suplementos de alta calidad. Productos naturales para tu bienestar y salud.',
+  description:
+    'Descubre nuestra selección de terapias naturales y suplementos de alta calidad. Productos naturales para tu bienestar y salud.',
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://www.purezanaturalis.com/',
+    url: 'https://web.purezanaturalis.com/',
     siteName: 'Pureza Naturalis',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/logo-pureza-naturalis-largo_320.webp',
         width: 1200,
         height: 630,
         alt: 'Pureza Naturalis - Terapias Naturales',

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../types/product';
+import { OptimizedImage } from './OptimizedImage';
 
 interface SystemCardProps {
   title: string;
@@ -22,7 +23,7 @@ const SystemCard: React.FC<SystemCardProps> = ({
   benefits,
   systemId,
   color,
-  timeline
+  timeline,
 }) => {
   const navigate = useNavigate();
 
@@ -60,22 +61,32 @@ const SystemCard: React.FC<SystemCardProps> = ({
       <div className="p-6">
         {/* Products Grid */}
         <div className="mb-6">
-          <h4 className="font-semibold text-gray-800 mb-3">Componentes del Sistema:</h4>
+          <h4 className="font-semibold text-gray-800 mb-3">
+            Componentes del Sistema:
+          </h4>
           <div className="grid grid-cols-2 gap-3">
             {products.map((product) => (
-              <div key={product.id} className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
-                <img 
-                  src={typeof product.images[0] === 'string' ? product.images[0] : product.images[0].full} 
+              <div
+                key={product.id}
+                className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg"
+              >
+                <OptimizedImage
+                  src={
+                    typeof product.images[0] === 'string'
+                      ? product.images[0]
+                      : product.images[0]?.full || product.images[0]?.thumbnail || '/placeholder-product.jpg'
+                  }
                   alt={product.name}
-                  className="w-8 h-8 object-cover rounded"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded"
+                  sizes="32px"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium text-gray-800 truncate">
                     {product.name}
                   </div>
-                  <div className="text-xs text-gray-500">
-                    ${product.price}
-                  </div>
+                  <div className="text-xs text-gray-500">${product.price}</div>
                 </div>
               </div>
             ))}
@@ -84,7 +95,9 @@ const SystemCard: React.FC<SystemCardProps> = ({
 
         {/* Benefits */}
         <div className="mb-6">
-          <h4 className="font-semibold text-gray-800 mb-3">Beneficios Sinérgicos:</h4>
+          <h4 className="font-semibold text-gray-800 mb-3">
+            Beneficios Sinérgicos:
+          </h4>
           <div className="space-y-2">
             {benefits.slice(0, 3).map((benefit, index) => (
               <div key={index} className="flex items-start">
@@ -97,7 +110,9 @@ const SystemCard: React.FC<SystemCardProps> = ({
 
         {/* Timeline */}
         <div className="mb-6 p-3 bg-blue-50 rounded-lg">
-          <h4 className="font-semibold text-gray-800 mb-2 text-sm">Cronología de Resultados:</h4>
+          <h4 className="font-semibold text-gray-800 mb-2 text-sm">
+            Cronología de Resultados:
+          </h4>
           <p className="text-xs text-gray-600">{timeline}</p>
         </div>
 
@@ -109,12 +124,11 @@ const SystemCard: React.FC<SystemCardProps> = ({
           >
             Ver Sistema Completo
           </button>
-          
+
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => {
                 // TODO: Agregar todos los productos al carrito
-                console.log('Agregar sistema completo al carrito:', systemId);
               }}
               className="bg-green-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
             >
@@ -134,7 +148,9 @@ const SystemCard: React.FC<SystemCardProps> = ({
       <div className="bg-gray-50 px-6 py-3 border-t">
         <div className="flex items-center justify-center space-x-2 text-xs text-gray-600">
           <span>🧬</span>
-          <span className="font-medium">Respaldado por investigación científica</span>
+          <span className="font-medium">
+            Respaldado por investigación científica
+          </span>
         </div>
       </div>
     </motion.div>

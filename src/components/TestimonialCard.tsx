@@ -15,9 +15,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
           <svg
             key={index}
             className={`w-5 h-5 ${
-              index < testimonial.rating
-                ? 'text-yellow-400'
-                : 'text-gray-300'
+              index < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
             }`}
             fill="currentColor"
             viewBox="0 0 20 20"

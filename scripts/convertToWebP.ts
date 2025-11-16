@@ -1,9 +1,9 @@
 /**
  * Script para convertir imágenes a formato WebP
- * 
+ *
  * Uso:
  * ts-node scripts/convertToWebP.ts
- * 
+ *
  * Características:
  * - Convierte JPG, JPEG, PNG a WebP
  * - Mantiene archivos originales
@@ -70,12 +70,14 @@ async function convertImage(inputPath: string): Promise<void> {
     stats.totalSizeAfter += mainStats.size;
 
     console.log(`✅ Convertido: ${inputPath} → ${mainOutputPath}`);
-    console.log(`   Tamaño: ${formatBytes(fileStats.size)} → ${formatBytes(mainStats.size)} (${Math.round((1 - mainStats.size / fileStats.size) * 100)}% reducción)`);
+    console.log(
+      `   Tamaño: ${formatBytes(fileStats.size)} → ${formatBytes(mainStats.size)} (${Math.round((1 - mainStats.size / fileStats.size) * 100)}% reducción)`
+    );
 
     // Generar versiones responsive
     for (const width of CONFIG.sizes) {
       const responsivePath = `${outputBase}_${width}.webp`;
-      
+
       if (CONFIG.skipExisting && fs.existsSync(responsivePath)) {
         continue;
       }
@@ -85,7 +87,9 @@ async function convertImage(inputPath: string): Promise<void> {
         .webp({ quality: CONFIG.quality })
         .toFile(responsivePath);
 
-      console.log(`   📐 Generado: ${path.basename(responsivePath)} (${width}w)`);
+      console.log(
+        `   📐 Generado: ${path.basename(responsivePath)} (${width}w)`
+      );
     }
 
     stats.processed++;
@@ -103,7 +107,7 @@ function formatBytes(bytes: number): string {
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }
 
 /**
@@ -116,7 +120,7 @@ async function main() {
   console.log(`📐 Tamaños responsive: ${CONFIG.sizes.join(', ')}\n`);
 
   // Buscar todas las imágenes
-  const images = await glob(CONFIG.inputDir, { 
+  const images = await glob(CONFIG.inputDir, {
     ignore: ['**/node_modules/**', '**/dist/**'],
     absolute: true,
   });
@@ -132,7 +136,7 @@ async function main() {
   const BATCH_SIZE = 5;
   for (let i = 0; i < images.length; i += BATCH_SIZE) {
     const batch = images.slice(i, i + BATCH_SIZE);
-    await Promise.all(batch.map(img => convertImage(img)));
+    await Promise.all(batch.map((img) => convertImage(img)));
   }
 
   // Mostrar estadísticas finales
@@ -143,12 +147,15 @@ async function main() {
   console.log(`❌ Errores:        ${stats.errors}`);
   console.log(`📦 Tamaño antes:   ${formatBytes(stats.totalSizeBefore)}`);
   console.log(`📦 Tamaño después: ${formatBytes(stats.totalSizeAfter)}`);
-  
+
   if (stats.totalSizeBefore > 0) {
-    const reduction = ((1 - stats.totalSizeAfter / stats.totalSizeBefore) * 100).toFixed(1);
+    const reduction = (
+      (1 - stats.totalSizeAfter / stats.totalSizeBefore) *
+      100
+    ).toFixed(1);
     console.log(`💾 Reducción:      ${reduction}%`);
   }
-  
+
   console.log('════════════════════════════════════════');
   console.log('✨ Conversión completada!\n');
 }

@@ -1,7 +1,16 @@
 import React, { useMemo, useEffect } from 'react';
+/**
+ * Página: StorePageOptimized
+ * Propósito: Listado de productos con filtrado y paginación eficiente conectado al backend.
+ * Claves de la implementación:
+ *  - Usa productStore para obtener productos desde API
+ *  - Filtros en memoria (categoría, búsqueda, precio, stock, oferta, tags).
+ *  - Normaliza tags a strings antes de compararlos para evitar errores por datos inconsistentes.
+ *  - Usa memoización para minimizar recomputaciones.
+ */
 import { motion, AnimatePresence } from 'framer-motion';
-import { products } from '../data/products';
-import ProductCard from '../../components/ProductCard';
+import { useProductStore } from '../store/productStore';
+import ProductCard from '../components/ProductCard';
 import FilterSidebar from '../components/FilterSidebar';
 import { useUIStore } from '../store/uiStore';
 
@@ -20,56 +29,75 @@ const StorePage: React.FC = () => {
     setIsFilterOpen,
   } = useUIStore();
 
+  const { products, loading, error, fetchProducts } = useProductStore();
+
+  // Fetch products on mount
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
   // Filter and sort products
   const processedProducts = useMemo(() => {
+    if (loading || !products.length) return [];
     let filtered = [...products];
 
     // Filter by categories
     if (productFilters.categories.length > 0) {
-      filtered = filtered.filter(product =>
-        productFilters.categories.some(cat => product.categories?.includes(cat))
+      filtered = filtered.filter((product) =>
+        productFilters.categories.some((cat) =>
+          product.categories?.includes(cat)
+        )
       );
     }
 
     // Filter by search term
     if (productFilters.searchTerm) {
       const term = productFilters.searchTerm.toLowerCase();
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(term) ||
-        product.description.toLowerCase().includes(term) ||
-        product.tags.some(tag => tag.toLowerCase().includes(term))
-      );
+      filtered = filtered.filter((product) => {
+        const safeTags = Array.isArray(product.tags)
+          ? product.tags.filter((t): t is string => typeof t === 'string')
+          : [];
+        return (
+          product.name.toLowerCase().includes(term) ||
+          product.description.toLowerCase().includes(term) ||
+          safeTags.some((tag) => tag.toLowerCase().includes(term))
+        );
+      });
     }
 
     // Filter by price range
     if (productFilters.priceRange) {
       const [min, max] = productFilters.priceRange;
-      filtered = filtered.filter(product =>
-        product.price >= min && product.price <= max
+      filtered = filtered.filter(
+        (product) => product.price >= min && product.price <= max
       );
     }
 
     // Filter by stock
     if (productFilters.inStock) {
-      filtered = filtered.filter(product => product.stock > 0);
+      filtered = filtered.filter((product) => product.stock > 0);
     }
 
     // Filter by sale/discount
     if (productFilters.onSale) {
-      filtered = filtered.filter(product =>
-        product.compareAtPrice && product.compareAtPrice > product.price
+      filtered = filtered.filter(
+        (product) =>
+          product.compareAtPrice && product.compareAtPrice > product.price
       );
     }
 
     // Filter by tags
     if (productFilters.tags.length > 0) {
-      filtered = filtered.filter(product =>
-        productFilters.tags.some(tag =>
-          product.tags.some(productTag =>
+      filtered = filtered.filter((product) => {
+        const safeTags = Array.isArray(product.tags)
+          ? product.tags.filter((t): t is string => typeof t === 'string')
+          : [];
+        return productFilters.tags.some((tag) =>
+          safeTags.some((productTag) =>
             productTag.toLowerCase().includes(tag.toLowerCase())
           )
-        )
-      );
+        );
+      });
     }
 
     // Sort products
@@ -94,7 +122,7 @@ const StorePage: React.FC = () => {
     });
 
     return sorted;
-  }, [productFilters]);
+  }, [productFilters, products, loading]);
 
   // Paginate products
   const paginatedProducts = useMemo(() => {
@@ -115,7 +143,7 @@ const StorePage: React.FC = () => {
     const pages = [];
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -163,7 +191,9 @@ const StorePage: React.FC = () => {
 
         {endPage < totalPages && (
           <>
-            {endPage < totalPages - 1 && <span className="text-gray-500">...</span>}
+            {endPage < totalPages - 1 && (
+              <span className="text-gray-500">...</span>
+            )}
             <button
               onClick={() => setCurrentPage(totalPages)}
               className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
@@ -193,7 +223,8 @@ const StorePage: React.FC = () => {
             Tienda Natural
           </h1>
           <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            Productos cuidadosamente seleccionados para apoyar tu camino hacia el bienestar.
+            Productos cuidadosamente seleccionados para apoyar tu camino hacia
+            el bienestar.
           </p>
         </div>
 
@@ -206,10 +237,23 @@ const StorePage: React.FC = () => {
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                 className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"
+                  />
                 </svg>
-                Filtros {productFilters.categories.length + productFilters.tags.length > 0 && `(${productFilters.categories.length + productFilters.tags.length})`}
+                Filtros{' '}
+                {productFilters.categories.length + productFilters.tags.length >
+                  0 &&
+                  `(${productFilters.categories.length + productFilters.tags.length})`}
               </button>
             </div>
 
@@ -250,7 +294,11 @@ const StorePage: React.FC = () => {
                 }`}
                 title="Vista en cuadrícula"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
               </button>
@@ -263,8 +311,16 @@ const StorePage: React.FC = () => {
                 }`}
                 title="Vista en lista"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </button>
             </div>
@@ -290,7 +346,8 @@ const StorePage: React.FC = () => {
         {/* Results info */}
         <div className="mb-6">
           <p className="text-sm text-gray-600">
-            Mostrando {paginatedProducts.length} de {processedProducts.length} productos
+            Mostrando {paginatedProducts.length} de {processedProducts.length}{' '}
+            productos
             {productFilters.categories.length > 0 && (
               <span className="ml-2">
                 en {productFilters.categories.join(', ')}
@@ -307,6 +364,30 @@ const StorePage: React.FC = () => {
 
           {/* Products Grid/List */}
           <div className="flex-1">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center">
+                  <svg className="animate-spin h-12 w-12 text-green-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <p className="mt-4 text-gray-600">Cargando productos...</p>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <div className="max-w-md mx-auto text-red-600">
+                  <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h3 className="mt-2 text-sm font-medium">Error al cargar productos</h3>
+                  <p className="mt-1 text-sm">{error}</p>
+                  <button onClick={() => fetchProducts()} className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                    Reintentar
+                  </button>
+                </div>
+              </div>
+            ) : (
             <AnimatePresence mode="wait">
               {paginatedProducts.length > 0 ? (
                 <motion.div
@@ -329,9 +410,7 @@ const StorePage: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <ProductCard
-                        product={product}
-                      />
+                      <ProductCard product={product} />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -365,9 +444,10 @@ const StorePage: React.FC = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+            )}
 
             {/* Pagination */}
-            {renderPagination()}
+            {!loading && !error && renderPagination()}
           </div>
         </div>
       </div>

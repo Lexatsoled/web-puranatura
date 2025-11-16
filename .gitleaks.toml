@@ -1,0 +1,29 @@
+title = "Pureza Naturalis - Gitleaks Config"
+
+[extend]
+# useDefault will extend the base configuration with the default gitleaks config:
+# https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+useDefault = true
+
+[allowlist]
+description = "Allowlist for known false positives"
+paths = [
+  '''\.env\.example$''',
+  '''backend/\.env\.example$''',
+  '''README\.md$''',
+  '''docs/.*\.md$''',
+  '''.*\.md$''',
+  '''.*\.example$''',
+  '''.*\.template$''',
+  '''.*\.sample$''',
+  '''package\.json$''',
+  '''package-lock\.json$''',
+  '''tsconfig\.json$''',
+  '''reports/.*''',
+  '''.*\.log$''',
+]
+
+regexes = [
+  # Ignorar variables VITE_ públicas (no son secretos)
+  '''VITE_[A-Z_]+=.*''',
+]

@@ -9,6 +9,7 @@
 ## 🔧 **Cambios Estructurales Realizados**
 
 ### **1. Eliminación del Link Contenedor**
+
 ```tsx
 // ❌ ANTES: Toda la tarjeta era un enlace
 <Link to={`/producto/${product.id}`} className="...tarjeta-completa...">
@@ -22,29 +23,37 @@
 ```
 
 ### **2. Imagen como Enlace Independiente**
+
 ```tsx
-{/* Solo la imagen es clickeable para navegar */}
-<Link 
+{
+  /* Solo la imagen es clickeable para navegar */
+}
+<Link
   to={`/producto/${product.id}`}
   className="relative h-56 bg-gray-100 flex items-center justify-center cursor-pointer block"
 >
   <img src={cardImageUrl} alt={product.name} />
-</Link>
+</Link>;
 ```
 
 ### **3. Nombre como Enlace Independiente**
+
 ```tsx
-{/* Solo el nombre es clickeable para navegar */}
-<Link 
+{
+  /* Solo el nombre es clickeable para navegar */
+}
+<Link
   to={`/producto/${product.id}`}
   className="text-lg font-semibold text-gray-800 truncate hover:text-green-600 transition-colors cursor-pointer"
 >
   {product.name}
-</Link>
+</Link>;
 ```
 
 ### **4. Elementos No Navegables**
+
 Estos elementos ahora **NO** navegan a la página del producto:
+
 - ✅ Selector de cantidad (botones + y -)
 - ✅ Botón "Añadir al carrito"
 - ✅ Botón de wishlist (corazón)
@@ -55,10 +64,12 @@ Estos elementos ahora **NO** navegan a la página del producto:
 ## 🎯 **Experiencia de Usuario Mejorada**
 
 ### **Para Navegar al Producto:**
+
 - **Clic en la imagen** → Va a página del producto
 - **Clic en el nombre** → Va a página del producto
 
 ### **Para Interactuar sin Navegar:**
+
 - **Clic en "+"** → Aumenta cantidad sin navegar
 - **Clic en "-"** → Disminuye cantidad sin navegar
 - **Clic en "Añadir"** → Añade al carrito sin navegar

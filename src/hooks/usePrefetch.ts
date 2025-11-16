@@ -18,9 +18,12 @@ export const usePrefetchImage = () => {
     prefetchedImages.current.add(src);
   }, []);
 
-  const prefetchImages = useCallback((srcs: string[]) => {
-    srcs.forEach(src => prefetchImage(src));
-  }, [prefetchImage]);
+  const prefetchImages = useCallback(
+    (srcs: string[]) => {
+      srcs.forEach((src) => prefetchImage(src));
+    },
+    [prefetchImage]
+  );
 
   return { prefetchImage, prefetchImages };
 };
@@ -74,7 +77,7 @@ export const usePrefetchData = () => {
 
   const prefetchData = useCallback(async (url: string, key?: string) => {
     const cacheKey = key || url;
-    
+
     if (prefetchedData.current.has(cacheKey)) {
       return;
     }
@@ -90,9 +93,8 @@ export const usePrefetchData = () => {
         // Los datos se quedan en HTTP cache del navegador
         prefetchedData.current.add(cacheKey);
       }
-    } catch (error) {
+    } catch {
       // Silently fail - prefetch es opcional
-      console.debug('Prefetch failed:', url, error);
     }
   }, []);
 
@@ -115,7 +117,7 @@ export const usePrefetchRoute = () => {
     link.rel = 'prefetch';
     link.as = 'script';
     link.href = routePath;
-    
+
     document.head.appendChild(link);
     prefetchedRoutes.current.add(routePath);
   }, []);

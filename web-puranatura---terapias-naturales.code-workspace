@@ -1,11 +1,11 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../../../Pictures/Imagenes de Suplementos/Publicados/Jpeg"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "../../../Pictures/Imagenes de Suplementos/Publicados/Jpeg",
+    },
+  ],
+  "settings": {},
 }

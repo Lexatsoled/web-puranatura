@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 const UserMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,53 +35,120 @@ const UserMenu: React.FC = () => {
   const menuItems = [
     {
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
         </svg>
       ),
       label: 'Mi Perfil',
       action: () => {
         navigate('/perfil');
         setIsOpen(false);
-      }
+      },
     },
     {
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
       ),
       label: 'Mis Pedidos',
       action: () => {
         navigate('/pedidos');
         setIsOpen(false);
-      }
+      },
     },
     {
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       ),
       label: 'Direcciones',
       action: () => {
         navigate('/direcciones');
         setIsOpen(false);
-      }
+      },
     },
     {
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
         </svg>
       ),
       label: 'Lista de Deseos',
       action: () => {
         navigate('/lista-deseos');
         setIsOpen(false);
-      }
-    }
+      },
+    },
+    {
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+          />
+        </svg>
+      ),
+      label: 'Seguridad de cuenta',
+      action: () => {
+        navigate('/configuracion-cuenta');
+        setIsOpen(false);
+      },
+    },
   ];
 
   return (
@@ -101,7 +168,7 @@ const UserMenu: React.FC = () => {
           transition: 'all 0.3s ease',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem'
+          gap: '0.5rem',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
@@ -112,43 +179,55 @@ const UserMenu: React.FC = () => {
           e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
         }}
       >
-        <div style={{
-          width: '32px',
-          height: '32px',
-          backgroundColor: '#ffffff',
-          color: '#16a34a',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '0.875rem',
-          fontWeight: '700'
-        }}>
+        <div
+          style={{
+            width: '32px',
+            height: '32px',
+            backgroundColor: '#ffffff',
+            color: '#16a34a',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.875rem',
+            fontWeight: '700',
+          }}
+        >
           {getInitials()}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <p style={{ 
-            fontSize: '0.875rem', 
-            fontWeight: '600', 
-            margin: 0, 
-            lineHeight: '1.2',
-            maxWidth: '120px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          }}
+        >
+          <p
+            style={{
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              margin: 0,
+              lineHeight: '1.2',
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {user.firstName} {user.lastName}
           </p>
-          <p style={{ 
-            fontSize: '0.75rem', 
-            opacity: '0.8', 
-            margin: 0, 
-            lineHeight: '1.2',
-            maxWidth: '120px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}>
+          <p
+            style={{
+              fontSize: '0.75rem',
+              opacity: '0.8',
+              margin: 0,
+              lineHeight: '1.2',
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {user.email}
           </p>
         </div>
@@ -158,13 +237,18 @@ const UserMenu: React.FC = () => {
             height: '16px',
             opacity: '0.8',
             transition: 'transform 0.3s ease',
-            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
@@ -187,9 +271,7 @@ const UserMenu: React.FC = () => {
                   <p className="text-sm font-semibold text-gray-900 truncate">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {user.email}
-                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   <p className="text-xs text-green-600 font-medium">
                     Miembro desde {new Date(user.createdAt).getFullYear()}
                   </p>
@@ -220,8 +302,18 @@ const UserMenu: React.FC = () => {
                 onClick={handleLogout}
                 className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-red-50 transition-colors text-red-600 hover:text-red-700"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
                 </svg>
                 <span className="text-sm">Cerrar Sesión</span>
               </button>
@@ -234,3 +326,4 @@ const UserMenu: React.FC = () => {
 };
 
 export default UserMenu;
+

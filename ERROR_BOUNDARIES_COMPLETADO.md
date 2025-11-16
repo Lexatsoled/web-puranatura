@@ -5,6 +5,7 @@
 Sistema completo de manejo de errores implementado con **Error Boundaries**, logging centralizado y captura global de errores. La aplicación ahora tiene capacidad para **recuperarse de errores** sin colapso total y mantener registros detallados para debugging.
 
 ### Resultados Clave
+
 - ✅ **3 niveles de ErrorBoundary**: Page, Component y Critical
 - ✅ **ErrorLogger centralizado**: Captura, categoriza y almacena errores
 - ✅ **Global error handlers**: Captura errores de window y promises no manejadas
@@ -22,6 +23,7 @@ Sistema completo de manejo de errores implementado con **Error Boundaries**, log
 **Propósito**: Servicio centralizado para logging de errores con soporte para Sentry.
 
 **Características**:
+
 - **4 niveles de severidad**:
   - `LOW`: Informativo, no crítico
   - `MEDIUM`: Advertencia, usuario debería saberlo
@@ -37,6 +39,7 @@ Sistema completo de manejo de errores implementado con **Error Boundaries**, log
   - `UNKNOWN`: No clasificados
 
 **Métodos principales**:
+
 ```typescript
 // Logging general
 errorLogger.log(
@@ -77,12 +80,14 @@ errorLogger.clearErrors(): void
 ```
 
 **Almacenamiento**:
+
 - **En memoria**: Hasta 100 errores recientes
 - **LocalStorage**: Últimos 50 errores persistentes
 - **Consola**: Logs detallados en desarrollo
 - **Sentry** (futuro): Envío automático de errores HIGH y CRITICAL
 
 **Ejemplo de error log**:
+
 ```json
 {
   "id": "1736184523000-abc123xyz",
@@ -92,7 +97,7 @@ errorLogger.clearErrors(): void
   "category": "render",
   "timestamp": "2025-01-06T15:30:23.000Z",
   "userAgent": "Mozilla/5.0 ...",
-  "url": "https://purezanaturalis.com/producto/123",
+  "url": "https://web.purezanaturalis.com/producto/123",
   "componentStack": "at ProductCard\n  at ProductList\n  at StorePage",
   "additionalData": {
     "productId": "123",
@@ -108,6 +113,7 @@ errorLogger.clearErrors(): void
 **Propósito**: Componente base de Error Boundary reutilizable con UI de fallback personalizable.
 
 **Props**:
+
 ```typescript
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -118,6 +124,7 @@ interface ErrorBoundaryProps {
 ```
 
 **Características**:
+
 - Captura errores en componentes hijos
 - Logs automáticos con `errorLogger.logBoundaryError()`
 - Mapeo automático de level → severity (page=HIGH, component=MEDIUM, critical=CRITICAL)
@@ -125,6 +132,7 @@ interface ErrorBoundaryProps {
 - Fallback UI por defecto elegante
 
 **Uso básico**:
+
 ```tsx
 <ErrorBoundary level="component">
   <MiComponente />
@@ -132,6 +140,7 @@ interface ErrorBoundaryProps {
 ```
 
 **Uso con custom fallback**:
+
 ```tsx
 <ErrorBoundary
   level="page"
@@ -148,6 +157,7 @@ interface ErrorBoundaryProps {
 ```
 
 **Default Fallback UI**:
+
 ```
 ┌─────────────────────────────────────┐
 │         ⚠️                          │
@@ -166,6 +176,7 @@ interface ErrorBoundaryProps {
 **Propósito**: Error Boundary para páginas completas con navegación.
 
 **Características**:
+
 - Envuelve rutas completas en App.tsx
 - Fallback UI full-screen con branding
 - 3 botones de acción:
@@ -174,6 +185,7 @@ interface ErrorBoundaryProps {
   3. **📋 Reportar error**: Descarga JSON con logs de errores
 
 **Uso**:
+
 ```tsx
 <PageErrorBoundary>
   <Routes>
@@ -185,6 +197,7 @@ interface ErrorBoundaryProps {
 ```
 
 **Fallback UI** (full-screen):
+
 ```
 ┌─────────────────────────────────────────────┐
 │                                             │
@@ -214,6 +227,7 @@ interface ErrorBoundaryProps {
 **Propósito**: Error Boundary ligero para componentes individuales.
 
 **Props**:
+
 ```typescript
 interface ComponentErrorBoundaryProps {
   children: ReactNode;
@@ -222,11 +236,13 @@ interface ComponentErrorBoundaryProps {
 ```
 
 **Características**:
+
 - Fallback UI minimalista (inline)
 - Ideal para cards, modales, sidebars
 - No bloquea el resto de la página
 
 **Uso**:
+
 ```tsx
 <ComponentErrorBoundary componentName="ProductCard">
   <ProductCard product={product} />
@@ -238,6 +254,7 @@ interface ComponentErrorBoundaryProps {
 ```
 
 **Fallback UI** (inline, compacto):
+
 ```
 ┌────────────────────────────────┐
 │ ⚠️ Error en ProductCard        │
@@ -270,6 +287,7 @@ withErrorHandling<T>(
 ```
 
 **`initializeGlobalErrorHandlers()`**:
+
 - Captura `window.addEventListener('error')`
   - Errores de sintaxis JavaScript
   - Runtime errors (ReferenceError, TypeError, etc.)
@@ -280,17 +298,19 @@ withErrorHandling<T>(
 - Logs automáticos con `errorLogger.log()`
 
 **Uso en App.tsx**:
+
 ```tsx
 const App: React.FC = () => {
   useEffect(() => {
     initializeGlobalErrorHandlers();
   }, []);
-  
+
   // ... resto del componente
 };
 ```
 
 **`createFetchWithErrorHandling()`** (uso futuro):
+
 ```typescript
 // Reemplazar fetch global
 window.fetch = createFetchWithErrorHandling();
@@ -301,14 +321,12 @@ const response = await fetch('/api/products');
 ```
 
 **`withErrorHandling()`** (helper para funciones async):
+
 ```typescript
-const fetchUserData = withErrorHandling(
-  async (userId: string) => {
-    const response = await fetch(`/api/users/${userId}`);
-    return response.json();
-  },
-  ErrorCategory.API
-);
+const fetchUserData = withErrorHandling(async (userId: string) => {
+  const response = await fetch(`/api/users/${userId}`);
+  return response.json();
+}, ErrorCategory.API);
 
 // Cualquier error en fetchUserData → automáticamente logeado
 ```
@@ -320,6 +338,7 @@ const fetchUserData = withErrorHandling(
 **Propósito**: Panel flotante de desarrollo para visualizar errores en tiempo real.
 
 **Características**:
+
 - **Solo en desarrollo**: `if (!import.meta.env.DEV) return null`
 - Botón flotante en esquina inferior derecha
 - Contador de errores en tiempo real
@@ -331,6 +350,7 @@ const fetchUserData = withErrorHandling(
 **UI**:
 
 **Estado colapsado**:
+
 ```
 ┌────────┐
 │   ✓    │  ← Verde si 0 errores
@@ -344,6 +364,7 @@ const fetchUserData = withErrorHandling(
 ```
 
 **Estado expandido**:
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🔍 Error Monitor                  [ X ] │
@@ -362,6 +383,7 @@ const fetchUserData = withErrorHandling(
 ```
 
 **Funcionalidad**:
+
 - Click en error → Expandir detalles
 - Botón "Limpiar" → `errorLogger.clearErrors()`
 - Filtros → Muestra solo errores del nivel seleccionado
@@ -461,6 +483,7 @@ const fetchUserData = withErrorHandling(
 **Experiencia de usuario**: Ve "⚠️ Error en ProductCard" pero puede seguir navegando otros productos.
 
 **Componentes ideales para wrapping**:
+
 - ProductCard
 - CartModal
 - AuthModal
@@ -480,6 +503,7 @@ useEffect(() => {
 ```
 
 **Captura automática**:
+
 - `console.error()` no capturados
 - Promises rechazadas sin `.catch()`
 - Errores de carga de recursos (scripts, imágenes)
@@ -495,25 +519,21 @@ useEffect(() => {
 
 ```tsx
 // En cualquier componente o función
-import { errorLogger, ErrorSeverity, ErrorCategory } from '@/services/errorLogger';
+import {
+  errorLogger,
+  ErrorSeverity,
+  ErrorCategory,
+} from '@/services/errorLogger';
 
 try {
   await fetch('/api/products');
 } catch (error) {
-  errorLogger.logNetworkError(
-    error as Error,
-    '/api/products',
-    'GET',
-    500
-  );
-  
+  errorLogger.logNetworkError(error as Error, '/api/products', 'GET', 500);
+
   // O logging genérico
-  errorLogger.log(
-    error as Error,
-    ErrorSeverity.HIGH,
-    ErrorCategory.NETWORK,
-    { endpoint: '/api/products' }
-  );
+  errorLogger.log(error as Error, ErrorSeverity.HIGH, ErrorCategory.NETWORK, {
+    endpoint: '/api/products',
+  });
 }
 ```
 
@@ -559,7 +579,7 @@ errorLogger.initSentry(
 // Línea 200-210
 private sendToSentry(error: Error, errorEntry: ErrorLogEntry): void {
   if (!this.sentryEnabled) return;
-  
+
   Sentry.captureException(error, {
     level: this.getSentryLevel(errorEntry.severity),
     tags: {
@@ -602,16 +622,17 @@ private getSentryLevel(severity: ErrorSeverity): Sentry.SeverityLevel {
 // Crear componente de test (solo dev)
 const ErrorTest: React.FC = () => {
   const [triggerError, setTriggerError] = useState(false);
-  
+
   if (triggerError) {
     throw new Error('Test component error');
   }
-  
+
   return <button onClick={() => setTriggerError(true)}>Trigger Error</button>;
 };
 ```
 
 **Pasos**:
+
 1. Agregar `<ErrorTest />` en HomePage
 2. Click en "Trigger Error"
 3. Verificar: ErrorBoundary fallback UI aparece
@@ -619,6 +640,7 @@ const ErrorTest: React.FC = () => {
 5. Click "Intentar de nuevo" → Componente se recupera
 
 **Resultado esperado**:
+
 - ✅ Fallback UI mostrada
 - ✅ Error en ErrorMonitor con categoría "render"
 - ✅ Botón reset funciona
@@ -634,11 +656,13 @@ const triggerPromiseError = () => {
 ```
 
 **Pasos**:
+
 1. Click en botón que ejecuta `triggerPromiseError()`
 2. Verificar: Error logeado en ErrorMonitor
 3. Verificar: Consola muestra log del global handler
 
 **Resultado esperado**:
+
 - ✅ Error en ErrorMonitor con categoría "unknown"
 - ✅ Severidad "medium"
 - ✅ Consola: "🚨 Error [medium] - unknown"
@@ -655,11 +679,13 @@ const triggerWindowError = () => {
 ```
 
 **Pasos**:
+
 1. Click en botón que ejecuta `triggerWindowError()`
 2. Verificar: Error capturado por global handler
 3. Verificar: Error en ErrorMonitor
 
 **Resultado esperado**:
+
 - ✅ Error logeado con filename, lineno, colno
 - ✅ ErrorMonitor muestra "ReferenceError: undefinedVariable is not defined"
 
@@ -682,10 +708,12 @@ const triggerNetworkError = async () => {
 ```
 
 **Pasos**:
+
 1. Click en botón
 2. Verificar: Error en ErrorMonitor con categoría "network"
 
 **Resultado esperado**:
+
 - ✅ Categoría "network"
 - ✅ AdditionalData contiene requestUrl, method
 
@@ -694,6 +722,7 @@ const triggerNetworkError = async () => {
 ## 📊 Métricas de Éxito
 
 ### Antes (Sin Error Boundaries)
+
 - ❌ **Errores de componente** → Pantalla blanca completa
 - ❌ **Promises rechazadas** → Solo en consola (invisible)
 - ❌ **Window errors** → Solo en consola
@@ -701,6 +730,7 @@ const triggerNetworkError = async () => {
 - ❌ **Experiencia de usuario** → App se rompe completamente
 
 ### Después (Con Error Boundaries)
+
 - ✅ **Errores de componente** → Fallback UI + recuperación
 - ✅ **Promises rechazadas** → Logeadas + visibles en dev panel
 - ✅ **Window errors** → Capturados + logeados
@@ -716,9 +746,10 @@ npm run build
 ```
 
 ### Resultados:
+
 - ✅ **TypeScript**: 0 errores
 - ✅ **Build time**: 20.56s
-- ✅ **Bundle size**: 
+- ✅ **Bundle size**:
   - Total JS: ~936 KB
   - Error Boundaries: ~15 KB (1.6% del bundle)
   - ErrorLogger: ~5 KB
@@ -726,6 +757,7 @@ npm run build
 - ✅ **Chunks**: 32 chunks optimizados
 
 ### Impacto en Performance:
+
 - **Overhead**: <1% del bundle total
 - **Runtime**: Negligible (ErrorBoundaries solo se activan en error)
 - **Memory**: ~5 KB en memoria para logs (100 errores max)
@@ -780,6 +812,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
 ### ✅ DO:
 
 1. **Wrap páginas completas con PageErrorBoundary**
+
    ```tsx
    <PageErrorBoundary>
      <Routes>...</Routes>
@@ -787,6 +820,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
    ```
 
 2. **Wrap componentes críticos con ComponentErrorBoundary**
+
    ```tsx
    <ComponentErrorBoundary componentName="CartModal">
      <CartModal />
@@ -794,6 +828,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
    ```
 
 3. **Log errores de red explícitamente**
+
    ```tsx
    try {
      await fetch('/api/products');
@@ -818,12 +853,13 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
 ### ❌ DON'T:
 
 1. **No wrappear componentes pequeños individualmente**
+
    ```tsx
    // ❌ Malo: Overhead innecesario
    <ComponentErrorBoundary>
      <div>Texto simple</div>
    </ComponentErrorBoundary>
-   
+
    // ✅ Bueno: Wrap grupos de componentes
    <ComponentErrorBoundary>
      <ProductGrid>
@@ -833,6 +869,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
    ```
 
 2. **No silenciar errores sin loggear**
+
    ```tsx
    // ❌ Malo
    try {
@@ -840,7 +877,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
    } catch (error) {
      // Silenciado sin trace
    }
-   
+
    // ✅ Bueno
    try {
      await riskyOperation();
@@ -851,10 +888,11 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
    ```
 
 3. **No usar ErrorBoundary para control de flujo**
+
    ```tsx
    // ❌ Malo: Usar errors para lógica
    if (data === null) throw new Error('No data');
-   
+
    // ✅ Bueno: Validación explícita
    if (data === null) {
      return <EmptyState />;
@@ -866,6 +904,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
 ## 🏆 Conclusión
 
 ### Sistema implementado:
+
 - ✅ **3 niveles de Error Boundaries** (Page, Component, Custom)
 - ✅ **ErrorLogger centralizado** con 6 categorías y 4 severidades
 - ✅ **Global error handlers** (window, promises)
@@ -875,6 +914,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
 - ✅ **Build exitoso** en 20.56s
 
 ### Beneficios:
+
 1. **Resiliencia**: App no colapsa completamente en error
 2. **Debugging**: Logs detallados con stack traces
 3. **UX mejorada**: Recuperación graciosa con UI de fallback
@@ -882,6 +922,7 @@ const { logError, getErrors, clearErrors } = useErrorLogger()
 5. **Mantenibilidad**: Sistema escalable y documentado
 
 ### Próximos pasos opcionales:
+
 1. Integrar Sentry para producción
 2. Añadir ComponentErrorBoundary a más componentes
 3. Implementar alertas automáticas para errores CRITICAL

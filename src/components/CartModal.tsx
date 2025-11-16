@@ -9,6 +9,13 @@ interface CartModalProps {
   onClose: () => void;
 }
 
+/**
+ * CartModal component displays the shopping cart in a modal dialog with accessibility and best practices.
+ *
+ * @component
+ * @param {CartModalProps} props - Props for CartModal
+ * @returns {JSX.Element}
+ */
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCartStore();
 
@@ -31,6 +38,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-50 z-50"
           onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cart-modal-title"
+          aria-describedby="cart-modal-description"
         >
           <motion.div
             initial={{ x: '100%' }}
@@ -39,16 +50,24 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed top-0 right-0 h-full w-full max-w-lg bg-gray-50 shadow-xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
+            role="document"
+            aria-label="Contenido del carrito"
           >
             {/* Header - Amazon-inspired */}
             <div className="bg-white border-b shadow-sm">
               <div className="flex justify-between items-center p-4 pb-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2
+                    id="cart-modal-title"
+                    className="text-lg font-semibold text-gray-900"
+                  >
                     Carrito de Compras
                   </h2>
                   {cart.items.length > 0 && (
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p
+                      id="cart-modal-description"
+                      className="text-sm text-gray-600 mt-1"
+                    >
                       {itemCount} {itemCount === 1 ? 'artículo' : 'artículos'}
                     </p>
                   )}
@@ -57,6 +76,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors p-2"
                   aria-label="Cerrar carrito"
+                  title="Cerrar carrito"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -81,13 +101,17 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-medium text-gray-900">
-                        Subtotal ({itemCount} {itemCount === 1 ? 'artículo' : 'artículos'}):
+                        Subtotal ({itemCount}{' '}
+                        {itemCount === 1 ? 'artículo' : 'artículos'}):
                       </span>
                       <span className="text-xl font-bold text-green-700">
                         DOP ${cart.total.toFixed(2)}
                       </span>
                     </div>
-                    <button className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm">
+                    <button
+                      className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm"
+                      aria-label={`Proceder al pago con subtotal de DOP ${cart.total.toFixed(2)}`}
+                    >
                       Proceder al Pago
                     </button>
                   </div>
@@ -116,11 +140,14 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     Tu carrito está vacío
                   </h3>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                    ¡Explora nuestra tienda y encuentra productos increíbles para tu bienestar natural!
+                    ¡Explora nuestra tienda y encuentra productos increíbles
+                    para tu bienestar natural!
                   </p>
                   <button
                     onClick={onClose}
                     className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors w-full"
+                    aria-label="Cerrar carrito y seguir comprando"
+                    title="Cerrar carrito y seguir comprando"
                   >
                     Seguir comprando
                   </button>
@@ -139,6 +166,8 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                        role="listitem"
+                        aria-label={`Producto: ${item.product.name}`}
                       >
                         <div className="flex gap-4">
                           {/* Product Image */}
@@ -156,7 +185,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                             <h4 className="font-medium text-gray-900 text-sm leading-tight mb-1 truncate">
                               {item.product.name}
                             </h4>
-                            
+
                             {/* Price */}
                             <div className="text-lg font-bold text-green-700 mb-2">
                               DOP ${item.product.price.toFixed(2)}
@@ -165,7 +194,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                             {/* Quantity and Actions Row */}
                             <div className="flex items-center justify-between">
                               {/* Quantity Selector */}
-                              <div className="flex items-center border border-gray-300 rounded-md bg-white">
+                              <div className="flex items-center border border-gray-300 rounded-md bg-white" role="group" aria-label="Selector de cantidad">
                                 <button
                                   onClick={() =>
                                     handleQuantityChange(
@@ -175,12 +204,23 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                                   }
                                   className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                                   aria-label="Reducir cantidad"
+                                  title="Reducir cantidad"
                                 >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M20 12H4"
+                                    />
                                   </svg>
                                 </button>
-                                <div className="w-12 h-8 flex items-center justify-center text-sm font-medium text-gray-900 border-x border-gray-300">
+                                <div className="w-12 h-8 flex items-center justify-center text-sm font-medium text-gray-900 border-x border-gray-300" aria-live="polite">
                                   {item.quantity}
                                 </div>
                                 <button
@@ -192,9 +232,20 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                                   }
                                   className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                                   aria-label="Aumentar cantidad"
+                                  title="Aumentar cantidad"
                                 >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 4v16m8-8H4"
+                                    />
                                   </svg>
                                 </button>
                               </div>
@@ -204,6 +255,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                                 onClick={() => removeFromCart(item.product.id)}
                                 className="text-gray-400 hover:text-red-500 p-1 transition-colors"
                                 aria-label="Eliminar del carrito"
+                                title="Eliminar del carrito"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -234,12 +286,17 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <button
                       onClick={clearCart}
                       className="flex-1 px-4 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm"
+                      aria-label="Vaciar todo el contenido del carrito"
+                      title="Vaciar todo el contenido del carrito"
+                      disabled={cart.items.length === 0}
                     >
                       Vaciar Carrito
                     </button>
-                    <button 
+                    <button
                       onClick={onClose}
                       className="flex-1 px-4 py-3 text-green-700 border border-green-300 rounded-lg hover:bg-green-50 transition-colors font-medium text-sm"
+                      aria-label="Cerrar carrito y continuar comprando"
+                      title="Cerrar carrito y continuar comprando"
                     >
                       Seguir Comprando
                     </button>

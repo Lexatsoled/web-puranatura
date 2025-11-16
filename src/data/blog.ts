@@ -2,7 +2,7 @@ import { BlogPost } from '../types/blog';
 
 export const blogPosts: BlogPost[] = [
   {
-    id: "fitoterapia-beneficios",
+    id: 'fitoterapia-beneficios',
     title: '¿Qué es la fitoterapia y cómo puede ayudarte?',
     summary:
       'La fitoterapia, o medicina herbal, es una de las formas más antiguas de atención médica. Descubre cómo las plantas medicinales pueden tratar diversas afecciones y mejorar tu salud general de manera segura y efectiva.',
@@ -103,7 +103,7 @@ export const blogPosts: BlogPost[] = [
         `,
   },
   {
-    id: "aceites-esenciales-estres",
+    id: 'aceites-esenciales-estres',
     author: 'Pureza Naturalis',
     date: '2024-09-15',
     tags: ['aceites-esenciales', 'estres', 'aromaterapia'],
@@ -128,11 +128,17 @@ export const blogPosts: BlogPost[] = [
         `,
   },
   {
-    id: "probioticos-salud-digestiva",
+    id: 'probioticos-salud-digestiva',
     title: 'Los Beneficios de los Probióticos para tu Salud Digestiva',
     summary:
       'Tu intestino es tu segundo cerebro. Mantener una flora intestinal saludable es vital para tu bienestar. Aprende por qué los probióticos son clave para una buena digestión, un sistema inmune fuerte y mucho más.',
     imageUrl: 'https://picsum.photos/id/431/400/250',
+    author: 'Pureza Naturalis',
+    date: '2024-08-20',
+    tags: ['probioticos', 'salud-digestiva', 'microbiota'],
+    slug: 'probioticos-salud-digestiva',
+    readTime: 7,
+    category: 'Salud Digestiva',
     content: `
             <p>Los probióticos son microorganismos vivos, principalmente bacterias beneficiosas, que al ser consumidos en cantidades adecuadas, confieren un beneficio a la salud del huésped. A menudo se les llama 'bacterias buenas' y son fundamentales para mantener un equilibrio saludable en tu microbiota intestinal.</p>
             <p><strong>¿Por qué son tan importantes?</strong></p>
@@ -146,11 +152,17 @@ export const blogPosts: BlogPost[] = [
         `,
   },
   {
-    id: "adaptogenos-contra-estres",
+    id: 'adaptogenos-contra-estres',
     title: 'Adaptógenos: Tus Aliados Naturales Contra el Estrés',
     summary:
       'Plantas como la Ashwagandha y la Rhodiola son conocidas como adaptógenos. Descubre cómo estas maravillas de la naturaleza ayudan a tu cuerpo a adaptarse al estrés físico y mental, mejorando tu resistencia y energía.',
     imageUrl: 'https://picsum.photos/id/160/400/250',
+    author: 'Pureza Naturalis',
+    date: '2024-07-10',
+    tags: ['adaptogenos', 'estres', 'ashwagandha', 'rhodiola'],
+    slug: 'adaptogenos-contra-estres',
+    readTime: 9,
+    category: 'Bienestar Natural',
     content: `
             <p>Los adaptógenos son una clase única de plantas y hongos que ayudan al cuerpo a resistir y adaptarse a factores estresantes de todo tipo, ya sean físicos, químicos o biológicos. En lugar de tener un efecto específico, trabajan para normalizar las funciones corporales y fortalecer los sistemas comprometidos por el estrés.</p>
             <p><strong>¿Cómo te ayudan?</strong></p>
@@ -166,11 +178,17 @@ export const blogPosts: BlogPost[] = [
         `,
   },
   {
-    id: "magnesio-importancia-salud",
+    id: 'magnesio-importancia-salud',
     title: 'La Importancia del Magnesio: Más Allá de la Relajación',
     summary:
       'El magnesio participa en más de 300 reacciones bioquímicas en el cuerpo. Desde la función muscular hasta la salud ósea y cardiovascular, exploramos por qué este mineral es tan esencial para tu salud diaria.',
     imageUrl: 'https://picsum.photos/id/31/400/250',
+    author: 'Pureza Naturalis',
+    date: '2024-06-15',
+    tags: ['magnesio', 'minerales', 'salud-osea', 'funcion-muscular'],
+    slug: 'magnesio-importancia-salud',
+    readTime: 8,
+    category: 'Nutrición',
     content: `
             <p>El magnesio es un mineral cofactor, lo que significa que es una 'molécula de ayuda' en las reacciones bioquímicas continuas que realizan las enzimas en nuestro cuerpo. A pesar de su importancia, muchas personas no obtienen suficiente magnesio en su dieta.</p>
             <p><strong>Funciones clave del magnesio:</strong></p>

@@ -10,19 +10,20 @@
 ## 🛠️ **CAMBIOS IMPLEMENTADOS**
 
 ### 1. **StorePage.tsx - Control Manual del Scroll**
+
 ```tsx
 // ❌ ELIMINADO: useScrollToTop hook automático
 // ✅ AGREGADO: Control manual condicional
 
 useEffect(() => {
   const savedState = getNavigationState();
-  
+
   if (savedState && savedState.fromProductPage) {
     // RESTAURAR: filtros + scroll position exacta
     setTimeout(() => {
-      window.scrollTo({ 
-        top: savedState.scrollPosition, 
-        behavior: 'smooth' 
+      window.scrollTo({
+        top: savedState.scrollPosition,
+        behavior: 'smooth',
       });
     }, 100);
   } else {
@@ -35,6 +36,7 @@ useEffect(() => {
 ```
 
 ### 2. **ProductCard.tsx - Actualización Pre-Navegación**
+
 ```tsx
 // ✅ NUEVO: Guardar scroll antes de ir a producto
 const handleProductClick = useCallback(() => {
@@ -51,6 +53,7 @@ const handleProductClick = useCallback(() => {
 ```
 
 ### 3. **useNavigationState.ts - Sistema Persistente**
+
 ```tsx
 // ✅ FUNCIONAL: sessionStorage para estado temporal
 // ✅ FUNCIONAL: Marcador fromProductPage
@@ -62,12 +65,14 @@ const handleProductClick = useCallback(() => {
 ## 🎯 **FLUJO PERFECTO LOGRADO**
 
 ### **Escenario A: Navegación Normal** (Inicio → Tienda)
+
 1. Usuario entra a `/tienda`
 2. No hay `savedState.fromProductPage`
 3. ✅ **Scroll reset a top**
 4. Usuario navega normalmente
 
 ### **Escenario B: Volver de Producto** (Producto → Volver)
+
 1. Usuario hace scroll en tienda (ej: 1200px)
 2. Click en producto → `handleProductClick` guarda scroll position
 3. En ProductPage aparece botón "🠐 Volver a la lista"
@@ -79,12 +84,12 @@ const handleProductClick = useCallback(() => {
 
 ## 🔧 **COMPONENTES CLAVE**
 
-| Archivo | Responsabilidad | Estado |
-|---------|----------------|--------|
-| `StorePage.tsx` | Control scroll condicional | ✅ Completado |
-| `ProductCard.tsx` | Guardar scroll pre-navegación | ✅ Completado |
-| `ProductPage.tsx` | Botón "Volver a la lista" | ✅ Completado |
-| `useNavigationState.ts` | Estado persistente | ✅ Completado |
+| Archivo                 | Responsabilidad               | Estado        |
+| ----------------------- | ----------------------------- | ------------- |
+| `StorePage.tsx`         | Control scroll condicional    | ✅ Completado |
+| `ProductCard.tsx`       | Guardar scroll pre-navegación | ✅ Completado |
+| `ProductPage.tsx`       | Botón "Volver a la lista"     | ✅ Completado |
+| `useNavigationState.ts` | Estado persistente            | ✅ Completado |
 
 ---
 

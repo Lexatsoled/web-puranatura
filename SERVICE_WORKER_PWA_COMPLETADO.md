@@ -9,14 +9,16 @@
 ## 📊 RESULTADOS ALCANZADOS
 
 ### Performance Improvements
-| Métrica | Primera Visita | Segunda Visita | Mejora |
-|---------|---------------|----------------|--------|
-| **Tiempo de Carga** | ~2.8s | ~0.3s | **-89% ⚡** |
-| **Recursos Cacheados** | 0 | 18 archivos (942 KB) | **Instant** |
-| **Offline Capability** | ❌ | ✅ Funcional | **100%** |
-| **Bundle Service Worker** | +0 KB | +8 KB (workbox) | Minimal |
+
+| Métrica                   | Primera Visita | Segunda Visita       | Mejora      |
+| ------------------------- | -------------- | -------------------- | ----------- |
+| **Tiempo de Carga**       | ~2.8s          | ~0.3s                | **-89% ⚡** |
+| **Recursos Cacheados**    | 0              | 18 archivos (942 KB) | **Instant** |
+| **Offline Capability**    | ❌             | ✅ Funcional         | **100%**    |
+| **Bundle Service Worker** | +0 KB          | +8 KB (workbox)      | Minimal     |
 
 ### Build Verification
+
 ```bash
 ✓ TypeScript: 0 errors
 ✓ Build time: 14.13s
@@ -37,6 +39,7 @@
 **Ubicación**: `vite.config.ts`
 
 **Configuración clave**:
+
 ```typescript
 VitePWA({
   registerType: 'autoUpdate',
@@ -59,9 +62,9 @@ VitePWA({
           cacheName: 'api-cache',
           expiration: {
             maxEntries: 50,
-            maxAgeSeconds: 5 * 60 // 5 minutos
-          }
-        }
+            maxAgeSeconds: 5 * 60, // 5 minutos
+          },
+        },
       },
       // Cache First para imágenes
       {
@@ -71,9 +74,9 @@ VitePWA({
           cacheName: 'image-cache',
           expiration: {
             maxEntries: 200,
-            maxAgeSeconds: 30 * 24 * 60 * 60 // 30 días
-          }
-        }
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 días
+          },
+        },
       },
       // Cache First para fonts
       {
@@ -82,9 +85,9 @@ VitePWA({
         options: {
           cacheName: 'font-cache',
           expiration: {
-            maxAgeSeconds: 365 * 24 * 60 * 60 // 1 año
-          }
-        }
+            maxAgeSeconds: 365 * 24 * 60 * 60, // 1 año
+          },
+        },
       },
       // Stale While Revalidate para JS/CSS
       {
@@ -93,20 +96,21 @@ VitePWA({
         options: {
           cacheName: 'static-resources',
           expiration: {
-            maxAgeSeconds: 7 * 24 * 60 * 60 // 7 días
-          }
-        }
-      }
+            maxAgeSeconds: 7 * 24 * 60 * 60, // 7 días
+          },
+        },
+      },
     ],
     navigateFallback: '/offline.html',
     cleanupOutdatedCaches: true,
     skipWaiting: true,
-    clientsClaim: true
-  }
-})
+    clientsClaim: true,
+  },
+});
 ```
 
 **Estrategias de Cache**:
+
 - ✅ **Network First**: APIs (datos siempre frescos, fallback a cache)
 - ✅ **Cache First**: Imágenes, fonts (carga instantánea)
 - ✅ **Stale While Revalidate**: JS/CSS (balance entre velocidad y actualización)
@@ -116,6 +120,7 @@ VitePWA({
 **Ubicación**: `src/components/PWAPrompts.tsx`
 
 **Características**:
+
 - ✅ Detecta automáticamente actualizaciones del SW
 - ✅ Toast notification elegante con animación
 - ✅ Auto-dismiss después de 30 segundos
@@ -123,21 +128,25 @@ VitePWA({
 - ✅ Botones "Actualizar ahora" / "Más tarde"
 
 **Flujo de actualización**:
+
 ```typescript
 useRegisterSW({
   onRegisteredSW(swUrl, registration) {
     // Check actualizaciones cada hora
-    setInterval(() => {
-      registration.update();
-    }, 60 * 60 * 1000);
+    setInterval(
+      () => {
+        registration.update();
+      },
+      60 * 60 * 1000
+    );
   },
   onNeedRefresh() {
     setShowUpdatePrompt(true); // Mostrar toast
   },
   onOfflineReady() {
     console.log('📱 App lista offline');
-  }
-})
+  },
+});
 ```
 
 ### 3. PWAInstallPrompt Component
@@ -145,6 +154,7 @@ useRegisterSW({
 **Ubicación**: `src/components/PWAPrompts.tsx`
 
 **Características**:
+
 - ✅ Detecta evento `beforeinstallprompt`
 - ✅ Banner discreto en top center
 - ✅ Remember dismiss por 7 días
@@ -152,6 +162,7 @@ useRegisterSW({
 - ✅ Tracking de instalación (aceptado/rechazado)
 
 **Ejemplo visual**:
+
 ```
 ┌─────────────────────────────────────┐
 │ 📱 Instala Pureza Naturalis         │
@@ -165,6 +176,7 @@ useRegisterSW({
 **Ubicación**: `public/offline.html`
 
 **Características**:
+
 - ✅ Página standalone (no depende de React)
 - ✅ Diseño responsive y atractivo
 - ✅ Auto-retry cada 5 segundos
@@ -172,6 +184,7 @@ useRegisterSW({
 - ✅ Tips útiles mientras espera
 
 **Contenido**:
+
 - Icon animado (pulse effect)
 - Mensaje claro sobre estado offline
 - Botón "Reintentar conexión"
@@ -183,6 +196,7 @@ useRegisterSW({
 ## 📈 ESTRATEGIAS DE CACHE
 
 ### Cache First (Imágenes, Fonts)
+
 ```
 1. User solicita imagen
 2. SW busca en cache
@@ -191,11 +205,13 @@ useRegisterSW({
 ```
 
 **Ventajas**:
+
 - ⚡ Carga instantánea de assets estáticos
 - 📉 Reducción masiva de requests de red
 - 💾 Funciona 100% offline
 
 ### Network First (APIs)
+
 ```
 1. User solicita datos API
 2. SW intenta fetch de red (timeout 10s)
@@ -204,11 +220,13 @@ useRegisterSW({
 ```
 
 **Ventajas**:
+
 - 🔄 Siempre intenta obtener datos frescos
 - 📱 Funciona offline con datos cached
 - ⏱️ Timeout rápido para UX fluida
 
 ### Stale While Revalidate (JS/CSS)
+
 ```
 1. User solicita JS/CSS
 2. SW return cache inmediatamente
@@ -217,6 +235,7 @@ useRegisterSW({
 ```
 
 **Ventajas**:
+
 - ⚡ Carga instantánea percibida
 - 🔄 Actualización silenciosa en background
 - 🎯 Balance perfecto velocidad/frescura
@@ -226,6 +245,7 @@ useRegisterSW({
 ## 🔧 DEPENDENCIAS
 
 ### Instaladas
+
 ```json
 {
   "vite-plugin-pwa": "^1.0.3",
@@ -234,12 +254,14 @@ useRegisterSW({
 ```
 
 **Motivo de elección**:
+
 - 📦 vite-plugin-pwa: Integración perfecta con Vite
 - 🛠️ workbox: Biblioteca de Google para SW (battle-tested)
 - 🎯 Configuración declarativa vs manual SW
 - ✅ TypeScript support completo
 
 **Tamaño final**:
+
 - Service Worker: ~8 KB (workbox runtime)
 - Overhead: Despreciable vs beneficios
 
@@ -248,8 +270,9 @@ useRegisterSW({
 ## 💡 USO Y COMPORTAMIENTO
 
 ### Primera Visita
+
 ```
-1. User visita https://purezanaturalis.com
+1. User visita https://web.purezanaturalis.com
 2. Service Worker se registra automáticamente
 3. Precache de 18 archivos críticos (942 KB)
 4. PWAInstallPrompt aparece (si compatible)
@@ -257,6 +280,7 @@ useRegisterSW({
 ```
 
 ### Segunda Visita
+
 ```
 1. Service Worker intercepta requests
 2. Assets estáticos: Cache instantáneo (0ms)
@@ -266,6 +290,7 @@ useRegisterSW({
 ```
 
 ### Actualización Disponible
+
 ```
 1. Nueva versión deployed
 2. Service Worker detecta cambio
@@ -275,6 +300,7 @@ useRegisterSW({
 ```
 
 ### Modo Offline
+
 ```
 1. User pierde conexión
 2. Service Worker sirve desde cache
@@ -290,6 +316,7 @@ useRegisterSW({
 ### Chrome DevTools - Application Tab
 
 **Service Worker**:
+
 ```
 ✅ Status: activated and running
 ✅ Update on reload: disabled
@@ -298,6 +325,7 @@ useRegisterSW({
 ```
 
 **Cache Storage**:
+
 ```
 ✅ workbox-precache: 18 entries
 ✅ image-cache: ~50 images
@@ -307,6 +335,7 @@ useRegisterSW({
 ```
 
 **Manifest**:
+
 ```
 ✅ Name: Pureza Naturalis - Terapias Naturales
 ✅ Short name: Pureza Naturalis
@@ -317,18 +346,19 @@ useRegisterSW({
 ```
 
 ### Lighthouse PWA Audit
+
 ```
 ✅ Fast and reliable (100/100)
   ✓ Registers a service worker
   ✓ Redirects HTTP to HTTPS
   ✓ Responds with 200 when offline
   ✓ Load fast enough on mobile networks
-  
+
 ✅ Installable (100/100)
   ✓ Web app manifest meets requirements
   ✓ Provides valid apple-touch-icon
   ✓ Configures viewport for mobile
-  
+
 ✅ PWA Optimized (100/100)
   ✓ Themed omnibox
   ✓ Sets content width
@@ -338,24 +368,28 @@ useRegisterSW({
 ### Manual Testing
 
 ✅ **Online → Offline**:
+
 - Desconectar WiFi
 - Navegar entre páginas: ✓ Funciona
 - Ver imágenes cacheadas: ✓ Cargan
 - Intentar API calls: ✓ Fallback a cache
 
 ✅ **Offline → Online**:
+
 - Reconectar WiFi
 - Auto-detección: ✓ Inmediata
 - Sync pendiente: ✓ Se envía
 - Cache refresh: ✓ Background update
 
 ✅ **Instalación PWA**:
+
 - Chrome Desktop: ✓ Prompt aparece
 - Chrome Android: ✓ Installable
 - Safari iOS: ✓ Add to Home Screen
 - Edge: ✓ Install app button
 
 ✅ **Actualización**:
+
 - Deploy nueva versión
 - Esperar check (< 1 hora): ✓
 - Toast notification: ✓ Aparece
@@ -366,6 +400,7 @@ useRegisterSW({
 ## 🚀 IMPACTO EN USUARIOS
 
 ### User Experience
+
 - ⚡ **Segunda visita**: 89% más rápida (2.8s → 0.3s)
 - 📱 **Offline browsing**: 100% funcional
 - 🏠 **Install to home**: Acceso rápido como app nativa
@@ -373,6 +408,7 @@ useRegisterSW({
 - 📊 **Reduced data usage**: Cache local vs downloads repetidos
 
 ### Business Impact
+
 - 📈 **Engagement**: +40% session duration (estimado)
 - 💰 **Conversion**: +15% checkout completion (estimado)
 - 🌍 **Reach**: Funciona en áreas con conexión pobre
@@ -384,12 +420,14 @@ useRegisterSW({
 ## 📚 REFERENCIAS Y DOCUMENTACIÓN
 
 ### Official Documentation
+
 - [Vite PWA Plugin](https://vite-pwa-org.netlify.app/)
 - [Workbox](https://developers.google.com/web/tools/workbox)
 - [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 - [Web App Manifest](https://web.dev/add-manifest/)
 
 ### Best Practices
+
 - [PWA Checklist](https://web.dev/pwa-checklist/)
 - [Offline Cookbook](https://web.dev/offline-cookbook/)
 - [Caching Strategies](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook)
@@ -399,11 +437,13 @@ useRegisterSW({
 ## 🐛 PROBLEMAS CONOCIDOS Y SOLUCIONES
 
 ### Issue #1: Service Worker no actualiza
+
 **Síntoma**: Nueva versión deployed pero SW no actualiza
 
 **Causa**: `skipWaiting: false` o SW en estado "waiting"
 
 **Solución**:
+
 ```typescript
 workbox: {
   skipWaiting: true,    // ✅ Force activación inmediata
@@ -412,11 +452,13 @@ workbox: {
 ```
 
 ### Issue #2: Cache creciendo indefinidamente
+
 **Síntoma**: Storage usage incrementa sin límite
 
 **Causa**: No hay expiration policies
 
 **Solución**:
+
 ```typescript
 options: {
   cacheName: 'image-cache',
@@ -428,11 +470,13 @@ options: {
 ```
 
 ### Issue #3: Offline page no funciona
+
 **Síntoma**: Error 404 al perder conexión
 
 **Causa**: offline.html no incluido en precache
 
 **Solución**:
+
 ```typescript
 includeAssets: ['offline.html'], // ✅ Include en precache
 navigateFallback: '/offline.html' // ✅ Fallback configurado
@@ -443,6 +487,7 @@ navigateFallback: '/offline.html' // ✅ Fallback configurado
 ## 📝 CHANGELOG
 
 ### v1.0.0 - 8 Octubre 2025
+
 - ✅ vite-plugin-pwa configurado
 - ✅ Service Worker con workbox
 - ✅ Manifest.json optimizado
@@ -459,18 +504,21 @@ navigateFallback: '/offline.html' // ✅ Fallback configurado
 ## 🎯 IMPACT SUMMARY
 
 ### Developer Experience
+
 - ✅ **Setup simple**: Plugin configuration vs manual SW
 - ✅ **Auto-generation**: SW generado en cada build
 - ✅ **Type-safe**: TypeScript support completo
 - ✅ **Dev mode aware**: PWA disabled en dev para evitar confusión
 
 ### User Experience
+
 - ⚡ **Instant loads**: Segunda visita 89% más rápida
 - 📱 **Works offline**: Funcionalidad completa sin conexión
 - 🔄 **Auto-updates**: Sin intervención manual
 - 🏠 **Installable**: Como app nativa en dispositivos
 
 ### Business Impact
+
 - 📈 **SEO boost**: Google favorece PWAs
 - 💰 **Conversion**: Menos abandonos por lentitud
 - 🌍 **Reach**: Usuarios con conexión pobre pueden usar la app
@@ -517,6 +565,6 @@ dist/manifest.webmanifest            ← Generated manifest
 
 ---
 
-*Documentación generada el 8 de Octubre de 2025*  
-*Tiempo de implementación: ~1.5 horas*  
-*Performance gain: 89% faster second load* ⚡
+_Documentación generada el 8 de Octubre de 2025_  
+_Tiempo de implementación: ~1.5 horas_  
+_Performance gain: 89% faster second load_ ⚡

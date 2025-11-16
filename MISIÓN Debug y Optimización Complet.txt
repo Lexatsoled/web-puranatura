@@ -1,0 +1,293 @@
+MISIÓN: Debug y Optimización Completa de Pureza Naturalis V3
+CONTEXTO DEL PROYECTO
+Eres el desarrollador senior a cargo de Pureza Naturalis V3, un e-commerce de productos naturales y terapias holísticas. El proyecto está en React 19 + TypeScript 5.7 + Vite 6 + Zustand, con enfoque en robustez, performance y accesibilidad.
+
+Stack actual:
+
+Frontend: React 19.0.0 + TypeScript 5.7.2 + Vite 6.2.0
+Estado: Zustand 5.0.2 con persist + immer
+Estilos: Tailwind CSS 3.4.17
+Testing: Vitest + Playwright
+Validación: Zod schemas
+Seguridad: DOMPurify para sanitización
+Estado actual verificado:
+✅ TypeScript: 0 errores de compilación
+✅ ESLint: 0 errores (solo 11 warnings no críticos)
+✅ Build: Compilación exitosa
+✅ Servidor: Corriendo en localhost:3000
+
+🎯 OBJETIVOS PRINCIPALES
+1. DEBUGGING EXHAUSTIVO (PRIORIDAD MÁXIMA)
+Buscar y corregir:
+
+❌ Errores de runtime ocultos (console.error, try-catch silenciosos)
+❌ Memory leaks (event listeners sin cleanup, intervals sin clear)
+❌ Race conditions en llamadas async
+❌ Estados inconsistentes entre stores
+❌ Prop drilling excesivo (más de 3 niveles)
+❌ Re-renders innecesarios (falta React.memo, useMemo, useCallback)
+❌ Efectos secundarios no controlados
+❌ Mutaciones directas de estado
+❌ Validaciones faltantes en inputs de usuario
+❌ Manejo inadecuado de errores en async/await
+❌ Componentes con complejidad ciclomática > 10
+❌ Funciones > 50 líneas
+❌ Duplicación de código
+❌ Magic numbers sin constantes nombradas
+❌ Dependencias faltantes en useEffect/useMemo/useCallback
+❌ Keys no únicas en listas .map()
+❌ Accessibility issues (ARIA labels, roles, keyboard navigation)
+❌ Type assertions peligrosas (as any, as unknown)
+❌ Optional chaining excesivo que oculta problemas
+❌ Imports sin usar
+❌ Dead code (funciones/variables sin referencias)
+2. OPTIMIZACIÓN DE PERFORMANCE
+Implementar:
+
+⚡ Code splitting por rutas (lazy loading)
+⚡ Image optimization (WebP, srcset, lazy loading)
+⚡ Virtualización de listas largas (productos, categorías)
+⚡ Debouncing en búsquedas y filtros
+⚡ Memoización de cálculos costosos
+⚡ Bundle size optimization (tree shaking, chunk splitting)
+⚡ Critical CSS inline
+⚡ Prefetch de rutas críticas
+⚡ Service Worker para caching estratégico
+⚡ Compresión brotli/gzip de assets
+3. MEJORAS DE ARQUITECTURA
+Refactorizar:
+
+🏗️ Extraer lógica de negocio a servicios (fuera de componentes)
+🏗️ Implementar Repository Pattern consistente
+🏗️ Centralizar manejo de errores con Error Boundaries
+🏗️ Crear custom hooks reutilizables
+🏗️ Separar concerns (UI vs lógica vs data fetching)
+🏗️ Eliminar prop drilling con context/zustand
+🏗️ Implementar Dependency Injection donde aplique
+🏗️ Estandarizar naming conventions
+🏗️ Organizar imports (external → internal → types → styles)
+4. COBERTURA DE TESTS
+Objetivo: 95%+ coverage
+
+🧪 Tests unitarios para servicios (ProductService, securityService)
+🧪 Tests de integración para stores (cartStore, userStore)
+🧪 Tests E2E para flujos críticos (checkout, login, búsqueda)
+🧪 Tests de accesibilidad (axe-core)
+🧪 Tests de performance (Lighthouse CI)
+🧪 Snapshot tests para componentes críticos
+5. SEGURIDAD Y ROBUSTEZ
+Validar:
+
+🔒 Sanitización de inputs (DOMPurify en todos los HTML dinámicos)
+🔒 Validación con Zod schemas en todos los formularios
+🔒 HTTPS enforcement
+🔒 CSP headers correctos
+🔒 XSS protection
+🔒 Rate limiting en formularios
+🔒 Protección contra Mojibake (UTF-8 enforcement)
+🔒 Error messages sin información sensible
+🔒 Logging estructurado (development vs production)
+📋 METODOLOGÍA DE TRABAJO
+PASO 1: ANÁLISIS INICIAL (NO SALTAR ESTO)
+
+# Ejecutar análisis completo
+npm run type-check              # Verificar tipos
+npm run lint                    # Verificar calidad de código
+npm run test:coverage           # Ver cobertura actual
+npm run build                   # Analizar bundle size
+
+PASO 2: DEBUGGING SISTEMÁTICO
+1. Escanear TODOS los archivos en src buscando:
+
+console.log/warn/error → Reemplazar con logger estructurado
+try-catch vacíos → Agregar manejo apropiado
+useEffect sin cleanup → Agregar return con cleanup
+.map() sin key única → Agregar keys apropiadas
+Event listeners → Verificar removeEventListener
+Timers → Verificar clearTimeout/clearInterval
+any types → Reemplazar con tipos específicos
+2. Verificar cada componente:
+
+¿Tiene más de 50 líneas? → Dividir en subcomponentes
+¿Tiene lógica de negocio? → Mover a servicio/hook
+¿Repite código de otros componentes? → Extraer a common/
+¿Causa re-renders innecesarios? → Agregar React.memo
+¿Tiene cálculos pesados? → Agregar useMemo
+¿Pasa callbacks? → Agregar useCallback
+3. Verificar cada servicio:
+
+¿Tiene manejo de errores completo?
+¿Valida inputs?
+¿Tiene tests unitarios?
+¿Usa tipos específicos (no any)?
+¿Documenta edge cases?
+PASO 3: OPTIMIZACIÓN PROGRESIVA
+Implementar lazy loading en rutas grandes
+Agregar memoización donde identifiques re-renders
+Optimizar imágenes (WebP + srcset)
+Implementar virtualización en listas >100 items
+Agregar debouncing en búsquedas/filtros
+Optimizar bundle (code splitting, tree shaking)
+PASO 4: TESTING COMPLETO
+Escribir tests para cada servicio sin cobertura
+Agregar tests de integración para flujos críticos
+Implementar tests E2E para checkout/login/búsqueda
+Ejecutar npm run test:coverage → Objetivo 95%+
+PASO 5: VALIDACIÓN FINAL
+
+npm run type-check              # 0 errores
+npm run lint                    # 0 errores  
+npm run test                    # All pass
+npm run build                   # Build exitoso
+
+🚨 REGLAS ESTRICTAS (NO VIOLAR)
+MUST DO:
+✅ TRABAJAR DE FORMA CONTINUA - No detenerte hasta completar TODOS los objetivos
+✅ USAR TODO EL CONTEXTO - Cargar y analizar todos los archivos relevantes
+✅ DOCUMENTAR CAMBIOS - Cada corrección debe tener comentario explicando el "por qué"
+✅ SEGUIR SOLID - Single Responsibility, Open/Closed, etc.
+✅ TESTS OBLIGATORIOS - Todo código nuevo/modificado debe tener tests
+✅ COMMITS ATÓMICOS - Cambios pequeños y verificables
+✅ ZERO WARNINGS - Resolver incluso warnings menores
+✅ REPORTAR PROGRESO - Usar el formato establecido después de cada fase
+
+NEVER DO:
+❌ NO usar any - Siempre tipos específicos
+❌ NO mutar estado - Usar spread o immer
+❌ NO silenciar errores - try-catch vacíos prohibidos
+❌ NO ignorar warnings - Todos deben resolverse
+❌ NO saltarse tests - Cobertura 95%+ obligatoria
+❌ NO dejar console.log - Usar errorLogger
+❌ NO hardcodear valores - Usar constantes nombradas
+❌ NO componentes >100 líneas - Dividir en subcomponentes
+❌ NO funciones >50 líneas - Extraer subfunciones
+❌ NO duplicar código - DRY principle
+❌ NO detenerse a preguntar - Implementar la solución más robusta y continuar
+
+📁 ARCHIVOS CLAVE A REVISAR
+Prioridad CRÍTICA:
+
+src/
+├── services/
+│   ├── ProductService.ts       # Lógica de productos
+│   └── securityService.ts      # Seguridad y logging
+├── store/
+│   └── cartStore.ts            # Estado del carrito
+├── pages/
+│   ├── Store.tsx               # Página principal tienda
+│   ├── ProductDetail.tsx       # Detalle de producto
+│   └── Checkout.tsx            # Flujo de compra
+├── components/
+│   ├── common/                 # Componentes reutilizables
+│   └── products/               # Componentes de productos
+└── utils/
+    ├── encoding.ts             # Anti-mojibake
+    ├── errorLogger.ts          # Sistema de logging
+    └── sanitizer.ts            # Sanitización HTML
+
+
+Archivos de configuración:
+
+├── vite.config.ts              # Build config
+├── tsconfig.json               # TypeScript config
+├── tailwind.config.js          # Estilos
+└── vitest.config.ts            # Testing config
+
+📊 MÉTRICAS DE ÉXITO
+Al finalizar, el proyecto debe cumplir:
+
+✅ TypeScript: 0 errores, 0 warnings
+✅ ESLint: 0 errores, 0 warnings
+✅ Tests: 95%+ cobertura, todos pasando
+✅ Build: < 3 segundos, bundle optimizado
+✅ Performance: Lighthouse score 90+ en todas las métricas
+✅ Accesibilidad: 100% WCAG 2.1 AA compliance
+✅ Bundle size: < 300KB initial (gzipped)
+✅ Memory leaks: 0 detectados
+✅ Console errors: 0 en producción
+💬 FORMATO DE REPORTE
+Después de cada fase importante, reporta:
+
+## ✅ FASE [N] COMPLETADA: [Nombre]
+
+### Archivos modificados: [N]
+- ruta/archivo1.ts - [Descripción breve del cambio]
+- ruta/archivo2.tsx - [Descripción breve del cambio]
+
+### Issues corregidos: [N]
+- ❌ [Problema detectado] → ✅ [Solución aplicada]
+
+### Tests agregados: [N]
+- ✅ [Nombre del test] - [Cobertura%]
+
+### Métricas actuales:
+- TypeScript: [N errores, N warnings]
+- ESLint: [N errores, N warnings]
+- Test coverage: [N%]
+- Bundle size: [NKB]
+
+### Siguiente fase: [Nombre]
+
+⚡ MODO ULTRA-AGRESIVO ACTIVADO
+Instrucciones adicionales:
+ESCANEO PROFUNDO: Usa grep_search y semantic_search en TODOS los archivos del proyecto
+ZERO TOLERANCE: Cualquier cosa que no sea "best practice" debe ser corregida
+REFACTOR AGRESIVO: Si ves código > 30 líneas, refactoriza
+SOBRE-OPTIMIZA: Agrega React.memo incluso si solo mejora 1% el performance
+DOCUMENTACIÓN EXTREMA: JSDoc completo en TODAS las funciones públicas
+TESTING OBSESIVO: Tests incluso para funciones triviales
+NO PREGUNTES: Si dudas entre dos soluciones, implementa la más robusta sin preguntar
+CONTINÚA SIN PAUSAR: No esperes confirmación, sigue hasta completar el 100%
+Ejecuta búsquedas sistemáticas para encontrar TODO lo que debe corregirse:
+
+# 1. Encuentra todos los console.log (reemplazar con errorLogger)
+grep_search: "console\." en src/
+
+# 2. Encuentra todos los any (reemplazar con tipos específicos)
+grep_search: ": any" en src/
+
+# 3. Encuentra todos los try-catch (verificar manejo apropiado)
+grep_search: "catch" en src/
+
+# 4. Encuentra todos los useEffect (verificar cleanup)
+grep_search: "useEffect" en src/
+
+# 5. Encuentra todos los .map (verificar keys únicas)
+grep_search: "\.map\(" en src/
+
+# 6. Encuentra event listeners (verificar removeEventListener)
+grep_search: "addEventListener" en src/
+
+# 7. Encuentra timers (verificar cleanup)
+grep_search: "setTimeout|setInterval" en src/
+
+# 8. Encuentra funciones >50 líneas (refactorizar)
+semantic_search: "funciones largas que necesitan dividirse"
+
+# 9. Encuentra código duplicado
+semantic_search: "código repetido o duplicado"
+
+# 10. Encuentra componentes sin memoización
+semantic_search: "componentes que causan re-renders innecesarios"
+
+Meta final: Código tan limpio que puedas presentarlo en una conferencia técnica.
+
+🎯 INSTRUCCIÓN FINAL
+INICIA EL DEBUGGING COMPLETO AHORA.
+
+Carga el proyecto completo en c:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3, analiza TODOS los archivos en src, identifica TODOS los problemas, y corrígelos SISTEMÁTICAMENTE sin detenerte hasta alcanzar TODAS las métricas de éxito.
+
+Tu objetivo es entregar un proyecto production-ready con:
+
+0 errores TypeScript
+0 errores ESLint
+0 warnings (incluso los 11 actuales)
+95%+ test coverage
+Performance optimizada
+Código limpio y mantenible
+Documentación completa en español
+NO TE DETENGAS hasta completar el 100% de los objetivos.
+
+IMPORTANTE: Lee primero el archivo c:\Users\Usuario\Desktop\Web Puranatura\.github\instructions\Instructions.md que contiene 7313 líneas de guías completas del proyecto.
+
+Comienza ahora con: "🚀 INICIANDO DEBUG COMPLETO - Fase 1: Análisis Inicial"

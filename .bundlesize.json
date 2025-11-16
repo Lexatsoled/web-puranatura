@@ -1,0 +1,8 @@
+{
+  "files": [
+    {
+      "path": "dist/assets/index-*.js",
+      "maxSize": "350 kB"
+    }
+  ]
+}

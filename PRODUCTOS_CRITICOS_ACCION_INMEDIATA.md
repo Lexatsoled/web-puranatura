@@ -1,4 +1,5 @@
 # PRODUCTOS CRÍTICOS - ACCIÓN INMEDIATA REQUERIDA
+
 ## Puranatura E-commerce - Alertas de Seguridad
 
 **⚠️ DOCUMENTO DE ALTA PRIORIDAD ⚠️**
@@ -8,18 +9,20 @@
 ## 🚨 PRODUCTOS POSIBLEMENTE PELIGROSOS
 
 ### **1. Yohimbe Max 2000mg**
+
 - **ID Producto:** `pr-yohimbe-max`
 - **Riesgo:** POSIBLEMENTE PELIGROSO según WebMD
 - **Problemas Identificados:**
   - Vinculado a ataques cardíacos y arritmias irregulares
   - Efectos secundarios severos reportados
   - Múltiples contraindicaciones médicas
-- **Acción Requerida:** 
+- **Acción Requerida:**
   - ✅ CORREGIDO: Advertencias críticas aplicadas
   - Considerar supervisión médica obligatoria para compra
   - Revisar políticas de venta
 
 ### **2. Cola de Caballo 800mg**
+
 - **ID Producto:** `pr-horsetail`
 - **Riesgo:** POSIBLEMENTE INSEGURO según WebMD
 - **Problemas Identificados:**
@@ -35,6 +38,7 @@
 ## ⚠️ PRODUCTOS DE ALTO RIESGO
 
 ### **3. Vitamina D3 10,000 UI**
+
 - **ID Producto:** `pr-vitamin-d3-10000`
 - **Riesgo:** DOSIS EXCESIVA PELIGROSA
 - **Problemas Identificados:**
@@ -46,6 +50,7 @@
   - **URGENTE:** Considerar retirar o requerir prescripción médica
 
 ### **4. Cohosh Negro 540mg**
+
 - **ID Producto:** `pr-black-cohosh`
 - **Riesgo:** RIESGO DE DAÑO HEPÁTICO
 - **Problemas Identificados:**
@@ -57,6 +62,7 @@
   - Requiere advertencias prominentes en UI
 
 ### **5. Ajo Inodoro 500mg**
+
 - **ID Producto:** `pr-iodine`
 - **Riesgo:** RIESGO CRÍTICO DE SANGRADO
 - **Problemas Identificados:**
@@ -72,6 +78,7 @@
 ## 🔍 PRODUCTOS CON EVIDENCIA INSUFICIENTE
 
 ### **6. Chanca Piedra 900mg**
+
 - **ID Producto:** `pr-chanca-piedra`
 - **Problema:** SIN EVIDENCIA CIENTÍFICA VERIFICADA
 - **Status WebMD:** "No disponible información científica verificada para humanos"
@@ -80,6 +87,7 @@
   - Revisar claims de marketing para evitar afirmaciones médicas
 
 ### **7. Pau d'Arco 1000mg**
+
 - **ID Producto:** `pr-pau-darco`
 - **Problema:** EVIDENCIA LIMITADA A ESTUDIOS IN VITRO
 - **Status WebMD:** Sin estudios clínicos robustos en humanos
@@ -92,6 +100,7 @@
 ## ✅ ACCIONES COMPLETADAS
 
 ### **Correcciones Inmediatas Aplicadas:**
+
 1. **Descripciones actualizadas** con advertencias científicas precisas
 2. **Contraindicaciones específicas** añadidas a productos de riesgo
 3. **Interacciones medicamentosas** documentadas según WebMD
@@ -99,6 +108,7 @@
 5. **Estados de evidencia** clarificados (SÓLIDA, LIMITADA, INSUFICIENTE)
 
 ### **Productos Validados Positivamente:**
+
 - ✅ **Inositol:** EVIDENCIA CIENTÍFICA SÓLIDA para PCOS
 - ✅ **Ashwagandha:** EVIDENCIA ROBUSTA para estrés (con advertencias hepáticas)
 - ✅ **Cúrcuma:** EVIDENCIA ANTIINFLAMATORIA SÓLIDA
@@ -108,18 +118,21 @@
 ## 🎯 PRÓXIMOS PASOS RECOMENDADOS
 
 ### **Inmediato (24-48 horas):**
+
 1. **Revisar interfaz de usuario** para destacar advertencias críticas
 2. **Actualizar marketing copy** eliminando claims no respaldados
 3. **Briefing al equipo** sobre nuevas advertencias de seguridad
 4. **Backup del archivo** de productos con cambios aplicados
 
 ### **Corto Plazo (1-2 semanas):**
+
 1. **Consulta legal** sobre productos de alto riesgo
 2. **Políticas de venta** para productos que requieren supervisión médica
 3. **Sistema de advertencias** prominentes en checkout
 4. **Capacitación del servicio al cliente** en nuevas advertencias
 
 ### **Medio Plazo (1 mes):**
+
 1. **Auditoría completa** de todo el marketing material
 2. **Partnerships médicos** para validación adicional
 3. **Sistema de monitoreo** de nuevas evidencias científicas
@@ -130,12 +143,14 @@
 ## 📞 CONTACTOS DE EMERGENCIA
 
 ### **Si se reportan efectos adversos:**
+
 1. **Documentar inmediatamente** el caso
 2. **Contactar profesional médico** si es severo
 3. **Reportar a autoridades** según regulaciones locales
 4. **Revisar producto específico** para posibles recalls
 
 ### **Monitoreo Continuo:**
+
 - **WebMD Safety Alerts:** Suscripción a actualizaciones
 - **FDA Communications:** Monitoreo de nuevas advertencias
 - **Examine.com Updates:** Revisión trimestral de evidencias
@@ -143,6 +158,7 @@
 ---
 
 **⚠️ ESTE DOCUMENTO DEBE SER REVISADO INMEDIATAMENTE POR:**
+
 - Dirección General
 - Departamento Legal
 - Responsable de Marketing

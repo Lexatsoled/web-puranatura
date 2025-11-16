@@ -13,14 +13,14 @@ interface VirtualProductGridProps {
 
 /**
  * VirtualProductGrid - Grid virtualizado para renderizar grandes listas de productos
- * 
+ *
  * Características:
  * - Solo renderiza productos visibles en viewport
  * - Scroll suave y performante
  * - Responsive: ajusta columnas según ancho de pantalla
  * - Memory efficient: -70% uso de memoria vs grid tradicional
  * - Render time: -90% vs grid tradicional (50ms vs 500ms)
- * 
+ *
  * Ideal para listas de 50+ productos
  */
 export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
@@ -46,34 +46,45 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
 
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
-    
+
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
   // Calcular columnas dinámicamente según ancho
   const getColumnCount = (): number => {
     if (itemsPerRow) return itemsPerRow;
-    
+
     if (containerWidth >= 1280) return 4; // xl
     if (containerWidth >= 1024) return 3; // lg
-    if (containerWidth >= 640) return 2;  // sm
+    if (containerWidth >= 640) return 2; // sm
     return 1; // mobile
   };
 
   const columnCount = getColumnCount();
   const rowCount = Math.ceil(products.length / columnCount);
-  const columnWidth = (containerWidth - gapSize * (columnCount + 1)) / columnCount;
+  const columnWidth =
+    (containerWidth - gapSize * (columnCount + 1)) / columnCount;
 
   // Celda del grid
-  const Cell = ({ columnIndex, rowIndex, style, ariaAttributes }: any) => {
+  const Cell = ({
+    columnIndex,
+    rowIndex,
+    style,
+    ariaAttributes,
+  }: {
+    columnIndex: number;
+    rowIndex: number;
+    style: React.CSSProperties;
+    ariaAttributes?: React.HTMLAttributes<HTMLDivElement>;
+  }) => {
     const index = rowIndex * columnCount + columnIndex;
-    
+
     if (index >= products.length) {
       return null;
     }
 
     const product = products[index];
-    
+
     // Calcular posición con padding
     const cellStyle = {
       ...style,
@@ -115,7 +126,7 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
       ) : (
         <Grid
           cellComponent={Cell}
-          cellProps={{}}
+          cellProps={{} as never}
           columnCount={columnCount}
           columnWidth={columnWidth + gapSize}
           rowCount={rowCount}
@@ -125,19 +136,31 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
           overscanCount={2}
         />
       )}
-      
+
       {/* Información de rendimiento (solo en dev) */}
       {process.env.NODE_ENV === 'development' && (
         <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm">
-          <p className="font-semibold text-blue-800">Virtual Scrolling Stats:</p>
+          <p className="font-semibold text-blue-800">
+            Virtual Scrolling Stats:
+          </p>
           <p className="text-blue-700">
-            Total productos: {products.length} | 
-            Columnas: {columnCount} | 
-            Filas: {rowCount} | 
-            Renderizados simultáneamente: ~{Math.min(Math.ceil(containerHeight / (cardHeight + gapSize)) * columnCount, products.length)}
+            Total productos: {products.length} | Columnas: {columnCount} |
+            Filas: {rowCount} | Renderizados simultáneamente: ~
+            {Math.min(
+              Math.ceil(containerHeight / (cardHeight + gapSize)) * columnCount,
+              products.length
+            )}
           </p>
           <p className="text-blue-600 text-xs mt-1">
-            ⚡ Mejora de rendimiento: {Math.round((1 - (Math.ceil(containerHeight / (cardHeight + gapSize)) * columnCount) / products.length) * 100)}% menos componentes en DOM
+            ⚡ Mejora de rendimiento:{' '}
+            {Math.round(
+              (1 -
+                (Math.ceil(containerHeight / (cardHeight + gapSize)) *
+                  columnCount) /
+                  products.length) *
+                100
+            )}
+            % menos componentes en DOM
           </p>
         </div>
       )}

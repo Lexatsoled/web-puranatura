@@ -12,8 +12,10 @@ import {
   Bar,
 } from 'recharts';
 
+type DataPoint = Record<string, string | number | Date>;
+
 interface AnalyticsChartProps {
-  data: any[];
+  data: DataPoint[];
   type: 'line' | 'bar';
   xKey: string;
   yKey: string;
@@ -55,10 +57,7 @@ export const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
               fill="#8884d8"
             />
           ) : (
-            <Bar
-              dataKey={yKey}
-              fill="#8884d8"
-            />
+            <Bar dataKey={yKey} fill="#8884d8" />
           )}
         </ChartComponent>
       </ResponsiveContainer>
@@ -67,9 +66,9 @@ export const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
 };
 
 interface AnalyticsDashboardProps {
-  pageViews: any[];
-  productViews: any[];
-  conversions: any[];
+  pageViews: DataPoint[];
+  productViews: DataPoint[];
+  conversions: DataPoint[];
 }
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({

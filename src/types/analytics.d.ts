@@ -1,4 +1,4 @@
-export type EventCategory = 
+export type EventCategory =
   | 'page_view'
   | 'product'
   | 'cart'
@@ -13,23 +13,23 @@ export interface AnalyticsEvent {
   action: string;
   label?: string;
   value?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Tipos para Google Analytics
 interface Window {
-  dataLayer: any[];
-  gtag: (...args: any[]) => void;
-  fbq: (...args: any[]) => void;
+  dataLayer: unknown[];
+  gtag: (...args: unknown[]) => void;
+  fbq: (...args: unknown[]) => void;
 }
 
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    dataLayer: unknown[];
+    gtag: (...args: unknown[]) => void;
     fbq: {
-      (...args: any[]): void;
-      q?: any[];
+      (...args: unknown[]): void;
+      q?: unknown[];
     };
   }
 }

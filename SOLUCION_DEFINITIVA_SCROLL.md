@@ -3,6 +3,7 @@
 ## 🔍 **ANÁLISIS DE LA CAUSA RAÍZ**
 
 **❌ PROBLEMA IDENTIFICADO:** React Router v7 tiene **scroll restoration automático** habilitado por defecto:
+
 ```javascript
 // Por defecto en React Router
 window.history.scrollRestoration = 'auto'; // ← ESTO causaba el reset constante
@@ -15,6 +16,7 @@ window.history.scrollRestoration = 'auto'; // ← ESTO causaba el reset constant
 ## ✅ **SOLUCIÓN ARQUITECTÓNICA IMPLEMENTADA**
 
 ### 1. **Deshabilitar Scroll Restoration Automático** - `index.tsx`
+
 ```typescript
 // CRÍTICO: Control manual total del scroll
 if ('scrollRestoration' in window.history) {
@@ -23,6 +25,7 @@ if ('scrollRestoration' in window.history) {
 ```
 
 ### 2. **ScrollManager Centralizado** - `ScrollManager.tsx`
+
 ```typescript
 // Manejo global e inteligente del scroll
 export const ScrollManager = () => {
@@ -31,7 +34,7 @@ export const ScrollManager = () => {
   useEffect(() => {
     if (currentPath === '/tienda') {
       const savedState = sessionStorage.getItem(STORAGE_KEY);
-      
+
       if (savedState?.fromProductPage) {
         // 🔄 RESTAURAR: Posición exacta al volver de producto
         window.scrollTo({ top: savedState.scrollPosition, behavior: 'smooth' });
@@ -45,6 +48,7 @@ export const ScrollManager = () => {
 ```
 
 ### 3. **Integración Global** - `App.tsx`
+
 ```typescript
 return (
   <AuthProvider>
@@ -57,6 +61,7 @@ return (
 ```
 
 ### 4. **Limpieza de StorePage** - `StorePage.tsx`
+
 ```typescript
 // ❌ ELIMINADO: Todo control manual de scroll
 // ✅ SOLO: Restauración de filtros y estado de UI
@@ -100,11 +105,13 @@ useEffect(() => {
 ## 🎯 **COMPORTAMIENTO FINAL**
 
 ### **Escenario A: Navegación Normal**
+
 1. Usuario entra a `/tienda` desde cualquier página
 2. ScrollManager detecta: NO hay `fromProductPage`
 3. ✅ **Ejecuta scroll reset a top**
 
-### **Escenario B: Volver de Producto** 
+### **Escenario B: Volver de Producto**
+
 1. Usuario está en tienda (scroll: 1200px)
 2. Click producto → `handleProductClick` guarda posición
 3. En ProductPage aparece "🠐 Volver a la lista"
@@ -113,6 +120,7 @@ useEffect(() => {
 6. ✅ **Restaura scroll exacto (1200px)**
 
 ### **Escenario C: Página de Producto**
+
 1. Cualquier navegación a `/producto/xxx`
 2. ScrollManager ejecuta scroll reset
 3. ✅ **Usuario ve producto desde arriba**
@@ -125,13 +133,14 @@ useEffect(() => {
 ✅ **Centralizado:** Una sola fuente de verdad para scroll  
 ✅ **Predecible:** Comportamiento consistente en todas las rutas  
 ✅ **Debugging:** Logs explícitos para diagnóstico  
-✅ **Mantenible:** Lógica separada y modular  
+✅ **Mantenible:** Lógica separada y modular
 
 ---
 
 ## 🧪 **TESTING DE LA SOLUCIÓN**
 
 ### **Test Manual:**
+
 1. Abrir `/tienda`
 2. Hacer scroll hacia abajo (ej: 1200px)
 3. Click en cualquier producto
@@ -140,6 +149,7 @@ useEffect(() => {
 6. **RESULTADO ESPERADO:** Scroll restaurado a 1200px exactos
 
 ### **Logs de Debug:**
+
 ```console
 📍 ScrollManager: Navegación normal - reseteando scroll
 🔄 ScrollManager: Restaurando scroll a: 1200px

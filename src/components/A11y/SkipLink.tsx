@@ -8,7 +8,11 @@ import React from 'react';
 import './SkipLink.css';
 
 const SkipLink: React.FC = () => {
-  const handleSkip = (e: React.MouseEvent<HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>) => {
+  const handleSkip = (
+    e:
+      | React.MouseEvent<HTMLAnchorElement>
+      | React.KeyboardEvent<HTMLAnchorElement>
+  ) => {
     e.preventDefault();
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
@@ -16,10 +20,10 @@ const SkipLink: React.FC = () => {
       const originalTabIndex = mainContent.getAttribute('tabindex');
       mainContent.setAttribute('tabindex', '-1');
       mainContent.focus();
-      
+
       // Scroll suave al contenido
       mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
+
       // Restaurar tabindex original
       setTimeout(() => {
         if (originalTabIndex) {

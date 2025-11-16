@@ -4,7 +4,7 @@ import { useCheckoutStore, ShippingAddress } from '../store/checkoutStore';
 
 const ShippingForm: React.FC = () => {
   const { shippingAddress, setShippingAddress, nextStep } = useCheckoutStore();
-  
+
   const [formData, setFormData] = useState<Partial<ShippingAddress>>(
     shippingAddress || {
       firstName: '',
@@ -56,21 +56,34 @@ const ShippingForm: React.FC = () => {
     'Valverde',
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validation
-    const required = ['firstName', 'lastName', 'street', 'city', 'state', 'postalCode', 'phone'];
-    const isValid = required.every(field => formData[field as keyof ShippingAddress]);
-    
+    const required = [
+      'firstName',
+      'lastName',
+      'street',
+      'city',
+      'state',
+      'postalCode',
+      'phone',
+    ];
+    const isValid = required.every(
+      (field) => formData[field as keyof ShippingAddress]
+    );
+
     if (!isValid) {
       alert('Por favor, completa todos los campos requeridos.');
       return;
@@ -101,12 +114,17 @@ const ShippingForm: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-2xl mx-auto"
     >
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Información de Envío</h2>
-      
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        Información de Envío
+      </h2>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Nombre *
             </label>
             <input
@@ -119,9 +137,12 @@ const ShippingForm: React.FC = () => {
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             />
           </div>
-          
+
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Apellido *
             </label>
             <input
@@ -137,7 +158,10 @@ const ShippingForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="company"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Empresa (opcional)
           </label>
           <input
@@ -151,7 +175,10 @@ const ShippingForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="street"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Dirección *
           </label>
           <input
@@ -167,7 +194,10 @@ const ShippingForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="apartment" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="apartment"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Apartamento, suite, etc. (opcional)
           </label>
           <input
@@ -182,7 +212,10 @@ const ShippingForm: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Ciudad *
             </label>
             <input
@@ -195,9 +228,12 @@ const ShippingForm: React.FC = () => {
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             />
           </div>
-          
+
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="state"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Provincia *
             </label>
             <select
@@ -216,9 +252,12 @@ const ShippingForm: React.FC = () => {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="postalCode"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Código Postal *
             </label>
             <input
@@ -234,7 +273,10 @@ const ShippingForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="phone"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Teléfono *
           </label>
           <input
@@ -271,7 +313,7 @@ const ShippingForm: React.FC = () => {
           >
             ← Volver al carrito
           </button>
-          
+
           <button
             type="submit"
             className="px-8 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors"

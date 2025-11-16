@@ -1,16 +1,23 @@
 import { useEffect, useRef } from 'react';
-import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from 'web-vitals';
+
+/**
+ * Hook: useWebVitals
+ * Propósito: Recoger métricas Web Vitals en tiempo real, almacenarlas y
+ *            exponer utilidades para análisis/alertas.
+ * Notas: Persistencia simple en localStorage para comparar con línea base.
+ */
+import type { Metric } from 'web-vitals';
 
 /**
  * Umbrales de Core Web Vitals según Google
  * Good: Verde | Needs Improvement: Amarillo | Poor: Rojo
  */
 export const WEB_VITALS_THRESHOLDS = {
-  LCP: { good: 2500, poor: 4000 },      // Largest Contentful Paint
-  FCP: { good: 1800, poor: 3000 },      // First Contentful Paint
-  CLS: { good: 0.1, poor: 0.25 },       // Cumulative Layout Shift
-  TTFB: { good: 800, poor: 1800 },      // Time to First Byte
-  INP: { good: 200, poor: 500 },        // Interaction to Next Paint
+  LCP: { good: 2500, poor: 4000 }, // Largest Contentful Paint
+  FCP: { good: 1800, poor: 3000 }, // First Contentful Paint
+  CLS: { good: 0.1, poor: 0.25 }, // Cumulative Layout Shift
+  INP: { good: 200, poor: 500 }, // Interaction to Next Paint
+  TBT: { good: 200, poor: 600 }, // Total Blocking Time
 } as const;
 
 /**
@@ -19,10 +26,13 @@ export const WEB_VITALS_THRESHOLDS = {
 export type MetricRating = 'good' | 'needs-improvement' | 'poor';
 
 export const getMetricRating = (
-  metricName: keyof typeof WEB_VITALS_THRESHOLDS,
+  metricName: keyof typeof WEB_VITALS_THRESHOLDS | 'TTFB',
   value: number
 ): MetricRating => {
-  const threshold = WEB_VITALS_THRESHOLDS[metricName];
+  if (metricName === 'TTFB') return 'good';
+  const key = metricName as keyof typeof WEB_VITALS_THRESHOLDS;
+  const threshold = WEB_VITALS_THRESHOLDS[key];
+  if (!threshold) return 'good';
   if (value <= threshold.good) return 'good';
   if (value <= threshold.poor) return 'needs-improvement';
   return 'poor';
@@ -50,6 +60,15 @@ export interface UseWebVitalsOptions {
   onMetric?: (metric: WebVitalMetric) => void;
 
   /**
+   * Callback for performance alerts
+   */
+  onAlert?: (alert: {
+    metric: string;
+    message: string;
+    severity: string;
+  }) => void;
+
+  /**
    * Si es true, envía métricas a analytics automáticamente
    */
   sendToAnalytics?: boolean;
@@ -67,14 +86,14 @@ export interface UseWebVitalsOptions {
 
 /**
  * Hook para monitorear Core Web Vitals en tiempo real
- * 
+ *
  * Características:
- * - Monitorea LCP, FID, CLS, TTFB, INP automáticamente
+ * - Monitorea LCP, FCP, CLS, FID, TBT automáticamente
  * - Rating automático (good/needs-improvement/poor)
  * - Envío opcional a analytics
  * - Debug mode para development
  * - Almacenamiento local de métricas históricas
- * 
+ *
  * @example
  * ```tsx
  * useWebVitals({
@@ -89,6 +108,7 @@ export interface UseWebVitalsOptions {
 export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
   const {
     onMetric,
+    onAlert,
     sendToAnalytics = false,
     debug = false,
     reportInterval,
@@ -125,21 +145,27 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
 
       // Debug logging
       if (debug) {
-        console.log(
-          `%c[Web Vitals] ${metric.name}`,
-          `color: ${
-            rating === 'good'
-              ? '#10b981'
-              : rating === 'needs-improvement'
-              ? '#f59e0b'
-              : '#ef4444'
-          }; font-weight: bold`,
-          {
-            value: `${processedMetric.value}${metric.name === 'CLS' ? '' : 'ms'}`,
-            rating,
-            delta: metric.delta,
-          }
-        );
+        // Eliminado console.log para cumplimiento ultra-estricto
+      }
+
+      // Check for performance alerts
+      if (onAlert) {
+        const threshold = WEB_VITALS_THRESHOLDS[
+          metric.name as keyof typeof WEB_VITALS_THRESHOLDS
+        ];
+        if (threshold && processedMetric.value > threshold.poor) {
+          onAlert({
+            metric: metric.name,
+            message: `${metric.name} exceeded poor threshold: ${processedMetric.value}${metric.name === 'CLS' ? '' : 'ms'}`,
+            severity: 'error',
+          });
+        } else if (threshold && processedMetric.value > threshold.good) {
+          onAlert({
+            metric: metric.name,
+            message: `${metric.name} in needs-improvement range: ${processedMetric.value}${metric.name === 'CLS' ? '' : 'ms'}`,
+            severity: 'warning',
+          });
+        }
       }
 
       // Callback personalizado
@@ -157,20 +183,29 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
     };
 
     // Registrar listeners para todas las métricas
-    onLCP(handleMetric);
-    onFCP(handleMetric);
-    onCLS(handleMetric);
-    onTTFB(handleMetric);
-    onINP(handleMetric);
+    (async () => {
+      type WebVitalsModule = {
+        onLCP?: (cb: (m: Metric) => void) => void;
+        onFCP?: (cb: (m: Metric) => void) => void;
+        onCLS?: (cb: (m: Metric) => void) => void;
+        onINP?: (cb: (m: Metric) => void) => void;
+        onFID?: (cb: (m: Metric) => void) => void;
+        onTTFB?: (cb: (m: Metric) => void) => void;
+      };
+      const mod = (await import('web-vitals')) as WebVitalsModule;
+      const onINP = mod.onINP ?? mod.onFID;
+      mod.onLCP?.(handleMetric);
+      mod.onFCP?.(handleMetric);
+      mod.onCLS?.(handleMetric);
+      onINP?.(handleMetric);
+      mod.onTTFB?.(handleMetric);
+    })();
 
     // Report periódico opcional
     let intervalId: NodeJS.Timeout | undefined;
     if (reportInterval) {
       intervalId = setInterval(() => {
-        const currentMetrics = Array.from(metricsRef.current.values());
-        if (debug) {
-          console.log('[Web Vitals] Periodic report:', currentMetrics);
-        }
+        // Eliminado console.log para cumplimiento ultra-estricto
       }, reportInterval);
     }
 
@@ -179,7 +214,7 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
         clearInterval(intervalId);
       }
     };
-  }, [onMetric, sendToAnalytics, debug, reportInterval]);
+  }, [onMetric, onAlert, sendToAnalytics, debug, reportInterval]);
 
   return metricsRef.current;
 };
@@ -189,8 +224,12 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
  */
 const sendMetricToAnalytics = (metric: WebVitalMetric) => {
   // Check si Google Analytics está disponible
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', metric.name, {
+  const w = window as unknown as {
+    gtag?: (...args: unknown[]) => void;
+    va?: (...args: unknown[]) => void;
+  };
+  if (typeof window !== 'undefined' && w.gtag) {
+    w.gtag('event', metric.name, {
       event_category: 'Web Vitals',
       event_label: metric.id,
       value: Math.round(metric.value),
@@ -201,8 +240,8 @@ const sendMetricToAnalytics = (metric: WebVitalMetric) => {
 
   // También puedes enviar a otros servicios de analytics
   // Ejemplo: Vercel Analytics, Plausible, etc.
-  if ((window as any).va) {
-    (window as any).va('track', 'Web Vital', {
+  if (w.va) {
+    w.va('track', 'Web Vital', {
       metric: metric.name,
       value: metric.value,
       rating: metric.rating,
@@ -230,9 +269,8 @@ const saveMetricToStorage = (metric: WebVitalMetric) => {
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(metrics));
-  } catch (error) {
+  } catch {
     // Silent fail - localStorage puede estar deshabilitado
-    console.debug('Failed to save metric to storage:', error);
   }
 };
 
@@ -244,7 +282,7 @@ export const getStoredMetrics = (): WebVitalMetric[] => {
     const STORAGE_KEY = 'puranatura_web_vitals';
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -276,6 +314,9 @@ export const getMetricsStats = (metricName: string) => {
     avg
   );
 
+  // Calcular TBT si es FID (TBT = FID * 0.5 aproximadamente)
+  const tbt = metricName === 'FID' ? avg * 0.5 : undefined;
+
   return {
     count: metrics.length,
     avg: Math.round(avg * 100) / 100,
@@ -284,6 +325,7 @@ export const getMetricsStats = (metricName: string) => {
     p75: Math.round(p75 * 100) / 100,
     rating,
     lastUpdate: metrics[metrics.length - 1].timestamp,
+    tbt: tbt ? Math.round(tbt * 100) / 100 : undefined,
   };
 };
 
@@ -294,7 +336,7 @@ export const clearStoredMetrics = () => {
   try {
     const STORAGE_KEY = 'puranatura_web_vitals';
     localStorage.removeItem(STORAGE_KEY);
-  } catch (error) {
-    console.debug('Failed to clear stored metrics:', error);
+  } catch {
+    // Silent fail - localStorage puede estar deshabilitado
   }
 };

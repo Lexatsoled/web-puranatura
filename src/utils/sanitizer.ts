@@ -1,102 +1,139 @@
 import DOMPurify from 'dompurify';
 
-// Configuración para DOMPurify
-const purifyConfig = {
+type DomPurifyConfig = Parameters<typeof DOMPurify.sanitize>[1];
+type InputKind = 'text' | 'html' | 'url' | 'email';
+type AnyObject = Record<string, unknown>;
+
+const HTML_CONFIG = {
   ALLOWED_TAGS: [
-    'b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img'
+    'p',
+    'br',
+    'strong',
+    'em',
+    'u',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'ul',
+    'ol',
+    'li',
+    'a',
+    'blockquote',
+    'code',
+    'pre',
   ],
-  ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'title'],
-  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|xxx):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-  ADD_TAGS: ['iframe'],
-  ADD_ATTR: ['frameborder', 'allow', 'allowfullscreen'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
+  ALLOW_DATA_ATTR: false,
+} as DomPurifyConfig;
+
+const SAFE_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:'];
+
+export const sanitizeHtml = (dirty: string, config?: DomPurifyConfig): string => {
+  if (!dirty) return '';
+  return DOMPurify.sanitize(dirty, config ?? HTML_CONFIG);
 };
 
-/**
- * Sanitiza una cadena HTML
- */
-export const sanitizeHtml = (html: string): string => {
-  return DOMPurify.sanitize(html, purifyConfig);
+export const sanitizeText = (dirty: string): string => {
+  if (!dirty) return '';
+  return DOMPurify.sanitize(dirty, { ALLOWED_TAGS: [], KEEP_CONTENT: true }).trim();
 };
 
-/**
- * Sanitiza texto plano (elimina cualquier HTML)
- */
-export const sanitizeText = (text: string): string => {
-  return DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
+export const sanitizeEmail = (dirty: string): string => {
+  const clean = sanitizeText(dirty).toLowerCase();
+  return clean.replace(/[^\w@.+-]/g, '');
 };
 
-/**
- * Sanitiza una URL
- */
 export const sanitizeUrl = (url: string): string => {
-  const sanitized = DOMPurify.sanitize(url);
-  if (!url.match(/^https?:\/\//i)) {
-    return `https://${sanitized}`;
-  }
-  return sanitized;
-};
-
-/**
- * Sanitiza un objeto completo de forma recursiva
- */
-export function sanitizeObject<T extends object>(obj: T): T {
-  const sanitized = {} as T;
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'string') {
-      // Sanitizar strings basándose en el nombre del campo
-      if (key.toLowerCase().includes('html')) {
-        (sanitized as any)[key] = sanitizeHtml(value);
-      } else if (key.toLowerCase().includes('url')) {
-        (sanitized as any)[key] = sanitizeUrl(value);
-      } else {
-        (sanitized as any)[key] = sanitizeText(value);
-      }
-    } else if (Array.isArray(value)) {
-      // Sanitizar arrays recursivamente
-      (sanitized as any)[key] = value.map(item =>
-        typeof item === 'object' ? sanitizeObject(item) : 
-        typeof item === 'string' ? sanitizeText(item) : item
-      );
-    } else if (value && typeof value === 'object') {
-      // Sanitizar objetos anidados
-      (sanitized as any)[key] = sanitizeObject(value);
-    } else {
-      // Mantener otros tipos de datos sin cambios
-      (sanitized as any)[key] = value;
+  if (!url) return '';
+  const trimmed = sanitizeText(url);
+  try {
+    const parsed = new URL(trimmed, 'http://localhost');
+    if (!SAFE_PROTOCOLS.includes(parsed.protocol)) {
+      return 'about:blank';
     }
+    return parsed.href.replace('http://localhost', '');
+  } catch {
+    return 'about:blank';
   }
-
-  return sanitized;
-}
-
-/**
- * Hook personalizado para sanitizar datos de formulario
- */
-export const useSanitizer = () => {
-  return {
-    sanitizeFormData: <T extends object>(formData: T): T => {
-      return sanitizeObject(formData);
-    },
-    sanitizeHtml,
-    sanitizeText,
-    sanitizeUrl,
-  };
 };
 
-/**
- * Validador personalizado para React Hook Form
- */
-export const createSanitizeValidator = (type: 'html' | 'text' | 'url' = 'text') => {
-  return (value: string) => {
-    if (typeof value !== 'string') return value;
+const sanitizeUnknown = (value: unknown, keyHint?: string): unknown => {
+  if (typeof value === 'string') {
+    if (keyHint?.toLowerCase().includes('html')) return sanitizeHtml(value);
+    if (keyHint?.toLowerCase().includes('url')) return sanitizeUrl(value);
+    if (keyHint?.toLowerCase().includes('email')) return sanitizeEmail(value);
+    const trimmed = value.trim();
+    if (/^(https?:|mailto:|tel:)/i.test(trimmed)) {
+      return sanitizeUrl(trimmed);
+    }
+    if (/^javascript:/i.test(trimmed)) {
+      return 'about:blank';
+    }
+    return sanitizeText(value);
+  }
+  if (Array.isArray(value)) {
+    return value.map((entry) => sanitizeUnknown(entry));
+  }
+  if (value && typeof value === 'object') {
+    return sanitizeObject(value as AnyObject);
+  }
+  return value;
+};
 
+export const sanitizeObject = <T extends AnyObject>(obj: T): T => {
+  const sanitized: AnyObject = {};
+  Object.entries(obj).forEach(([key, value]) => {
+    sanitized[key] = sanitizeUnknown(value, key);
+  });
+  return sanitized as T;
+};
+
+export const sanitizeFormValues = <T>(data: T): T => {
+  if (!data || typeof data !== 'object') {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map((entry) => sanitizeUnknown(entry)) as T;
+  }
+
+  const clone: AnyObject = { ...(data as AnyObject) };
+  Object.entries(clone).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      const lowerKey = key.toLowerCase();
+      if (lowerKey.includes('email')) {
+        clone[key] = sanitizeEmail(value);
+      } else if (lowerKey.includes('url') || lowerKey.includes('website')) {
+        clone[key] = sanitizeUrl(value);
+      } else if (lowerKey.includes('html')) {
+        clone[key] = sanitizeHtml(value);
+      } else {
+        clone[key] = sanitizeText(value);
+      }
+    } else if (Array.isArray(value) || (value && typeof value === 'object')) {
+      clone[key] = sanitizeUnknown(value, key);
+    } else {
+      clone[key] = value;
+    }
+  });
+  return clone as T;
+};
+
+export const createSanitizeValidator = (type: InputKind = 'text') => {
+  return (value: string) => {
+    if (typeof value !== 'string') {
+      return value;
+    }
     switch (type) {
       case 'html':
         return sanitizeHtml(value);
       case 'url':
         return sanitizeUrl(value);
+      case 'email':
+        return sanitizeEmail(value);
       default:
         return sanitizeText(value);
     }

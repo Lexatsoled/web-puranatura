@@ -9,19 +9,22 @@ import {
 
 /**
  * WebVitalsMonitor - Componente para visualizar Core Web Vitals en tiempo real
- * 
+ *
  * Solo visible en desarrollo o con query param ?debug=vitals
  * Muestra métricas actuales + histórico
  */
 export const WebVitalsMonitor: React.FC = () => {
-  const [metrics, setMetrics] = useState<Map<string, WebVitalMetric>>(new Map());
+  const [metrics, setMetrics] = useState<Map<string, WebVitalMetric>>(
+    new Map()
+  );
   const [isVisible, setIsVisible] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
   // Check si debe mostrarse
   useEffect(() => {
     const isDev = import.meta.env.DEV;
-    const hasDebugParam = new URLSearchParams(window.location.search).get('debug') === 'vitals';
+    const hasDebugParam =
+      new URLSearchParams(window.location.search).get('debug') === 'vitals';
     setIsVisible(isDev || hasDebugParam);
   }, []);
 
@@ -71,8 +74,18 @@ export const WebVitalsMonitor: React.FC = () => {
             className="text-white hover:text-gray-300 transition-colors"
             title="Minimize"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
         </div>
@@ -80,7 +93,7 @@ export const WebVitalsMonitor: React.FC = () => {
 
       {/* Metrics List */}
       <div className="p-4 space-y-3">
-        {['LCP', 'FCP', 'CLS', 'TTFB', 'INP'].map((metricName) => {
+        {['LCP', 'FCP', 'CLS', 'INP', 'TBT'].map((metricName) => {
           const current = metrics.get(metricName);
           const stats = getMetricsStats(metricName);
 
@@ -97,7 +110,8 @@ export const WebVitalsMonitor: React.FC = () => {
 
       {/* Footer */}
       <div className="sticky bottom-0 bg-gray-50 px-4 py-2 text-xs text-gray-600 border-t">
-        💡 Tip: Métricas se guardan en localStorage. Click "Clear" para resetear.
+        💡 Tip: Métricas se guardan en localStorage. Click "Clear" para
+        resetear.
       </div>
     </div>
   );
@@ -113,7 +127,8 @@ interface MetricCardProps {
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ name, current, stats }) => {
-  const threshold = WEB_VITALS_THRESHOLDS[name as keyof typeof WEB_VITALS_THRESHOLDS];
+  const threshold =
+    WEB_VITALS_THRESHOLDS[name as keyof typeof WEB_VITALS_THRESHOLDS];
   const rating = current?.rating || stats?.rating || 'good';
 
   const ratingColor = {
@@ -147,7 +162,9 @@ const MetricCard: React.FC<MetricCardProps> = ({ name, current, stats }) => {
           <div className="text-2xl font-bold">
             {formatMetricValue(name, current.value)}
           </div>
-          <div className="text-xs opacity-70 capitalize">{rating.replace('-', ' ')}</div>
+          <div className="text-xs opacity-70 capitalize">
+            {rating.replace('-', ' ')}
+          </div>
         </div>
       )}
 
@@ -156,19 +173,27 @@ const MetricCard: React.FC<MetricCardProps> = ({ name, current, stats }) => {
         <div className="grid grid-cols-2 gap-2 text-xs mt-2 pt-2 border-t border-current border-opacity-20">
           <div>
             <div className="opacity-70">Avg (n={stats.count})</div>
-            <div className="font-semibold">{formatMetricValue(name, stats.avg)}</div>
+            <div className="font-semibold">
+              {formatMetricValue(name, stats.avg)}
+            </div>
           </div>
           <div>
             <div className="opacity-70">P75</div>
-            <div className="font-semibold">{formatMetricValue(name, stats.p75)}</div>
+            <div className="font-semibold">
+              {formatMetricValue(name, stats.p75)}
+            </div>
           </div>
           <div>
             <div className="opacity-70">Min</div>
-            <div className="font-semibold">{formatMetricValue(name, stats.min)}</div>
+            <div className="font-semibold">
+              {formatMetricValue(name, stats.min)}
+            </div>
           </div>
           <div>
             <div className="opacity-70">Max</div>
-            <div className="font-semibold">{formatMetricValue(name, stats.max)}</div>
+            <div className="font-semibold">
+              {formatMetricValue(name, stats.max)}
+            </div>
           </div>
         </div>
       )}
@@ -176,8 +201,8 @@ const MetricCard: React.FC<MetricCardProps> = ({ name, current, stats }) => {
       {/* Thresholds */}
       <div className="mt-2 pt-2 border-t border-current border-opacity-20">
         <div className="text-xs opacity-70">
-          Good: ≤{formatMetricValue(name, threshold.good)} | 
-          Poor: ≥{formatMetricValue(name, threshold.poor)}
+          Good: ≤{formatMetricValue(name, threshold.good)} | Poor: ≥
+          {formatMetricValue(name, threshold.poor)}
         </div>
       </div>
 
@@ -199,8 +224,8 @@ const getMetricDescription = (name: string): string => {
     LCP: 'Largest Contentful Paint',
     FCP: 'First Contentful Paint',
     CLS: 'Cumulative Layout Shift',
-    TTFB: 'Time to First Byte',
     INP: 'Interaction to Next Paint',
+    TBT: 'Total Blocking Time',
   };
   return descriptions[name] || name;
 };

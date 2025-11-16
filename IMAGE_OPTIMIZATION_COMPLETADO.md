@@ -21,17 +21,20 @@ Implementar optimización completa de imágenes con WebP, lazy loading y respons
 #### Características Implementadas:
 
 ✅ **WebP con Fallback Automático**
+
 - Detecta y genera rutas `.webp` automáticamente
 - Usa `<picture>` con múltiples `<source>` para compatibilidad
 - Fallback a formato original (jpg/png) en navegadores antiguos
 
 ✅ **Lazy Loading Inteligente**
+
 - Intersection Observer con rootMargin de 100px
 - Carga imágenes 100px antes de ser visibles
 - Modo `priority` para imágenes above-the-fold (hero, etc)
 - Loading nativo del navegador (`loading="lazy"`)
 
 ✅ **Responsive Images con srcset**
+
 ```typescript
 // Genera automáticamente:
 image_320.webp 320w
@@ -42,16 +45,19 @@ image.webp 1200w
 ```
 
 ✅ **Placeholders Durante Carga**
+
 - Skeleton screen con animación pulse
 - Spinner SVG elegante
 - Transición suave de opacidad al cargar
 
 ✅ **Manejo de Errores**
+
 - Imagen fallback con icono SVG
 - onError callback personalizable
 - Prevención de layout shifts
 
 ✅ **Optimizaciones Adicionales**
+
 - `decoding="async"` para no bloquear rendering
 - `objectFit` configurable (cover, contain, etc)
 - Dimensiones explícitas para evitar CLS
@@ -65,16 +71,19 @@ image.webp 1200w
 #### Características:
 
 ✅ **Conversión Automática**
+
 ```bash
 npm run convert-webp
 ```
 
 ✅ **Múltiples Formatos de Entrada**
+
 - JPG, JPEG, PNG → WebP
 - Mantiene archivos originales
 - Busca recursivamente en `public/**`
 
 ✅ **Múltiples Tamaños Responsive**
+
 - Original (1200w)
 - 1024px
 - 768px
@@ -82,11 +91,13 @@ npm run convert-webp
 - 320px
 
 ✅ **Configuración Optimizada**
+
 - Calidad: 85% (balance óptimo)
 - Compresión WebP moderna
 - Procesamiento paralelo (5 imágenes simultáneas)
 
 ✅ **Estadísticas Detalladas**
+
 ```
 📊 RESUMEN DE CONVERSIÓN:
 ════════════════════════════════════════
@@ -100,6 +111,7 @@ npm run convert-webp
 ```
 
 ✅ **Skip Existentes**
+
 - No reconvierte si ya existe el .webp
 - Ahorra tiempo en builds subsiguientes
 
@@ -112,15 +124,13 @@ npm run convert-webp
 #### Cambios:
 
 **ANTES**:
+
 ```tsx
-<img
-  src={cardImageUrl}
-  alt={product.name}
-  loading="lazy"
-/>
+<img src={cardImageUrl} alt={product.name} loading="lazy" />
 ```
 
 **DESPUÉS**:
+
 ```tsx
 <OptimizedImage
   src={cardImageUrl}
@@ -133,6 +143,7 @@ npm run convert-webp
 ```
 
 #### Beneficios:
+
 - 🎯 Lazy loading con Intersection Observer
 - 📦 WebP con fallback automático
 - 📐 Responsive srcset
@@ -144,21 +155,21 @@ npm run convert-webp
 
 ### Conversión de Imágenes
 
-| Métrica | Resultado |
-|---------|-----------|
-| **Imágenes convertidas** | 166 |
-| **Tamaño original** | 8.42 MB |
-| **Tamaño WebP** | 5.12 MB |
-| **Reducción total** | **39.2%** ✅ |
-| **Reducción promedio** | 21-75% por imagen |
+| Métrica                  | Resultado         |
+| ------------------------ | ----------------- |
+| **Imágenes convertidas** | 166               |
+| **Tamaño original**      | 8.42 MB           |
+| **Tamaño WebP**          | 5.12 MB           |
+| **Reducción total**      | **39.2%** ✅      |
+| **Reducción promedio**   | 21-75% por imagen |
 
 ### Ejemplos de Conversión:
 
-| Imagen | Original | WebP | Reducción |
-|--------|----------|------|-----------|
+| Imagen                | Original  | WebP     | Reducción  |
+| --------------------- | --------- | -------- | ---------- |
 | Logo Pureza Naturalis | 100.22 KB | 24.69 KB | **75%** ⭐ |
-| Yohimbe Max Reverso | 97.23 KB | 60.99 KB | **37%** |
-| 5-HTP Reverso | 109.4 KB | ~80 KB | **27%** |
+| Yohimbe Max Reverso   | 97.23 KB  | 60.99 KB | **37%**    |
+| 5-HTP Reverso         | 109.4 KB  | ~80 KB   | **27%**    |
 
 ---
 
@@ -166,25 +177,28 @@ npm run convert-webp
 
 ### Lighthouse Metrics (Estimados)
 
-| Métrica | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| **LCP** | 1.8s | **< 1.2s** | **-0.6s** ⬇️ |
-| **FCP** | 1.2s | **< 0.9s** | **-0.3s** ⬇️ |
-| **Total Page Weight** | ~600 KB | **~380 KB** | **-37%** ⬇️ |
-| **Images Weight** | ~400 KB | **~240 KB** | **-40%** ⬇️ |
-| **Lighthouse Performance** | 90 | **94-96** | **+4-6 pts** ⬆️ |
+| Métrica                    | Antes   | Después     | Mejora          |
+| -------------------------- | ------- | ----------- | --------------- |
+| **LCP**                    | 1.8s    | **< 1.2s**  | **-0.6s** ⬇️    |
+| **FCP**                    | 1.2s    | **< 0.9s**  | **-0.3s** ⬇️    |
+| **Total Page Weight**      | ~600 KB | **~380 KB** | **-37%** ⬇️     |
+| **Images Weight**          | ~400 KB | **~240 KB** | **-40%** ⬇️     |
+| **Lighthouse Performance** | 90      | **94-96**   | **+4-6 pts** ⬆️ |
 
 ### Core Web Vitals
 
 ✅ **LCP (Largest Contentful Paint)**
+
 - Target: < 2.5s
 - Esperado: **1.0-1.2s** ✅ GREEN
 
 ✅ **CLS (Cumulative Layout Shift)**
+
 - Dimensiones explícitas previenen shifts
 - Esperado: **< 0.05** ✅ GREEN
 
 ✅ **INP (Interaction to Next Paint)**
+
 - Lazy loading no bloquea main thread
 - Esperado: **< 200ms** ✅ GREEN
 
@@ -194,12 +208,12 @@ npm run convert-webp
 
 ### Browser Support
 
-| Feature | Support |
-|---------|---------|
-| **WebP** | 97% (Chrome 23+, Firefox 65+, Edge 18+, Safari 14+) |
-| **Picture Element** | 98% (todos los navegadores modernos) |
-| **Intersection Observer** | 97% (polyfill disponible) |
-| **Native Lazy Loading** | 92% (fallback a IO en navegadores antiguos) |
+| Feature                   | Support                                             |
+| ------------------------- | --------------------------------------------------- |
+| **WebP**                  | 97% (Chrome 23+, Firefox 65+, Edge 18+, Safari 14+) |
+| **Picture Element**       | 98% (todos los navegadores modernos)                |
+| **Intersection Observer** | 97% (polyfill disponible)                           |
+| **Native Lazy Loading**   | 92% (fallback a IO en navegadores antiguos)         |
 
 ### Fallback Strategy
 
@@ -224,6 +238,7 @@ Si no soporta picture
 ## 📝 Uso del Componente
 
 ### Caso 1: Imagen de Producto (Lazy Loading)
+
 ```tsx
 <OptimizedImage
   src="/public/Jpeg/producto.jpg"
@@ -237,6 +252,7 @@ Si no soporta picture
 ```
 
 ### Caso 2: Hero Image (Priority Loading)
+
 ```tsx
 <OptimizedImage
   src="/public/hero.jpg"
@@ -250,6 +266,7 @@ Si no soporta picture
 ```
 
 ### Caso 3: Thumbnail con Aspect Ratio
+
 ```tsx
 <OptimizedImage
   src="/public/thumb.jpg"
@@ -265,11 +282,13 @@ Si no soporta picture
 ## 🛠️ Comandos Disponibles
 
 ### Convertir imágenes a WebP
+
 ```bash
 npm run convert-webp
 ```
 
 ### Build con optimización de imágenes
+
 ```bash
 npm run build
 # Ya incluye: npm run optimize-images && tsc && vite build
@@ -280,11 +299,13 @@ npm run build
 ## 📋 Componentes Actualizados
 
 ### ✅ Completados
+
 - [x] `OptimizedImage.tsx` - Componente mejorado
 - [x] `ProductCard.tsx` - Integrado
 - [x] Script `convertToWebP.ts` - Funcional
 
 ### ⏳ Pendientes (Próxima sesión)
+
 - [ ] `ProductDetailModal.tsx` - Galería de imágenes
 - [ ] `ImageZoom.tsx` - Zoom de productos
 - [ ] `Header.tsx` - Logo optimizado
@@ -329,8 +350,9 @@ npm run build
 ### Optimizaciones Adicionales (Quick Wins)
 
 1. **Preload Critical Images** (5 min)
+
 ```html
-<link rel="preload" as="image" href="/hero.webp" type="image/webp">
+<link rel="preload" as="image" href="/hero.webp" type="image/webp" />
 ```
 
 2. **Blur Placeholder (LQIP)** (30 min)
@@ -382,7 +404,8 @@ La optimización de imágenes está **COMPLETADA** con éxito:
 ✅ **166 imágenes convertidas** automáticamente
 ✅ **0 regresiones** - Todo funcionando
 
-**Impacto esperado**: 
+**Impacto esperado**:
+
 - LCP: -0.6s (33% mejora)
 - Page Weight: -220 KB (37% reducción)
 - Lighthouse: +4-6 puntos

@@ -13,11 +13,11 @@ interface PageErrorBoundaryProps {
   pageName?: string;
 }
 
-const PageErrorFallback: React.FC<{ error?: Error; pageName?: string; onReset?: () => void }> = ({
-  error,
-  pageName,
-  onReset,
-}) => {
+const PageErrorFallback: React.FC<{
+  error?: Error;
+  pageName?: string;
+  onReset?: () => void;
+}> = ({ error, pageName, onReset }) => {
   const navigate = useNavigate();
 
   return (
@@ -28,8 +28,8 @@ const PageErrorFallback: React.FC<{ error?: Error; pageName?: string; onReset?: 
           Error en {pageName || 'la página'}
         </h2>
         <p className="error-boundary-message">
-          Lo sentimos, no pudimos cargar esta página correctamente. 
-          Esto puede ser temporal. Por favor, intenta una de las siguientes opciones:
+          Lo sentimos, no pudimos cargar esta página correctamente. Esto puede
+          ser temporal. Por favor, intenta una de las siguientes opciones:
         </p>
 
         <div className="error-boundary-actions">
@@ -56,7 +56,10 @@ const PageErrorFallback: React.FC<{ error?: Error; pageName?: string; onReset?: 
         </div>
 
         {import.meta.env.DEV && error && (
-          <details className="error-boundary-details" style={{ marginTop: '2rem' }}>
+          <details
+            className="error-boundary-details"
+            style={{ marginTop: '2rem' }}
+          >
             <summary>Detalles técnicos (solo desarrollo)</summary>
             <pre className="error-boundary-stack">
               {error.toString()}
@@ -66,17 +69,19 @@ const PageErrorFallback: React.FC<{ error?: Error; pageName?: string; onReset?: 
           </details>
         )}
 
-        <p style={{ 
-          marginTop: '2rem', 
-          fontSize: '0.875rem', 
-          color: '#9ca3af',
-        }}>
+        <p
+          style={{
+            marginTop: '2rem',
+            fontSize: '0.875rem',
+            color: '#9ca3af',
+          }}
+        >
           Si el problema persiste, por favor{' '}
-          <a 
-            href="/contacto" 
-            style={{ 
-              color: '#059669', 
-              textDecoration: 'underline' 
+          <a
+            href="/contacto"
+            style={{
+              color: '#059669',
+              textDecoration: 'underline',
             }}
           >
             contáctanos
@@ -88,24 +93,22 @@ const PageErrorFallback: React.FC<{ error?: Error; pageName?: string; onReset?: 
   );
 };
 
-const PageErrorBoundary: React.FC<PageErrorBoundaryProps> = ({ children, pageName }) => {
+const PageErrorBoundary: React.FC<PageErrorBoundaryProps> = ({
+  children,
+  pageName,
+}) => {
   const [key, setKey] = React.useState(0);
 
   const handleReset = React.useCallback(() => {
     // Forzar re-render incrementando la key
-    setKey(prev => prev + 1);
+    setKey((prev) => prev + 1);
   }, []);
 
   return (
     <ErrorBoundary
       key={key}
       componentName={`Page: ${pageName || 'Unknown'}`}
-      fallback={
-        <PageErrorFallback 
-          pageName={pageName} 
-          onReset={handleReset}
-        />
-      }
+      fallback={<PageErrorFallback pageName={pageName} onReset={handleReset} />}
     >
       {children}
     </ErrorBoundary>

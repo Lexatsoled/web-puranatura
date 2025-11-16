@@ -1,0 +1,80 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Build
+        run: npm run build
+
+      - name: Serve dist
+        run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+      
+      - name: Run Playwright tests
+        env:
+          CI: true
+        run: npx playwright test --workers=2 --reporter=list
+      
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-results
+          path: |
+            test-results/
+            playwright-report/
+            traces/
+            videos/
+          retention-days: 30
+
+  smoke-checkout:
+    name: E2E Smoke - Checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Build
+        run: npm run build
+      - name: Serve dist
+        run: npx http-server ./dist -p 3000 -a 127.0.0.1 &
+      - name: Run smoke Checkout Flow
+        env:
+          CI: true
+        run: npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=2 --reporter=list
+      - name: Upload smoke artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: checkout-smoke-artifacts
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 30

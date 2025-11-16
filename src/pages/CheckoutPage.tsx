@@ -4,15 +4,24 @@ import { useCartStore } from '../store/cartStore';
 import { useCheckoutStore } from '../store/checkoutStore';
 import ShippingForm from '../components/ShippingForm';
 import { useNavigate } from 'react-router-dom';
+import { OptimizedImage } from '../components/OptimizedImage';
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { cart } = useCartStore();
-  const {
-    currentStep,
-    orderSummary,
-    calculateOrderSummary,
-  } = useCheckoutStore();
+  const { currentStep, orderSummary, calculateOrderSummary } =
+    useCheckoutStore();
+
+  const resolveProductImage = (
+    product: (typeof cart.items)[number]['product'],
+  ) => {
+    const [primary] = product.images ?? [];
+    return (
+      primary?.full ||
+      primary?.thumbnail ||
+      '/placeholder-product.jpg'
+    );
+  };
 
   useEffect(() => {
     // Redirect if cart is empty
@@ -25,27 +34,22 @@ const CheckoutPage: React.FC = () => {
     calculateOrderSummary(cart);
   }, [cart, navigate, calculateOrderSummary]);
 
-  const stepTitles = [
-    'Envío',
-    'Pago',
-    'Revisión',
-    'Confirmación'
-  ];
+  const stepTitles = ['Envío', 'Pago', 'Revisión', 'Confirmación'];
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return <ShippingForm />;
-      
+
       case 2:
         return <PaymentForm />;
-      
+
       case 3:
         return <OrderReview />;
-      
+
       case 4:
         return <OrderConfirmation />;
-      
+
       default:
         return <ShippingForm />;
     }
@@ -70,22 +74,28 @@ const CheckoutPage: React.FC = () => {
                         isCompleted
                           ? 'bg-green-600 text-white'
                           : isActive
-                          ? 'bg-green-600 text-white'
-                          : 'bg-gray-300 text-gray-600'
+                            ? 'bg-green-600 text-white'
+                            : 'bg-gray-300 text-gray-600'
                       }`}
                     >
                       {isCompleted ? '✓' : stepNumber}
                     </div>
-                    <span className={`ml-2 text-sm font-medium ${
-                      isActive ? 'text-green-600' : 'text-gray-500'
-                    }`}>
+                    <span
+                      className={`ml-2 text-sm font-medium ${
+                        isActive ? 'text-green-600' : 'text-gray-500'
+                      }`}
+                    >
                       {title}
                     </span>
                   </div>
                   {index < stepTitles.length - 1 && (
-                    <div className={`ml-4 mr-4 w-8 h-0.5 ${
-                      stepNumber < currentStep ? 'bg-green-600' : 'bg-gray-300'
-                    }`} />
+                    <div
+                      className={`ml-4 mr-4 w-8 h-0.5 ${
+                        stepNumber < currentStep
+                          ? 'bg-green-600'
+                          : 'bg-gray-300'
+                      }`}
+                    />
                   )}
                 </div>
               );
@@ -95,9 +105,7 @@ const CheckoutPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
-            {renderStepContent()}
-          </div>
+          <div className="lg:col-span-2">{renderStepContent()}</div>
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
@@ -109,11 +117,17 @@ const CheckoutPage: React.FC = () => {
               {/* Cart Items */}
               <div className="space-y-3 mb-6">
                 {cart.items.map((item) => (
-                  <div key={item.product.id} className="flex items-center space-x-3">
-                    <img
-                      src={item.product.images[0]?.thumbnail || item.product.images[0]?.full}
+                  <div
+                    key={item.product.id}
+                    className="flex items-center space-x-3"
+                  >
+                    <OptimizedImage
+                      src={resolveProductImage(item.product)}
                       alt={item.product.name}
-                      className="w-12 h-12 object-cover rounded-md"
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 rounded-md"
+                      sizes="48px"
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
@@ -134,28 +148,38 @@ const CheckoutPage: React.FC = () => {
               <div className="border-t border-gray-200 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">DOP ${orderSummary.subtotal.toFixed(2)}</span>
+                  <span className="text-gray-900">
+                    DOP ${orderSummary.subtotal.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Envío</span>
                   <span className="text-gray-900">
-                    {orderSummary.shipping === 0 ? 'Gratis' : `DOP ${orderSummary.shipping.toFixed(2)}`}
+                    {orderSummary.shipping === 0
+                      ? 'Gratis'
+                      : `DOP ${orderSummary.shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">ITBIS (18%)</span>
-                  <span className="text-gray-900">DOP ${orderSummary.tax.toFixed(2)}</span>
+                  <span className="text-gray-900">
+                    DOP ${orderSummary.tax.toFixed(2)}
+                  </span>
                 </div>
                 {orderSummary.discount > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Descuento</span>
-                    <span className="text-green-600">-DOP ${orderSummary.discount.toFixed(2)}</span>
+                    <span className="text-green-600">
+                      -DOP ${orderSummary.discount.toFixed(2)}
+                    </span>
                   </div>
                 )}
                 <div className="border-t border-gray-200 pt-2">
                   <div className="flex justify-between text-base font-medium">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-gray-900">DOP ${orderSummary.total.toFixed(2)}</span>
+                    <span className="text-gray-900">
+                      DOP ${orderSummary.total.toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -164,7 +188,8 @@ const CheckoutPage: React.FC = () => {
               {orderSummary.subtotal < 3000 && (
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
                   <p className="text-sm text-blue-700">
-                    Añade DOP ${(3000 - orderSummary.subtotal).toFixed(2)} más para envío gratis
+                    Añade DOP ${(3000 - orderSummary.subtotal).toFixed(2)} más
+                    para envío gratis
                   </p>
                 </div>
               )}
@@ -214,11 +239,11 @@ const PaymentForm: React.FC = () => {
       return;
     }
 
-    const method = paymentMethods.find(m => m.id === selectedMethod);
+    const method = paymentMethods.find((m) => m.id === selectedMethod);
     if (method) {
       setPaymentMethod({
         id: `payment_${Date.now()}`,
-        type: selectedMethod as any,
+        type: selectedMethod as 'credit_card' | 'debit_card' | 'bank_transfer' | 'cash_on_delivery',
         isDefault: false,
       });
       nextStep();
@@ -232,7 +257,7 @@ const PaymentForm: React.FC = () => {
       className="max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Método de Pago</h2>
-      
+
       <div className="space-y-4">
         {paymentMethods.map((method) => (
           <label
@@ -256,8 +281,12 @@ const PaymentForm: React.FC = () => {
                 <div className="flex items-center">
                   <span className="text-2xl mr-3">{method.icon}</span>
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">{method.name}</h3>
-                    <p className="text-sm text-gray-500">{method.description}</p>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {method.name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {method.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -273,7 +302,7 @@ const PaymentForm: React.FC = () => {
         >
           ← Volver a envío
         </button>
-        
+
         <button
           onClick={handleSubmit}
           disabled={!selectedMethod}
@@ -292,15 +321,15 @@ const PaymentForm: React.FC = () => {
 
 // Order Review Component
 const OrderReview: React.FC = () => {
-  const { 
-    shippingAddress, 
-    paymentMethod, 
-    orderNotes, 
+  const {
+    shippingAddress,
+    paymentMethod,
+    orderNotes,
     agreedToTerms,
     setOrderNotes,
     setAgreedToTerms,
-    nextStep, 
-    previousStep 
+    nextStep,
+    previousStep,
   } = useCheckoutStore();
 
   const handleSubmit = () => {
@@ -318,18 +347,25 @@ const OrderReview: React.FC = () => {
       className="max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Revisar Pedido</h2>
-      
+
       <div className="space-y-6">
         {/* Shipping Address */}
         <div className="bg-white p-4 border border-gray-200 rounded-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Dirección de Envío</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Dirección de Envío
+          </h3>
           {shippingAddress && (
             <div className="text-sm text-gray-600">
-              <p>{shippingAddress.firstName} {shippingAddress.lastName}</p>
+              <p>
+                {shippingAddress.firstName} {shippingAddress.lastName}
+              </p>
               {shippingAddress.company && <p>{shippingAddress.company}</p>}
               <p>{shippingAddress.street}</p>
               {shippingAddress.apartment && <p>{shippingAddress.apartment}</p>}
-              <p>{shippingAddress.city}, {shippingAddress.state} {shippingAddress.postalCode}</p>
+              <p>
+                {shippingAddress.city}, {shippingAddress.state}{' '}
+                {shippingAddress.postalCode}
+              </p>
               <p>{shippingAddress.country}</p>
               <p>{shippingAddress.phone}</p>
             </div>
@@ -338,20 +374,27 @@ const OrderReview: React.FC = () => {
 
         {/* Payment Method */}
         <div className="bg-white p-4 border border-gray-200 rounded-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Método de Pago</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Método de Pago
+          </h3>
           {paymentMethod && (
             <p className="text-sm text-gray-600">
               {paymentMethod.type === 'credit_card' && 'Tarjeta de Crédito'}
               {paymentMethod.type === 'debit_card' && 'Tarjeta de Débito'}
-              {paymentMethod.type === 'bank_transfer' && 'Transferencia Bancaria'}
-              {paymentMethod.type === 'cash_on_delivery' && 'Pago Contra Entrega'}
+              {paymentMethod.type === 'bank_transfer' &&
+                'Transferencia Bancaria'}
+              {paymentMethod.type === 'cash_on_delivery' &&
+                'Pago Contra Entrega'}
             </p>
           )}
         </div>
 
         {/* Order Notes */}
         <div>
-          <label htmlFor="orderNotes" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="orderNotes"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Notas del Pedido (opcional)
           </label>
           <textarea
@@ -375,11 +418,17 @@ const OrderReview: React.FC = () => {
           />
           <label htmlFor="agreedToTerms" className="ml-2 text-sm text-gray-600">
             He leído y acepto los{' '}
-            <a href="/terminos" className="text-green-600 hover:text-green-800 underline">
+            <a
+              href="/terminos"
+              className="text-green-600 hover:text-green-800 underline"
+            >
               términos y condiciones
             </a>{' '}
             y la{' '}
-            <a href="/privacidad" className="text-green-600 hover:text-green-800 underline">
+            <a
+              href="/privacidad"
+              className="text-green-600 hover:text-green-800 underline"
+            >
               política de privacidad
             </a>
           </label>
@@ -393,7 +442,7 @@ const OrderReview: React.FC = () => {
         >
           ← Volver al pago
         </button>
-        
+
         <button
           onClick={handleSubmit}
           disabled={!agreedToTerms}
@@ -419,8 +468,10 @@ const OrderConfirmation: React.FC = () => {
   const handleFinalizeOrder = async () => {
     const result = await processOrder(cart);
     if (result.success) {
-      clearCart();
       navigate(`/pedido-confirmado/${result.orderId}`);
+      setTimeout(() => {
+        clearCart();
+      }, 0);
     }
   };
 
@@ -432,8 +483,18 @@ const OrderConfirmation: React.FC = () => {
     >
       <div className="mb-6">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          <svg
+            className="w-8 h-8 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">¡Todo listo!</h2>
@@ -462,7 +523,8 @@ const OrderConfirmation: React.FC = () => {
       </button>
 
       <p className="text-xs text-gray-500 mt-4">
-        Al hacer clic en "Confirmar Pedido" aceptas nuestros términos y condiciones
+        Al hacer clic en "Confirmar Pedido" aceptas nuestros términos y
+        condiciones
       </p>
     </motion.div>
   );

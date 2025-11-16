@@ -10,6 +10,13 @@ interface QuantitySelectorProps {
   disabled?: boolean;
 }
 
+/**
+ * QuantitySelector component for selecting product quantity with accessibility and best practices.
+ *
+ * @component
+ * @param {QuantitySelectorProps} props - Props for QuantitySelector
+ * @returns {JSX.Element}
+ */
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   min = 1,
   max = 3,
@@ -88,19 +95,34 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   const variantClasses = getVariantClasses();
 
   return (
-    <div className={`flex items-center border rounded-lg ${sizeClasses.container} ${variantClasses.container} ${disabled ? 'opacity-50' : ''}`}>
+    <div
+      className={`flex items-center border rounded-lg ${sizeClasses.container} ${variantClasses.container} ${disabled ? 'opacity-50' : ''}`}
+      role="group"
+      aria-label="Selector de cantidad"
+    >
       <button
         type="button"
         onClick={handleDecrease}
         disabled={disabled || quantity <= min}
         className={`${sizeClasses.button} flex items-center justify-center border-r ${variantClasses.button} disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors`}
         aria-label="Disminuir cantidad"
+        title="Disminuir cantidad"
       >
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+        <svg
+          className="w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20 12H4"
+          />
         </svg>
       </button>
-      
+
       <input
         type="number"
         value={quantity}
@@ -114,18 +136,30 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
         max={max}
         disabled={disabled}
         aria-label="Cantidad"
+        aria-live="polite"
         className={`${sizeClasses.input} text-center border-0 focus:outline-none focus:ring-0 font-medium ${variantClasses.input}`}
       />
-      
+
       <button
         type="button"
         onClick={handleIncrease}
         disabled={disabled || quantity >= max}
         className={`${sizeClasses.button} flex items-center justify-center border-l ${variantClasses.button} disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors`}
         aria-label="Aumentar cantidad"
+        title="Aumentar cantidad"
       >
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        <svg
+          className="w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
         </svg>
       </button>
     </div>

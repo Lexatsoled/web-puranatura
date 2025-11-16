@@ -1,204 +1,203 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-// Tipos de usuario
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  dateOfBirth?: string;
-  addresses: Address[];
-  orderHistory: Order[];
-  createdAt: Date;
-}
-
-export interface Address {
-  id: string;
-  type: 'home' | 'work' | 'other';
-  street: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  isDefault: boolean;
-}
-
-export interface Order {
-  id: string;
-  date: Date;
-  items: any[];
-  total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-}
-
-// Contexto de autenticación
-interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (userData: RegisterData) => Promise<boolean>;
-  logout: () => void;
-  updateProfile: (userData: Partial<User>) => Promise<boolean>;
-  isAuthenticated: boolean;
-}
-
-interface RegisterData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-}
+import { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { isAxiosError } from 'axios';
+import {
+  User,
+  AuthContextType,
+  LoginCredentials,
+  RegisterData,
+} from '../types/auth';
+import { apiClient, refreshAccessToken } from '@/services/apiClient';
+import {
+  BackendUserDTO,
+  composeFullName,
+  mapBackendUserToUser,
+} from '@/utils/authMapper';
+import { sanitizeFormValues } from '@/utils/sanitizer';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+}: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Cargar usuario desde localStorage al iniciar
-  useEffect(() => {
-    const savedUser = localStorage.getItem('puranatura-user');
-    if (savedUser) {
-      try {
-        const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Error loading user from localStorage:', error);
-        localStorage.removeItem('puranatura-user');
-      }
+  const logAuthError = useCallback(async (err: unknown, message: string) => {
+    try {
+      const { errorLogger, ErrorSeverity, ErrorCategory } = await import(
+        '../services/errorLogger'
+      );
+      errorLogger.log(
+        err instanceof Error ? err : new Error(String(err)),
+        ErrorSeverity.MEDIUM,
+        ErrorCategory.STATE,
+        { context: 'AuthContext', message }
+      );
+    } catch {
+      // Ignore logging failures to keep auth flow resilient
     }
-    setIsLoading(false);
   }, []);
 
-  // Guardar usuario en localStorage cuando cambie
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('puranatura-user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('puranatura-user');
-    }
-  }, [user]);
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Verificar credenciales (simulado)
-    const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-    const foundUser = savedUsers.find((u: any) => 
-      u.email === email && u.password === password
-    );
-    
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
+  const fetchCurrentUser = useCallback(async (): Promise<User | null> => {
+    try {
+      const { data } = await apiClient.get<{ user: BackendUserDTO }>(
+        '/api/v1/auth/me'
+      );
+      if (data?.user) {
+        const mappedUser = mapBackendUserToUser(data.user);
+        setUser(mappedUser);
+        setError(null);
+        return mappedUser;
+      }
+      setUser(null);
+      return null;
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 401) {
+        setUser(null);
+        return null;
+      }
+      await logAuthError(err, 'Error fetching current user');
+      setError('No pudimos validar tu sesion. Intenta iniciar sesion de nuevo.');
+      setUser(null);
+      return null;
+    } finally {
       setIsLoading(false);
-      return true;
     }
-    
-    setIsLoading(false);
-    return false;
+  }, [logAuthError]);
+
+  useEffect(() => {
+    fetchCurrentUser().catch(async (err) => {
+      await logAuthError(err, 'Error inicializando autenticacion');
+    });
+  }, [fetchCurrentUser, logAuthError]);
+
+  const login = async (credentials: LoginCredentials): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      const sanitizedCredentials = sanitizeFormValues(credentials);
+      const { data } = await apiClient.post<{ user: BackendUserDTO }>(
+        '/api/v1/auth/login',
+        sanitizedCredentials
+      );
+      const mappedUser = mapBackendUserToUser(data.user);
+      setUser(mappedUser);
+      setError(null);
+      return true;
+    } catch (err) {
+      if (isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setError('Email o contrasena incorrectos.');
+          return false;
+        }
+        const message =
+          (err.response?.data as { message?: string } | undefined)?.message ??
+          'No se pudo iniciar sesion.';
+        setError(message);
+      } else {
+        setError('Ocurrio un error inesperado al iniciar sesion.');
+      }
+      await logAuthError(err, 'Login error');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {
     setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
     try {
-      // Verificar si el email ya existe
-      const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-      const emailExists = savedUsers.some((u: any) => u.email === userData.email);
-      
-      if (emailExists) {
-        setIsLoading(false);
+      const sanitizedData = sanitizeFormValues(userData);
+      const fullName = composeFullName(
+        sanitizedData.firstName,
+        sanitizedData.lastName,
+        sanitizedData.email
+      );
+
+      const { data } = await apiClient.post<{ user: BackendUserDTO }>(
+        '/api/auth/signup',
+        {
+          email: sanitizedData.email,
+          password: sanitizedData.password,
+          name: fullName,
+        }
+      );
+
+      const mappedUser = mapBackendUserToUser(data.user);
+      setUser(mappedUser);
+      setError(null);
+      return true;
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 409) {
+        setError('El email ya esta registrado.');
         return false;
       }
-      
-      // Crear nuevo usuario
-      const newUser: User = {
-        id: `user_${Date.now()}`,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        phone: userData.phone,
-        addresses: [],
-        orderHistory: [],
-        createdAt: new Date()
-      };
-      
-      // Guardar en "base de datos" simulada
-      const userWithPassword = { ...newUser, password: userData.password };
-      savedUsers.push(userWithPassword);
-      localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));
-      
-      // Autenticar automáticamente
-      setUser(newUser);
-      setIsLoading(false);
-      return true;
-    } catch (error) {
-      setIsLoading(false);
+      await logAuthError(err, 'Registration error');
+      setError('No se pudo crear la cuenta. Intenta nuevamente.');
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await apiClient.post('/api/auth/logout');
+    } catch (err) {
+      await logAuthError(err, 'Logout error');
+    } finally {
+      setUser(null);
+      setError(null);
+      setIsLoading(false);
+    }
   };
 
   const updateProfile = async (userData: Partial<User>): Promise<boolean> => {
-    if (!user) return false;
-    
-    setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    if (!user) {
+      return false;
+    }
+
+    // TODO: Integrate with backend profile endpoint (future phase)
+    setUser({ ...user, ...userData });
+    return true;
+  };
+
+  const clearError = () => {
+    setError(null);
+  };
+
+  const refreshToken = async (): Promise<boolean> => {
     try {
-      const updatedUser = { ...user, ...userData };
-      setUser(updatedUser);
-      
-      // Actualizar en "base de datos"
-      const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-      const userIndex = savedUsers.findIndex((u: any) => u.id === user.id);
-      if (userIndex !== -1) {
-        savedUsers[userIndex] = { ...savedUsers[userIndex], ...userData };
-        localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));
-      }
-      
-      setIsLoading(false);
+      await refreshAccessToken();
       return true;
-    } catch (error) {
-      setIsLoading(false);
+    } catch (err) {
+      await logAuthError(err, 'Refresh token error');
+      setUser(null);
       return false;
     }
   };
 
   const value: AuthContextType = {
     user,
+    tokens: null,
     isLoading,
+    isAuthenticated: Boolean(user),
+    error,
     login,
     register,
     logout,
+    refreshToken,
     updateProfile,
-    isAuthenticated: !!user
+    clearError,
+    getCurrentUser: fetchCurrentUser,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export default AuthContext;

@@ -1,9 +1,30 @@
+/**
+ * Página dedicada para mostrar un servicio en detalle.
+ * Propósito: Renderizar una vista completa de un servicio con información detallada, beneficios, contraindicaciones y opciones de reserva.
+ * Lógica: Gestiona el estado del servicio, carga de datos, SEO dinámico, y renderiza layout responsive con sidebar de reserva.
+ * Entradas: serviceId desde URL params.
+ * Salidas: JSX de la página completa del servicio.
+ * Dependencias: React Router, framer-motion, DOMPurify, datos de servicios.
+ * Efectos secundarios: Modifica document.title y meta tags, maneja navegación programática.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import DOMPurify from 'dompurify';
+import { OptimizedImage } from '../components/OptimizedImage';
 import { Service } from '../types/services';
 import { services } from '../data/services';
 
+/**
+ * Componente funcional ServicePage.
+ * Propósito: Página principal para visualización de servicios individuales.
+ * Lógica: Maneja estados de carga, búsqueda de servicio por ID, y renderizado condicional.
+ * Entradas: Ninguna directa (usa hooks de React Router).
+ * Salidas: Renderiza la página completa o estados de carga/error.
+ * Dependencias: useParams, useNavigate, useState, useEffect.
+ * Efectos secundarios: Navegación automática si servicio no encontrado.
+ */
 const ServicePage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
@@ -11,23 +32,39 @@ const ServicePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [relatedServices, setRelatedServices] = useState<Service[]>([]);
 
+  /**
+   * Efecto principal para cargar datos del servicio.
+   * Propósito: Buscar el servicio por ID, configurar SEO dinámico y obtener servicios relacionados.
+   * Lógica: Filtra services por ID, actualiza estado, modifica DOM para SEO, calcula relacionados por categoría.
+   * Entradas: serviceId (string), navigate (función).
+   * Salidas: Ninguna directa (actualiza estados).
+   * Dependencias: serviceId, navigate.
+   * Efectos secundarios: Modifica document.title y meta description, navegación automática.
+   */
   useEffect(() => {
     if (serviceId) {
-      const foundService = services.find(s => s.id === serviceId);
+      const foundService = services.find((s) => s.id === serviceId);
       if (foundService) {
         setService(foundService);
-        
-        // Set SEO metadata
+
+        // Configurar metadatos SEO dinámicamente
         document.title = `${foundService.title} | Pureza Naturalis Servicios`;
-        
-        const metaDescription = document.querySelector('meta[name="description"]');
+
+        const metaDescription = document.querySelector(
+          'meta[name="description"]'
+        );
         if (metaDescription) {
           metaDescription.setAttribute('content', foundService.description);
         }
 
-        // Get related services (same category or similar services)
+        // Obtener servicios relacionados (misma categoría o servicios similares)
         const related = services
-          .filter(s => s.id !== serviceId && (s.category === foundService.category || s.category !== foundService.category))
+          .filter(
+            (s) =>
+              s.id !== serviceId &&
+              (s.category === foundService.category ||
+                s.category !== foundService.category)
+          )
           .slice(0, 3);
         setRelatedServices(related);
       } else {
@@ -37,6 +74,15 @@ const ServicePage: React.FC = () => {
     setIsLoading(false);
   }, [serviceId, navigate]);
 
+  /**
+   * Estado de carga: muestra spinner mientras se cargan los datos.
+   * Propósito: Proporcionar feedback visual durante la carga inicial del servicio.
+   * Lógica: Renderizado condicional basado en isLoading.
+   * Entradas: isLoading (boolean).
+   * Salidas: JSX del componente de carga.
+   * Dependencias: isLoading.
+   * Efectos secundarios: Ninguno.
+   */
   if (isLoading) {
     return (
       <div className="bg-emerald-100 min-h-screen py-12 flex items-center justify-center">
@@ -48,13 +94,24 @@ const ServicePage: React.FC = () => {
     );
   }
 
+  /**
+   * Estado de error: servicio no encontrado.
+   * Propósito: Manejar el caso cuando el serviceId no corresponde a ningún servicio existente.
+   * Lógica: Verificación de existencia del servicio, renderiza mensaje de error con enlace.
+   * Entradas: service (Service | null).
+   * Salidas: JSX del componente de error.
+   * Dependencias: service, Link component.
+   * Efectos secundarios: Ninguno.
+   */
   if (!service) {
     return (
       <div className="bg-emerald-100 min-h-screen py-12 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Servicio no encontrado</h1>
-          <Link 
-            to="/servicios" 
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Servicio no encontrado
+          </h1>
+          <Link
+            to="/servicios"
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
           >
             Volver a Servicios
@@ -64,14 +121,27 @@ const ServicePage: React.FC = () => {
     );
   }
 
+  /**
+   * Renderizado principal de la página del servicio.
+   * Propósito: Mostrar el layout completo con navegación, contenido detallado del servicio y sidebar de reserva.
+   * Lógica: Estructura responsive con grid, animaciones, y secciones informativas del servicio.
+   * Entradas: service (Service), relatedServices (Service[]).
+   * Salidas: JSX completo de la página.
+   * Dependencias: motion, Link, DOMPurify, service data.
+   * Efectos secundarios: dangerouslySetInnerHTML con contenido sanitizado.
+   */
   return (
     <div className="bg-emerald-100 min-h-screen">
-      {/* Breadcrumbs */}
+      {/* Navegación de migas de pan */}
       <div className="container mx-auto px-6 py-6">
         <nav className="text-sm text-gray-600 mb-8">
-          <Link to="/" className="hover:text-green-600">Inicio</Link>
+          <Link to="/" className="hover:text-green-600">
+            Inicio
+          </Link>
           <span className="mx-2">›</span>
-          <Link to="/servicios" className="hover:text-green-600">Servicios</Link>
+          <Link to="/servicios" className="hover:text-green-600">
+            Servicios
+          </Link>
           <span className="mx-2">›</span>
           <span className="text-gray-800">{service.title}</span>
         </nav>
@@ -79,7 +149,7 @@ const ServicePage: React.FC = () => {
 
       <div className="container mx-auto px-6 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content */}
+          {/* Contenido principal del servicio */}
           <div className="lg:col-span-2">
             <motion.article
               initial={{ opacity: 0, y: 20 }}
@@ -87,12 +157,13 @@ const ServicePage: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
-              {/* Hero Image */}
+              {/* Imagen principal del servicio */}
               <div className="relative h-64 md:h-80">
-                <img
-                  src={service.imageUrl}
+                <OptimizedImage
+                  src={service.imageUrl || '/placeholder-product.jpg'}
                   alt={service.title}
                   className="w-full h-full object-cover"
+                  sizes="100vw"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                 <div className="absolute bottom-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -100,7 +171,7 @@ const ServicePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Content */}
+              {/* Contenido detallado del servicio */}
               <div className="p-8 md:p-12">
                 <header className="mb-8">
                   <h1 className="text-3xl md:text-4xl font-bold text-green-800 font-display mb-4 leading-tight">
@@ -109,31 +180,43 @@ const ServicePage: React.FC = () => {
                   <p className="text-lg text-gray-600 leading-relaxed mb-6">
                     {service.description}
                   </p>
-                  
-                  {/* Service Info */}
+
+                  {/* Información básica del servicio */}
                   <div className="grid grid-cols-2 gap-4 bg-emerald-50 p-4 rounded-lg">
                     <div>
-                      <span className="text-sm text-gray-500 block">Duración</span>
-                      <span className="text-lg font-semibold text-green-700">{service.duration} minutos</span>
+                      <span className="text-sm text-gray-500 block">
+                        Duración
+                      </span>
+                      <span className="text-lg font-semibold text-green-700">
+                        {service.duration} minutos
+                      </span>
                     </div>
                     <div>
-                      <span className="text-sm text-gray-500 block">Precio</span>
-                      <span className="text-lg font-semibold text-green-700">DOP ${service.price.toFixed(2)}</span>
+                      <span className="text-sm text-gray-500 block">
+                        Precio
+                      </span>
+                      <span className="text-lg font-semibold text-green-700">
+                        DOP ${service.price.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </header>
 
-                {/* Detailed Content */}
+                {/* Contenido detallado adicional */}
                 {service.detailedContent && (
-                  <div 
+                  <div
                     className="prose prose-lg max-w-none prose-green prose-headings:text-green-800 prose-a:text-green-600 prose-strong:text-green-700 mb-8"
-                    dangerouslySetInnerHTML={{ __html: service.detailedContent }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(service.detailedContent),
+                    }}
                   />
                 )}
 
-                {/* Benefits */}
+                {/* Beneficios del servicio */}
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">🌟 Beneficios Principales</h3>
+                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                    🌟 Beneficios Principales
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {service.benefits.map((benefit, index) => (
                       <div key={index} className="flex items-center gap-2">
@@ -144,38 +227,50 @@ const ServicePage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* What to Expect */}
+                {/* Qué esperar durante el servicio */}
                 {service.whatToExpect && (
                   <div className="mb-8 bg-blue-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold text-blue-800 mb-3">💡 ¿Qué Esperar?</h3>
+                    <h3 className="text-xl font-bold text-blue-800 mb-3">
+                      💡 ¿Qué Esperar?
+                    </h3>
                     <p className="text-blue-700">{service.whatToExpect}</p>
                   </div>
                 )}
 
-                {/* Preparation */}
+                {/* Preparación necesaria */}
                 {service.preparation && (
                   <div className="mb-8 bg-amber-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold text-amber-800 mb-3">📋 Preparación</h3>
+                    <h3 className="text-xl font-bold text-amber-800 mb-3">
+                      📋 Preparación
+                    </h3>
                     <p className="text-amber-700">{service.preparation}</p>
                   </div>
                 )}
 
-                {/* Contraindications */}
-                {service.contraindications && service.contraindications.length > 0 && (
-                  <div className="mb-8 bg-red-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold text-red-800 mb-3">⚠️ Contraindicaciones</h3>
-                    <ul className="space-y-2">
-                      {service.contraindications.map((contraindication, index) => (
-                        <li key={index} className="flex items-start gap-2 text-red-700">
-                          <span className="text-red-500 mt-1">•</span>
-                          <span>{contraindication}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {/* Contraindicaciones médicas */}
+                {service.contraindications &&
+                  service.contraindications.length > 0 && (
+                    <div className="mb-8 bg-red-50 p-6 rounded-lg">
+                      <h3 className="text-xl font-bold text-red-800 mb-3">
+                        ⚠️ Contraindicaciones
+                      </h3>
+                      <ul className="space-y-2">
+                        {service.contraindications.map(
+                          (contraindication, index) => (
+                            <li
+                              key={index}
+                              className="flex items-start gap-2 text-red-700"
+                            >
+                              <span className="text-red-500 mt-1">•</span>
+                              <span>{contraindication}</span>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
 
-                {/* Actions */}
+                {/* Acciones disponibles */}
                 <div className="mt-8 flex flex-col sm:flex-row gap-4">
                   <Link
                     to="/contacto"
@@ -190,7 +285,9 @@ const ServicePage: React.FC = () => {
                     ← Volver a Servicios
                   </Link>
                   <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                     className="inline-flex items-center justify-center bg-emerald-200 text-emerald-700 px-6 py-3 rounded-lg hover:bg-emerald-300 transition-colors"
                   >
                     ↑ Ir al inicio
@@ -200,10 +297,10 @@ const ServicePage: React.FC = () => {
             </motion.article>
           </div>
 
-          {/* Sidebar */}
+          {/* Barra lateral con elementos de conversión */}
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-8">
-              {/* Quick Contact */}
+              {/* Sección de reserva rápida */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -215,8 +312,12 @@ const ServicePage: React.FC = () => {
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-600 mb-2">Duración: {service.duration} min</p>
-                    <p className="text-2xl font-bold text-green-700">DOP ${service.price.toFixed(2)}</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Duración: {service.duration} min
+                    </p>
+                    <p className="text-2xl font-bold text-green-700">
+                      DOP ${service.price.toFixed(2)}
+                    </p>
                   </div>
                   <Link
                     to="/contacto"
@@ -230,7 +331,7 @@ const ServicePage: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Related Services */}
+              {/* Servicios relacionados */}
               {relatedServices.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
@@ -249,17 +350,19 @@ const ServicePage: React.FC = () => {
                         className="block group"
                       >
                         <div className="flex gap-3">
-                          <img
-                            src={relatedService.imageUrl}
+                          <OptimizedImage
+                            src={relatedService.imageUrl || '/placeholder-product.jpg'}
                             alt={relatedService.title}
                             className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                            sizes="64px"
                           />
                           <div className="flex-1 min-w-0">
                             <h4 className="text-sm font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
                               {relatedService.title}
                             </h4>
                             <p className="text-xs text-gray-500 mt-1">
-                              {relatedService.category} • {relatedService.duration} min
+                              {relatedService.category} •{' '}
+                              {relatedService.duration} min
                             </p>
                             <p className="text-xs font-semibold text-green-600 mt-1">
                               DOP ${relatedService.price.toFixed(2)}
@@ -272,7 +375,7 @@ const ServicePage: React.FC = () => {
                 </motion.div>
               )}
 
-              {/* FAQ */}
+              {/* Preguntas frecuentes y contacto */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -283,7 +386,8 @@ const ServicePage: React.FC = () => {
                   ❓ ¿Tienes Preguntas?
                 </h3>
                 <p className="text-green-100 mb-4 text-sm">
-                  Nuestro equipo está aquí para resolver todas tus dudas sobre nuestros servicios y terapias.
+                  Nuestro equipo está aquí para resolver todas tus dudas sobre
+                  nuestros servicios y terapias.
                 </p>
                 <Link
                   to="/contacto"

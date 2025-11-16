@@ -1,203 +1,215 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { SortOption, Product } from '@/types/product';
+import { errorLogger, ErrorSeverity, ErrorCategory } from '@/services/errorLogger';
+import { withLazyLoading } from '@/utils/performance/lazy';
+import { useNavigationState } from '@/hooks/useNavigationState';
+import { useProductStore } from '@/store/productStore';
 
-import { loadProductsByCategory, productCategories, loadSystems } from '../data/products';
-import { System } from '@/types/system';
-import VirtualProductGrid from '../components/VirtualProductGrid';
-import { SortOption, Product } from '../types/product';
-import { useNavigationState } from '../hooks/useNavigationState';
+const VirtualizedProductGrid = withLazyLoading(
+  React.lazy(() => import('@/components/VirtualizedProductGrid'))
+);
+
+const DEFAULT_CATEGORY = 'todos';
+const DEFAULT_LIMIT = 12;
+const SEARCH_DEBOUNCE = 300;
+
+const toTitle = (slug: string) =>
+  slug === DEFAULT_CATEGORY
+    ? 'Todos'
+    : slug
+        .split('-')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 
 const StorePage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
+  const [selectedCategory, setSelectedCategory] = useState<string>(DEFAULT_CATEGORY);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('default');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [systems, setSystems] = useState<System[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_LIMIT);
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([DEFAULT_CATEGORY]);
+  const [initialized, setInitialized] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const { 
-    saveNavigationState, 
-    getNavigationState 
-  } = useNavigationState();
+  const products = useProductStore((state) => state.products);
+  const fetchProducts = useProductStore((state) => state.fetchProducts);
+  const loading = useProductStore((state) => state.loading);
+  const storeError = useProductStore((state) => state.error);
+  const pagination = useProductStore((state) => state.pagination);
 
-  // Cargar productos y sistemas dinámicamente
-  useEffect(() => {
-    console.log('🔄 Cargando productos para categoría:', selectedCategory);
-    setLoading(true);
-    Promise.all([
-      loadProductsByCategory(selectedCategory),
-      loadSystems()
-    ]).then(([loadedProducts, loadedSystems]) => {
-      console.log('✅ Productos cargados:', loadedProducts.length);
-      console.log('📦 Primeros 3 productos:', loadedProducts.slice(0, 3));
-      setProducts(loadedProducts);
-      setSystems(loadedSystems);
-      setLoading(false);
-    }).catch(error => {
-      console.error('❌ Error cargando productos:', error);
-      setLoading(false);
+  const { saveNavigationState, getNavigationState } = useNavigationState();
+
+  const updateCategoryOptions = (items: Product[]) => {
+    setCategoryOptions((prev) => {
+      const set = new Set(prev);
+      items.forEach((product) => {
+        product.categories?.forEach((category) => set.add(category));
+      });
+      const entries = Array.from(set).filter(Boolean);
+      if (!entries.includes(DEFAULT_CATEGORY)) {
+        entries.unshift(DEFAULT_CATEGORY);
+      }
+      return entries;
     });
-  }, [selectedCategory]);
+  };
 
-  // Manejar parámetros de URL para sistemas sinérgicos
+  useEffect(() => {
+    const savedState = getNavigationState();
+    if (savedState) {
+      setSelectedCategory(savedState.selectedCategory ?? DEFAULT_CATEGORY);
+      setSearchTerm(savedState.searchTerm ?? '');
+      setSortOption((savedState.sortOption as SortOption) ?? 'default');
+      setItemsPerPage(savedState.itemsPerPage ?? DEFAULT_LIMIT);
+    }
+
+    const initialCategory =
+      savedState?.selectedCategory && savedState.selectedCategory !== DEFAULT_CATEGORY
+        ? savedState.selectedCategory
+        : undefined;
+    const initialSearch = savedState?.searchTerm ? savedState.searchTerm : undefined;
+    const initialLimit = savedState?.itemsPerPage ?? DEFAULT_LIMIT;
+
+    fetchProducts({
+      category: initialCategory,
+      search: initialSearch,
+      limit: initialLimit,
+    })
+      .then(updateCategoryOptions)
+      .catch((error) => {
+        errorLogger.log(
+          error instanceof Error ? error : new Error(String(error)),
+          ErrorSeverity.MEDIUM,
+          ErrorCategory.API,
+          { context: 'StorePage', action: 'initialFetch' }
+        );
+      })
+      .finally(() => setInitialized(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const sistema = searchParams.get('sistema');
     if (sistema) {
+      // El sistema ahora usa IDs de categorías reales o términos de búsqueda
+      // que el endpoint flexible /system/:id puede resolver
       setSelectedCategory(`sistema-${sistema}`);
     }
   }, [searchParams]);
 
-  // Restaurar estado al cargar la página (SIN MANEJAR SCROLL)
   useEffect(() => {
-    const savedState = getNavigationState();
-    
-    if (savedState && savedState.fromProductPage) {
-      // Solo restaurar filtros y paginación - ScrollManager maneja el scroll
-      setSelectedCategory(savedState.selectedCategory);
-      setSearchTerm(savedState.searchTerm);
-      setSortOption(savedState.sortOption as SortOption);
-      setCurrentPage(savedState.currentPage);
-      setItemsPerPage(savedState.itemsPerPage);
-      
-      // NO limpiar el estado aquí - ScrollManager lo hará después del scroll
-    }
-  }, [getNavigationState]);
+    if (!initialized) return;
 
-  // Guardar estado cada vez que cambie algo
-  useEffect(() => {
-    // Solo guardar si no estamos en proceso de restaurar estado
-    const savedState = getNavigationState();
-    const isRestoring = savedState && savedState.fromProductPage;
-    
-    if (!isRestoring) {
-      const stateToSave = {
-        selectedCategory,
-        searchTerm,
-        sortOption,
-        currentPage,
-        itemsPerPage,
-      };
-      
-      saveNavigationState(stateToSave);
-    }
-  }, [selectedCategory, searchTerm, sortOption, currentPage, itemsPerPage, saveNavigationState, getNavigationState]);
+    const handler = window.setTimeout(() => {
+      fetchProducts({
+        category: selectedCategory !== DEFAULT_CATEGORY ? selectedCategory : undefined,
+        search: searchTerm || undefined,
+        limit: itemsPerPage,
+      })
+        .then(updateCategoryOptions)
+        .catch((error) => {
+          errorLogger.log(
+            error instanceof Error ? error : new Error(String(error)),
+            ErrorSeverity.MEDIUM,
+            ErrorCategory.API,
+            {
+              context: 'StorePage',
+              action: 'fetchProducts',
+              selectedCategory,
+              searchTerm,
+            }
+          );
+        });
+    }, SEARCH_DEBOUNCE);
 
-  // Guardar estado antes de navegar
+    return () => window.clearTimeout(handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialized, itemsPerPage, searchTerm, selectedCategory]);
+
   useEffect(() => {
+    if (!initialized) return;
+    const stateToSave = {
+      selectedCategory,
+      searchTerm,
+      sortOption,
+      currentPage: pagination.page,
+      itemsPerPage,
+    };
+    saveNavigationState(stateToSave);
+  }, [initialized, itemsPerPage, pagination.page, saveNavigationState, searchTerm, selectedCategory, sortOption]);
+
+  useEffect(() => {
+    if (!initialized) return;
     const handleBeforeUnload = () => {
-      const stateToSave = {
+      saveNavigationState({
         selectedCategory,
         searchTerm,
         sortOption,
-        currentPage,
+        currentPage: pagination.page,
         itemsPerPage,
-      };
-      
-      saveNavigationState(stateToSave);
+      });
     };
 
-    // Guardar en cambios de página/navegación
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [selectedCategory, searchTerm, sortOption, currentPage, itemsPerPage, saveNavigationState]);
-
-  // Función para obtener todas las categorías hijas de una categoría padre
-  const getChildCategories = (parentId: string): string[] => {
-    return productCategories
-      .filter(cat => cat.parent === parentId)
-      .map(cat => cat.id);
-  };
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [initialized, itemsPerPage, pagination.page, saveNavigationState, searchTerm, selectedCategory, sortOption]);
 
   const processedProducts = useMemo(() => {
-    let filtered = products;
-
-    // Filter by category or synergistic system
-    if (selectedCategory !== 'todos' && selectedCategory !== 'Todos') {
-      if (selectedCategory.startsWith('sistema-')) {
-        // Filtrar por sistema sinérgico usando systems de data/products
-        const systemId = selectedCategory.replace('sistema-', '');
-        const system = systems.find(s => s.id === systemId);
-        if (system) {
-          filtered = filtered.filter(product => 
-            system.products.includes(product.id)
-          );
-        }
-      } else {
-        // Filtrar por categoría tradicional
-        const childCategories = getChildCategories(selectedCategory);
-        const categoriesToSearch = childCategories.length > 0 
-          ? [...childCategories, selectedCategory] 
-          : [selectedCategory];
-        
-        filtered = filtered.filter(
-          (product) => product.categories && 
-          product.categories.some(cat => categoriesToSearch.includes(cat))
-        );
-      }
+    const list = [...products];
+    switch (sortOption) {
+      case 'name-asc':
+        return list.sort((a, b) => a.name.localeCompare(b.name));
+      case 'name-desc':
+        return list.sort((a, b) => b.name.localeCompare(a.name));
+      case 'price-asc':
+        return list.sort((a, b) => a.price - b.price);
+      case 'price-desc':
+        return list.sort((a, b) => b.price - a.price);
+      case 'rating-desc':
+        return list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      default:
+        return list;
     }
+  }, [products, sortOption]);
 
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  const hasNextPage = pagination.page < pagination.totalPages;
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value as SortOption);
+  };
+
+  const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(event.target.value));
+  };
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore || !hasNextPage) return;
+    setIsLoadingMore(true);
+    try {
+      await fetchProducts({
+        category: selectedCategory !== DEFAULT_CATEGORY ? selectedCategory : undefined,
+        search: searchTerm || undefined,
+        limit: itemsPerPage,
+        page: pagination.page + 1,
+      }).then(updateCategoryOptions);
+    } catch (error) {
+      errorLogger.log(
+        error instanceof Error ? error : new Error(String(error)),
+        ErrorSeverity.MEDIUM,
+        ErrorCategory.API,
+        { context: 'StorePage', action: 'handleLoadMore' }
       );
+    } finally {
+      setIsLoadingMore(false);
     }
-
-    // Sort products
-    const sorted = [...filtered].sort((a, b) => {
-      switch (sortOption) {
-        case 'name-asc':
-          return a.name.localeCompare(b.name);
-        case 'name-desc':
-          return b.name.localeCompare(a.name);
-        case 'price-asc':
-          return a.price - b.price;
-        case 'price-desc':
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
-
-    return sorted;
-  }, [selectedCategory, searchTerm, sortOption]);
-
-  // Paginate products
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return processedProducts.slice(startIndex, startIndex + itemsPerPage);
-  }, [processedProducts, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value as SortOption);
-    setCurrentPage(1);
-  };
-
-  const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1);
   };
 
   return (
@@ -208,15 +220,12 @@ const StorePage: React.FC = () => {
             Tienda Natural
           </h1>
           <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            Productos cuidadosamente seleccionados para apoyar tu camino hacia
-            el bienestar.
+            Productos cuidadosamente seleccionados para apoyar tu camino hacia el bienestar.
           </p>
         </div>
 
-        {/* Controls Bar */}
         <div className="bg-emerald-100/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
-            {/* Search */}
             <div className="relative">
               <input
                 type="text"
@@ -240,32 +249,20 @@ const StorePage: React.FC = () => {
                 />
               </svg>
             </div>
-            {/* Category with Systems */}
+
             <select
               value={selectedCategory}
               onChange={handleCategoryChange}
               aria-label="Filtrar por categoría"
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
-              {/* Sistemas Sinérgicos */}
-              <optgroup label="🧬 Sistemas Sinérgicos">
-                {systems.map((system) => (
-                  <option key={`sistema-${system.id}`} value={`sistema-${system.id}`}>
-                    {system.name}
-                  </option>
-                ))}
-              </optgroup>
-              
-              {/* Categorías tradicionales */}
-              <optgroup label="📂 Categorías Tradicionales">
-                {productCategories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </optgroup>
+              {categoryOptions.map((category) => (
+                <option key={category} value={category}>
+                  {toTitle(category)}
+                </option>
+              ))}
             </select>
-            {/* Sort */}
+
             <select
               value={sortOption}
               onChange={handleSortChange}
@@ -277,8 +274,9 @@ const StorePage: React.FC = () => {
               <option value="name-desc">Nombre (Z-A)</option>
               <option value="price-asc">Precio (Menor a Mayor)</option>
               <option value="price-desc">Precio (Mayor a Menor)</option>
+              <option value="rating-desc">Mejor valoración</option>
             </select>
-            {/* Items per page */}
+
             <select
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
@@ -292,48 +290,42 @@ const StorePage: React.FC = () => {
           </div>
         </div>
 
-        {loading ? (
+        {storeError && (
+          <div className="bg-red-50 border border-red-100 text-red-700 px-4 py-3 rounded mb-6">
+            {storeError}
+          </div>
+        )}
+
+        {loading && !isLoadingMore ? (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500"></div>
             <p className="mt-6 text-lg text-gray-600">Cargando productos...</p>
           </div>
-        ) : paginatedProducts.length > 0 ? (
-          <VirtualProductGrid 
-            products={paginatedProducts}
-            cardHeight={450}
-            gapSize={32}
-          />
+        ) : processedProducts.length > 0 ? (
+          <Suspense
+            fallback={
+              <div className="text-center py-20">
+                <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500"></div>
+                <p className="mt-6 text-lg text-gray-600">Cargando productos...</p>
+              </div>
+            }
+          >
+            <VirtualizedProductGrid
+              products={processedProducts}
+              containerWidth={800}
+              containerHeight={600}
+              itemWidth={280}
+              itemHeight={400}
+              gap={16}
+              onLoadMore={hasNextPage ? handleLoadMore : undefined}
+              hasNextPage={hasNextPage}
+              isLoading={loading || isLoadingMore}
+            />
+          </Suspense>
         ) : (
           <div className="text-center py-20">
-            <h2 className="text-2xl font-semibold text-gray-600">
-              No se encontraron productos
-            </h2>
-            <p className="text-gray-500 mt-2">
-              Intenta ajustar tu búsqueda o filtros.
-            </p>
-          </div>
-        )}
-
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="mt-12 flex justify-center items-center space-x-4">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Anterior
-            </button>
-            <span className="text-sm text-gray-700">
-              Página {currentPage} de {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Siguiente
-            </button>
+            <h2 className="text-2xl font-semibold text-gray-600">No se encontraron productos</h2>
+            <p className="text-gray-500 mt-2">Intenta ajustar tu búsqueda o filtros.</p>
           </div>
         )}
       </div>

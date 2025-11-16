@@ -1,6 +1,7 @@
 # Análisis Exhaustivo de Imports - Pre-Migración
 
 ## Fecha: 2025-10-09
+
 ## Estado: ANÁLISIS COMPLETO ✅
 
 ---
@@ -8,6 +9,7 @@
 ## 🎯 ARCHIVOS EN RAÍZ QUE NECESITAN ACTUALIZACIÓN
 
 ### **App.tsx** (18 imports)
+
 ```typescript
 // CONTEXTS (3)
 import { CartProvider } from './contexts/CartContext';
@@ -35,6 +37,7 @@ import CartPage from './pages/CartPage';
 ```
 
 ### **SimpleLayout.tsx** (3 imports)
+
 ```typescript
 // CONTEXTS (1)
 import { useAuth } from './contexts/AuthContext';
@@ -45,20 +48,25 @@ import UserMenu from './components/UserMenu';
 ```
 
 ### **TestImagePage.tsx** (1 import)
+
 ```typescript
 // COMPONENTS (1)
 import ImageZoom from './components/ImageZoom';
 ```
 
 ### **SimpleHomePage.tsx** (0 imports)
+
 ✅ **VERIFICADO:** No tiene imports de ./components/, ./pages/, o ./contexts/
+
 ```typescript
 // Solo tiene: import React from 'react';
 // NO NECESITA CAMBIOS
 ```
 
 ### **index.tsx** (1 import)
+
 ✅ **VERIFICADO:** Solo importa App.tsx
+
 ```typescript
 import App from './App';
 // NO NECESITA CAMBIOS - App.tsx está en raíz
@@ -68,24 +76,26 @@ import App from './App';
 
 ## 📊 RESUMEN DE CAMBIOS NECESARIOS
 
-| Archivo | Imports a cambiar | Patrón actual | Nuevo patrón |
-|---------|------------------|---------------|-------------|
-| **App.tsx** | 18 | `./contexts/`, `./components/`, `./pages/` | `./src/contexts/`, `./src/components/`, `./src/pages/` |
-| **SimpleLayout.tsx** | 3 | `./contexts/`, `./components/` | `./src/contexts/`, `./src/components/` |
-| **TestImagePage.tsx** | 1 | `./components/` | `./src/components/` |
-| **SimpleHomePage.tsx** | 0 | N/A | ✅ NO NECESITA CAMBIOS |
-| **index.tsx** | 0 | N/A | ✅ NO NECESITA CAMBIOS |
+| Archivo                | Imports a cambiar | Patrón actual                              | Nuevo patrón                                           |
+| ---------------------- | ----------------- | ------------------------------------------ | ------------------------------------------------------ |
+| **App.tsx**            | 18                | `./contexts/`, `./components/`, `./pages/` | `./src/contexts/`, `./src/components/`, `./src/pages/` |
+| **SimpleLayout.tsx**   | 3                 | `./contexts/`, `./components/`             | `./src/contexts/`, `./src/components/`                 |
+| **TestImagePage.tsx**  | 1                 | `./components/`                            | `./src/components/`                                    |
+| **SimpleHomePage.tsx** | 0                 | N/A                                        | ✅ NO NECESITA CAMBIOS                                 |
+| **index.tsx**          | 0                 | N/A                                        | ✅ NO NECESITA CAMBIOS                                 |
 
 ---
 
 ## 🔍 BÚSQUEDA EXHAUSTIVA
 
 ### Patrón usado:
+
 ```regex
 from ['"]\.\/components|from ['"]\.\/pages|from ['"]\.\/contexts
 ```
 
 ### Total de coincidencias: 56
+
 - ✅ **App.tsx:** 18 matches
 - ✅ **SimpleLayout.tsx:** 3 matches
 - ✅ **TestImagePage.tsx:** 1 match
@@ -96,10 +106,12 @@ from ['"]\.\/components|from ['"]\.\/pages|from ['"]\.\/contexts
 ## ⚠️ ARCHIVOS PARA REVISIÓN MANUAL
 
 ### 1. SimpleHomePage.tsx
+
 **Razón:** Existe en raíz pero no apareció en búsqueda.
 **Acción:** Leer contenido completo.
 
 ### 2. index.tsx
+
 **Razón:** Existe en raíz pero no apareció en búsqueda.
 **Acción:** Leer contenido completo.
 
@@ -108,11 +120,13 @@ from ['"]\.\/components|from ['"]\.\/pages|from ['"]\.\/contexts
 ## ✅ VERIFICACIONES ADICIONALES
 
 ### Carpetas a migrar:
+
 - ✅ `./components/` → `./src/components/`
 - ✅ `./pages/` → `./src/pages/`
 - ✅ `./contexts/` → `./src/contexts/`
 
 ### Carpetas en src/ verificadas:
+
 ```bash
 src/
 ├── components/  ✅ Existe
@@ -127,11 +141,12 @@ src/
 **Paso 1.5:** Revisar SimpleHomePage.tsx e index.tsx manualmente.
 **Paso 2:** Crear commit de seguridad.
 **Paso 3:** Actualizar imports en orden:
-  1. App.tsx
-  2. SimpleLayout.tsx
-  3. TestImagePage.tsx
-  4. SimpleHomePage.tsx (si necesita cambios)
-  5. index.tsx (si necesita cambios)
+
+1. App.tsx
+2. SimpleLayout.tsx
+3. TestImagePage.tsx
+4. SimpleHomePage.tsx (si necesita cambios)
+5. index.tsx (si necesita cambios)
 
 ---
 
@@ -148,8 +163,9 @@ src/
 
 ---
 
-**CONCLUSIÓN FINAL:** 
+**CONCLUSIÓN FINAL:**
 ✅ **22 imports confirmados** que necesitan cambio en **3 archivos**:
+
 - App.tsx: 18 imports
 - SimpleLayout.tsx: 3 imports
 - TestImagePage.tsx: 1 import

@@ -25,6 +25,7 @@
 
 El archivo `src/data/products.ts` se corrompió durante las operaciones de reorganización.
 Causas posibles:
+
 - Operaciones de archivo simultáneas
 - Mezclado de contenido durante Copy-Item
 - Buffer corrupto en escrituras múltiples
@@ -32,6 +33,7 @@ Causas posibles:
 ### Solución Requerida 🔧
 
 **OPCIÓN 1: Restaurar manualmente**
+
 ```powershell
 # 1. Eliminar el archivo corrupto
 Remove-Item "src\data\products.ts" -Force
@@ -55,7 +57,7 @@ export {
   loadProductById,
   preloadCategories,
   clearProductCache,
-  getCacheStats
+  getCacheStats,
 } from './products/loader';
 
 // Sistemas sinérgicos (carga dinámica)
@@ -64,11 +66,12 @@ export {
   getSystemById,
   getProductsBySystem,
   getFeaturedSystems,
-  getRelatedSystems
+  getRelatedSystems,
 } from './products/all-products';
 ```
 
 **OPCIÓN 2: Usar importación directa temporalmente**
+
 ```typescript
 // En componentes que usan productos:
 import { products } from '@/data/products/all-products';
@@ -77,14 +80,16 @@ import { products } from '@/data/products/all-products';
 ### Componentes que Necesitan Actualización 📝
 
 Archivos que importan `products`:
+
 1. **src/pages/ProductPage.tsx**
+
    ```typescript
    // ANTES:
    import { products } from '@/data/products';
-   
+
    // DESPUÉS:
    import { loadProductById } from '@/data/products';
-   
+
    // En useEffect:
    const [product, setProduct] = useState<Product | null>(null);
    useEffect(() => {
@@ -93,44 +98,56 @@ Archivos que importan `products`:
    ```
 
 2. **src/pages/StorePageOptimized.tsx**
+
    ```typescript
    // ANTES:
    import { products } from '@/data/products';
-   
+
    // DESPUÉS:
    import { loadProductsByCategory } from '@/data/products';
-   
+
    // En useEffect:
    const [products, setProducts] = useState<Product[]>([]);
    useEffect(() => {
-     loadProductsByCategory(selectedCategory || 'todos')
-       .then(setProducts);
+     loadProductsByCategory(selectedCategory || 'todos').then(setProducts);
    }, [selectedCategory]);
    ```
 
 3. **src/pages/SystemsTestPage.tsx**
+
    ```typescript
    // ANTES:
-   import { systems, getFeaturedSystems, getProductsBySystem } from '@/data/products';
-   
+   import {
+     systems,
+     getFeaturedSystems,
+     getProductsBySystem,
+   } from '@/data/products';
+
    // DESPUÉS:
-   import { systems, getFeaturedSystems, getProductsBySystem } from '@/data/products';
+   import {
+     systems,
+     getFeaturedSystems,
+     getProductsBySystem,
+   } from '@/data/products';
    // (Este import puede quedar igual si systems es pequeño)
    ```
 
 ### Beneficios Esperados 📊
 
 **Bundle Size:**
+
 - Antes: `data-CuNyUCme.js`: 354 KB (94 KB gzip)
 - Después: `data-*.js`: ~20 KB (5 KB gzip)
 - **Reducción: -94%**
 
 **Performance:**
+
 - LCP (Largest Contentful Paint): 3.5s → 2.1s (-40%)
 - TTI (Time to Interactive): 4.0s → 2.6s (-35%)
 - FCP (First Contentful Paint): 1.8s → 1.1s (-39%)
 
 **User Experience:**
+
 - Carga inicial más rápida
 - Productos se cargan solo cuando se navega a una categoría
 - Pre-carga inteligente de categorías populares

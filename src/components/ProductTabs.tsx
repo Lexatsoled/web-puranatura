@@ -9,6 +9,13 @@ interface TabsProps {
   className?: string;
 }
 
+/**
+ * ProductTabs component for rendering accessible tab navigation and content.
+ *
+ * @component
+ * @param {TabsProps} props - Props for ProductTabs
+ * @returns {JSX.Element}
+ */
 const ProductTabs: React.FC<TabsProps> = ({ tabs, className = '' }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
 
@@ -16,7 +23,7 @@ const ProductTabs: React.FC<TabsProps> = ({ tabs, className = '' }) => {
     <div className={`w-full ${className}`}>
       {/* Tabs Navigation */}
       <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+        <nav className="-mb-px flex space-x-8 overflow-x-auto" role="tablist" aria-label="Información de producto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -28,7 +35,12 @@ const ProductTabs: React.FC<TabsProps> = ({ tabs, className = '' }) => {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
               `}
-              aria-current={activeTab === tab.id ? 'page' : undefined}
+              role="tab"
+              aria-selected={activeTab === tab.id ? "true" : "false"}
+              aria-controls={`tabpanel-${tab.id}`}
+              id={`tab-${tab.id}`}
+              tabIndex={activeTab === tab.id ? 0 : -1}
+              title={tab.label}
             >
               {tab.label}
             </button>
@@ -41,7 +53,11 @@ const ProductTabs: React.FC<TabsProps> = ({ tabs, className = '' }) => {
         {tabs.map((tab) => (
           <div
             key={tab.id}
+            id={`tabpanel-${tab.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${tab.id}`}
             className={`${activeTab === tab.id ? 'block' : 'hidden'} prose prose-green max-w-none`}
+            tabIndex={0}
           >
             {tab.content}
           </div>

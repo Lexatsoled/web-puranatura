@@ -103,12 +103,12 @@ const prefetchChunk = (chunkPath: string) => {
   const link = document.createElement('link');
   link.rel = 'prefetch';
   link.as = 'script';
-  
+
   // Vite añade hash al final, por eso buscamos archivos que empiecen con el nombre base
   // En producción, necesitaremos el nombre exacto del chunk
   // Por ahora, dejamos que el navegador maneje el prefetch
   link.href = `${chunkPath}.js`;
-  
+
   document.head.appendChild(link);
 };
 
@@ -120,12 +120,16 @@ export const CriticalResourceHints: React.FC = () => {
     <>
       {/* Preconnect a dominios externos comunes */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+
       {/* DNS Prefetch para CDNs y APIs */}
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-      
+
       {/* Preload de fuentes críticas (si las hay) */}
       {/* <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossOrigin="anonymous" /> */}
     </>
