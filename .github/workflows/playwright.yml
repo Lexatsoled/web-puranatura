@@ -183,6 +183,12 @@ jobs:
             playwright-report/
           retention-days: 30
 
+      - name: Re-run failed smoke test once (if failures)
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          echo "Re-running smoke 'Checkout Flow' to gather more diagnostics..."
+          npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=0 --reporter=list || true
+
       - name: Post PR diagnostics summary (if failures)
         if: failure() && github.event_name == 'pull_request'
         uses: actions/github-script@v6
