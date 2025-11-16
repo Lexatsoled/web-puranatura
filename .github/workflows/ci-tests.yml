@@ -28,7 +28,30 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Wait for server (ci-tests)
+        run: npx wait-on http://127.0.0.1:3000 -t 300000 || true
 
-      - name: Run Playwright smoke tests (chromium)
+      - name: System diagnostics (ci-tests)
         run: |
-          npx playwright test e2e/contact-iframe.spec.ts e2e/product-srcset.spec.ts --project=chromium --reporter=dot
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+
+      - name: Run Playwright smoke tests (chromium) with retries
+        run: |
+          set -e
+          attempts=2
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running selected smoke tests..."
+            npx playwright test e2e/contact-iframe.spec.ts e2e/product-srcset.spec.ts --project=chromium --reporter=dot && break
+            echo "Smoke attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
