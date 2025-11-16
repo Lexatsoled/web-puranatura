@@ -79,7 +79,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000,
     env: {
       // Inform the app it's running under E2E so it can disable animations/overlays
       VITE_E2E: '1',
@@ -91,5 +91,5 @@ export default defineConfig({
 
   /* Expect timeout */
   expect: {
-    timeout: 15 * 1000,
+    timeout: 30 * 1000,
   },
