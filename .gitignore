@@ -41,3 +41,4 @@ backend/database.sqlite-shm
 *.njsproj
 *.sln
 *.sw?
+playwright-report/
