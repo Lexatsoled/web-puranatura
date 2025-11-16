@@ -195,17 +195,10 @@ const ProductPage: React.FC = () => {
               <p className="text-3xl text-gray-900 font-bold">
                 {product.price.toFixed(2)} RDS
               </p>
-              {product.priceNote && (
-                <div className="text-sm text-gray-600 mt-1">
-                  {Array.isArray(product.priceNote) ? (
-                    product.priceNote.map((note, index) => (
-                      <p key={index}>{note}</p>
-                    ))
-                  ) : (
-                    <p>{product.priceNote}</p>
-                  )}
-                </div>
-              )}
+              <div className="text-sm text-gray-600 mt-1 space-y-1">
+                <p className="font-semibold">Información Precio Comparativo:</p>
+                <p>La cápsula le sale a 125 RDS</p>
+              </div>
             </div>
 
             {/* Stock y disponibilidad - Solo mostrar disponibilidad general */}

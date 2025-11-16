@@ -4,7 +4,7 @@ export const testimonials: Testimonial[] = [
   {
     id: '1',
     name: 'Ana Martínez',
-    text: 'PuraNatura cambió mi vida. El enfoque personalizado de la naturopatía me ayudó a entender mi cuerpo y a encontrar un equilibrio que no creía posible. ¡Totalmente recomendados!',
+    text: 'Pureza Naturalis cambió mi vida. El enfoque personalizado de la naturopatía me ayudó a entender mi cuerpo y a encontrar un equilibrio que no creía posible. ¡Totalmente recomendados!',
     imageUrl: 'https://picsum.photos/id/237/100/100',
     rating: 5,
     date: '2023-01-15',
@@ -12,7 +12,7 @@ export const testimonials: Testimonial[] = [
   {
     id: '2',
     name: 'Carlos Gómez',
-    text: 'Sufria de insomnio y estrés crónico. La combinación de fitoterapia y aromaterapia ha sido milagrosa. Duermo mejor y me siento con más energía durante el día. Gracias al equipo de PuraNatura.',
+    text: 'Sufria de insomnio y estrés crónico. La combinación de fitoterapia y aromaterapia ha sido milagrosa. Duermo mejor y me siento con más energía durante el día. Gracias al equipo de Pureza Naturalis.',
     imageUrl: 'https://picsum.photos/id/338/100/100',
     rating: 4,
     date: '2023-03-20',
