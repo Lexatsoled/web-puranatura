@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test';
 
 export const test = base.extend({
   // Override `page` fixture to add an init script before any navigation
-  page: async ({ page }, use) => {
+  page: async ({ page, testInfo }, use) => {
     await page.addInitScript(() => {
       (function () {
         const disableOverlays = () => {
@@ -41,8 +41,43 @@ export const test = base.extend({
       })();
     });
 
+    // Collect console messages & runtime errors for test diagnostics
+    const logs: string[] = [];
+    page.on('console', (msg) => {
+      try {
+        const loc = msg.location ? msg.location() : undefined;
+        const locStr = loc ? `${loc.url}:${loc.line}:${loc.column}` : '';
+        logs.push(`[console:${msg.type()}] ${msg.text()} ${locStr}`);
+      } catch (e) {
+        logs.push(`[console:${msg.type()}] ${msg.text()}`);
+      }
+    });
+    page.on('pageerror', (err) => {
+      logs.push(`[pageerror] ${err?.message || String(err)}`);
+    });
+    page.on('requestfailed', (req) => {
+      try {
+        logs.push(`[requestfailed] ${req.method()} ${req.url()} (${req.failure()?.errorText})`);
+      } catch (e) {
+        logs.push(`[requestfailed] ${req.url()}`);
+      }
+    });
+
     // Provide the page to the test
     await use(page);
+
+    // After the test ends, write logs to the test output directory for CI artifacts
+    try {
+      const fs = require('fs');
+      const outputDir = testInfo.outputPath('');
+      const outPath = testInfo.outputPath('console.log');
+      if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      fs.writeFileSync(outPath, logs.join('\n'), 'utf8');
+    } catch (err) {
+      // Do not fail the test if writing logs fails
+      // eslint-disable-next-line no-console
+      console.warn('Failed to write console logs for test:', err?.message || err);
+    }
   },
 });
 
