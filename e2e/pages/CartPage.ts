@@ -16,7 +16,9 @@ export class CartPage {
     this.page = page;
     this.cartItems = page.locator('.divide-y > *');
     this.totalAmount = page.getByTestId('cart-total');
-    this.checkoutButton = page.getByRole('button', { name: /proceder al pago/i });
+    this.checkoutButton = page.getByRole('button', {
+      name: /proceder al pago/i,
+    });
     this.emptyCartMessage = page.getByTestId('empty-cart-message');
   }
 
@@ -30,7 +32,9 @@ export class CartPage {
     // Some implementations render items without semantic listitem roles.
     // Prefer reading the "Productos (N)" heading if present, otherwise count known item containers.
     try {
-      const heading = this.page.getByRole('heading', { name: /Productos \(\d+\)/i });
+      const heading = this.page.getByRole('heading', {
+        name: /Productos \(\d+\)/i,
+      });
       const text = await heading.textContent();
       if (text) {
         const m = text.match(/(\d+)/);
@@ -66,7 +70,10 @@ export class CartPage {
   }
 
   async removeItem(index: number) {
-    await this.cartItems.nth(index).getByRole('button', { name: /eliminar/i }).click();
+    await this.cartItems
+      .nth(index)
+      .getByRole('button', { name: /eliminar/i })
+      .click();
   }
 
   async checkout() {
@@ -79,7 +86,8 @@ export class CartPage {
     await button.scrollIntoViewIfNeeded();
     try {
       await button.click();
-    } catch {
+    } catch (e) {
+      void e;
       await button.click({ force: true });
     }
     return true;
@@ -95,7 +103,11 @@ export class CartPage {
       // Check for common visual-disabled classes
       const hasDisabledClass = await this.checkoutButton.evaluate((el) => {
         const cls = (el.className || '').toString();
-        return cls.includes('opacity-50') || cls.includes('disabled') || cls.includes('pointer-events-none');
+        return (
+          cls.includes('opacity-50') ||
+          cls.includes('disabled') ||
+          cls.includes('pointer-events-none')
+        );
       });
       if (hasDisabledClass) return true;
     } catch (e) {
@@ -105,11 +117,15 @@ export class CartPage {
   }
 
   async waitForQuantityControls(timeout = 20000) {
-    await this.page.waitForSelector('button[aria-label="Aumentar cantidad"]', { timeout }).catch(() => {});
+    await this.page
+      .waitForSelector('button[aria-label="Aumentar cantidad"]', { timeout })
+      .catch(() => {});
   }
 
   async increaseQuantity(index = 0) {
-    const button = this.cartItems.nth(index).getByRole('button', { name: /aumentar cantidad/i });
+    const button = this.cartItems
+      .nth(index)
+      .getByRole('button', { name: /aumentar cantidad/i });
     await button.waitFor({ state: 'visible', timeout: 10000 });
     await button.click();
   }
@@ -127,7 +143,10 @@ export class CartPage {
 
   async waitForCount(expected: number, timeout = 10000) {
     const pattern = new RegExp(`Productos \\(${expected}\\)`, 'i');
-    await this.page.getByRole('heading', { name: pattern }).waitFor({ state: 'visible', timeout }).catch(() => {});
+    await this.page
+      .getByRole('heading', { name: pattern })
+      .waitFor({ state: 'visible', timeout })
+      .catch(() => {});
   }
 
   private async waitForHydration(options: CartPageGotoOptions) {
@@ -144,17 +163,26 @@ export class CartPage {
       .waitForFunction(
         () => {
           try {
-            if (document.querySelector('.p-6.flex') || document.querySelector('[data-testid="empty-cart-message"]')) return true;
+            if (
+              document.querySelector('.p-6.flex') ||
+              document.querySelector('[data-testid="empty-cart-message"]')
+            )
+              return true;
             const raw = localStorage.getItem('pureza-naturalis-cart-storage');
             if (!raw) return false;
             const parsed = JSON.parse(raw);
             const state = parsed.state ?? parsed;
-            return Boolean(state && state.cart && (state.cart.count || (state.cart.items && state.cart.items.length)));
+            return Boolean(
+              state &&
+                state.cart &&
+                (state.cart.count ||
+                  (state.cart.items && state.cart.items.length))
+            );
           } catch (e) {
             return false;
           }
         },
-        { timeout },
+        { timeout }
       )
       .catch(() => {});
   }
@@ -164,6 +192,8 @@ export class CartPage {
   }
 
   private async waitForEmptyCart(timeout: number) {
-    await this.emptyCartMessage.waitFor({ state: 'visible', timeout }).catch(() => {});
+    await this.emptyCartMessage
+      .waitFor({ state: 'visible', timeout })
+      .catch(() => {});
   }
 }

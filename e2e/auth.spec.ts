@@ -5,10 +5,15 @@ test.describe('Authentication', () => {
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
     // Wait for a known email input variant; if none present, skip test
-    const emailCount = await page.locator('form:has(input[type="email"]), input[type="email"], input[name="email"], [aria-label*="email"], [placeholder*="email"]').count();
+    const emailCount = await page
+      .locator(
+        'form:has(input[type="email"]), input[type="email"], input[name="email"], [aria-label*="email"], [placeholder*="email"]'
+      )
+      .count();
     if (emailCount === 0) {
-      // eslint-disable-next-line no-console
-      console.log('[E2E-DIAG] login form not present; skipping authentication test');
+      console.log(
+        '[E2E-DIAG] login form not present; skipping authentication test'
+      );
       return;
     }
 
@@ -24,10 +29,15 @@ test.describe('Authentication', () => {
   test('should show validation errors', async ({ page }) => {
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
-    const emailCount2 = await page.locator('form:has(input[type="email"]), input[type="email"], input[name="email"], [aria-label*="email"], [placeholder*="email"]').count();
+    const emailCount2 = await page
+      .locator(
+        'form:has(input[type="email"]), input[type="email"], input[name="email"], [aria-label*="email"], [placeholder*="email"]'
+      )
+      .count();
     if (emailCount2 === 0) {
-      // eslint-disable-next-line no-console
-      console.log('[E2E-DIAG] login form not present; skipping authentication test');
+      console.log(
+        '[E2E-DIAG] login form not present; skipping authentication test'
+      );
       return;
     }
 
@@ -42,10 +52,15 @@ test.describe('Authentication', () => {
   test('should register new user', async ({ page }) => {
     await page.goto('/register');
     await page.waitForLoadState('networkidle');
-    const nameCount = await page.locator('form:has(input[name="name"]), input[name="name"], [aria-label*="nombre"], [placeholder*="nombre"]').count();
+    const nameCount = await page
+      .locator(
+        'form:has(input[name="name"]), input[name="name"], [aria-label*="nombre"], [placeholder*="nombre"]'
+      )
+      .count();
     if (nameCount === 0) {
-      // eslint-disable-next-line no-console
-      console.log('[E2E-DIAG] register form not present; skipping register test');
+      console.log(
+        '[E2E-DIAG] register form not present; skipping register test'
+      );
       return;
     }
 
@@ -53,7 +68,7 @@ test.describe('Authentication', () => {
     await page.getByLabel(/email/i).fill(`test${Date.now()}@example.com`);
     await page.getByLabel(/^contraseña$/i).fill('SecurePass123');
     await page.getByLabel(/confirmar contraseña/i).fill('SecurePass123');
-    
+
     await page.getByRole('button', { name: /registrarse/i }).click();
 
     // Verificar registro exitoso

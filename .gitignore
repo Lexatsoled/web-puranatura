@@ -13,6 +13,8 @@ lerna-debug.log*
 
 node_modules
 dist
+tmp/e2e-storage/
+tmp/e2e-storage/*
 dist-ssr
 *.local
 public/optimized

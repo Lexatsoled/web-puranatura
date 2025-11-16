@@ -1,5 +1,13 @@
-import { test as base, expect, type TestInfo } from '@playwright/test';
+import {
+  test as base,
+  expect,
+  type TestInfo,
+  type Browser,
+  type Page,
+} from '@playwright/test';
 import fs from 'fs';
+import { seedCartAndCreatePreseededPage } from './helpers/cart-helper';
+import type { BrowserContext } from 'playwright';
 
 export const test = base.extend({
   // Override `page` fixture to add an init script before any navigation
@@ -22,7 +30,12 @@ export const test = base.extend({
                 const z = parseInt(s.zIndex) || 0;
                 const rect = el.getBoundingClientRect();
                 // Heuristic: large fixed/absolute elements covering most of viewport
-                if ((pos === 'fixed' || pos === 'absolute') && rect.width >= vw * 0.8 && rect.height >= vh * 0.25 && z > 0) {
+                if (
+                  (pos === 'fixed' || pos === 'absolute') &&
+                  rect.width >= vw * 0.8 &&
+                  rect.height >= vh * 0.25 &&
+                  z > 0
+                ) {
                   el.style.pointerEvents = 'none';
                   // hide if it looks like an overlay
                   el.style.visibility = 'hidden';
@@ -38,7 +51,10 @@ export const test = base.extend({
 
         // run immediately and on DOM mutations
         disableOverlays();
-        new MutationObserver(disableOverlays).observe(document.documentElement, { childList: true, subtree: true });
+        new MutationObserver(disableOverlays).observe(
+          document.documentElement,
+          { childList: true, subtree: true }
+        );
       })();
     });
 
@@ -58,7 +74,9 @@ export const test = base.extend({
     });
     page.on('requestfailed', (req) => {
       try {
-        logs.push(`[requestfailed] ${req.method()} ${req.url()} (${req.failure()?.errorText})`);
+        logs.push(
+          `[requestfailed] ${req.method()} ${req.url()} (${req.failure()?.errorText})`
+        );
       } catch (e) {
         logs.push(`[requestfailed] ${req.url()}`);
       }
@@ -71,12 +89,34 @@ export const test = base.extend({
     try {
       const outputDir = testInfo.outputPath('');
       const outPath = testInfo.outputPath('console.log');
-      if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      if (outputDir && !fs.existsSync(outputDir))
+        fs.mkdirSync(outputDir, { recursive: true });
       fs.writeFileSync(outPath, logs.join('\n'), 'utf8');
     } catch (err) {
       // Do not fail the test if writing logs fails
-      // eslint-disable-next-line no-console
-      console.warn('Failed to write console logs for test:', err?.message || err);
+      console.warn(
+        'Failed to write console logs for test:',
+        err?.message || err
+      );
+    }
+  },
+  // Fixture: preseededPage creates a new context and page seeded using storageState.
+  preseededPage: async ({ page, browser }, use) => {
+    // Create a pre-seeded page and context from the helper
+    const {
+      page: seededPage,
+      context,
+      storagePath,
+    } = await seedCartAndCreatePreseededPage(page, browser, { quantity: 1 });
+    // Provide the preseeded page object plus small helper attributes
+    try {
+      await use({ page: seededPage, context, storagePath });
+    } finally {
+      try {
+        await context.close();
+      } catch (e) {
+        // ignore
+      }
     }
   },
 });
