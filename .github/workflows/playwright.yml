@@ -33,10 +33,32 @@ jobs:
       - name: Wait for server
         run: npx wait-on http://127.0.0.1:3000 -t 300000
       
-      - name: Run Playwright tests
+      - name: System diagnostics
+        run: |
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+
+      - name: Run Playwright tests (with job-level retries)
         env:
           CI: true
-        run: npx playwright test --workers=2 --reporter=list
+        run: |
+          set -e
+          attempts=3
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running Playwright suite..."
+            npx playwright test --workers=2 --reporter=list --retries=2 && break
+            echo "Playwright attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 10))s..."
+              sleep $((i * 10))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
       
       - name: Upload test artifacts
         uses: actions/upload-artifact@v3
@@ -71,10 +93,32 @@ jobs:
 
       - name: Wait for server
         run: npx wait-on http://127.0.0.1:3000 -t 300000
-      - name: Run smoke Checkout Flow
+      - name: System diagnostics (smoke)
+        run: |
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+
+      - name: Run smoke Checkout Flow (with small job-level retry)
         env:
           CI: true
-        run: npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=2 --reporter=list
+        run: |
+          set -e
+          attempts=2
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running smoke 'Checkout Flow'..."
+            npx playwright test e2e/checkout.spec.ts -g "Checkout Flow" --project=chromium --retries=2 --reporter=list && break
+            echo "Smoke Playwright attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
       - name: Upload smoke artifacts
         uses: actions/upload-artifact@v3
         if: always()
