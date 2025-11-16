@@ -123,7 +123,7 @@ export async function seedCart(page: Page, opts?: { productId?: string; quantity
   // Verify persistence: attempt to read the storage from the app origin using
   // a probe page for a short time window. Retry a couple of times to work
   // around flakiness in some browsers or CI combinations (notably WebKit).
-  const maxWaitMs = 5000;
+  const maxWaitMs = 10000; // extend verification window on CI where startup may be slower
   const intervalMs = 250;
   const tryUntil = (ms: number) => new Promise((res) => setTimeout(res, ms));
   const verifyStart = Date.now();
