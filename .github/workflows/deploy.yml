@@ -28,7 +28,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
       
       - name: Build
         run: npm run build
@@ -54,9 +54,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       
+      - name: Wait for deployed URL
+        run: npx wait-on ${{ secrets.DEPLOY_URL }} -t 300000
+
       - name: Run smoke tests
         run: |
-          sleep 30
           npm run test:smoke -- --url ${{ secrets.DEPLOY_URL }}
       
       - name: Notify deployment
