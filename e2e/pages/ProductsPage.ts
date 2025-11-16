@@ -12,7 +12,9 @@ export class ProductsPage {
     this.searchInput = page.getByPlaceholder(/buscar productos/i);
     this.categoryFilter = page.getByRole('combobox', { name: 'Categoría' });
     this.productCards = page.getByRole('article');
-    this.addToCartButtons = page.getByRole('button', { name: /añadir al carrito/i });
+    this.addToCartButtons = page.getByRole('button', {
+      name: /añadir al carrito/i,
+    });
   }
 
   async goto() {
@@ -52,14 +54,30 @@ export class ProductsPage {
           ];
           const disabled: HTMLElement[] = [];
           for (const p of points) {
-            const top = document.elementFromPoint(p.x, p.y) as HTMLElement | null;
+            const top = document.elementFromPoint(
+              p.x,
+              p.y
+            ) as HTMLElement | null;
             if (top && top !== el && !el.contains(top)) {
               // Skip if it's part of the document chrome (html/body) or already marked
-              if (top.tagName.toLowerCase() === 'html' || top.tagName.toLowerCase() === 'body') continue;
-              if (top.getAttribute && top.getAttribute('data-e2e-disabled-overlay') === 'true') continue;
+              if (
+                top.tagName.toLowerCase() === 'html' ||
+                top.tagName.toLowerCase() === 'body'
+              )
+                continue;
+              if (
+                top.getAttribute &&
+                top.getAttribute('data-e2e-disabled-overlay') === 'true'
+              )
+                continue;
               // Only act on visible elements
               const style = window.getComputedStyle(top);
-              if (style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+              if (
+                style &&
+                style.display !== 'none' &&
+                style.visibility !== 'hidden' &&
+                style.opacity !== '0'
+              ) {
                 try {
                   // Use setProperty with 'important' to override any CSS rules
                   // that may be using !important and prevent inline style changes.
@@ -76,15 +94,26 @@ export class ProductsPage {
           // Also try to remove any fixed/floating elements that overlap the button by scanning
           // body children with high z-index.
           try {
-            const children = Array.from(document.body.children) as HTMLElement[];
+            const children = Array.from(
+              document.body.children
+            ) as HTMLElement[];
             for (const c of children) {
               if (c === el || c.contains(el)) continue;
               const cRect = c.getBoundingClientRect();
               if (cRect.width === 0 || cRect.height === 0) continue;
-              const overlap = !(cRect.right < rect.left || cRect.left > rect.right || cRect.bottom < rect.top || cRect.top > rect.bottom);
+              const overlap = !(
+                cRect.right < rect.left ||
+                cRect.left > rect.right ||
+                cRect.bottom < rect.top ||
+                cRect.top > rect.bottom
+              );
               if (overlap) {
                 const style = window.getComputedStyle(c);
-                if (style.position === 'fixed' || style.position === 'sticky' || parseInt(style.zIndex || '0') > 0) {
+                if (
+                  style.position === 'fixed' ||
+                  style.position === 'sticky' ||
+                  parseInt(style.zIndex || '0') > 0
+                ) {
                   try {
                     c.style.setProperty('pointer-events', 'none', 'important');
                     c.style.setProperty('visibility', 'hidden', 'important');
@@ -114,7 +143,11 @@ export class ProductsPage {
         const diag = await this.page.evaluate((el) => {
           const rect = el.getBoundingClientRect();
           const points = [
-            { name: 'center', x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+            {
+              name: 'center',
+              x: rect.left + rect.width / 2,
+              y: rect.top + rect.height / 2,
+            },
             { name: 'tl', x: rect.left + 2, y: rect.top + 2 },
             { name: 'tr', x: rect.right - 2, y: rect.top + 2 },
             { name: 'bl', x: rect.left + 2, y: rect.bottom - 2 },
@@ -123,10 +156,26 @@ export class ProductsPage {
           const hits: any[] = [];
           for (const p of points) {
             try {
-              const top = document.elementFromPoint(p.x, p.y) as HTMLElement | null;
+              const top = document.elementFromPoint(
+                p.x,
+                p.y
+              ) as HTMLElement | null;
               if (top) {
                 const style = window.getComputedStyle(top);
-                hits.push({ point: p.name, tag: top.tagName, classes: top.className, id: top.id, pointerEvents: style.pointerEvents, visibility: style.visibility, rect: top.getBoundingClientRect ? top.getBoundingClientRect() : null, dataDisabled: top.getAttribute && top.getAttribute('data-e2e-disabled-overlay') });
+                hits.push({
+                  point: p.name,
+                  tag: top.tagName,
+                  classes: top.className,
+                  id: top.id,
+                  pointerEvents: style.pointerEvents,
+                  visibility: style.visibility,
+                  rect: top.getBoundingClientRect
+                    ? top.getBoundingClientRect()
+                    : null,
+                  dataDisabled:
+                    top.getAttribute &&
+                    top.getAttribute('data-e2e-disabled-overlay'),
+                });
               } else {
                 hits.push({ point: p.name, tag: null });
               }
@@ -135,16 +184,24 @@ export class ProductsPage {
             }
           }
           // Also capture any nearby candidates with 'bg-emerald-100' for context
-          const candidates = Array.from(document.querySelectorAll('[class*="bg-emerald-100"]')) as HTMLElement[];
+          const candidates = Array.from(
+            document.querySelectorAll('[class*="bg-emerald-100"]')
+          ) as HTMLElement[];
           const candInfo = candidates.slice(0, 8).map((c) => {
             const s = window.getComputedStyle(c);
             const r = c.getBoundingClientRect();
-            return { tag: c.tagName, classes: c.className, id: c.id, pointerEvents: s.pointerEvents, visibility: s.visibility, rect: r };
+            return {
+              tag: c.tagName,
+              classes: c.className,
+              id: c.id,
+              pointerEvents: s.pointerEvents,
+              visibility: s.visibility,
+              rect: r,
+            };
           });
           return { hits, candInfo };
         }, handle);
         // Print diagnostic to the test runner log
-        // eslint-disable-next-line no-console
         console.log('[E2E-DIAG] overlayInfo:', JSON.stringify(diag));
       } catch (e) {
         // ignore diagnostics failures
@@ -156,7 +213,9 @@ export class ProductsPage {
       try {
         await this.page.evaluate(() => {
           try {
-            const list = Array.from(document.querySelectorAll('[class*="bg-emerald-100"]')) as HTMLElement[];
+            const list = Array.from(
+              document.querySelectorAll('[class*="bg-emerald-100"]')
+            ) as HTMLElement[];
             for (const el of list) {
               try {
                 el.style.setProperty('pointer-events', 'none', 'important');
@@ -190,11 +249,21 @@ export class ProductsPage {
           await handle2.evaluate((el: HTMLElement) => {
             try {
               const r = el.getBoundingClientRect();
-              const ev = new MouseEvent('click', { bubbles: true, cancelable: true, composed: true, clientX: Math.round(r.left + r.width / 2), clientY: Math.round(r.top + r.height / 2) });
+              const ev = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                composed: true,
+                clientX: Math.round(r.left + r.width / 2),
+                clientY: Math.round(r.top + r.height / 2),
+              });
               el.dispatchEvent(ev);
             } catch (e) {
               // fall back to simple click if dispatch fails
-              try { (el as any).click(); } catch (e) { /* ignore */ }
+              try {
+                (el as any).click();
+              } catch (e) {
+                void e;
+              }
             }
           });
           return;
@@ -213,7 +282,10 @@ export class ProductsPage {
           try {
             const box = await handle3.boundingBox();
             if (box) {
-              await this.page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+              await this.page.mouse.click(
+                box.x + box.width / 2,
+                box.y + box.height / 2
+              );
               return;
             }
           } catch (err2) {

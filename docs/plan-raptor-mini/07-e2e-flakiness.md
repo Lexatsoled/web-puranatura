@@ -25,3 +25,27 @@ Acciones recomendadas:
    - Reproducir fallos en GitHub Actions con 'runs-on: ubuntu-latest' y habilitar `debug: true` para la infraestructura.
 
 7. Considera ejecutar suites críticas (checkout) en un job separado con retries y parallelism controlado, y marcar pruebas no-criticas como `test.skip` o `test.fixme` hasta que se estabilicen.
+
+## StorageState y `preseededPage` (estrategia recomendada)
+
+- Para casos donde el backend no provea datos consistentes, usar una estrategia `storageState` para crear contexts preseeded. Esto reduce el uso de UI clicks y el flake asociado a escrituras asíncronas de `localStorage`.
+
+- Herramientas y helpers:
+  - `seedCartAndSaveStorageState(browserType)` — helper que crea un estado de `localStorage` con el carrito pre-cargado.
+  - `seedCartAndCreatePreseededPage` — helper que crea un contexto y page con `storageState` pre-cargado.
+
+- Estrategia CI:
+  1.  Añadir una job `seed-playwright` en el pipeline que genera `storageState` para `dist/` y lo publica como artefacto.
+  2.  Job de testing crea contextos usando el `storageState` artifact para replicar el estado exacto.
+  3.  No conviertas el `storageState` en commit; marcar `tmp/e2e-storage/` en `.gitignore`.
+
+## Diagnósticos y artefactos
+
+- Anexar `trace`, `video`, `screenshot` y logs con `E2E-DIAG` cuando la prueba falla. Esto permite inspeccionar el `seededCartRaw` y determinar si la semilla no fue escrita o si hubo un conflicto de origen/CSP.
+- En los fallos, priorizar: (1) confirmar `storageState` escrito, (2) confirmar el origen del contexto (dominio correcto), (3) validar si policies CSP/Cookie impiden escritura.
+
+## Pasos de migración de tests frágiles
+
+1. Identificar tests que fallan recurrentemente (search/filter, performance, security, etc.).
+2. Para los tests dependientes de datos, convertirlos a `preseededPage` o implementar endpoint de seed backend.
+3. Añadir `expect.poll` donde el test espera a que `localStorage` cambie, y usar `toHaveCount` para elementos visibles, con un `timeout` aumentado para entornos lentos.
