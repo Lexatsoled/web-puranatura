@@ -90,15 +90,13 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
 
     if (index >= products.length) {
       // Return an empty element to satisfy react-window's type expectations
-      // eslint-disable-next-line
+
       return <div style={cellStyle} />;
     }
 
     const product = products[index];
 
-
     return (
-      {/* eslint-disable-next-line */}
       <div style={cellStyle} className={styles.gridCell} {...ariaAttributes}>
         <ProductCard product={product} />
       </div>
