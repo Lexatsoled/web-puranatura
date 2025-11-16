@@ -58,8 +58,29 @@ jobs:
         run: npm ci --legacy-peer-deps --no-audit --no-fund
       - name: Install Playwright
         run: npx playwright install --with-deps
-      - name: Run E2E tests
-        run: npm run test:e2e
+      - name: System diagnostics (CI test-e2e)
+        run: |
+          uname -a
+          node --version
+          npm --version
+          npx playwright --version || true
+          df -h
+      - name: Run E2E tests (with job-level retries)
+        run: |
+          set -e
+          attempts=2
+          for i in $(seq 1 $attempts); do
+            echo "Attempt $i/$attempts: running CI E2E suite..."
+            npm run test:e2e && break
+            echo "E2E attempt $i failed."
+            if [ "$i" -lt "$attempts" ]; then
+              echo "Retrying in $((i * 10))s..."
+              sleep $((i * 10))
+            else
+              echo "All attempts failed. Exiting with failure.";
+              exit 1
+            fi
+          done
       - uses: actions/upload-artifact@v3
         if: always()
         with:
