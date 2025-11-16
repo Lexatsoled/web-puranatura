@@ -4,9 +4,10 @@ type Product = any;
 
 async function fetchProduct(page: Page, productId?: string): Promise<Product | null> {
   try {
-    const url = productId
-      ? `http://localhost:3001/api/v1/products/${productId}`
-      : `http://localhost:3001/api/v1/products?limit=1`;
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const url = productId
+        ? `${backendUrl}/api/v1/products/${productId}`
+        : `${backendUrl}/api/v1/products?limit=1`;
     const resp = await page.request.get(url);
     if (!resp.ok()) return null;
     const body = await resp.json();
@@ -99,7 +100,8 @@ export async function seedCart(page: Page, opts?: { productId?: string; quantity
     if (!storageCheck) {
       const probe = await context.newPage();
       try {
-        await probe.goto('http://localhost:3000/', { waitUntil: 'load', timeout: 10000 });
+          const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+          await probe.goto(baseUrl + '/', { waitUntil: 'load', timeout: 10000 });
         // Give the initScript a moment to run
         await probe.waitForTimeout(100);
         const seedCheck = await probe.evaluate(() => localStorage.getItem('pureza-naturalis-cart-storage'))
@@ -132,7 +134,7 @@ export async function seedCart(page: Page, opts?: { productId?: string; quantity
     try {
       const probe = await context.newPage();
       try {
-        await probe.goto('http://localhost:3000/', { waitUntil: 'load', timeout: 10000 });
+       await probe.goto(baseUrl + '/', { waitUntil: 'load', timeout: 10000 });
         const seedCheck = await probe.evaluate(() => localStorage.getItem('pureza-naturalis-cart-storage')).catch(() => null);
         if (seedCheck) {
           persisted = true;
@@ -147,6 +149,7 @@ export async function seedCart(page: Page, opts?: { productId?: string; quantity
               localStorage.setItem(k, JSON.stringify({ state: parsed, version: 2 }));
             } catch {}
           } catch {}
+            // stray baseUrl removed; this is the evaluate() contract
         }, 'pureza-naturalis-cart-storage', stateJson);
       } finally {
         await probe.close();
