@@ -1,4 +1,8 @@
-﻿import { errorLogger, ErrorSeverity, ErrorCategory } from '../services/errorLogger';
+﻿import {
+  errorLogger,
+  ErrorSeverity,
+  ErrorCategory,
+} from '../services/errorLogger';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -19,12 +23,16 @@ import { useProductStore } from '@/store/productStore';
 // Helper types y funciones para manejo robusto de imágenes
 const PLACEHOLDER_IMG = '/placeholder-product.jpg';
 
-type AnyImage = string | { full?: string; url?: string; src?: string; thumbnail?: string };
+type AnyImage =
+  | string
+  | { full?: string; url?: string; src?: string; thumbnail?: string };
 
 function pickUrl(img: AnyImage | null | undefined): string | null {
   if (!img) return null;
   if (typeof img === 'string') return img.trim() || null;
-  const candidates = [img.full, img.url, img.src].filter((x) => typeof x === 'string' && x.trim());
+  const candidates = [img.full, img.url, img.src].filter(
+    (x) => typeof x === 'string' && x.trim()
+  );
   return (candidates[0] as string | undefined) ?? null;
 }
 
@@ -32,7 +40,7 @@ function pickThumb(img: AnyImage | null | undefined): string | null {
   if (!img) return null;
   if (typeof img === 'string') return img.trim() || null;
   const candidates = [img.thumbnail, img.full, img.url, img.src].filter(
-    (x) => typeof x === 'string' && x.trim(),
+    (x) => typeof x === 'string' && x.trim()
   );
   return (candidates[0] as string | undefined) ?? null;
 }
@@ -51,7 +59,7 @@ const ProductPage: React.FC = () => {
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { returnToStore, getNavigationState } = useNavigationState();
   const fetchProductById = useProductStore((state) => state.fetchProductById);
-  
+
   useScrollToTop([productId]);
 
   // Computar todas las variables derivadas de Hooks ANTES de early returns
@@ -60,7 +68,11 @@ const ProductPage: React.FC = () => {
   const inWishlist = product ? isInWishlist(product.id) : false;
 
   const mainImageUrl = useMemo(() => {
-    if (!product || !Array.isArray(product.images) || product.images.length === 0) {
+    if (
+      !product ||
+      !Array.isArray(product.images) ||
+      product.images.length === 0
+    ) {
       return ''; // ImageZoom mostrará su placeholder
     }
     const entry = product.images[selectedImageIndex] ?? product.images[0];
@@ -86,7 +98,8 @@ const ProductPage: React.FC = () => {
           const seo = generateProductSEO(resolved);
           if (seo.title) document.title = seo.title;
           const meta = document.querySelector('meta[name="description"]');
-          if (meta && seo.description) meta.setAttribute('content', seo.description);
+          if (meta && seo.description)
+            meta.setAttribute('content', seo.description);
         } else {
           navigate('/tienda');
         }
@@ -108,7 +121,7 @@ const ProductPage: React.FC = () => {
     };
   }, [fetchProductById, navigate, productId]);
 
-  // Early returns DESPUÃ‰S de todos los Hooks
+  // Early returns DESPUÉS de todos los Hooks
   if (isLoading) {
     return (
       <div className="bg-emerald-100 min-h-screen py-12 flex items-center justify-center">
@@ -143,37 +156,67 @@ const ProductPage: React.FC = () => {
 
   const safe = (s?: string) => {
     const t = s ?? '';
-    return t.replace(/[\\u0000-\\u001f\\u007f]/g, ' ').replace(/\\s+/g, ' ').trim();
+    return t
+      .replace(/[\\u0000-\\u001f\\u007f]/g, ' ')
+      .replace(/\\s+/g, ' ')
+      .trim();
   };
 
   return (
     <div className="bg-emerald-100 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex justify-between items-center mb-8" aria-label="Breadcrumb">
+        <nav
+          className="flex justify-between items-center mb-8"
+          aria-label="Breadcrumb"
+        >
           <div className="flex-1">
             <ol className="inline-flex items-center space-x-1 md:space-x-3">
               <li className="inline-flex items-center">
-                <Link to="/" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600">
+                <Link
+                  to="/"
+                  className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600"
+                >
                   Inicio
                 </Link>
               </li>
               <li>
                 <div className="flex items-center">
-                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                  <svg
+                    className="w-6 h-6 text-gray-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    ></path>
                   </svg>
-                  <Link to="/tienda" className="ml-1 text-sm font-medium text-gray-700 hover:text-green-600 md:ml-2">
+                  <Link
+                    to="/tienda"
+                    className="ml-1 text-sm font-medium text-gray-700 hover:text-green-600 md:ml-2"
+                  >
                     Tienda
                   </Link>
                 </div>
               </li>
               <li aria-current="page">
                 <div className="flex items-center">
-                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                  <svg
+                    className="w-6 h-6 text-gray-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    ></path>
                   </svg>
-                  <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">{product.name}</span>
+                  <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                    {product.name}
+                  </span>
                 </div>
               </li>
             </ol>
@@ -184,8 +227,18 @@ const ProductPage: React.FC = () => {
                 onClick={returnToStore}
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 hover:text-green-800 transition-colors duration-200"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                  />
                 </svg>
                 Volver a la lista
               </button>
@@ -199,7 +252,7 @@ const ProductPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start"
         >
-          {/* GalerÃ¯Â¿Â½a */}
+          {/* Galería */}
           <div className="flex flex-col-reverse">
             <div className="w-full">
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
@@ -214,49 +267,60 @@ const ProductPage: React.FC = () => {
                   className="w-full max-w-lg mx-auto"
                 />
               </div>
-            <div className="mt-6 w-full max-w-2xl mx-auto lg:max-w-none">
-              <div className="flex flex-wrap justify-center gap-4">
-                {(product.images ?? []).length > 0 ? (
-                  product.images.map((image, index) => {
-                    const url = pickUrl(image);
-                    const thumb = pickThumb(image);
-                    const thumbnailSrcSet = url ? generateSrcSet(url, { widths: [120, 160, 240], includeWidthQueryFallback: false }) : '';
+              <div className="mt-6 w-full max-w-2xl mx-auto lg:max-w-none">
+                <div className="flex flex-wrap justify-center gap-4">
+                  {(product.images ?? []).length > 0 ? (
+                    product.images.map((image, index) => {
+                      const url = pickUrl(image);
+                      const thumb = pickThumb(image);
+                      const thumbnailSrcSet = url
+                        ? generateSrcSet(url, {
+                            widths: [120, 160, 240],
+                            includeWidthQueryFallback: false,
+                          })
+                        : '';
 
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`relative h-20 w-20 bg-white rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 ${
-                          index === selectedImageIndex ? 'ring-2 ring-green-600 shadow-lg transform scale-105' : 'border border-gray-200 hover:border-green-400 hover:shadow'
-                        }`}
-                        disabled={!url}
-                        title={url ? `Imagen ${index + 1}` : 'Sin imagen'}
-                      >
-                        <span className="sr-only">Imagen {index + 1}</span>
-                        {thumb ? (
-                          <img
-                            src={thumb}
-                            srcSet={thumbnailSrcSet}
-                            sizes="80px"
-                            alt={`Vista ${index + 1}`}
-                            loading="lazy"
-                            decoding="async"
-                            className="w-16 h-16 object-contain p-1"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 grid place-items-center text-xs text-gray-400">N/D</div>
-                        )}
-                        {index === selectedImageIndex && (
-                          <span className="absolute inset-0 border-2 border-green-600 rounded-lg pointer-events-none"></span>
-                        )}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <div className="text-gray-500 text-sm">Este producto no tiene imágenes.</div>
-                )}
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImageIndex(index)}
+                          className={`relative h-20 w-20 bg-white rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 ${
+                            index === selectedImageIndex
+                              ? 'ring-2 ring-green-600 shadow-lg transform scale-105'
+                              : 'border border-gray-200 hover:border-green-400 hover:shadow'
+                          }`}
+                          disabled={!url}
+                          title={url ? `Imagen ${index + 1}` : 'Sin imagen'}
+                        >
+                          <span className="sr-only">Imagen {index + 1}</span>
+                          {thumb ? (
+                            <img
+                              src={thumb}
+                              srcSet={thumbnailSrcSet}
+                              sizes="80px"
+                              alt={`Vista ${index + 1}`}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-16 h-16 object-contain p-1"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 grid place-items-center text-xs text-gray-400">
+                              N/D
+                            </div>
+                          )}
+                          {index === selectedImageIndex && (
+                            <span className="absolute inset-0 border-2 border-green-600 rounded-lg pointer-events-none"></span>
+                          )}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="text-gray-500 text-sm">
+                      Este producto no tiene imágenes.
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
             </div>
           </div>
 
@@ -284,7 +348,7 @@ const ProductPage: React.FC = () => {
                   {product.stock === 0
                     ? 'Agotado'
                     : quantity > 0
-                      ? `En carrito (${quantity}) - AÃ¯Â¿Â½adir ${selectedQuantity} mÃ¯Â¿Â½s`
+                      ? `En carrito (${quantity}) - Añadir ${selectedQuantity} más`
                       : `Agregar al carrito ${selectedQuantity > 1 ? `(${selectedQuantity})` : ''}`}
                 </button>
                 <button
@@ -300,7 +364,7 @@ const ProductPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* PestaÃ±as */}
+        {/* Pestañas */}
         <div className="mt-16 bg-white rounded-xl shadow-md p-6">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 font-display">
             Información del producto
@@ -317,9 +381,7 @@ const ProductPage: React.FC = () => {
                         <h4 className="text-xl font-semibold text-gray-800 mb-4">
                           Acerca de {product?.name}
                         </h4>
-                        <p className="mb-6">
-                          {product?.detailedDescription}
-                        </p>
+                        <p className="mb-6">{product?.detailedDescription}</p>
                       </>
                     )}
                     {product?.mechanismOfAction && (
@@ -327,39 +389,39 @@ const ProductPage: React.FC = () => {
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">
                           Mecanismo de acción
                         </h4>
-                        <p className="mb-6">
-                          {product?.mechanismOfAction}
-                        </p>
+                        <p className="mb-6">{product?.mechanismOfAction}</p>
                       </>
                     )}
-                    {Array.isArray(product?.benefitsDescription) && product.benefitsDescription.length > 0 && (
-                      <>
-                        <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                          Beneficios
-                        </h4>
-                        <ul className="list-disc pl-6 mb-6 space-y-2">
-                          {product.benefitsDescription.map((benefit, idx) => (
-                            <li key={idx} className="text-gray-700">
-                              {benefit}
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                    {Array.isArray(product?.healthIssues) && product.healthIssues.length > 0 && (
-                      <>
-                        <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                          Ayuda con
-                        </h4>
-                        <ul className="list-disc pl-6 mb-6 space-y-2">
-                          {product.healthIssues.map((issue, idx) => (
-                            <li key={idx} className="text-gray-700">
-                              {issue}
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
+                    {Array.isArray(product?.benefitsDescription) &&
+                      product.benefitsDescription.length > 0 && (
+                        <>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                            Beneficios
+                          </h4>
+                          <ul className="list-disc pl-6 mb-6 space-y-2">
+                            {product.benefitsDescription.map((benefit, idx) => (
+                              <li key={idx} className="text-gray-700">
+                                {benefit}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    {Array.isArray(product?.healthIssues) &&
+                      product.healthIssues.length > 0 && (
+                        <>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                            Ayuda con
+                          </h4>
+                          <ul className="list-disc pl-6 mb-6 space-y-2">
+                            {product.healthIssues.map((issue, idx) => (
+                              <li key={idx} className="text-gray-700">
+                                {issue}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                   </div>
                 ),
               },
@@ -442,7 +504,7 @@ const ProductPage: React.FC = () => {
                         {product.administrationMethod && (
                           <>
                             <h4 className="text-xl font-semibold text-gray-800 mb-4">
-                              Forma de administraciÃ³n
+                              Forma de administración
                             </h4>
                             <p className="mb-6 text-gray-700">
                               {product.administrationMethod}
@@ -454,11 +516,11 @@ const ProductPage: React.FC = () => {
                             Aviso importante
                           </h4>
                           <p className="text-blue-700">
-                            Los suplementos dietÃ©ticos no deben utilizarse como
+                            Los suplementos dietéticos no deben utilizarse como
                             sustituto de una dieta variada y equilibrada. No
-                            exceda la dosis diaria recomendada. Si estÃ¡
+                            exceda la dosis diaria recomendada. Si está
                             embarazada, amamantando, tomando medicamentos o
-                            tiene una condiciÃ³n mÃ©dica, consulte a un
+                            tiene una condición médica, consulte a un
                             profesional de la salud antes de usar.
                           </p>
                         </div>
@@ -520,20 +582,3 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
