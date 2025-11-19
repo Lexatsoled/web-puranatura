@@ -33,20 +33,20 @@ const OrdersPage: React.FC = () => {
           name: 'Aceite Esencial de Lavanda Orgánico',
           price: 24.99,
           quantity: 2,
-          image: '/api/placeholder/80/80'
+          image: '/api/placeholder/80/80',
         },
         {
           id: '2',
           name: 'Suplemento de Vitamina D3',
-          price: 18.50,
+          price: 18.5,
           quantity: 1,
-          image: '/api/placeholder/80/80'
-        }
+          image: '/api/placeholder/80/80',
+        },
       ],
       total: 68.48,
       status: 'delivered',
       trackingNumber: 'TN789123456',
-      estimatedDelivery: new Date('2025-07-30')
+      estimatedDelivery: new Date('2025-07-30'),
     },
     {
       id: 'PN-2025-002',
@@ -57,13 +57,13 @@ const OrdersPage: React.FC = () => {
           name: 'Infusión Detox Natural',
           price: 15.99,
           quantity: 3,
-          image: '/api/placeholder/80/80'
-        }
+          image: '/api/placeholder/80/80',
+        },
       ],
       total: 47.97,
       status: 'shipped',
       trackingNumber: 'TN789123457',
-      estimatedDelivery: new Date('2025-08-02')
+      estimatedDelivery: new Date('2025-08-02'),
     },
     {
       id: 'PN-2025-003',
@@ -72,22 +72,22 @@ const OrdersPage: React.FC = () => {
         {
           id: '4',
           name: 'Crema Hidratante de Aloe Vera',
-          price: 32.00,
+          price: 32.0,
           quantity: 1,
-          image: '/api/placeholder/80/80'
+          image: '/api/placeholder/80/80',
         },
         {
           id: '5',
           name: 'Complejo B Natural',
           price: 22.75,
           quantity: 2,
-          image: '/api/placeholder/80/80'
-        }
+          image: '/api/placeholder/80/80',
+        },
       ],
-      total: 77.50,
+      total: 77.5,
       status: 'processing',
-      estimatedDelivery: new Date('2025-08-05')
-    }
+      estimatedDelivery: new Date('2025-08-05'),
+    },
   ];
 
   if (!isAuthenticated || !user) {
@@ -107,23 +107,35 @@ const OrdersPage: React.FC = () => {
 
   const getStatusColor = (status: Order['status']) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'processing': return 'bg-blue-100 text-blue-800';
-      case 'shipped': return 'bg-purple-100 text-purple-800';
-      case 'delivered': return 'bg-green-100 text-green-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'processing':
+        return 'bg-blue-100 text-blue-800';
+      case 'shipped':
+        return 'bg-purple-100 text-purple-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusText = (status: Order['status']) => {
     switch (status) {
-      case 'pending': return 'Pendiente';
-      case 'processing': return 'Procesando';
-      case 'shipped': return 'Enviado';
-      case 'delivered': return 'Entregado';
-      case 'cancelled': return 'Cancelado';
-      default: return 'Desconocido';
+      case 'pending':
+        return 'Pendiente';
+      case 'processing':
+        return 'Procesando';
+      case 'shipped':
+        return 'Enviado';
+      case 'delivered':
+        return 'Entregado';
+      case 'cancelled':
+        return 'Cancelado';
+      default:
+        return 'Desconocido';
     }
   };
 
@@ -144,8 +156,18 @@ const OrdersPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center"
           >
-            <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            <svg
+              className="w-16 h-16 text-gray-400 mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               No tienes pedidos aún
@@ -179,7 +201,9 @@ const OrdersPage: React.FC = () => {
                           Realizado el {order.date.toLocaleDateString()}
                         </p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}
+                      >
                         {getStatusText(order.status)}
                       </span>
                     </div>
@@ -188,10 +212,16 @@ const OrdersPage: React.FC = () => {
                         €{order.total.toFixed(2)}
                       </p>
                       <button
-                        onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
+                        onClick={() =>
+                          setSelectedOrder(
+                            selectedOrder?.id === order.id ? null : order
+                          )
+                        }
                         className="text-green-600 hover:text-green-700 text-sm font-medium"
                       >
-                        {selectedOrder?.id === order.id ? 'Ocultar detalles' : 'Ver detalles'}
+                        {selectedOrder?.id === order.id
+                          ? 'Ocultar detalles'
+                          : 'Ver detalles'}
                       </button>
                     </div>
                   </div>
@@ -202,8 +232,18 @@ const OrdersPage: React.FC = () => {
                   <div className="px-6 py-3 bg-blue-50 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                        <svg
+                          className="w-5 h-5 text-blue-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                          />
                         </svg>
                         <span className="text-sm text-blue-800">
                           <strong>Seguimiento:</strong> {order.trackingNumber}
@@ -211,7 +251,8 @@ const OrdersPage: React.FC = () => {
                       </div>
                       {order.estimatedDelivery && (
                         <span className="text-sm text-blue-600">
-                          Entrega estimada: {order.estimatedDelivery.toLocaleDateString()}
+                          Entrega estimada:{' '}
+                          {order.estimatedDelivery.toLocaleDateString()}
                         </span>
                       )}
                     </div>
@@ -231,14 +272,20 @@ const OrdersPage: React.FC = () => {
                     </h4>
                     <div className="space-y-3">
                       {order.items.map((item) => (
-                        <div key={item.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                        <div
+                          key={item.id}
+                          className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
+                        >
                           <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
                             <span className="text-2xl">🌿</span>
                           </div>
                           <div className="flex-1">
-                            <h5 className="font-medium text-gray-900">{item.name}</h5>
+                            <h5 className="font-medium text-gray-900">
+                              {item.name}
+                            </h5>
                             <p className="text-sm text-gray-600">
-                              Cantidad: {item.quantity} × €{item.price.toFixed(2)}
+                              Cantidad: {item.quantity} × €
+                              {item.price.toFixed(2)}
                             </p>
                           </div>
                           <div className="text-right">

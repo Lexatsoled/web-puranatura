@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-type EventCategory = 
+type EventCategory =
   | 'page_view'
   | 'product'
   | 'cart'
@@ -46,9 +46,13 @@ class AnalyticsService {
     if (typeof window !== 'undefined') {
       // Google Analytics
       if (process.env.REACT_APP_GA_ID) {
-        this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`);
+        this.loadScript(
+          `https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`
+        );
         window.dataLayer = window.dataLayer || [];
-        window.gtag = function(){window.dataLayer.push(arguments)};
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
         window.gtag('js', new Date());
         window.gtag('config', process.env.REACT_APP_GA_ID);
       }
@@ -56,7 +60,11 @@ class AnalyticsService {
       // Facebook Pixel
       if (process.env.REACT_APP_FB_PIXEL_ID) {
         this.loadScript('https://connect.facebook.net/en_US/fbevents.js');
-        window.fbq = window.fbq || function(){(window.fbq.q = window.fbq.q || []).push(arguments)};
+        window.fbq =
+          window.fbq ||
+          function () {
+            (window.fbq.q = window.fbq.q || []).push(arguments);
+          };
         window.fbq('init', process.env.REACT_APP_FB_PIXEL_ID);
       }
     }

@@ -1,48 +1,51 @@
 import mongoose from 'mongoose';
 import { nanoid } from 'nanoid';
 
-const analyticsEventSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    default: () => nanoid(),
+const analyticsEventSchema = new mongoose.Schema(
+  {
+    _id: {
+      type: String,
+      default: () => nanoid(),
+    },
+    category: {
+      type: String,
+      required: true,
+      enum: [
+        'page_view',
+        'product',
+        'cart',
+        'checkout',
+        'search',
+        'user',
+        'blog',
+        'therapy',
+      ],
+    },
+    action: {
+      type: String,
+      required: true,
+    },
+    label: String,
+    value: Number,
+    metadata: mongoose.Schema.Types.Mixed,
+    sessionId: {
+      type: String,
+      required: true,
+    },
+    userId: String,
+    ip: String,
+    userAgent: String,
+    referrer: String,
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  category: {
-    type: String,
-    required: true,
-    enum: [
-      'page_view',
-      'product',
-      'cart',
-      'checkout',
-      'search',
-      'user',
-      'blog',
-      'therapy',
-    ],
-  },
-  action: {
-    type: String,
-    required: true,
-  },
-  label: String,
-  value: Number,
-  metadata: mongoose.Schema.Types.Mixed,
-  sessionId: {
-    type: String,
-    required: true,
-  },
-  userId: String,
-  ip: String,
-  userAgent: String,
-  referrer: String,
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-}, {
-  timestamps: true,
-  collection: 'analytics_events',
-});
+  {
+    timestamps: true,
+    collection: 'analytics_events',
+  }
+);
 
 // Índices para consultas comunes
 analyticsEventSchema.index({ category: 1, action: 1 });
@@ -52,7 +55,7 @@ analyticsEventSchema.index({ timestamp: 1 });
 analyticsEventSchema.index({ 'metadata.productId': 1 }, { sparse: true });
 
 // Métodos estáticos para análisis comunes
-analyticsEventSchema.statics.getPageViews = async function(
+analyticsEventSchema.statics.getPageViews = async function (
   startDate: Date,
   endDate: Date
 ) {
@@ -86,7 +89,7 @@ analyticsEventSchema.statics.getPageViews = async function(
   ]);
 };
 
-analyticsEventSchema.statics.getProductAnalytics = async function(
+analyticsEventSchema.statics.getProductAnalytics = async function (
   productId: string,
   startDate: Date,
   endDate: Date
@@ -119,11 +122,13 @@ analyticsEventSchema.statics.getProductAnalytics = async function(
   ]);
 };
 
-analyticsEventSchema.statics.getUserJourney = async function(sessionId: string) {
-  return this.find({ sessionId })
-    .sort({ timestamp: 1 })
-    .select('-__v')
-    .lean();
+analyticsEventSchema.statics.getUserJourney = async function (
+  sessionId: string
+) {
+  return this.find({ sessionId }).sort({ timestamp: 1 }).select('-__v').lean();
 };
 
-export const AnalyticsEvent = mongoose.model('AnalyticsEvent', analyticsEventSchema);
+export const AnalyticsEvent = mongoose.model(
+  'AnalyticsEvent',
+  analyticsEventSchema
+);

@@ -33,13 +33,15 @@ const ServicesPage: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity duration-300" />
               </div>
-              
+
               <div className="p-6 flex flex-col justify-center flex-grow">
                 <h3 className="text-2xl font-bold text-green-700 font-display mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{service.description}</p>
-                
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+
                 {/* {service.benefits && service.benefits.length > 0 && (
                   <div className="mt-4">
                     <h4 className="font-semibold text-green-600 mb-2">Beneficios:</h4>
@@ -50,7 +52,7 @@ const ServicesPage: React.FC = () => {
                     </ul>
                   </div>
                 )} */}
-                
+
                 {/* <div className="mt-4 pt-4 border-t border-gray-100">
                   <div className="flex justify-between items-center">
                     {service.duration && (

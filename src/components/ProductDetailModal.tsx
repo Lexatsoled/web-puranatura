@@ -15,7 +15,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   product,
   isOpen,
   onClose,
-  onAddToCartSuccess
+  onAddToCartSuccess,
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -38,18 +38,18 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-      
+
       switch (e.key) {
         case 'Escape':
           onClose();
           break;
         case 'ArrowLeft':
-          setSelectedImage((prev) => 
+          setSelectedImage((prev) =>
             prev === 0 ? product.images.length - 1 : prev - 1
           );
           break;
         case 'ArrowRight':
-          setSelectedImage((prev) => 
+          setSelectedImage((prev) =>
             prev === product.images.length - 1 ? 0 : prev + 1
           );
           break;
@@ -73,19 +73,22 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   }, [isOpen]);
 
   // Manejar zoom de imagen
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isZoomed) return;
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!isZoomed) return;
 
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - bounds.left) / bounds.width) * 100;
-    const y = ((e.clientY - bounds.top) / bounds.height) * 100;
-    setMousePosition({ x, y });
-  }, [isZoomed]);
+      const bounds = e.currentTarget.getBoundingClientRect();
+      const x = ((e.clientX - bounds.left) / bounds.width) * 100;
+      const y = ((e.clientY - bounds.top) / bounds.height) * 100;
+      setMousePosition({ x, y });
+    },
+    [isZoomed]
+  );
 
   // Añadir al carrito con manejo de errores
   const handleAddToCart = async () => {
     if (isAddingToCart) return;
-    
+
     setIsAddingToCart(true);
     try {
       await addToCart(product as any, quantity);
@@ -128,7 +131,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               {/* Galería de imágenes */}
               <div className="relative p-6 flex flex-col">
                 <div className="relative flex-grow">
-                  <div 
+                  <div
                     className={`aspect-w-1 aspect-h-1 bg-gray-100 rounded-lg overflow-hidden relative ${
                       isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
                     }`}
@@ -137,16 +140,20 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   >
                     <motion.div
                       className="w-full h-full"
-                      animate={isZoomed ? {
-                        scale: 2,
-                        x: -mousePosition.x,
-                        y: -mousePosition.y,
-                      } : {
-                        scale: 1,
-                        x: 0,
-                        y: 0,
-                      }}
-                      transition={{ type: "spring", damping: 25 }}
+                      animate={
+                        isZoomed
+                          ? {
+                              scale: 2,
+                              x: -mousePosition.x,
+                              y: -mousePosition.y,
+                            }
+                          : {
+                              scale: 1,
+                              x: 0,
+                              y: 0,
+                            }
+                      }
+                      transition={{ type: 'spring', damping: 25 }}
                     >
                       <OptimizedImage
                         src={product.images[selectedImage].full}
@@ -208,14 +215,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     )} */}
                   </div>
                   {product.inStock && (
-                    <p className="text-sm mt-1 text-green-600">
-                      En stock
-                    </p>
+                    <p className="text-sm mt-1 text-green-600">En stock</p>
                   )}
                   {!product.inStock && (
-                    <p className="text-sm mt-1 text-red-600">
-                      Agotado
-                    </p>
+                    <p className="text-sm mt-1 text-red-600">Agotado</p>
                   )}
                 </div>
 
@@ -228,9 +231,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-2">Beneficios</h3>
                     <ul className="list-disc list-inside text-gray-600 space-y-1">
-                      {product.benefits.map((benefit: string, index: number) => (
-                        <li key={index}>{benefit}</li>
-                      ))}
+                      {product.benefits.map(
+                        (benefit: string, index: number) => (
+                          <li key={index}>{benefit}</li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}
@@ -280,31 +285,32 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       w-full px-6 py-3 rounded-md font-semibold
                       transition-colors duration-200
                       flex items-center justify-center
-                      ${isAddingToCart 
-                        ? 'bg-gray-400 cursor-not-allowed' 
-                        : 'bg-green-600 hover:bg-green-700 text-white'
+                      ${
+                        isAddingToCart
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700 text-white'
                       }
                     `}
                   >
                     {isAddingToCart ? (
                       <>
-                        <svg 
-                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
+                        <svg
+                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
                           viewBox="0 0 24 24"
                         >
-                          <circle 
-                            className="opacity-25" 
-                            cx="12" 
-                            cy="12" 
-                            r="10" 
-                            stroke="currentColor" 
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
                             strokeWidth="4"
                           />
-                          <path 
-                            className="opacity-75" 
-                            fill="currentColor" 
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                           />
                         </svg>

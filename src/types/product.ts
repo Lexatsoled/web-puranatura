@@ -3,6 +3,11 @@ export interface ProductImage {
   thumbnail: string;
 }
 
+export interface ProductCategory {
+  id: string;
+  name: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +25,14 @@ export interface Product {
   isNew?: boolean;
   isBestSeller?: boolean;
   compareAtPrice?: number;
+  detailedDescription?: string;
+  mechanismOfAction?: string;
+  benefitsDescription?: string[];
+  healthIssues?: string[];
+  components?: Array<{ name: string; description?: string; amount?: string }>;
+  faqs?: Array<{ question: string; answer: string }>;
+  dosage?: string;
+  administrationMethod?: string;
 }
 
 export type SortOption =

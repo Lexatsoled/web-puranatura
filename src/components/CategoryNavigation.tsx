@@ -106,7 +106,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
                   src={category.image}
                   alt={category.name}
                   className="object-cover"
-                  aspectRatio={16/9}
+                  aspectRatio={16 / 9}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-opacity" />
               </div>

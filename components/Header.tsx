@@ -16,7 +16,10 @@ const pageLinks: { name: string; path: string }[] = [
   { name: 'Contacto', path: '/contacto' },
 ];
 
-const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
+const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({
+  to,
+  children,
+}) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -49,9 +52,12 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
         </nav>
         <div className="flex items-center">
           <button
+            aria-label="Abrir carrito"
+            title="Abrir carrito"
             onClick={onCartClick}
             className="relative text-gray-600 hover:text-green-600 transition-colors duration-300 mr-4"
           >
+            <span className="sr-only">Abrir carrito</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -67,7 +73,10 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
               />
             </svg>
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span
+                data-testid="cart-counter"
+                className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >
                 {cartCount}
               </span>
             )}

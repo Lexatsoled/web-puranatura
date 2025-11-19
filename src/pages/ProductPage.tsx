@@ -11,7 +11,7 @@ import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
 // Helper function to get product by ID
 const getProductById = (id: string | undefined): Product | null => {
   if (!id) return null;
-  return products.find(product => product.id === id) || null;
+  return products.find((product) => product.id === id) || null;
 };
 
 const ProductPage: React.FC = () => {
@@ -50,13 +50,13 @@ const ProductPage: React.FC = () => {
           price: product.price,
           priceCurrency: 'EUR',
           availability: 'InStock', // product.inStock ? 'InStock' : 'OutOfStock',
-          url: currentUrl
+          url: currentUrl,
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateBreadcrumbJsonLd(breadcrumbs))
+          __html: JSON.stringify(generateBreadcrumbJsonLd(breadcrumbs)),
         }}
       />
       <div className="container mx-auto px-4 py-8">

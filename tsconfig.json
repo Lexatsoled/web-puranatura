@@ -26,5 +26,18 @@
     "paths": {
       "@/*": ["./*"]
     }
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "reports",
+    "public/optimized",
+    "playwright-report",
+    "test-results",
+    "tmp",
+    "temp_trace_extract1",
+    "tools/githooks",
+    "**/node_modules/**"
+  ]
 }

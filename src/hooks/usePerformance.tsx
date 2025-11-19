@@ -18,13 +18,13 @@ interface WithLazyLoadingProps {
 }
 
 // HOC para lazy loading
-export function withLazyLoading<P extends object>(
+export function withLazyLoading<P extends Record<string, any>>(
   Component: React.ComponentType<P>,
   options: WithLazyLoadingProps = {}
-): React.FC<P> {
-  const LazyComponent = React.lazy(() => 
-    Promise.resolve({ default: Component })
-  );
+): React.ComponentType<P> {
+  const LazyComponent = React.lazy(() =>
+    Promise.resolve({ default: Component as any })
+  ) as React.LazyExoticComponent<React.ComponentType<any>>;
 
   return function WrappedComponent(props: P) {
     return (
@@ -36,16 +36,21 @@ export function withLazyLoading<P extends object>(
 }
 
 // Hook para memoizar funciones basadas en dependencias
-export function useStableMemo<T>(factory: () => T, deps: React.DependencyList): T {
+export function useStableMemo<T>(
+  factory: () => T,
+  deps: React.DependencyList
+): T {
   return React.useMemo(() => factory(), deps);
 }
 
 // HOC para memoización de componentes
-export function withMemo<P extends object>(
+export function withMemo<P extends Record<string, any>>(
   Component: React.ComponentType<P>,
   propsAreEqual?: (prevProps: Readonly<P>, nextProps: Readonly<P>) => boolean
-): React.NamedExoticComponent<P> {
-  return React.memo(Component, propsAreEqual);
+): React.MemoExoticComponent<React.ComponentType<P>> {
+  return React.memo(Component, propsAreEqual) as React.MemoExoticComponent<
+    React.ComponentType<P>
+  >;
 }
 
 // Hook para callbacks estables

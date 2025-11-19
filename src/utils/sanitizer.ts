@@ -3,11 +3,27 @@ import DOMPurify from 'dompurify';
 // Configuración para DOMPurify
 const purifyConfig = {
   ALLOWED_TAGS: [
-    'b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img'
+    'b',
+    'i',
+    'em',
+    'strong',
+    'a',
+    'p',
+    'br',
+    'ul',
+    'ol',
+    'li',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'img',
   ],
   ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'title'],
-  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|xxx):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+  ALLOWED_URI_REGEXP:
+    /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|xxx):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
   ADD_TAGS: ['iframe'],
   ADD_ATTR: ['frameborder', 'allow', 'allowfullscreen'],
 };
@@ -55,9 +71,12 @@ export function sanitizeObject<T extends object>(obj: T): T {
       }
     } else if (Array.isArray(value)) {
       // Sanitizar arrays recursivamente
-      (sanitized as any)[key] = value.map(item =>
-        typeof item === 'object' ? sanitizeObject(item) : 
-        typeof item === 'string' ? sanitizeText(item) : item
+      (sanitized as any)[key] = value.map((item) =>
+        typeof item === 'object'
+          ? sanitizeObject(item)
+          : typeof item === 'string'
+            ? sanitizeText(item)
+            : item
       );
     } else if (value && typeof value === 'object') {
       // Sanitizar objetos anidados
@@ -88,7 +107,9 @@ export const useSanitizer = () => {
 /**
  * Validador personalizado para React Hook Form
  */
-export const createSanitizeValidator = (type: 'html' | 'text' | 'url' = 'text') => {
+export const createSanitizeValidator = (
+  type: 'html' | 'text' | 'url' = 'text'
+) => {
   return (value: string) => {
     if (typeof value !== 'string') return value;
 

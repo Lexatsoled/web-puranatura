@@ -53,7 +53,8 @@ export const useErrorHandler = () => {
       showNotification({
         type: 'error',
         title: 'Error de conexión',
-        message: 'Por favor, verifica tu conexión a internet e intenta nuevamente.',
+        message:
+          'Por favor, verifica tu conexión a internet e intenta nuevamente.',
       });
     } else if (error instanceof Error) {
       showNotification({
@@ -65,7 +66,8 @@ export const useErrorHandler = () => {
       showNotification({
         type: 'error',
         title: 'Error inesperado',
-        message: 'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
+        message:
+          'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
       });
     }
   };
@@ -80,28 +82,36 @@ export async function withErrorHandling<T>(
     onSuccess?: (data: T) => void;
     onError?: (error: unknown) => void;
     successMessage?: string;
+    // optional handlers to delegate notification/error handling responsibility
+    showNotification?: (payload: {
+      type: string;
+      title?: string;
+      message?: string;
+    }) => void;
+    handleError?: (error: unknown) => void;
   } = {}
 ): Promise<T | undefined> {
-  const { showNotification } = useNotifications();
-  
   try {
     const data = await fn();
-    
-    if (options.successMessage) {
-      showNotification({
+
+    if (options.successMessage && options.showNotification) {
+      options.showNotification({
         type: 'success',
         message: options.successMessage,
       });
     }
-    
+
     options.onSuccess?.(data);
     return data;
   } catch (error) {
     if (options.onError) {
       options.onError(error);
+    } else if (options.handleError) {
+      options.handleError(error);
     } else {
-      const { handleError } = useErrorHandler();
-      handleError(error);
+      // Fallback to console if no handler provided
+      console.error('Unhandled error in withErrorHandling:', error);
+      throw error;
     }
   }
 }
@@ -132,10 +142,6 @@ export function transformApiError(error: any): Error {
     case 500:
       return new ApiError('Error interno del servidor', status, data);
     default:
-      return new ApiError(
-        data.message || 'Error desconocido',
-        status,
-        data
-      );
+      return new ApiError(data.message || 'Error desconocido', status, data);
   }
 }

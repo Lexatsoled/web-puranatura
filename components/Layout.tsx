@@ -12,9 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ onCartClick, children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-emerald-50 text-gray-800">
       <Header onCartClick={onCartClick} />
-      <main className="flex-grow">
-        {children || <Outlet />}
-      </main>
+      <main className="flex-grow">{children || <Outlet />}</main>
       <Footer />
     </div>
   );

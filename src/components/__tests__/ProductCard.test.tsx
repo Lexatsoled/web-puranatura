@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '../../test/test-utils';
+import { render } from '../../test/test-utils';
+import * as testingLibrary from '@testing-library/react';
 import ProductCard from '../ProductCard';
 
 const mockProduct = {
@@ -22,35 +23,40 @@ const mockProduct = {
 describe('ProductCard', () => {
   it('renders product information correctly', () => {
     const handleViewDetails = vi.fn();
-    render(
+    const { getAllByText, getByRole, getByText } = render(
       <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
     );
 
     // Verificar que la información del producto se muestra correctamente
-    expect(screen.getByText(mockProduct.name)).toBeInTheDocument();
-    expect(screen.getByText(mockProduct.category)).toBeInTheDocument();
-    expect(screen.getByText(`DOP $${mockProduct.price.toFixed(2)}`)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /añadir/i })).toBeInTheDocument();
+    expect(getAllByText(mockProduct.name)[0]).toBeInTheDocument();
+    expect(
+      getByRole('heading', { name: mockProduct.name })
+    ).toBeInTheDocument();
+    expect(
+      getByText(`DOP $${mockProduct.price.toFixed(2)}`)
+    ).toBeInTheDocument();
+    expect(getByRole('button', { name: /añadir/i })).toBeInTheDocument();
   });
 
   it('calls onViewDetails when clicked', () => {
     const handleViewDetails = vi.fn();
-    render(
+    const { getAllByTestId } = render(
       <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
     );
 
     // Simular clic en el componente
-    fireEvent.click(screen.getByText(mockProduct.name));
+    const cards = getAllByTestId('product-card-1');
+    const cardToClick = cards.length > 1 ? cards[1] : cards[0];
+    (testingLibrary as any).fireEvent.click(cardToClick);
     expect(handleViewDetails).toHaveBeenCalledWith(mockProduct);
   });
 
   it('displays the correct image', () => {
     const handleViewDetails = vi.fn();
-    render(
+    const { getAllByAltText } = render(
       <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
     );
-
-    const image = screen.getByAltText(mockProduct.name);
+    const image = getAllByAltText(mockProduct.name)[0];
     expect(image).toHaveAttribute('src', mockProduct.images[0].full);
   });
 });

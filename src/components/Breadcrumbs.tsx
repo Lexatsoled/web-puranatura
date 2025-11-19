@@ -114,10 +114,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
       </nav>
 
       {/* Breadcrumbs móvil */}
-      <nav
-        aria-label="Breadcrumb"
-        className={`md:hidden mt-2 ${className}`}
-      >
+      <nav aria-label="Breadcrumb" className={`md:hidden mt-2 ${className}`}>
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -162,10 +159,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                   </Link>
                 )}
                 {index < items.length - 1 && (
-                  <span
-                    className="mx-2 text-gray-400"
-                    aria-hidden="true"
-                  >
+                  <span className="mx-2 text-gray-400" aria-hidden="true">
                     {separator}
                   </span>
                 )}

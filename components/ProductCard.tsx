@@ -34,7 +34,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer transform hover:-translate-y-1 transition-all duration-300 flex flex-col"
+      data-testid={`product-card-${product.id}`}
+      className={`product-card bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer transform hover:-translate-y-1 transition-all duration-300 flex flex-col`}
       onClick={() => onViewDetails(product)}
     >
       <div className="relative h-56 bg-gray-100 flex items-center justify-center">
@@ -44,19 +45,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
           className="w-full h-full object-contain p-2"
         />
         <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-0 transition-all duration-300"></div>
-        
+
         {/* Botón de wishlist */}
         <button
           onClick={handleWishlistToggle}
           className={`absolute top-2 right-2 p-2 rounded-full transition-all duration-300 ${
-            isProductInWishlist 
-              ? 'bg-red-500 text-white hover:bg-red-600' 
+            isProductInWishlist
+              ? 'bg-red-500 text-white hover:bg-red-600'
               : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
           }`}
-          title={isProductInWishlist ? 'Quitar de lista de deseos' : 'Agregar a lista de deseos'}
+          title={
+            isProductInWishlist
+              ? 'Quitar de lista de deseos'
+              : 'Agregar a lista de deseos'
+          }
         >
-          <svg className="w-5 h-5" fill={isProductInWishlist ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          <svg
+            className="w-5 h-5"
+            fill={isProductInWishlist ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
           </svg>
         </button>
       </div>
@@ -71,6 +86,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </p>
           <button
             onClick={handleAddToCart}
+            data-testid="add-to-cart"
             className="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-700 transition-colors duration-300"
           >
             Añadir
