@@ -1,3 +1,9 @@
+/*
+  NOTE: This file is temporarily disabled because ESLint v9 uses flat configs
+  and reading both legacy and flat configs in the same project causes errors
+  in the CLI. The repository's ".eslintrc.cjs" is the canonical config.
+  If you need to re-enable this JSON file, move it to .eslintrc.json.bak
+*/
 {
   "env": {
     "browser": true,
@@ -18,11 +24,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "react-hooks",
-    "@typescript-eslint"
-  ],
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",

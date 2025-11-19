@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface OptimizedImageProps {
   src: string;
@@ -46,9 +45,19 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     onError?.();
   }, [onError]);
 
+  React.useEffect(() => {
+    // Only import CSS in browser context; avoids Node import error when running Playwright tests
+    if (typeof window !== 'undefined') {
+      import('react-lazy-load-image-component/src/effects/blur.css').catch(
+        () => {}
+      );
+    }
+  }, []);
+
   // Calcular dimensiones basadas en aspectRatio
   const finalWidth = width || '100%';
-  const finalHeight = height || (aspectRatio ? `${100 / aspectRatio}%` : '100%');
+  const finalHeight =
+    height || (aspectRatio ? `${100 / aspectRatio}%` : '100%');
 
   // Generar srcSet automático si no se proporciona
   const autoSrcSet = srcSet || generateSrcSet(src);
@@ -85,7 +94,9 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         height={finalHeight}
         effect={blur && !priority ? 'blur' : undefined}
         srcSet={autoSrcSet}
-        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+        sizes={
+          sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+        }
         afterLoad={handleLoad}
         onError={handleError}
         className={`transition-opacity duration-300 ${
@@ -98,7 +109,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         }}
         loading={priority ? 'eager' : 'lazy'}
       />
-      
+
       {/* Loading placeholder */}
       {!isLoaded && !hasError && (
         <div
@@ -127,17 +138,17 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
 // Función auxiliar para generar srcSet
 function generateSrcSet(src: string): string {
   if (!src) return '';
-  
+
   const baseUrl = src.split('?')[0];
   const extension = baseUrl.split('.').pop();
   const baseName = baseUrl.replace(`.${extension}`, '');
-  
+
   return [
     `${baseName}_320.${extension} 320w`,
     `${baseName}_640.${extension} 640w`,
     `${baseName}_768.${extension} 768w`,
     `${baseName}_1024.${extension} 1024w`,
-    `${src} 1200w`
+    `${src} 1200w`,
   ].join(', ');
 }
 

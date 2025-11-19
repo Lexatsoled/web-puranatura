@@ -9,7 +9,7 @@ const ProfilePage: React.FC = () => {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     phone: user?.phone || '',
-    email: user?.email || ''
+    email: user?.email || '',
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -31,7 +31,7 @@ const ProfilePage: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
@@ -42,7 +42,7 @@ const ProfilePage: React.FC = () => {
       const success = await updateProfile({
         firstName: formData.firstName,
         lastName: formData.lastName,
-        phone: formData.phone || undefined
+        phone: formData.phone || undefined,
       });
 
       if (success) {
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
       } else {
         setSaveMessage('Error al actualizar el perfil');
       }
-    } catch (error) {
+    } catch {
       setSaveMessage('Error al actualizar el perfil');
     } finally {
       setIsSaving(false);
@@ -64,7 +64,7 @@ const ProfilePage: React.FC = () => {
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone || '',
-      email: user.email
+      email: user.email,
     });
     setIsEditing(false);
     setSaveMessage('');
@@ -98,8 +98,18 @@ const ProfilePage: React.FC = () => {
                     onClick={() => setIsEditing(true)}
                     className="text-green-600 hover:text-green-700 font-medium text-sm flex items-center gap-1"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                     Editar
                   </button>
@@ -107,11 +117,13 @@ const ProfilePage: React.FC = () => {
               </div>
 
               {saveMessage && (
-                <div className={`mb-4 p-3 rounded-md ${
-                  saveMessage.includes('Error') 
-                    ? 'bg-red-50 border border-red-200 text-red-700'
-                    : 'bg-green-50 border border-green-200 text-green-700'
-                }`}>
+                <div
+                  className={`mb-4 p-3 rounded-md ${
+                    saveMessage.includes('Error')
+                      ? 'bg-red-50 border border-red-200 text-red-700'
+                      : 'bg-green-50 border border-green-200 text-green-700'
+                  }`}
+                >
                   {saveMessage}
                 </div>
               )}
@@ -160,7 +172,8 @@ const ProfilePage: React.FC = () => {
                   </label>
                   <p className="text-gray-900 py-2">{user.email}</p>
                   <p className="text-xs text-gray-500">
-                    El email no se puede modificar. Contacta con soporte si necesitas cambiarlo.
+                    El email no se puede modificar. Contacta con soporte si
+                    necesitas cambiarlo.
                   </p>
                 </div>
 
@@ -195,9 +208,24 @@ const ProfilePage: React.FC = () => {
                     className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {isSaving && (
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                       </svg>
                     )}
                     Guardar Cambios

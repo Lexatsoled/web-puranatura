@@ -22,7 +22,9 @@ interface WishlistContextType {
   wishlistCount: number;
 }
 
-const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
+const WishlistContext = createContext<WishlistContextType | undefined>(
+  undefined
+);
 
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
@@ -36,7 +38,9 @@ interface WishlistProviderProps {
   children: React.ReactNode;
 }
 
-export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) => {
+export const WishlistProvider: React.FC<WishlistProviderProps> = ({
+  children,
+}) => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
 
   // Cargar lista de deseos desde localStorage al inicializar
@@ -48,7 +52,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
         // Convertir fechas de string a Date
         const wishlistWithDates = parsedWishlist.map((item: any) => ({
           ...item,
-          addedDate: new Date(item.addedDate)
+          addedDate: new Date(item.addedDate),
         }));
         setWishlistItems(wishlistWithDates);
       } catch (error) {
@@ -63,8 +67,10 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
   }, [wishlistItems]);
 
   const addToWishlist = (product: Product) => {
-    const isAlreadyInWishlist = wishlistItems.some(item => item.id === product.id);
-    
+    const isAlreadyInWishlist = wishlistItems.some(
+      (item) => item.id === product.id
+    );
+
     if (!isAlreadyInWishlist) {
       const wishlistItem: WishlistItem = {
         id: product.id,
@@ -74,19 +80,19 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
         category: product.category,
         inStock: true, // Por defecto asumimos que está en stock
         addedDate: new Date(),
-        product: product
+        product: product,
       };
 
-      setWishlistItems(prev => [...prev, wishlistItem]);
+      setWishlistItems((prev) => [...prev, wishlistItem]);
     }
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlistItems(prev => prev.filter(item => item.id !== productId));
+    setWishlistItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
   const isInWishlist = (productId: string): boolean => {
-    return wishlistItems.some(item => item.id === productId);
+    return wishlistItems.some((item) => item.id === productId);
   };
 
   const clearWishlist = () => {
@@ -101,7 +107,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     removeFromWishlist,
     isInWishlist,
     clearWishlist,
-    wishlistCount
+    wishlistCount,
   };
 
   return (

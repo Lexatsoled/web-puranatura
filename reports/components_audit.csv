@@ -1,0 +1,26 @@
+id,name,has_placeholder,empty_amounts,total_components
+"2","High Potency Vitamin D3, 10,000 IU",0,2,3
+"3","Vitamina_K2",0,2,3
+"6","Immune Probiotic Go Pack",0,1,4
+"pr-alpha-gpc","Alpha GPC, 200 mg",0,6,7
+"pr-maca","Maca, 4800 mg",0,4,5
+"pr-same","SAM-e Enteric Coated",0,11,12
+"pr-bamboo-extract","Bamboo Extract, 3000 mg",0,3,4
+"pr-borage-oil","Borage Oil (GLA)",0,2,6
+"pr-ashwa-melatonin","Sleep Formula",0,4,9
+"pr-basil-oil","Passion Flower",0,4,5
+"pr-creatine","Creatine (Micronized)",0,4,5
+"pr-chamomile-oil","Rhodiola Rosea",0,3,4
+"pr-sandalwood-oil","Valerian Root",0,3,4
+"pr-bacopa","Bacopa Monnieri",0,4,5
+"pr-pqq","PQQ Pyrroloquinoline Quinone",0,3,4
+"pr-iodine","Odorless Garlic",0,3,4
+"pr-kudzu-root","Kudzu Root",0,4,5
+"pr-apple-cider-vinegar","Apple Cider Vinegar",0,7,11
+"pr-activated-charcoal","Activated Coconut Charcoal",0,2,3
+"pr-soy-lecithin","Lecithin - NON GMO, 1200 mg",0,2,3
+"pr-clove-oil","Oil of Oregano, 4000 mg",0,2,3
+"pr-cranberry-vitamin-c","Cranberry_Plus_C_30_000",0,4,6
+"pr-collagen-peptides","Grassfed Collagen Peptides",0,1,5
+"pr-digestive-duo","Digestive Duo Probiotic",0,1,10
+"pr-mct-oil","MCT Oil, 3600 mg",0,2,3

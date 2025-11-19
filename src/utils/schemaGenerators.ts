@@ -20,13 +20,16 @@ interface ProductJsonLd {
   };
 }
 
-export const generateProductJsonLd = (product: Product, url: string): ProductJsonLd => {
+export const generateProductJsonLd = (
+  product: Product,
+  url: string
+): ProductJsonLd => {
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
     description: product.seoDescription || product.description,
-    image: product.images.map(img => img.full),
+    image: product.images.map((img) => img.full),
     ...(product.brand && {
       brand: {
         '@type': 'Brand',

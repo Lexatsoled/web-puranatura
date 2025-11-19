@@ -19,10 +19,16 @@ const CART_STORAGE_KEY = 'pura-natura-cart';
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(CART_STORAGE_KEY, []);
-  
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    CART_STORAGE_KEY,
+    []
+  );
+
   // Calcular el total de items y precio
-  const cartCount = cartItems.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+  const cartCount = cartItems.reduce(
+    (sum: number, item: CartItem) => sum + item.quantity,
+    0
+  );
   const totalPrice = cartItems.reduce(
     (sum: number, item: CartItem) => sum + item.product.price * item.quantity,
     0
@@ -31,7 +37,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const addToCart = (product: Product, quantity: number = 1) => {
     setCartItems((prevItems: CartItem[]) => {
       const existingItem = prevItems.find(
-        (item: CartItem) => item.product.id === product.id,
+        (item: CartItem) => item.product.id === product.id
       );
       if (existingItem) {
         return prevItems.map((item: CartItem) =>

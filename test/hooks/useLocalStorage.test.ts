@@ -1,10 +1,16 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useLocalStorage } from '../../src/hooks/useLocalStorage';
 
 describe('useLocalStorage', () => {
   beforeEach(() => {
-    window.localStorage.clear();
+    if (typeof window.localStorage?.clear === 'function') {
+      window.localStorage.clear();
+    } else if (typeof window.localStorage?.removeItem === 'function') {
+      // fallback for environments where localStorage.clear is not defined
+      const keys = Object.keys(window.localStorage as any);
+      keys.forEach((key) => (window.localStorage as any).removeItem(key));
+    }
   });
 
   it('should return initial value when no item in localStorage', () => {
@@ -22,20 +28,28 @@ describe('useLocalStorage', () => {
     const { result } = renderHook(() => useLocalStorage('test-key', 'initial'));
 
     // Actualizamos el valor
-    result.current[1]('new value');
+    act(() => {
+      result.current[1]('new value');
+    });
 
     expect(result.current[0]).toBe('new value');
-    expect(JSON.parse(window.localStorage.getItem('test-key') || '')).toBe('new value');
+    expect(JSON.parse(window.localStorage.getItem('test-key') || '')).toBe(
+      'new value'
+    );
   });
 
   it('should handle errors when localStorage is not available', () => {
-    const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const mockGetItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-      throw new Error('localStorage not available');
-    });
+    const mockConsoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const mockGetItem = vi
+      .spyOn((window as any).localStorage, 'getItem')
+      .mockImplementation(() => {
+        throw new Error('localStorage not available');
+      });
 
     const { result } = renderHook(() => useLocalStorage('test-key', 'initial'));
-    
+
     expect(result.current[0]).toBe('initial');
     expect(mockConsoleError).toHaveBeenCalled();
 

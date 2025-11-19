@@ -8,12 +8,9 @@ interface OptimizedBackgroundImageProps {
   overlayClassName?: string;
 }
 
-export const OptimizedBackgroundImage: React.FC<OptimizedBackgroundImageProps> = ({
-  src,
-  children,
-  className = '',
-  overlayClassName = '',
-}) => {
+export const OptimizedBackgroundImage: React.FC<
+  OptimizedBackgroundImageProps
+> = ({ src, children, className = '', overlayClassName = '' }) => {
   return (
     <div className={`relative ${className}`}>
       <LazyLoadImage

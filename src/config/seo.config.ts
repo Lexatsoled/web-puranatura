@@ -3,7 +3,8 @@ import { DefaultSeoProps } from 'next-seo';
 export const DEFAULT_SEO_CONFIG: DefaultSeoProps = {
   titleTemplate: '%s | PuraNatura - Terapias Naturales',
   defaultTitle: 'PuraNatura - Terapias Naturales y Suplementos',
-  description: 'Descubre nuestra selección de terapias naturales y suplementos de alta calidad. Productos naturales para tu bienestar y salud.',
+  description:
+    'Descubre nuestra selección de terapias naturales y suplementos de alta calidad. Productos naturales para tu bienestar y salud.',
   openGraph: {
     type: 'website',
     locale: 'es_ES',

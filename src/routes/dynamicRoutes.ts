@@ -51,7 +51,7 @@ export const categoryRoute: DynamicRoute<CategoryParams> = {
       'productos-naturales',
       'remedios-homeopaticos',
     ];
-    return categories.map(category => ({ category }));
+    return categories.map((category) => ({ category }));
   },
 };
 
@@ -60,8 +60,10 @@ export const productRoute: DynamicRoute<ProductParams> = {
   path: '/tienda/producto/:id',
   async getMetadata({ id }) {
     // Aquí obtendrías el producto de tu base de datos o API
-    const product = await fetch(`/api/products/${id}`).then(res => res.json()) as Product;
-    
+    const product = (await fetch(`/api/products/${id}`).then((res) =>
+      res.json()
+    )) as Product;
+
     return {
       title: `${product.name} | PuraNatura`,
       description: product.seoDescription || product.description,
@@ -72,7 +74,7 @@ export const productRoute: DynamicRoute<ProductParams> = {
         '@type': 'Product',
         name: product.name,
         description: product.description,
-        image: product.images.map(img => img.full),
+        image: product.images.map((img) => img.full),
         offers: {
           '@type': 'Offer',
           price: product.price,
@@ -84,8 +86,10 @@ export const productRoute: DynamicRoute<ProductParams> = {
   },
   async generateStaticPaths() {
     // Aquí obtendrías todos los IDs de productos
-    const products = await fetch('/api/products').then(res => res.json()) as Product[];
-    return products.map(product => ({ id: product.id }));
+    const products = (await fetch('/api/products').then((res) =>
+      res.json()
+    )) as Product[];
+    return products.map((product) => ({ id: product.id }));
   },
 };
 
@@ -93,8 +97,8 @@ export const productRoute: DynamicRoute<ProductParams> = {
 export const blogPostRoute: DynamicRoute<BlogPostParams> = {
   path: '/blog/:slug',
   async getMetadata({ slug }) {
-    const post = await fetch(`/api/blog/${slug}`).then(res => res.json());
-    
+    const post = await fetch(`/api/blog/${slug}`).then((res) => res.json());
+
     return {
       title: `${post.title} | Blog PuraNatura`,
       description: post.excerpt,
@@ -115,13 +119,9 @@ export const blogPostRoute: DynamicRoute<BlogPostParams> = {
     };
   },
   async generateStaticPaths() {
-    const posts = await fetch('/api/blog').then(res => res.json());
+    const posts = await fetch('/api/blog').then((res) => res.json());
     return posts.map((post: { slug: string }) => ({ slug: post.slug }));
   },
 };
 
-export const dynamicRoutes = [
-  categoryRoute,
-  productRoute,
-  blogPostRoute,
-];
+export const dynamicRoutes = [categoryRoute, productRoute, blogPostRoute];

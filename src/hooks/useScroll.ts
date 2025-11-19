@@ -14,13 +14,16 @@ export function useIntersectionObserver<T extends Element>(
   const targetRef = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const callback = useStableCallback((entries: IntersectionObserverEntry[]) => {
-    const [entry] = entries;
-    setIsVisible(entry.isIntersecting);
-    if (entry.isIntersecting && onIntersect) {
-      onIntersect(entry);
-    }
-  }, [onIntersect]);
+  const callback = useStableCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      setIsVisible(entry.isIntersecting);
+      if (entry.isIntersecting && onIntersect) {
+        onIntersect(entry);
+      }
+    },
+    [onIntersect]
+  );
 
   useEffect(() => {
     const target = targetRef.current;

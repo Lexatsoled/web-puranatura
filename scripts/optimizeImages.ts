@@ -12,8 +12,9 @@ async function optimizeImages() {
 
     // Por ahora, solo reportamos que el script se ejecutó
     console.log('✅ Script de optimización ejecutado correctamente');
-    console.log('💡 Nota: Para optimización real de imágenes, se necesita implementar el procesamiento');
-    
+    console.log(
+      '💡 Nota: Para optimización real de imágenes, se necesita implementar el procesamiento'
+    );
   } catch (error) {
     console.error('❌ Error durante la optimización de imágenes:', error);
     process.exit(1);

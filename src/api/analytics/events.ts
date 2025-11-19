@@ -23,7 +23,9 @@ export default async function handler(req: Request, res: Response) {
     // Añadir información adicional
     const enrichedEvent = {
       ...event,
-      ip: Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : (req.headers['x-forwarded-for'] || req.socket.remoteAddress),
+      ip: Array.isArray(req.headers['x-forwarded-for'])
+        ? req.headers['x-forwarded-for'][0]
+        : req.headers['x-forwarded-for'] || req.socket.remoteAddress,
       userAgent: req.headers['user-agent'],
       referrer: req.headers.referer,
     };
@@ -41,14 +43,15 @@ export default async function handler(req: Request, res: Response) {
   }
 }
 
-async function storeEvent(_event: ExtendedAnalyticsEvent & { 
-  ip?: string; 
-  userAgent?: string; 
-  referrer?: string; 
-}) {
+async function storeEvent(
+  _event: ExtendedAnalyticsEvent & {
+    ip?: string;
+    userAgent?: string;
+    referrer?: string;
+  }
+) {
   // Aquí implementarías la lógica para almacenar en tu base de datos
   // Por ejemplo, usando MongoDB:
-  
   /*
   const { db } = await connectToDatabase();
   await db.collection('analytics_events').insertOne({
@@ -61,7 +64,7 @@ async function storeEvent(_event: ExtendedAnalyticsEvent & {
 async function processRealTimeEvent(event: ExtendedAnalyticsEvent) {
   // Aquí implementarías la lógica para procesamiento en tiempo real
   // Por ejemplo, actualizando contadores, disparando alertas, etc.
-  
+
   switch (event.category) {
     case 'product':
       if (event.action === 'view') {

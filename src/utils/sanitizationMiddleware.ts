@@ -4,7 +4,9 @@ import { sanitizeObject } from './sanitizer';
 /**
  * Middleware para sanitizar automáticamente las peticiones a la API
  */
-export const sanitizeRequestMiddleware = (config: InternalAxiosRequestConfig) => {
+export const sanitizeRequestMiddleware = (
+  config: InternalAxiosRequestConfig
+) => {
   if (config.data && typeof config.data === 'object') {
     config.data = sanitizeObject(config.data);
   }

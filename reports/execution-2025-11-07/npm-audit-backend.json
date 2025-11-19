@@ -1,0 +1,52 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@fastify/csrf-protection": {
+      "name": "@fastify/csrf-protection",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1094727,
+          "name": "@fastify/csrf-protection",
+          "dependency": "@fastify/csrf-protection",
+          "title": "Bypass of CSRF protection in the presence of predictable userInfo",
+          "url": "https://github.com/advisories/GHSA-qrgf-9gpc-vrxw",
+          "severity": "moderate",
+          "cwe": ["CWE-352"],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:H/A:N"
+          },
+          "range": ">=5.0.0 <6.3.0"
+        }
+      ],
+      "effects": [],
+      "range": "5.0.0 - 6.2.0",
+      "nodes": ["node_modules/@fastify/csrf-protection"],
+      "fixAvailable": {
+        "name": "@fastify/csrf-protection",
+        "version": "7.1.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 1,
+      "high": 0,
+      "critical": 0,
+      "total": 1
+    },
+    "dependencies": {
+      "prod": 174,
+      "dev": 174,
+      "optional": 117,
+      "peer": 4,
+      "peerOptional": 0,
+      "total": 349
+    }
+  }
+}

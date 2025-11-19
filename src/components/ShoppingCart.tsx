@@ -46,13 +46,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   maxQuantityPerItem = 99,
 }) => {
   // Memoizar cálculos costosos
-  const {
-    subtotal,
-    discount,
-    tax,
-    total,
-    totalItems,
-  } = useMemo(() => {
+  const { subtotal, discount, tax, total, totalItems } = useMemo(() => {
     const subtotal = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
@@ -121,7 +115,9 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Carrito de Compra</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Carrito de Compra
+      </h2>
 
       {items.length === 0 ? (
         <motion.div
@@ -265,7 +261,8 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
                             handleQuantityChange(item.id, item.quantity + 1)
                           }
                           disabled={
-                            item.quantity >= (item.maxQuantity || maxQuantityPerItem)
+                            item.quantity >=
+                            (item.maxQuantity || maxQuantityPerItem)
                           }
                         >
                           <svg

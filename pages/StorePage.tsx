@@ -12,7 +12,7 @@ type SortOption =
   | 'default';
 
 const StorePage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,9 +24,10 @@ const StorePage: React.FC = () => {
     let filtered = products;
 
     // Filter by category
-    if (selectedCategory !== 'Todos') {
+    // `selectedCategory` options are lowercase ids (e.g. 'todos'), so compare with lowercase
+    if (selectedCategory !== 'todos') {
       filtered = filtered.filter(
-        (product) => product.category === selectedCategory,
+        (product) => product.category === selectedCategory
       );
     }
 
@@ -35,7 +36,7 @@ const StorePage: React.FC = () => {
       filtered = filtered.filter(
         (product) =>
           product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchTerm.toLowerCase()),
+          product.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -92,7 +93,7 @@ const StorePage: React.FC = () => {
   };
 
   const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
@@ -117,6 +118,7 @@ const StorePage: React.FC = () => {
             {/* Search */}
             <div className="relative">
               <input
+                data-testid="search-input"
                 type="text"
                 placeholder="Buscar productos..."
                 value={searchTerm}
@@ -140,18 +142,20 @@ const StorePage: React.FC = () => {
             </div>
             {/* Category */}
             <select
+              aria-label="Categoria"
               value={selectedCategory}
               onChange={handleCategoryChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
               {productCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>
             {/* Sort */}
             <select
+              aria-label="Ordenar productos"
               value={sortOption}
               onChange={handleSortChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
@@ -164,6 +168,7 @@ const StorePage: React.FC = () => {
             </select>
             {/* Items per page */}
             <select
+              aria-label="Elementos por pagina"
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"

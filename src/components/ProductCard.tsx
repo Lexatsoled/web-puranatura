@@ -3,18 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../types/product';
 import { useCartStore } from '../store/cartStore';
 import { OptimizedImage } from './OptimizedImage';
-import { useStableMemo, useStableCallback, withMemo } from '../hooks/usePerformance';
+import {
+  useStableMemo,
+  useStableCallback,
+  withMemo,
+} from '../hooks/usePerformance';
 
 interface ProductCardProps {
   product: Product;
-  onViewDetails: (product: Product) => void;
+  onViewDetails?: (product: Product) => void;
   priority?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ 
-  product, 
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
   onViewDetails,
-  priority = false 
+  priority = false,
 }) => {
   const addToCart = useCartStore((state) => state.addToCart);
   const [isHovered, setIsHovered] = useState(false);
@@ -28,26 +32,32 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return 'in-stock';
   }, [product.stock]);
 
-  const handleAddToCart = useStableCallback(async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isAddingToCart || stockStatus === 'out-of-stock') return;
-    
-    setIsAddingToCart(true);
-    try {
-      addToCart(product);
-      // Aquí podríamos añadir una notificación de éxito
-    } catch (error) {
-      // Aquí podríamos añadir una notificación de error
-    } finally {
-      setIsAddingToCart(false);
-    }
-  }, [addToCart, product, isAddingToCart, stockStatus]);
+  const handleAddToCart = useStableCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (isAddingToCart || stockStatus === 'out-of-stock') return;
+
+      setIsAddingToCart(true);
+      try {
+        addToCart(product);
+        // Aquí podríamos añadir una notificación de éxito
+      } catch {
+        // Aquí podríamos añadir una notificación de error
+      } finally {
+        setIsAddingToCart(false);
+      }
+    },
+    [addToCart, product, isAddingToCart, stockStatus]
+  );
 
   return (
     <motion.div
-      className="bg-white rounded-lg shadow-sm overflow-hidden group cursor-pointer"
+      data-testid={`product-card-${product.id}`}
+      data-testid-base="product-card"
+      data-product-id={product.id}
+      className={`product-card bg-white rounded-lg shadow-sm overflow-hidden group cursor-pointer`}
       whileHover={{ y: -8 }}
-      onClick={() => onViewDetails(product)}
+      onClick={() => onViewDetails?.(product)}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -61,7 +71,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="absolute inset-0"
           >
             <OptimizedImage
-              src={product.images[currentImageIndex]?.full || product.images[0].full}
+              src={
+                product.images[currentImageIndex]?.full ||
+                product.images[0].full
+              }
               alt={product.name}
               className="w-full h-full object-cover"
               aspectRatio={1}
@@ -121,10 +134,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm text-gray-500 mb-3">{product.category}</p>
 
         <div className="mt-auto flex justify-between items-center">
-          <motion.p
-            className="text-xl font-bold text-green-700"
-            layout
-          >
+          <motion.p className="text-xl font-bold text-green-700" layout>
             DOP ${product.price.toFixed(2)}
           </motion.p>
           <button
@@ -134,8 +144,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
               stockStatus === 'out-of-stock'
                 ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                 : isAddingToCart
-                ? 'bg-green-500 text-white cursor-wait'
-                : 'bg-green-600 text-white hover:bg-green-700'
+                  ? 'bg-green-500 text-white cursor-wait'
+                  : 'bg-green-600 text-white hover:bg-green-700'
             }`}
           >
             {isAddingToCart ? (
@@ -167,7 +177,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </motion.span>
             ) : (
               <>
-                <span>{stockStatus === 'out-of-stock' ? 'Agotado' : 'Añadir'}</span>
+                <span>
+                  {stockStatus === 'out-of-stock' ? 'Agotado' : 'Añadir'}
+                </span>
                 {stockStatus === 'low-stock' && (
                   <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
                     ¡Solo {product.stock} disponibles!
@@ -183,7 +195,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 // Memoizar el componente con una función de comparación personalizada
-const arePropsEqual = (prevProps: ProductCardProps, nextProps: ProductCardProps) => {
+const arePropsEqual = (
+  prevProps: ProductCardProps,
+  nextProps: ProductCardProps
+) => {
   return (
     prevProps.product.id === nextProps.product.id &&
     prevProps.product.stock === nextProps.product.stock &&
