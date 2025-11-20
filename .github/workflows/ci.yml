@@ -48,6 +48,8 @@ jobs:
 
       - name: Run DB migrations (non-interactive)
         # Intentamos aplicar migraciones; si fallan, hacemos db push como fallback no interactivo
+        env:
+          DATABASE_URL: "file:./backend/prisma/database.sqlite"
         run: |
           if [ -d backend/prisma ]; then
             npx --yes prisma migrate deploy --schema=backend/prisma/schema.prisma || npx --yes prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss
