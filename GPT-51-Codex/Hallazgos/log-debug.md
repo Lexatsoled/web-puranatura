@@ -284,6 +284,19 @@ Este documento sintetiza cada hallazgo con fechas, síntomas, causa-raíz, soluc
 - **Impacto:** evita fallos en `npm ci` y EBADENGINE en runners; asegura que `Next` y otras dependencias que requieren Node 20 se instalan correctamente.
 
 
+### CI-WORKFLOW-005 - Prisma CLI 7 rompe schema.prisma
+
+- **Fecha:** 2025-11-22
+- **Síntoma:** el job Run DB migrations (non-interactive) falló con Error P1012 porque 
+px prisma ... descargó Prisma CLI 7 (la raíz no tenía dependencia). Prisma 7 eliminó url dentro del datasource, pero nuestro ackend/prisma/schema.prisma (Prisma 5) sigue usando url = env("DATABASE_URL").
+- **Causa-raíz:** el workflow ejecuta 
+px --yes prisma ... --schema=backend/prisma/schema.prisma desde la raíz y, al no encontrar prisma local, instaló la versión más reciente (7.x) en runtime.
+- **Acción 2025-11-22:** se añadió prisma@5.22.0 como devDependency en la raíz (package.json + package-lock.json) para que 
+px prisma utilice una versión compatible con el schema actual. El cambio se documenta aquí y se incluyó en el PR #3.
+- **Seguimiento:** ajustar el workflow para ejecutar 
+pm --prefix backend run migrate o 
+px --prefix backend prisma ... y planificar una migración gradual a Prisma 7 (mover la URL a prisma.config.ts) cuando haya capacidad.
+- **Estado:** mitigado localmente; pendiente validar en la próxima ejecución de ci.yml.
 ### BUILD-TS-013 -
 
 pm run build fallaba tras integrar el BFF
@@ -295,3 +308,4 @@ pm run build fallaba tras integrar el BFF
 - **Acción 2025-11-21:** se normalizó src/types/product.ts (alt opcional, brand, sin duplicados), se añadió el estado orderError, se protegieron las fechas del perfil, se corrigieron importaciones/mappers y se simplificó playwright.config.ts. Tras los ajustes
   pm run build ejecuta sc y ite build con éxito.
 - **Estado:** cerrado (desbloquea continuación de T1.2/T2.x).
+
