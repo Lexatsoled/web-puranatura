@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../contexts/CartContext';
+import { formatCurrency } from '../src/utils/intl';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -37,7 +38,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  // Manejar tecla ESC
+  // Manejar tecla ESC y restore de foco
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -47,13 +52,42 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           onClose();
         }
       }
+
+      // Basic focus trap: keep focus inside modal when open
+      if (event.key === 'Tab' && isOpen && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     };
 
     if (isOpen) {
+      previouslyFocusedRef.current =
+        document.activeElement as HTMLElement | null;
       window.addEventListener('keydown', handleKeyDown);
+      // set focus to close button for screen reader users
+      setTimeout(() => closeButtonRef.current?.focus(), 0);
     }
 
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // restore focus to previously focused element
+      try {
+        previouslyFocusedRef.current?.focus();
+      } catch {
+        // Ignorar errores al restaurar el foco (compatibilidad con browsers)
+      }
+    };
   }, [isOpen, isConfirmingClear, onClose]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
@@ -108,12 +142,16 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cart-modal-title"
           className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="text-xl font-semibold">
+            <h2 id="cart-modal-title" className="text-xl font-semibold">
               {isProcessingPayment
                 ? 'Procesando Pago'
                 : paymentComplete
@@ -121,15 +159,20 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                   : `Carrito (${cartCount} ${cartCount === 1 ? 'artículo' : 'artículos'})`}
             </h2>
             <button
+              ref={closeButtonRef}
               onClick={onClose}
               className="p-1 hover:bg-gray-100 rounded"
               disabled={isProcessingPayment}
+              aria-label="Cerrar carrito"
+              type="button"
             >
               <svg
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
               >
                 <path
                   strokeLinecap="round"
@@ -171,7 +214,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-green-800 mb-2">
-                  ¡Pago completado!
+                  ¡¡Pago completado!
                 </h3>
                 <p className="text-gray-600">
                   Tu pedido ha sido procesado exitosamente
@@ -217,7 +260,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         {item.product.name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        €{item.product.price.toFixed(2)}
+                        {formatCurrency(item.product.price)}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -230,12 +273,16 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         }
                         className="p-1 hover:bg-gray-100 rounded"
                         disabled={item.quantity <= 1}
+                        aria-label={`Disminuir cantidad de ${item.product.name}`}
+                        type="button"
                       >
                         <svg
                           className="h-4 w-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          focusable="false"
                         >
                           <path
                             strokeLinecap="round"
@@ -256,12 +303,16 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                           )
                         }
                         className="p-1 hover:bg-gray-100 rounded"
+                        aria-label={`Aumentar cantidad de ${item.product.name}`}
+                        type="button"
                       >
                         <svg
                           className="h-4 w-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          focusable="false"
                         >
                           <path
                             strokeLinecap="round"
@@ -274,12 +325,16 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       <button
                         onClick={() => removeFromCart(item.product.id)}
                         className="p-1 hover:bg-red-100 text-red-600 rounded ml-2"
+                        aria-label={`Eliminar ${item.product.name} del carrito`}
+                        type="button"
                       >
                         <svg
                           className="h-4 w-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          focusable="false"
                         >
                           <path
                             strokeLinecap="round"
@@ -302,7 +357,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               <div className="flex items-center justify-between mb-4">
                 <span className="text-lg font-semibold">Total:</span>
                 <span className="text-lg font-bold text-green-600">
-                  €{totalPrice.toFixed(2)}
+                  {formatCurrency(totalPrice)}
                 </span>
               </div>
 
@@ -312,12 +367,14 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <button
                       onClick={handleProceedToPayment}
                       className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
+                      type="button"
                     >
                       Proceder al Pago
                     </button>
                     <button
                       onClick={() => setIsConfirmingClear(true)}
                       className="w-full text-gray-600 py-1 px-4 hover:text-red-600 transition-colors text-sm"
+                      type="button"
                     >
                       Vaciar carrito
                     </button>
@@ -350,12 +407,14 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       <button
                         onClick={handleClearCart}
                         className="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                        type="button"
                       >
                         Sí, vaciar carrito
                       </button>
                       <button
                         onClick={() => setIsConfirmingClear(false)}
                         className="flex-1 bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+                        type="button"
                       >
                         Cancelar
                       </button>

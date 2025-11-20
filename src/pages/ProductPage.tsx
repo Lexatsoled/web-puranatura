@@ -1,22 +1,62 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { NextSeo, ProductJsonLd } from 'next-seo';
 import { useParams, useLocation } from 'react-router-dom';
 import { useSeo } from '../hooks/useSeo';
 import { motion } from 'framer-motion';
-import { ProductImage } from '../types';
-import { Product } from '../../types';
-import { products } from '../../data/products';
+import { Product, ProductImage } from '../types/product';
+import { products as legacyProducts } from '../../data/products';
 import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
-
-// Helper function to get product by ID
-const getProductById = (id: string | undefined): Product | null => {
-  if (!id) return null;
-  return products.find((product) => product.id === id) || null;
-};
+import { sanitizeHtml } from '../utils/sanitizer';
+import { sanitizeProductContent } from '../utils/contentSanitizers';
+import { useApi } from '../utils/api';
+import { mapApiProduct, ApiProduct } from '../utils/productMapper';
+import { formatCurrency } from '../utils/intl';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const product = getProductById(id);
+  const api = useApi();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
+    'loading'
+  );
+
+  const fallbackProducts = useMemo(
+    () => legacyProducts.map((legacy) => sanitizeProductContent(legacy)),
+    []
+  );
+
+  useEffect(() => {
+    if (!id) {
+      setStatus('error');
+      return;
+    }
+
+    let active = true;
+    const fetchProduct = async () => {
+      setStatus('loading');
+      try {
+        const apiProduct = await api.get<ApiProduct>(`/products/${id}`);
+        if (!active) return;
+        setProduct(sanitizeProductContent(mapApiProduct(apiProduct)));
+        setStatus('ready');
+      } catch (error) {
+        console.error('Error cargando producto', error);
+        if (!active) return;
+        const fallback = fallbackProducts.find((item) => item.id === id);
+        if (fallback) {
+          setProduct(fallback);
+          setStatus('ready');
+        } else {
+          setStatus('error');
+        }
+      }
+    };
+
+    fetchProduct();
+    return () => {
+      active = false;
+    };
+  }, [api, fallbackProducts, id]);
 
   const location = useLocation();
   const currentUrl = `${window.location.origin}${location.pathname}`;
@@ -28,16 +68,28 @@ const ProductPage: React.FC = () => {
     image: product?.images[0]?.full,
   });
 
-  if (!product) {
-    return <div>Producto no encontrado</div>;
+  const breadcrumbs = useMemo(
+    () => [
+      { name: 'Inicio', url: '/' },
+      { name: 'Tienda', url: '/store' },
+      { name: product?.category ?? 'Tienda', url: `/store` },
+      { name: product?.name ?? 'Producto', url: currentUrl },
+    ],
+    [product?.category, product?.name, currentUrl]
+  );
+
+  const sanitizedBreadcrumbJsonLd = useMemo(
+    () => sanitizeHtml(JSON.stringify(generateBreadcrumbJsonLd(breadcrumbs))),
+    [breadcrumbs]
+  );
+
+  if (status === 'loading') {
+    return <div className="text-center py-20">Cargando producto...</div>;
   }
 
-  const breadcrumbs = [
-    { name: 'Inicio', url: '/' },
-    { name: 'Tienda', url: '/store' },
-    { name: product.category, url: `/store/category/${product.category}` },
-    { name: product.name, url: currentUrl },
-  ];
+  if (!product || status === 'error') {
+    return <div className="text-center py-20">Producto no encontrado</div>;
+  }
 
   return (
     <>
@@ -49,14 +101,14 @@ const ProductPage: React.FC = () => {
         offers={{
           price: product.price,
           priceCurrency: 'EUR',
-          availability: 'InStock', // product.inStock ? 'InStock' : 'OutOfStock',
+          availability: product.inStock ? 'InStock' : 'OutOfStock',
           url: currentUrl,
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateBreadcrumbJsonLd(breadcrumbs)),
+          __html: sanitizedBreadcrumbJsonLd,
         }}
       />
       <div className="container mx-auto px-4 py-8">
@@ -76,21 +128,12 @@ const ProductPage: React.FC = () => {
 
           <div className="space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-            <p className="text-xl text-gray-600">${product.price.toFixed(2)}</p>
+            <p className="text-xl text-gray-600">
+              {formatCurrency(product.price)}
+            </p>
             <div className="prose prose-green">
               <p>{product.description}</p>
             </div>
-
-            {/* <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Beneficios:</h2>
-              <ul className="list-disc list-inside space-y-2">
-                {product.benefits?.map((benefit: string, index: number) => (
-                  <li key={index} className="text-gray-600">
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-            </div> */}
 
             <button
               type="button"

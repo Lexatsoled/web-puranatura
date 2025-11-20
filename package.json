@@ -17,7 +17,7 @@
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run",
     "test:unit": "vitest run",
-    "test:e2e": "npm run build && concurrently -k \"npm run preview -- --port 5173\" \"npx wait-on http://localhost:5173 && npx cross-env BASE_URL=http://localhost:5173 npx playwright test --project=chromium --reporter=dot\"",
+    "test:e2e": "npm run build && node scripts/run-e2e.cjs",
     "optimize-images": "ts-node scripts/optimizeImages.ts"
   },
   "dependencies": {

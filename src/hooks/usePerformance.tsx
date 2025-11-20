@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 
+// Agrupa utilidades de rendimiento: carga perezosa, memoizacion y callbacks estables.
+
 // Componente de loading con animación
 const LoadingFallback: React.FC = () => (
   <motion.div
@@ -19,12 +21,10 @@ interface WithLazyLoadingProps {
 
 // HOC para lazy loading
 export function withLazyLoading<P extends Record<string, any>>(
-  Component: React.ComponentType<P>,
+  loader: () => Promise<{ default: React.ComponentType<P> }>,
   options: WithLazyLoadingProps = {}
 ): React.ComponentType<P> {
-  const LazyComponent = React.lazy(() =>
-    Promise.resolve({ default: Component as any })
-  ) as React.LazyExoticComponent<React.ComponentType<any>>;
+  const LazyComponent = React.lazy(loader);
 
   return function WrappedComponent(props: P) {
     return (

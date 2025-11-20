@@ -55,7 +55,7 @@ if (typeof window !== 'undefined') {
         for (const k of keys) delete this._store[k];
       } as any;
     }
-  } catch (e) {
-    // ignore if we can't override
+  } catch {
+    // Ignorar si no se puede sobrescribir (entorno test no soporta overrides)
   }
 }

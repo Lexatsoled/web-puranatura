@@ -77,6 +77,7 @@ export async function seedCart(
   const quantity = opts?.quantity ?? 1;
   const stateJson = JSON.stringify(buildCartState(product, quantity));
   const ctx = page.context();
+  const storageKey = 'pureza-naturalis-cart-storage';
   await ctx.addInitScript(
     ({ key, value }: { key: string; value: string }) => {
       try {
@@ -90,24 +91,23 @@ export async function seedCart(
         } catch {}
       } catch {}
     },
-    { key: 'pureza-naturalis-cart-storage', value: stateJson }
+    { key: storageKey, value: stateJson }
   );
   try {
     await page.evaluate(
-      (k, v) => {
+      ({ key, value }: { key: string; value: string }) => {
         try {
-          localStorage.setItem(k, v);
+          localStorage.setItem(key, value);
           try {
-            const parsed = JSON.parse(v);
+            const parsed = JSON.parse(value);
             localStorage.setItem(
-              k,
+              key,
               JSON.stringify({ state: parsed, version: 2 })
             );
           } catch {}
         } catch {}
       },
-      'pureza-naturalis-cart-storage',
-      stateJson
+      { key: storageKey, value: stateJson }
     );
   } catch {}
   const maxWaitMs = 5000;

@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { NextSeoProps } from 'next-seo';
 import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
 
+// Genera configuraciones Next-SEO coherentes con la navegación actual y el branding del sitio.
+
 interface SeoProps extends Partial<NextSeoProps> {
   title?: string;
   description?: string;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '../src/utils/intl';
 
 interface Order {
   id: string;
@@ -209,7 +210,7 @@ const OrdersPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-semibold text-gray-900">
-                        €{order.total.toFixed(2)}
+                        {formatCurrency(order.total)}
                       </p>
                       <button
                         onClick={() =>
@@ -284,13 +285,13 @@ const OrdersPage: React.FC = () => {
                               {item.name}
                             </h5>
                             <p className="text-sm text-gray-600">
-                              Cantidad: {item.quantity} × €
-                              {item.price.toFixed(2)}
+                              Cantidad: {item.quantity} ·{' '}
+                              {formatCurrency(item.price)}
                             </p>
                           </div>
                           <div className="text-right">
                             <p className="font-semibold text-gray-900">
-                              €{(item.price * item.quantity).toFixed(2)}
+                              {formatCurrency(item.price * item.quantity)}
                             </p>
                           </div>
                         </div>

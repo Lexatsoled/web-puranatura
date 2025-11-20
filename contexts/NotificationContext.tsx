@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Tipos de notificación
+// Orquesta la creacion y el renderizado de notificaciones en toda la SPA.
+// Tipos de notificacin
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
-// Interfaz para una notificación
+// Interfaz para una notificacin
 interface Notification {
   id: string;
   type: NotificationType;
@@ -43,7 +44,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
 
       setNotifications((prev) => [...prev, notification]);
 
-      // Auto-remove notification after duration
+      // Elimina automaticamente la notificacion cuando expire la duracion
       setTimeout(() => {
         removeNotification(id);
       }, duration);
@@ -157,7 +158,7 @@ const NotificationContainer: React.FC<{
                         : 'text-blue-500 hover:text-blue-600'
                 }`}
               >
-                <span className="sr-only">Cerrar notificación</span>
+                <span className="sr-only">Cerrar notificacin</span>
                 <svg
                   className="h-5 w-5"
                   viewBox="0 0 20 20"

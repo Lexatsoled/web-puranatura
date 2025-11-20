@@ -1,0 +1,1401 @@
+{
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.8.0"
+  },
+  "testRunner": {
+    "name": "axe"
+  },
+  "testEnvironment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+    "windowWidth": 1280,
+    "windowHeight": 720,
+    "orientationAngle": 0,
+    "orientationType": "landscape-primary"
+  },
+  "timestamp": "2025-11-20T15:17:35.835Z",
+  "url": "http://localhost:5173/",
+  "toolOptions": {
+    "runOnly": {
+      "type": "tag",
+      "values": ["wcag2aa", "section508"]
+    },
+    "reporter": "v1"
+  },
+  "inapplicable": [
+    {
+      "id": "area-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag244",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.2.4.4",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures <area> elements of image maps have alternate text",
+      "help": "Active <area> elements must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/area-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "audio-caption",
+      "impact": null,
+      "tags": [
+        "cat.time-and-media",
+        "wcag2a",
+        "wcag121",
+        "EN-301-549",
+        "EN-9.1.2.1",
+        "section508",
+        "section508.22.a",
+        "deprecated"
+      ],
+      "description": "Ensures <audio> elements have captions",
+      "help": "<audio> elements must have a captions track",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/audio-caption?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "blink",
+      "impact": null,
+      "tags": [
+        "cat.time-and-media",
+        "wcag2a",
+        "wcag222",
+        "section508",
+        "section508.22.j",
+        "TTv5",
+        "TT2.b",
+        "EN-301-549",
+        "EN-9.2.2.2"
+      ],
+      "description": "Ensures <blink> elements are not used",
+      "help": "<blink> elements are deprecated and must not be used",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/blink?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "frame-title",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.i",
+        "TTv5",
+        "TT12.d",
+        "EN-301-549",
+        "EN-9.4.1.2"
+      ],
+      "description": "Ensures <iframe> and <frame> elements have an accessible name",
+      "help": "Frames must have an accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/frame-title?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "image-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "TT7.b",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+      "help": "Images must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/image-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "input-button-name",
+      "impact": null,
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures input buttons have discernible text",
+      "help": "Input buttons must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/input-button-name?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "input-image-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures <input type=\"image\"> elements have alternate text",
+      "help": "Image buttons must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/input-image-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "label",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.n",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures every form element has a label",
+      "help": "Form elements must have labels",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/label?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "object-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "EN-301-549",
+        "EN-9.1.1.1"
+      ],
+      "description": "Ensures <object> elements have alternate text",
+      "help": "<object> elements must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/object-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "role-img-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensures [role=\"img\"] elements have alternate text",
+      "help": "[role=\"img\"] elements must have an alternative text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/role-img-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "select-name",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.n",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures select element has an accessible name",
+      "help": "Select element must have an accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/select-name?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "server-side-image-map",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag211",
+        "section508",
+        "section508.22.f",
+        "TTv5",
+        "TT4.a",
+        "EN-301-549",
+        "EN-9.2.1.1"
+      ],
+      "description": "Ensures that server-side image maps are not used",
+      "help": "Server-side image maps must not be used",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/server-side-image-map?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "svg-img-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensures <svg> elements with an img, graphics-document or graphics-symbol role have an accessible text",
+      "help": "<svg> elements with an img role must have an alternative text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/svg-img-alt?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "td-headers-attr",
+      "impact": null,
+      "tags": [
+        "cat.tables",
+        "wcag2a",
+        "wcag131",
+        "section508",
+        "section508.22.g",
+        "TTv5",
+        "TT14.b",
+        "EN-301-549",
+        "EN-9.1.3.1"
+      ],
+      "description": "Ensure that each cell in a table that uses the headers attribute refers only to other cells in that table",
+      "help": "Table cells that use the headers attribute must only refer to cells in the same table",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/td-headers-attr?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "th-has-data-cells",
+      "impact": null,
+      "tags": [
+        "cat.tables",
+        "wcag2a",
+        "wcag131",
+        "section508",
+        "section508.22.g",
+        "TTv5",
+        "TT14.b",
+        "EN-301-549",
+        "EN-9.1.3.1"
+      ],
+      "description": "Ensure that <th> elements and elements with role=columnheader/rowheader have data cells they describe",
+      "help": "Table headers in a data table must refer to data cells",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/th-has-data-cells?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "valid-lang",
+      "impact": null,
+      "tags": [
+        "cat.language",
+        "wcag2aa",
+        "wcag312",
+        "TTv5",
+        "TT11.b",
+        "EN-301-549",
+        "EN-9.3.1.2",
+        "ACT"
+      ],
+      "description": "Ensures lang attributes have valid values",
+      "help": "lang attribute must have a valid value",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/valid-lang?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "video-caption",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag122",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT17.a",
+        "EN-301-549",
+        "EN-9.1.2.2"
+      ],
+      "description": "Ensures <video> elements have captions",
+      "help": "<video> elements must have captions",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/video-caption?application=axeAPI",
+      "nodes": []
+    }
+  ],
+  "passes": [
+    {
+      "id": "button-name",
+      "impact": null,
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures buttons have discernible text",
+      "help": "Buttons must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/button-name?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button style=\"background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.5rem 1rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;\">",
+          "target": ["button:nth-child(1)"]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button style=\"background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.5rem 1rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;\">",
+          "target": ["button:nth-child(2)"]
+        }
+      ]
+    },
+    {
+      "id": "bypass",
+      "impact": null,
+      "tags": [
+        "cat.keyboard",
+        "wcag2a",
+        "wcag241",
+        "section508",
+        "section508.22.o",
+        "TTv5",
+        "TT9.a",
+        "EN-301-549",
+        "EN-9.2.4.1"
+      ],
+      "description": "Ensures each page has at least one mechanism for a user to bypass navigation and jump straight to the content",
+      "help": "Page must have means to bypass repeated blocks",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/bypass?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "header-present",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<h1 style=\"margin: 0px; font-size: 1.8rem; font-weight: 700; text-shadow: rgba(0, 0, 0, 0.3) 2px 2px 4px;\">🌿 PuraNatura</h1>",
+                  "target": ["header > div > h1"]
+                },
+                {
+                  "html": "<h1 class=\"text-5xl md:text-7xl font-bold font-display leading-tight mb-4\">Bienestar que Nace de la Tierra</h1>",
+                  "target": [".text-5xl"]
+                },
+                {
+                  "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
+                  "target": ["h2"]
+                },
+                {
+                  "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Terapias Personalizadas</h3>",
+                  "target": [".p-8.bg-white\\/50.border:nth-child(1) > h3"]
+                },
+                {
+                  "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Productos Naturales</h3>",
+                  "target": [".p-8.bg-white\\/50.border:nth-child(2) > h3"]
+                },
+                {
+                  "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Asesoramiento Experto</h3>",
+                  "target": [".p-8.bg-white\\/50.border:nth-child(3) > h3"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Page has a heading"
+            },
+            {
+              "id": "landmark",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<main style=\"min-height: calc(-120px + 100vh);\">",
+                  "target": ["main"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Page has a landmark region"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<html lang=\"es\">",
+          "target": ["html"]
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT"
+      ],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 4,
+                "fontSize": "21.6pt (28.8px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1",
+                "shadowColor": "#149242"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h1 style=\"margin: 0px; font-size: 1.8rem; font-weight: 700; text-shadow: rgba(0, 0, 0, 0.3) 2px 2px 4px;\">🌿 PuraNatura</h1>",
+          "target": ["header > div > h1"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#14532d",
+                "contrastRatio": 9.11,
+                "fontSize": "54.0pt (72px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 9.11"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h1 class=\"text-5xl md:text-7xl font-bold font-display leading-tight mb-4\">Bienestar que Nace de la Tierra</h1>",
+          "target": [".text-5xl"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#14532d",
+                "contrastRatio": 9.11,
+                "fontSize": "15.0pt (20px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 9.11"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-lg md:text-xl max-w-2xl mb-8\">En PuraNatura, creemos en el poder curativo de la naturaleza para restaurar el equilibrio de tu cuerpo y mente.</p>",
+          "target": [".md\\:text-xl"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#166534",
+                "bgColor": "#ffffff",
+                "contrastRatio": 7.13,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.13"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"bg-white text-green-800 font-semibold py-3 px-8 rounded-full hover:bg-green-100 transition-all duration-300 transform hover:scale-105\" href=\"/servicios\" data-discover=\"true\">Nuestros Servicios</a>",
+          "target": [".bg-white"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#15803d",
+                "contrastRatio": 5.01,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.01"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"bg-green-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-800 transition-all duration-300 transform hover:scale-105\" href=\"/tienda\" data-discover=\"true\">Ir a la Tienda</a>",
+          "target": [".bg-green-700"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#166534",
+                "bgColor": "#ecfdf5",
+                "contrastRatio": 6.76,
+                "fontSize": "27.0pt (36px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.76"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
+          "target": ["h2"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#4b5563",
+                "bgColor": "#ecfdf5",
+                "contrastRatio": 7.17,
+                "fontSize": "13.5pt (18px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.17"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-lg text-gray-600 max-w-3xl mx-auto mb-12\">Ofrecemos una gama de terapias naturales diseñadas para tratar a la persona en su totalidad, no solo los síntomas. Descubre un enfoque de salud que es a la vez suave y poderoso.</p>",
+          "target": [".max-w-3xl"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#15803d",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 4.89,
+                "fontSize": "18.0pt (24px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.89"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Terapias Personalizadas</h3>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(1) > h3"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#4b5563",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 7.36,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.36"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-gray-600\">Planes de tratamiento únicos adaptados a tus necesidades específicas.</p>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(1) > .text-gray-600"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#15803d",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 4.89,
+                "fontSize": "18.0pt (24px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.89"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Productos Naturales</h3>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(2) > h3"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#4b5563",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 7.36,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.36"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-gray-600\">Una selección cuidada de suplementos y remedios de la más alta calidad.</p>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(2) > .text-gray-600"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#15803d",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 4.89,
+                "fontSize": "18.0pt (24px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.89"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Asesoramiento Experto</h3>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(3) > h3"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#4b5563",
+                "bgColor": "#f6fefa",
+                "contrastRatio": 7.36,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.36"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-gray-600\">Guiado por profesionales apasionados por la salud natural.</p>",
+          "target": [".p-8.bg-white\\/50.border:nth-child(3) > .text-gray-600"]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#065f46",
+                "contrastRatio": 7.68,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.68"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p style=\"margin: 0px;\">© 2025 PuraNatura - Terapias Naturales</p>",
+          "target": ["footer > p"]
+        }
+      ]
+    },
+    {
+      "id": "link-name",
+      "impact": null,
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag244",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.2.4.4",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensures links have discernible text",
+      "help": "Links must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/link-name?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: rgb(251, 191, 36); text-decoration: none; font-weight: 700; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Inicio</a>",
+          "target": ["a[href=\"/\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/sobre-nosotros\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Sobre Nosotros</a>",
+          "target": ["a[href$=\"sobre-nosotros\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/servicios\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Servicios</a>",
+          "target": [".nav-link[href$=\"servicios\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/tienda\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Tienda</a>",
+          "target": [".nav-link[href$=\"tienda\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/testimonios\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Testimonios</a>",
+          "target": ["a[href$=\"testimonios\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/blog\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Blog</a>",
+          "target": ["a[href$=\"blog\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"nav-link\" href=\"/contacto\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Contacto</a>",
+          "target": ["a[href$=\"contacto\"]"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"bg-white text-green-800 font-semibold py-3 px-8 rounded-full hover:bg-green-100 transition-all duration-300 transform hover:scale-105\" href=\"/servicios\" data-discover=\"true\">Nuestros Servicios</a>",
+          "target": [".bg-white"]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"bg-green-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-800 transition-all duration-300 transform hover:scale-105\" href=\"/tienda\" data-discover=\"true\">Ir a la Tienda</a>",
+          "target": [".bg-green-700"]
+        }
+      ]
+    },
+    {
+      "id": "meta-viewport",
+      "impact": null,
+      "tags": [
+        "cat.sensory-and-visual-cues",
+        "wcag2aa",
+        "wcag144",
+        "EN-301-549",
+        "EN-9.1.4.4",
+        "ACT"
+      ],
+      "description": "Ensures <meta name=\"viewport\"> does not disable text scaling and zooming",
+      "help": "Zooming and scaling must not be disabled",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/meta-viewport?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "meta-viewport",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "<meta> tag does not disable zooming on mobile devices"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+          "target": ["meta[name=\"viewport\"]"]
+        }
+      ]
+    }
+  ],
+  "incomplete": [],
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT"
+      ],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#45b56e",
+                "contrastRatio": 2.59,
+                "fontSize": "10.8pt (14.4px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<button style=\"background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.5rem 1rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;\">",
+                  "target": ["button:nth-child(1)"]
+                },
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 2.59 (foreground color: #ffffff, background color: #45b56e, font size: 10.8pt (14.4px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button style=\"background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.5rem 1rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;\">",
+          "target": ["button:nth-child(1)"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.59 (foreground color: #ffffff, background color: #45b56e, font size: 10.8pt (14.4px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#45b56e",
+                "contrastRatio": 2.59,
+                "fontSize": "10.8pt (14.4px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<button style=\"background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.5rem 1rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;\">",
+                  "target": ["button:nth-child(2)"]
+                },
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 2.59 (foreground color: #ffffff, background color: #45b56e, font size: 10.8pt (14.4px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span>Mi Carrito</span>",
+          "target": ["span:nth-child(2)"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.59 (foreground color: #ffffff, background color: #45b56e, font size: 10.8pt (14.4px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fbbf24",
+                "bgColor": "#16a34a",
+                "contrastRatio": 1.97,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "bold",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 1.97 (foreground color: #fbbf24, background color: #16a34a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: rgb(251, 191, 36); text-decoration: none; font-weight: 700; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Inicio</a>",
+          "target": ["a[href=\"/\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.97 (foreground color: #fbbf24, background color: #16a34a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/sobre-nosotros\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Sobre Nosotros</a>",
+          "target": ["a[href$=\"sobre-nosotros\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/servicios\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Servicios</a>",
+          "target": [".nav-link[href$=\"servicios\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/tienda\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Tienda</a>",
+          "target": [".nav-link[href$=\"tienda\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/testimonios\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Testimonios</a>",
+          "target": ["a[href$=\"testimonios\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/blog\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Blog</a>",
+          "target": ["a[href$=\"blog\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#16a34a",
+                "contrastRatio": 3.29,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<header style=\"position: relative; background-color: rgb(22, 163, 74); color: white; padding: 1rem; display: flex; flex-direction: column; align-items: center; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;\">",
+                  "target": ["header"]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"nav-link\" href=\"/contacto\" data-discover=\"true\" style=\"margin: 0px 1.5rem; color: white; text-decoration: none; font-weight: 500; font-size: 1rem; padding: 0.5rem 0px; position: relative; transition: 0.3s;\">Contacto</a>",
+          "target": ["a[href$=\"contacto\"]"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+
+// Inicializa proveedores externos de analitica y expone helpers tipados para registrar eventos en toda la SPA.
 
 type EventCategory =
   | 'page_view'
@@ -29,6 +31,9 @@ class AnalyticsService {
   private static instance: AnalyticsService;
   private initialized: boolean = false;
   private queue: AnalyticsEvent[] = [];
+  private consentGranted: boolean = false;
+  private readonly gaId = import.meta.env.VITE_GA_ID;
+  private readonly fbPixelId = import.meta.env.VITE_FB_PIXEL_ID;
 
   private constructor() {}
 
@@ -39,33 +44,40 @@ class AnalyticsService {
     return AnalyticsService.instance;
   }
 
+  setConsent(granted: boolean) {
+    this.consentGranted = granted;
+    if (granted) {
+      this.init();
+    }
+  }
+
   init() {
-    if (this.initialized) return;
+    if (this.initialized || !this.consentGranted) return;
 
     // Inicializar servicios de analytics
     if (typeof window !== 'undefined') {
       // Google Analytics
-      if (process.env.REACT_APP_GA_ID) {
+      if (this.gaId) {
         this.loadScript(
-          `https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`
+          `https://www.googletagmanager.com/gtag/js?id=${this.gaId}`
         );
         window.dataLayer = window.dataLayer || [];
         window.gtag = function () {
           window.dataLayer.push(arguments);
         };
         window.gtag('js', new Date());
-        window.gtag('config', process.env.REACT_APP_GA_ID);
+        window.gtag('config', this.gaId);
       }
 
       // Facebook Pixel
-      if (process.env.REACT_APP_FB_PIXEL_ID) {
+      if (this.fbPixelId) {
         this.loadScript('https://connect.facebook.net/en_US/fbevents.js');
         window.fbq =
           window.fbq ||
           function () {
             (window.fbq.q = window.fbq.q || []).push(arguments);
           };
-        window.fbq('init', process.env.REACT_APP_FB_PIXEL_ID);
+        window.fbq('init', this.fbPixelId);
       }
     }
 
@@ -88,6 +100,9 @@ class AnalyticsService {
   }
 
   trackEvent(event: AnalyticsEvent) {
+    if (!this.consentGranted) {
+      return;
+    }
     if (!this.initialized) {
       this.queue.push(event);
       return;
@@ -118,6 +133,7 @@ class AnalyticsService {
   }
 
   trackPageView({ path, title, referrer }: PageViewEvent) {
+    if (!this.consentGranted) return;
     this.trackEvent({
       category: 'page_view',
       action: 'view',
@@ -131,6 +147,7 @@ class AnalyticsService {
   }
 
   private async logEventToBackend(event: AnalyticsEvent) {
+    if (!this.consentGranted) return;
     try {
       await fetch('/api/analytics/events', {
         method: 'POST',
@@ -144,7 +161,7 @@ class AnalyticsService {
         }),
       });
     } catch (error) {
-      console.error('Error logging analytics event:', error);
+      console.error('Error al registrar el evento de analitica:', error);
     }
   }
 
@@ -162,23 +179,40 @@ class AnalyticsService {
 export function useAnalytics() {
   const location = useLocation();
   const analytics = AnalyticsService.getInstance();
+  const consentGranted = useMemo(() => {
+    try {
+      if (typeof window === 'undefined') return false;
+      return (
+        window.localStorage.getItem('puranatura-consent-analytics') ===
+        'granted'
+      );
+    } catch (error) {
+      console.warn('No se pudo leer el consentimiento de analytics:', error);
+      return false;
+    }
+  }, []);
 
   useEffect(() => {
-    analytics.init();
-  }, []);
+    analytics.setConsent(consentGranted);
+  }, [analytics, consentGranted]);
 
   // Seguimiento automático de vistas de página
   useEffect(() => {
+    if (!consentGranted) return;
     analytics.trackPageView({
       path: location.pathname + location.search,
       title: document.title,
       referrer: document.referrer,
     });
-  }, [location]);
+  }, [analytics, consentGranted, location]);
 
-  const trackEvent = useCallback((event: Omit<AnalyticsEvent, 'timestamp'>) => {
-    analytics.trackEvent(event);
-  }, []);
+  const trackEvent = useCallback(
+    (event: Omit<AnalyticsEvent, 'timestamp'>) => {
+      if (!consentGranted) return;
+      analytics.trackEvent(event);
+    },
+    [analytics, consentGranted]
+  );
 
   return { trackEvent };
 }

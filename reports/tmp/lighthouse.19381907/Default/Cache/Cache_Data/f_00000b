@@ -1,0 +1,430 @@
+import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=bdef0fb3"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=bdef0fb3"; const useState = __vite__cjsImport1_react["useState"]; const useMemo = __vite__cjsImport1_react["useMemo"]; const useEffect = __vite__cjsImport1_react["useEffect"];
+import { products as legacyProducts, productCategories } from "/data/products.ts";
+import ProductCard from "/components/ProductCard.tsx";
+import ProductDetailModal from "/components/ProductDetailModal.tsx";
+import { sanitizeProductContent } from "/src/utils/contentSanitizers.ts";
+import { useApi } from "/src/utils/api.ts";
+import { mapApiProduct } from "/src/utils/productMapper.ts";
+const StorePage = () => {
+  const [selectedCategory, setSelectedCategory] = useState("todos");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("default");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [products, setProducts] = useState([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [apiError, setApiError] = useState(null);
+  const api = useApi();
+  const fallbackProducts = useMemo(
+    () => legacyProducts.map((product) => sanitizeProductContent(product)),
+    []
+  );
+  useEffect(() => {
+    let active = true;
+    const fetchProducts = async () => {
+      setIsLoadingProducts(true);
+      try {
+        const apiProducts = await api.get("/products");
+        if (!active) return;
+        if (!Array.isArray(apiProducts)) {
+          console.error("API /products returned non-array response:", apiProducts);
+          setProducts(fallbackProducts);
+          setApiError(
+            "Mostrando catálogo provisional mientras conectamos con la API."
+          );
+          return;
+        }
+        const mapped = apiProducts.map(
+          (product) => sanitizeProductContent(mapApiProduct(product))
+        );
+        setProducts(mapped);
+      } catch (error) {
+        console.error("Error cargando productos desde la API", error);
+        if (active) {
+          setProducts(fallbackProducts);
+          setApiError(
+            "Mostrando catálago provisional mientras conectamos con la API."
+          );
+        }
+      } finally {
+        if (active) {
+          setIsLoadingProducts(false);
+        }
+      }
+    };
+    fetchProducts();
+    return () => {
+      active = false;
+    };
+  }, [api, fallbackProducts]);
+  const processedProducts = useMemo(() => {
+    let filtered = products;
+    if (selectedCategory !== "todos") {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortOption) {
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+    return sorted;
+  }, [products, selectedCategory, searchTerm, sortOption]);
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return processedProducts.slice(startIndex, startIndex + itemsPerPage);
+  }, [processedProducts, currentPage, itemsPerPage]);
+  const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
+  const handleViewDetails = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+  return /* @__PURE__ */ jsxDEV("div", { className: "bg-emerald-50 py-12", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "container mx-auto px-6", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "text-center mb-12", children: [
+        /* @__PURE__ */ jsxDEV("h1", { className: "text-4xl md:text-5xl font-bold font-display text-green-800", children: "Tienda Natural" }, void 0, false, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 159,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-lg text-gray-600 mt-4 max-w-2xl mx-auto", children: "Productos cuidadosamente seleccionados para apoyar tu camino hacia el bienestar." }, void 0, false, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 162,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 158,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "bg-emerald-50/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200", children: /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "relative", children: [
+          /* @__PURE__ */ jsxDEV(
+            "input",
+            {
+              "data-testid": "search-input",
+              type: "text",
+              placeholder: "Buscar productos...",
+              value: searchTerm,
+              onChange: handleSearchChange,
+              className: "w-full p-3 pl-10 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
+            },
+            void 0,
+            false,
+            {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+              lineNumber: 173,
+              columnNumber: 15
+            },
+            this
+          ),
+          /* @__PURE__ */ jsxDEV(
+            "svg",
+            {
+              xmlns: "http://www.w3.org/2000/svg",
+              className: "h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400",
+              fill: "none",
+              viewBox: "0 0 24 24",
+              stroke: "currentColor",
+              children: /* @__PURE__ */ jsxDEV(
+                "path",
+                {
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  strokeWidth: "2",
+                  d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                },
+                void 0,
+                false,
+                {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                  lineNumber: 188,
+                  columnNumber: 17
+                },
+                this
+              )
+            },
+            void 0,
+            false,
+            {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+              lineNumber: 181,
+              columnNumber: 15
+            },
+            this
+          )
+        ] }, void 0, true, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 172,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            "aria-label": "Categoria",
+            value: selectedCategory,
+            onChange: handleCategoryChange,
+            className: "w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition",
+            children: productCategories.map((category) => /* @__PURE__ */ jsxDEV("option", { value: category.id, children: category.name }, category.id, false, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+              lineNumber: 204,
+              columnNumber: 17
+            }, this))
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+            lineNumber: 197,
+            columnNumber: 13
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            "aria-label": "Ordenar productos",
+            value: sortOption,
+            onChange: handleSortChange,
+            className: "w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition",
+            children: [
+              /* @__PURE__ */ jsxDEV("option", { value: "default", children: "Ordenar por defecto" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 216,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: "name-asc", children: "Nombre (A-Z)" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 217,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: "name-desc", children: "Nombre (Z-A)" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 218,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: "price-asc", children: "Precio (Menor a Mayor)" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 219,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: "price-desc", children: "Precio (Mayor a Menor)" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 220,
+                columnNumber: 15
+              }, this)
+            ]
+          },
+          void 0,
+          true,
+          {
+            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+            lineNumber: 210,
+            columnNumber: 13
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            "aria-label": "Elementos por pagina",
+            value: itemsPerPage,
+            onChange: handleItemsPerPageChange,
+            className: "w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition",
+            children: [
+              /* @__PURE__ */ jsxDEV("option", { value: 12, children: "12 por página" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 229,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: 24, children: "24 por página" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 230,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: 48, children: "48 por página" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+                lineNumber: 231,
+                columnNumber: 15
+              }, this)
+            ]
+          },
+          void 0,
+          true,
+          {
+            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+            lineNumber: 223,
+            columnNumber: 13
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 170,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 169,
+        columnNumber: 9
+      }, this),
+      apiError && /* @__PURE__ */ jsxDEV("div", { className: "mb-6 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-900 text-sm", children: apiError }, void 0, false, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 237,
+        columnNumber: 11
+      }, this),
+      isLoadingProducts && !apiError ? /* @__PURE__ */ jsxDEV("div", { className: "text-center py-20 text-gray-500", children: "Cargando catálogo..." }, void 0, false, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 243,
+        columnNumber: 11
+      }, this) : paginatedProducts.length > 0 ? /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8", children: paginatedProducts.map((product) => /* @__PURE__ */ jsxDEV(
+        ProductCard,
+        {
+          product,
+          onViewDetails: handleViewDetails
+        },
+        product.id,
+        false,
+        {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 249,
+          columnNumber: 15
+        },
+        this
+      )) }, void 0, false, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 247,
+        columnNumber: 11
+      }, this) : /* @__PURE__ */ jsxDEV("div", { className: "text-center py-20", children: [
+        /* @__PURE__ */ jsxDEV("h2", { className: "text-2xl font-semibold text-gray-600", children: "No se encontraron productos" }, void 0, false, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 258,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-gray-500 mt-2", children: "Intenta ajustar tu búsqueda o filtros." }, void 0, false, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 261,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 257,
+        columnNumber: 11
+      }, this),
+      totalPages > 1 && /* @__PURE__ */ jsxDEV("div", { className: "mt-12 flex justify-center items-center space-x-4", children: [
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            onClick: () => setCurrentPage((p) => Math.max(1, p - 1)),
+            disabled: currentPage === 1,
+            className: "px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed",
+            children: "Anterior"
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+            lineNumber: 270,
+            columnNumber: 13
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV("span", { className: "text-sm text-gray-700", children: [
+          "Página ",
+          currentPage,
+          " de ",
+          totalPages
+        ] }, void 0, true, {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+          lineNumber: 277,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            onClick: () => setCurrentPage((p) => Math.min(totalPages, p + 1)),
+            disabled: currentPage === totalPages,
+            className: "px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed",
+            children: "Siguiente"
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+            lineNumber: 280,
+            columnNumber: 13
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 269,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+      lineNumber: 157,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV(
+      ProductDetailModal,
+      {
+        isOpen: isModalOpen,
+        onClose: handleCloseModal,
+        product: selectedProduct
+      },
+      void 0,
+      false,
+      {
+        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+        lineNumber: 290,
+        columnNumber: 7
+      },
+      this
+    )
+  ] }, void 0, true, {
+    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/pages/StorePage.tsx",
+    lineNumber: 156,
+    columnNumber: 5
+  }, this);
+};
+export default StorePage;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlN0b3JlUGFnZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IHVzZVN0YXRlLCB1c2VNZW1vLCB1c2VFZmZlY3QgfSBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyBwcm9kdWN0cyBhcyBsZWdhY3lQcm9kdWN0cywgcHJvZHVjdENhdGVnb3JpZXMgfSBmcm9tICcuLi9kYXRhL3Byb2R1Y3RzJztcbmltcG9ydCBQcm9kdWN0Q2FyZCBmcm9tICcuLi9jb21wb25lbnRzL1Byb2R1Y3RDYXJkJztcbmltcG9ydCBQcm9kdWN0RGV0YWlsTW9kYWwgZnJvbSAnLi4vY29tcG9uZW50cy9Qcm9kdWN0RGV0YWlsTW9kYWwnO1xuaW1wb3J0IHsgUHJvZHVjdCB9IGZyb20gJy4uL3NyYy90eXBlcy9wcm9kdWN0JztcbmltcG9ydCB7IHNhbml0aXplUHJvZHVjdENvbnRlbnQgfSBmcm9tICcuLi9zcmMvdXRpbHMvY29udGVudFNhbml0aXplcnMnO1xuaW1wb3J0IHsgdXNlQXBpIH0gZnJvbSAnLi4vc3JjL3V0aWxzL2FwaSc7XG5pbXBvcnQgeyBtYXBBcGlQcm9kdWN0LCBBcGlQcm9kdWN0IH0gZnJvbSAnLi4vc3JjL3V0aWxzL3Byb2R1Y3RNYXBwZXInO1xuXG50eXBlIFNvcnRPcHRpb24gPVxuICB8ICduYW1lLWFzYydcbiAgfCAnbmFtZS1kZXNjJ1xuICB8ICdwcmljZS1hc2MnXG4gIHwgJ3ByaWNlLWRlc2MnXG4gIHwgJ2RlZmF1bHQnO1xuXG5jb25zdCBTdG9yZVBhZ2U6IFJlYWN0LkZDID0gKCkgPT4ge1xuICBjb25zdCBbc2VsZWN0ZWRDYXRlZ29yeSwgc2V0U2VsZWN0ZWRDYXRlZ29yeV0gPSB1c2VTdGF0ZTxzdHJpbmc+KCd0b2RvcycpO1xuICBjb25zdCBbc2VsZWN0ZWRQcm9kdWN0LCBzZXRTZWxlY3RlZFByb2R1Y3RdID0gdXNlU3RhdGU8UHJvZHVjdCB8IG51bGw+KG51bGwpO1xuICBjb25zdCBbaXNNb2RhbE9wZW4sIHNldElzTW9kYWxPcGVuXSA9IHVzZVN0YXRlKGZhbHNlKTtcbiAgY29uc3QgW3NlYXJjaFRlcm0sIHNldFNlYXJjaFRlcm1dID0gdXNlU3RhdGUoJycpO1xuICBjb25zdCBbc29ydE9wdGlvbiwgc2V0U29ydE9wdGlvbl0gPSB1c2VTdGF0ZTxTb3J0T3B0aW9uPignZGVmYXVsdCcpO1xuICBjb25zdCBbY3VycmVudFBhZ2UsIHNldEN1cnJlbnRQYWdlXSA9IHVzZVN0YXRlKDEpO1xuICBjb25zdCBbaXRlbXNQZXJQYWdlLCBzZXRJdGVtc1BlclBhZ2VdID0gdXNlU3RhdGUoMTIpO1xuICBjb25zdCBbcHJvZHVjdHMsIHNldFByb2R1Y3RzXSA9IHVzZVN0YXRlPFByb2R1Y3RbXT4oW10pO1xuICBjb25zdCBbaXNMb2FkaW5nUHJvZHVjdHMsIHNldElzTG9hZGluZ1Byb2R1Y3RzXSA9IHVzZVN0YXRlKHRydWUpO1xuICBjb25zdCBbYXBpRXJyb3IsIHNldEFwaUVycm9yXSA9IHVzZVN0YXRlPHN0cmluZyB8IG51bGw+KG51bGwpO1xuICBjb25zdCBhcGkgPSB1c2VBcGkoKTtcblxuICBjb25zdCBmYWxsYmFja1Byb2R1Y3RzID0gdXNlTWVtbyhcbiAgICAoKSA9PiBsZWdhY3lQcm9kdWN0cy5tYXAoKHByb2R1Y3QpID0+IHNhbml0aXplUHJvZHVjdENvbnRlbnQocHJvZHVjdCkpLFxuICAgIFtdXG4gICk7XG5cbiAgdXNlRWZmZWN0KCgpID0+IHtcbiAgICBsZXQgYWN0aXZlID0gdHJ1ZTtcbiAgICBjb25zdCBmZXRjaFByb2R1Y3RzID0gYXN5bmMgKCkgPT4ge1xuICAgICAgc2V0SXNMb2FkaW5nUHJvZHVjdHModHJ1ZSk7XG4gICAgICB0cnkge1xuICAgICAgICBjb25zdCBhcGlQcm9kdWN0cyA9IGF3YWl0IGFwaS5nZXQ8QXBpUHJvZHVjdFtdPignL3Byb2R1Y3RzJyk7XG4gICAgICAgIGlmICghYWN0aXZlKSByZXR1cm47XG4gICAgICAgIGlmICghQXJyYXkuaXNBcnJheShhcGlQcm9kdWN0cykpIHtcbiAgICAgICAgICBjb25zb2xlLmVycm9yKCdBUEkgL3Byb2R1Y3RzIHJldHVybmVkIG5vbi1hcnJheSByZXNwb25zZTonLCBhcGlQcm9kdWN0cyk7XG4gICAgICAgICAgLy8gRmFsbGJhY2sgdG8gbGVnYWN5IHByb2R1Y3RzIGlmIEFQSSBzaGFwZSBpcyB1bmV4cGVjdGVkXG4gICAgICAgICAgc2V0UHJvZHVjdHMoZmFsbGJhY2tQcm9kdWN0cyk7XG4gICAgICAgICAgc2V0QXBpRXJyb3IoXG4gICAgICAgICAgICAnTW9zdHJhbmRvIGNhdMOhbG9nbyBwcm92aXNpb25hbCBtaWVudHJhcyBjb25lY3RhbW9zIGNvbiBsYSBBUEkuJ1xuICAgICAgICAgICk7XG4gICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG4gICAgICAgIGNvbnN0IG1hcHBlZCA9IGFwaVByb2R1Y3RzLm1hcCgocHJvZHVjdCkgPT5cbiAgICAgICAgICBzYW5pdGl6ZVByb2R1Y3RDb250ZW50KG1hcEFwaVByb2R1Y3QocHJvZHVjdCkpXG4gICAgICAgICk7XG4gICAgICAgIHNldFByb2R1Y3RzKG1hcHBlZCk7XG4gICAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgICBjb25zb2xlLmVycm9yKCdFcnJvciBjYXJnYW5kbyBwcm9kdWN0b3MgZGVzZGUgbGEgQVBJJywgZXJyb3IpO1xuICAgICAgICBpZiAoYWN0aXZlKSB7XG4gICAgICAgICAgc2V0UHJvZHVjdHMoZmFsbGJhY2tQcm9kdWN0cyk7XG4gICAgICAgICAgc2V0QXBpRXJyb3IoXG4gICAgICAgICAgICAnTW9zdHJhbmRvIGNhdMOhbGFnbyBwcm92aXNpb25hbCBtaWVudHJhcyBjb25lY3RhbW9zIGNvbiBsYSBBUEkuJ1xuICAgICAgICAgICk7XG4gICAgICAgIH1cbiAgICAgIH0gZmluYWxseSB7XG4gICAgICAgIGlmIChhY3RpdmUpIHtcbiAgICAgICAgICBzZXRJc0xvYWRpbmdQcm9kdWN0cyhmYWxzZSk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9O1xuXG4gICAgZmV0Y2hQcm9kdWN0cygpO1xuICAgIHJldHVybiAoKSA9PiB7XG4gICAgICBhY3RpdmUgPSBmYWxzZTtcbiAgICB9O1xuICB9LCBbYXBpLCBmYWxsYmFja1Byb2R1Y3RzXSk7XG5cbiAgY29uc3QgcHJvY2Vzc2VkUHJvZHVjdHMgPSB1c2VNZW1vKCgpID0+IHtcbiAgICBsZXQgZmlsdGVyZWQgPSBwcm9kdWN0cztcblxuICAgIC8vIEZpbHRlciBieSBjYXRlZ29yeVxuICAgIC8vIGBzZWxlY3RlZENhdGVnb3J5YCBvcHRpb25zIGFyZSBsb3dlcmNhc2UgaWRzIChlLmcuICd0b2RvcycpLCBzbyBjb21wYXJlIHdpdGggbG93ZXJjYXNlXG4gICAgaWYgKHNlbGVjdGVkQ2F0ZWdvcnkgIT09ICd0b2RvcycpIHtcbiAgICAgIGZpbHRlcmVkID0gZmlsdGVyZWQuZmlsdGVyKFxuICAgICAgICAocHJvZHVjdCkgPT4gcHJvZHVjdC5jYXRlZ29yeSA9PT0gc2VsZWN0ZWRDYXRlZ29yeVxuICAgICAgKTtcbiAgICB9XG5cbiAgICAvLyBGaWx0ZXIgYnkgc2VhcmNoIHRlcm1cbiAgICBpZiAoc2VhcmNoVGVybSkge1xuICAgICAgZmlsdGVyZWQgPSBmaWx0ZXJlZC5maWx0ZXIoXG4gICAgICAgIChwcm9kdWN0KSA9PlxuICAgICAgICAgIHByb2R1Y3QubmFtZS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKHNlYXJjaFRlcm0udG9Mb3dlckNhc2UoKSkgfHxcbiAgICAgICAgICBwcm9kdWN0LmRlc2NyaXB0aW9uLnRvTG93ZXJDYXNlKCkuaW5jbHVkZXMoc2VhcmNoVGVybS50b0xvd2VyQ2FzZSgpKVxuICAgICAgKTtcbiAgICB9XG5cbiAgICAvLyBTb3J0IHByb2R1Y3RzXG4gICAgY29uc3Qgc29ydGVkID0gWy4uLmZpbHRlcmVkXS5zb3J0KChhLCBiKSA9PiB7XG4gICAgICBzd2l0Y2ggKHNvcnRPcHRpb24pIHtcbiAgICAgICAgY2FzZSAnbmFtZS1hc2MnOlxuICAgICAgICAgIHJldHVybiBhLm5hbWUubG9jYWxlQ29tcGFyZShiLm5hbWUpO1xuICAgICAgICBjYXNlICduYW1lLWRlc2MnOlxuICAgICAgICAgIHJldHVybiBiLm5hbWUubG9jYWxlQ29tcGFyZShhLm5hbWUpO1xuICAgICAgICBjYXNlICdwcmljZS1hc2MnOlxuICAgICAgICAgIHJldHVybiBhLnByaWNlIC0gYi5wcmljZTtcbiAgICAgICAgY2FzZSAncHJpY2UtZGVzYyc6XG4gICAgICAgICAgcmV0dXJuIGIucHJpY2UgLSBhLnByaWNlO1xuICAgICAgICBkZWZhdWx0OlxuICAgICAgICAgIHJldHVybiAwO1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgcmV0dXJuIHNvcnRlZDtcbiAgfSwgW3Byb2R1Y3RzLCBzZWxlY3RlZENhdGVnb3J5LCBzZWFyY2hUZXJtLCBzb3J0T3B0aW9uXSk7XG5cbiAgLy8gUGFnaW5hdGUgcHJvZHVjdHNcbiAgY29uc3QgcGFnaW5hdGVkUHJvZHVjdHMgPSB1c2VNZW1vKCgpID0+IHtcbiAgICBjb25zdCBzdGFydEluZGV4ID0gKGN1cnJlbnRQYWdlIC0gMSkgKiBpdGVtc1BlclBhZ2U7XG4gICAgcmV0dXJuIHByb2Nlc3NlZFByb2R1Y3RzLnNsaWNlKHN0YXJ0SW5kZXgsIHN0YXJ0SW5kZXggKyBpdGVtc1BlclBhZ2UpO1xuICB9LCBbcHJvY2Vzc2VkUHJvZHVjdHMsIGN1cnJlbnRQYWdlLCBpdGVtc1BlclBhZ2VdKTtcblxuICBjb25zdCB0b3RhbFBhZ2VzID0gTWF0aC5jZWlsKHByb2Nlc3NlZFByb2R1Y3RzLmxlbmd0aCAvIGl0ZW1zUGVyUGFnZSk7XG5cbiAgY29uc3QgaGFuZGxlVmlld0RldGFpbHMgPSAocHJvZHVjdDogUHJvZHVjdCkgPT4ge1xuICAgIHNldFNlbGVjdGVkUHJvZHVjdChwcm9kdWN0KTtcbiAgICBzZXRJc01vZGFsT3Blbih0cnVlKTtcbiAgfTtcblxuICBjb25zdCBoYW5kbGVDbG9zZU1vZGFsID0gKCkgPT4ge1xuICAgIHNldElzTW9kYWxPcGVuKGZhbHNlKTtcbiAgICBzZXRTZWxlY3RlZFByb2R1Y3QobnVsbCk7XG4gIH07XG5cbiAgY29uc3QgaGFuZGxlQ2F0ZWdvcnlDaGFuZ2UgPSAoZTogUmVhY3QuQ2hhbmdlRXZlbnQ8SFRNTFNlbGVjdEVsZW1lbnQ+KSA9PiB7XG4gICAgc2V0U2VsZWN0ZWRDYXRlZ29yeShlLnRhcmdldC52YWx1ZSk7XG4gICAgc2V0Q3VycmVudFBhZ2UoMSk7XG4gIH07XG5cbiAgY29uc3QgaGFuZGxlU2VhcmNoQ2hhbmdlID0gKGU6IFJlYWN0LkNoYW5nZUV2ZW50PEhUTUxJbnB1dEVsZW1lbnQ+KSA9PiB7XG4gICAgc2V0U2VhcmNoVGVybShlLnRhcmdldC52YWx1ZSk7XG4gICAgc2V0Q3VycmVudFBhZ2UoMSk7XG4gIH07XG5cbiAgY29uc3QgaGFuZGxlU29ydENoYW5nZSA9IChlOiBSZWFjdC5DaGFuZ2VFdmVudDxIVE1MU2VsZWN0RWxlbWVudD4pID0+IHtcbiAgICBzZXRTb3J0T3B0aW9uKGUudGFyZ2V0LnZhbHVlIGFzIFNvcnRPcHRpb24pO1xuICAgIHNldEN1cnJlbnRQYWdlKDEpO1xuICB9O1xuXG4gIGNvbnN0IGhhbmRsZUl0ZW1zUGVyUGFnZUNoYW5nZSA9IChcbiAgICBlOiBSZWFjdC5DaGFuZ2VFdmVudDxIVE1MU2VsZWN0RWxlbWVudD5cbiAgKSA9PiB7XG4gICAgc2V0SXRlbXNQZXJQYWdlKE51bWJlcihlLnRhcmdldC52YWx1ZSkpO1xuICAgIHNldEN1cnJlbnRQYWdlKDEpO1xuICB9O1xuXG4gIHJldHVybiAoXG4gICAgPGRpdiBjbGFzc05hbWU9XCJiZy1lbWVyYWxkLTUwIHB5LTEyXCI+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cImNvbnRhaW5lciBteC1hdXRvIHB4LTZcIj5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJ0ZXh0LWNlbnRlciBtYi0xMlwiPlxuICAgICAgICAgIDxoMSBjbGFzc05hbWU9XCJ0ZXh0LTR4bCBtZDp0ZXh0LTV4bCBmb250LWJvbGQgZm9udC1kaXNwbGF5IHRleHQtZ3JlZW4tODAwXCI+XG4gICAgICAgICAgICBUaWVuZGEgTmF0dXJhbFxuICAgICAgICAgIDwvaDE+XG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1sZyB0ZXh0LWdyYXktNjAwIG10LTQgbWF4LXctMnhsIG14LWF1dG9cIj5cbiAgICAgICAgICAgIFByb2R1Y3RvcyBjdWlkYWRvc2FtZW50ZSBzZWxlY2Npb25hZG9zIHBhcmEgYXBveWFyIHR1IGNhbWlubyBoYWNpYVxuICAgICAgICAgICAgZWwgYmllbmVzdGFyLlxuICAgICAgICAgIDwvcD5cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgey8qIENvbnRyb2xzIEJhciAqL31cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJiZy1lbWVyYWxkLTUwLzk1IGJhY2tkcm9wLWJsdXItc20gcHktNCBtYi04IHJvdW5kZWQtbGcgc2hhZG93LW1kIGJvcmRlciBib3JkZXItZW1lcmFsZC0yMDBcIj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImdyaWQgZ3JpZC1jb2xzLTEgbWQ6Z3JpZC1jb2xzLTIgbGc6Z3JpZC1jb2xzLTQgZ2FwLTQgaXRlbXMtY2VudGVyXCI+XG4gICAgICAgICAgICB7LyogU2VhcmNoICovfVxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJyZWxhdGl2ZVwiPlxuICAgICAgICAgICAgICA8aW5wdXRcbiAgICAgICAgICAgICAgICBkYXRhLXRlc3RpZD1cInNlYXJjaC1pbnB1dFwiXG4gICAgICAgICAgICAgICAgdHlwZT1cInRleHRcIlxuICAgICAgICAgICAgICAgIHBsYWNlaG9sZGVyPVwiQnVzY2FyIHByb2R1Y3Rvcy4uLlwiXG4gICAgICAgICAgICAgICAgdmFsdWU9e3NlYXJjaFRlcm19XG4gICAgICAgICAgICAgICAgb25DaGFuZ2U9e2hhbmRsZVNlYXJjaENoYW5nZX1cbiAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ3LWZ1bGwgcC0zIHBsLTEwIGJnLXdoaXRlIGJvcmRlciBib3JkZXItZ3JlZW4tMjAwIHJvdW5kZWQtbGcgc2hhZG93LXNtIGZvY3VzOnJpbmctMiBmb2N1czpyaW5nLWdyZWVuLTMwMCBmb2N1czpib3JkZXItZ3JlZW4tNDAwIHRyYW5zaXRpb25cIlxuICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICA8c3ZnXG4gICAgICAgICAgICAgICAgeG1sbnM9XCJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Z1wiXG4gICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiaC01IHctNSBhYnNvbHV0ZSBsZWZ0LTMgdG9wLTEvMiAtdHJhbnNsYXRlLXktMS8yIHRleHQtZ3JheS00MDBcIlxuICAgICAgICAgICAgICAgIGZpbGw9XCJub25lXCJcbiAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcbiAgICAgICAgICAgICAgICBzdHJva2U9XCJjdXJyZW50Q29sb3JcIlxuICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAgPHBhdGhcbiAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVjYXA9XCJyb3VuZFwiXG4gICAgICAgICAgICAgICAgICBzdHJva2VMaW5lam9pbj1cInJvdW5kXCJcbiAgICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoPVwiMlwiXG4gICAgICAgICAgICAgICAgICBkPVwiTTIxIDIxbC02LTZtMi01YTcgNyAwIDExLTE0IDAgNyA3IDAgMDExNCAwelwiXG4gICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgPC9zdmc+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIHsvKiBDYXRlZ29yeSAqL31cbiAgICAgICAgICAgIDxzZWxlY3RcbiAgICAgICAgICAgICAgYXJpYS1sYWJlbD1cIkNhdGVnb3JpYVwiXG4gICAgICAgICAgICAgIHZhbHVlPXtzZWxlY3RlZENhdGVnb3J5fVxuICAgICAgICAgICAgICBvbkNoYW5nZT17aGFuZGxlQ2F0ZWdvcnlDaGFuZ2V9XG4gICAgICAgICAgICAgIGNsYXNzTmFtZT1cInctZnVsbCBwLTMgYmctd2hpdGUgYm9yZGVyIGJvcmRlci1ncmVlbi0yMDAgcm91bmRlZC1sZyBzaGFkb3ctc20gZm9jdXM6cmluZy0yIGZvY3VzOnJpbmctZ3JlZW4tMzAwIGZvY3VzOmJvcmRlci1ncmVlbi00MDAgdHJhbnNpdGlvblwiXG4gICAgICAgICAgICA+XG4gICAgICAgICAgICAgIHtwcm9kdWN0Q2F0ZWdvcmllcy5tYXAoKGNhdGVnb3J5KSA9PiAoXG4gICAgICAgICAgICAgICAgPG9wdGlvbiBrZXk9e2NhdGVnb3J5LmlkfSB2YWx1ZT17Y2F0ZWdvcnkuaWR9PlxuICAgICAgICAgICAgICAgICAge2NhdGVnb3J5Lm5hbWV9XG4gICAgICAgICAgICAgICAgPC9vcHRpb24+XG4gICAgICAgICAgICAgICkpfVxuICAgICAgICAgICAgPC9zZWxlY3Q+XG4gICAgICAgICAgICB7LyogU29ydCAqL31cbiAgICAgICAgICAgIDxzZWxlY3RcbiAgICAgICAgICAgICAgYXJpYS1sYWJlbD1cIk9yZGVuYXIgcHJvZHVjdG9zXCJcbiAgICAgICAgICAgICAgdmFsdWU9e3NvcnRPcHRpb259XG4gICAgICAgICAgICAgIG9uQ2hhbmdlPXtoYW5kbGVTb3J0Q2hhbmdlfVxuICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ3LWZ1bGwgcC0zIGJnLXdoaXRlIGJvcmRlciBib3JkZXItZ3JlZW4tMjAwIHJvdW5kZWQtbGcgc2hhZG93LXNtIGZvY3VzOnJpbmctMiBmb2N1czpyaW5nLWdyZWVuLTMwMCBmb2N1czpib3JkZXItZ3JlZW4tNDAwIHRyYW5zaXRpb25cIlxuICAgICAgICAgICAgPlxuICAgICAgICAgICAgICA8b3B0aW9uIHZhbHVlPVwiZGVmYXVsdFwiPk9yZGVuYXIgcG9yIGRlZmVjdG88L29wdGlvbj5cbiAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT1cIm5hbWUtYXNjXCI+Tm9tYnJlIChBLVopPC9vcHRpb24+XG4gICAgICAgICAgICAgIDxvcHRpb24gdmFsdWU9XCJuYW1lLWRlc2NcIj5Ob21icmUgKFotQSk8L29wdGlvbj5cbiAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT1cInByaWNlLWFzY1wiPlByZWNpbyAoTWVub3IgYSBNYXlvcik8L29wdGlvbj5cbiAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT1cInByaWNlLWRlc2NcIj5QcmVjaW8gKE1heW9yIGEgTWVub3IpPC9vcHRpb24+XG4gICAgICAgICAgICA8L3NlbGVjdD5cbiAgICAgICAgICAgIHsvKiBJdGVtcyBwZXIgcGFnZSAqL31cbiAgICAgICAgICAgIDxzZWxlY3RcbiAgICAgICAgICAgICAgYXJpYS1sYWJlbD1cIkVsZW1lbnRvcyBwb3IgcGFnaW5hXCJcbiAgICAgICAgICAgICAgdmFsdWU9e2l0ZW1zUGVyUGFnZX1cbiAgICAgICAgICAgICAgb25DaGFuZ2U9e2hhbmRsZUl0ZW1zUGVyUGFnZUNoYW5nZX1cbiAgICAgICAgICAgICAgY2xhc3NOYW1lPVwidy1mdWxsIHAtMyBiZy13aGl0ZSBib3JkZXIgYm9yZGVyLWdyZWVuLTIwMCByb3VuZGVkLWxnIHNoYWRvdy1zbSBmb2N1czpyaW5nLTIgZm9jdXM6cmluZy1ncmVlbi0zMDAgZm9jdXM6Ym9yZGVyLWdyZWVuLTQwMCB0cmFuc2l0aW9uXCJcbiAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT17MTJ9PjEyIHBvciBww6FnaW5hPC9vcHRpb24+XG4gICAgICAgICAgICAgIDxvcHRpb24gdmFsdWU9ezI0fT4yNCBwb3IgcMOhZ2luYTwvb3B0aW9uPlxuICAgICAgICAgICAgICA8b3B0aW9uIHZhbHVlPXs0OH0+NDggcG9yIHDDoWdpbmE8L29wdGlvbj5cbiAgICAgICAgICAgIDwvc2VsZWN0PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICB7YXBpRXJyb3IgJiYgKFxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWItNiByb3VuZGVkLWxnIGJvcmRlciBib3JkZXIteWVsbG93LTMwMCBiZy15ZWxsb3ctNTAgcC00IHRleHQteWVsbG93LTkwMCB0ZXh0LXNtXCI+XG4gICAgICAgICAgICB7YXBpRXJyb3J9XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICl9XG5cbiAgICAgICAge2lzTG9hZGluZ1Byb2R1Y3RzICYmICFhcGlFcnJvciA/IChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRleHQtY2VudGVyIHB5LTIwIHRleHQtZ3JheS01MDBcIj5cbiAgICAgICAgICAgIENhcmdhbmRvIGNhdMOhbG9nby4uLlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICApIDogcGFnaW5hdGVkUHJvZHVjdHMubGVuZ3RoID4gMCA/IChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImdyaWQgZ3JpZC1jb2xzLTEgc206Z3JpZC1jb2xzLTIgbGc6Z3JpZC1jb2xzLTMgeGw6Z3JpZC1jb2xzLTQgZ2FwLThcIj5cbiAgICAgICAgICAgIHtwYWdpbmF0ZWRQcm9kdWN0cy5tYXAoKHByb2R1Y3QpID0+IChcbiAgICAgICAgICAgICAgPFByb2R1Y3RDYXJkXG4gICAgICAgICAgICAgICAga2V5PXtwcm9kdWN0LmlkfVxuICAgICAgICAgICAgICAgIHByb2R1Y3Q9e3Byb2R1Y3R9XG4gICAgICAgICAgICAgICAgb25WaWV3RGV0YWlscz17aGFuZGxlVmlld0RldGFpbHN9XG4gICAgICAgICAgICAgIC8+XG4gICAgICAgICAgICApKX1cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgKSA6IChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRleHQtY2VudGVyIHB5LTIwXCI+XG4gICAgICAgICAgICA8aDIgY2xhc3NOYW1lPVwidGV4dC0yeGwgZm9udC1zZW1pYm9sZCB0ZXh0LWdyYXktNjAwXCI+XG4gICAgICAgICAgICAgIE5vIHNlIGVuY29udHJhcm9uIHByb2R1Y3Rvc1xuICAgICAgICAgICAgPC9oMj5cbiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtZ3JheS01MDAgbXQtMlwiPlxuICAgICAgICAgICAgICBJbnRlbnRhIGFqdXN0YXIgdHUgYsO6c3F1ZWRhIG8gZmlsdHJvcy5cbiAgICAgICAgICAgIDwvcD5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgKX1cblxuICAgICAgICB7LyogUGFnaW5hdGlvbiBDb250cm9scyAqL31cbiAgICAgICAge3RvdGFsUGFnZXMgPiAxICYmIChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm10LTEyIGZsZXgganVzdGlmeS1jZW50ZXIgaXRlbXMtY2VudGVyIHNwYWNlLXgtNFwiPlxuICAgICAgICAgICAgPGJ1dHRvblxuICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBzZXRDdXJyZW50UGFnZSgocCkgPT4gTWF0aC5tYXgoMSwgcCAtIDEpKX1cbiAgICAgICAgICAgICAgZGlzYWJsZWQ9e2N1cnJlbnRQYWdlID09PSAxfVxuICAgICAgICAgICAgICBjbGFzc05hbWU9XCJweC00IHB5LTIgYmctd2hpdGUgYm9yZGVyIGJvcmRlci1ncmF5LTMwMCByb3VuZGVkLW1kIHNoYWRvdy1zbSB0ZXh0LXNtIGZvbnQtbWVkaXVtIHRleHQtZ3JheS03MDAgaG92ZXI6YmctZ3JheS01MCBkaXNhYmxlZDpvcGFjaXR5LTUwIGRpc2FibGVkOmN1cnNvci1ub3QtYWxsb3dlZFwiXG4gICAgICAgICAgICA+XG4gICAgICAgICAgICAgIEFudGVyaW9yXG4gICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQtc20gdGV4dC1ncmF5LTcwMFwiPlxuICAgICAgICAgICAgICBQw6FnaW5hIHtjdXJyZW50UGFnZX0gZGUge3RvdGFsUGFnZXN9XG4gICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICA8YnV0dG9uXG4gICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldEN1cnJlbnRQYWdlKChwKSA9PiBNYXRoLm1pbih0b3RhbFBhZ2VzLCBwICsgMSkpfVxuICAgICAgICAgICAgICBkaXNhYmxlZD17Y3VycmVudFBhZ2UgPT09IHRvdGFsUGFnZXN9XG4gICAgICAgICAgICAgIGNsYXNzTmFtZT1cInB4LTQgcHktMiBiZy13aGl0ZSBib3JkZXIgYm9yZGVyLWdyYXktMzAwIHJvdW5kZWQtbWQgc2hhZG93LXNtIHRleHQtc20gZm9udC1tZWRpdW0gdGV4dC1ncmF5LTcwMCBob3ZlcjpiZy1ncmF5LTUwIGRpc2FibGVkOm9wYWNpdHktNTAgZGlzYWJsZWQ6Y3Vyc29yLW5vdC1hbGxvd2VkXCJcbiAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgU2lndWllbnRlXG4gICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgKX1cbiAgICAgIDwvZGl2PlxuICAgICAgPFByb2R1Y3REZXRhaWxNb2RhbFxuICAgICAgICBpc09wZW49e2lzTW9kYWxPcGVufVxuICAgICAgICBvbkNsb3NlPXtoYW5kbGVDbG9zZU1vZGFsfVxuICAgICAgICBwcm9kdWN0PXtzZWxlY3RlZFByb2R1Y3R9XG4gICAgICAvPlxuICAgIDwvZGl2PlxuICApO1xufTtcblxuZXhwb3J0IGRlZmF1bHQgU3RvcmVQYWdlO1xuXG4iXSwibWFwcGluZ3MiOiJBQThKVTtBQTlKVixTQUFnQixVQUFVLFNBQVMsaUJBQWlCO0FBQ3BELFNBQVMsWUFBWSxnQkFBZ0IseUJBQXlCO0FBQzlELE9BQU8saUJBQWlCO0FBQ3hCLE9BQU8sd0JBQXdCO0FBRS9CLFNBQVMsOEJBQThCO0FBQ3ZDLFNBQVMsY0FBYztBQUN2QixTQUFTLHFCQUFpQztBQVMxQyxNQUFNLFlBQXNCLE1BQU07QUFDaEMsUUFBTSxDQUFDLGtCQUFrQixtQkFBbUIsSUFBSSxTQUFpQixPQUFPO0FBQ3hFLFFBQU0sQ0FBQyxpQkFBaUIsa0JBQWtCLElBQUksU0FBeUIsSUFBSTtBQUMzRSxRQUFNLENBQUMsYUFBYSxjQUFjLElBQUksU0FBUyxLQUFLO0FBQ3BELFFBQU0sQ0FBQyxZQUFZLGFBQWEsSUFBSSxTQUFTLEVBQUU7QUFDL0MsUUFBTSxDQUFDLFlBQVksYUFBYSxJQUFJLFNBQXFCLFNBQVM7QUFDbEUsUUFBTSxD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

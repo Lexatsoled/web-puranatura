@@ -1,0 +1,35 @@
+Issue
+
+The security-scan job fails with two related errors from the logs:
+"CodeQL Action major versions v1 and v2 have been deprecated. Please update ... to v3."
+"Resource not accessible by integration" while uploading the SARIF file (trivy-results.sarif) via github/codeql-action/upload-sarif@v2.
+Root causes
+
+You're using the CodeQL upload action at @v2 — CodeQL actions must be updated to v3.
+Uploading SARIF requires GITHUB_TOKEN to have the proper security write permissions (and will fail for PRs from forks because the token has reduced permissions for forked workflows).
+Minimal fixes (apply both)
+
+Update the upload action to v3.
+Grant the workflow the security-events write permission (and contents read).
+Prevent attempting SARIF uploads for forked PRs (optional but recommended to avoid the "Resource not accessible by integration" error on forked PR runs).
+Suggested changes (replace in .github/workflows/ci.yml at ref 8990890edcdb086925a002b7905d201660599978)
+
+Add a permissions block at the top-level of the workflow (right under env or at the top):
+permissions: contents: read security-events: write
+
+Update the security-scan job so it only runs the SARIF upload when the run has permission to write security events (skip fork PRs), and use the v3 upload action:
+Replace the job header for security-scan with (snippet):
+
+security-scan: runs-on: ubuntu-latest # Only attempt SARIF upload on non-forked runs (push or same-repo PRs) if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }} steps: - uses: actions/checkout@v3 - name: Run Trivy vulnerability scanner uses: aquasecurity/trivy-action@master with: scan-type: 'fs' scan-ref: '.' format: 'sarif' output: 'trivy-results.sarif' - name: Upload Trivy results to GitHub Security # UPDATED: use CodeQL v3 upload action uses: github/codeql-action/upload-sarif@v3 with: sarif_file: 'trivy-results.sarif'
+
+Why this fixes it
+
+Updating to upload-sarif@v3 resolves the deprecation error.
+Adding workflow permissions ensures the GITHUB_TOKEN used by the action has the "security-events: write" scope required to create code-scanning alerts and upload SARIF.
+Skipping the SARIF upload for forked PRs prevents "Resource not accessible by integration" failures caused by the limited permissions for workflows triggered from forks.
+Notes / alternatives
+
+If you want SARIF uploads on PRs from forks, you must use a token with higher privileges (e.g., a PAT stored as a secret) — not recommended for public forks due to security risk.
+If you prefer, you can limit the security-scan job to run only on pushes to main/develop instead of PRs.
+Ensure there are no other occurrences of codeql actions at v1/v2 in other workflow files; update them to v3 as well.
+If you want, I can produce a ready-to-apply patch/diff for .github/workflows/ci.yml at ref 8990890edcdb086925a002b7905d201660599978.

@@ -1,0 +1,42 @@
+Summary — root cause
+
+The Vitest run in job 55539339479 fails immediately with: "Error: Cannot find module '@testing-library/dom'". This is a missing dependency that the tests import, so Vitest cannot start the test suites in src/utils.
+The workflow that ran is .github/workflows/ci-tests.yml at ref 8990890edcdb086925a002b7905d201660599978 (the CI installs with npm ci then runs vitest). See the job log showing the error and the workflow at: https://github.com/Lexatsoled/web-puranatura/blob/8990890edcdb086925a002b7905d201660599978/.github/workflows/ci-tests.yml
+Recommended fix (best practice)
+
+Add @testing-library/dom to devDependencies in package.json and commit the updated package-lock.json
+This is the correct long-term fix: if tests import a package, it must be declared and locked in package.json/package-lock.json so npm ci can install it in CI.
+Example package.json change:
+
+Add to devDependencies (pick an appropriate version; example uses a current minor version — confirm compatibility with your tests): { "devDependencies": { "@testing-library/dom": "^8.19.0", "...": "..." } }
+Commands to run locally and commit the lockfile:
+
+npm install --save-dev @testing-library/dom
+git add package.json package-lock.json
+git commit -m "chore(tests): add @testing-library/dom to devDependencies"
+After that, CI’s npm ci will install the dependency and Vitest should find it.
+
+Quick temporary CI remediation (if you need an immediate workaround)
+
+Add a short step in the workflow before running tests to ensure the package exists (not recommended long-term because it masks missing lockfile changes):
+Example step to insert before "Run unit tests":
+
+name: Ensure test deps present (temporary) run: | npm ci --legacy-peer-deps --no-audit --no-fund npm install --no-save @testing-library/dom
+(Then run the vitest step as before.) Again: please prefer committing the package change above.
+
+Extra diagnostics to help verify and prevent recurrence
+
+Add a small diagnostics snippet (only for debugging) in CI to show whether @testing-library/dom is installed and to print npm/node versions (you already have some diagnostics later; consider moving or expanding them before test execution):
+Example snippet to add right after "Install dependencies":
+
+name: Debug installed test deps run: | node --version npm --version npm ls @testing-library/dom || true ls -la node_modules/@testing-library || true
+
+If you have a monorepo/workspaces setup, ensure CI runs the correct install command for your package manager (npm ci at workspace root or use workspace-aware commands for pnpm/yarn). If you use workspaces, make sure @testing-library/dom is declared in the package.json of the package that contains the tests.
+
+Why this will fix the failing job
+
+The error comes from require resolution failing for a test-time import. Committing the package as a devDependency ensures npm ci (used by the CI workflow) installs it consistently in the Actions environment, allowing Vitest to import it and run the tests.
+If you want, I can:
+
+Provide the exact package.json diff to commit.
+Prepare a small patch for .github/workflows/ci-tests.yml to add temporary diagnostics or the quick workaround step (using the ref 8990890edcdb086925a002b7905d201660599978).

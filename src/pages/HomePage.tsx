@@ -12,26 +12,29 @@ const HomePage: React.FC = () => {
         overlayClassName="bg-green-900 bg-opacity-50"
       >
         <div className="flex flex-col justify-center items-center h-full text-center text-white px-4">
-          <h1 className="text-5xl md:text-7xl font-bold font-display leading-tight mb-4">
-            Bienestar que Nace de la Tierra
-          </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-8">
-            En PuraNatura, creemos en el poder curativo de la naturaleza para
-            restaurar el equilibrio de tu cuerpo y mente.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/servicios"
-              className="bg-white text-green-800 font-semibold py-3 px-8 rounded-full hover:bg-green-100 transition-all duration-300 transform hover:scale-105"
-            >
-              Nuestros Servicios
-            </Link>
-            <Link
-              to="/tienda"
-              className="bg-green-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
-            >
-              Ir a la Tienda
-            </Link>
+          {/* Deterministic background panel to make contrast calculable by axe */}
+          <div className="bg-green-900 p-6 rounded-md md:max-w-3xl">
+            <h1 className="text-5xl md:text-7xl font-bold font-display leading-tight mb-4">
+              Bienestar que Nace de la Tierra
+            </h1>
+            <p className="text-lg md:text-xl max-w-2xl mb-8">
+              En PuraNatura, creemos en el poder curativo de la naturaleza para
+              restaurar el equilibrio de tu cuerpo y mente.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                to="/servicios"
+                className="bg-white text-green-800 font-semibold py-3 px-8 rounded-full hover:bg-green-100 transition-all duration-300 transform hover:scale-105"
+              >
+                Nuestros Servicios
+              </Link>
+              <Link
+                to="/tienda"
+                className="bg-green-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-800 transition-all duration-300 transform hover:scale-105"
+              >
+                Ir a la Tienda
+              </Link>
+            </div>
           </div>
         </div>
       </OptimizedBackgroundImage>

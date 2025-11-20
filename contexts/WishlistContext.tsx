@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '../types';
 
+// Mantiene la lista de deseos sincronizada con localStorage y expone utilidades para la UI.
+
 interface WishlistItem {
   id: string;
   name: string;
@@ -29,7 +31,7 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
   if (!context) {
-    throw new Error('useWishlist must be used within a WishlistProvider');
+    throw new Error('useWishlist debe usarse dentro de WishlistProvider');
   }
   return context;
 };
@@ -56,7 +58,10 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({
         }));
         setWishlistItems(wishlistWithDates);
       } catch (error) {
-        console.error('Error loading wishlist from localStorage:', error);
+        console.error(
+          'Error al cargar la lista de deseos desde localStorage:',
+          error
+        );
       }
     }
   }, []);

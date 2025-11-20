@@ -2,6 +2,7 @@ import React from 'react';
 import { services } from '../../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
 import { Service } from '../../types';
+import { formatCurrency } from '../utils/intl';
 
 const ServicesPage: React.FC = () => {
   return (
@@ -42,31 +43,31 @@ const ServicesPage: React.FC = () => {
                   {service.description}
                 </p>
 
-                {/* {service.benefits && service.benefits.length > 0 && (
+                {service.benefits && service.benefits.length > 0 && (
                   <div className="mt-4">
-                    <h4 className="font-semibold text-green-600 mb-2">Beneficios:</h4>
+                    <h4 className="font-semibold text-green-600 mb-2">
+                      Beneficios:
+                    </h4>
                     <ul className="list-disc list-inside text-gray-600 space-y-1">
                       {service.benefits?.map((benefit: string, idx: number) => (
                         <li key={idx}>{benefit}</li>
                       ))}
                     </ul>
                   </div>
-                )} */}
+                )}
 
-                {/* <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex justify-between items-center">
+                {service.price && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
                     {service.duration && (
                       <span className="text-gray-500 text-sm">
                         Duración: {service.duration} minutos
                       </span>
                     )}
-                    {service.price && (
-                      <span className="text-green-700 font-bold">
-                        DOP ${service.price.toFixed(2)}
-                      </span>
-                    )}
+                    <span className="text-green-700 font-bold">
+                      {formatCurrency(service.price)}
+                    </span>
                   </div>
-                </div> */}
+                )}
               </div>
             </div>
           ))}
