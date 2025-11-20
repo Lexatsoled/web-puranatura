@@ -272,6 +272,17 @@ Este documento sintetiza cada hallazgo con fechas, síntomas, causa-raíz, soluc
 - **Solicito a:** `@DevOpsTeam`, `@QA`, `@Lexatsoled` — revisar logs y confirmar que `reports`/`test-results` se suben como artifacts. Si todo va bien, marcar `T4.2` como completado y mergear.
 - **Notas:** Si la pipeline falla en `prisma migrate`, usar `npx prisma db push --accept-data-loss` como fallback (documentar en PR), y si Playwright falla por dependencias del SO en runner, revisar `npx playwright install --with-deps` y/o cambiar a contenedor de GitHub Actions con dependencias de navegador.
 
+### CI-WORKFLOW-004 - Node/lockfile mismatch in CI
+
+- **Fecha:** 2025-11-20
+- **Síntoma:** `npm ci` falla en GitHub Actions con `EBADENGINE` y `EUSAGE` errors: packages in the lock file require Node >=20 while setup-node used v18; `package-lock.json` is out of sync with `package.json`.
+- **Acción propuesta:**
+  1. Cambiar `ci.yml` para usar `node-version: '20'` (ya implementado en PR `fix/ci-orchestrator-lint`).
+  2. Ejecutar localmente `npm install` en Node v20 y commitear el `package-lock.json` actualizado al PR.
+  3. Añadir `engines.node` >= 20 en `package.json` y `backend/package.json` para indicar explícitamente la dependencia del runtime.
+  4. Si actualizaciones de lock no pueden realizarse inmediatamente, como fallback temporal usar `npm install` en CI para evitar bloqueos, pero preferimos `npm ci` para reproducibilidad.
+- **Impacto:** evita fallos en `npm ci` y EBADENGINE en runners; asegura que `Next` y otras dependencias que requieren Node 20 se instalan correctamente.
+
 
 ### BUILD-TS-013 -
 
