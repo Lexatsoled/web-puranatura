@@ -74,7 +74,7 @@ jobs:
         shell: bash
 
       - name: Wait for backend /api/health
-        run: npx wait-on --timeout 30000 http://localhost:3001/api/health
+        run: npx wait-on --timeout 30000 http://127.0.0.1:3001/api/health
 
       - name: Build frontend
         run: npm run build
