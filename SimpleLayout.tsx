@@ -84,8 +84,8 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
       {/* Header con navegación funcional y carrito */}
       <header
         style={{
-          backgroundColor: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-          background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+          position: 'relative',
+          backgroundColor: '#16a34a',
           color: 'white',
           padding: '1rem',
           display: 'flex',
@@ -94,6 +94,7 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         }}
       >
+        {/* Background color set to a deterministic solid color to help axe compute contrast. */}
         <div
           style={{
             display: 'flex',
@@ -101,6 +102,8 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
             alignItems: 'center',
             width: '100%',
             maxWidth: '1200px',
+            position: 'relative',
+            zIndex: 1,
           }}
         >
           <h1

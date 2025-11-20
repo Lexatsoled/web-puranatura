@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -21,15 +21,36 @@ const UserMenu: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Mantener los hooks en la parte superior del componente para cumplir
+  // con las reglas de Hooks de React (no llamar hooks condicionalmente).
+  const memberSinceLabel = useMemo(() => {
+    if (!user?.createdAt) return 'Reciente';
+    const parsed = new Date(user.createdAt);
+    return Number.isNaN(parsed.getTime())
+      ? 'Reciente'
+      : parsed.getFullYear().toString();
+  }, [user?.createdAt]);
+
   if (!isAuthenticated || !user) return null;
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setIsOpen(false);
   };
 
   const getInitials = () => {
-    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+    const composite = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+    if (!composite) {
+      return user.email.charAt(0).toUpperCase();
+    }
+    const initials = composite
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part.charAt(0))
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+    return initials || user.email.charAt(0).toUpperCase();
   };
 
   const menuItems = [
@@ -251,7 +272,7 @@ const UserMenu: React.FC = () => {
                   </p>
                   <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   <p className="text-xs text-green-600 font-medium">
-                    Miembro desde {new Date(user.createdAt).getFullYear()}
+                    Miembro desde {memberSinceLabel}
                   </p>
                 </div>
               </div>

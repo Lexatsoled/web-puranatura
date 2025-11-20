@@ -1,0 +1,32 @@
+GitHub Copilot Chat Assistant
+
+Root cause
+
+The run failed during action preparation because the workflow uses the deprecated actions/upload-artifact@v3. GitHub automatically fails runs that try to use that deprecated major version (see the job log entry).
+Fix
+
+Update all uses of actions/upload-artifact@v3 to the supported v4 release (for example actions/upload-artifact@v4). v4 is the current major and is a drop-in replacement for the common usage in this workflow.
+Quick patch (replace both occurrences)
+
+File: .github/workflows/ci.yml (ref: 8990890edcdb086925a002b7905d201660599978)
+URL: https://github.com/Lexatsoled/web-puranatura/blob/8990890edcdb086925a002b7905d201660599978/.github/workflows/ci.yml
+Replace this block in test-e2e: uses: actions/upload-artifact@v3 with: uses: actions/upload-artifact@v4
+
+And replace this block in build: uses: actions/upload-artifact@v3 with: uses: actions/upload-artifact@v4
+
+Minimal diff you can apply:
+
+In .github/workflows/ci.yml
+Line around test-e2e:
+uses: actions/upload-artifact@v3
+uses: actions/upload-artifact@v4
+Line around build:
+uses: actions/upload-artifact@v3
+uses: actions/upload-artifact@v4
+Notes and recommendations
+
+Pin to the major tag (actions/upload-artifact@v4) rather than commit SHAs to receive non-breaking updates while avoiding deprecated major versions.
+After applying the change, push and re-run the workflow (or re-run the failed job) to confirm the prepare-step error is resolved.
+If you have other workflows or reusable workflows in the repo, search for any other uses of upload-artifact@v3 and update them similarly.
+If you want stricter reproducibility, you can pin to a specific v4 minor/patch tag (for example actions/upload-artifact@v4.0.1) or a commit SHA.
+This change addresses the automatic failure shown in the job log and should allow the runner to download and run the upload-artifact action successfully.

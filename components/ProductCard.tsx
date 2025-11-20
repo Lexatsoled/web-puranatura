@@ -2,6 +2,7 @@ import React from 'react';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import { formatCurrency } from '../src/utils/intl';
 
 interface ProductCardProps {
   product: Product;
@@ -82,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm text-gray-500 mb-3">{product.category}</p>
         <div className="mt-auto flex justify-between items-center">
           <p className="text-xl font-bold text-green-700">
-            DOP ${product.price.toFixed(2)}
+            {formatCurrency(product.price)}
           </p>
           <button
             onClick={handleAddToCart}

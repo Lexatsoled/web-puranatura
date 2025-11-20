@@ -1,4 +1,60 @@
 import { Product, ProductCategory } from '../src/types/product';
+import imageManifest from './image-manifest.json';
+
+// Dataset heredado que ahora se usa como fallback mientras el BFF provee datos reales.
+
+type ImageManifestEntry = {
+  slug: string;
+  fileName: string;
+  path: string;
+  size: number;
+};
+
+const manifestEntries = imageManifest as ImageManifestEntry[];
+const manifestMap = new Map<string, ImageManifestEntry>(
+  manifestEntries.map((entry) => [entry.slug, entry])
+);
+
+const FALLBACK_IMAGE = '/Jpeg/vitamina_c_1000_500x500.jpg';
+
+const imageAliasMap: Record<string, string> = {
+  'c-1000-with-bioflavonoids-anverso': 'vitamina-c-now-anverso',
+  'c-1000-with-bioflavonoids-reverso': 'vitamina-c-1000-500x500',
+  'high-potency-vitamin-d3-10-000-iu-anverso': 'vitamina-d3-10000-anverso',
+  'high-potency-vitamin-d3-10-000-iu-reverso': 'vitamina-d3-10000-500x500',
+  'calcium-magnesium-zinc-anverso': 'calcio-magnesio-anverso',
+  'calcium-magnesium-zinc-reverso': 'calcio-magnesio-etiqueta-500x500',
+  'glucosamine-chondroitin-anverso': 'glucosamina-condroitina-anverso',
+  'glucosamine-chondroitin-reverso': 'glucosamina-condroitina-500x500',
+  'immune-probiotic-go-pack-anverso': 'ultimate-flora-500x500',
+  'immune-probiotic-go-pack-reverso': 'ultimate-flora-500x500',
+};
+
+const normalizeImageKey = (value: string) =>
+  value
+    .replace(/^\/?Jpeg\//i, '')
+    .replace(/\.(jpg|jpeg|png|webp|avif)$/i, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const resolveImagePath = (value: string): string => {
+  if (!value) return FALLBACK_IMAGE;
+  const baseName = value.replace(/^\/?Jpeg\//i, '');
+  const normalizedKey = normalizeImageKey(baseName);
+  const slug = imageAliasMap[normalizedKey] ?? normalizedKey;
+  return manifestMap.get(slug)?.path ?? FALLBACK_IMAGE;
+};
+
+const normalizeProductImages = (product: Product): Product => ({
+  ...product,
+  images:
+    product.images?.map((image) => ({
+      ...image,
+      thumbnail: resolveImagePath(image.thumbnail),
+      full: resolveImagePath(image.full),
+    })) ?? [],
+});
 
 export const productCategories: ProductCategory[] = [
   { id: 'todos', name: 'Todos' },
@@ -11,7 +67,7 @@ export const productCategories: ProductCategory[] = [
   { id: 'suplementos-especializados', name: 'Suplementos Especializados' },
 ];
 
-export const products: Product[] = [
+const legacyProducts: Product[] = [
   // Vitaminas y Minerales
   {
     id: '1',
@@ -2705,3 +2761,5 @@ export const products: Product[] = [
     tags: ['magnesio', 'músculos', 'nervios', 'citrato'],
   },
 ];
+
+export const products: Product[] = legacyProducts.map(normalizeProductImages);

@@ -70,6 +70,14 @@ const ProfilePage: React.FC = () => {
     setSaveMessage('');
   };
 
+  const memberSinceText = (() => {
+    if (!user.createdAt) return 'Reciente';
+    const parsed = new Date(user.createdAt);
+    return Number.isNaN(parsed.getTime())
+      ? 'Reciente'
+      : parsed.toLocaleDateString();
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
@@ -257,7 +265,7 @@ const ProfilePage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Miembro desde</span>
                   <span className="font-medium text-gray-900">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                    {memberSinceText}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">

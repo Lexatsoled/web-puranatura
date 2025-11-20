@@ -6,13 +6,17 @@ import {
   sanitizeResponseMiddleware,
 } from './sanitizationMiddleware';
 
-// Configuración del cliente axios
+const apiBaseUrl =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
+  '/api';
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || '/api',
+  baseURL: apiBaseUrl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // Añadir middleware de sanitización
@@ -88,6 +92,18 @@ export const useApi = () => {
       await limiter.waitForSlot();
 
       const response = await api(config);
+      // Detect accidental HTML responses (e.g., when preview serves index.html
+      // for unknown /api routes) and treat them as errors so the caller falls
+      // back to legacy data instead of attempting to .map() a string.
+      if (
+        response &&
+        response.data &&
+        typeof response.data === 'string' &&
+        response.data.trim().startsWith('<')
+      ) {
+        throw new Error('Unexpected HTML response from API');
+      }
+
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 429) {
@@ -129,44 +145,12 @@ export const useApi = () => {
   };
 };
 
-// Interceptor para añadir el token de autenticación
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Interceptor para refrescar el token
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = localStorage.getItem('refresh_token');
-        const response = await axios.post('/api/auth/refresh', {
-          refreshToken,
-        });
-
-        const { token } = response.data;
-        localStorage.setItem('auth_token', token);
-
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Si falla el refresh, redirigir al login
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
+  (error) => {
+    if (error.response?.status === 401) {
+      window.dispatchEvent(new Event('auth:logout'));
     }
-
     return Promise.reject(error);
   }
 );

@@ -17,7 +17,6 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     actionTimeout: process.env.CI ? 30_000 : 20_000,
-    expect: { timeout: process.env.CI ? 30_000 : 15_000 },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

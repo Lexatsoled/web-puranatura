@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '../src/utils/intl';
 
 const WishlistPage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -201,11 +202,11 @@ const WishlistPage: React.FC = () => {
 
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-lg font-bold text-green-700">
-                        DOP ${item.price.toFixed(2)}
+                        {formatCurrency(item.price)}
                       </span>
                       {item.originalPrice && (
                         <span className="text-sm text-gray-500 line-through">
-                          DOP ${item.originalPrice.toFixed(2)}
+                          {formatCurrency(item.originalPrice)}
                         </span>
                       )}
 

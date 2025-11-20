@@ -4,29 +4,15 @@ import { withLazyLoading } from '../hooks/usePerformance';
 import PageTransition from '../components/PageTransition';
 
 // Importación perezosa de páginas
-const HomePage = withLazyLoading(
-  React.lazy(() => import('../../pages/HomePage'))
-);
-const StorePage = withLazyLoading(
-  React.lazy(() => import('../../pages/StorePage'))
-);
-const ProductPage = withLazyLoading(
-  React.lazy(() => import('../pages/ProductPage'))
-);
-const BlogPage = withLazyLoading(
-  React.lazy(() => import('../../pages/BlogPage'))
-);
-const AboutPage = withLazyLoading(
-  React.lazy(() => import('../../pages/AboutPage'))
-);
-const ContactPage = withLazyLoading(
-  React.lazy(() => import('../../pages/ContactPage'))
-);
-const ServicesPage = withLazyLoading(
-  React.lazy(() => import('../../pages/ServicesPage'))
-);
+const HomePage = withLazyLoading(() => import('../../pages/HomePage'));
+const StorePage = withLazyLoading(() => import('../../pages/StorePage'));
+const ProductPage = withLazyLoading(() => import('../pages/ProductPage'));
+const BlogPage = withLazyLoading(() => import('../../pages/BlogPage'));
+const AboutPage = withLazyLoading(() => import('../../pages/AboutPage'));
+const ContactPage = withLazyLoading(() => import('../../pages/ContactPage'));
+const ServicesPage = withLazyLoading(() => import('../../pages/ServicesPage'));
 const TestimonialsPage = withLazyLoading(
-  React.lazy(() => import('../../pages/TestimonialsPage'))
+  () => import('../../pages/TestimonialsPage')
 );
 
 const AppRoutes: React.FC = () => {

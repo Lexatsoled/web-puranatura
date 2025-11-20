@@ -22,8 +22,14 @@ export const sanitizeRequestMiddleware = (
  * Middleware para sanitizar automáticamente las respuestas de la API
  */
 export const sanitizeResponseMiddleware = (response: any) => {
-  if (response.data && typeof response.data === 'object') {
-    response.data = sanitizeObject(response.data);
+  if (response.data) {
+    if (Array.isArray(response.data)) {
+      response.data = response.data.map((item: any) =>
+        item && typeof item === 'object' ? sanitizeObject(item) : item
+      );
+    } else if (typeof response.data === 'object') {
+      response.data = sanitizeObject(response.data);
+    }
   }
   return response;
 };

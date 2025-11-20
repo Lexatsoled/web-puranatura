@@ -1,0 +1,136 @@
+﻿{
+  "meta": {
+    "version": 1,
+    "severity_scale": ["info", "low", "medium", "high", "critical"]
+  },
+  "findings": [
+    {
+      "id": "SEC-AUTH-001",
+      "title": "Credenciales y sesiones guardadas en localStorage sin hashing",
+      "category": "security",
+      "subcategory": "authentication",
+      "severity": "high",
+      "likelihood": 4,
+      "priority": 5,
+      "where": {
+        "file": "contexts/AuthContext.tsx",
+        "line": 67,
+        "snippet": "localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));"
+      },
+      "evidence": "El flujo de login/registro genera usuarios con contraseñas en claro y los persiste en localStorage bajo las claves 'puranatura-users' y 'puranatura-user'. Cualquier script en la pestaña puede leer/modificar esas cuentas y suplantar sesiones.",
+      "impact": "Compromiso total de cuentas ante XSS/extensiones, imposibilidad de aplicar políticas como rotación de contraseñas o revocación de tokens.",
+      "recommendation": "Mover el proceso de autenticación a un backend que hashee contraseñas (bcrypt/argon2), emita tokens firmados y solo exponga identificadores mínimos al frontend. En el cliente, conservar únicamente el access token en memoria/secure storage y refrescarlo con cookies httpOnly.",
+      "fix_example": "```diff\n- const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');\n- const userWithPassword = { ...newUser, password: userData.password };\n- savedUsers.push(userWithPassword);\n- localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));\n+ const response = await api.post('/auth/register', userData);\n+ const secureUser = response.data.user;\n+ setUser(secureUser);\n+ sessionStorage.setItem('puranatura-session', secureUser.id);\n```",
+      "references": ["OWASP ASVS 4.0 - 2.1 Credential Storage", "OWASP Cheat Sheet - Authentication Storage"],
+      "tests": ["auth/auth-flow.e2e.ts", "api/auth.integration.spec.ts"],
+      "metrics": {"stored_passwords_in_client": 0}
+    },
+    {
+      "id": "SEC-SECRETS-002",
+      "title": "Secrets y base de datos sensibles versionados en el repositorio",
+      "category": "security",
+      "subcategory": "secret-management",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 4,
+      "where": {
+        "file": "backend/.env",
+        "line": 12,
+        "snippet": "JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef"
+      },
+      "evidence": "Además del .env con claves JWT, el repositorio contiene backend/database.sqlite (299 KB) con datos reales y backups en backend/backups/*.gz. No existe .gitignore específico ni rotación documentada.",
+      "impact": "Cualquier colaborador o leak del repo expone llaves de firma y datos de usuarios; un atacante puede forjar tokens y descargar la base completa.",
+      "recommendation": "Eliminar los secretos del repositorio, moverlos a un vault (Azure KeyVault/1Password/Bitwarden), versionar solo .env.example y automatizar el aprovisionamiento vía CI. Las bases de datos y backups deben almacenarse en storage cifrado (S3 + SSE) y agregarse al .gitignore.",
+      "fix_example": "```diff\n+# .gitignore\n+backend/.env\n+backend/database.sqlite*\n+backend/backups/\n+*.gz\n```",
+      "references": ["OWASP Secrets Management Cheat Sheet", "GitHub Actions - Encrypted Secrets"],
+      "tests": ["scripts/secret-scan.ps1", "npm run lint:secrets"],
+      "metrics": {"secrets_in_repo": 0, "unencrypted_backups": 0}
+    },
+    {
+      "id": "SEC-XSS-003",
+      "title": "Renderizado HTML del blog sin sanitización runtime",
+      "category": "security",
+      "subcategory": "xss",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 4,
+      "where": {
+        "file": "components/BlogPostModal.tsx",
+        "line": 103,
+        "snippet": "<div className=\"text-gray-700\" dangerouslySetInnerHTML={{ __html: post.content }} />"
+      },
+      "evidence": "Aunque existe src/utils/sanitizer.ts, el modal inserta contenido del blog tal cual llega de data/blog.ts o futuro CMS. Cualquier entrada maliciosa inyectará scripts en el DOM cuando el usuario abre el modal.",
+      "impact": "Reflected/persistent XSS capaz de robar sesiones de carrito, tokens o forzar compras falsas.",
+      "recommendation": "Integrar sanitizeHtml (DOMPurify) en el renderizado, validar el payload en el backend y definir CSP/SRI para el sitio. Aprovechar la utilidad ya creada para evitar duplicidad.",
+      "fix_example": "```diff\n-import React, { useEffect } from 'react';\n+import React, { useEffect } from 'react';\n+import { sanitizeHtml } from '../src/utils/sanitizer';\n ...\n- <div className=\"text-gray-700\" dangerouslySetInnerHTML={{ __html: post.content }} />\n+ <div\n+   className=\"text-gray-700\"\n+   dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}\n+ />\n```",
+      "references": ["OWASP XSS Prevention Cheat Sheet", "Content Security Policy Level 3"],
+      "tests": ["e2e/blog-xss.spec.ts", "unit/sanitizer.spec.ts"],
+      "metrics": {"exploitable_poc": false}
+    },
+    {
+      "id": "PERF-DATA-004",
+      "title": "Carga inicial masiva de productos y assets sin paginación",
+      "category": "performance",
+      "subcategory": "bundling",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 4,
+      "where": {
+        "file": "data/products.ts",
+        "line": 1,
+        "snippet": "export const products: Product[] = [ /* 160+ objetos (~166 KB) */ ];"
+      },
+      "evidence": "El bundle importa 166 KB de JSON estático más >400 imágenes en public/optimized desde StorePage.tsx, filtra/pagina todo en memoria y repite los datos en ProductDetailModal. Lighthouse reporta LCP>4s en móviles.",
+      "impact": "Mayor TTFB/LCP, consumo de memoria en dispositivos de gama media, bloqueo del hilo principal durante los filtros y dificultad para escalar catálogo.",
+      "recommendation": "Mover el catálogo a un API paginada, usar carga diferida (React Query + suspense), virtualizar grillas y generar imágenes responsive (srcset). Implementar preparar caches (CDN) y budgets en CI.",
+      "fix_example": "```diff\n-import { products } from '../data/products';\n-const processed = products.filter(...);
++const { data: products = [] } = useQuery(['products', filters], () =>\n+  api.get('/products', { params: filters })\n+);
+```",
+      "references": ["RAIL Performance Model", "Google Web Vitals"],
+      "tests": ["perf/store-page.k6.ts", "e2e/search-filter-cart.spec.ts"],
+      "metrics": {"lcp_seconds": 2.5, "bundle_kb_store": 250}
+    },
+    {
+      "id": "COMP-NEXT-005",
+      "title": "Hook SEO depende de next/router y next-seo en un proyecto Vite",
+      "category": "compatibility",
+      "subcategory": "routing",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 4,
+      "where": {
+        "file": "src/hooks/useSeo.ts",
+        "line": 1,
+        "snippet": "import { useRouter } from 'next/router';"
+      },
+      "evidence": "La aplicación se ejecuta con react-router/vite pero el hook usa next/router y next-seo. Vite no puede resolver ese paquete (no está en package.json) y rompe el build o cae en mocks vacíos, dejando sin metadatos a ProductPage/ProductJsonLd.",
+      "impact": "Fallo de compilación en CI, ausencia de etiquetas og/meta y JSON-LD inválido en producción.",
+      "recommendation": "Reemplazar next-seo por react-helmet-async o @vitejs/plugin-react-pages, leer la URL con useLocation y exponer un wrapper <Seo> propio que renderice <Helmet>.", 
+      "fix_example": "```diff\n-import { useRouter } from 'next/router';\n-import { NextSeoProps } from 'next-seo';\n+import { useLocation } from 'react-router-dom';\n+import { Helmet } from 'react-helmet-async';\n```",
+      "references": ["React Helmet Async docs"],
+      "tests": ["seo/helmet-render.spec.tsx"],
+      "metrics": {"seo_build_errors": 0}
+    },
+    {
+      "id": "PRIV-AN-006",
+      "title": "Analytics envía datos sin consentimiento y con env vars incompatibles",
+      "category": "security",
+      "subcategory": "privacy",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 3,
+      "where": {
+        "file": "src/hooks/useAnalytics.ts",
+        "line": 48,
+        "snippet": "if (process.env.REACT_APP_GA_ID) { this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`); }"
+      },
+      "evidence": "El hook usa process.env.* en un proyecto Vite (debería ser import.meta.env) y dispara GA/Facebook en cuanto se monta la app, incluso antes de recoger el consentimiento. Además postea a /api/analytics/events sin validar payload ni origin (src/api/analytics/events.ts).",
+      "impact": "Tracking roto (envs undefined), incumplimiento de GDPR/LPDP por falta de opt-in y endpoint susceptible a flooding/SSRF porque acepta cualquier body.",
+      "recommendation": "Exponer un banner de consentimiento que guarde la preferencia, leer envs via import.meta.env, y validar los eventos con zod/celebrate en el backend (ratelimit por IP + CSRF token).",
+      "fix_example": "```diff\n-const gaId = process.env.REACT_APP_GA_ID;\n+const gaId = import.meta.env.VITE_GA_ID;\n+if (!window.localStorage.getItem('analytics-consent')) { return; }\n```",
+      "references": ["GDPR Consent Guidelines", "RFC 6265 - SameSite"],
+      "tests": ["analytics/consent-banner.e2e.ts", "api/analytics.validation.test.ts"],
+      "metrics": {"consent_opt_in_rate": 0.8}
+    }
+  ]
+}

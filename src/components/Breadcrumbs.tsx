@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { sanitizeHtml } from '../utils/sanitizer';
 
 interface BreadcrumbItem {
   label: string;
@@ -52,25 +53,33 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     visible: { opacity: 1, x: 0 },
   };
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@id': item.path,
-        name: item.label,
-      },
-    })),
-  };
+  const jsonLd = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@id': item.path,
+          name: item.label,
+        },
+      })),
+    }),
+    [items]
+  );
+
+  const structuredData = useMemo(
+    () => sanitizeHtml(JSON.stringify(jsonLd)),
+    [jsonLd]
+  );
 
   return (
     <>
       {structured && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: structuredData }}
         />
       )}
       <nav aria-label="Breadcrumb" className={className}>

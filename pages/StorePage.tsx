@@ -1,8 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { products, productCategories } from '../data/products';
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  products as legacyProducts,
+  productCategories,
+} from '../data/products';
 import ProductCard from '../components/ProductCard';
 import ProductDetailModal from '../components/ProductDetailModal';
-import { Product } from '../types';
+import { Product } from '../src/types/product';
+import { sanitizeProductContent } from '../src/utils/contentSanitizers';
+import { useApi } from '../src/utils/api';
+import { mapApiProduct, ApiProduct } from '../src/utils/productMapper';
 
 type SortOption =
   | 'name-asc'
@@ -19,6 +25,59 @@ const StorePage: React.FC = () => {
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const api = useApi();
+
+  const fallbackProducts = useMemo(
+    () => legacyProducts.map((product) => sanitizeProductContent(product)),
+    []
+  );
+
+  useEffect(() => {
+    let active = true;
+    const fetchProducts = async () => {
+      setIsLoadingProducts(true);
+      try {
+        const apiProducts = await api.get<ApiProduct[]>('/products');
+        if (!active) return;
+        if (!Array.isArray(apiProducts)) {
+          console.error(
+            'API /products returned non-array response:',
+            apiProducts
+          );
+          // Fallback to legacy products if API shape is unexpected
+          setProducts(fallbackProducts);
+          setApiError(
+            'Mostrando catálogo provisional mientras conectamos con la API.'
+          );
+          return;
+        }
+        const mapped = apiProducts.map((product) =>
+          sanitizeProductContent(mapApiProduct(product))
+        );
+        setProducts(mapped);
+      } catch (error) {
+        console.error('Error cargando productos desde la API', error);
+        if (active) {
+          setProducts(fallbackProducts);
+          setApiError(
+            'Mostrando catálago provisional mientras conectamos con la API.'
+          );
+        }
+      } finally {
+        if (active) {
+          setIsLoadingProducts(false);
+        }
+      }
+    };
+
+    fetchProducts();
+    return () => {
+      active = false;
+    };
+  }, [api, fallbackProducts]);
 
   const processedProducts = useMemo(() => {
     let filtered = products;
@@ -57,7 +116,7 @@ const StorePage: React.FC = () => {
     });
 
     return sorted;
-  }, [selectedCategory, searchTerm, sortOption]);
+  }, [products, selectedCategory, searchTerm, sortOption]);
 
   // Paginate products
   const paginatedProducts = useMemo(() => {
@@ -180,7 +239,17 @@ const StorePage: React.FC = () => {
           </div>
         </div>
 
-        {paginatedProducts.length > 0 ? (
+        {apiError && (
+          <div className="mb-6 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-900 text-sm">
+            {apiError}
+          </div>
+        )}
+
+        {isLoadingProducts && !apiError ? (
+          <div className="text-center py-20 text-gray-500">
+            Cargando catálogo...
+          </div>
+        ) : paginatedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {paginatedProducts.map((product) => (
               <ProductCard
