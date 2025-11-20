@@ -34,6 +34,9 @@ Este PR recoge cambios para estabilizar el pipeline de CI en GitHub Actions y me
 
 - [ ] Crear branch `fix/ci-orchestrator-lint` y push a GitHub
 - [ ] Abrir PR con title, reviewers `@Lexatsoled` (owner), `@DevOpsTeam`, y `@QA` (o los aliases del repo)
+ - [ ] Actualizar `package-lock.json` (ejecutar `npm install` y commitear el lock actualizado)
+ - [ ] Añadir `.nvmrc` con `20` y documentar Node 20 para desarrolladores (opcional)
+ - [ ] Verificar que la versión de Node en `ci.yml` es la 20 ('Setup Node.js' -> `node-version: '20'`)
 - [ ] Revisar la ejecución de `ci.yml` en GitHub Actions (especialmente: `prisma migrate` y Playwright en runner Linux)
 - [ ] Verificar que `reports/` y `test-results/` se suben como artifacts
 - [ ] Si falla `migrate`, usar `prisma db push` fallback y documentar en PR
@@ -56,10 +59,44 @@ gh pr create --title "[CI] Orquestador y lint fixes" --body "file:GPT-51-Codex/P
 node .\scripts\orchestrator.mjs ci
 ```
 
+## Si no tienes `nvm` (Windows) — comandos alternativos
+
+1. Instalar Node 20 y regenerar `package-lock.json` con PowerShell (winget):
+
+```powershell
+# Instalar Node 20 con winget (Windows)
+winget install OpenJS.NodeJS -s winget --accept-source-agreements --accept-package-agreements
+
+# Verificar versión (necesita 20)
+node -v
+
+# Actualiza el lockfile
+npm install
+
+# Confirma y push
+git add package-lock.json
+git commit -m "chore: update package-lock for Node 20" || echo "No changes to lockfile"
+git push origin fix/ci-orchestrator-lint
+```
+
+2. Alternativa: usar Docker (si no quieres cambiar Node global)
+
+```powershell
+# Ejecuta npm install dentro de un contenedor Node 20 y actualiza lockfile
+docker run --rm -v ${PWD}:/work -w /work node:20-bullseye bash -lc "npm install && chown -R $(id -u):$(id -g) package-lock.json"
+
+# Revisa y commitea
+git add package-lock.json
+git commit -m "chore: update package-lock for Node 20" || echo "No changes to lockfile"
+git push origin fix/ci-orchestrator-lint
+```
+
  
 ## Nota de seguridad y CI
 
 - `ci.yml` ya incluye `npx --yes prisma migrate deploy` con fallback `prisma db push`, y `npx playwright install --with-deps` para instalar navegadores en runners. Revisar timeouts si la ejecución de `build` o `prisma` tarda demasiado.
+ - `ci.yml` ahora usa Node 20 para evitar EBADENGINE con dependencias que requieren Node >=20; recuerda actualizar local `package-lock.json` si lo cambias.
+ - Añadida nota `engines.node >= 20` en `package.json` y `backend/package.json`.
 
 ---
 Solicito revisión de CI para validar migraciones en runner Linux y tests E2E (Playwright) en PR antes del merge.
