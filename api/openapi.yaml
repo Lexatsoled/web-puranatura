@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: PuraNatura BFF API
+  version: 1.0.0
+  description: API para auth, catálogo y pedidos.
+servers:
+  - url: https://api.puranatura.local
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /api/auth/register:
+    post:
+      summary: Registro
+      requestBody:
+        required: true
+      responses:
+        '201': { description: Creado }
+  /api/auth/login:
+    post:
+      summary: Login
+      responses:
+        '200': { description: OK }
+        '401': { description: Credenciales inválidas }
+  /api/auth/logout:
+    post:
+      summary: Logout
+      responses:
+        '200': { description: OK }
+  /api/auth/refresh:
+    post:
+      summary: Refresh token
+      responses:
+        '200': { description: OK }
+  /api/auth/me:
+    get:
+      summary: Usuario actual
+      responses:
+        '200': { description: OK }
+        '401': { description: No autenticado }
+  /api/products:
+    get:
+      summary: Lista paginada de productos
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, minimum: 1, maximum: 50 }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: search
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear producto (admin)
+      responses:
+        '201': { description: Creado }
+        '401': { description: No autenticado }
+        '403': { description: Prohibido }
+  /api/products/{id}:
+    get:
+      summary: Obtener producto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '404': { description: No encontrado }
+  /api/orders:
+    get:
+      summary: Listar órdenes del usuario
+      responses:
+        '200': { description: OK }
+        '401': { description: No autenticado }
+    post:
+      summary: Crear orden
+      responses:
+        '201': { description: Creado }
+        '400': { description: Datos inválidos }
+        '401': { description: No autenticado }
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+security:
+  - cookieAuth: []
