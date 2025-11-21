@@ -4,7 +4,7 @@ export const test = base.extend({
   page: async ({ page }, use) => {
     page.on('pageerror', (error) => console.log('[PAGE ERROR]', String(error)));
     page.on('response', (r) => {
-      if (r.url().includes('/api/v1/products'))
+      if (r.url().includes('/api/products'))
         console.log('[API RESPONSE]', r.status(), r.url());
     });
     await page.addInitScript(() => {
@@ -45,26 +45,26 @@ export const test = base.extend({
           } catch (e) {}
         };
         disableOverlays();
-        new MutationObserver(disableOverlays).observe(
-          document.documentElement,
-          { childList: true, subtree: true }
-        );
+        const root = document?.documentElement;
+        if (root) {
+          new MutationObserver(disableOverlays).observe(root, {
+            childList: true,
+            subtree: true,
+          });
+        }
       })();
     });
 
     const sampleProduct = {
       id: 'fallback-product-1',
       name: 'Vitamina C - Fallback',
+      slug: 'vitamina-c-fallback',
       description: 'Producto de prueba',
+      category: 'vitaminas',
       price: 9.99,
       stock: 10,
-      categories: ['Vitaminas'],
-      images: [
-        {
-          thumbnail: '/assets/fallback-product-thumb.jpg',
-          full: '/assets/fallback-product.jpg',
-        },
-      ],
+      imageUrl:
+        'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&w=600&q=80',
     } as any;
     const sampleProducts = [
       sampleProduct,
@@ -72,17 +72,27 @@ export const test = base.extend({
         ...sampleProduct,
         id: 'fallback-product-2',
         name: 'Vitamina D - Fallback',
+        slug: 'vitamina-d-fallback',
         price: 5.99,
       },
       {
         ...sampleProduct,
         id: 'fallback-product-3',
         name: 'Vitamina B - Fallback',
+        slug: 'vitamina-b-fallback',
         price: 14.99,
       },
     ];
 
-    await page.route('**/api/v1/products*', async (route, request) => {
+    const fulfillJson = async (route: any, body: any, status = 200) => {
+      await route.fulfill({
+        status,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    };
+
+    await page.route('**/api/**/products*', async (route, request) => {
       try {
         const url = new URL(request.url());
         const pathParts = url.pathname.split('/').filter(Boolean);
@@ -90,63 +100,41 @@ export const test = base.extend({
         const isProductId =
           Boolean(last && Number.isNaN(Number(last)) === false) ||
           /[a-z0-9\-]{6,}/i.test(last);
-        if (isProductId && url.pathname.includes('/api/v1/products/')) {
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ product: { ...sampleProduct, id: last } }),
+        if (isProductId && url.pathname.includes('/api/')) {
+          await fulfillJson(route, {
+            product: { ...sampleProduct, id: last, slug: `${last}-slug` },
           });
           return;
         }
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ products: sampleProducts }),
-        });
+        await fulfillJson(route, { products: sampleProducts });
       } catch (e) {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ products: sampleProducts }),
-        });
+        await fulfillJson(route, { products: sampleProducts });
       }
     });
 
-    await page.route('**/api/v1/orders', async (route, request) => {
+    await page.route('**/api/**/orders*', async (route, request) => {
       if (request.method() === 'POST') {
-        await route.fulfill({
-          status: 201,
-          contentType: 'application/json',
-          body: JSON.stringify({ success: true, orderId: 'TEST-123' }),
-        });
+        await fulfillJson(route, { success: true, orderId: 'TEST-123' }, 201);
         return;
       }
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ orders: [] }),
-      });
+      await fulfillJson(route, { orders: [] });
     });
 
-    await page.route('**/api/v1/auth/login', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          token: 'E2E-FAKE-TOKEN',
-          user: { id: 'e2e-user', name: 'E2E User' },
-        }),
+    await page.route('**/api/**/auth/login', async (route) => {
+      await fulfillJson(route, {
+        token: 'E2E-FAKE-TOKEN',
+        user: { id: 'e2e-user', name: 'E2E User' },
       });
     });
-    await page.route('**/api/v1/auth/register', async (route) => {
-      await route.fulfill({
-        status: 201,
-        contentType: 'application/json',
-        body: JSON.stringify({
+    await page.route('**/api/**/auth/register', async (route) => {
+      await fulfillJson(
+        route,
+        {
           token: 'E2E-FAKE-TOKEN',
           user: { id: 'e2e-user', name: 'E2E User' },
-        }),
-      });
+        },
+        201
+      );
     });
 
     await use(page);
