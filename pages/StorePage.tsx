@@ -1,8 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { products, productCategories } from '../data/products';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import {
+  products as legacyProducts,
+  productCategories,
+} from '../data/products';
 import ProductCard from '../components/ProductCard';
 import ProductDetailModal from '../components/ProductDetailModal';
-import { Product } from '../types';
+import { Product } from '../src/types/product';
+import { sanitizeProductContent } from '../src/utils/contentSanitizers';
+import { useApi } from '../src/utils/api';
+import { mapApiProduct, ApiProduct } from '../src/utils/productMapper';
 
 type SortOption =
   | 'name-asc'
@@ -12,21 +18,83 @@ type SortOption =
   | 'default';
 
 const StorePage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const api = useApi();
+  const hasFetched = useRef(false);
+
+  const fallbackProducts = useMemo(
+    () => legacyProducts.map((product) => sanitizeProductContent(product)),
+    []
+  );
+
+  useEffect(() => {
+    // Evitar doble ejecución en modo Strict (dev)
+    if (hasFetched.current) {
+      setIsLoadingProducts(false);
+      return;
+    }
+    hasFetched.current = true;
+    const applyFallback = () => {
+      setProducts(fallbackProducts);
+      setApiError(
+        'Mostrando catálogo provisional mientras conectamos con la API.'
+      );
+      setIsLoadingProducts(false);
+    };
+
+    const fetchProducts = async () => {
+      setIsLoadingProducts(true);
+      try {
+        const apiProducts = await api.get<ApiProduct[]>('/products');
+        if (!Array.isArray(apiProducts)) {
+          console.warn(
+            'API /products returned non-array response:',
+            apiProducts
+          );
+          // Fallback to legacy products if API shape is unexpected
+          applyFallback();
+          return;
+        }
+        const mapped = apiProducts.map((product) =>
+          sanitizeProductContent(mapApiProduct(product))
+        );
+        if (mapped.length === 0) {
+          console.warn('API /products devolvió lista vacía; usando fallback.');
+          applyFallback();
+        } else {
+          setProducts(mapped);
+          setApiError(null);
+          setIsLoadingProducts(false);
+        }
+      } catch (error) {
+        console.warn('Error cargando productos desde la API', error);
+        applyFallback();
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+    return () => undefined;
+  }, [api, fallbackProducts]);
 
   const processedProducts = useMemo(() => {
     let filtered = products;
 
     // Filter by category
-    if (selectedCategory !== 'Todos') {
+    // `selectedCategory` options are lowercase ids (e.g. 'todos'), so compare with lowercase
+    if (selectedCategory !== 'todos') {
       filtered = filtered.filter(
-        (product) => product.category === selectedCategory,
+        (product) => product.category === selectedCategory
       );
     }
 
@@ -35,7 +103,7 @@ const StorePage: React.FC = () => {
       filtered = filtered.filter(
         (product) =>
           product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchTerm.toLowerCase()),
+          product.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -56,7 +124,7 @@ const StorePage: React.FC = () => {
     });
 
     return sorted;
-  }, [selectedCategory, searchTerm, sortOption]);
+  }, [products, selectedCategory, searchTerm, sortOption]);
 
   // Paginate products
   const paginatedProducts = useMemo(() => {
@@ -92,7 +160,7 @@ const StorePage: React.FC = () => {
   };
 
   const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
@@ -117,6 +185,7 @@ const StorePage: React.FC = () => {
             {/* Search */}
             <div className="relative">
               <input
+                data-testid="search-input"
                 type="text"
                 placeholder="Buscar productos..."
                 value={searchTerm}
@@ -140,18 +209,20 @@ const StorePage: React.FC = () => {
             </div>
             {/* Category */}
             <select
+              aria-label="Categoria"
               value={selectedCategory}
               onChange={handleCategoryChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
               {productCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>
             {/* Sort */}
             <select
+              aria-label="Ordenar productos"
               value={sortOption}
               onChange={handleSortChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
@@ -164,6 +235,7 @@ const StorePage: React.FC = () => {
             </select>
             {/* Items per page */}
             <select
+              aria-label="Elementos por pagina"
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
@@ -175,7 +247,17 @@ const StorePage: React.FC = () => {
           </div>
         </div>
 
-        {paginatedProducts.length > 0 ? (
+        {apiError && (
+          <div className="mb-6 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-900 text-sm">
+            {apiError}
+          </div>
+        )}
+
+        {isLoadingProducts && !apiError ? (
+          <div className="text-center py-20 text-gray-500">
+            Cargando catálogo...
+          </div>
+        ) : paginatedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {paginatedProducts.map((product) => (
               <ProductCard

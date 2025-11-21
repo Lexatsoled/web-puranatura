@@ -1,6 +1,12 @@
 export interface ProductImage {
   full: string;
   thumbnail: string;
+  alt?: string;
+}
+
+export interface ProductCategory {
+  id: string;
+  name: string;
 }
 
 export interface Product {
@@ -13,13 +19,27 @@ export interface Product {
   stock: number;
   sku: string;
   tags: string[];
+  inStock?: boolean;
+  brand?: string;
+  benefits?: string[];
+  featured?: boolean;
+  seoDescription?: string;
+  ingredients?: string[];
+  compareAtPrice?: number;
   specifications?: {
     [key: string]: string;
   };
   relatedProducts?: string[];
   isNew?: boolean;
   isBestSeller?: boolean;
-  compareAtPrice?: number;
+  detailedDescription?: string;
+  mechanismOfAction?: string;
+  benefitsDescription?: string[];
+  healthIssues?: string[];
+  components?: Array<{ name: string; description?: string; amount?: string }>;
+  faqs?: Array<{ question: string; answer: string }>;
+  dosage?: string;
+  administrationMethod?: string;
 }
 
 export type SortOption =

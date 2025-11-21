@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "version": 1,
+    "severity_scale": ["info", "low", "medium", "high", "critical"]
+  },
+  "findings": [
+    {
+      "id": "ARCH-BUILD-001",
+      "title": "useSeo depende de Next.js y rompe el bundle de Vite",
+      "category": "reliability",
+      "subcategory": "routing",
+      "severity": "high",
+      "likelihood": 4,
+      "priority": 64,
+      "where": {
+        "file": "src/hooks/useSeo.ts",
+        "line": "1-40",
+        "snippet": "import { useRouter } from 'next/router';\nconst router = useRouter();"
+      },
+      "evidence": "El paquete no incluye Next.js, pero el hook importa useRouter y espera router.asPath. Vite intenta resolver 'next/router' y falla en build/test, bloqueando ProductPage y cualquier uso de useSeo.",
+      "impact": "Sin SEO dinámico ni build estable; ProductPage lanza un error y corta la navegación.",
+      "recommendation": "Reescribir el hook con react-router (useLocation) y normalizar URLs usando import.meta.env.* en lugar de APIs de Next.",
+      "fix_example": "```diff\n- import { useRouter } from 'next/router';\n+ import { useLocation } from 'react-router-dom';\n@@\n-export const useSeo = (props: SeoProps = {}): NextSeoProps => {\n-  const router = useRouter();\n-  const currentUrl = `${DEFAULT_SEO_CONFIG.openGraph?.url}${router.asPath}`;\n+export const useSeo = (props: SeoProps = {}): NextSeoProps => {\n+  const location = useLocation();\n+  const baseUrl = import.meta.env.VITE_APP_URL || DEFAULT_SEO_CONFIG.openGraph?.url || '';\n+  const currentUrl = `${baseUrl}${location.pathname}${location.search}`;\n```",
+      "references": [
+        "https://reactrouter.com/en/main/hooks/use-location",
+        "https://vitejs.dev/guide/env-and-mode"
+      ],
+      "tests": ["vitest run", "npm run lint"],
+      "metrics": { "build_blocked": true }
+    },
+    {
+      "id": "SEC-AUTH-002",
+      "title": "Autenticación sólo en cliente con contraseñas en localStorage",
+      "category": "security",
+      "subcategory": "authentication",
+      "severity": "critical",
+      "likelihood": 4,
+      "priority": 80,
+      "where": {
+        "file": "contexts/AuthContext.tsx",
+        "line": "98-155",
+        "snippet": "const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');\nconst foundUser = savedUsers.find((u: any) => u.email === email && u.password === password);"
+      },
+      "evidence": "El registro/login guarda usuarios completos y contraseñas en texto plano dentro de localStorage y reutiliza ese almacén para autenticar. No hay hashing, expiración ni backend.",
+      "impact": "Cualquier script con acceso al DOM puede robar/modificar cuentas y tokens, lo que incumple OWASP A07 y la protección de PII.",
+      "recommendation": "Mover el flujo de auth a un backend con hash seguro (bcrypt/argon), tokens HttpOnly y refresh en servidor. Hasta entonces, bloquear el registro y no persistir contraseñas en el cliente.",
+      "fix_example": "```diff\n- const foundUser = savedUsers.find((u: any) => u.email === email && u.password === password);\n- if (foundUser) {\n-   const { password: _, ...userWithoutPassword } = foundUser;\n-   setUser(userWithoutPassword);\n- }\n+ const response = await fetch('/api/auth/login', {\n+   method: 'POST',\n+   headers: { 'Content-Type': 'application/json' },\n+   body: JSON.stringify({ email, password }),\n+   credentials: 'include',\n+ });\n+ if (!response.ok) throw new Error('Credenciales inválidas');\n+ const { profile } = await response.json();\n+ setUser(profile);\n```",
+      "references": [
+        "https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/"
+      ],
+      "tests": ["npm run test:unit -- AuthContext", "npm run test:e2e"],
+      "metrics": { "credential_storage_insecure": true }
+    },
+    {
+      "id": "SEC-XSS-003",
+      "title": "Contenido de blog renderizado con dangerouslySetInnerHTML sin sanitizar",
+      "category": "security",
+      "subcategory": "xss",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 48,
+      "where": {
+        "file": "components/BlogPostModal.tsx",
+        "line": "96-112",
+        "snippet": "<div className=\"text-gray-700 leading-relaxed\" dangerouslySetInnerHTML={{ __html: post.content }} />"
+      },
+      "evidence": "El modal inyecta cualquier HTML proveniente del CMS/archivo estático sin pasar por DOMPurify aunque ya existe un sanitizador global.",
+      "impact": "Un editor o atacante puede ejecutar JS arbitrario cuando el usuario abre un artículo, robando tokens y datos sensibles.",
+      "recommendation": "Integrar DOMPurify/sanitizeHtml antes de hacer render o filtrar atributos peligrosos en el backend.",
+      "fix_example": "```diff\n-import React, { useEffect } from 'react';\n+import React, { useEffect, useMemo } from 'react';\n+import { sanitizeHtml } from '../src/utils/sanitizer';\n@@\n-  if (!post) return null;\n+  if (!post) return null;\n+  const safeContent = useMemo(() => sanitizeHtml(post.content), [post]);\n@@\n-        <div dangerouslySetInnerHTML={{ __html: post.content }} />\n+        <div dangerouslySetInnerHTML={{ __html: safeContent }} />\n```",
+      "references": [
+        "https://owasp.org/www-community/attacks/xss/",
+        "https://github.com/cure53/DOMPurify"
+      ],
+      "tests": [
+        "npm run test:unit -- BlogPostModal",
+        "npx playwright test --grep blog"
+      ],
+      "metrics": { "exploitable_poc": true }
+    },
+    {
+      "id": "SEC-SECRETS-004",
+      "title": "JWT_SECRET y llaves sensibles comiteadas en backend/.env",
+      "category": "security",
+      "subcategory": "secret-management",
+      "severity": "high",
+      "likelihood": 5,
+      "priority": 80,
+      "where": {
+        "file": "backend/.env",
+        "line": "12-18",
+        "snippet": "JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef\nJWT_REFRESH_SECRET=dev_refresh_secret_cambiar_en_produccion_min_64_chars"
+      },
+      "evidence": "El repositorio expone claves JWT y configuración sensible. No hay .env.example ni exclusión git para impedir nuevos leaks.",
+      "impact": "Si se reutilizan en cualquier entorno, los tokens son falsificables y deben rotarse inmediatamente.",
+      "recommendation": "Mover las llaves a un gestor (Vault/KeyVault), versionar sólo .env.example sin valores y añadir escaneo de secretos en CI.",
+      "fix_example": "```diff\n-JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef\n-JWT_REFRESH_SECRET=dev_refresh_secret_cambiar_en_produccion_min_64_chars\n+JWT_SECRET=\n+JWT_REFRESH_SECRET=\n```",
+      "references": ["https://12factor.net/config"],
+      "tests": ["secret-scan", "npm run lint -- backend"],
+      "metrics": { "secrets_in_repo": 2 }
+    },
+    {
+      "id": "PERF-LAZY-005",
+      "title": "withLazyLoading envuelve React.lazy y evita el code-splitting",
+      "category": "performance",
+      "subcategory": "bundling",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "src/routes/AppRoutes.tsx",
+        "line": "6-30",
+        "snippet": "const HomePage = withLazyLoading(React.lazy(() => import('../../pages/HomePage')));"
+      },
+      "evidence": "El HOC recibe un componente ya lazy y lo vuelve a envolver con Promise.resolve, por lo que el import se ejecuta inmediatamente y todas las vistas caen en el mismo chunk inicial.",
+      "impact": "Bundle inicial >2 MB, sin beneficios de lazy loading y con peores métricas LCP/INP.",
+      "recommendation": "Hacer que withLazyLoading acepte un loader (factory) y pase esa promesa a React.lazy una sola vez.",
+      "fix_example": "```diff\n-export function withLazyLoading<P extends Record<string, any>>(\n-  Component: React.ComponentType<P>,\n+export function withLazyLoading<P extends Record<string, any>>(\n+  loader: () => Promise<{ default: React.ComponentType<P> }>,\n   options: WithLazyLoadingProps = {}\n ): React.ComponentType<P> {\n-  const LazyComponent = React.lazy(() =>\n-    Promise.resolve({ default: Component as any })\n-  );\n+  const LazyComponent = React.lazy(loader);\n   return function WrappedComponent(props: P) {\n     return (\n       <Suspense fallback={options.fallback || <LoadingFallback />}>\n         <LazyComponent {...props} />\n       </Suspense>\n     );\n   };\n }\n```",
+      "references": ["https://react.dev/reference/react/lazy"],
+      "tests": ["npm run build", "npx lighthouse http://localhost:5173"],
+      "metrics": { "bundle_reduction_target_kb": 450 }
+    },
+    {
+      "id": "OBS-ANA-006",
+      "title": "useAnalytics usa process.env de CRA e inyecta scripts sin controles",
+      "category": "observability",
+      "subcategory": "analytics",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "src/hooks/useAnalytics.ts",
+        "line": "42-70",
+        "snippet": "if (process.env.REACT_APP_GA_ID) {\n  this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`);\n  window.dataLayer = window.dataLayer || [];\n  window.gtag('config', process.env.REACT_APP_GA_ID);\n}"
+      },
+      "evidence": "Vite expone variables como import.meta.env.VITE_*, por lo que REACT_APP_* nunca existe y GA/FB no envían datos. Además, no hay gating de consentimiento.",
+      "impact": "Sin métricas de uso reales y riesgo de incumplir GDPR al inyectar scripts sin permiso.",
+      "recommendation": "Usar import.meta.env, soportar un flag VITE_ENABLE_ANALYTICS y exponer un método para iniciar tracking tras consentimiento explícito.",
+      "fix_example": "```diff\n-      if (process.env.REACT_APP_GA_ID) {\n-        this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GA_ID}`);\n+      const gaId = import.meta.env.VITE_GA_TRACKING_ID;\n+      if (gaId && consentStore.analytics) {\n+        this.loadScript(`https://www.googletagmanager.com/gtag/js?id=${gaId}`);\n         window.dataLayer = window.dataLayer || [];\n-        window.gtag('config', process.env.REACT_APP_GA_ID);\n+        window.gtag('config', gaId, { anonymize_ip: true });\n       }\n```",
+      "references": [
+        "https://vitejs.dev/guide/env-and-mode#env-variables",
+        "https://developers.google.com/analytics/devguides/collection/gtagjs"
+      ],
+      "tests": ["npm run test -- useAnalytics", "Consent banner E2E"],
+      "metrics": { "analytics_events_lost_pct": 100 }
+    },
+    {
+      "id": "QA-E2E-007",
+      "title": "Prueba E2E de búsqueda compara el mismo recuento y nunca falla",
+      "category": "quality",
+      "subcategory": "testing",
+      "severity": "medium",
+      "likelihood": 5,
+      "priority": 30,
+      "where": {
+        "file": "e2e/search-filter-cart.spec.ts",
+        "line": "25-33",
+        "snippet": "await expect(page.locator('.product-card')).toHaveCount(\n  await page.locator('.product-card').count()\n);"
+      },
+      "evidence": "La aserción compara el número de cards consigo mismo, así que siempre pasa. El helper clickWhenReady fuerza clicks aunque la UI no responda.",
+      "impact": "Los pipelines CI aprueban regresiones en búsqueda/filtros y no generan alertas.",
+      "recommendation": "Capturar el conteo inicial y asegurar que disminuye/filtra, o verificar que los títulos contienen el término. Hacer que el helper propague fallos en lugar de usar force.",
+      "fix_example": "```diff\n-    await expect(page.locator('.product-card')).toHaveCount(\n-      await page.locator('.product-card').count()\n-    );\n+    const initialCount = await page.locator('.product-card').count();\n+    await expect(page.locator('.product-card')).toHaveCountLessThan(initialCount);\n+    await expect(page.getByTestId('product-card-1')).toContainText(/vitamina/i);\n```",
+      "references": ["https://playwright.dev/docs/test-assertions"],
+      "tests": ["npx playwright test"],
+      "metrics": { "false_positive_rate": 1.0 }
+    },
+    {
+      "id": "OPS-SCRIPT-008",
+      "title": "optimizeImages contiene texto corrupto y no procesa nada",
+      "category": "maintainability",
+      "subcategory": "build-pipeline",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "scripts/optimizeImages.ts",
+        "line": "8-18",
+        "snippet": "console.log('\uFFFDY-\uFFFD\uFFFD? Iniciando optimización de imágenes...');\n// Por ahora, solo reportamos que el script se ejecutó"
+      },
+      "evidence": "El comando `npm run build` depende de este script, pero el archivo sólo imprime cadenas dañadas y nunca llama a Sharp/processProductImages. No hay salida de error si falla.",
+      "impact": "Se publican imágenes sin optimizar y los pipelines creen que la tarea se ejecutó correctamente.",
+      "recommendation": "Invocar realmente a processProductImages, validar que existan carpetas destino y fallar con exit code ≠0 si no se genera nada.",
+      "fix_example": "```diff\n-import path from 'path';\n-...console.log('\uFFFDY-\uFFFD\uFFFD? Iniciando optimización de imágenes...');\n+import path from 'path';\n+import { processProductImages } from '../src/utils/imageProcessor';\n+console.info('[optimize-images] Iniciando optimización...');\n+const ok = await processProductImages(inputDir, outputDir);\n+if (!ok) throw new Error('Optimización de imágenes fallida');\n```",
+      "references": ["https://sharp.pixelplumbing.com/"],
+      "tests": ["npm run optimize-images"],
+      "metrics": { "optimized_assets_pct": 0.0 }
+    },
+    {
+      "id": "I18N-ENC-009",
+      "title": "Caracteres mojibake en CartModal/SimpleLayout rompen textos y moneda",
+      "category": "accessibility",
+      "subcategory": "localization",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 36,
+      "where": {
+        "file": "components/CartModal.tsx",
+        "line": "117-220",
+        "snippet": "'\uFFFD\uFFFDPago Exitoso!', 'art\uFFFD\uFFFDculo', `\uFFFD'\uFFFD${totalPrice.toFixed(2)}`"
+      },
+      "evidence": "Gran parte de los textos se guardaron con encoding Windows-1252 y se ven como � en el DOM. El símbolo de moneda muestra `�'�` en vez de DOP/USD.",
+      "impact": "Mala accesibilidad (lectores de pantalla pronuncian caracteres incorrectos), pérdida de confianza y problemas legales en precios.",
+      "recommendation": "Re-grabar strings en UTF-8, centralizar i18n y formatear moneda/fechas con Intl.NumberFormat.",
+      "fix_example": "```diff\n-                : paymentComplete\n-                  ? '\uFFFD\uFFFDPago Exitoso!'\n+                : paymentComplete\n+                  ? 'Pago exitoso'\n@@\n-              <p className=\"text-sm text-gray-500\">\uFFFD'\uFFFD{item.product.price.toFixed(2)}</p>\n+              <p className=\"text-sm text-gray-500\">{priceFormatter.format(item.product.price)}</p>\n```",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat"
+      ],
+      "tests": ["npm run test:unit -- CartModal", "npx playwright test cart"],
+      "metrics": { "strings_with_mojibake": 120 }
+    }
+  ]
+}

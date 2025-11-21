@@ -1,34 +1,10 @@
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  images: ProductImage[];
-  benefits?: string[];
-  inStock: boolean;
-  featured?: boolean;
-  seoDescription?: string;
-  seoKeywords?: string[];
-  brand?: string;
-  sku?: string;
-  ingredients?: string[];
-  nutrition?: {
-    servingSize: string;
-    servingsPerContainer: number;
-    nutritionalInfo: {
-      name: string;
-      amount: string;
-      dailyValue?: string;
-    }[];
-  };
-}
-
-export interface ProductImage {
-  thumbnail: string;
-  full: string;
-  alt?: string;
-}
+export type {
+  ProductImage,
+  Product,
+  ProductCategory,
+  ProductFilters,
+  SortOption,
+} from './types/product';
 
 export interface OptimizedImageProps {
   src: string;

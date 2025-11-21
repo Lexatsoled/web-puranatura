@@ -2,6 +2,7 @@ import React from 'react';
 import { services } from '../../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
 import { Service } from '../../types';
+import { formatCurrency } from '../utils/intl';
 
 const ServicesPage: React.FC = () => {
   return (
@@ -33,38 +34,40 @@ const ServicesPage: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity duration-300" />
               </div>
-              
+
               <div className="p-6 flex flex-col justify-center flex-grow">
                 <h3 className="text-2xl font-bold text-green-700 font-display mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{service.description}</p>
-                
-                {/* {service.benefits && service.benefits.length > 0 && (
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+
+                {service.benefits && service.benefits.length > 0 && (
                   <div className="mt-4">
-                    <h4 className="font-semibold text-green-600 mb-2">Beneficios:</h4>
+                    <h4 className="font-semibold text-green-600 mb-2">
+                      Beneficios:
+                    </h4>
                     <ul className="list-disc list-inside text-gray-600 space-y-1">
                       {service.benefits?.map((benefit: string, idx: number) => (
                         <li key={idx}>{benefit}</li>
                       ))}
                     </ul>
                   </div>
-                )} */}
-                
-                {/* <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex justify-between items-center">
+                )}
+
+                {service.price && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
                     {service.duration && (
                       <span className="text-gray-500 text-sm">
                         Duración: {service.duration} minutos
                       </span>
                     )}
-                    {service.price && (
-                      <span className="text-green-700 font-bold">
-                        DOP ${service.price.toFixed(2)}
-                      </span>
-                    )}
+                    <span className="text-green-700 font-bold">
+                      {formatCurrency(service.price)}
+                    </span>
                   </div>
-                </div> */}
+                )}
               </div>
             </div>
           ))}

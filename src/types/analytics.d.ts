@@ -1,4 +1,4 @@
-export type EventCategory = 
+export type EventCategory =
   | 'page_view'
   | 'product'
   | 'cart'

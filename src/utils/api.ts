@@ -1,15 +1,22 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useNotifications } from '../contexts/NotificationContext';
 import { transformApiError } from './errorHandler';
-import { sanitizeRequestMiddleware, sanitizeResponseMiddleware } from './sanitizationMiddleware';
+import {
+  sanitizeRequestMiddleware,
+  sanitizeResponseMiddleware,
+} from './sanitizationMiddleware';
 
-// Configuración del cliente axios
+const apiBaseUrl =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
+  '/api';
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || '/api',
+  baseURL: apiBaseUrl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // Añadir middleware de sanitización
@@ -18,15 +25,15 @@ api.interceptors.response.use(sanitizeResponseMiddleware);
 
 // Configuración de rate limiting
 interface RateLimitConfig {
-  maxRequests: number;  // Número máximo de solicitudes
-  timeWindow: number;   // Ventana de tiempo en milisegundos
-  retryAfter: number;  // Tiempo de espera antes de reintentar en milisegundos
+  maxRequests: number; // Número máximo de solicitudes
+  timeWindow: number; // Ventana de tiempo en milisegundos
+  retryAfter: number; // Tiempo de espera antes de reintentar en milisegundos
 }
 
 const defaultRateLimitConfig: RateLimitConfig = {
-  maxRequests: 60,     // 60 solicitudes
-  timeWindow: 60000,   // por minuto
-  retryAfter: 1000,    // esperar 1 segundo antes de reintentar
+  maxRequests: 60, // 60 solicitudes
+  timeWindow: 60000, // por minuto
+  retryAfter: 1000, // esperar 1 segundo antes de reintentar
 };
 
 // Clase para manejar el rate limiting
@@ -40,10 +47,10 @@ class RateLimiter {
 
   async checkRateLimit(): Promise<boolean> {
     const now = Date.now();
-    
+
     // Limpiar solicitudes antiguas
     this.requests = this.requests.filter(
-      timestamp => now - timestamp < this.config.timeWindow
+      (timestamp) => now - timestamp < this.config.timeWindow
     );
 
     // Verificar si excedemos el límite
@@ -58,7 +65,9 @@ class RateLimiter {
 
   async waitForSlot(): Promise<void> {
     while (!(await this.checkRateLimit())) {
-      await new Promise(resolve => setTimeout(resolve, this.config.retryAfter));
+      await new Promise((resolve) =>
+        setTimeout(resolve, this.config.retryAfter)
+      );
     }
   }
 }
@@ -74,13 +83,27 @@ export const useApi = () => {
     config: AxiosRequestConfig,
     rateLimitConfig?: Partial<RateLimitConfig>
   ): Promise<T> => {
-    const limiter = rateLimitConfig ? new RateLimiter(rateLimitConfig) : rateLimiter;
+    const limiter = rateLimitConfig
+      ? new RateLimiter(rateLimitConfig)
+      : rateLimiter;
 
     try {
       // Esperar si es necesario por el rate limiting
       await limiter.waitForSlot();
 
       const response = await api(config);
+      // Detect accidental HTML responses (e.g., when preview serves index.html
+      // for unknown /api routes) and treat them as errors so the caller falls
+      // back to legacy data instead of attempting to .map() a string.
+      if (
+        response &&
+        response.data &&
+        typeof response.data === 'string' &&
+        response.data.trim().startsWith('<')
+      ) {
+        throw new Error('Unexpected HTML response from API');
+      }
+
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 429) {
@@ -89,10 +112,13 @@ export const useApi = () => {
           title: 'Demasiadas solicitudes',
           message: 'Por favor, espera un momento antes de intentar nuevamente.',
         });
-        
+
         // Esperar el tiempo indicado y reintentar
-        await new Promise(resolve => 
-          setTimeout(resolve, Number(error.response?.headers['retry-after']) * 1000 || 5000)
+        await new Promise((resolve) =>
+          setTimeout(
+            resolve,
+            Number(error.response?.headers['retry-after']) * 1000 || 5000
+          )
         );
         return makeRequest(config, rateLimitConfig);
       }
@@ -104,59 +130,27 @@ export const useApi = () => {
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
       makeRequest<T>({ ...config, method: 'GET', url }),
-    
+
     post: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
       makeRequest<T>({ ...config, method: 'POST', url, data }),
-    
+
     put: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
       makeRequest<T>({ ...config, method: 'PUT', url, data }),
-    
+
     patch: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
       makeRequest<T>({ ...config, method: 'PATCH', url, data }),
-    
+
     delete: <T>(url: string, config?: AxiosRequestConfig) =>
       makeRequest<T>({ ...config, method: 'DELETE', url }),
   };
 };
 
-// Interceptor para añadir el token de autenticación
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Interceptor para refrescar el token
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = localStorage.getItem('refresh_token');
-        const response = await axios.post('/api/auth/refresh', {
-          refreshToken,
-        });
-
-        const { token } = response.data;
-        localStorage.setItem('auth_token', token);
-
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Si falla el refresh, redirigir al login
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
+  (error) => {
+    if (error.response?.status === 401) {
+      window.dispatchEvent(new Event('auth:logout'));
     }
-
     return Promise.reject(error);
   }
 );

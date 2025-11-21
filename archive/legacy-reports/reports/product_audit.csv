@@ -1,0 +1,72 @@
+id,name_before,name_after,matched_old,detailedDescription_new_has,mechanismOfAction_new_has,benefitsDescription_new_has,healthIssues_new_has,components_new_has,dosage_new_has,administrationMethod_new_has,faqs_new_has,scientificReferences_new_has,detailedDescription_old_has,mechanismOfAction_old_has,benefitsDescription_old_has,healthIssues_old_has,components_old_has,dosage_old_has,administrationMethod_old_has,faqs_old_has,scientificReferences_old_has,detailedDescription_merged,mechanismOfAction_merged,benefitsDescription_merged,healthIssues_merged,components_merged,dosage_merged,administrationMethod_merged,faqs_merged,scientificReferences_merged,image_name_mismatch
+"1","C-1000 with Bioflavonoids","C-1000 with Bioflavonoids",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"2","High Potency Vitamin D3, 10,000 IU","High Potency Vitamin D3, 10,000 IU",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"3","Vitamina_K2","Vitamina_K2",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"4","Calcium Magnesium Zinc","Calcium Magnesium Zinc",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"5","Glucosamine Chondroitin","Glucosamine Chondroitin",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"6","Immune Probiotic Go Pack","Immune Probiotic Go Pack",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"7","Digestive_Duo","Digestive_Duo",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"8","Cleanse_More","Cleanse_More",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"9","Acido_Hialuronico","Acido_Hialuronico",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"10","Triple_extacto_Hongos","Triple_extacto_Hongos",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"11","Mezcla_Higado","Mezcla_Higado",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"12","Menopause_Plus","Menopause_Plus",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"13","Cranberry_Concentrado","Cranberry_Concentrado",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-alpha-gpc","Alpha GPC, 200 mg","Alpha GPC, 200 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-chlorophyll","Chlorophyll","Chlorophyll",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-konjac-fiber","Konjac Root Fiber Glucomannan","Konjac Root Fiber Glucomannan",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-tribulus","Tribulus Mega","Tribulus Mega",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-inositol","Inositol","Inositol",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-magnesium-threonate","Magnesium L-Threonate","Magnesium L-Threonate",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-fish-oil","Mini Omega-3 Fish Oil Lemon","Mini Omega-3 Fish Oil Lemon",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,no
+"pr-maca","Maca, 4800 mg","Maca, 4800 mg",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-same","SAM-e Enteric Coated","SAM-e Enteric Coated",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,no
+"pr-bamboo-extract","Bamboo Extract, 3000 mg","Bamboo Extract, 3000 mg",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-borage-oil","Borage Oil (GLA)","Borage Oil (GLA)",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-liver-cleanse","3-Day Liver Cleanse","3-Day Liver Cleanse",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-ashwa-melatonin","Sleep Formula","Sleep Formula",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-basil-oil","Passion Flower","Passion Flower",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-creatine","Creatine (Micronized)","Creatine (Micronized)",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-chamomile-oil","Rhodiola Rosea","Rhodiola Rosea",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-sandalwood-oil","Valerian Root","Valerian Root",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-5htp","5-HTP, 200 mg","5-HTP, 200 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-bacopa","Bacopa Monnieri","Bacopa Monnieri",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-pqq","PQQ Pyrroloquinoline Quinone","PQQ Pyrroloquinoline Quinone",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-iodine","Odorless Garlic","Odorless Garlic",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-kudzu-root","Kudzu Root","Kudzu Root",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-apple-cider-vinegar","Apple Cider Vinegar","Apple Cider Vinegar",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-activated-charcoal","Activated Coconut Charcoal","Activated Coconut Charcoal",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-soy-lecithin","Lecithin - NON GMO, 1200 mg","Lecithin - NON GMO, 1200 mg",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-clove-oil","Oil of Oregano, 4000 mg","Oil of Oregano, 4000 mg",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-cranberry-vitamin-c","Cranberry_Plus_C_30_000","Cranberry_Plus_C_30_000",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,no
+"pr-collagen-peptides","Grassfed Collagen Peptides","Grassfed Collagen Peptides",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,no
+"pr-digestive-duo","Digestive Duo Probiotic","Digestive Duo Probiotic",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,no
+"pr-mct-oil","MCT Oil, 3600 mg","MCT Oil, 3600 mg",yes,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,no
+"pr-turmeric-advanced","Standardized Turmeric Curcumin","Standardized Turmeric Curcumin",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"101","Ashwagandha, 4500 mg","Ashwagandha, 4500 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"102","CoQ10, 100 mg","CoQ10, 100 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"103","GABA","GABA",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"104","L-Theanine, 200 mg","L-Theanine, 200 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"105","Magnesium Citrate, 400 mg","Magnesium Citrate, 400 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-stinging-nettles","Stinging Nettles","Stinging Nettles",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-pau-darco","Pau d'Arco Inner Bark","Pau d'Arco Inner Bark",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-vitamin-a","Vitamin A, 10,000 IU","Vitamin A, 10,000 IU",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-vitamin-e","Vitamin E, 200 IU","Vitamin E, 200 IU",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-yohimbe-max","Yohimbe Max","Yohimbe Max",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-nitric-oxide-max","Nitric Oxide Max","Nitric Oxide Max",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"pr-horse-chestnut","Horse Chestnut","Horse Chestnut",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-horsetail","Horsetail, 800 mg","Horsetail, 800 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-black-cohosh","Black Cohosh","Black Cohosh",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-bitter-melon","Bitter Melon","Bitter Melon",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-chanca-piedra","Chanca Piedra","Chanca Piedra",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-chlorella-organic","Chlorella (Organic), 1000 mg","Chlorella (Organic), 1000 mg",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-circulation-complex","Circulation Complex","Circulation Complex",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-cleanse-more","Cleanse More","Cleanse More",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"pr-electrolyte-lemon","Electrolyte (Lemon)","Electrolyte (Lemon)",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,no
+"sys-immune-01","Immune Defense Complex","Immune Defense Complex",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-immune-02","Ultra Vitamin C Complex","Ultra Vitamin C Complex",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-immune-03","Zinc Immunity Pro","Zinc Immunity Pro",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-cardio-01","CardioMax Pro","CardioMax Pro",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-cardio-02","Omega-3 Ultra Pure","Omega-3 Ultra Pure",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-bone-01","Bone Matrix Pro","Bone Matrix Pro",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no
+"sys-bone-02","Calcium Plus D3 K2","Calcium Plus D3 K2",yes,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,no

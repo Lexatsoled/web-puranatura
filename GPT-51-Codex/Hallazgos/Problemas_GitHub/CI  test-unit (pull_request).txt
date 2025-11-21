@@ -1,0 +1,36 @@
+Root cause
+
+All tests failed with: Error: Cannot find module '@testing-library/dom' — the test suite imports that package but it is not listed/installed in the repository's devDependencies.
+Quick fix (recommended)
+
+Add @testing-library/dom to devDependencies in the repository root package.json.
+Commit the change and make sure the CI job installs devDependencies (npm ci / npm install without --production).
+Re-run the CI build.
+Exact change to make
+
+Edit package.json (root) at: https://github.com/Lexatsoled/web-puranatura/blob/8990890edcdb086925a002b7905d201660599978/package.json
+Add this entry under "devDependencies" (choose a matching/latest semver; the example uses a stable current range):
+
+"@testing-library/dom": "^8.0.0"
+
+Example snippet (showing context — insert inside devDependencies): { ... "devDependencies": { "@axe-core/react": "^4.11.0", "@playwright/test": "^1.56.1", ... "@testing-library/jest-dom": "^6.9.1", "@testing-library/react": "^16.3.0", "@testing-library/user-event": "^14.6.1", "@testing-library/dom": "^8.0.0", ... } ... }
+
+Commands to run locally / in CI
+
+Locally (or as part of CI if you prefer to only modify lockfile via install): npm install --save-dev @testing-library/dom
+
+If you update package.json manually, update lockfile and node_modules: npm ci
+
+CI checklist
+
+Ensure the CI workflow installs devDependencies. If your CI uses npm ci, it will install devDependencies by default — but confirm it's not passing --production or setting NODE_ENV=production before install.
+If you use caching for node_modules or the package manager cache, invalidate the cache key or bump it so the new package gets fetched.
+Alternative (if you intentionally removed the package)
+
+If tests can be changed to avoid directly importing '@testing-library/dom', replace direct imports with equivalents from '@testing-library/react' or adjust test setup. But adding the package is the simplest and least disruptive fix.
+Why this will resolve the failure
+
+Tests import functionality that lives in @testing-library/dom; installing it will satisfy the require/import and allow Vitest to load tests instead of failing immediately at module resolution.
+If you want, I can:
+
+Provide a commit patch you can apply that updates package.json and package-lock (or yarn/pnpm lock) and show the exact diff.

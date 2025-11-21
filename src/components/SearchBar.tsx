@@ -40,7 +40,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   // Cerrar al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -77,9 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex((prev) =>
-          prev < results.length - 1 ? prev + 1 : prev
-        );
+        setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
         break;
       case 'ArrowUp':
         e.preventDefault();
@@ -283,7 +284,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
                       </div>
                     )}
                     <div>
-                      <div className="text-sm text-gray-700">{result.title}</div>
+                      <div className="text-sm text-gray-700">
+                        {result.title}
+                      </div>
                       {result.subtitle && (
                         <div className="text-xs text-gray-500">
                           {result.subtitle}

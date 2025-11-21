@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '../src/utils/intl';
 
 const WishlistPage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -27,7 +28,7 @@ const WishlistPage: React.FC = () => {
 
   const handleRemoveFromWishlist = (itemId: string) => {
     removeFromWishlist(itemId);
-    setSelectedItems(prev => prev.filter(id => id !== itemId));
+    setSelectedItems((prev) => prev.filter((id) => id !== itemId));
   };
 
   const handleAddToCart = (item: any) => {
@@ -35,9 +36,9 @@ const WishlistPage: React.FC = () => {
   };
 
   const handleSelectItem = (itemId: string) => {
-    setSelectedItems(prev =>
+    setSelectedItems((prev) =>
       prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
+        ? prev.filter((id) => id !== itemId)
         : [...prev, itemId]
     );
   };
@@ -46,28 +47,34 @@ const WishlistPage: React.FC = () => {
     if (selectedItems.length === wishlistItems.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(wishlistItems.map(item => item.id));
+      setSelectedItems(wishlistItems.map((item) => item.id));
     }
   };
 
   const handleRemoveSelected = () => {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar ${selectedItems.length} productos de tu lista de deseos?`)) {
-      selectedItems.forEach(itemId => removeFromWishlist(itemId));
+    if (
+      window.confirm(
+        `¿Estás seguro de que quieres eliminar ${selectedItems.length} productos de tu lista de deseos?`
+      )
+    ) {
+      selectedItems.forEach((itemId) => removeFromWishlist(itemId));
       setSelectedItems([]);
     }
   };
 
   const handleAddSelectedToCart = () => {
-    const selectedInStockItems = wishlistItems.filter(item =>
-      selectedItems.includes(item.id) && item.inStock
+    const selectedInStockItems = wishlistItems.filter(
+      (item) => selectedItems.includes(item.id) && item.inStock
     );
 
-    selectedInStockItems.forEach(item => {
+    selectedInStockItems.forEach((item) => {
       addToCart(item.product);
     });
 
     if (selectedInStockItems.length > 0) {
-      alert(`Se agregaron ${selectedInStockItems.length} productos al carrito.`);
+      alert(
+        `Se agregaron ${selectedInStockItems.length} productos al carrito.`
+      );
     }
   };
 
@@ -75,7 +82,7 @@ const WishlistPage: React.FC = () => {
     return new Intl.DateTimeFormat('es-ES', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   };
 
@@ -96,16 +103,18 @@ const WishlistPage: React.FC = () => {
                 Productos que te interesan para comprar más tarde
               </p>
             </div>
-            
+
             {wishlistItems.length > 0 && (
               <div className="flex gap-2">
                 <button
                   onClick={handleSelectAll}
                   className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                 >
-                  {selectedItems.length === wishlistItems.length ? 'Deseleccionar todo' : 'Seleccionar todo'}
+                  {selectedItems.length === wishlistItems.length
+                    ? 'Deseleccionar todo'
+                    : 'Seleccionar todo'}
                 </button>
-                
+
                 {selectedItems.length > 0 && (
                   <>
                     <button
@@ -114,7 +123,7 @@ const WishlistPage: React.FC = () => {
                     >
                       Agregar al carrito ({selectedItems.length})
                     </button>
-                    
+
                     <button
                       onClick={handleRemoveSelected}
                       className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
@@ -129,8 +138,18 @@ const WishlistPage: React.FC = () => {
 
           {wishlistItems.length === 0 ? (
             <div className="text-center py-12">
-              <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400 mb-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
               </svg>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 Tu lista de deseos está vacía
@@ -154,7 +173,9 @@ const WishlistPage: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow ${
-                    selectedItems.includes(item.id) ? 'border-blue-300 bg-blue-50' : 'border-gray-200'
+                    selectedItems.includes(item.id)
+                      ? 'border-blue-300 bg-blue-50'
+                      : 'border-gray-200'
                   }`}
                 >
                   <input
@@ -163,7 +184,7 @@ const WishlistPage: React.FC = () => {
                     onChange={() => handleSelectItem(item.id)}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  
+
                   <div className="flex-shrink-0">
                     <img
                       src={item.image}
@@ -171,24 +192,24 @@ const WishlistPage: React.FC = () => {
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                   </div>
-                  
+
                   <div className="flex-grow">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
                     <p className="text-sm text-gray-600">{item.category}</p>
                     <p className="text-xs text-gray-500 mt-1">
                       Agregado el {formatDate(item.addedDate)}
                     </p>
-                    
+
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-lg font-bold text-green-700">
-                        DOP ${item.price.toFixed(2)}
+                        {formatCurrency(item.price)}
                       </span>
                       {item.originalPrice && (
                         <span className="text-sm text-gray-500 line-through">
-                          DOP ${item.originalPrice.toFixed(2)}
+                          {formatCurrency(item.originalPrice)}
                         </span>
                       )}
-                      
+
                       {!item.inStock && (
                         <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
                           Agotado
@@ -196,7 +217,7 @@ const WishlistPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleAddToCart(item)}
@@ -209,14 +230,24 @@ const WishlistPage: React.FC = () => {
                     >
                       {item.inStock ? 'Agregar al carrito' : 'No disponible'}
                     </button>
-                    
+
                     <button
                       onClick={() => handleRemoveFromWishlist(item.id)}
                       className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
                       title="Eliminar de la lista de deseos"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -237,27 +268,36 @@ const WishlistPage: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Resumen de la Lista
             </h2>
-            
+
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Total de productos:</span>
                 <span className="font-medium">
-                  {wishlistItems.length} productos • {wishlistItems.filter(item => item.inStock).length} disponibles
+                  {wishlistItems.length} productos •{' '}
+                  {wishlistItems.filter((item) => item.inStock).length}{' '}
+                  disponibles
                 </span>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Valor total:</span>
                 <span className="font-medium text-green-700">
-                  DOP ${wishlistItems.reduce((total, item) => total + item.price, 0).toFixed(2)}
+                  DOP $
+                  {wishlistItems
+                    .reduce((total, item) => total + item.price, 0)
+                    .toFixed(2)}
                 </span>
               </div>
             </div>
-            
+
             <div className="mt-4 pt-4 border-t border-gray-200">
               <button
                 onClick={() => {
-                  if (window.confirm('¿Estás seguro de que quieres vaciar toda tu lista de deseos?')) {
+                  if (
+                    window.confirm(
+                      '¿Estás seguro de que quieres vaciar toda tu lista de deseos?'
+                    )
+                  ) {
                     clearWishlist();
                     setSelectedItems([]);
                   }

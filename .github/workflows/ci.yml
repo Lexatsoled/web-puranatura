@@ -1,0 +1,95 @@
+name: CI
+on:
+  push:
+    branches: [main, fix/*, feat/*]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DATABASE_URL: "file:./backend/prisma/database.sqlite"
+      JWT_SECRET: "ci-local-secret"
+      JWT_REFRESH_SECRET: "ci-local-refresh-secret"
+      JWT_EXPIRES_IN: "15m"
+      JWT_REFRESH_EXPIRES_IN: "7d"
+      ALLOWED_ORIGINS: "http://localhost:5173"
+      BASE_URL: "http://127.0.0.1:5173"
+      REUSE_VITE_SERVER: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Verify Node & npm
+        run: |
+          echo "Node version:" && node -v
+          echo "npm version:" && npm -v
+
+      - name: Cache root node_modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (root)
+        run: |
+          set -o pipefail
+          npm ci || (npm install && echo "WARNING: lockfile changed - update package-lock.json and push the changes")
+
+      - name: Install backend deps and build backend
+        run: |
+          npm --prefix backend ci
+          npm --prefix backend run build
+
+      - name: Run DB migrations (non-interactive)
+        env:
+          DATABASE_URL: "file:./backend/prisma/database.sqlite"
+        run: |
+          if [ -d backend/prisma ]; then
+            npx --yes prisma migrate deploy --schema=backend/prisma/schema.prisma || npx --yes prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss
+          else
+            echo "No hay carpeta backend/prisma, saltando migraciones"
+          fi
+        shell: bash
+
+      - name: Start backend (background)
+        run: |
+          nohup node backend/dist/server.js > backend.log 2>&1 &
+          echo $! > backend.pid
+          echo "Backend started, pid $(cat backend.pid)"
+        shell: bash
+
+      - name: Wait for backend /api/health
+        run: npx wait-on --timeout 30000 http://127.0.0.1:3001/api/health
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run unit tests (vitest)
+        run: npm run test:ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            test-results/**
+            reports/**
+            backend.log

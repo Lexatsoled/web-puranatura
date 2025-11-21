@@ -1,16 +1,22 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+﻿import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from 'react';
+import { useApi } from '../src/utils/api';
 
-// Tipos de usuario
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   phone?: string;
-  dateOfBirth?: string;
-  addresses: Address[];
-  orderHistory: Order[];
-  createdAt: Date;
+  addresses?: Address[];
+  orderHistory?: Order[];
+  createdAt?: Date;
 }
 
 export interface Address {
@@ -31,13 +37,12 @@ export interface Order {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 }
 
-// Contexto de autenticación
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateProfile: (userData: Partial<User>) => Promise<boolean>;
   isAuthenticated: boolean;
 }
@@ -50,132 +55,127 @@ interface RegisterData {
   phone?: string;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+interface ApiAuthResponse {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone?: string | null;
+  };
+}
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const USER_STORAGE_KEY = 'puranatura-user';
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const api = useApi();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Cargar usuario desde localStorage al iniciar
-  useEffect(() => {
-    const savedUser = localStorage.getItem('puranatura-user');
-    if (savedUser) {
-      try {
-        const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Error loading user from localStorage:', error);
-        localStorage.removeItem('puranatura-user');
-      }
-    }
-    setIsLoading(false);
-  }, []);
+  const mapUser = (apiUser: ApiAuthResponse['user']): User => ({
+    id: apiUser.id,
+    email: apiUser.email,
+    firstName: apiUser.firstName,
+    lastName: apiUser.lastName,
+    phone: apiUser.phone ?? undefined,
+  });
 
-  // Guardar usuario en localStorage cuando cambie
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('puranatura-user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('puranatura-user');
+  const loadSession = useCallback(async () => {
+    try {
+      const response = await api.get<{ user: ApiAuthResponse['user'] }>(
+        '/auth/me'
+      );
+      const mapped = mapUser(response.user);
+      setUser(mapped);
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(mapped));
+    } catch {
+      localStorage.removeItem(USER_STORAGE_KEY);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-  }, [user]);
+  }, [api]);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+    const hasSavedUser = !!savedUser;
+    if (hasSavedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem(USER_STORAGE_KEY);
+      }
+      // Sólo consultar /auth/me si tenemos una sesión previa almacenada
+      loadSession();
+    } else {
+      setIsLoading(false);
+    }
+  }, [loadSession]);
+
+  const persistSession = (nextUser: User) => {
+    setUser(nextUser);
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(nextUser));
+  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Verificar credenciales (simulado)
-    const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-    const foundUser = savedUsers.find((u: any) => 
-      u.email === email && u.password === password
-    );
-    
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
-      setIsLoading(false);
+    try {
+      const response = await api.post<ApiAuthResponse>('/auth/login', {
+        email,
+        password,
+      });
+      persistSession(mapUser(response.user));
       return true;
+    } catch {
+      return false;
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
-    return false;
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {
     setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
     try {
-      // Verificar si el email ya existe
-      const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-      const emailExists = savedUsers.some((u: any) => u.email === userData.email);
-      
-      if (emailExists) {
-        setIsLoading(false);
-        return false;
-      }
-      
-      // Crear nuevo usuario
-      const newUser: User = {
-        id: `user_${Date.now()}`,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        phone: userData.phone,
-        addresses: [],
-        orderHistory: [],
-        createdAt: new Date()
-      };
-      
-      // Guardar en "base de datos" simulada
-      const userWithPassword = { ...newUser, password: userData.password };
-      savedUsers.push(userWithPassword);
-      localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));
-      
-      // Autenticar automáticamente
-      setUser(newUser);
-      setIsLoading(false);
+      const response = await api.post<ApiAuthResponse>(
+        '/auth/register',
+        userData
+      );
+      persistSession(mapUser(response.user));
       return true;
-    } catch (error) {
-      setIsLoading(false);
+    } catch {
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch {
+      // ignorar
+    }
+    localStorage.removeItem(USER_STORAGE_KEY);
     setUser(null);
-  };
+  }, [api]);
+
+  useEffect(() => {
+    const handleForcedLogout = () => {
+      logout();
+    };
+    window.addEventListener('auth:logout', handleForcedLogout);
+    return () => window.removeEventListener('auth:logout', handleForcedLogout);
+  }, [logout]);
 
   const updateProfile = async (userData: Partial<User>): Promise<boolean> => {
     if (!user) return false;
-    
-    setIsLoading(true);
-    
-    // Simular API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    try {
-      const updatedUser = { ...user, ...userData };
-      setUser(updatedUser);
-      
-      // Actualizar en "base de datos"
-      const savedUsers = JSON.parse(localStorage.getItem('puranatura-users') || '[]');
-      const userIndex = savedUsers.findIndex((u: any) => u.id === user.id);
-      if (userIndex !== -1) {
-        savedUsers[userIndex] = { ...savedUsers[userIndex], ...userData };
-        localStorage.setItem('puranatura-users', JSON.stringify(savedUsers));
-      }
-      
-      setIsLoading(false);
-      return true;
-    } catch (error) {
-      setIsLoading(false);
-      return false;
-    }
+    const updatedUser = { ...user, ...userData };
+    setUser(updatedUser);
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUser));
+    return true;
   };
 
   const value: AuthContextType = {
@@ -185,20 +185,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     register,
     logout,
     updateProfile,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error(
+      'useAuth debe usarse dentro de AuthProvider (envoltorio de autenticacion)'
+    );
   }
   return context;
 };

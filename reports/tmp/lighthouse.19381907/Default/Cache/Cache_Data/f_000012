@@ -1,0 +1,735 @@
+import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=bdef0fb3"; const Fragment = __vite__cjsImport0_react_jsxDevRuntime["Fragment"]; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=bdef0fb3"; const useState = __vite__cjsImport1_react["useState"]; const useEffect = __vite__cjsImport1_react["useEffect"]; const useRef = __vite__cjsImport1_react["useRef"];
+import { motion, AnimatePresence } from "/node_modules/.vite/deps/framer-motion.js?v=bdef0fb3";
+import { useCart } from "/contexts/CartContext.tsx";
+import { formatCurrency } from "/src/utils/intl.ts";
+const CartModal = ({ isOpen, onClose }) => {
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    totalPrice,
+    clearCart,
+    cartCount
+  } = useCart();
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentComplete, setPaymentComplete] = useState(false);
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+      setIsConfirmingClear(false);
+      setIsProcessingPayment(false);
+      setPaymentComplete(false);
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+  const previouslyFocusedRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const modalRef = useRef(null);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        if (isConfirmingClear) {
+          setIsConfirmingClear(false);
+        } else {
+          onClose();
+        }
+      }
+      if (event.key === "Tab" && isOpen && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    if (isOpen) {
+      previouslyFocusedRef.current = document.activeElement;
+      window.addEventListener("keydown", handleKeyDown);
+      setTimeout(() => closeButtonRef.current?.focus(), 0);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      try {
+        previouslyFocusedRef.current?.focus();
+      } catch (e) {
+      }
+    };
+  }, [isOpen, isConfirmingClear, onClose]);
+  const handleQuantityChange = (productId, newQuantity) => {
+    if (newQuantity >= 1) {
+      updateQuantity(productId, newQuantity);
+    }
+  };
+  const handleClearCart = () => {
+    clearCart();
+    setIsConfirmingClear(false);
+  };
+  const handleProceedToPayment = async () => {
+    setIsProcessingPayment(true);
+    await new Promise((resolve) => setTimeout(resolve, 3e3));
+    const paymentSuccess = Math.random() > 0.1;
+    if (paymentSuccess) {
+      setPaymentComplete(true);
+      setTimeout(() => {
+        clearCart();
+        setPaymentComplete(false);
+        setIsProcessingPayment(false);
+        onClose();
+      }, 2e3);
+    } else {
+      setIsProcessingPayment(false);
+      alert(
+        "Error en el procesamiento del pago. Por favor, inténtalo de nuevo."
+      );
+    }
+  };
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxDEV(AnimatePresence, { children: /* @__PURE__ */ jsxDEV(
+    motion.div,
+    {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      className: "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center",
+      onClick: onClose,
+      children: /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          initial: { scale: 0.9, opacity: 0 },
+          animate: { scale: 1, opacity: 1 },
+          exit: { scale: 0.9, opacity: 0 },
+          ref: modalRef,
+          role: "dialog",
+          "aria-modal": "true",
+          "aria-labelledby": "cart-modal-title",
+          className: "bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden",
+          onClick: (e) => e.stopPropagation(),
+          children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "flex items-center justify-between p-4 border-b", children: [
+              /* @__PURE__ */ jsxDEV("h2", { id: "cart-modal-title", className: "text-xl font-semibold", children: isProcessingPayment ? "Procesando Pago" : paymentComplete ? "¡Pago Exitoso!" : `Carrito (${cartCount} ${cartCount === 1 ? "artículo" : "artículos"})` }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 151,
+                columnNumber: 13
+              }, this),
+              /* @__PURE__ */ jsxDEV(
+                "button",
+                {
+                  ref: closeButtonRef,
+                  onClick: onClose,
+                  className: "p-1 hover:bg-gray-100 rounded",
+                  disabled: isProcessingPayment,
+                  "aria-label": "Cerrar carrito",
+                  type: "button",
+                  children: /* @__PURE__ */ jsxDEV(
+                    "svg",
+                    {
+                      className: "h-5 w-5",
+                      fill: "none",
+                      stroke: "currentColor",
+                      viewBox: "0 0 24 24",
+                      "aria-hidden": "true",
+                      focusable: "false",
+                      children: /* @__PURE__ */ jsxDEV(
+                        "path",
+                        {
+                          strokeLinecap: "round",
+                          strokeLinejoin: "round",
+                          strokeWidth: 2,
+                          d: "M6 18L18 6M6 6l12 12"
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                          lineNumber: 174,
+                          columnNumber: 17
+                        },
+                        this
+                      )
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 166,
+                      columnNumber: 15
+                    },
+                    this
+                  )
+                },
+                void 0,
+                false,
+                {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 158,
+                  columnNumber: 13
+                },
+                this
+              )
+            ] }, void 0, true, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 150,
+              columnNumber: 11
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "p-4 overflow-y-auto max-h-96", children: isProcessingPayment ? /* @__PURE__ */ jsxDEV("div", { className: "text-center py-12", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 188,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("h3", { className: "text-lg font-semibold text-gray-800 mb-2", children: "Procesando pago..." }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 189,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { className: "text-gray-600", children: "Por favor espera mientras procesamos tu pedido" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 192,
+                columnNumber: 17
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 187,
+              columnNumber: 15
+            }, this) : paymentComplete ? /* @__PURE__ */ jsxDEV("div", { className: "text-center py-12", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxDEV(
+                "svg",
+                {
+                  className: "h-8 w-8 text-green-600",
+                  fill: "none",
+                  stroke: "currentColor",
+                  viewBox: "0 0 24 24",
+                  children: /* @__PURE__ */ jsxDEV(
+                    "path",
+                    {
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeWidth: 2,
+                      d: "M5 13l4 4L19 7"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 205,
+                      columnNumber: 21
+                    },
+                    this
+                  )
+                },
+                void 0,
+                false,
+                {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 199,
+                  columnNumber: 19
+                },
+                this
+              ) }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 198,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("h3", { className: "text-lg font-semibold text-green-800 mb-2", children: "¡¡Pago completado!" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 213,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { className: "text-gray-600", children: "Tu pedido ha sido procesado exitosamente" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 216,
+                columnNumber: 17
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 197,
+              columnNumber: 15
+            }, this) : cartItems.length === 0 ? /* @__PURE__ */ jsxDEV("div", { className: "text-center py-8", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "text-gray-400 mb-2", children: /* @__PURE__ */ jsxDEV(
+                "svg",
+                {
+                  className: "h-12 w-12 mx-auto",
+                  fill: "none",
+                  stroke: "currentColor",
+                  viewBox: "0 0 24 24",
+                  children: /* @__PURE__ */ jsxDEV(
+                    "path",
+                    {
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeWidth: 1,
+                      d: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 229,
+                      columnNumber: 21
+                    },
+                    this
+                  )
+                },
+                void 0,
+                false,
+                {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 223,
+                  columnNumber: 19
+                },
+                this
+              ) }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 222,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { className: "text-gray-600", children: "Tu carrito está vacío" }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 237,
+                columnNumber: 17
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 221,
+              columnNumber: 15
+            }, this) : /* @__PURE__ */ jsxDEV("div", { className: "space-y-4", children: cartItems.map((item) => /* @__PURE__ */ jsxDEV(
+              "div",
+              {
+                className: "flex items-center space-x-3 border-b pb-3",
+                children: [
+                  /* @__PURE__ */ jsxDEV("div", { className: "flex-shrink-0", children: item.product.images?.[0] && /* @__PURE__ */ jsxDEV(
+                    "img",
+                    {
+                      src: item.product.images[0].thumbnail,
+                      alt: item.product.name,
+                      className: "h-12 w-12 object-cover rounded"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 248,
+                      columnNumber: 25
+                    },
+                    this
+                  ) }, void 0, false, {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 246,
+                    columnNumber: 21
+                  }, this),
+                  /* @__PURE__ */ jsxDEV("div", { className: "flex-1 min-w-0", children: [
+                    /* @__PURE__ */ jsxDEV("h3", { className: "text-sm font-medium text-gray-900 truncate", children: item.product.name }, void 0, false, {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 256,
+                      columnNumber: 23
+                    }, this),
+                    /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-500", children: formatCurrency(item.product.price) }, void 0, false, {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 259,
+                      columnNumber: 23
+                    }, this)
+                  ] }, void 0, true, {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 255,
+                    columnNumber: 21
+                  }, this),
+                  /* @__PURE__ */ jsxDEV("div", { className: "flex items-center space-x-2", children: [
+                    /* @__PURE__ */ jsxDEV(
+                      "button",
+                      {
+                        onClick: () => handleQuantityChange(
+                          item.product.id,
+                          item.quantity - 1
+                        ),
+                        className: "p-1 hover:bg-gray-100 rounded",
+                        disabled: item.quantity <= 1,
+                        "aria-label": `Disminuir cantidad de ${item.product.name}`,
+                        type: "button",
+                        children: /* @__PURE__ */ jsxDEV(
+                          "svg",
+                          {
+                            className: "h-4 w-4",
+                            fill: "none",
+                            stroke: "currentColor",
+                            viewBox: "0 0 24 24",
+                            "aria-hidden": "true",
+                            focusable: "false",
+                            children: /* @__PURE__ */ jsxDEV(
+                              "path",
+                              {
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                                strokeWidth: 2,
+                                d: "M20 12H4"
+                              },
+                              void 0,
+                              false,
+                              {
+                                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                                lineNumber: 284,
+                                columnNumber: 27
+                              },
+                              this
+                            )
+                          },
+                          void 0,
+                          false,
+                          {
+                            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                            lineNumber: 276,
+                            columnNumber: 25
+                          },
+                          this
+                        )
+                      },
+                      void 0,
+                      false,
+                      {
+                        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                        lineNumber: 264,
+                        columnNumber: 23
+                      },
+                      this
+                    ),
+                    /* @__PURE__ */ jsxDEV("span", { className: "text-sm font-medium w-8 text-center", children: item.quantity }, void 0, false, {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 292,
+                      columnNumber: 23
+                    }, this),
+                    /* @__PURE__ */ jsxDEV(
+                      "button",
+                      {
+                        onClick: () => handleQuantityChange(
+                          item.product.id,
+                          item.quantity + 1
+                        ),
+                        className: "p-1 hover:bg-gray-100 rounded",
+                        "aria-label": `Aumentar cantidad de ${item.product.name}`,
+                        type: "button",
+                        children: /* @__PURE__ */ jsxDEV(
+                          "svg",
+                          {
+                            className: "h-4 w-4",
+                            fill: "none",
+                            stroke: "currentColor",
+                            viewBox: "0 0 24 24",
+                            "aria-hidden": "true",
+                            focusable: "false",
+                            children: /* @__PURE__ */ jsxDEV(
+                              "path",
+                              {
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                                strokeWidth: 2,
+                                d: "M12 6v6m0 0v6m0-6h6m-6 0H6"
+                              },
+                              void 0,
+                              false,
+                              {
+                                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                                lineNumber: 314,
+                                columnNumber: 27
+                              },
+                              this
+                            )
+                          },
+                          void 0,
+                          false,
+                          {
+                            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                            lineNumber: 306,
+                            columnNumber: 25
+                          },
+                          this
+                        )
+                      },
+                      void 0,
+                      false,
+                      {
+                        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                        lineNumber: 295,
+                        columnNumber: 23
+                      },
+                      this
+                    ),
+                    /* @__PURE__ */ jsxDEV(
+                      "button",
+                      {
+                        onClick: () => removeFromCart(item.product.id),
+                        className: "p-1 hover:bg-red-100 text-red-600 rounded ml-2",
+                        "aria-label": `Eliminar ${item.product.name} del carrito`,
+                        type: "button",
+                        children: /* @__PURE__ */ jsxDEV(
+                          "svg",
+                          {
+                            className: "h-4 w-4",
+                            fill: "none",
+                            stroke: "currentColor",
+                            viewBox: "0 0 24 24",
+                            "aria-hidden": "true",
+                            focusable: "false",
+                            children: /* @__PURE__ */ jsxDEV(
+                              "path",
+                              {
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                                strokeWidth: 2,
+                                d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              },
+                              void 0,
+                              false,
+                              {
+                                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                                lineNumber: 336,
+                                columnNumber: 27
+                              },
+                              this
+                            )
+                          },
+                          void 0,
+                          false,
+                          {
+                            fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                            lineNumber: 328,
+                            columnNumber: 25
+                          },
+                          this
+                        )
+                      },
+                      void 0,
+                      false,
+                      {
+                        fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                        lineNumber: 322,
+                        columnNumber: 23
+                      },
+                      this
+                    )
+                  ] }, void 0, true, {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 263,
+                    columnNumber: 21
+                  }, this)
+                ]
+              },
+              item.product.id,
+              true,
+              {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 242,
+                columnNumber: 19
+              },
+              this
+            )) }, void 0, false, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 240,
+              columnNumber: 15
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 185,
+              columnNumber: 11
+            }, this),
+            cartItems.length > 0 && !isProcessingPayment && !paymentComplete && /* @__PURE__ */ jsxDEV("div", { className: "border-t p-4", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "flex items-center justify-between mb-4", children: [
+                /* @__PURE__ */ jsxDEV("span", { className: "text-lg font-semibold", children: "Total:" }, void 0, false, {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 355,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "text-lg font-bold text-green-600", children: formatCurrency(totalPrice) }, void 0, false, {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 356,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 354,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { className: "space-y-2", children: !isConfirmingClear ? /* @__PURE__ */ jsxDEV(Fragment, { children: [
+                /* @__PURE__ */ jsxDEV(
+                  "button",
+                  {
+                    onClick: handleProceedToPayment,
+                    className: "w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold",
+                    type: "button",
+                    children: "Proceder al Pago"
+                  },
+                  void 0,
+                  false,
+                  {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 364,
+                    columnNumber: 21
+                  },
+                  this
+                ),
+                /* @__PURE__ */ jsxDEV(
+                  "button",
+                  {
+                    onClick: () => setIsConfirmingClear(true),
+                    className: "w-full text-gray-600 py-1 px-4 hover:text-red-600 transition-colors text-sm",
+                    type: "button",
+                    children: "Vaciar carrito"
+                  },
+                  void 0,
+                  false,
+                  {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 371,
+                    columnNumber: 21
+                  },
+                  this
+                )
+              ] }, void 0, true, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 363,
+                columnNumber: 19
+              }, this) : /* @__PURE__ */ jsxDEV("div", { className: "bg-red-50 border border-red-200 rounded-lg p-4", children: [
+                /* @__PURE__ */ jsxDEV("div", { className: "flex items-center mb-3", children: [
+                  /* @__PURE__ */ jsxDEV(
+                    "svg",
+                    {
+                      className: "h-5 w-5 text-red-600 mr-2",
+                      fill: "none",
+                      stroke: "currentColor",
+                      viewBox: "0 0 24 24",
+                      children: /* @__PURE__ */ jsxDEV(
+                        "path",
+                        {
+                          strokeLinecap: "round",
+                          strokeLinejoin: "round",
+                          strokeWidth: 2,
+                          d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 15.5c-.77.833.192 2.5 1.732 2.5z"
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                          lineNumber: 388,
+                          columnNumber: 25
+                        },
+                        this
+                      )
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 382,
+                      columnNumber: 23
+                    },
+                    this
+                  ),
+                  /* @__PURE__ */ jsxDEV("h3", { className: "text-red-800 font-semibold", children: "¿Vaciar carrito?" }, void 0, false, {
+                    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                    lineNumber: 395,
+                    columnNumber: 23
+                  }, this)
+                ] }, void 0, true, {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 381,
+                  columnNumber: 21
+                }, this),
+                /* @__PURE__ */ jsxDEV("p", { className: "text-red-700 text-sm mb-4", children: "Se eliminarán todos los productos del carrito. Esta acción no se puede deshacer." }, void 0, false, {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 399,
+                  columnNumber: 21
+                }, this),
+                /* @__PURE__ */ jsxDEV("div", { className: "flex space-x-2", children: [
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      onClick: handleClearCart,
+                      className: "flex-1 bg-red-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors",
+                      type: "button",
+                      children: "Sí, vaciar carrito"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 404,
+                      columnNumber: 23
+                    },
+                    this
+                  ),
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      onClick: () => setIsConfirmingClear(false),
+                      className: "flex-1 bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors",
+                      type: "button",
+                      children: "Cancelar"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                      lineNumber: 411,
+                      columnNumber: 23
+                    },
+                    this
+                  )
+                ] }, void 0, true, {
+                  fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                  lineNumber: 403,
+                  columnNumber: 21
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 380,
+                columnNumber: 19
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+                lineNumber: 361,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+              lineNumber: 353,
+              columnNumber: 13
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+          lineNumber: 138,
+          columnNumber: 9
+        },
+        this
+      )
+    },
+    void 0,
+    false,
+    {
+      fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+      lineNumber: 131,
+      columnNumber: 7
+    },
+    this
+  ) }, void 0, false, {
+    fileName: "C:/Users/Usuario/Desktop/Web Puranatura/web-puranatura---terapias-naturales/components/CartModal.tsx",
+    lineNumber: 130,
+    columnNumber: 5
+  }, this);
+};
+export default CartModal;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkNhcnRNb2RhbC50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IHVzZVN0YXRlLCB1c2VFZmZlY3QsIHVzZVJlZiB9IGZyb20gJ3JlYWN0JztcclxuaW1wb3J0IHsgbW90aW9uLCBBbmltYXRlUHJlc2VuY2UgfSBmcm9tICdmcmFtZXItbW90aW9uJztcclxuaW1wb3J0IHsgdXNlQ2FydCB9IGZyb20gJy4uL2NvbnRleHRzL0NhcnRDb250ZXh0JztcclxuaW1wb3J0IHsgZm9ybWF0Q3VycmVuY3kgfSBmcm9tICcuLi9zcmMvdXRpbHMvaW50bCc7XHJcblxyXG5pbnRlcmZhY2UgQ2FydE1vZGFsUHJvcHMge1xyXG4gIGlzT3BlbjogYm9vbGVhbjtcclxuICBvbkNsb3NlOiAoKSA9PiB2b2lkO1xyXG59XHJcblxyXG5jb25zdCBDYXJ0TW9kYWw6IFJlYWN0LkZDPENhcnRNb2RhbFByb3BzPiA9ICh7IGlzT3Blbiwgb25DbG9zZSB9KSA9PiB7XHJcbiAgY29uc3Qge1xyXG4gICAgY2FydEl0ZW1zLFxyXG4gICAgcmVtb3ZlRnJvbUNhcnQsXHJcbiAgICB1cGRhdGVRdWFudGl0eSxcclxuICAgIHRvdGFsUHJpY2UsXHJcbiAgICBjbGVhckNhcnQsXHJcbiAgICBjYXJ0Q291bnQsXHJcbiAgfSA9IHVzZUNhcnQoKTtcclxuXHJcbiAgY29uc3QgW2lzQ29uZmlybWluZ0NsZWFyLCBzZXRJc0NvbmZpcm1pbmdDbGVhcl0gPSB1c2VTdGF0ZShmYWxzZSk7XHJcbiAgY29uc3QgW2lzUHJvY2Vzc2luZ1BheW1lbnQsIHNldElzUHJvY2Vzc2luZ1BheW1lbnRdID0gdXNlU3RhdGUoZmFsc2UpO1xyXG4gIGNvbnN0IFtwYXltZW50Q29tcGxldGUsIHNldFBheW1lbnRDb21wbGV0ZV0gPSB1c2VTdGF0ZShmYWxzZSk7XHJcblxyXG4gIC8vIFByZXZlbmlyIHNjcm9sbCBjdWFuZG8gZWwgbW9kYWwgZXN0w6EgYWJpZXJ0b1xyXG4gIHVzZUVmZmVjdCgoKSA9PiB7XHJcbiAgICBpZiAoaXNPcGVuKSB7XHJcbiAgICAgIGRvY3VtZW50LmJvZHkuc3R5bGUub3ZlcmZsb3cgPSAnaGlkZGVuJztcclxuICAgIH0gZWxzZSB7XHJcbiAgICAgIGRvY3VtZW50LmJvZHkuc3R5bGUub3ZlcmZsb3cgPSAndW5zZXQnO1xyXG4gICAgICAvLyBSZXNldGVhciBlc3RhZG9zIGN1YW5kbyBzZSBjaWVycmUgZWwgbW9kYWxcclxuICAgICAgc2V0SXNDb25maXJtaW5nQ2xlYXIoZmFsc2UpO1xyXG4gICAgICBzZXRJc1Byb2Nlc3NpbmdQYXltZW50KGZhbHNlKTtcclxuICAgICAgc2V0UGF5bWVudENvbXBsZXRlKGZhbHNlKTtcclxuICAgIH1cclxuICAgIHJldHVybiAoKSA9PiB7XHJcbiAgICAgIGRvY3VtZW50LmJvZHkuc3R5bGUub3ZlcmZsb3cgPSAndW5zZXQnO1xyXG4gICAgfTtcclxuICB9LCBbaXNPcGVuXSk7XHJcblxyXG4gIC8vIE1hbmVqYXIgdGVjbGEgRVNDIHkgcmVzdG9yZSBkZSBmb2NvXHJcbiAgY29uc3QgcHJldmlvdXNseUZvY3VzZWRSZWYgPSB1c2VSZWY8SFRNTEVsZW1lbnQgfCBudWxsPihudWxsKTtcclxuICBjb25zdCBjbG9zZUJ1dHRvblJlZiA9IHVzZVJlZjxIVE1MQnV0dG9uRWxlbWVudCB8IG51bGw+KG51bGwpO1xyXG4gIGNvbnN0IG1vZGFsUmVmID0gdXNlUmVmPEhUTUxEaXZFbGVtZW50IHwgbnVsbD4obnVsbCk7XHJcblxyXG4gIHVzZUVmZmVjdCgoKSA9PiB7XHJcbiAgICBjb25zdCBoYW5kbGVLZXlEb3duID0gKGV2ZW50OiBLZXlib2FyZEV2ZW50KSA9PiB7XHJcbiAgICAgIGlmIChldmVudC5rZXkgPT09ICdFc2NhcGUnKSB7XHJcbiAgICAgICAgaWYgKGlzQ29uZmlybWluZ0NsZWFyKSB7XHJcbiAgICAgICAgICBzZXRJc0NvbmZpcm1pbmdDbGVhcihmYWxzZSk7XHJcbiAgICAgICAgfSBlbHNlIHtcclxuICAgICAgICAgIG9uQ2xvc2UoKTtcclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuXHJcbiAgICAgIC8vIEJhc2ljIGZvY3VzIHRyYXA6IGtlZXAgZm9jdXMgaW5zaWRlIG1vZGFsIHdoZW4gb3BlblxyXG4gICAgICBpZiAoZXZlbnQua2V5ID09PSAnVGFiJyAmJiBpc09wZW4gJiYgbW9kYWxSZWYuY3VycmVudCkge1xyXG4gICAgICAgIGNvbnN0IGZvY3VzYWJsZSA9IG1vZGFsUmVmLmN1cnJlbnQucXVlcnlTZWxlY3RvckFsbDxIVE1MRWxlbWVudD4oXHJcbiAgICAgICAgICAnYVtocmVmXSwgYnV0dG9uOm5vdChbZGlzYWJsZWRdKSwgdGV4dGFyZWEsIGlucHV0LCBzZWxlY3QsIFt0YWJpbmRleF06bm90KFt0YWJpbmRleD1cIi0xXCJdKSdcclxuICAgICAgICApO1xyXG4gICAgICAgIGlmIChmb2N1c2FibGUubGVuZ3RoID09PSAwKSByZXR1cm47XHJcbiAgICAgICAgY29uc3QgZmlyc3QgPSBmb2N1c2FibGVbMF07XHJcbiAgICAgICAgY29uc3QgbGFzdCA9IGZvY3VzYWJsZVtmb2N1c2FibGUubGVuZ3RoIC0gMV07XHJcbiAgICAgICAgaWYgKGV2ZW50LnNoaWZ0S2V5ICYmIGRvY3VtZW50LmFjdGl2ZUVsZW1lbnQgPT09IGZpcnN0KSB7XHJcbiAgICAgICAgICBldmVudC5wcmV2ZW50RGVmYXVsdCgpO1xyXG4gICAgICAgICAgbGFzdC5mb2N1cygpO1xyXG4gICAgICAgIH0gZWxzZSBpZiAoIWV2ZW50LnNoaWZ0S2V5ICYmIGRvY3VtZW50LmFjdGl2ZUVsZW1lbnQgPT09IGxhc3QpIHtcclxuICAgICAgICAgIGV2ZW50LnByZXZlbnREZWZhdWx0KCk7XHJcbiAgICAgICAgICBmaXJzdC5mb2N1cygpO1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfTtcclxuXHJcbiAgICBpZiAoaXNPcGVuKSB7XHJcbiAgICAgIHByZXZpb3VzbHlGb2N1c2VkUmVmLmN1cnJlbnQgPSBkb2N1bWVudC5hY3RpdmVFbGVtZW50IGFzIEhUTUxFbGVtZW50IHwgbnVsbDtcclxuICAgICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBoYW5kbGVLZXlEb3duKTtcclxuICAgICAgLy8gc2V0IGZvY3VzIHRvIGNsb3NlIGJ1dHRvbiBmb3Igc2NyZWVuIHJlYWRlciB1c2Vyc1xyXG4gICAgICBzZXRUaW1lb3V0KCgpID0+IGNsb3NlQnV0dG9uUmVmLmN1cnJlbnQ/LmZvY3VzKCksIDApO1xyXG4gICAgfVxyXG5cclxuICAgIHJldHVybiAoKSA9PiB7XHJcbiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCdrZXlkb3duJywgaGFuZGxlS2V5RG93bik7XHJcbiAgICAgIC8vIHJlc3RvcmUgZm9jdXMgdG8gcHJldmlvdXNseSBmb2N1c2VkIGVsZW1lbnRcclxuICAgICAgdHJ5IHtcclxuICAgICAgICBwcmV2aW91c2x5Rm9jdXNlZFJlZi5jdXJyZW50Py5mb2N1cygpO1xyXG4gICAgICB9IGNhdGNoIChlKSB7fVxyXG4gICAgfTtcclxuICB9LCBbaXNPcGVuLCBpc0NvbmZpcm1pbmdDbGVhciwgb25DbG9zZV0pO1xyXG5cclxuICBjb25zdCBoYW5kbGVRdWFudGl0eUNoYW5nZSA9IChwcm9kdWN0SWQ6IHN0cmluZywgbmV3UXVhbnRpdHk6IG51bWJlcikgPT4ge1xyXG4gICAgaWYgKG5ld1F1YW50aXR5ID49IDEpIHtcclxuICAgICAgdXBkYXRlUXVhbnRpdHkocHJvZHVjdElkLCBuZXdRdWFudGl0eSk7XHJcbiAgICB9XHJcbiAgfTtcclxuXHJcbiAgY29uc3QgaGFuZGxlQ2xlYXJDYXJ0ID0gKCkgPT4ge1xyXG4gICAgY2xlYXJDYXJ0KCk7XHJcbiAgICBzZXRJc0NvbmZpcm1pbmdDbGVhcihmYWxzZSk7XHJcbiAgfTtcclxuXHJcbiAgY29uc3QgaGFuZGxlUHJvY2VlZFRvUGF5bWVudCA9IGFzeW5jICgpID0+IHtcclxuICAgIHNldElzUHJvY2Vzc2luZ1BheW1lbnQodHJ1ZSk7XHJcblxyXG4gICAgLy8gU2ltdWxhciBwcm9jZXNhbWllbnRvIGRlIHBhZ28gKDMgc2VndW5kb3MpXHJcbiAgICBhd2FpdCBuZXcgUHJvbWlzZSgocmVzb2x2ZSkgPT4gc2V0VGltZW91dChyZXNvbHZlLCAzMDAwKSk7XHJcblxyXG4gICAgLy8gU2ltdWxhciDDqXhpdG8gbyBmYWxsbyBhbGVhdG9yaWFtZW50ZSAoOTAlIMOpeGl0bylcclxuICAgIGNvbnN0IHBheW1lbnRTdWNjZXNzID0gTWF0aC5yYW5kb20oKSA+IDAuMTtcclxuXHJcbiAgICBpZiAocGF5bWVudFN1Y2Nlc3MpIHtcclxuICAgICAgc2V0UGF5bWVudENvbXBsZXRlKHRydWUpO1xyXG4gICAgICAvLyBMaW1waWFyIGNhcnJpdG8gZGVzcHXDqXMgZGVsIHBhZ28gZXhpdG9zb1xyXG4gICAgICBzZXRUaW1lb3V0KCgpID0+IHtcclxuICAgICAgICBjbGVhckNhcnQoKTtcclxuICAgICAgICBzZXRQYXltZW50Q29tcGxldGUoZmFsc2UpO1xyXG4gICAgICAgIHNldElzUHJvY2Vzc2luZ1BheW1lbnQoZmFsc2UpO1xyXG4gICAgICAgIG9uQ2xvc2UoKTtcclxuICAgICAgfSwgMjAwMCk7XHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICBzZXRJc1Byb2Nlc3NpbmdQYXltZW50KGZhbHNlKTtcclxuICAgICAgYWxlcnQoXHJcbiAgICAgICAgJ0Vycm9yIGVuIGVsIHByb2Nlc2FtaWVudG8gZGVsIHBhZ28uIFBvciBmYXZvciwgaW50w6ludGFsbyBkZSBudWV2by4nXHJcbiAgICAgICk7XHJcbiAgICB9XHJcbiAgfTtcclxuXHJcbiAgaWYgKCFpc09wZW4pIHJldHVybiBudWxsO1xyXG5cclxuICByZXR1cm4gKFxyXG4gICAgPEFuaW1hdGVQcmVzZW5jZT5cclxuICAgICAgPG1vdGlvbi5kaXZcclxuICAgICAgICBpbml0aWFsPXt7IG9wYWNpdHk6IDAgfX1cclxuICAgICAgICBhbmltYXRlPXt7IG9wYWNpdHk6IDEgfX1cclxuICAgICAgICBleGl0PXt7IG9wYWNpdHk6IDAgfX1cclxuICAgICAgICBjbGFzc05hbWU9XCJmaXhlZCBpbnNldC0wIGJnLWJsYWNrIGJnLW9wYWNpdHktNTAgei01MCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlclwiXHJcbiAgICAgICAgb25DbGljaz17b25DbG9zZX1cclxuICAgICAgPlxyXG4gICAgICAgIDxtb3Rpb24uZGl2XHJcbiAgICAgICAgICBpbml0aWFsPXt7IHNjYWxlOiAwLjksIG9wYWNpdHk6IDAgfX1cclxuICAgICAgICAgIGFuaW1hdGU9e3sgc2NhbGU6IDEsIG9wYWNpdHk6IDEgfX1cclxuICAgICAgICAgIGV4aXQ9e3sgc2NhbGU6IDAuOSwgb3BhY2l0eTogMCB9fVxyXG4gICAgICAgICAgcmVmPXttb2RhbFJlZn1cclxuICAgICAgICAgIHJvbGU9XCJkaWFsb2dcIlxyXG4gICAgICAgICAgYXJpYS1tb2RhbD1cInRydWVcIlxyXG4gICAgICAgICAgYXJpYS1sYWJlbGxlZGJ5PVwiY2FydC1tb2RhbC10aXRsZVwiXHJcbiAgICAgICAgICBjbGFzc05hbWU9XCJiZy13aGl0ZSByb3VuZGVkLWxnIHctZnVsbCBtYXgtdy1tZCBteC00IG1heC1oLVs4MHZoXSBvdmVyZmxvdy1oaWRkZW5cIlxyXG4gICAgICAgICAgb25DbGljaz17KGUpID0+IGUuc3RvcFByb3BhZ2F0aW9uKCl9XHJcbiAgICAgICAgPlxyXG4gICAgICAgICAgey8qIEhlYWRlciAqL31cclxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHAtNCBib3JkZXItYlwiPlxyXG4gICAgICAgICAgICA8aDIgaWQ9XCJjYXJ0LW1vZGFsLXRpdGxlXCIgY2xhc3NOYW1lPVwidGV4dC14bCBmb250LXNlbWlib2xkXCI+XHJcbiAgICAgICAgICAgICAge2lzUHJvY2Vzc2luZ1BheW1lbnRcclxuICAgICAgICAgICAgICAgID8gJ1Byb2Nlc2FuZG8gUGFnbydcclxuICAgICAgICAgICAgICAgIDogcGF5bWVudENvbXBsZXRlXHJcbiAgICAgICAgICAgICAgICAgID8gJ8KhUGFnbyBFeGl0b3NvISdcclxuICAgICAgICAgICAgICAgICAgOiBgQ2Fycml0byAoJHtjYXJ0Q291bnR9ICR7Y2FydENvdW50ID09PSAxID8gJ2FydMOtY3VsbycgOiAnYXJ0w61jdWxvcyd9KWB9XHJcbiAgICAgICAgICAgIDwvaDI+XHJcbiAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICByZWY9e2Nsb3NlQnV0dG9uUmVmfVxyXG4gICAgICAgICAgICAgIG9uQ2xpY2s9e29uQ2xvc2V9XHJcbiAgICAgICAgICAgICAgY2xhc3NOYW1lPVwicC0xIGhvdmVyOmJnLWdyYXktMTAwIHJvdW5kZWRcIlxyXG4gICAgICAgICAgICAgIGRpc2FibGVkPXtpc1Byb2Nlc3NpbmdQYXltZW50fVxyXG4gICAgICAgICAgICAgIGFyaWEtbGFiZWw9XCJDZXJyYXIgY2Fycml0b1wiXHJcbiAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXHJcbiAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICA8c3ZnXHJcbiAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTUgdy01XCJcclxuICAgICAgICAgICAgICAgIGZpbGw9XCJub25lXCJcclxuICAgICAgICAgICAgICAgIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiXHJcbiAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcclxuICAgICAgICAgICAgICAgIGFyaWEtaGlkZGVuPVwidHJ1ZVwiXHJcbiAgICAgICAgICAgICAgICBmb2N1c2FibGU9XCJmYWxzZVwiXHJcbiAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAgPHBhdGhcclxuICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWNhcD1cInJvdW5kXCJcclxuICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWpvaW49XCJyb3VuZFwiXHJcbiAgICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoPXsyfVxyXG4gICAgICAgICAgICAgICAgICBkPVwiTTYgMThMMTggNk02IDZsMTIgMTJcIlxyXG4gICAgICAgICAgICAgICAgLz5cclxuICAgICAgICAgICAgICA8L3N2Zz5cclxuICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICA8L2Rpdj5cclxuXHJcbiAgICAgICAgICB7LyogQ29udGVuaWRvICovfVxyXG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwLTQgb3ZlcmZsb3cteS1hdXRvIG1heC1oLTk2XCI+XHJcbiAgICAgICAgICAgIHtpc1Byb2Nlc3NpbmdQYXltZW50ID8gKFxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1jZW50ZXIgcHktMTJcIj5cclxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYW5pbWF0ZS1zcGluIGgtMTIgdy0xMiBib3JkZXItNCBib3JkZXItZ3JlZW4tNTAwIGJvcmRlci10LXRyYW5zcGFyZW50IHJvdW5kZWQtZnVsbCBteC1hdXRvIG1iLTRcIj48L2Rpdj5cclxuICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJ0ZXh0LWxnIGZvbnQtc2VtaWJvbGQgdGV4dC1ncmF5LTgwMCBtYi0yXCI+XHJcbiAgICAgICAgICAgICAgICAgIFByb2Nlc2FuZG8gcGFnby4uLlxyXG4gICAgICAgICAgICAgICAgPC9oMz5cclxuICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtZ3JheS02MDBcIj5cclxuICAgICAgICAgICAgICAgICAgUG9yIGZhdm9yIGVzcGVyYSBtaWVudHJhcyBwcm9jZXNhbW9zIHR1IHBlZGlkb1xyXG4gICAgICAgICAgICAgICAgPC9wPlxyXG4gICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICApIDogcGF5bWVudENvbXBsZXRlID8gKFxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1jZW50ZXIgcHktMTJcIj5cclxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaC0xNiB3LTE2IGJnLWdyZWVuLTEwMCByb3VuZGVkLWZ1bGwgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgbXgtYXV0byBtYi00XCI+XHJcbiAgICAgICAgICAgICAgICAgIDxzdmdcclxuICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTggdy04IHRleHQtZ3JlZW4tNjAwXCJcclxuICAgICAgICAgICAgICAgICAgICBmaWxsPVwibm9uZVwiXHJcbiAgICAgICAgICAgICAgICAgICAgc3Ryb2tlPVwiY3VycmVudENvbG9yXCJcclxuICAgICAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcclxuICAgICAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAgICAgIDxwYXRoXHJcbiAgICAgICAgICAgICAgICAgICAgICBzdHJva2VMaW5lY2FwPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWpvaW49XCJyb3VuZFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICBzdHJva2VXaWR0aD17Mn1cclxuICAgICAgICAgICAgICAgICAgICAgIGQ9XCJNNSAxM2w0IDRMMTkgN1wiXHJcbiAgICAgICAgICAgICAgICAgICAgLz5cclxuICAgICAgICAgICAgICAgICAgPC9zdmc+XHJcbiAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJ0ZXh0LWxnIGZvbnQtc2VtaWJvbGQgdGV4dC1ncmVlbi04MDAgbWItMlwiPlxyXG4gICAgICAgICAgICAgICAgICDCocKhUGFnbyBjb21wbGV0YWRvIVxyXG4gICAgICAgICAgICAgICAgPC9oMz5cclxuICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtZ3JheS02MDBcIj5cclxuICAgICAgICAgICAgICAgICAgVHUgcGVkaWRvIGhhIHNpZG8gcHJvY2VzYWRvIGV4aXRvc2FtZW50ZVxyXG4gICAgICAgICAgICAgICAgPC9wPlxyXG4gICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICApIDogY2FydEl0ZW1zLmxlbmd0aCA9PT0gMCA/IChcclxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRleHQtY2VudGVyIHB5LThcIj5cclxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1ncmF5LTQwMCBtYi0yXCI+XHJcbiAgICAgICAgICAgICAgICAgIDxzdmdcclxuICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTEyIHctMTIgbXgtYXV0b1wiXHJcbiAgICAgICAgICAgICAgICAgICAgZmlsbD1cIm5vbmVcIlxyXG4gICAgICAgICAgICAgICAgICAgIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiXHJcbiAgICAgICAgICAgICAgICAgICAgdmlld0JveD1cIjAgMCAyNCAyNFwiXHJcbiAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICA8cGF0aFxyXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWNhcD1cInJvdW5kXCJcclxuICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlV2lkdGg9ezF9XHJcbiAgICAgICAgICAgICAgICAgICAgICBkPVwiTTE2IDExVjdhNCA0IDAgMDAtOCAwdjRNNSA5aDE0bDEgMTJINEw1IDl6XCJcclxuICAgICAgICAgICAgICAgICAgICAvPlxyXG4gICAgICAgICAgICAgICAgICA8L3N2Zz5cclxuICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1ncmF5LTYwMFwiPlR1IGNhcnJpdG8gZXN0w6EgdmFjw61vPC9wPlxyXG4gICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICApIDogKFxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwic3BhY2UteS00XCI+XHJcbiAgICAgICAgICAgICAgICB7Y2FydEl0ZW1zLm1hcCgoaXRlbSkgPT4gKFxyXG4gICAgICAgICAgICAgICAgICA8ZGl2XHJcbiAgICAgICAgICAgICAgICAgICAga2V5PXtpdGVtLnByb2R1Y3QuaWR9XHJcbiAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIgc3BhY2UteC0zIGJvcmRlci1iIHBiLTNcIlxyXG4gICAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4LXNocmluay0wXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICB7aXRlbS5wcm9kdWN0LmltYWdlcz8uWzBdICYmIChcclxuICAgICAgICAgICAgICAgICAgICAgICAgPGltZ1xyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHNyYz17aXRlbS5wcm9kdWN0LmltYWdlc1swXS50aHVtYm5haWx9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgYWx0PXtpdGVtLnByb2R1Y3QubmFtZX1cclxuICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTEyIHctMTIgb2JqZWN0LWNvdmVyIHJvdW5kZWRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAvPlxyXG4gICAgICAgICAgICAgICAgICAgICAgKX1cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXgtMSBtaW4tdy0wXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPVwidGV4dC1zbSBmb250LW1lZGl1bSB0ZXh0LWdyYXktOTAwIHRydW5jYXRlXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHtpdGVtLnByb2R1Y3QubmFtZX1cclxuICAgICAgICAgICAgICAgICAgICAgIDwvaDM+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXNtIHRleHQtZ3JheS01MDBcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAge2Zvcm1hdEN1cnJlbmN5KGl0ZW0ucHJvZHVjdC5wcmljZSl9XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLWNlbnRlciBzcGFjZS14LTJcIj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICBoYW5kbGVRdWFudGl0eUNoYW5nZShcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZW0ucHJvZHVjdC5pZCxcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZW0ucXVhbnRpdHkgLSAxXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgKVxyXG4gICAgICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cInAtMSBob3ZlcjpiZy1ncmF5LTEwMCByb3VuZGVkXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgZGlzYWJsZWQ9e2l0ZW0ucXVhbnRpdHkgPD0gMX1cclxuICAgICAgICAgICAgICAgICAgICAgICAgYXJpYS1sYWJlbD17YERpc21pbnVpciBjYW50aWRhZCBkZSAke2l0ZW0ucHJvZHVjdC5uYW1lfWB9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxyXG4gICAgICAgICAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8c3ZnXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiaC00IHctNFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbD1cIm5vbmVcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgdmlld0JveD1cIjAgMCAyNCAyNFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgYXJpYS1oaWRkZW49XCJ0cnVlXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBmb2N1c2FibGU9XCJmYWxzZVwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aFxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWNhcD1cInJvdW5kXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlV2lkdGg9ezJ9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTIwIDEySDRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIC8+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJ0ZXh0LXNtIGZvbnQtbWVkaXVtIHctOCB0ZXh0LWNlbnRlclwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICB7aXRlbS5xdWFudGl0eX1cclxuICAgICAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICBoYW5kbGVRdWFudGl0eUNoYW5nZShcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZW0ucHJvZHVjdC5pZCxcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZW0ucXVhbnRpdHkgKyAxXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgKVxyXG4gICAgICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cInAtMSBob3ZlcjpiZy1ncmF5LTEwMCByb3VuZGVkXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgYXJpYS1sYWJlbD17YEF1bWVudGFyIGNhbnRpZGFkIGRlICR7aXRlbS5wcm9kdWN0Lm5hbWV9YH1cclxuICAgICAgICAgICAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXHJcbiAgICAgICAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxzdmdcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTQgdy00XCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBmaWxsPVwibm9uZVwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlPVwiY3VycmVudENvbG9yXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBhcmlhLWhpZGRlbj1cInRydWVcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIGZvY3VzYWJsZT1cImZhbHNlXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VMaW5lY2FwPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWpvaW49XCJyb3VuZFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VXaWR0aD17Mn1cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGQ9XCJNMTIgNnY2bTAgMHY2bTAtNmg2bS02IDBINlwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPC9zdmc+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gcmVtb3ZlRnJvbUNhcnQoaXRlbS5wcm9kdWN0LmlkKX1cclxuICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwicC0xIGhvdmVyOmJnLXJlZC0xMDAgdGV4dC1yZWQtNjAwIHJvdW5kZWQgbWwtMlwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGFyaWEtbGFiZWw9e2BFbGltaW5hciAke2l0ZW0ucHJvZHVjdC5uYW1lfSBkZWwgY2Fycml0b2B9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxyXG4gICAgICAgICAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8c3ZnXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiaC00IHctNFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbD1cIm5vbmVcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgdmlld0JveD1cIjAgMCAyNCAyNFwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgYXJpYS1oaWRkZW49XCJ0cnVlXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBmb2N1c2FibGU9XCJmYWxzZVwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aFxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlTGluZWNhcD1cInJvdW5kXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlV2lkdGg9ezJ9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTE5IDdsLS44NjcgMTIuMTQyQTIgMiAwIDAxMTYuMTM4IDIxSDcuODYyYTIgMiAwIDAxLTEuOTk1LTEuODU4TDUgN201IDR2Nm00LTZ2Nm0xLTEwVjRhMSAxIDAgMDAtMS0xaC00YTEgMSAwIDAwLTEgMXYzTTQgN2gxNlwiXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPC9zdmc+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICApKX1cclxuICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgKX1cclxuICAgICAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgICAgIHsvKiBGb290ZXIgKi99XHJcbiAgICAgICAgICB7Y2FydEl0ZW1zLmxlbmd0aCA+IDAgJiYgIWlzUHJvY2Vzc2luZ1BheW1lbnQgJiYgIXBheW1lbnRDb21wbGV0ZSAmJiAoXHJcbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYm9yZGVyLXQgcC00XCI+XHJcbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gbWItNFwiPlxyXG4gICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwidGV4dC1sZyBmb250LXNlbWlib2xkXCI+VG90YWw6PC9zcGFuPlxyXG4gICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwidGV4dC1sZyBmb250LWJvbGQgdGV4dC1ncmVlbi02MDBcIj5cclxuICAgICAgICAgICAgICAgICAge2Zvcm1hdEN1cnJlbmN5KHRvdGFsUHJpY2UpfVxyXG4gICAgICAgICAgICAgICAgPC9zcGFuPlxyXG4gICAgICAgICAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInNwYWNlLXktMlwiPlxyXG4gICAgICAgICAgICAgICAgeyFpc0NvbmZpcm1pbmdDbGVhciA/IChcclxuICAgICAgICAgICAgICAgICAgPD5cclxuICAgICAgICAgICAgICAgICAgICA8YnV0dG9uXHJcbiAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXtoYW5kbGVQcm9jZWVkVG9QYXltZW50fVxyXG4gICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwidy1mdWxsIGJnLWdyZWVuLTYwMCB0ZXh0LXdoaXRlIHB5LTIgcHgtNCByb3VuZGVkLWxnIGhvdmVyOmJnLWdyZWVuLTcwMCB0cmFuc2l0aW9uLWNvbG9ycyBmb250LXNlbWlib2xkXCJcclxuICAgICAgICAgICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxyXG4gICAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICAgIFByb2NlZGVyIGFsIFBhZ29cclxuICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgICAgICA8YnV0dG9uXHJcbiAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBzZXRJc0NvbmZpcm1pbmdDbGVhcih0cnVlKX1cclxuICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cInctZnVsbCB0ZXh0LWdyYXktNjAwIHB5LTEgcHgtNCBob3Zlcjp0ZXh0LXJlZC02MDAgdHJhbnNpdGlvbi1jb2xvcnMgdGV4dC1zbVwiXHJcbiAgICAgICAgICAgICAgICAgICAgICB0eXBlPVwiYnV0dG9uXCJcclxuICAgICAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgICBWYWNpYXIgY2Fycml0b1xyXG4gICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICAgICAgICAgICAgICA8Lz5cclxuICAgICAgICAgICAgICAgICkgOiAoXHJcbiAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYmctcmVkLTUwIGJvcmRlciBib3JkZXItcmVkLTIwMCByb3VuZGVkLWxnIHAtNFwiPlxyXG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIgbWItM1wiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPHN2Z1xyXG4gICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJoLTUgdy01IHRleHQtcmVkLTYwMCBtci0yXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgZmlsbD1cIm5vbmVcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICBzdHJva2U9XCJjdXJyZW50Q29sb3JcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcclxuICAgICAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGhcclxuICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VMaW5lY2FwPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoPXsyfVxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgIGQ9XCJNMTIgOXYybTAgNGguMDFtLTYuOTM4IDRoMTMuODU2YzEuNTQgMCAyLjUwMi0xLjY2NyAxLjczMi0yLjVMMTMuNzMyIDRjLS43Ny0uODMzLTEuNzMyLS44MzMtMi41IDBMNC4yMzIgMTUuNWMtLjc3LjgzMy4xOTIgMi41IDEuNzMyIDIuNXpcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAvPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9zdmc+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPVwidGV4dC1yZWQtODAwIGZvbnQtc2VtaWJvbGRcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgwr9WYWNpYXIgY2Fycml0bz9cclxuICAgICAgICAgICAgICAgICAgICAgIDwvaDM+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1yZWQtNzAwIHRleHQtc20gbWItNFwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgU2UgZWxpbWluYXLDoW4gdG9kb3MgbG9zIHByb2R1Y3RvcyBkZWwgY2Fycml0by4gRXN0YSBhY2Npw7NuXHJcbiAgICAgICAgICAgICAgICAgICAgICBubyBzZSBwdWVkZSBkZXNoYWNlci5cclxuICAgICAgICAgICAgICAgICAgICA8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IHNwYWNlLXgtMlwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvblxyXG4gICAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXtoYW5kbGVDbGVhckNhcnR9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cImZsZXgtMSBiZy1yZWQtNjAwIHRleHQtd2hpdGUgcHktMiBweC0zIHJvdW5kZWQtbGcgdGV4dC1zbSBmb250LW1lZGl1bSBob3ZlcjpiZy1yZWQtNzAwIHRyYW5zaXRpb24tY29sb3JzXCJcclxuICAgICAgICAgICAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXHJcbiAgICAgICAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIFPDrSwgdmFjaWFyIGNhcnJpdG9cclxuICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvblxyXG4gICAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBzZXRJc0NvbmZpcm1pbmdDbGVhcihmYWxzZSl9XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cImZsZXgtMSBiZy1ncmF5LTIwMCB0ZXh0LWdyYXktNzAwIHB5LTIgcHgtMyByb3VuZGVkLWxnIHRleHQtc20gZm9udC1tZWRpdW0gaG92ZXI6YmctZ3JheS0zMDAgdHJhbnNpdGlvbi1jb2xvcnNcIlxyXG4gICAgICAgICAgICAgICAgICAgICAgICB0eXBlPVwiYnV0dG9uXCJcclxuICAgICAgICAgICAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgICAgICAgICAgQ2FuY2VsYXJcclxuICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICl9XHJcbiAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgKX1cclxuICAgICAgICA8L21vdGlvbi5kaXY+XHJcbiAgICAgIDwvbW90aW9uLmRpdj5cclxuICAgIDwvQW5pbWF0ZVByZXNlbmNlPlxyXG4gICk7XHJcbn07XHJcblxyXG5leHBvcnQgZGVmYXVsdCBDYXJ0TW9kYWw7XHJcbiJdLCJtYXBwaW5ncyI6IkFBc0pZLFNBb05NLFVBcE5OO0FBdEpaLFNBQWdCLFVBQVUsV0FBVyxjQUFjO0FBQ25ELFNBQVMsUUFBUSx1QkFBdUI7QUFDeEMsU0FBUyxlQUFlO0FBQ3hCLFNBQVMsc0JBQXNCO0FBTy9CLE1BQU0sWUFBc0MsQ0FBQyxFQUFFLFFBQVEsUUFBUSxN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

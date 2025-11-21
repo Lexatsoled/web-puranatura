@@ -253,7 +253,8 @@ const Wishlist: React.FC<WishlistProps> = ({
                   />
                 </svg>
                 <span>
-                  Mover {selectedItems.size} {selectedItems.size === 1 ? 'item' : 'items'} al carrito
+                  Mover {selectedItems.size}{' '}
+                  {selectedItems.size === 1 ? 'item' : 'items'} al carrito
                 </span>
               </button>
             </motion.div>

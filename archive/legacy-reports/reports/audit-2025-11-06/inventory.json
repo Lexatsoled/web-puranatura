@@ -1,0 +1,3026 @@
+﻿{
+  "scanned_at": "2025-11-06T18:50:57.4908553-04:00",
+  "root": "Pureza-Naturalis-V3",
+  "files": [
+    {
+      "path": "src/env.d.ts",
+      "size": 467,
+      "lang": "ts",
+      "hash": "sha256:0bb59b10e9b7197bec5e7f7d03cdc6a33470f748bfd5f71c6fa968ac780875dc",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types.ts",
+      "size": 724,
+      "lang": "ts",
+      "hash": "sha256:1e79f8e2c0fd33d746909dea019853a29b2024c0f676781175088242a4131b6f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "size": 1481,
+      "lang": "ts",
+      "hash": "sha256:fc6c18b1f976b0ab24027c618b6dbcd1f57b376e554f023938866973e1337165",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/api/analytics/events.ts",
+      "size": 2904,
+      "lang": "ts",
+      "hash": "sha256:320faa85bda9f42b12c44c100e90861ca5fd060b133f402d5042942dd3324219",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/AuthModal.tsx",
+      "size": 22838,
+      "lang": "tsx",
+      "hash": "sha256:1bfe23706aea6cc300e2a9e99515fefbc72f8b13a99b9fd742f99b2355048aa6",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/BlogGallery.tsx",
+      "size": 3383,
+      "lang": "tsx",
+      "hash": "sha256:1cdb343243e3424d066121bde4b57e02cf01d1a715b9b5d5aa46a041cd069506",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/BlogPostCard.tsx",
+      "size": 2520,
+      "lang": "tsx",
+      "hash": "sha256:b398c8f83de360e4bbf1135a7bd1b9b1dcd17923442fbc5dbdeb57a94ab4fd1d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/BlogPostModal.tsx",
+      "size": 4230,
+      "lang": "tsx",
+      "hash": "sha256:7c341f7d77fa8d303e53b3896d44cd85717d13224a49f73b38dafc95a6923d0c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/BlogPostModal_Fixed.tsx",
+      "size": 9045,
+      "lang": "tsx",
+      "hash": "sha256:4b25f30daab1cc5a6c9900ee81b4e352d083ee15ed332d4a9e118a792b6b6719",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Breadcrumbs.tsx",
+      "size": 5554,
+      "lang": "tsx",
+      "hash": "sha256:a5eb319fad1018719dcfcfe2ab0f5c36325e06630366130d47c023e4cffd6bb6",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/CartModal.css",
+      "size": 863,
+      "lang": "css",
+      "hash": "sha256:f9969271e52d35f008a43c7d37d8f25d114c8a56e8416733b2a1897b7c8b3680",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/CartModal.tsx",
+      "size": 14167,
+      "lang": "tsx",
+      "hash": "sha256:5c3c232a6aa18e154fc434bd9c107374d440d1fbdc4e3d2c694cc9973f88ed38",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/CartNotification.tsx",
+      "size": 2529,
+      "lang": "tsx",
+      "hash": "sha256:8e1ac3830147c30135ef2f3f9446f2f865b79941bb3d9e95772c7793063ae8b8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/CategoryNavigation.tsx",
+      "size": 7002,
+      "lang": "tsx",
+      "hash": "sha256:6e9f1d9248e017141220e658ba07426f5ffce59d2422b7bab06a6ccb1adf3c39",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorMonitor.tsx",
+      "size": 9950,
+      "lang": "tsx",
+      "hash": "sha256:2be53053403f5bf6f5d88d9a6da86594cf9801516d96232b49fb1bb72e17fd56",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/FAQSection.tsx",
+      "size": 14989,
+      "lang": "tsx",
+      "hash": "sha256:ad2404a9806a14fd870503f635e5e6aa128e0f8e4150abfda7c8b61fa58863ec",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/FilterBar.tsx",
+      "size": 9401,
+      "lang": "tsx",
+      "hash": "sha256:a80a56213a34e188ab777228bcab729c4b4d27b09ad98d49c979e3c866a110ad",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/FilterSidebar.tsx",
+      "size": 8761,
+      "lang": "tsx",
+      "hash": "sha256:2991d72c439f9d432e5d0816f80a72fa8fe985fbad0768f39352982a473505c8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Footer.tsx",
+      "size": 3131,
+      "lang": "tsx",
+      "hash": "sha256:2549acfe9d9d609e7a7cdb3bd0b0d0ccf84161ce5215954e4f6f2a8962ae72c0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Header.tsx",
+      "size": 8009,
+      "lang": "tsx",
+      "hash": "sha256:a2ca554f80726629d72503b9d45c8905391b9cdb30e506cf2a2fd80aeff93a92",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Header_Simple.tsx",
+      "size": 6893,
+      "lang": "tsx",
+      "hash": "sha256:f1890e7e54849aa4cb332e55368341adbffef081e8f96e3090858042623f2b7b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ImageGallery.tsx",
+      "size": 8753,
+      "lang": "tsx",
+      "hash": "sha256:95bd6d848314bf77d319b62d6c796a977c6e249775caef84db8291480b7bfdf0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ImageZoom.css",
+      "size": 2122,
+      "lang": "css",
+      "hash": "sha256:969961fde7859f8ff4900d8fe5ca7f8082888cba5f88288c5e2a7e91ff31bd30",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ImageZoom.tsx",
+      "size": 6871,
+      "lang": "tsx",
+      "hash": "sha256:2ed02d692797430a1c3408ae292840b8d28a92bf1a521487a2bd53210d850a8a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/index.ts",
+      "size": 663,
+      "lang": "ts",
+      "hash": "sha256:4d83272eb4429e74608f28fdbb78acfa41316790bdebb0135a954a3dbcd48423",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Layout.tsx",
+      "size": 4895,
+      "lang": "tsx",
+      "hash": "sha256:5052feb23739e43492b680091708202a1352ce009b0836c467c373d5c00acdf5",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/NotFound.tsx",
+      "size": 9392,
+      "lang": "tsx",
+      "hash": "sha256:69a45ee697014cbd89decf74c0d841031e18c94b6502e03eb4d4304e482339f7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/NotificationContainer.tsx",
+      "size": 7576,
+      "lang": "tsx",
+      "hash": "sha256:2bd001fc45d85b087fc75f2e8a9dff9cd3c227111eb10bd894d9530aff4f0729",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/NotificationsContainer.tsx",
+      "size": 5675,
+      "lang": "tsx",
+      "hash": "sha256:e7d6f31a69d9da5436967bb0a2bb52f1137d1f43dcd2e9684f097fd8a6a57579",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/OptimizedBackgroundImage.tsx",
+      "size": 855,
+      "lang": "tsx",
+      "hash": "sha256:ae6a38918f5ad868a2c2cc4a8d9667f11292fb9ab94dbba78ca5729d86fc0c1d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/OptimizedImage.tsx",
+      "size": 3564,
+      "lang": "tsx",
+      "hash": "sha256:c1d49b475105b06529bb8388999cca939af0ba545cd9b4c97d25299083257576",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/OptimizedImage_Fixed.tsx",
+      "size": 3995,
+      "lang": "tsx",
+      "hash": "sha256:b93a6500bc35c29f5404ae62bdc27b9c46e7981fd5498efa1701f54b53d29088",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/PageTransition.tsx",
+      "size": 772,
+      "lang": "tsx",
+      "hash": "sha256:312eef906ea4df15685fa92b68c3bbac7f35cdbf20dada2a3a8b545f645a70c2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductActions.tsx",
+      "size": 6082,
+      "lang": "tsx",
+      "hash": "sha256:baace76a4c00fa189412d4a1e9296b0992e14c8b7670aec8a78d4abe61019e3b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductCard.tsx",
+      "size": 2631,
+      "lang": "tsx",
+      "hash": "sha256:e00f0e3b2cd4d0b78ac80e154e8c95d39b83cbc67cf92aa67596827450477041",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductCompare.tsx",
+      "size": 9570,
+      "lang": "tsx",
+      "hash": "sha256:fb0c992d72198ed30f05c8ef621eee1e879de5b27d7cfa63b1b088a00ebe5951",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductDetails.tsx",
+      "size": 5305,
+      "lang": "tsx",
+      "hash": "sha256:97ee3d19b6ed466c00a7bed71fda880da12e08736611287a62ad12eb40773566",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductGallery.tsx",
+      "size": 9869,
+      "lang": "tsx",
+      "hash": "sha256:50b5ed120f617a5102ad00d998a91627a9ad2cbd3cc1481a46187521f62bb5cf",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductGallery_Fixed.tsx",
+      "size": 9585,
+      "lang": "tsx",
+      "hash": "sha256:9a6c67acdd4d4fae9996042a69edb191c07cb8eaa111c8b995ac4bca150b9cbb",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductImage.tsx",
+      "size": 2497,
+      "lang": "tsx",
+      "hash": "sha256:8ed5a2bcdc87715709b84a4c82fa14936a8fc9765d84bcc7dfe517ccb82e489c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductImageGallery.tsx",
+      "size": 2229,
+      "lang": "tsx",
+      "hash": "sha256:6707d564ddc2927d5aabb91add16a4f87fc1ee6118a158dbd27346232d9e6d8c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductInfo.tsx",
+      "size": 3082,
+      "lang": "tsx",
+      "hash": "sha256:bd5aae1142588fe02908f4cfaf911e628593c336870630b6bbefbea8f4213980",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductReviews.tsx",
+      "size": 9801,
+      "lang": "tsx",
+      "hash": "sha256:3467f0e46e6df45624a471a67675b3ddafb754074d7299be3e5dbb35f4ea96c7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProductTabs.tsx",
+      "size": 2097,
+      "lang": "tsx",
+      "hash": "sha256:7f08b1f8b0b4e0a897816402de184898e6b44702c0dc332d9e96390ee93201c1",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ProtectedRoute.tsx",
+      "size": 1742,
+      "lang": "tsx",
+      "hash": "sha256:c768b25e20bef6d6d02a61ce0a57293850877dfe9dbae16a16c47fc8c86d866b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/PWAPrompts.tsx",
+      "size": 8969,
+      "lang": "tsx",
+      "hash": "sha256:1e993958f2d1936658818c94ad58352220874dcc6963c3a2ac3c26efec1ad29c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/QuantitySelector.tsx",
+      "size": 4583,
+      "lang": "tsx",
+      "hash": "sha256:faa7d023d5fdc22ff7050a0ad729b4d9cce0df3466ddd71fde4cea3a17273be5",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/RelatedProducts.tsx",
+      "size": 6922,
+      "lang": "tsx",
+      "hash": "sha256:7619772dffe7436812795af93acbfad0b4dce96b4dd95b3b9d731c12c69febed",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ReviewForm.tsx",
+      "size": 5357,
+      "lang": "tsx",
+      "hash": "sha256:838f141cfa43e60b22705d5593956b3e56b101d5c58597f3c7720a2753dded2d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/RoutePrefetcher.tsx",
+      "size": 4293,
+      "lang": "tsx",
+      "hash": "sha256:9cb21930d1f0b71881740baaf092cf542d0379fdcf9872d066c0e3cae03da6cf",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ScientificReferences.tsx",
+      "size": 15601,
+      "lang": "tsx",
+      "hash": "sha256:98c877bf15194a0adddbed0c7efb72e18558af56e271ba0d91540eb0f5983ba4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ScreenReader.tsx",
+      "size": 1526,
+      "lang": "tsx",
+      "hash": "sha256:7d40edb3859c057c9a371bae4a43049c3cf5cf20da56c11ecf7f83cac98d86ac",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ScrollManager.tsx",
+      "size": 2598,
+      "lang": "tsx",
+      "hash": "sha256:e20adc8852bbe1d91f96e8d616bfa090423e2160927ddeffc8386e0165a8b3c9",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/SearchBar.tsx",
+      "size": 12840,
+      "lang": "tsx",
+      "hash": "sha256:9bf392cc2fd55463dd53b1e610c713684ddd6ed5926739f18001e12a948df771",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/SecurityDashboard.tsx",
+      "size": 14768,
+      "lang": "tsx",
+      "hash": "sha256:48178db26d3b027cbe68f2be0b498bc5e707b307129642712e33206119dc5ef0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ShippingForm.tsx",
+      "size": 9284,
+      "lang": "tsx",
+      "hash": "sha256:086383f5fa1f95027f7f24311f653a3250ac4f515d880bc2b6391bcc6153387e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ShoppingCart.tsx",
+      "size": 13504,
+      "lang": "tsx",
+      "hash": "sha256:3aae50981a099c32e83ffc52247bf1ee5b0cf33de91d40afefc403a9be11be53",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/StructuredData.tsx",
+      "size": 7738,
+      "lang": "tsx",
+      "hash": "sha256:94586f88cf3002d77d4d34c12c51f318b363dfe1c1c2699ab6435d8978acff8b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/SystemCard.tsx",
+      "size": 5939,
+      "lang": "tsx",
+      "hash": "sha256:e53849c17dc3d936d5a710e4f0894c29041e0552d5ca24b7e49c360f9e134f80",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/TestimonialCard.tsx",
+      "size": 2088,
+      "lang": "tsx",
+      "hash": "sha256:dac2e7950bfc0b5228f10b6df89d560c746fd5e42c49eeb008e93db809fdf1fe",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/UserMenu.tsx",
+      "size": 9197,
+      "lang": "tsx",
+      "hash": "sha256:665aef037b77e0f9dfaf7862a21f25e20d34bf41c8d22543e7db1f510d692091",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/VirtualizedProductGrid.tsx",
+      "size": 4708,
+      "lang": "tsx",
+      "hash": "sha256:88ed447c00accd673b471baa390713b252a9a1e976a48e0474a11c0ab762da84",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/VirtualProductGrid.module.css",
+      "size": 553,
+      "lang": "css",
+      "hash": "sha256:6b3a292af558b8f79eca4ac7c7182ab70215a991d9c0db18c1b494643df6eec5",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/VirtualProductGrid.tsx",
+      "size": 5242,
+      "lang": "tsx",
+      "hash": "sha256:f1036d1e693e64562e8d19f81651021de44174b801ee1a3a136add863149a297",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/WebVitalsMonitor.tsx",
+      "size": 7229,
+      "lang": "tsx",
+      "hash": "sha256:6f662ecf6fc92cda47fc490c79754c42b4d846534edf9bab97af209366046a90",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/WebVitalsReport.tsx",
+      "size": 11469,
+      "lang": "tsx",
+      "hash": "sha256:a0c007e796c71f1e072404a38cfa8c1b91834b30a204db601f453c37e18d9176",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Wishlist.tsx",
+      "size": 9522,
+      "lang": "tsx",
+      "hash": "sha256:ba1a30200c22b8f58315f73963d3af79e14895597d5659de3e7a99dd94f2f473",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/A11y/FocusManager.tsx",
+      "size": 2759,
+      "lang": "tsx",
+      "hash": "sha256:332a24546535d938164a6a3d5403cbc21220843101647db2f3f85b11af00d80a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/A11y/LiveRegion.tsx",
+      "size": 1339,
+      "lang": "tsx",
+      "hash": "sha256:fb38909b4e7245f68d774f36194229830d479411dcd706361121f4803a3dbf82",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/A11y/SkipLink.css",
+      "size": 885,
+      "lang": "css",
+      "hash": "sha256:b697fda11ad75060d97c4b95c5bbe02d589ed1e469c0f8d3e9cd5354ce0ca8db",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/A11y/SkipLink.tsx",
+      "size": 1380,
+      "lang": "tsx",
+      "hash": "sha256:8dd73b513e99edd3850fc660654bc10c365b1989c6e35a4ebab25af218f24de4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/A11y/VisuallyHidden.tsx",
+      "size": 1106,
+      "lang": "tsx",
+      "hash": "sha256:5120a9708d2ba2d78ea7cf7b56ea1432c29f39f446b05318e026bdd5beba9e07",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Analytics/AnalyticsCharts.tsx",
+      "size": 2174,
+      "lang": "tsx",
+      "hash": "sha256:9528a9278d181f215ce152956a74a9ae258365a9a1fa2b6e3bd7a466191b5d15",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorBoundary/ComponentErrorBoundary.tsx",
+      "size": 1124,
+      "lang": "tsx",
+      "hash": "sha256:e8d700b8c49631b6e2b93d73215981bd69718d9e0a4ec4e23e881320ee4e139c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorBoundary/ErrorBoundary.css",
+      "size": 3646,
+      "lang": "css",
+      "hash": "sha256:b923dbd41a758b70860a1c8881daf8fb2b3e8683c11c1d57b3b15c61bc6f77ce",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorBoundary/ErrorBoundary.tsx",
+      "size": 3453,
+      "lang": "tsx",
+      "hash": "sha256:2479a7a2050e5c1fac1975801d9fdfb25ebe71c1e4c19f8415ca613774f534e2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorBoundary/index.ts",
+      "size": 170,
+      "lang": "ts",
+      "hash": "sha256:7939808e30374ef71ed3522ea91ace75ae4f28234bee84f562e4849dcab70751",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/ErrorBoundary/PageErrorBoundary.tsx",
+      "size": 3163,
+      "lang": "tsx",
+      "hash": "sha256:531cd2639b50fd0e3bbf01feb6f766afc72cbd0df3021e76c577861d959c43e0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/Form/FormFields.tsx",
+      "size": 3522,
+      "lang": "tsx",
+      "hash": "sha256:f0a010bc281eba26f1bfee34625730130cb324bb60e9bf03f4b63aa1093f5287",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/FilterSidebar.test.tsx",
+      "size": 3326,
+      "lang": "tsx",
+      "hash": "sha256:1317c19203437600d7799a1411b5a86cbca85a9dd7771c68b1ca048f50baa38a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/Footer.test.tsx",
+      "size": 1841,
+      "lang": "tsx",
+      "hash": "sha256:54b2ed52818b77d7e51d359cf36f2facf10953018d33b0596c5de63dd2c6191c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/Header.test.tsx",
+      "size": 2563,
+      "lang": "tsx",
+      "hash": "sha256:d7990fe4b59113a23630ba1dc7af5071c617d5b34a26aacd023c0a0805362a2d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ProductActions.test.tsx",
+      "size": 4095,
+      "lang": "tsx",
+      "hash": "sha256:05ff0c621b2d48172c6fcd3dd2fbb32974e0b1fad8cd25bfc71bcc45eae68044",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ProductCard.test.tsx",
+      "size": 4873,
+      "lang": "tsx",
+      "hash": "sha256:4ea4eab39a83418e3a6e94816f7ef6f042e13bda45c5583b5a7413836eca1b69",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ProductDetails.test.tsx",
+      "size": 7026,
+      "lang": "tsx",
+      "hash": "sha256:fbe0d14afad85416aba0d1fd48605918b922e857d572fd44a00d37d8d6cccbf8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ProductImage.test.tsx",
+      "size": 4326,
+      "lang": "tsx",
+      "hash": "sha256:b696f5cbb136ad427cd5e0c8e88e78a6281596c289b17a930d63177bb1a14277",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ProductInfo.test.tsx",
+      "size": 3063,
+      "lang": "tsx",
+      "hash": "sha256:fd91c605a3908a3f16fb0dcb647721d5c9d0222870cf11485bbc025885456a42",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/QuantitySelector.test.tsx",
+      "size": 4335,
+      "lang": "tsx",
+      "hash": "sha256:2edaa90664abdde3bd8b018735e96d5db3e48e1188f16ff7b263a21a1e500e18",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/ScientificReferences.test.tsx",
+      "size": 2377,
+      "lang": "tsx",
+      "hash": "sha256:a5addadf13cee7d6201f8a1ebc635a2feb66d75eb28ee36065ff0456aaeab5b4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/components/__tests__/VirtualizedProductGrid.test.tsx",
+      "size": 2232,
+      "lang": "tsx",
+      "hash": "sha256:bd6499cc8b6137535d42cff9480503bc5a6c29aa4cf32491e6a3b31e4bf18ad3",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/config/index.ts",
+      "size": 904,
+      "lang": "ts",
+      "hash": "sha256:ce13bac49ebd931c8b23d53c10f9fd8331bd77117844f49a67beb074d789fe26",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/config/securityHeaders.ts",
+      "size": 6922,
+      "lang": "ts",
+      "hash": "sha256:f673ab8ca20ed5a16ad8db65ab19ce6f03584e78643a885e1eb7fa7f15a845ba",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/config/seo.config.ts",
+      "size": 1206,
+      "lang": "ts",
+      "hash": "sha256:836f50d796c3d82c6d7d57ed92b7ad1a3238b945b7512767429b1edf29a431bb",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/contexts/AuthContext.tsx",
+      "size": 5330,
+      "lang": "tsx",
+      "hash": "sha256:c600d8cb38d66049ea7dd4e82c51de26b57646bbf5c11640a3d7af7d39b1422d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/contexts/CartContext.tsx",
+      "size": 608,
+      "lang": "tsx",
+      "hash": "sha256:62767c3de7f080069d449940ed8fcde07595e0cef99726a3c2b66d83b8300e1e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/contexts/NotificationContext.tsx",
+      "size": 5589,
+      "lang": "tsx",
+      "hash": "sha256:11bd8991c2e035e1c94361be78b2e6cadc21c0ad017960d3af83b872c02fec98",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/contexts/WishlistContext.tsx",
+      "size": 3673,
+      "lang": "tsx",
+      "hash": "sha256:a6234637d13ebd827ebcb984589f884634dadfd2504cadb411b2ea0c377cc48f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/data/blog.ts",
+      "size": 16490,
+      "lang": "ts",
+      "hash": "sha256:bf17cf74107650ad1d0f4047cd67e186d513026ee8e23fe37b07a322b22fbca3",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/data/services.ts",
+      "size": 61363,
+      "lang": "ts",
+      "hash": "sha256:d5adf3c717c83e8c696699c0930b8e6f76cf94c1c6becbd905aaf1d7c67fc3c7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/data/testimonials.ts",
+      "size": 1404,
+      "lang": "ts",
+      "hash": "sha256:b557cbe7c9df912d3fdb5ac86f8a17dc8d0d9a01fa8177d698731cd455237562",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hocs/withAnalytics.tsx",
+      "size": 1838,
+      "lang": "tsx",
+      "hash": "sha256:81ec1b7ef289954830d5d7ecff94b5f265222961624dbee27c68bc92744b9289",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useA11y.ts",
+      "size": 6829,
+      "lang": "ts",
+      "hash": "sha256:5852a9d6d1695e005e3d83231b0df9c87112a3867e2d5a844cf3b9270e92adb2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useAnalytics.ts",
+      "size": 5358,
+      "lang": "ts",
+      "hash": "sha256:7ad3de9f962eb8cffecf99a9e8bacb383b3bea87e8f857bddd4aeb72f1b33b18",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useAuth.ts",
+      "size": 307,
+      "lang": "ts",
+      "hash": "sha256:2d8969a6e202a338a2c0730bc81613aeca1c56ebb021d5a560ec1f00e4122282",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useAuthSession.ts",
+      "size": 3903,
+      "lang": "ts",
+      "hash": "sha256:adf10c7648989cc4188d72825981bb6d08f68c339167c91df2fcd3cb64e620fb",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useCart.ts",
+      "size": 271,
+      "lang": "ts",
+      "hash": "sha256:759343e46894083fe9f217aef34e4c95ca8767117f7aaf16b6bc3e1b8598dffd",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useImage.ts",
+      "size": 1160,
+      "lang": "ts",
+      "hash": "sha256:eb1b504226f464fffe451e1e1aa8783c3753338ae24626f879906d0d6f02bf4a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useKeyboardNavigation.ts",
+      "size": 10950,
+      "lang": "ts",
+      "hash": "sha256:b980eaec463724d46cc995474b07a98879bed33eff696e65c150515535a68dfa",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useKeyPress.ts",
+      "size": 456,
+      "lang": "ts",
+      "hash": "sha256:daad066c58db3309bc8aeadedf8c14140a4befca8c2af7bee3645a0dd15e3b82",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useLiveRegion.tsx",
+      "size": 680,
+      "lang": "tsx",
+      "hash": "sha256:5db1080061923d82ea8201b584a6991a0aed90d951d4f112f669b85960ce0440",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useLocalStorage.ts",
+      "size": 1594,
+      "lang": "ts",
+      "hash": "sha256:6b9d825d4ab86bae9c7c52bc2933726aec1601f1ecbef11ea5595539c909986b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useMetaTags.ts",
+      "size": 2317,
+      "lang": "ts",
+      "hash": "sha256:061b13df47162af8177ed3d799f64b1eff6c45db0087c01ddc701da53f0d1c66",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useNavigationState.ts",
+      "size": 2946,
+      "lang": "ts",
+      "hash": "sha256:ee15c77b349100eb9be2a96cde854d64f19218579e0e78134038f8cba4783c0b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useNotifications.ts",
+      "size": 346,
+      "lang": "ts",
+      "hash": "sha256:94a777878b6a9d642dac90659fd74472bf7d769fccb8ffe2e6d86953d952cd1a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/usePerformance.tsx",
+      "size": 1813,
+      "lang": "tsx",
+      "hash": "sha256:11bd41ce13c6c1ca12d99b1a821144fa352f1493a7046576afe5872ea9f9b10e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/usePerformanceAlert.tsx",
+      "size": 1432,
+      "lang": "tsx",
+      "hash": "sha256:5444b74e6f7002ffe46773f8b1fca78df119718cdd324fd317eb75bbb51868ef",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/usePerformanceAlertHook.ts",
+      "size": 2528,
+      "lang": "ts",
+      "hash": "sha256:4f0f60b0ab814269b2919571bbbce77b58089bb97be9906d5a43eaad7b9d1a94",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/usePerformanceReport.ts",
+      "size": 14640,
+      "lang": "ts",
+      "hash": "sha256:5ce3a1d078f122e629812cab4d3ee223198f2e74a97b95535005f15b3bba10c7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/usePrefetch.ts",
+      "size": 3805,
+      "lang": "ts",
+      "hash": "sha256:2751982311bc5d891b96d63954211821ef8dcba2460522b9468595a4ffe080c7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useRateLimit.ts",
+      "size": 7457,
+      "lang": "ts",
+      "hash": "sha256:a01cd88391af09d60ce8d35e882fa40ac6181aa235c87f31dd1acd5bc4159686",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useScreenReaderAnnouncement.ts",
+      "size": 1333,
+      "lang": "ts",
+      "hash": "sha256:769755a1e6a23d55de8692b2b2536f7fc6d68bdca074f9ce7ba2f2da1acc29e4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useScroll.ts",
+      "size": 2809,
+      "lang": "ts",
+      "hash": "sha256:7e6dccc7ab27009fb0d5750b6fc0c61ad311571db756aa2b2cfdfcfa8beffc09",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useScrollToTop.ts",
+      "size": 1356,
+      "lang": "ts",
+      "hash": "sha256:9136f6ed78c5a88b02061ea52257248fd89729659864ff5a37b930fbdf0de225",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useSeo.ts",
+      "size": 1197,
+      "lang": "ts",
+      "hash": "sha256:9e25472e81ff7fbebd378454733378a816baff577cbd79ff5b50f34649b14e88",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useStable.ts",
+      "size": 747,
+      "lang": "ts",
+      "hash": "sha256:95e141b9acbb3ff8d42b6956f91ea884b6aded7b1c8d1887fcac32aa658a1ae8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useWebVitals.ts",
+      "size": 9402,
+      "lang": "ts",
+      "hash": "sha256:4e27233e46a0e5777006ee73100ecf4f2d548d7f64deebf66f1fc44776c304fa",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/hooks/useWishlist.ts",
+      "size": 299,
+      "lang": "ts",
+      "hash": "sha256:db844a33bc0429b5af7337f6b88b82f2945518d4404f4a6c8099322dbdc9080d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/infrastructure/di/Container.ts",
+      "size": 7267,
+      "lang": "ts",
+      "hash": "sha256:8a149fe51d4be60a8e8cd451343a0b8aba05e942b1cf5658af14c2736260a4b1",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/middleware/securityHeaders.ts",
+      "size": 365,
+      "lang": "ts",
+      "hash": "sha256:1aae6c70268e093945f4213b20cb88aaeb1448f2c5da88db7bd83e1c086fb0b7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/models/AnalyticsEvent.ts",
+      "size": 2992,
+      "lang": "ts",
+      "hash": "sha256:874ba21fe75d6d49ade84ef0aace1be14a0f3bce0f0897ca5b249eba749645d3",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/AboutPage.tsx",
+      "size": 4611,
+      "lang": "tsx",
+      "hash": "sha256:ebcb3838ee5bc56aeb34dee2b3ca9a14d190a6254c23f3b21cab255090d2928c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/AddressesPage.tsx",
+      "size": 16407,
+      "lang": "tsx",
+      "hash": "sha256:ed418b02c1a86d17be7fbabd7faa1783a6dbb8cdf12a0d750066c578871cb37d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/BlogPage.tsx",
+      "size": 2880,
+      "lang": "tsx",
+      "hash": "sha256:6a7a808ce175600d2f5fb2708b1bc5d7e216dbc567725e9beeeafff657188ccf",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/BlogPostPage.tsx",
+      "size": 13867,
+      "lang": "tsx",
+      "hash": "sha256:dff102c275f74a46034cfeb48d4008c137214272bb20833110b7308efa0b50a5",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/CartPage.tsx",
+      "size": 23171,
+      "lang": "tsx",
+      "hash": "sha256:c6e9675d1d536a3ba4efdd2de105899baaba426ca127bbbdb1e0b1f14737ec82",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/CheckoutPage.tsx",
+      "size": 17648,
+      "lang": "tsx",
+      "hash": "sha256:08ffe4f1ba4a6fa5535f6e37ab0c40c8329d5b26b05b21e2c70bbb2e146aa875",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/ContactPage.tsx",
+      "size": 5524,
+      "lang": "tsx",
+      "hash": "sha256:5e9d0a57061f375c8e7e067f721e6ff4ec0a16f360b439715997d63e1ba12b46",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/HomePage.tsx",
+      "size": 5236,
+      "lang": "tsx",
+      "hash": "sha256:92764cfc82a9442a8eb4fd556a47a0beb6bf5fb27ce8de57417ad72f6977fec4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/LoginPage.tsx",
+      "size": 3793,
+      "lang": "tsx",
+      "hash": "sha256:f3ac2fe0ac93787643639624a0329e5b892f5cbe7cd1060016838625440ec528",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/OrderConfirmationPage.tsx",
+      "size": 14734,
+      "lang": "tsx",
+      "hash": "sha256:87bed9902e0fa3457d417b390daec9ccbc98ffc582c699ec8d18fe46392088ea",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/OrdersPage.tsx",
+      "size": 8671,
+      "lang": "tsx",
+      "hash": "sha256:15f29183b0ff3a3efe4c825bb218937ae92d13730a20ff37a641434be0ecb272",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/ProductPage.tsx",
+      "size": 22253,
+      "lang": "tsx",
+      "hash": "sha256:cf43387969d63fa3ee599804ccfb216be1623bc2c82090aab67423010aa312df",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/ProfilePage.tsx",
+      "size": 12436,
+      "lang": "tsx",
+      "hash": "sha256:1c654f4ee05fcb99e147646c8ee2b281fcc9431d6fd7f5133a7ddb502cfb4572",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/ServicePage.tsx",
+      "size": 19169,
+      "lang": "tsx",
+      "hash": "sha256:287b9fa36bc42f83e9a0144082a2953bad6a2c23eba0ca3127926f0fcce61439",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/ServicesPage.tsx",
+      "size": 3873,
+      "lang": "tsx",
+      "hash": "sha256:d219671ac2b7887ed76e286a89ad281996fe8b3e0e587c2faf2d304daa29a85e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/SignupPage.tsx",
+      "size": 6415,
+      "lang": "tsx",
+      "hash": "sha256:d8dee6595c196d842c6ca603311f9a0b61c85f4a96b42674cd8cee2337a33518",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/SistemasSinergicosPage.tsx",
+      "size": 16434,
+      "lang": "tsx",
+      "hash": "sha256:b51be219563740a86cefeb809ee8dd70183b5b4e57f30ea4886c3292d2e80c9c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/StorePage.tsx",
+      "size": 12533,
+      "lang": "tsx",
+      "hash": "sha256:1e11bbc5ca33c8c1481975355aa3cc2234fb71c4ab131e818f1ee253c2e83d32",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/StorePageOptimized.tsx",
+      "size": 17246,
+      "lang": "tsx",
+      "hash": "sha256:f50f43ad0e85d89f5875f2b82889a33cc6bb6ced36c2cdfe4ba3d0b22eb10c07",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/TestimonialsPage.tsx",
+      "size": 1637,
+      "lang": "tsx",
+      "hash": "sha256:6939f8bc185f514caf6dbd176dfb779d2b7c85ea1c890c939a5b9e021b68e179",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/WishlistPage.tsx",
+      "size": 11403,
+      "lang": "tsx",
+      "hash": "sha256:5a4ba546b672a1fa10e8aabc139f84317d0974a5d80f0dc84e72dc20c73e578c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/AboutPage.test.tsx",
+      "size": 706,
+      "lang": "tsx",
+      "hash": "sha256:9d28c1d17205f44ee1ea4afd5fd726aeb24c9ba37e039e12cca77418673ebbab",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/AddressesPage.test.tsx",
+      "size": 6105,
+      "lang": "tsx",
+      "hash": "sha256:7faf38af0f4149ce4480fa8ddbb1abe5d3feda76ab73d4c5e3691e5a30cfec54",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/BlogPage.test.tsx",
+      "size": 1661,
+      "lang": "tsx",
+      "hash": "sha256:89f198017e54aee82258a76764c8a55b15ae899e8437753a43e008ab340b90fa",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/BlogPostPage.test.tsx",
+      "size": 1752,
+      "lang": "tsx",
+      "hash": "sha256:7fa082ea5e7e5e2e99a04c066abe642540df85c3dd1ca99ac7da9460fc2af23f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/CheckoutPage.test.tsx",
+      "size": 8293,
+      "lang": "tsx",
+      "hash": "sha256:b3b5fa43de510c0a239ccc8a78c42ce1db17bfc051566420b43a8c837127e140",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/ContactPage.test.tsx",
+      "size": 2525,
+      "lang": "tsx",
+      "hash": "sha256:2f91a3627e183772a9a0ef604df74409d73074cd9b53de776647a1bd6abf21cf",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/OrderConfirmationPage.test.tsx",
+      "size": 2677,
+      "lang": "tsx",
+      "hash": "sha256:31c6b4e35b18335d56eb316fd2757be4cc810b6d7198bec1f002dd6d31f21b8c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/OrdersPage.test.tsx",
+      "size": 3714,
+      "lang": "tsx",
+      "hash": "sha256:a02ded39fcfb03476f96cd6cb26bb61e7e36704419e10bcc408e121a8ce490da",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/ProductPage.test.tsx",
+      "size": 2454,
+      "lang": "tsx",
+      "hash": "sha256:5167abd0573c151bf7a7f55d33b37f771086a8311d4550ff2cb5deb32998d0eb",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/ProfilePage.test.tsx",
+      "size": 3001,
+      "lang": "tsx",
+      "hash": "sha256:e75076cacc43e4c8e8ed880eeec64f01dd0f092e66a66172ae00209fe807a677",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/ServicesPage.test.tsx",
+      "size": 1177,
+      "lang": "tsx",
+      "hash": "sha256:fd790956438f3184cc2cbaad39d4f7dde6dea52982b8672e3e1c75d6195a0dfe",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/SistemasSinergicosPage.test.tsx",
+      "size": 1156,
+      "lang": "tsx",
+      "hash": "sha256:3f96a143212c4cbeb1cda6941f7aadf7a3555828abaa4457f4aafa055cba0cdf",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/StorePage.test.tsx",
+      "size": 1523,
+      "lang": "tsx",
+      "hash": "sha256:f282bf0e85ce08dc7b35910deb7feb98d90bb797e7a22bdf56e52a3c4c186b25",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/TestimonialsPage.test.tsx",
+      "size": 808,
+      "lang": "tsx",
+      "hash": "sha256:d13e4722bdceb22a328a12b74f67460d005ec361a9105e5b36c0d4f1cf578705",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/pages/__tests__/WishlistPage.test.tsx",
+      "size": 5542,
+      "lang": "tsx",
+      "hash": "sha256:9e15226b756a89d937327af935af7405d926d26df9bdea7ac6c54d9847ad956a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/providers/queryClient.ts",
+      "size": 496,
+      "lang": "ts",
+      "hash": "sha256:53e6a05b823517ae191ca8b233807f407180bd870b31884bf85ad93f459a0fc2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/providers/QueryProvider.tsx",
+      "size": 1112,
+      "lang": "tsx",
+      "hash": "sha256:27feac73546010d56bc7dba16d6e1ac741489fd5f5d39c967d5aec064e61c671",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/repositories/__tests__/ProductRepository.test.ts",
+      "size": 3442,
+      "lang": "ts",
+      "hash": "sha256:18e75bea3043792465b99382201ad7f147aabc11ed83eb4e61ef1058d05830ca",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/routes/AppRoutes.tsx",
+      "size": 6461,
+      "lang": "tsx",
+      "hash": "sha256:38095e4819a3c2c01d111c634b89c52e52c35224059f9569a4e8e9d6aee0969c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/routes/dynamicRoutes.ts",
+      "size": 3639,
+      "lang": "ts",
+      "hash": "sha256:af0846816a636c9a0a6d5892694ea8125571412547bbf1f7b0206867120f11b9",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/schemas/validationSchemas.ts",
+      "size": 10495,
+      "lang": "ts",
+      "hash": "sha256:bf7638ce25d74f3a3552eb705b17149e691e8a65cbf681047afae61baa738f2f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/addressService.ts",
+      "size": 3695,
+      "lang": "ts",
+      "hash": "sha256:27ac07911a92d24023a1acbac92304603292b7e1386a1c34562dc7245d0d1a35",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/apiClient.ts",
+      "size": 1909,
+      "lang": "ts",
+      "hash": "sha256:3909f594cf837086d686e4f622998c34d375b7e11d680e8f23ab6f6d530e2ab8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/errorLogger.ts",
+      "size": 6883,
+      "lang": "ts",
+      "hash": "sha256:16ecb8948aeaa34075a8b549444c3caea8e0107b943146f01c5d3798f54b6c36",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/orderService.ts",
+      "size": 8959,
+      "lang": "ts",
+      "hash": "sha256:5eb4a87eafeb1d882284a92e4ce1cff950256808f770899291084e41f6c43cd9",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/productApi.ts",
+      "size": 6193,
+      "lang": "ts",
+      "hash": "sha256:4d0df11d523151010f673373f54934bd39ed854c073b714ec50d86c47e03a34a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/productHelpers.ts",
+      "size": 2133,
+      "lang": "ts",
+      "hash": "sha256:10c06240bfaadb6caa90383974d5a676265a80ddf10fc07e7ea018fcb376b7d1",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/reviewsService.ts",
+      "size": 1394,
+      "lang": "ts",
+      "hash": "sha256:d4dd3299281637fcd290560841cacbbc0eb299739316fcf7564de44c6b0e96a4",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/securityReportingService.ts",
+      "size": 17104,
+      "lang": "ts",
+      "hash": "sha256:73bdf7a0e4f2c9bdd6077116355e64569c3d70afa439e4fb1e3156c45a71db07",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/securityService.ts",
+      "size": 35104,
+      "lang": "ts",
+      "hash": "sha256:1fcd8a2e2b32939d0df60ec9079912511ad54577803ce1767dc8dc3a998e1b87",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/services/__tests__/ProductService.test.ts",
+      "size": 14824,
+      "lang": "ts",
+      "hash": "sha256:481bcd3f6e7de79042237523874e814eba7feaf39b30e92e4e29d0587f8b4028",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/authStore.ts",
+      "size": 4877,
+      "lang": "ts",
+      "hash": "sha256:1e704d1231efc28825f8487a8bd26909e888c9c1e126b07f0e42e84c40556d06",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/cartNotificationStore.ts",
+      "size": 838,
+      "lang": "ts",
+      "hash": "sha256:ef80a5556e86fc8ebb7aafdc0a0c1984ee77acc82fe67e01dd5a036c4e91b9c7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/cartStore.ts",
+      "size": 12571,
+      "lang": "ts",
+      "hash": "sha256:16b3a110c29300fdc4ce532424913b97b0c21931b1b419e2f0f7d74c7fae67be",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/checkoutStore.ts",
+      "size": 6015,
+      "lang": "ts",
+      "hash": "sha256:15a1388d027383a1667b450148771618665b4b81d3ceeda6be36e00e3909d31c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/index.ts",
+      "size": 348,
+      "lang": "ts",
+      "hash": "sha256:4549a7e67b60c6c53ad1445af5d0ad985b71d312a7757fe44abf5d2d19ac407f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/notificationStore.ts",
+      "size": 2291,
+      "lang": "ts",
+      "hash": "sha256:e6c849cbf87a46fae424fca142c05573d9aa9e1bd5dfe156ce2c7148722579c8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/orderStore.ts",
+      "size": 3241,
+      "lang": "ts",
+      "hash": "sha256:3486304dbbe90a94de788b5ab7503335e32224271b9fcf936ec5f45e0dbe618a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/productStore.ts",
+      "size": 7350,
+      "lang": "ts",
+      "hash": "sha256:d14f1acc8e8f98ed157f5cb8160b0ac73b393fd5b64cc7ce60765c73f9d3490a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/uiStore.ts",
+      "size": 4543,
+      "lang": "ts",
+      "hash": "sha256:eb9fd37d9b26c51b6de04edc25a1eef444c6facc54cac9727151227ff2184c24",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/wishlistStore.ts",
+      "size": 8017,
+      "lang": "ts",
+      "hash": "sha256:ab91fdb22f753502e45368bb437970e252964bf39e3383547e103b39a9ebf22e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/__tests__/authStore.test.ts",
+      "size": 5157,
+      "lang": "ts",
+      "hash": "sha256:25a22df715798e07de5789dd3137e275fe873380f5748b3a6702bbaa5f3276d2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/store/__tests__/cartStore.test.ts",
+      "size": 2847,
+      "lang": "ts",
+      "hash": "sha256:084c9dc799a57b043886133363c94ca371406ec9b889e1828454a6a2f6616f5e",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/styles/accessibility.css",
+      "size": 5217,
+      "lang": "css",
+      "hash": "sha256:e5bbea65331d127d4187001e789dd8ec794bd402351c49bb13227a77c15606f9",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "size": 304,
+      "lang": "ts",
+      "hash": "sha256:315a92f51318a9e623a7ccce68bac465e937f0a10226a996b424b02eb0e4d164",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/test/test-utils.tsx",
+      "size": 556,
+      "lang": "tsx",
+      "hash": "sha256:e9f76e2dfd4c846e608d5713c8507b6e18a69638672d32199fb59c351754e07f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/test/utils/text.ts",
+      "size": 590,
+      "lang": "ts",
+      "hash": "sha256:a348cf4ae5ad39af4213e7d60dde5b0055cbb55cae16d7f9fb44da31920fc043",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/analytics.d.ts",
+      "size": 626,
+      "lang": "ts",
+      "hash": "sha256:1597552e9560333fb70f144d9ed010d68aacfe545fd7542a3787837987e2bcbd",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/auth.ts",
+      "size": 2456,
+      "lang": "ts",
+      "hash": "sha256:4bf983557aa399f2259c4c0746710936ad7b2dcb59a6ea356da02762f62c48d7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/blog.ts",
+      "size": 340,
+      "lang": "ts",
+      "hash": "sha256:8fee83f386cd549ef21f3cbe8ad60ee82621fa7d7ca12306c3f4bf4403e9a28c",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/cart.ts",
+      "size": 1934,
+      "lang": "ts",
+      "hash": "sha256:a7a8b4a5ed113daf42dceeb19fcbd03d4122b5f524bc5050347084499392df6b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/index.ts",
+      "size": 1319,
+      "lang": "ts",
+      "hash": "sha256:0e2263f517d18ece4469040f9058b3a1ca104a7f93e53084cf833a229fb59fa1",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/product.ts",
+      "size": 5936,
+      "lang": "ts",
+      "hash": "sha256:a0a45fe956d52f22a967723324f065c1a4b9863b418791f8482b77a67c85cd43",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/rateLimit.ts",
+      "size": 3704,
+      "lang": "ts",
+      "hash": "sha256:31ab16c3cb429d6a5f67f1d39938930640262fc4059dc37e21690cd5e6429977",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/security.ts",
+      "size": 7075,
+      "lang": "ts",
+      "hash": "sha256:e79dc8d547d9f1099a0d7b3494d0ee670e407d776f71d599af386c79f0920e2a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/services.ts",
+      "size": 464,
+      "lang": "ts",
+      "hash": "sha256:46203e1051c4ec7922ad79f7e6b04d0b2bcb0958d71a049eaf6e4b0ba6a0a7f7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/serviceWorker.ts",
+      "size": 1315,
+      "lang": "ts",
+      "hash": "sha256:34e7280a1bafaffd83db3cd351b26d1b6eb7402f92e14cafb53109b8faa7e8b0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/types/system.ts",
+      "size": 434,
+      "lang": "ts",
+      "hash": "sha256:7ae960d1ac1bf5864084dc85b876b0ae6def3655fb57baa09ff033fb9fdd718d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/a11yFocus.ts",
+      "size": 2228,
+      "lang": "ts",
+      "hash": "sha256:a60fa46fff9c131d932552a8d276f7dfabd7b61e57cade35e13803ac4d6d8a4a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/accessibilityTest.ts",
+      "size": 5864,
+      "lang": "ts",
+      "hash": "sha256:948c8642225020d8f3de7713f170293a871fb731fe00959348aeb3f9efadfbe7",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/api.ts",
+      "size": 6576,
+      "lang": "ts",
+      "hash": "sha256:b820e7a12cd05ce7130ddc6961620f8437a0f7629c9a83225e53320c10c27422",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/authErrorHandler.ts",
+      "size": 8867,
+      "lang": "ts",
+      "hash": "sha256:ccd554e5087bd3f0a0efbaadab36391afdd927a97a1b1480acb5b7130b518628",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/authMapper.ts",
+      "size": 1585,
+      "lang": "ts",
+      "hash": "sha256:c609bc456e57f04ff43fec1ca3d3df2d1c6056d2a6b7a842ddf0d1838b0bc596",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/backgroundSync.ts",
+      "size": 7707,
+      "lang": "ts",
+      "hash": "sha256:d6c2d30fdb2f1ec6bb7e40aed96e1f0590b2dfdffebe6225dae4675c53de2ac0",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/browserSupport.ts",
+      "size": 17847,
+      "lang": "ts",
+      "hash": "sha256:3f03aa7b60ef9f7c30e13ce3e17c9ee7fdd4b98c739695bbdcf7ee67e2974d9b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/encoding.ts",
+      "size": 16756,
+      "lang": "ts",
+      "hash": "sha256:9070956d586213ec68b5ac95d1b87320fba7ed91e9f9d73c99e0ef3d5ba7b8f6",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/errorHandler.ts",
+      "size": 3753,
+      "lang": "ts",
+      "hash": "sha256:ea5a36a9f4fbcbc1a0745fe1cf85ca00d3d8cf860da6b3a2f5cbbad11af8823d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/globalErrorHandler.ts",
+      "size": 2863,
+      "lang": "ts",
+      "hash": "sha256:e0dbf06d5cf680fdf62ecb74b0fdbe0c35c29d7bf586064da2b60eda19ab6f7d",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/image.ts",
+      "size": 2521,
+      "lang": "ts",
+      "hash": "sha256:1052702f84a049bacb6cac061ff9ab226b15ed7fd875970f16a860c2ce116c62",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/imageProcessor.ts",
+      "size": 2469,
+      "lang": "ts",
+      "hash": "sha256:dd94eb6e17a3de9a39a359145b8d683ea9401893ca1bed197f686fa360cf6dce",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/logger.ts",
+      "size": 22749,
+      "lang": "ts",
+      "hash": "sha256:928264e750352c6e19ffa0b193faef697df89132f3a7b559d2f401620575c103",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/pushNotifications.ts",
+      "size": 9269,
+      "lang": "ts",
+      "hash": "sha256:4eb8d5a0ac7a59bde08afa682ac3d283d7b38cca848b2cb9a761e85af794a64f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/rateLimitConfig.ts",
+      "size": 9956,
+      "lang": "ts",
+      "hash": "sha256:368382a625e0b73e41c96f7833278168f0fb8441228f503112e0a80b0521f22a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/rateLimitMonitoring.ts",
+      "size": 9895,
+      "lang": "ts",
+      "hash": "sha256:1146d05c149a66c6eda3f503281cd0fc09e48b4d127658c67095902111123698",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/rateLimitUtils.ts",
+      "size": 14909,
+      "lang": "ts",
+      "hash": "sha256:870a68e62e527326f391128e8fa8d16e12498256e5e7e4fd1ef89dd4c580d556",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/sanitizationMiddleware.ts",
+      "size": 5979,
+      "lang": "ts",
+      "hash": "sha256:a5e394f46c3f677c549664b4f58ee45e62cd982732a4c1f8de5166837a0ef313",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/sanitizer.ts",
+      "size": 2783,
+      "lang": "ts",
+      "hash": "sha256:145e2db8196990bec582bcb270e0ce138becbf25d5abd24cc419972fc4dcd12a",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/schemaGenerators.ts",
+      "size": 1657,
+      "lang": "ts",
+      "hash": "sha256:4c9162c825c52b1e71b8ca697a0299a1800dd36c99ccbdb29f88ff63c480bc7b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/securityIntegration.ts",
+      "size": 14636,
+      "lang": "ts",
+      "hash": "sha256:1f82e8ec3c5973e0e129afdfc962825577ee79eef7edf70e0d36ec7a2c1e6fd3",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/seo.ts",
+      "size": 6572,
+      "lang": "ts",
+      "hash": "sha256:229bb4db69a34df0e2978b7d63d04a7f0ebb8995ce916db2e369801531506bfb",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/performance/alerts.ts",
+      "size": 2124,
+      "lang": "ts",
+      "hash": "sha256:c9d7e22c7081861e411a0c00c5fe79a4b6841828351def1e3b576a2b9016f35f",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/performance/lazy.tsx",
+      "size": 1869,
+      "lang": "tsx",
+      "hash": "sha256:f967c5f0dfaa776c6ac16c53b40d35ded850bb16a4f3f2fdc0ce7b340dd06ae8",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/security/cspConfig.ts",
+      "size": 11706,
+      "lang": "ts",
+      "hash": "sha256:cbcef90443c799c9ebbd2316d8c73604b3ad03c01893fc9f097c87cedc92ffe5",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/security/csrfProtection.ts",
+      "size": 15004,
+      "lang": "ts",
+      "hash": "sha256:f126bb21a173259ef4386cddab126ca37de78f06d1ac37787a763897197c6947",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/security/sanitization.ts",
+      "size": 14937,
+      "lang": "ts",
+      "hash": "sha256:58baff7a87f7f2ec590860c6008049e57a99cb94a25310c485871d640bb361a2",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/security/sslConfig.ts",
+      "size": 5607,
+      "lang": "ts",
+      "hash": "sha256:ec41dc72d4ada5609931feb14dc94d06b77a0b8a2fc0a62dc47fbfb64b5c169b",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/__tests__/encoding.test.ts",
+      "size": 11885,
+      "lang": "ts",
+      "hash": "sha256:3a46af4687d8c3c6988d24e2010bbdcc01d9365651f8f8725297d36106837e55",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "src/utils/__tests__/sanitizationMiddleware.test.ts",
+      "size": 5610,
+      "lang": "ts",
+      "hash": "sha256:eae790671d1cb1509f8c949709ca330f1ffd3609b281d7edeb2c7cbdbc0f57f6",
+      "module_id": "frontend-core"
+    },
+    {
+      "path": "backend/src/index.ts",
+      "size": 2180,
+      "lang": "ts",
+      "hash": "sha256:74dee157740a3eac3920350deb4a7e037681081fae22a876175d9232cbb5f7b8",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/config/index.ts",
+      "size": 1870,
+      "lang": "ts",
+      "hash": "sha256:ddee11a93cfcb0aff56b8597bcb01a4e3d1ee6876a5a937a7307f1eec9d20c28",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/client.ts",
+      "size": 1094,
+      "lang": "ts",
+      "hash": "sha256:a90b8f90fd122d989ee97aa1673b3903f3bd84c3601db5105f2082fe97febea4",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/init-schema.ts",
+      "size": 3245,
+      "lang": "ts",
+      "hash": "sha256:5185320b2c420fe6f00f35932d0363b075b8978847cb2e6591d435990f801f2d",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/migrate.ts",
+      "size": 598,
+      "lang": "ts",
+      "hash": "sha256:5b13ee4eb7d945b97d4bf9ae25e94a2aaa830ddfc72c9c811fdf76da5695a888",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/products-data.ts",
+      "size": 363323,
+      "lang": "ts",
+      "hash": "sha256:c9e4d01792679be89982ca06c5973eb708301868049691aa78604d8fa554139a",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/schema.ts",
+      "size": 5126,
+      "lang": "ts",
+      "hash": "sha256:fdc38f06ba23ff0bd27b0c7dd64afe760f84b8447be00aa76df590b2c6a7e114",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/seed.ts",
+      "size": 3617,
+      "lang": "ts",
+      "hash": "sha256:900cc5cf4c8987eda10dd7fed5c624bdb012ae5639e453f93f5790420e8268a3",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/migrations/0000_romantic_eternals.sql",
+      "size": 2128,
+      "lang": "sql",
+      "hash": "sha256:febae00b6dfe2958833f7789bad0325e25d628b43bc8ca64d7266b9223d3abdc",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/migrations/0001_add_product_details.sql",
+      "size": 946,
+      "lang": "sql",
+      "hash": "sha256:f98838f301e79b81ef282c0c6f5c1e6019a768fcafdddb1091790a450b4d1629",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/migrations/meta/0000_snapshot.json",
+      "size": 10720,
+      "lang": "json",
+      "hash": "sha256:152b48dd6a880f02572283996e8e27bf878eb1ec09c742945e4d7be5a3754d88",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/db/migrations/meta/_journal.json",
+      "size": 355,
+      "lang": "json",
+      "hash": "sha256:274259c54854f79b5f86872c685d283125e340e431398395ba4bac15a1dda3aa",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/middleware/auth.ts",
+      "size": 1437,
+      "lang": "ts",
+      "hash": "sha256:6e1a0d43f41c35504a1dc9e37f05ed533686f4ff9594f06dc1f8c36b0e48e1db",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/middleware/validate.ts",
+      "size": 785,
+      "lang": "ts",
+      "hash": "sha256:1ee8f14ec84e4dce83a75cb993091fe5fdbfc70c13737cd0d31356a8992fb2b6",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/routes/auth.ts",
+      "size": 5414,
+      "lang": "ts",
+      "hash": "sha256:5e654996a8389844b4dd6037583ea15fad5cd57e79d7ce5b8f2715bea2e256e8",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/routes/products.ts",
+      "size": 6125,
+      "lang": "ts",
+      "hash": "sha256:8969475ddbec9f15b3d25e4624d546361980f74215df00da83204c388637e73d",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/services/authService.ts",
+      "size": 3245,
+      "lang": "ts",
+      "hash": "sha256:948b199550fdc2db6bf7f6bc1d42f72037af36ab6de8fe44ee3bdb194429e9c4",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/services/productService.ts",
+      "size": 9696,
+      "lang": "ts",
+      "hash": "sha256:039515aaca4eb9c3fccfead16feb9529afdff737fe497e4fb5b71cb80eaf60bf",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/types/auth.ts",
+      "size": 583,
+      "lang": "ts",
+      "hash": "sha256:d8d2dea26a371e23e0b65dd0894e746f7467e74700b9626b3b86dc59118590a0",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/types/product.ts",
+      "size": 1173,
+      "lang": "ts",
+      "hash": "sha256:ff3fb4847a43c5db6724b04749606cacc181c2645c56808e64dc0f88c51988a4",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "backend/src/types/validation.ts",
+      "size": 915,
+      "lang": "ts",
+      "hash": "sha256:327532ab631d0976b56988e6551e3bff1d49a7423982ddfeae31c559e87f83ea",
+      "module_id": "backend-api"
+    },
+    {
+      "path": "components/AuthModal.tsx",
+      "size": 20954,
+      "lang": "tsx",
+      "hash": "sha256:1c912ffbe0fe32168e298a96987183e3dc37d655f10dbe2da22184f910646214",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/BlogPostModal_Fixed.tsx",
+      "size": 7248,
+      "lang": "tsx",
+      "hash": "sha256:3dde5a92dd05fcb6368ee7baba056738366c49659e8347b77292ad22c096a3d1",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/CartModal.css",
+      "size": 863,
+      "lang": "css",
+      "hash": "sha256:f9969271e52d35f008a43c7d37d8f25d114c8a56e8416733b2a1897b7c8b3680",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/CartModal.tsx",
+      "size": 20128,
+      "lang": "tsx",
+      "hash": "sha256:e2a3bc54dd14a382777c2f7d971d81af6b2ac253430a4512e74829f8d9572bd8",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/CartNotification.tsx",
+      "size": 2529,
+      "lang": "tsx",
+      "hash": "sha256:8e1ac3830147c30135ef2f3f9446f2f865b79941bb3d9e95772c7793063ae8b8",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/Footer.tsx",
+      "size": 1977,
+      "lang": "tsx",
+      "hash": "sha256:70bd68e6d58b22c927a5c548e35f80ab77b93499e872746e9d5107708957e374",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/ImageZoom.css",
+      "size": 2122,
+      "lang": "css",
+      "hash": "sha256:969961fde7859f8ff4900d8fe5ca7f8082888cba5f88288c5e2a7e91ff31bd30",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/ImageZoom.tsx",
+      "size": 6871,
+      "lang": "tsx",
+      "hash": "sha256:2ed02d692797430a1c3408ae292840b8d28a92bf1a521487a2bd53210d850a8a",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/ProductCard.tsx",
+      "size": 8575,
+      "lang": "tsx",
+      "hash": "sha256:d1ad0f4cfec817f2f882f13659ab594f6b1810324d646f19c7be6738fa84ae4b",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/ProductTabs.tsx",
+      "size": 2232,
+      "lang": "tsx",
+      "hash": "sha256:21ed52d0f28c065b69506b756a073f2b2c7ffe803d7b0e08d2c549e94a4f122c",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/QuantitySelector.tsx",
+      "size": 4779,
+      "lang": "tsx",
+      "hash": "sha256:691be1b1b9c84dd9034d501e936567029a720e1490a1e8f1493df2faa74a13bb",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/ScientificReferences.tsx",
+      "size": 10278,
+      "lang": "tsx",
+      "hash": "sha256:a0a514b2d1776c2b4112e77a2330a672dfad0e79f94d725e713036487709be27",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/SystemCard.tsx",
+      "size": 5423,
+      "lang": "tsx",
+      "hash": "sha256:887ae5ed3bb485e0c6c1d5550d06c6f84094bdf3308c2a3651be0403eb16f9a2",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "components/UserMenu.tsx",
+      "size": 9200,
+      "lang": "tsx",
+      "hash": "sha256:9e66fc08d64bd3a4e04d13cbe01ccd560ae662877cea74dbb24db6881e8ef6fb",
+      "module_id": "frontend-shared-components"
+    },
+    {
+      "path": "public/humans.txt",
+      "size": 952,
+      "lang": "txt",
+      "hash": "sha256:9a1a44c5a6b9d56c5ff0010df1f56b2419977a16c32835579d60543259c7d553",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/manifest.json",
+      "size": 1600,
+      "lang": "json",
+      "hash": "sha256:2c6875e771398f1ad3b514288bffb734986232a45ae8f02e8d73965eea69e43f",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/offline.html",
+      "size": 5198,
+      "lang": "html",
+      "hash": "sha256:f04367e84a03eb238550d34b52753794f525e5d0f1db22bb5adb48e49cb91918",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/robots.txt",
+      "size": 1485,
+      "lang": "txt",
+      "hash": "sha256:ce7359fa105275223e4c2daed41cc9415210836065b0b73ec9cf44eb24ec021c",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/js/ga.js",
+      "size": 864,
+      "lang": "js",
+      "hash": "sha256:e1c789c433ee0a50d7a42fda5f8f00bb8e554a4e88ade7f19e920fd7a36cc0f9",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/js/init.js",
+      "size": 172,
+      "lang": "js",
+      "hash": "sha256:19c4587b5425a876b46e91fe5f51beef10a21b63210247764daa5e1dc294c2fd",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "public/js/offline.js",
+      "size": 300,
+      "lang": "js",
+      "hash": "sha256:789b5f521a494065fdb181a009edceb977286ac960f92f1bf2261f8a4417aad2",
+      "module_id": "public-assets"
+    },
+    {
+      "path": "scripts/analyzeBundle.cjs",
+      "size": 9345,
+      "lang": "js",
+      "hash": "sha256:dcad0f029169f7ca37d198822e255bc36f0df0447fe0b54224215f3499879a1a",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/clean_specific_files.cjs",
+      "size": 4612,
+      "lang": "js",
+      "hash": "sha256:e8cf587f8efe6d37523181e5a45f6a24bdd8d370cb1403cb55fb6704bf67d457",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/ConvertAllImages.ps1",
+      "size": 5151,
+      "lang": "ps1",
+      "hash": "sha256:a0a959df69748b6f71c00e17f35551fd2970f41ff6ff03383e6af4dea04b02d1",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/ConvertImages.ps1",
+      "size": 3652,
+      "lang": "ps1",
+      "hash": "sha256:fc640f012bc66f00e1c4518b8423140edcf07f42753435a4755a00962ee8aecf",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/convertToJpeg.js",
+      "size": 1919,
+      "lang": "js",
+      "hash": "sha256:7af75d3ceb523d422c07522dfcfc03c0c9f8f3d46262b3a523234dee76232f6d",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/ConvertToJpeg.ps1",
+      "size": 3178,
+      "lang": "ps1",
+      "hash": "sha256:ebac42178a1252217c99879eb0280c165b149a759ebb8ff67dae56cb2544ed07",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/convertToWebP.ts",
+      "size": 4755,
+      "lang": "ts",
+      "hash": "sha256:65edbc1ab0b7dec706ed2030bfd29869816af29ad90983ed4083c5ac3353a7a8",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/createConverter.js",
+      "size": 9017,
+      "lang": "js",
+      "hash": "sha256:af7b34412e89960d1d48883a3f0cf437844d6f2c45e98cb979b561ac4356fdb8",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/docs_encoding_check.cjs",
+      "size": 1020,
+      "lang": "js",
+      "hash": "sha256:dd8040e517ddb48759125e1ae7339a340d3bc8e0d8f8b03d3b200ac09071d137",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/exportDataFromTS.cjs",
+      "size": 1459,
+      "lang": "js",
+      "hash": "sha256:c1c5a8936e986a17a5d58e9d7f4f0b833c46c3a7c1df2002796bcf2c1d1c0b17",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/finalPipingRockUpdate.js",
+      "size": 7381,
+      "lang": "js",
+      "hash": "sha256:885297a2a37bb882f700019a0ec771cec8c5bfce083a429901af22d38244babf",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/fix-encoding.js",
+      "size": 2279,
+      "lang": "js",
+      "hash": "sha256:e6d80639ac9c1cd5f6d0d71cb3a325ee649b939553de990fa11aa6c691039d50",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/fix-product-data.mjs",
+      "size": 922,
+      "lang": "js",
+      "hash": "sha256:cac4379c91c07ae857d71d404db68f49e56a0766f2312b0878d20bade7886bb9",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/force_repair_encoding.cjs",
+      "size": 2935,
+      "lang": "js",
+      "hash": "sha256:ccf41c7a93ccb9bf36d413c47597a9306a1b7566155d274b1cadba6a82c7e427",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/generateIcons.ts",
+      "size": 1177,
+      "lang": "ts",
+      "hash": "sha256:979c18082f40c5556819157005123d2430c00b534f8288cb98b32c9d84367ed6",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/generateSitemap.ts",
+      "size": 3084,
+      "lang": "ts",
+      "hash": "sha256:182d4374dce7438db82ccb9369de5686b118a3de1042f001a0db21b6a617df90",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/optimizeImages.ts",
+      "size": 2210,
+      "lang": "ts",
+      "hash": "sha256:06bd19e7439765c98b26837f8aee339595ae4839cce523373229a4219c3e2db8",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/setup_backend.ps1",
+      "size": 3997,
+      "lang": "ps1",
+      "hash": "sha256:8b6e3fd7b06d57696b4dde34dc369bf488d6d83ca4f58eceb65d6e8d075e4dae",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/SimpleConvert.ps1",
+      "size": 3625,
+      "lang": "ps1",
+      "hash": "sha256:839d13675f8494ddfb976a39a67dec88d5638fd10e1fc1b257b60263a5430f60",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/smoke.ps1",
+      "size": 2312,
+      "lang": "ps1",
+      "hash": "sha256:750215304e1ed80c01482354ef95716d52f74d654066b0757e7a5bb816105bc0",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/strip-bom.cjs",
+      "size": 1448,
+      "lang": "js",
+      "hash": "sha256:8ee9e43a91a8e39f4a19735633f5dd59e4a2edbf2c177252dfbe270f88f5c822",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/updateAllPipingRockImages.js",
+      "size": 12520,
+      "lang": "js",
+      "hash": "sha256:50ceaab6633cccd0b9f1792fff1cd5b87f16af1505227239f7446357eb771657",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/updatePipingRockImages.js",
+      "size": 5433,
+      "lang": "js",
+      "hash": "sha256:40fe009927f000d77160f9d300f717a3d634d3e1b393d10d2c1b1910e4549a2e",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/validate-comments.js",
+      "size": 5784,
+      "lang": "js",
+      "hash": "sha256:96b7d70e63d281d78637a02ffeccba611f7ab112d3fa8ea1565e4e791a7895ba",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/validate_phase.ps1",
+      "size": 8907,
+      "lang": "ps1",
+      "hash": "sha256:0fcd5aa0ea0ccc0e3e19d22202830434126f55219e64c97ca2cff0b0556756f8",
+      "module_id": "tooling"
+    },
+    {
+      "path": "scripts/verify-systems.ts",
+      "size": 353,
+      "lang": "ts",
+      "hash": "sha256:aedea2d172c6c92c599a579e821c159ab6174d0d51958be80f1d9f1532fba9d5",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/add_references.cjs",
+      "size": 40082,
+      "lang": "js",
+      "hash": "sha256:23fd8a644ba10b21fd6c828a48f26de3196b3a70a87ace24bcb44ad02feaa51d",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/check_encoding.cjs",
+      "size": 2651,
+      "lang": "js",
+      "hash": "sha256:b3169007ef7a2617bb211a4fa438e72ce800b5ae2bd5aa071281cffb95adeb55",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/components_audit.cjs",
+      "size": 1952,
+      "lang": "js",
+      "hash": "sha256:4fb5b4976c5d836d0ace521d42555c7ecee4aebb3e61a9b4ad3d143f39a9141f",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/encoding_audit.cjs",
+      "size": 1738,
+      "lang": "js",
+      "hash": "sha256:228792774a2e2969ea65a88de3068aee222aec26052da51da3ddf6839bacfc64",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/fetch_sources.cjs",
+      "size": 2595,
+      "lang": "js",
+      "hash": "sha256:d12a4ba3f809174f58f1583aaf77d5131e646accf1a26c37761aff0c119d17ec",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/fill_components_from_old.cjs",
+      "size": 5303,
+      "lang": "js",
+      "hash": "sha256:49c3edc072e40a6e11cee23c59c30d371b091922bb69ea0dc7965abe73a00099",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/fill_min_sections.cjs",
+      "size": 15044,
+      "lang": "js",
+      "hash": "sha256:88e4f0b721b5103dfa6dedc02584ab3106d32747a16c1863ae5209da496ddd0f",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/fix_encoding_component.cjs",
+      "size": 1574,
+      "lang": "js",
+      "hash": "sha256:6fff9f4bd4a95b1413953fc44afafa97c86c1a8a96d74f42092271b3d48322a2",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/fix_reference_urls.cjs",
+      "size": 1675,
+      "lang": "js",
+      "hash": "sha256:020b2fbf45afcdf45c41d33c2577d3b9f54babd9e0916e422779693e0a4384dc",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/image_rename_map.json",
+      "size": 239312,
+      "lang": "json",
+      "hash": "sha256:e4e6d65e83937baa5792dbf810bb3955ddfbf4f27eddc4f8595cb8ee9b6b9b71",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/links_check.cjs",
+      "size": 2177,
+      "lang": "js",
+      "hash": "sha256:e20c45669984662c33ffbd06336d68743034e129264f8e1fbf8e1d8e1e6fbbc7",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/normalize_spanish_text.ps1",
+      "size": 2071,
+      "lang": "ps1",
+      "hash": "sha256:1f27bcde238eb1ed33a20c635b3f30a39839412618d7a679bd93fcd4eaad8211",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/product_audit_merge.cjs",
+      "size": 9285,
+      "lang": "js",
+      "hash": "sha256:c99ad858a3d2f45a58600a0b60327e6f5babd5fef52337372fa0d2ddebb83709",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/regenerate_reports.cjs",
+      "size": 847,
+      "lang": "js",
+      "hash": "sha256:9f126f93cc91f9b2f1e8bd8d52061e3d59d65cd2f9d68343e89065fb1711fb20",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/set_components.cjs",
+      "size": 1627,
+      "lang": "js",
+      "hash": "sha256:49967e51b612fb7148e16e24cda49691f046c22b2a2e5b596213effeeb4f263c",
+      "module_id": "tooling"
+    },
+    {
+      "path": "tools/text_audit.cjs",
+      "size": 2339,
+      "lang": "js",
+      "hash": "sha256:d96f3c744638d937f704f8031beca347586dbcc8a0041a0c2666b4f25c70784c",
+      "module_id": "tooling"
+    },
+    {
+      "path": "e2e/a11y.spec.ts",
+      "size": 1342,
+      "lang": "ts",
+      "hash": "sha256:d5ef17aff8fa0621edafe2ac87d006c1f5f15ee33fbd042f0d6919d53eff07cb",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/addToCart.spec.ts",
+      "size": 1017,
+      "lang": "ts",
+      "hash": "sha256:a144ad7f41ec13eb008db7ce69023a916340c79bbc85eab28070349f1f75787f",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/auth.spec.ts",
+      "size": 2389,
+      "lang": "ts",
+      "hash": "sha256:bd55829440cada52cdb1dfe8d95f8959fbd7595fe675aa1d126f0056020ad982",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/navigation.spec.ts",
+      "size": 1672,
+      "lang": "ts",
+      "hash": "sha256:128a7487b64499087cc8f2418f86a37d020b8f043b3f39a00ff42f7516a5906b",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/performance-accessibility.spec.ts",
+      "size": 6658,
+      "lang": "ts",
+      "hash": "sha256:56f7c26dc68ae28eb970668c6bc2dede38584a734e8852607481861ac8e0db21",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/search-filter-cart.spec.ts",
+      "size": 4279,
+      "lang": "ts",
+      "hash": "sha256:1950cc8ae1295d1767f72ca18eb34a6f38965d49d233703e708c4334ff7dc770",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "e2e/security.spec.ts",
+      "size": 4862,
+      "lang": "ts",
+      "hash": "sha256:25384eb78593aa711aa98261e04dcc43db8ba2d0989f07395b6befeef3d330a0",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/components/CartModal.test.tsx",
+      "size": 1971,
+      "lang": "tsx",
+      "hash": "sha256:9340ad7d850a2aa0407febdd43e281772e3f556f06c53cf12ddd18897aa6a0e2",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/components/Footer.test.tsx",
+      "size": 1961,
+      "lang": "tsx",
+      "hash": "sha256:c9badcac6fe3c9d27c46ca2f64f5102f6d3ebb18d2b531fe4b14a7abba780494",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/components/Header.test.tsx",
+      "size": 2032,
+      "lang": "tsx",
+      "hash": "sha256:f756548d3c25050266f9dbb012f8b6a8561d21f39e7b4349727c9a8b8252ac32",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/components/ProductCard.test.tsx",
+      "size": 2392,
+      "lang": "tsx",
+      "hash": "sha256:4e701be7715679c2e0632cd0b676ca6afdf440adb8dcbef810de5b7efd50aa55",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/hooks/useLocalStorage.test.ts",
+      "size": 1814,
+      "lang": "ts",
+      "hash": "sha256:f400453efd46e36e1b37ea65a4235caa1234180ff5e15faa40bdbc7c749544f0",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/integration/App.test.tsx",
+      "size": 5071,
+      "lang": "tsx",
+      "hash": "sha256:fb52bd8226e788b828a14af5abe9d0305fd690bd541c9474425d4711161b9703",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/integration/CartFlow.test.tsx",
+      "size": 1228,
+      "lang": "tsx",
+      "hash": "sha256:27cde034d49e9f7053581e9ba8c161da9d2e9d7bbb473126c8a8c6155ed20ed1",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "test/__mocks__/fileMock.ts",
+      "size": 33,
+      "lang": "ts",
+      "hash": "sha256:97ddce77f4605af9f6c4dd749486c2530d8475b3e64a2af5cabe12abf7eac211",
+      "module_id": "qa-automation"
+    },
+    {
+      "path": "docs/ACCESSIBILITY_IMPLEMENTATION.md",
+      "size": 9394,
+      "lang": "md",
+      "hash": "sha256:f60ad4ca637cd837a2524e296ce2f67296bd769141600865914188808118ce57",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/DOCUMENTACION_COMPLETA_ES.md",
+      "size": 13471,
+      "lang": "md",
+      "hash": "sha256:ece1b64618fddff75e1bfe8131f440d1b5f0aa44b6875fc4ed4211e279664f50",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/EXPERT_BEST_PRACTICES_SUMMARY.md",
+      "size": 7770,
+      "lang": "md",
+      "hash": "sha256:8d38f3764c553016a6e424a3f41a8289f93f8dbf8721669f0cc0213f712b75ba",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/FASE0_REPORTE_FINAL.md",
+      "size": 11537,
+      "lang": "md",
+      "hash": "sha256:0593226aae1150c289af856b218df050234b79e456d4f43a6af170ddee364493",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/fase0_setup_backend.md",
+      "size": 12983,
+      "lang": "md",
+      "hash": "sha256:f3e924f9b0e68742f81a5af18295933983855ea8c4e3cbf7d1babd0e137407be",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/fase1_autenticacion.md",
+      "size": 17721,
+      "lang": "md",
+      "hash": "sha256:f171ed78afeffad3a9f83f38376a762ccfad1a0ba95fbe141e50fd1db780909f",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/KIT_MIGRACION_README.md",
+      "size": 5678,
+      "lang": "md",
+      "hash": "sha256:92e2e496fe8107ee87e13eb4bdfef77e9e36c76cc9a78245ad32192d1388023f",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/MONITORING_SETUP.md",
+      "size": 6816,
+      "lang": "md",
+      "hash": "sha256:dc458a4fa3dd179b4635c376ff182580e4c899a7f4736a334e5f1609912908b9",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/PLAN_MIGRACION_COMPLETO.md",
+      "size": 12156,
+      "lang": "md",
+      "hash": "sha256:df64a4d84465383c2d7df778f6cadaf4d8b8e300fb3229b51a651fcc22f2cb50",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/TESTING_NOTAS.md",
+      "size": 1020,
+      "lang": "md",
+      "hash": "sha256:b4d9102598ed1e4280cc9064e0496aa07698ce3bcdf1bfa42d832eed3814d29b",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/checklists/accesibilidad.md",
+      "size": 4428,
+      "lang": "md",
+      "hash": "sha256:72b13a02357105101f8557271300c56dea0f871efd735b60e0fd9d2c6653ef00",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/checklists/rendimiento.md",
+      "size": 3557,
+      "lang": "md",
+      "hash": "sha256:902472b157b74fc66434e45429c27d41151ca7728315e56f99209a8267d0b0df",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": "docs/checklists/seguridad.md",
+      "size": 3067,
+      "lang": "md",
+      "hash": "sha256:5edb978a5c76068d23894839c3fcde8fa92a8049f0176a9c14d6a419b35d84ba",
+      "module_id": "knowledge-base"
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "size": 6756,
+      "lang": "md",
+      "hash": "sha256:016fbff8e0a699a59d76ac7b843089e7530a84654e0c81d1553bf3093c2b90e2",
+      "module_id": "ci-cd"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "size": 883,
+      "lang": "md",
+      "hash": "sha256:31481a6bbf26a58b25a6b9895b23385e5f166b25c17f74b24ff30c65fa00aa7c",
+      "module_id": "ci-cd"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "size": 5899,
+      "lang": "yml",
+      "hash": "sha256:8be9cd823513d272ba90b93f49663a9d7e75116726dd458103b25d34a96d886d",
+      "module_id": "ci-cd"
+    },
+    {
+      "path": "supabase/schema.sql",
+      "size": 12639,
+      "lang": "sql",
+      "hash": "sha256:65d4aebc5f3c259e9ac4db2479521f2c8dc963174cc8b266263f52e3318323d7",
+      "module_id": "data-layer"
+    },
+    {
+      "path": "templates/backend/package.json",
+      "size": 1339,
+      "lang": "json",
+      "hash": "sha256:09d6a7012243d8681359f15274e83d02db74eeaaf9c5599571bc4b7afde8c374",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/README_TEMPLATES.md",
+      "size": 10576,
+      "lang": "md",
+      "hash": "sha256:1c0416150b71e0a1df31a0c46fe80bb633421cac222c8ce2c5f458167b85057b",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/tsconfig.json",
+      "size": 492,
+      "lang": "json",
+      "hash": "sha256:caa40c7c3dfac3e23024395f9e07b4938d35daa910a51f9d0a454a7c6a2fc1b7",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/index.ts",
+      "size": 2959,
+      "lang": "ts",
+      "hash": "sha256:10822a955bd66e982030394f9f4d35e32e176a1f01c4954c600233188f47f38c",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/config/index.ts",
+      "size": 1870,
+      "lang": "ts",
+      "hash": "sha256:2e3eaa1023dcff0f37b2acf0a9bb08e8f3705c56b7805bd0adfec27ab279ca79",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/db/client.ts",
+      "size": 1028,
+      "lang": "ts",
+      "hash": "sha256:660883f6743def665470c1088976dc008a7b5e1fd7bed345c3412d5cfe1c1df4",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/db/migrate.ts",
+      "size": 598,
+      "lang": "ts",
+      "hash": "sha256:5b13ee4eb7d945b97d4bf9ae25e94a2aaa830ddfc72c9c811fdf76da5695a888",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/db/schema.ts",
+      "size": 3813,
+      "lang": "ts",
+      "hash": "sha256:08f3b38cd4da6f602205654a976484fc76ef2b3ade7185fec3d2b46c97072848",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/db/seed.ts",
+      "size": 3426,
+      "lang": "ts",
+      "hash": "sha256:a08074fcdc1fa8dd0c567f36ff1f75eff2e6822a4eb1aa6dc2355ddda06fcd1a",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/middleware/auth.ts",
+      "size": 1437,
+      "lang": "ts",
+      "hash": "sha256:6e1a0d43f41c35504a1dc9e37f05ed533686f4ff9594f06dc1f8c36b0e48e1db",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/middleware/validate.ts",
+      "size": 785,
+      "lang": "ts",
+      "hash": "sha256:1ee8f14ec84e4dce83a75cb993091fe5fdbfc70c13737cd0d31356a8992fb2b6",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/routes/auth.ts",
+      "size": 5594,
+      "lang": "ts",
+      "hash": "sha256:2df6002574eee47515a368857428772c1fc5a5fc843bf486374d76f2220bbabc",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/services/authService.ts",
+      "size": 2815,
+      "lang": "ts",
+      "hash": "sha256:5c0d94ffb521d338384b8f78c7e60390f060138bf66e93334dd0d1212c703de7",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/types/auth.ts",
+      "size": 583,
+      "lang": "ts",
+      "hash": "sha256:d8d2dea26a371e23e0b65dd0894e746f7467e74700b9626b3b86dc59118590a0",
+      "module_id": "templates"
+    },
+    {
+      "path": "templates/backend/src/types/validation.ts",
+      "size": 915,
+      "lang": "ts",
+      "hash": "sha256:327532ab631d0976b56988e6551e3bff1d49a7423982ddfeae31c559e87f83ea",
+      "module_id": "templates"
+    }
+  ],
+  "modules": [
+    {
+      "id": "frontend-core",
+      "description": "Aplicacion React/Vite (src)",
+      "files": [
+        "src/env.d.ts",
+        "src/types.ts",
+        "src/vite-env.d.ts",
+        "src/api/analytics/events.ts",
+        "src/components/AuthModal.tsx",
+        "src/components/BlogGallery.tsx",
+        "src/components/BlogPostCard.tsx",
+        "src/components/BlogPostModal.tsx",
+        "src/components/BlogPostModal_Fixed.tsx",
+        "src/components/Breadcrumbs.tsx",
+        "src/components/CartModal.css",
+        "src/components/CartModal.tsx",
+        "src/components/CartNotification.tsx",
+        "src/components/CategoryNavigation.tsx",
+        "src/components/ErrorMonitor.tsx",
+        "src/components/FAQSection.tsx",
+        "src/components/FilterBar.tsx",
+        "src/components/FilterSidebar.tsx",
+        "src/components/Footer.tsx",
+        "src/components/Header.tsx",
+        "src/components/Header_Simple.tsx",
+        "src/components/ImageGallery.tsx",
+        "src/components/ImageZoom.css",
+        "src/components/ImageZoom.tsx",
+        "src/components/index.ts",
+        "src/components/Layout.tsx",
+        "src/components/NotFound.tsx",
+        "src/components/NotificationContainer.tsx",
+        "src/components/NotificationsContainer.tsx",
+        "src/components/OptimizedBackgroundImage.tsx",
+        "src/components/OptimizedImage.tsx",
+        "src/components/OptimizedImage_Fixed.tsx",
+        "src/components/PageTransition.tsx",
+        "src/components/ProductActions.tsx",
+        "src/components/ProductCard.tsx",
+        "src/components/ProductCompare.tsx",
+        "src/components/ProductDetails.tsx",
+        "src/components/ProductGallery.tsx",
+        "src/components/ProductGallery_Fixed.tsx",
+        "src/components/ProductImage.tsx",
+        "src/components/ProductImageGallery.tsx",
+        "src/components/ProductInfo.tsx",
+        "src/components/ProductReviews.tsx",
+        "src/components/ProductTabs.tsx",
+        "src/components/ProtectedRoute.tsx",
+        "src/components/PWAPrompts.tsx",
+        "src/components/QuantitySelector.tsx",
+        "src/components/RelatedProducts.tsx",
+        "src/components/ReviewForm.tsx",
+        "src/components/RoutePrefetcher.tsx",
+        "src/components/ScientificReferences.tsx",
+        "src/components/ScreenReader.tsx",
+        "src/components/ScrollManager.tsx",
+        "src/components/SearchBar.tsx",
+        "src/components/SecurityDashboard.tsx",
+        "src/components/ShippingForm.tsx",
+        "src/components/ShoppingCart.tsx",
+        "src/components/StructuredData.tsx",
+        "src/components/SystemCard.tsx",
+        "src/components/TestimonialCard.tsx",
+        "src/components/UserMenu.tsx",
+        "src/components/VirtualizedProductGrid.tsx",
+        "src/components/VirtualProductGrid.module.css",
+        "src/components/VirtualProductGrid.tsx",
+        "src/components/WebVitalsMonitor.tsx",
+        "src/components/WebVitalsReport.tsx",
+        "src/components/Wishlist.tsx",
+        "src/components/A11y/FocusManager.tsx",
+        "src/components/A11y/LiveRegion.tsx",
+        "src/components/A11y/SkipLink.css",
+        "src/components/A11y/SkipLink.tsx",
+        "src/components/A11y/VisuallyHidden.tsx",
+        "src/components/Analytics/AnalyticsCharts.tsx",
+        "src/components/ErrorBoundary/ComponentErrorBoundary.tsx",
+        "src/components/ErrorBoundary/ErrorBoundary.css",
+        "src/components/ErrorBoundary/ErrorBoundary.tsx",
+        "src/components/ErrorBoundary/index.ts",
+        "src/components/ErrorBoundary/PageErrorBoundary.tsx",
+        "src/components/Form/FormFields.tsx",
+        "src/components/__tests__/FilterSidebar.test.tsx",
+        "src/components/__tests__/Footer.test.tsx",
+        "src/components/__tests__/Header.test.tsx",
+        "src/components/__tests__/ProductActions.test.tsx",
+        "src/components/__tests__/ProductCard.test.tsx",
+        "src/components/__tests__/ProductDetails.test.tsx",
+        "src/components/__tests__/ProductImage.test.tsx",
+        "src/components/__tests__/ProductInfo.test.tsx",
+        "src/components/__tests__/QuantitySelector.test.tsx",
+        "src/components/__tests__/ScientificReferences.test.tsx",
+        "src/components/__tests__/VirtualizedProductGrid.test.tsx",
+        "src/config/index.ts",
+        "src/config/securityHeaders.ts",
+        "src/config/seo.config.ts",
+        "src/contexts/AuthContext.tsx",
+        "src/contexts/CartContext.tsx",
+        "src/contexts/NotificationContext.tsx",
+        "src/contexts/WishlistContext.tsx",
+        "src/data/blog.ts",
+        "src/data/services.ts",
+        "src/data/testimonials.ts",
+        "src/hocs/withAnalytics.tsx",
+        "src/hooks/useA11y.ts",
+        "src/hooks/useAnalytics.ts",
+        "src/hooks/useAuth.ts",
+        "src/hooks/useAuthSession.ts",
+        "src/hooks/useCart.ts",
+        "src/hooks/useImage.ts",
+        "src/hooks/useKeyboardNavigation.ts",
+        "src/hooks/useKeyPress.ts",
+        "src/hooks/useLiveRegion.tsx",
+        "src/hooks/useLocalStorage.ts",
+        "src/hooks/useMetaTags.ts",
+        "src/hooks/useNavigationState.ts",
+        "src/hooks/useNotifications.ts",
+        "src/hooks/usePerformance.tsx",
+        "src/hooks/usePerformanceAlert.tsx",
+        "src/hooks/usePerformanceAlertHook.ts",
+        "src/hooks/usePerformanceReport.ts",
+        "src/hooks/usePrefetch.ts",
+        "src/hooks/useRateLimit.ts",
+        "src/hooks/useScreenReaderAnnouncement.ts",
+        "src/hooks/useScroll.ts",
+        "src/hooks/useScrollToTop.ts",
+        "src/hooks/useSeo.ts",
+        "src/hooks/useStable.ts",
+        "src/hooks/useWebVitals.ts",
+        "src/hooks/useWishlist.ts",
+        "src/infrastructure/di/Container.ts",
+        "src/middleware/securityHeaders.ts",
+        "src/models/AnalyticsEvent.ts",
+        "src/pages/AboutPage.tsx",
+        "src/pages/AddressesPage.tsx",
+        "src/pages/BlogPage.tsx",
+        "src/pages/BlogPostPage.tsx",
+        "src/pages/CartPage.tsx",
+        "src/pages/CheckoutPage.tsx",
+        "src/pages/ContactPage.tsx",
+        "src/pages/HomePage.tsx",
+        "src/pages/LoginPage.tsx",
+        "src/pages/OrderConfirmationPage.tsx",
+        "src/pages/OrdersPage.tsx",
+        "src/pages/ProductPage.tsx",
+        "src/pages/ProfilePage.tsx",
+        "src/pages/ServicePage.tsx",
+        "src/pages/ServicesPage.tsx",
+        "src/pages/SignupPage.tsx",
+        "src/pages/SistemasSinergicosPage.tsx",
+        "src/pages/StorePage.tsx",
+        "src/pages/StorePageOptimized.tsx",
+        "src/pages/TestimonialsPage.tsx",
+        "src/pages/WishlistPage.tsx",
+        "src/pages/__tests__/AboutPage.test.tsx",
+        "src/pages/__tests__/AddressesPage.test.tsx",
+        "src/pages/__tests__/BlogPage.test.tsx",
+        "src/pages/__tests__/BlogPostPage.test.tsx",
+        "src/pages/__tests__/CheckoutPage.test.tsx",
+        "src/pages/__tests__/ContactPage.test.tsx",
+        "src/pages/__tests__/OrderConfirmationPage.test.tsx",
+        "src/pages/__tests__/OrdersPage.test.tsx",
+        "src/pages/__tests__/ProductPage.test.tsx",
+        "src/pages/__tests__/ProfilePage.test.tsx",
+        "src/pages/__tests__/ServicesPage.test.tsx",
+        "src/pages/__tests__/SistemasSinergicosPage.test.tsx",
+        "src/pages/__tests__/StorePage.test.tsx",
+        "src/pages/__tests__/TestimonialsPage.test.tsx",
+        "src/pages/__tests__/WishlistPage.test.tsx",
+        "src/providers/queryClient.ts",
+        "src/providers/QueryProvider.tsx",
+        "src/repositories/__tests__/ProductRepository.test.ts",
+        "src/routes/AppRoutes.tsx",
+        "src/routes/dynamicRoutes.ts",
+        "src/schemas/validationSchemas.ts",
+        "src/services/addressService.ts",
+        "src/services/apiClient.ts",
+        "src/services/errorLogger.ts",
+        "src/services/orderService.ts",
+        "src/services/productApi.ts",
+        "src/services/productHelpers.ts",
+        "src/services/reviewsService.ts",
+        "src/services/securityReportingService.ts",
+        "src/services/securityService.ts",
+        "src/services/__tests__/ProductService.test.ts",
+        "src/store/authStore.ts",
+        "src/store/cartNotificationStore.ts",
+        "src/store/cartStore.ts",
+        "src/store/checkoutStore.ts",
+        "src/store/index.ts",
+        "src/store/notificationStore.ts",
+        "src/store/orderStore.ts",
+        "src/store/productStore.ts",
+        "src/store/uiStore.ts",
+        "src/store/wishlistStore.ts",
+        "src/store/__tests__/authStore.test.ts",
+        "src/store/__tests__/cartStore.test.ts",
+        "src/styles/accessibility.css",
+        "src/test/setup.ts",
+        "src/test/test-utils.tsx",
+        "src/test/utils/text.ts",
+        "src/types/analytics.d.ts",
+        "src/types/auth.ts",
+        "src/types/blog.ts",
+        "src/types/cart.ts",
+        "src/types/index.ts",
+        "src/types/product.ts",
+        "src/types/rateLimit.ts",
+        "src/types/security.ts",
+        "src/types/services.ts",
+        "src/types/serviceWorker.ts",
+        "src/types/system.ts",
+        "src/utils/a11yFocus.ts",
+        "src/utils/accessibilityTest.ts",
+        "src/utils/api.ts",
+        "src/utils/authErrorHandler.ts",
+        "src/utils/authMapper.ts",
+        "src/utils/backgroundSync.ts",
+        "src/utils/browserSupport.ts",
+        "src/utils/encoding.ts",
+        "src/utils/errorHandler.ts",
+        "src/utils/globalErrorHandler.ts",
+        "src/utils/image.ts",
+        "src/utils/imageProcessor.ts",
+        "src/utils/logger.ts",
+        "src/utils/pushNotifications.ts",
+        "src/utils/rateLimitConfig.ts",
+        "src/utils/rateLimitMonitoring.ts",
+        "src/utils/rateLimitUtils.ts",
+        "src/utils/sanitizationMiddleware.ts",
+        "src/utils/sanitizer.ts",
+        "src/utils/schemaGenerators.ts",
+        "src/utils/securityIntegration.ts",
+        "src/utils/seo.ts",
+        "src/utils/performance/alerts.ts",
+        "src/utils/performance/lazy.tsx",
+        "src/utils/security/cspConfig.ts",
+        "src/utils/security/csrfProtection.ts",
+        "src/utils/security/sanitization.ts",
+        "src/utils/security/sslConfig.ts",
+        "src/utils/__tests__/encoding.test.ts",
+        "src/utils/__tests__/sanitizationMiddleware.test.ts"
+      ]
+    },
+    {
+      "id": "backend-api",
+      "description": "API Fastify/Drizzle",
+      "files": [
+        "backend/src/index.ts",
+        "backend/src/config/index.ts",
+        "backend/src/db/client.ts",
+        "backend/src/db/init-schema.ts",
+        "backend/src/db/migrate.ts",
+        "backend/src/db/products-data.ts",
+        "backend/src/db/schema.ts",
+        "backend/src/db/seed.ts",
+        "backend/src/db/migrations/0000_romantic_eternals.sql",
+        "backend/src/db/migrations/0001_add_product_details.sql",
+        "backend/src/db/migrations/meta/0000_snapshot.json",
+        "backend/src/db/migrations/meta/_journal.json",
+        "backend/src/middleware/auth.ts",
+        "backend/src/middleware/validate.ts",
+        "backend/src/routes/auth.ts",
+        "backend/src/routes/products.ts",
+        "backend/src/services/authService.ts",
+        "backend/src/services/productService.ts",
+        "backend/src/types/auth.ts",
+        "backend/src/types/product.ts",
+        "backend/src/types/validation.ts"
+      ]
+    },
+    {
+      "id": "frontend-shared-components",
+      "description": "Componentes legacy fuera de src",
+      "files": [
+        "components/AuthModal.tsx",
+        "components/BlogPostModal_Fixed.tsx",
+        "components/CartModal.css",
+        "components/CartModal.tsx",
+        "components/CartNotification.tsx",
+        "components/Footer.tsx",
+        "components/ImageZoom.css",
+        "components/ImageZoom.tsx",
+        "components/ProductCard.tsx",
+        "components/ProductTabs.tsx",
+        "components/QuantitySelector.tsx",
+        "components/ScientificReferences.tsx",
+        "components/SystemCard.tsx",
+        "components/UserMenu.tsx"
+      ]
+    },
+    {
+      "id": "public-assets",
+      "description": "Manifiestos y archivos estaticos ligeros",
+      "files": [
+        "public/humans.txt",
+        "public/manifest.json",
+        "public/offline.html",
+        "public/robots.txt",
+        "public/js/ga.js",
+        "public/js/init.js",
+        "public/js/offline.js"
+      ]
+    },
+    {
+      "id": "tooling",
+      "description": "Scripts de build/auditoria",
+      "files": [
+        "scripts/analyzeBundle.cjs",
+        "scripts/clean_specific_files.cjs",
+        "scripts/ConvertAllImages.ps1",
+        "scripts/ConvertImages.ps1",
+        "scripts/convertToJpeg.js",
+        "scripts/ConvertToJpeg.ps1",
+        "scripts/convertToWebP.ts",
+        "scripts/createConverter.js",
+        "scripts/docs_encoding_check.cjs",
+        "scripts/exportDataFromTS.cjs",
+        "scripts/finalPipingRockUpdate.js",
+        "scripts/fix-encoding.js",
+        "scripts/fix-product-data.mjs",
+        "scripts/force_repair_encoding.cjs",
+        "scripts/generateIcons.ts",
+        "scripts/generateSitemap.ts",
+        "scripts/optimizeImages.ts",
+        "scripts/setup_backend.ps1",
+        "scripts/SimpleConvert.ps1",
+        "scripts/smoke.ps1",
+        "scripts/strip-bom.cjs",
+        "scripts/updateAllPipingRockImages.js",
+        "scripts/updatePipingRockImages.js",
+        "scripts/validate-comments.js",
+        "scripts/validate_phase.ps1",
+        "scripts/verify-systems.ts",
+        "tools/add_references.cjs",
+        "tools/check_encoding.cjs",
+        "tools/components_audit.cjs",
+        "tools/encoding_audit.cjs",
+        "tools/fetch_sources.cjs",
+        "tools/fill_components_from_old.cjs",
+        "tools/fill_min_sections.cjs",
+        "tools/fix_encoding_component.cjs",
+        "tools/fix_reference_urls.cjs",
+        "tools/image_rename_map.json",
+        "tools/links_check.cjs",
+        "tools/normalize_spanish_text.ps1",
+        "tools/product_audit_merge.cjs",
+        "tools/regenerate_reports.cjs",
+        "tools/set_components.cjs",
+        "tools/text_audit.cjs"
+      ]
+    },
+    {
+      "id": "qa-automation",
+      "description": "Tests e2e/unit",
+      "files": [
+        "e2e/a11y.spec.ts",
+        "e2e/addToCart.spec.ts",
+        "e2e/auth.spec.ts",
+        "e2e/navigation.spec.ts",
+        "e2e/performance-accessibility.spec.ts",
+        "e2e/search-filter-cart.spec.ts",
+        "e2e/security.spec.ts",
+        "test/components/CartModal.test.tsx",
+        "test/components/Footer.test.tsx",
+        "test/components/Header.test.tsx",
+        "test/components/ProductCard.test.tsx",
+        "test/hooks/useLocalStorage.test.ts",
+        "test/integration/App.test.tsx",
+        "test/integration/CartFlow.test.tsx",
+        "test/__mocks__/fileMock.ts"
+      ]
+    },
+    {
+      "id": "knowledge-base",
+      "description": "Documentacion funcional",
+      "files": [
+        "docs/ACCESSIBILITY_IMPLEMENTATION.md",
+        "docs/DOCUMENTACION_COMPLETA_ES.md",
+        "docs/EXPERT_BEST_PRACTICES_SUMMARY.md",
+        "docs/FASE0_REPORTE_FINAL.md",
+        "docs/fase0_setup_backend.md",
+        "docs/fase1_autenticacion.md",
+        "docs/KIT_MIGRACION_README.md",
+        "docs/MONITORING_SETUP.md",
+        "docs/PLAN_MIGRACION_COMPLETO.md",
+        "docs/TESTING_NOTAS.md",
+        "docs/checklists/accesibilidad.md",
+        "docs/checklists/rendimiento.md",
+        "docs/checklists/seguridad.md"
+      ]
+    },
+    {
+      "id": "ci-cd",
+      "description": "Workflows y settings CI/CD",
+      "files": [
+        ".github/copilot-instructions.md",
+        ".github/pull_request_template.md",
+        ".github/workflows/ci.yml"
+      ]
+    },
+    {
+      "id": "data-layer",
+      "description": "Esquemas Supabase/DB",
+      "files": "supabase/schema.sql"
+    },
+    {
+      "id": "templates",
+      "description": "Plantillas de contenido",
+      "files": [
+        "templates/backend/package.json",
+        "templates/backend/README_TEMPLATES.md",
+        "templates/backend/tsconfig.json",
+        "templates/backend/src/index.ts",
+        "templates/backend/src/config/index.ts",
+        "templates/backend/src/db/client.ts",
+        "templates/backend/src/db/migrate.ts",
+        "templates/backend/src/db/schema.ts",
+        "templates/backend/src/db/seed.ts",
+        "templates/backend/src/middleware/auth.ts",
+        "templates/backend/src/middleware/validate.ts",
+        "templates/backend/src/routes/auth.ts",
+        "templates/backend/src/services/authService.ts",
+        "templates/backend/src/types/auth.ts",
+        "templates/backend/src/types/validation.ts"
+      ]
+    }
+  ]
+}

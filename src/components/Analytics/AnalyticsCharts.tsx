@@ -55,10 +55,7 @@ export const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
               fill="#8884d8"
             />
           ) : (
-            <Bar
-              dataKey={yKey}
-              fill="#8884d8"
-            />
+            <Bar dataKey={yKey} fill="#8884d8" />
           )}
         </ChartComponent>
       </ResponsiveContainer>

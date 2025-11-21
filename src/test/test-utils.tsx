@@ -5,11 +5,7 @@ import { ReactElement } from 'react';
 // Wrapper personalizado que incluye los providers necesarios
 export function renderWithProviders(ui: ReactElement) {
   return rtlRender(ui, {
-    wrapper: ({ children }) => (
-      <BrowserRouter>
-        {children}
-      </BrowserRouter>
-    ),
+    wrapper: ({ children }) => <BrowserRouter>{children}</BrowserRouter>,
   });
 }
 

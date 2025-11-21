@@ -1,6 +1,8 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { Product, CartItem } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useApi } from '../src/utils/api';
+import { useAuth } from './AuthContext';
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -8,6 +10,7 @@ interface CartContextType {
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  placeOrder: () => Promise<void>;
   cartCount: number;
   totalPrice: number;
 }
@@ -19,10 +22,18 @@ const CART_STORAGE_KEY = 'pura-natura-cart';
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(CART_STORAGE_KEY, []);
-  
+  const api = useApi();
+  const { user } = useAuth();
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    CART_STORAGE_KEY,
+    []
+  );
+
   // Calcular el total de items y precio
-  const cartCount = cartItems.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+  const cartCount = cartItems.reduce(
+    (sum: number, item: CartItem) => sum + item.quantity,
+    0
+  );
   const totalPrice = cartItems.reduce(
     (sum: number, item: CartItem) => sum + item.product.price * item.quantity,
     0
@@ -31,7 +42,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const addToCart = (product: Product, quantity: number = 1) => {
     setCartItems((prevItems: CartItem[]) => {
       const existingItem = prevItems.find(
-        (item: CartItem) => item.product.id === product.id,
+        (item: CartItem) => item.product.id === product.id
       );
       if (existingItem) {
         return prevItems.map((item: CartItem) =>
@@ -67,6 +78,25 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     setCartItems([]);
   };
 
+  const placeOrder = async () => {
+    if (!user) {
+      throw new Error('Debes iniciar sesión para finalizar tu compra.');
+    }
+
+    if (cartItems.length === 0) {
+      throw new Error('El carrito está vacío.');
+    }
+
+    await api.post('/orders', {
+      items: cartItems.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      })),
+    });
+
+    clearCart();
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -75,6 +105,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         removeFromCart,
         updateQuantity,
         clearCart,
+        placeOrder,
         cartCount,
         totalPrice,
       }}

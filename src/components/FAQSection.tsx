@@ -152,10 +152,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
           className="space-y-4"
         >
           {filteredItems.length === 0 ? (
-            <motion.div
-              variants={itemVariants}
-              className="text-center py-12"
-            >
+            <motion.div variants={itemVariants} className="text-center py-12">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400 mb-4"
                 fill="none"
@@ -251,9 +248,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
             animate={{ opacity: 1, y: 0 }}
             className="mt-12 text-center"
           >
-            <p className="text-gray-600 mb-4">
-              ¿No encuentras lo que buscas?
-            </p>
+            <p className="text-gray-600 mb-4">¿No encuentras lo que buscas?</p>
             <button
               onClick={onContactSupport}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors"
