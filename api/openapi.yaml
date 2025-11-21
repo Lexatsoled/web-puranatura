@@ -163,7 +163,7 @@ components:
         phone:
           type:
             - string
-            - "null"
+            - 'null'
     LoginRequest:
       type: object
       required:
