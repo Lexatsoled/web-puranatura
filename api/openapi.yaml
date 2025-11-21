@@ -5,6 +5,7 @@ info:
   description: API para auth, catálogo y pedidos.
   license:
     name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
   - url: https://api.puranatura.local
 paths:
@@ -160,8 +161,9 @@ components:
         lastName:
           type: string
         phone:
-          type: string
-          nullable: true
+          type:
+            - string
+            - "null"
     LoginRequest:
       type: object
       required:
