@@ -322,3 +322,11 @@ pm run build fallaba tras integrar el BFF
 - **Accion 2025-11-22:** se renombro el helper a `applyFallback` y se declararon dependencias reales del efecto (api + fallbackProducts) para eliminar el `eslint-disable`; `sanitizeProductContent` ahora fuerza un placeholder https seguro (`FALLBACK_IMAGE`) cuando la ruta no es relativa (`/...`) ni http(s). Se ejecutaron `npm run lint`, `npm run test:ci`, `npm run build` y `npm run test:e2e` con exito (avisos conocidos: advertencias de `use client` en framer-motion y el preview de Vite quedo en el puerto 5180 por puertos ocupados).
 - **Estado:** cerrado (T4.2 validado localmente; pendiente ejecucion en runner CI).
 
+
+### OBS-MET-011 - Dashboard de metricas
+
+- **Fecha:** 2025-11-22
+- **Archivos:** pages/MetricsDashboardPage.tsx, data/metricsDashboard.ts, metrics-dashboard.md, App.tsx, SimpleLayout.tsx.
+- **Sintoma:** no existia un dashboard visible para LCP/TTFB/bundle/coverage; metricas solo en markdown con valores obsoletos.
+- **Accion:** se creo la ruta `/metricas` con tarjetas, series Recharts y comandos de actualizacion; se documentaron valores basicos en metrics-dashboard.md y se anadio dataset tipado en data/metricsDashboard.ts. Navegacion actualizada para exponer la pagina.
+- **Estado:** cerrado (T5.1 completada; pendiente conectar fuentes reales GA/APM en futuras iteraciones).
