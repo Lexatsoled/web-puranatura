@@ -181,31 +181,30 @@ Este documento sintetiza cada hallazgo con fechas, síntomas, causa-raíz, soluc
 - **Acción 2025-11-21:** se migró a `import.meta.env.VITE_*`, se consulta `puranatura-consent-analytics` antes de cargar scripts y se bloquea cualquier tracking (incluido el backend) sin consentimiento.
 - **Estado:** cerrado (T2.3 completada).
 
-### QA-E2E-007 – Test tautológico
+### QA-E2E-007 - Test tautologico
 
 - **Fecha:** 2025-11-18
 - **Archivo:** `e2e/search-filter-cart.spec.ts`.
-- **Síntoma:** `expect(locator).toHaveCount(await locator.count())`.
-- **Solución:** capturar `initialCount`, verificar reducción y texto relacionado; endurecer helper `clickWhenReady`.
+- **Sintoma:** `expect(locator).toHaveCount(await locator.count())`.
+- **Solucion:** capturar `initialCount`, verificar reduccion y texto relacionado; endurecer helper `clickWhenReady`.
 - **Estado:** pendiente Fase 4 T4.1.
-- **Actualización 2025-11-19:** se ejecutó la suite E2E local con `npm run test:e2e`. Resultado: 2 pruebas fallaron en Chromium.
+- **Actualizacion 2025-11-19:** se ejecuto la suite E2E local con `npm run test:e2e`. Resultado: 2 pruebas fallaron en Chromium.
   - Tests fallidos:
-    - `Funcionalidades críticas: búsqueda, filtros y carrito › debe permitir buscar productos` — Error: `expect(locator).toBeVisible()` falló; selector `[data-testid="search-input"]` no encontrado/visible.
-    - `Funcionalidades críticas: búsqueda, filtros y carrito › debe permitir añadir productos al carrito` — Error: `locator.waitFor` timeout esperando el botón `[data-testid="add-to-cart"]` dentro de `.product-card`.
+    - `Funcionalidades criticas: busqueda, filtros y carrito > debe permitir buscar productos` - Error: `expect(locator).toBeVisible()` fallo; selector `[data-testid="search-input"]` no encontrado/visible.
+    - `Funcionalidades criticas: busqueda, filtros y carrito > debe permitir anadir productos al carrito` - Error: `locator.waitFor` timeout esperando el boton `[data-testid="add-to-cart"]` dentro de `.product-card`.
   - Artefactos generados (local):
     - `test-results/search-filter-cart-Funcion-2842e-e-permitir-buscar-productos-chromium/test-failed-1.png`
     - `test-results/search-filter-cart-Funcion-2842e-e-permitir-buscar-productos-chromium/video.webm`
-    - `test-results/search-filter-cart-Funcion-d5bab-añadir-productos-al-carrito-chromium/test-failed-1.png`
-    - `test-results/search-filter-cart-Funcion-d5bab-añadir-productos-al-carrito-chromium/video.webm`
-  - Observaciones: la página se sirve correctamente (`http://localhost:5173`) pero algunos selectores usados por el test no resolvieron; puede deberse a cambios en los atributos `data-testid`, a tiempo de carga diferente, o a diferencias en el contenido inicial (manifest/imágenes/placeholder). También se registraron logs de la página indicando uso de CDN de Tailwind (advertencia) y el `body` estaba vacío al primer intento de ver el DOM en el fallo (ver capturas).
-- **Estado:** en investigación (T4.1) — se requiere revisar selectores E2E y sincronización (timeouts/clickWhenReady).
-- **Acción 2025-11-20:** iniciada tarea T4.1 — endurecer tests Playwright y corregir `e2e/search-filter-cart.spec.ts`.
+    - `test-results/search-filter-cart-Funcion-d5bab-anadir-productos-al-carrito-chromium/test-failed-1.png`
+    - `test-results/search-filter-cart-Funcion-d5bab-anadir-productos-al-carrito-chromium/video.webm`
+  - Observaciones: la pagina se sirve correctamente (`http://localhost:5173`) pero algunos selectores usados por el test no resolvieron; puede deberse a cambios en los atributos `data-testid`, a tiempo de carga diferente, o a diferencias en el contenido inicial (manifest/imagenes/placeholder). Tambien se registraron logs de la pagina indicando uso de CDN de Tailwind (advertencia) y el `body` estaba vacio al primer intento de ver el DOM en el fallo (ver capturas).
+- **Accion 2025-11-20:** iniciada tarea T4.1 - endurecer tests Playwright y corregir `e2e/search-filter-cart.spec.ts`.
   - **Cambios aplicados:**
-    - Reescrito `e2e/search-filter-cart.spec.ts` para usar selectores robustos (`[data-testid^="product-card-"]`), capturar conteos iniciales y comprobaciones no tautológicas, verificar que los títulos de resultados contienen el término buscado, y seleccionar el primer botón «Añadir» habilitado en lugar de asumir el primer card.
+    - Reescrito `e2e/search-filter-cart.spec.ts` para usar selectores robustos (`[data-testid^="product-card-"]`), capturar conteos iniciales y comprobaciones no tautologicas, verificar que los titulos de resultados contienen el termino buscado, y seleccionar el primer boton "Anadir" habilitado en lugar de asumir el primer card.
     - Mantener captura de consola y pageerror en el spec para facilitar debugging.
-  - **Resultado de validación:** ejecutada la suite E2E localmente con el nuevo orquestador; Playwright devolvió exit code `0` y los tests relevantes pasaron en esta máquina (2 passed). Persisten advertencias/NetworkError en el preview que no afectan los resultados gracias a fallbacks en la UI.
-  - **Estado:** en progreso (T4.1 parcialmente completada). Próximo paso: revisar fallos intermitentes en entornos CI y, si reaparecen, ajustar `useApi` o introducir mocks HTTP en Playwright.
-
+  - **Resultado de validacion:** ejecutada la suite E2E localmente con el nuevo orquestador; Playwright devolvio exit code `0` y los tests relevantes pasaron en esta maquina (2 passed). Persisten advertencias/NetworkError en el preview que no afectan los resultados gracias a fallbacks en la UI.
+- **Actualizacion 2025-11-22:** fixtures E2E interceptan `/api/**` (productos/auth/orders) con datasets seguros alineados al contrato del BFF; se sanitizo `MutationObserver` para evitar errores; el spec usa `test-fixtures` y `npm run test:e2e` pasa localmente (preview termino en puerto 5182 por puertos ocupados).
+- **Estado:** cerrado (T4.1 completada; monitorear en CI).
 ### I18N-ENC-009 – Mojibake general
 
 - **Fecha:** 2025-11-18
@@ -322,3 +321,4 @@ pm run build fallaba tras integrar el BFF
 - **Sintoma:** `npm run lint` fallaba por usar un helper llamado `useFallback` dentro de `fetchProducts` (rules-of-hooks); `npm run test:ci` fallaba porque `sanitizeProductContent` dejaba `javascript:alert(1)` como `/javascript:alert(1)` en los `images`, rompiendo la expectativa de URLs https seguras.
 - **Accion 2025-11-22:** se renombro el helper a `applyFallback` y se declararon dependencias reales del efecto (api + fallbackProducts) para eliminar el `eslint-disable`; `sanitizeProductContent` ahora fuerza un placeholder https seguro (`FALLBACK_IMAGE`) cuando la ruta no es relativa (`/...`) ni http(s). Se ejecutaron `npm run lint`, `npm run test:ci`, `npm run build` y `npm run test:e2e` con exito (avisos conocidos: advertencias de `use client` en framer-motion y el preview de Vite quedo en el puerto 5180 por puertos ocupados).
 - **Estado:** cerrado (T4.2 validado localmente; pendiente ejecucion en runner CI).
+
