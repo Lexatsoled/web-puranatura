@@ -22,7 +22,7 @@
     "test:ci": "vitest run",
     "test:unit": "vitest run",
     "test:e2e": "npm run build && node scripts/run-e2e.cjs",
-    "test:contract": "prism mock api/openapi.yaml --cors -d ''",
+    "test:contract": "prism mock api/openapi.yaml --cors --port 4010 --host 127.0.0.1",
     "perf:api": "npx --yes k6 run GPT-51-Codex-Max/perf/k6-api-smoke.js",
     "perf:web": "lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
     "scan:security": "npx --yes gitleaks detect --no-banner",
