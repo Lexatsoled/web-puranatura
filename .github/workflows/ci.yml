@@ -1,5 +1,4 @@
 name: CI
-# Workflow CI básico: install, build, backend, tests unitarios y e2e
 on:
   push:
     branches: [main, fix/*, feat/*]
@@ -17,6 +16,8 @@ jobs:
       JWT_EXPIRES_IN: "15m"
       JWT_REFRESH_EXPIRES_IN: "7d"
       ALLOWED_ORIGINS: "http://localhost:5173"
+      BASE_URL: "http://127.0.0.1:5173"
+      REUSE_VITE_SERVER: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,9 +42,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies (root)
-        # Try to install with npm ci for reproducible installs; if it fails because the lockfile is
-        # out of sync, try `npm install` as a temporary fallback so CI can continue while the
-        # `package-lock.json` is updated in a separate commit.
         run: |
           set -o pipefail
           npm ci || (npm install && echo "WARNING: lockfile changed - update package-lock.json and push the changes")
@@ -54,7 +52,6 @@ jobs:
           npm --prefix backend run build
 
       - name: Run DB migrations (non-interactive)
-        # Intentamos aplicar migraciones; si fallan, hacemos db push como fallback no interactivo
         env:
           DATABASE_URL: "file:./backend/prisma/database.sqlite"
         run: |
@@ -66,7 +63,6 @@ jobs:
         shell: bash
 
       - name: Start backend (background)
-        # Usamos el artefacto compilado para evitar nodemon/ts-node en CI
         run: |
           nohup node backend/dist/server.js > backend.log 2>&1 &
           echo $! > backend.pid
