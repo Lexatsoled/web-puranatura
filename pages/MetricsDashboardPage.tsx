@@ -29,9 +29,15 @@ const estadoBadge = (metric: MetricCard) => {
   const { actual, objetivo, unidad } = metric;
   const worseIsHigher = unidad !== 'ratio' && unidad !== '%';
   const enRiesgo = worseIsHigher ? actual > objetivo : actual < objetivo;
-  const color = enRiesgo ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+  const color = enRiesgo
+    ? 'bg-red-100 text-red-700'
+    : 'bg-green-100 text-green-700';
   const label = enRiesgo ? 'En riesgo' : 'OK';
-  return <span className={`px-3 py-1 rounded-full text-xs font-semibold ${color}`}>{label}</span>;
+  return (
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${color}`}>
+      {label}
+    </span>
+  );
 };
 
 const MetricsDashboardPage: React.FC = () => {
@@ -46,9 +52,10 @@ const MetricsDashboardPage: React.FC = () => {
             Dashboard de m&eacute;tricas
           </h1>
           <p className="text-gray-700 mt-3 max-w-3xl">
-            Seguimiento r&aacute;pido de salud del frontend/BFF: LCP, bundle, auth, cobertura y
-            telemetr&iacute;a. Los datos est&aacute;n precargados con el baseline actual (2025-11-22)
-            y pueden conectarse a fuentes reales (GA/APM) m&aacute;s adelante.
+            Seguimiento r&aacute;pido de salud del frontend/BFF: LCP, bundle,
+            auth, cobertura y telemetr&iacute;a. Los datos est&aacute;n
+            precargados con el baseline actual (2025-11-22) y pueden conectarse
+            a fuentes reales (GA/APM) m&aacute;s adelante.
           </p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-700">
             <span className="px-3 py-1 rounded-full bg-white shadow-sm border border-emerald-100">
@@ -103,7 +110,9 @@ const MetricsDashboardPage: React.FC = () => {
               key={serie.id}
               className="bg-white/90 border border-emerald-100 rounded-xl shadow-sm p-4"
             >
-              <h3 className="text-xl font-semibold text-emerald-900 mb-1">{serie.nombre}</h3>
+              <h3 className="text-xl font-semibold text-emerald-900 mb-1">
+                {serie.nombre}
+              </h3>
               <p className="text-sm text-slate-600 mb-4">
                 Serie temporal con objetivo marcado en verde.
               </p>
@@ -117,7 +126,9 @@ const MetricsDashboardPage: React.FC = () => {
                       tickFormatter={(v) => formatValor(v, serie.unidad)}
                     />
                     <Tooltip
-                      formatter={(value: number) => formatValor(value, serie.unidad)}
+                      formatter={(value: number) =>
+                        formatValor(value, serie.unidad)
+                      }
                       labelFormatter={(label) => `Fecha: ${label}`}
                     />
                     <Legend />
@@ -151,14 +162,16 @@ const MetricsDashboardPage: React.FC = () => {
               Instrucciones r&aacute;pidas
             </h3>
             <span className="text-xs text-slate-500">
-              Ejecuta estos comandos y actualiza los valores en `data/metricsDashboard.ts`.
+              Ejecuta estos comandos y actualiza los valores en
+              `data/metricsDashboard.ts`.
             </span>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-slate-700">
             <div className="p-3 bg-emerald-50 rounded border border-emerald-100">
               <p className="font-semibold text-emerald-900">Lighthouse / LCP</p>
               <code className="block text-xs text-slate-800 bg-white rounded p-2 mt-1">
-                npx lighthouse http://localhost:4173 --preset=desktop --output=json
+                npx lighthouse http://localhost:4173 --preset=desktop
+                --output=json
               </code>
             </div>
             <div className="p-3 bg-emerald-50 rounded border border-emerald-100">

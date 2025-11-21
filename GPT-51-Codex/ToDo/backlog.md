@@ -2,7 +2,7 @@
 
 ---
 
-version: 2.0
+version: 1.8
 updated: 2025-11-22
 owner: PM Técnico
 
@@ -19,9 +19,9 @@ owner: PM Técnico
 | T2.3 | 🔷 Media | Gatear `useAnalytics` por consentimiento (OBS-ANA-006)                  | Frontend            | 2025-11-29 | ✅ Hecho    | T1.1                           |
 | T2.4 | 🔷 Media | Generar manifest de imágenes + alinear dataset (IMG-ASSET-010)          | Frontend/DevOps     | 2025-11-29 | ✅ Hecho    | T2.2                           |
 | T3.1 | 🔷 Media | Normalizar encoding/i18n (I18N-ENC-009)                                 | UX                  | 2025-12-02 | ✅ Hecho    | T2.1                           |
-| T4.1 | ?? Media | Refactor pruebas Playwright y helper (QA-E2E-007)                       | QA                  | 2025-12-03 | Hecho           | T2.2                           |
+| T4.1 | 🔷 Media | Refactor pruebas Playwright y helper (QA-E2E-007)                       | QA                  | 2025-12-03 | Planned     | T2.2                           |
 | T4.2 | ?? Media | Reparar workflows CI (CI-SEC-001 ?)                                     | DevOps              | 2025-11-24 | Hecho           | T1.2, T1.5                     |
-| T5.1 | ? Baja  | Dashboard metricas automatizado                                         | PM/QA               | 2025-12-05 | Hecho           | T2.x + T4.x                    |
+| T5.1 | ⚪ Baja  | Dashboard métricas automatizado                                         | PM/QA               | 2025-12-05 | Planned     | T2.x + T4.x                    |
 
 ## Notas operativas
 
@@ -33,8 +33,6 @@ owner: PM Técnico
 
 ### Historial de cambios
 
-- **2025-11-22 - v2.0** - T5.1 marcado como Hecho tras crear dashboard de m�tricas (/metricas) y actualizar metrics-dashboard.md.
-- **2025-11-22 - v1.9** - T4.1 marcado como Hecho tras endurecer fixtures Playwright (rutas `/api/*`, datasets seguros) y limpiar errores de observer.
 - **2025-11-22 - v1.8** - T4.2 marcado como Hecho tras validar lint/test/build/e2e en local (Node 20) y ajustar sanitizaci��n de im��genes.
 - **2025-11-21 - v1.7** - T2.3 cerrada: `useAnalytics` consulta consentimiento y evita cargar GA/FB sin permiso.
 - **2025-11-21 - v1.6** - T2.1 completada: `withLazyLoading` consume loaders reales y habilita code-splitting.

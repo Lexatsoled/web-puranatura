@@ -1,21 +1,12 @@
 ﻿# Metrics Dashboard
 
-version: 1.2  
-updated: 2025-11-22  
-owner: Observabilidad
-
-| Metrica                   | Valor actual (2025-11-22) | Objetivo Q1 2026 | Como medir / Owner                         |
-| ------------------------- | ------------------------- | ---------------- | ------------------------------------------ |
-| LCP Home (desktop)        | 1.72 s                    | <= 2.5 s         | `npx lighthouse --preset=desktop` / Front  |
-| TTFB /api/auth/login      | 0.9 s (mock)              | <= 0.3 s         | k6 + APM backend / SRE                     |
-| Bundle inicial            | 979.56 kB                 | <= 650 kB        | `npm run build` / Front                    |
-| Cobertura pruebas         | 42 % statements           | >= 80 %          | `npm run test:coverage` / QA               |
-| Secret leaks por release  | 0                         | 0                | `gitleaks detect` en CI / DevSecOps        |
-| CLS promedio              | 0.0039                    | <= 0.10          | Lighthouse + RUM / UX                      |
-| Eventos analytics validos | 0 % (bloqueado por GDPR)  | >= 95 %          | GA debug view + consentimiento / Marketing |
-
-Pasos para actualizar:
-
-1. Ejecuta `npm run build`, `npm run test:coverage` y `npx lighthouse http://localhost:4173 --preset=desktop --output=json` (y mobile si se requiere).
-2. Reemplaza los valores en `data/metricsDashboard.ts` y guarda los artefactos en `reports/`.
-3. Publica los resultados en el dashboard UI (`/metricas`) y en este archivo.
+| Métrica                    | Baseline (11/2025)         | Target Q1 2026             | Cómo medir / Owner                                  |
+| -------------------------- | -------------------------- | -------------------------- | --------------------------------------------------- |
+| LCP Home (`frontend-core`) | 3.8 s (desktop Lighthouse) | ≤ 2.5 s                    | `npm run build` + `npx lighthouse` / Frontend Guild |
+| TTFB API `/auth/login`     | 900 ms (mock)              | ≤ 300 ms                   | k6 load + APM backend / SRE                         |
+| Bundle inicial             | 2.1 MB                     | ≤ 650 kB                   | `vite build --analyze` / Frontend Guild             |
+| Error rate Auth            | 6 % (por fallas locales)   | ≤ 1 %                      | Sentry + backend logs / AppSec                      |
+| Cobertura pruebas          | 42 % statements            | ≥ 80 %                     | `npm run test:coverage` / QA                        |
+| Secret leaks por release   | 2 hallazgos críticos       | 0                          | `gitleaks detect` en CI / DevSecOps                 |
+| CLS promedio               | 0.18                       | ≤ 0.10                     | Lighthouse + RUM / UX                               |
+| Eventos analytics válidos  | 0 % (feature rota)         | ≥ 95 % tras consentimiento | GA debug view + contract tests / Marketing Ops      |

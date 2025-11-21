@@ -12,6 +12,7 @@
     "lint": "eslint src pages components tools scripts test --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src pages components tools scripts test --ext .ts,.tsx --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format",
@@ -21,6 +22,10 @@
     "test:ci": "vitest run",
     "test:unit": "vitest run",
     "test:e2e": "npm run build && node scripts/run-e2e.cjs",
+    "test:contract": "prism mock api/openapi.yaml --cors -d ''",
+    "perf:api": "npx --yes k6 run GPT-51-Codex-Max/perf/k6-api-smoke.js",
+    "perf:web": "lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
+    "scan:security": "npx --yes gitleaks detect --no-banner",
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts"
   },
   "dependencies": {

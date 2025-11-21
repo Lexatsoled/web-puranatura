@@ -15,7 +15,6 @@ import ProfilePage from './pages/ProfilePage';
 import OrdersPage from './pages/OrdersPage';
 import AddressesPage from './pages/AddressesPage';
 import WishlistPage from './pages/WishlistPage';
-import MetricsDashboardPage from './pages/MetricsDashboardPage';
 import SimpleLayout from './SimpleLayout';
 import CartModal from './components/CartModal';
 
@@ -23,8 +22,8 @@ const App: React.FC = () => {
   const [isCartOpen, setCartOpen] = useState(false);
 
   return (
-    <NotificationProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <NotificationProvider>
         <CartProvider>
           <WishlistProvider>
             <SimpleLayout onCartClick={() => setCartOpen(true)}>
@@ -40,14 +39,13 @@ const App: React.FC = () => {
                 <Route path="/pedidos" element={<OrdersPage />} />
                 <Route path="/direcciones" element={<AddressesPage />} />
                 <Route path="/lista-deseos" element={<WishlistPage />} />
-                <Route path="/metricas" element={<MetricsDashboardPage />} />
               </Routes>
             </SimpleLayout>
             <CartModal isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
           </WishlistProvider>
         </CartProvider>
-      </AuthProvider>
-    </NotificationProvider>
+      </NotificationProvider>
+    </AuthProvider>
   );
 };
 
