@@ -84,9 +84,12 @@ Actionable Lighthouse opportunities (prioritized):
 
 Siguientes pasos propuestos:
 
-1. Ajustar `NavLink` en `SimpleLayout.tsx` — proponer un color alternativo accesible o añadir fondo claro para enlaces.
-2. Re-ejecutar `.\scripts\run-axe-dev.ps1` para asegurar que las `violations` desaparecen.
-3. Ejecutar `.\scripts\run-accessibility-audits.ps1` con Chrome iniciado en `--remote-debugging-port` para generar Lighthouse HTML/JSON y completar evidencias de la Fase 3.
+1. Re-ejecutar .\scripts\run-axe-dev.ps1 para asegurar que las iolations de contraste desaparecen tras el ajuste del header/nav. - Status: pendiente
+2. Ejecutar .\scripts\run-accessibility-audits.ps1 con Chrome iniciado en --remote-debugging-port para generar Lighthouse HTML/JSON actualizados. - Status: pendiente
+3. (Opcional) Correr 
+pm run build si se modifican assets antes del audit. - Status: opcional
+
+**Actualizaci?n contrastes (2025-11-21):** Cabecera en SimpleLayout.tsx ahora usa fondo #0f5132, enlaces con fondos claros y foco visible, y botones de autenticaci?n/carrito con alto contraste (objetivo >= 4.5:1). Pendiente validar con axe/Lighthouse.
 
 **Artifacts**
 
@@ -263,6 +266,7 @@ Este documento sintetiza cada hallazgo con fechas, síntomas, causa-raíz, soluc
   2. `components/UserMenu.tsx`, `src/pages/ProductPage.tsx`: movidos los `useMemo` para evitar hooks condicionales.
   3. `scripts/run-e2e.cjs`, `vitest.setup.ts`, `components/CartModal.tsx`: cambiado `catch (e)` a `catch { }` y añadido comentario explicativo en español; se mitigaron warnings `no-unused-vars`.
 - **Resultado:** `node scripts/orchestrator.mjs ci` ejecuta lint, unit y e2e localmente; los tests unitarios y e2e pasan en mi máquina. El orquestador no falla por falta de `ci:security`.
+ - **Nota adicional (2025-11-21):** Tras revisar las advertencias, corregí un warning de Prettier en `scripts/orchestrator.mjs` (formato de `execSync(...)`) para cumplir la configuración `--max-warnings 0`. Realicé una ejecución local completa con Node v25.1: lint → pasó después del ajuste; vitest → passed; Playwright → 2 tests pasados; build → completado con warnings de chunks grandes (ver log). Se recomienda actualizar `package-lock.json` en la rama si el lockfile cambia al regenerarlo con Node 20.
 - **Estado:** in progress → ready for review (T4.2 parcialmente resuelto).
 
 ### CI-WORKFLOW-003 - Solicitud de revisión del pipeline en GitHub Actions
@@ -309,3 +313,12 @@ pm run build fallaba tras integrar el BFF
   pm run build ejecuta sc y ite build con éxito.
 - **Estado:** cerrado (desbloquea continuación de T1.2/T2.x).
 
+
+
+### CI-WORKFLOW-006 - Validacion local de pipeline y sanitizacion de imagenes
+
+- **Fecha:** 2025-11-22
+- **Archivos:** pages/StorePage.tsx, src/utils/contentSanitizers.ts.
+- **Sintoma:** `npm run lint` fallaba por usar un helper llamado `useFallback` dentro de `fetchProducts` (rules-of-hooks); `npm run test:ci` fallaba porque `sanitizeProductContent` dejaba `javascript:alert(1)` como `/javascript:alert(1)` en los `images`, rompiendo la expectativa de URLs https seguras.
+- **Accion 2025-11-22:** se renombro el helper a `applyFallback` y se declararon dependencias reales del efecto (api + fallbackProducts) para eliminar el `eslint-disable`; `sanitizeProductContent` ahora fuerza un placeholder https seguro (`FALLBACK_IMAGE`) cuando la ruta no es relativa (`/...`) ni http(s). Se ejecutaron `npm run lint`, `npm run test:ci`, `npm run build` y `npm run test:e2e` con exito (avisos conocidos: advertencias de `use client` en framer-motion y el preview de Vite quedo en el puerto 5180 por puertos ocupados).
+- **Estado:** cerrado (T4.2 validado localmente; pendiente ejecucion en runner CI).

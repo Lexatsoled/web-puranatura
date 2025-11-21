@@ -101,14 +101,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const savedUser = localStorage.getItem(USER_STORAGE_KEY);
-    if (savedUser) {
+    const hasSavedUser = !!savedUser;
+    if (hasSavedUser) {
       try {
         setUser(JSON.parse(savedUser));
       } catch {
         localStorage.removeItem(USER_STORAGE_KEY);
       }
+      // Sólo consultar /auth/me si tenemos una sesión previa almacenada
+      loadSession();
+    } else {
+      setIsLoading(false);
     }
-    loadSession();
   }, [loadSession]);
 
   const persistSession = (nextUser: User) => {
