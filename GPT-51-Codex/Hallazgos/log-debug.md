@@ -330,3 +330,18 @@ pm run build fallaba tras integrar el BFF
 - **Sintoma:** no existia un dashboard visible para LCP/TTFB/bundle/coverage; metricas solo en markdown con valores obsoletos.
 - **Accion:** se creo la ruta `/metricas` con tarjetas, series Recharts y comandos de actualizacion; se documentaron valores basicos en metrics-dashboard.md y se anadio dataset tipado en data/metricsDashboard.ts. Navegacion actualizada para exponer la pagina.
 - **Estado:** cerrado (T5.1 completada; pendiente conectar fuentes reales GA/APM en futuras iteraciones).
+### OBS-MET-012 - Lighthouse/metricas actualizadas
+
+- **Fecha:** 2025-11-22
+- **Archivos:** reports/lighthouse-desktop.report.json, data/metricsDashboard.ts, metrics-dashboard.md.
+- **Hallazgos:** LCP desktop 1.72s (mejora clara vs baseline anterior), CLS 0.0039 (bueno), bundle inicial 979.56 kB (> objetivo 650 kB).
+- **Accion:** se regenero build y se corrio Lighthouse desktop; se actualizaron valores en el dataset y dashboard. La ejecucion de Lighthouse concluyo con EPERM al limpiar /Temp pero genero el JSON correctamente.
+- **Pendiente:** repetir Lighthouse mobile y axe; reducir bundle con split/code pruning para alcanzar <=650 kB.
+- **Estado:** abierto (seguimiento de optimizacion de bundle y medicion mobile/axe).
+### OBS-MET-013 - axe-core CLI sin violaciones
+
+- **Fecha:** 2025-11-22
+- **Archivos:** reports/axe-report.json.
+- **Resultado:** 0 violations, 0 incomplete (axe-core 4.11.0 sobre http://127.0.0.1:4173, tags wcag2a/wcag2aa).
+- **Nota:** Solo cubre detecciones automatizadas; se requiere validación manual adicional.
+- **Estado:** cerrado para a11y automatizado; pendiente Lighthouse mobile por EPERM en cleanup.
