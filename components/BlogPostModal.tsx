@@ -1,6 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BlogPost } from '../types';
+import {
+  sanitizeHtml,
+  sanitizeText,
+  sanitizeUrl,
+} from '../src/utils/sanitizer';
 
 interface BlogPostModalProps {
   isOpen: boolean;
@@ -8,7 +13,11 @@ interface BlogPostModalProps {
   onClose: () => void;
 }
 
-const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) => {
+const BlogPostModal: React.FC<BlogPostModalProps> = ({
+  isOpen,
+  post,
+  onClose,
+}) => {
   // Prevenir scroll del body cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
@@ -16,7 +25,7 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -36,6 +45,23 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  const safeContent = useMemo(
+    () => (post?.content ? sanitizeHtml(post.content) : ''),
+    [post?.content]
+  );
+  const safeTitle = useMemo(
+    () => (post?.title ? sanitizeText(post.title) : ''),
+    [post?.title]
+  );
+  const safeSummary = useMemo(
+    () => (post?.summary ? sanitizeText(post.summary) : ''),
+    [post?.summary]
+  );
+  const safeImageUrl = useMemo(
+    () => (post?.imageUrl ? sanitizeUrl(post.imageUrl) : ''),
+    [post?.imageUrl]
+  );
 
   if (!post) return null;
 
@@ -58,16 +84,16 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
           >
             {/* Header */}
             <div className="relative">
-              {post.imageUrl && (
+              {safeImageUrl && (
                 <div className="h-64 w-full overflow-hidden">
                   <img
-                    src={post.imageUrl}
-                    alt={post.title}
+                    src={safeImageUrl}
+                    alt={safeTitle}
                     className="w-full h-full object-cover"
                   />
                 </div>
               )}
-              
+
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 transition-all"
@@ -92,18 +118,18 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({ isOpen, post, onClose }) 
             {/* Contenido */}
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-16rem)]">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {post.title}
+                {safeTitle}
               </h1>
-              
+
               <div className="text-gray-600 mb-6 border-l-4 border-green-500 pl-4">
-                <p className="italic">{post.summary}</p>
+                <p className="italic">{safeSummary}</p>
               </div>
-              
+
               <div className="prose prose-lg max-w-none">
                 {/* Renderizar contenido del post */}
-                <div 
+                <div
                   className="text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: safeContent }}
                 />
               </div>
             </div>

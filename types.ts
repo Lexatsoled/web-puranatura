@@ -1,14 +1,13 @@
-export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  description: string;
-  images: {
-    thumbnail: string;
-    full: string;
-  }[];
-}
+import type { Product as DomainProduct } from './src/types/product';
+
+export type {
+  ProductImage,
+  ProductCategory,
+  ProductFilters,
+  SortOption,
+} from './src/types/product';
+
+export type Product = DomainProduct;
 
 export interface CartItem {
   product: Product;
@@ -19,6 +18,9 @@ export interface Service {
   title: string;
   description: string;
   imageUrl: string;
+  price?: number;
+  duration?: number;
+  benefits?: string[];
 }
 
 export interface Testimonial {

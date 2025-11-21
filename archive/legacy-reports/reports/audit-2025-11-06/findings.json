@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "version": 1,
+    "severity_scale": ["info", "low", "medium", "high", "critical"]
+  },
+  "findings": [
+    {
+      "id": "SEC-SECRETS-001",
+      "title": "Secretos y base SQLite versionados en el repo",
+      "category": "security",
+      "subcategory": "secret-management",
+      "severity": "high",
+      "likelihood": 4,
+      "priority": 16,
+      "where": {
+        "file": ".env",
+        "line": 1,
+        "snippet": "VITE_APP_URL=…, backend/.env con JWT_SECRET y backend/database.sqlite versionado"
+      },
+      "evidence": "`.env`, `.env.local` y `backend/.env` contienen claves reales mientras `backend/database.sqlite` se comitea en texto plano.",
+      "impact": "Permite clonar credenciales y datos sensibles en cuestión de segundos; facilita suplantación de tokens y fuga de clientes.",
+      "recommendation": "Versionar únicamente `.env.example`, mover secretos a variables administradas y regenerar los JWT_SECRET/REFRESH_SECRET.",
+      "fix_example": "```diff\n--- a/.gitignore\n+++ b/.gitignore\n@@\n+.env\n+.env.local\n+backend/.env\n+backend/database.sqlite*\n+*.sqlite-shm\n+*.sqlite-wal\n```",
+      "references": ["https://owasp.org/www-project-secrets-management/"],
+      "tests": ["git ls-files .env backend/.env backend/database.sqlite"],
+      "metrics": {
+        "tracked_secrets": 0
+      }
+    },
+    {
+      "id": "SEC-CHECKOUT-002",
+      "title": "Checkout persiste pedidos y métodos de pago en localStorage",
+      "category": "security",
+      "subcategory": "data-protection",
+      "severity": "critical",
+      "likelihood": 3,
+      "priority": 15,
+      "where": {
+        "file": "src/store/checkoutStore.ts",
+        "line": 150,
+        "snippet": "localStorage.setItem('pureza-naturalis-orders', JSON.stringify(existingOrders))"
+      },
+      "evidence": "`processOrder` serializa shipping address, notas y `paymentMethod` completos en localStorage sin cifrado ni expiración.",
+      "impact": "Exposición directa de PII y posibles datos de pago en cualquier navegador compartido; incumple PCI/GDPR.",
+      "recommendation": "Mover la creación de pedidos al backend, tokenizar métodos de pago y borrar cualquier rastro local tras confirmar.",
+      "fix_example": "```diff\n-      const existingOrders = JSON.parse(\n-        localStorage.getItem('pureza-naturalis-orders') || '[]'\n-      );\n-      existingOrders.push(order);\n-      localStorage.setItem('pureza-naturalis-orders', JSON.stringify(existingOrders));\n+      const { data } = await apiClient.post('/api/orders', order, { withCredentials: true });\n+      showSuccessNotification(`Pedido #${data.orderId} confirmado`);\n```",
+      "references": [
+        "https://owasp.org/www-project-top-ten/2017/A03_2017-Sensitive_Data_Exposure"
+      ],
+      "tests": ["npm run test:e2e -- --project checkout"],
+      "metrics": {
+        "local_storage_orders": 0
+      }
+    },
+    {
+      "id": "SEC-CSRF-003",
+      "title": "API de autenticación sin CSRF ni rotación de refresh tokens",
+      "category": "security",
+      "subcategory": "auth",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 12,
+      "where": {
+        "file": "backend/src/routes/auth.ts",
+        "line": 20,
+        "snippet": "app.post('/login', ...); // sin token anti-CSRF"
+      },
+      "evidence": "Las cookies httpOnly se aceptan sin validar origen ni token CSRF y los refresh tokens nunca se rotan ni se guardan con jti.",
+      "impact": "Una página maliciosa puede reutilizar cookies del usuario para iniciar sesión o mantener sesiones válidas tras un robo de refresh.",
+      "recommendation": "Registrar `@fastify/csrf-protection`, exigir encabezados X-CSRF-Token y almacenar refresh tokens hasheados con identificación única y revocación.",
+      "fix_example": "```diff\n-import Fastify from 'fastify';\n+import Fastify from 'fastify';\n+import csrf from '@fastify/csrf-protection';\n ...\n-const app = Fastify({ logger: true });\n+const app = Fastify({ logger: true });\n+await app.register(csrf, {\n+  sessionPlugin: true,\n+  cookieOpts: { sameSite: 'strict', secure: config.NODE_ENV === 'production', httpOnly: true }\n+});\n```",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
+      ],
+      "tests": ["npm run test:e2e -- --project auth"],
+      "metrics": {
+        "csrf_block_rate": ">=99%"
+      }
+    },
+    {
+      "id": "PRIV-LOGGER-004",
+      "title": "Logger/SecurityService envían PII a Sentry y localStorage",
+      "category": "security",
+      "subcategory": "logging",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 12,
+      "where": {
+        "file": "src/utils/logger.ts",
+        "line": 417,
+        "snippet": "security(event, data) { ... Sentry.captureMessage }"
+      },
+      "evidence": "El logger propaga `data` tal cual hacia Sentry y `SecurityService` persiste eventos en localStorage sin anonimizar campos sensibles.",
+      "impact": "Datos personales quedan replicados en proveedores externos y dispositivos cliente sin controles de retención.",
+      "recommendation": "Aplicar una allow-list/scrubber antes de loggear y deshabilitar la persistencia en localStorage para eventos de seguridad.",
+      "fix_example": "```diff\n+const SENSITIVE_KEYS = ['password','token','email','address','cardNumber'];\n+const scrubPayload = (payload) => {\n+  if (!payload || typeof payload !== 'object') return payload;\n+  return Object.fromEntries(Object.entries(payload).map(([key, value]) => (\n+    SENSITIVE_KEYS.includes(key) ? [key, '[redacted]'] : [key, value]\n+  )));\n+};\n   security(event, data) {\n-    this.log(LogLevel.WARN, LogCategory.SECURITY, event, data);\n+    this.log(LogLevel.WARN, LogCategory.SECURITY, event, scrubPayload(data));\n   }\n```",
+      "references": [
+        "https://docs.sentry.io/platforms/javascript/configuration/filtering/"
+      ],
+      "tests": ["npm run test:ci -- logger"],
+      "metrics": {
+        "pii_fields_in_logs": 0
+      }
+    },
+    {
+      "id": "A11Y-COMP-005",
+      "title": "ProductPage usa componentes legacy fuera de `src/components`",
+      "category": "accessibility",
+      "subcategory": "semantics",
+      "severity": "medium",
+      "likelihood": 3,
+      "priority": 9,
+      "where": {
+        "file": "src/pages/ProductPage.tsx",
+        "line": 13,
+        "snippet": "import QuantitySelector from '../../components/QuantitySelector'"
+      },
+      "evidence": "Los imports van al árbol `/components/**`, que carece de los fixes (roles/aria) presentes en `src/components/**`.",
+      "impact": "Usuarios con lector de pantalla pierden nombres de rol y focus, y se duplica la base de componentes.",
+      "recommendation": "Actualizar imports a `@/components/*` y eliminar el árbol legacy para garantizar una sola fuente de verdad.",
+      "fix_example": "```diff\n-import QuantitySelector from '../../components/QuantitySelector';\n-import ImageZoom from '../../components/ImageZoom';\n-import ProductTabs from '../../components/ProductTabs';\n-import ScientificReferences from '../../components/ScientificReferences';\n+import QuantitySelector from '@/components/QuantitySelector';\n+import ImageZoom from '@/components/ImageZoom';\n+import ProductTabs from '@/components/ProductTabs';\n+import ScientificReferences from '@/components/ScientificReferences';\n```",
+      "references": [
+        "https://www.w3.org/WAI/WCAG22/quickref/?versions=2.1#name-role-value"
+      ],
+      "tests": ["npm run test:e2e -- --project a11y"],
+      "metrics": {
+        "duplicated_components": 0
+      }
+    },
+    {
+      "id": "FUNC-ORDERS-006",
+      "title": "Servicios de direcciones/pedidos llaman APIs inexistentes",
+      "category": "maintainability",
+      "subcategory": "api-contract",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 12,
+      "where": {
+        "file": "src/services/orderService.ts",
+        "line": 47,
+        "snippet": "axios.post<OrderResponse>(this.apiUrl, orderData)"
+      },
+      "evidence": "Solo existen rutas `/api/auth/*` y `/api/products/*`, pero la UI intenta escribir en `/api/orders` y `/api/addresses`, produciendo 404 silenciosos.",
+      "impact": "El checkout nunca llega al backend y no hay registro de pedidos reales; soporte no puede rastrear compras.",
+      "recommendation": "Implementar endpoints Fastify para pedidos/direcciones o deshabilitar temporalmente los botones hasta tener backend funcional.",
+      "fix_example": "```diff\n-      const response = await axios.post<OrderResponse>(this.apiUrl, orderData);\n+      const response = await apiClient.post<OrderResponse>('/api/orders', orderData, { withCredentials: true });\n       return response.data;\n```",
+      "references": [
+        "https://martinfowler.com/articles/richardsonMaturityModel.html"
+      ],
+      "tests": ["npm run test:e2e -- checkout"],
+      "metrics": {
+        "api_404_rate": "<1%"
+      }
+    },
+    {
+      "id": "PERF-ASSETS-007",
+      "title": "Paquete de imágenes descontrolado (992 archivos / 29.6 MB)",
+      "category": "performance",
+      "subcategory": "assets",
+      "severity": "medium",
+      "likelihood": 4,
+      "priority": 12,
+      "where": {
+        "file": "public/Jpeg",
+        "line": 0,
+        "snippet": "COUNT=992, SIZE_MB=29.59"
+      },
+      "evidence": "`Get-ChildItem public/Jpeg -Recurse` reporta 992 archivos (>29 MB) servidos tal cual sin responsive loader.",
+      "impact": "Cada visita a la tienda descarga decenas de MB, degradando LCP y costes de CDN.",
+      "recommendation": "Automatizar resize/compresión (sharp/imagetools), servir desde CDN y usar `srcset` generado en build.",
+      "fix_example": "```diff\n import react from '@vitejs/plugin-react';\n-import { compression } from 'vite-plugin-compression2';\n+import { compression } from 'vite-plugin-compression2';\n+import { imagetools } from 'vite-imagetools';\n ...\n-    plugins: [\n-      react(),\n-      compression({ algorithms: ['gzip'], exclude: /\\.(br)$/ }),\n-      compression({ algorithms: ['brotliCompress'], exclude: /\\.(gz)$/ }),\n-    ],\n+    plugins: [\n+      react(),\n+      imagetools({ defaultDirectives: new URLSearchParams({ format: 'avif;webp', widths: '320;640;1024' }) }),\n+      compression({ algorithms: ['gzip'], exclude: /\\.(br)$/ }),\n+      compression({ algorithms: ['brotliCompress'], exclude: /\\.(gz)$/ }),\n+    ],\n```",
+      "references": ["https://web.dev/fast/#optimize-your-images"],
+      "tests": ["npm run build", "npm run audit:all"],
+      "metrics": {
+        "image_payload_mb": "<5"
+      }
+    },
+    {
+      "id": "SCAL-SQLITE-008",
+      "title": "SQLite síncrono bloquea el event loop y es SPOF",
+      "category": "reliability",
+      "subcategory": "scalability",
+      "severity": "medium",
+      "likelihood": 3,
+      "priority": 9,
+      "where": {
+        "file": "backend/src/db/client.ts",
+        "line": 5,
+        "snippet": "const sqlite = new Database(config.DATABASE_URL, ... )"
+      },
+      "evidence": "La API usa `better-sqlite3` en el mismo hilo de Fastify y la base vive como archivo `/backend/database.sqlite` comprometido en Git.",
+      "impact": "Al aumentar la concurrencia las peticiones se bloquean y cualquier corrupción del archivo deja la API fuera de servicio.",
+      "recommendation": "Migrar a Postgres/Supabase con pooling o aislar SQLite en worker threads con backups automáticos.",
+      "fix_example": "```diff\n-import Database from 'better-sqlite3';\n-import { drizzle } from 'drizzle-orm/better-sqlite3';\n-const sqlite = new Database(config.DATABASE_URL, {...});\n-export const db = drizzle(sqlite, { schema });\n+import postgres from 'postgres';\n+import { drizzle } from 'drizzle-orm/postgres-js';\n+const sql = postgres(config.DATABASE_URL, { max: 5, idle_timeout: 5 });\n+export const db = drizzle(sql, { schema });\n```",
+      "references": [
+        "https://fastify.dev/docs/latest/Reference/Server/#handling-long-running-tasks"
+      ],
+      "tests": ["npm run test:ci --backend"],
+      "metrics": {
+        "api_p95_ms": "<300"
+      }
+    }
+  ]
+}

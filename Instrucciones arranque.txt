@@ -1,0 +1,16 @@
+npm run dev
+
+o
+
+npm run dev -- --port 3500
+
+
+Ademas ahora que tiene Backend hay que inciarlo tambie mediante "npm run dev" en la carpeta "C:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3\backend".
+Esto arranca una base de datos SQLite en localhost:3001
+
+
+cloudflared tunnel run web.purezanaturalis.com
+
+o 
+
+cloudflared tunnel run web.purezanaturalis.com --url localhost:3500

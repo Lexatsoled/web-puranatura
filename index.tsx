@@ -7,7 +7,7 @@ import './index.css';
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error(
-    'No se pudo encontrar el elemento raíz para montar la aplicación.',
+    'No se pudo encontrar el elemento raíz para montar la aplicación.'
   );
 }
 
@@ -17,5 +17,5 @@ root.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

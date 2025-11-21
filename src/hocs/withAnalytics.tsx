@@ -17,9 +17,10 @@ export function withAnalytics<P extends object>(
     const { trackEvent } = useAnalytics();
 
     const handleAnalytics = () => {
-      const eventProps = typeof analyticsProps === 'function' 
-        ? analyticsProps(props) 
-        : analyticsProps;
+      const eventProps =
+        typeof analyticsProps === 'function'
+          ? analyticsProps(props)
+          : analyticsProps;
 
       trackEvent({
         category: eventProps.eventCategory as any, // EventCategory cast
@@ -30,19 +31,14 @@ export function withAnalytics<P extends object>(
       });
     };
 
-    return (
-      <WrappedComponent
-        {...props}
-        onAnalytics={handleAnalytics}
-      />
-    );
+    return <WrappedComponent {...props} onAnalytics={handleAnalytics} />;
   };
 }
 
 // HOC específico para productos
-export function withProductAnalytics<P extends { product: { id: string; name: string; price: number } }>(
-  WrappedComponent: React.ComponentType<P>
-) {
+export function withProductAnalytics<
+  P extends { product: { id: string; name: string; price: number } },
+>(WrappedComponent: React.ComponentType<P>) {
   return withAnalytics(WrappedComponent, (props: P) => ({
     eventCategory: 'product',
     eventAction: 'view',

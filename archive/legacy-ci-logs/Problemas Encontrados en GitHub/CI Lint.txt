@@ -1,0 +1,88 @@
+GitHub Copilot Chat Assistant
+
+Summary of failure
+
+CI job 55539339483 failed because ESLint found 127 problems (120 errors). The failure log (ref: 8990890edcdb086925a002b7905d201660599978) shows many common patterns: unused variables/params, assigned-but-unused variables, Unexpected any, empty blocks, case-declaration errors, unnecessary escape characters and unused eslint-disable directives. Example: lighthouse-runner.mjs shows an unused catch parameter at line 88:16 (see file at ref 8990890edcdb086925a002b7905d201660599978).
+Recommended fix plan (high-impact, ordered)
+
+Run automatic fixes first (safe & quick)
+
+Locally or in CI run: npx eslint --ext .js,.ts,.tsx . --fix
+This will resolve a subset (log states 4 errors fixable automatically) and reduce noise.
+Address the top recurring lint categories (manual edits)
+
+Unused variables / params: remove them, use underscore prefix, or use empty-catch binding.
+Assigned but never used: either use the variable or remove the assignment.
+Unexpected any: replace any with a concrete type or unknown and narrow it.
+Empty blocks: either add a comment explaining intentional noop or remove the block; use eslint-disable only when justified.
+no-case-declarations: wrap declarations inside blocks for switch cases.
+no-useless-escape: remove unnecessary backslashes in regex/strings.
+Remove unused eslint-disable lines that are no longer needed.
+Re-run lint and tests; repeat until green.
+
+Concrete code suggestions (copy-paste edits)
+
+Fix the unused catch parameter in lighthouse-runner.mjs (current file at ref 8990890edcdb086925a002b7905d201660599978) Current snippet (lines ~84–90): try { await chrome.kill(); } catch (e) { // Chrome ya cerrado }
+
+Two safe fixes (choose one):
+
+Option A — use empty catch binding (no unused var): try { await chrome.kill(); } catch { // Chrome already closed }
+
+Option B — keep error but mark intentionally unused (underscore name): try { await chrome.kill(); } catch (_e) { // Chrome already closed }
+
+Note: Option A is the cleanest if you don't need the error object and your Node target supports it.
+
+Handle unused function parameters like catch (e) in other JS files Replace catch (e) { /* noop / } with catch { / noop / } or catch (_e) { / noop */ }.
+
+Replace intentionally unused parameters with a leading underscore Example for event handlers or callbacks: // Before function onClick(e) { // nothing done with e }
+
+// After function onClick(_e) { // intentionally unused parameter }
+
+ESLint configs commonly ignore names starting with _.
+
+Fix "assigned a value but never used" If the variable was intended to be used later, use it; otherwise remove the assignment: // Before const addToCartInterval = setInterval(() => { ... }, 1000);
+
+// If you don't need to clear it: setInterval(() => { ... }, 1000);
+
+// If you intended to clear it later, ensure clearInterval(addToCartInterval) is present.
+
+Replace any with unknown or specific types (TypeScript files) // Before function normalize(x: any) { ... }
+
+// After (if you know the shape) interface Input { foo: string; bar?: number } function normalize(x: Input) { ... }
+
+// Or if type truly unknown: function normalize(x: unknown) { if (typeof x === 'string') { ... } }
+
+Fix empty block warnings (no-empty) // Before try { } catch (err) {}
+
+// After (document intent) try { // intentionally empty: operation is fire-and-forget } catch (err) { // handle if needed } Or: catch (err) { // eslint-disable-next-line no-empty }
+
+Fix no-case-declarations // Before switch (v) { case 'a': const x = 1; // error: lexical declaration in case break; }
+
+// After switch (v) { case 'a': { const x = 1; break; } }
+
+Remove unused eslint-disable directives Search for lines like /* eslint-disable @typescript-eslint/no-explicit-any */ that are not needed and delete them. They trigger "Unused eslint-disable directive" errors.
+
+Fix no-useless-escape (remove backslash) Example error at a regex or string — remove unnecessary backslashes: // Before const re = /https://example.com/;
+
+// If escaping isn't necessary in that context, remove the backslash before '.' only if not required. Validate the intended regex before changing.
+
+Quick commands to reproduce & iterate
+
+Reproduce locally (checkout the failing commit ref): git fetch && git checkout 8990890edcdb086925a002b7905d201660599978
+Run lint and auto-fix: npx eslint --ext .js,.ts,.tsx . --fix
+Run full lint to see remaining errors: npx eslint --ext .js,.ts,.tsx .
+Suggested CI improvements (optional)
+
+Add eslint --fix as a pre-commit step or run it in a separate job to reduce noise.
+If some test/tooling files legitimately require different rules, consider adding targeted eslint overrides in .eslintrc (not a global rule relaxation). For example, allow leading underscore for unused args with argsIgnorePattern: '^_'.
+Do not relax core rules broadly; prefer code fixes.
+Priority file edits to unblock CI quickly
+
+Fix all unused-catcher occurrences (many files show 'e' is defined but never used). Search for "catch (e)" and change to catch { } or catch (_e) as appropriate.
+Address assigned-but-unused variables in tests/tools (these are quick to remove).
+Fix a few Unexpected any locations in tests or setup files by changing type any -> unknown or a more precise type where obvious.
+References
+
+Failing job logs and commit ref: 8990890edcdb086925a002b7905d201660599978
+Example file with one of the errors: lighthouse-runner.mjs at ref 8990890edcdb086925a002b7905d201660599978 (edit around the finally catch to remove unused parameter).
+If you want, I can: (A) produce a focused patch for the highest-frequency errors (unused catch params + assigned-but-unused variables) and show a diff for the commit ref, or (B) run through one representative file at a time and provide exact edits. Which do you prefer?

@@ -1,0 +1,5 @@
+URL: https://www.pipingrock.com/same/same-enteric-coated-200-mg-30-tablets-14509
+Error: HTTP 404 Not Found
+    at fetchText (C:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3\tools\fetch_sources.cjs:17:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async main (C:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3\tools\fetch_sources.cjs:53:20)

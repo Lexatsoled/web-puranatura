@@ -155,7 +155,9 @@ const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
                 </label>
                 <select
                   value={filters.category}
-                  onChange={(e) => handleFilterChange('category', e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange('category', e.target.value)
+                  }
                   className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   {categories.map((cat) => (

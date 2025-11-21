@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-11T06:00:00.120Z",
+  "type": "full",
+  "size": 4192,
+  "checksum": "e450267b215a5157acecd5a323ffd1b3097f89e7ca0ac692449c961cfe9034f2",
+  "encrypted": false,
+  "compressed": true,
+  "integrityCheck": "passed",
+  "duration": 37,
+  "tableCount": 7,
+  "recordCount": 9,
+  "path": "C:\\Users\\Usuario\\Desktop\\Web Puranatura\\Pureza-Naturalis-V3\\backend\\backups\\2025-11-11T06-00-00-091Z-full.sqlite.gz"
+}

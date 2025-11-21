@@ -1,0 +1,13 @@
+# npm audit report
+
+@fastify/csrf-protection  5.0.0 - 6.2.0
+Severity: moderate
+Bypass of CSRF protection in the presence of predictable userInfo - https://github.com/advisories/GHSA-qrgf-9gpc-vrxw
+fix available via `npm audit fix --force`
+Will install @fastify/csrf-protection@7.1.0, which is a breaking change
+node_modules/@fastify/csrf-protection
+
+1 moderate severity vulnerability
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

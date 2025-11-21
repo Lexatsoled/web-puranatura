@@ -1,0 +1,97 @@
+{
+  "products": [
+    {
+      "id": 68,
+      "name": "Electrolitos Sabor Limón 90 Cápsulas",
+      "description": "Complejo de electrolitos con sabor natural a limón. Repone minerales esenciales perdidos durante el ejercicio y actividades físicas intensas.",
+      "price": 892.45,
+      "compareAtPrice": 981.6950000000002,
+      "stock": 40,
+      "category": "suplementos-especializados",
+      "subcategory": null,
+      "categories": ["suplementos-especializados"],
+      "sku": "PR-ELECTRO-LEM",
+      "isFeatured": false,
+      "images": [
+        "/Jpeg/Electrolyte (Lemon) Anverso.jpg",
+        "/Jpeg/Electrolyte (Lemon) Reverso.jpg"
+      ],
+      "benefits": [],
+      "benefitsDescription": [
+        "Rehidrata de forma eficiente después de actividad física intensa",
+        "Ayuda a prevenir calambres musculares y fatiga",
+        "Repone minerales clave perdidos con la sudoración",
+        "Puede apoyarse en dietas bajas en carbohidratos para mantener electrolitos",
+        "Formato en cápsulas fácil de transportar sin necesidad de bebidas dulces"
+      ],
+      "ingredients": [],
+      "usage": null,
+      "dosage": "Tomar 2 cápsulas antes o durante el ejercicio y repetir la dosis después de entrenamientos prolongados. No exceder 6 cápsulas al día salvo indicación profesional.",
+      "administrationMethod": "Ingerir con al menos 250 ml de agua. Ajuste la dosis según la intensidad del ejercicio, el clima y su plan nutricional.",
+      "warnings": null,
+      "rating": 4.8,
+      "reviewCount": 309,
+      "detailedDescription": "Complejo de electrolitos con sabor natural a limón diseñado para reponer minerales esenciales perdidos por sudoración. Ideal para entrenamientos intensos, climas calurosos o jornadas laborales demandantes.",
+      "mechanismOfAction": "Aporta sodio y potasio en proporciones fisiológicas para favorecer la rehidratación celular, mientras que el magnesio y el calcio ayudan a sostener la contracción muscular. La vitamina B6 mejora la utilización energética y reduce la fatiga.",
+      "healthIssues": [
+        "Deshidratación leve por ejercicio o exposición al calor",
+        "Calambres musculares recurrentes",
+        "Dietas cetogénicas o bajas en carbohidratos",
+        "Personas que realizan trabajo físico extenuante",
+        "Deportistas de resistencia y deportes outdoor"
+      ],
+      "components": [
+        {
+          "name": "Sodio (como cloruro de sodio)",
+          "description": "Principal electrolito extracelular que mantiene el volumen plasmático.",
+          "amount": "150 mg"
+        },
+        {
+          "name": "Potasio (como citrato de potasio)",
+          "description": "Electrolito intracelular que participa en la contracción muscular y la conducción nerviosa.",
+          "amount": "99 mg"
+        },
+        {
+          "name": "Magnesio (como citrato de magnesio)",
+          "description": "Cofactor de la producción de ATP y regulador de la relajación muscular.",
+          "amount": "50 mg"
+        },
+        {
+          "name": "Calcio (como citrato de calcio)",
+          "description": "Apoya la contracción muscular y la integridad ósea.",
+          "amount": "100 mg"
+        },
+        {
+          "name": "Vitamina B6 (piridoxina HCl)",
+          "description": "Favorece el metabolismo energético y ayuda a reducir el cansancio.",
+          "amount": "5 mg"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "¿Es necesario disolverlo en bebida?",
+          "answer": "No, el formato en cápsulas se puede tomar con agua. Si prefiere, puede abrir la cápsula y disolver el contenido en su bebida deportiva."
+        },
+        {
+          "question": "¿Sirve para dietas cetogénicas?",
+          "answer": "Sí, ayuda a reponer electrolitos que suelen disminuir en dietas bajas en carbohidratos evitando desequilibrios minerales."
+        },
+        {
+          "question": "¿Puedo usarlo fuera del ejercicio?",
+          "answer": "Puede emplearse en jornadas laborales con alta sudoración o en climas calurosos. Ajuste la dosis para evitar exceso de sodio si sigue dietas restrictivas."
+        }
+      ],
+      "scientificReferences": [],
+      "tags": ["electrolitos", "limón", "deportivo", "hidratación"],
+      "priceNote": null,
+      "createdAt": "2025-11-14 22:38:39"
+    }
+  ],
+  "total": 64,
+  "page": 1,
+  "limit": 1,
+  "totalPages": 64,
+  "nextCursor": 68,
+  "prevCursor": null,
+  "hasMore": true
+}

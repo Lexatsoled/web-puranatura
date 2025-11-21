@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { blogPosts } from '../data/blog';
 import { BlogPost } from '../types';
 import BlogPostModal from '../components/BlogPostModal';
+import { sanitizeBlogPostContent } from '../src/utils/contentSanitizers';
 
 const BlogPage: React.FC = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
@@ -16,6 +17,11 @@ const BlogPage: React.FC = () => {
     setIsModalOpen(false);
     setSelectedPost(null);
   };
+
+  const sanitizedPosts = useMemo(
+    () => blogPosts.map((post) => sanitizeBlogPostContent(post)),
+    []
+  );
 
   return (
     <>
@@ -32,7 +38,7 @@ const BlogPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
+            {sanitizedPosts.map((post, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg shadow-lg overflow-hidden group flex flex-col"

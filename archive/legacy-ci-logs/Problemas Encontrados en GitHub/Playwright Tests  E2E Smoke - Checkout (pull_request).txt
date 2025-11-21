@@ -1,0 +1,30 @@
+GitHub Copilot Chat Assistant — Cause and fix
+
+Cause
+
+The job failed at workflow setup with: "This request has been automatically failed because it uses a deprecated version of actions/upload-artifact: v3."
+The workflow .github/workflows/playwright.yml (ref: 8990890edcdb086925a002b7905d201660599978) uses actions/upload-artifact@v3 in two places (upload test artifacts and upload smoke artifacts). GitHub now rejects v3 of that action, so the run is aborted before other steps start.
+Quick solution
+
+Update both uses: actions/upload-artifact@v3 -> actions/upload-artifact@v4 (or a specific v4.x tag).
+Commit and push the change, then re-run the workflow.
+Code changes to apply (edit .github/workflows/playwright.yml at ref 8990890edcdb086925a002b7905d201660599978)
+
+Replace this block (first occurrence around lines ~63–74):
+
+uses: actions/upload-artifact@v3
+uses: actions/upload-artifact@v4 if: always() with: name: e2e-test-results path: | test-results/ playwright-report/ traces/ videos/ retention-days: 30
+And replace this block (second occurrence around lines ~176–184):
+
+uses: actions/upload-artifact@v3
+uses: actions/upload-artifact@v4 if: always() with: name: checkout-smoke-artifacts path: | test-results/ playwright-report/ retention-days: 30
+Suggested minimal patch (for copy/paste):
+
+Open .github/workflows/playwright.yml at ref 8990890edcdb086925a002b7905d201660599978
+Update both occurrences of: uses: actions/upload-artifact@v3 to uses: actions/upload-artifact@v4
+Notes and follow-ups
+
+After this change, the workflow should pass the "Prepare all required actions" step and proceed.
+Search other workflows in the repo for any remaining uses of actions/upload-artifact@v3 and update them likewise.
+If you want stricter pinning, you can pin to a patch tag (for example actions/upload-artifact@v4.0.1) once you verify the desired version; using @v4 is acceptable and will track non-breaking fixes within v4.
+If after upgrading you still see failures, provide the new run logs and I will analyze the next error.

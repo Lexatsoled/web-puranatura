@@ -13,7 +13,7 @@ export function useLocalStorage<T>(
   // Estado para almacenar nuestro valor
   // Pasar la función de estado inicial a useState para que la lógica se ejecute una sola vez
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return initialValue;
     }
     try {
@@ -33,11 +33,12 @@ export function useLocalStorage<T>(
   const setValue = (value: T | ((val: T) => T)) => {
     try {
       // Permitir que el valor sea una función para que tengamos la misma API que useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
       // Guardar estado
       setStoredValue(valueToStore);
       // Guardar en localStorage
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
