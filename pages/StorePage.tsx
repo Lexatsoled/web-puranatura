@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   products as legacyProducts,
   productCategories,
@@ -29,6 +29,7 @@ const StorePage: React.FC = () => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const api = useApi();
+  const hasFetched = useRef(false);
 
   const fallbackProducts = useMemo(
     () => legacyProducts.map((product) => sanitizeProductContent(product)),
@@ -36,47 +37,54 @@ const StorePage: React.FC = () => {
   );
 
   useEffect(() => {
-    let active = true;
+    // Evitar doble ejecución en modo Strict (dev)
+    if (hasFetched.current) {
+      setIsLoadingProducts(false);
+      return;
+    }
+    hasFetched.current = true;
+    const applyFallback = () => {
+      setProducts(fallbackProducts);
+      setApiError(
+        'Mostrando catálogo provisional mientras conectamos con la API.'
+      );
+      setIsLoadingProducts(false);
+    };
+
     const fetchProducts = async () => {
       setIsLoadingProducts(true);
       try {
         const apiProducts = await api.get<ApiProduct[]>('/products');
-        if (!active) return;
         if (!Array.isArray(apiProducts)) {
-          console.error(
+          console.warn(
             'API /products returned non-array response:',
             apiProducts
           );
           // Fallback to legacy products if API shape is unexpected
-          setProducts(fallbackProducts);
-          setApiError(
-            'Mostrando catálogo provisional mientras conectamos con la API.'
-          );
+          applyFallback();
           return;
         }
         const mapped = apiProducts.map((product) =>
           sanitizeProductContent(mapApiProduct(product))
         );
-        setProducts(mapped);
-      } catch (error) {
-        console.error('Error cargando productos desde la API', error);
-        if (active) {
-          setProducts(fallbackProducts);
-          setApiError(
-            'Mostrando catálago provisional mientras conectamos con la API.'
-          );
-        }
-      } finally {
-        if (active) {
+        if (mapped.length === 0) {
+          console.warn('API /products devolvió lista vacía; usando fallback.');
+          applyFallback();
+        } else {
+          setProducts(mapped);
+          setApiError(null);
           setIsLoadingProducts(false);
         }
+      } catch (error) {
+        console.warn('Error cargando productos desde la API', error);
+        applyFallback();
+      } finally {
+        setIsLoadingProducts(false);
       }
     };
 
     fetchProducts();
-    return () => {
-      active = false;
-    };
+    return () => undefined;
   }, [api, fallbackProducts]);
 
   const processedProducts = useMemo(() => {

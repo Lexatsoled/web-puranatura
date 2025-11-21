@@ -26,6 +26,7 @@ Este PR recoge cambios para estabilizar el pipeline de CI en GitHub Actions y me
 - `scripts/run-e2e.cjs` (catch -> catch {})
 - `vitest.setup.ts` (catch -> catch {})
 - `scripts/orchestrator.mjs` (ci optional step guard)
+- `scripts/orchestrator.mjs` (ci optional step guard + Prettier formatting fix)
 - `GPT-51-Codex/ToDo/backlog.md` (T4.2 -> Ready for review)
 - `GPT-51-Codex/Hallazgos/log-debug.md` (CI-WORKFLOW-002)
 
@@ -34,9 +35,9 @@ Este PR recoge cambios para estabilizar el pipeline de CI en GitHub Actions y me
 
 - [ ] Crear branch `fix/ci-orchestrator-lint` y push a GitHub
 - [ ] Abrir PR con title, reviewers `@Lexatsoled` (owner), `@DevOpsTeam`, y `@QA` (o los aliases del repo)
- - [ ] Actualizar `package-lock.json` (ejecutar `npm install` y commitear el lock actualizado)
- - [ ] Añadir `.nvmrc` con `20` y documentar Node 20 para desarrolladores (opcional)
- - [ ] Verificar que la versión de Node en `ci.yml` es la 20 ('Setup Node.js' -> `node-version: '20'`)
+- [ ] Actualizar `package-lock.json` (ejecutar `npm install` y commitear el lock actualizado)
+- [ ] Añadir `.nvmrc` con `20` y documentar Node 20 para desarrolladores (opcional)
+- [ ] Verificar que la versión de Node en `ci.yml` es la 20 ('Setup Node.js' -> `node-version: '20'`)
 - [ ] Revisar la ejecución de `ci.yml` en GitHub Actions (especialmente: `prisma migrate` y Playwright en runner Linux)
 - [ ] Verificar que `reports/` y `test-results/` se suben como artifacts
 - [ ] Si falla `migrate`, usar `prisma db push` fallback y documentar en PR
@@ -57,6 +58,8 @@ gh pr create --title "[CI] Orquestador y lint fixes" --body "file:GPT-51-Codex/P
 
 # Orquesta la pipeline localmente
 node .\scripts\orchestrator.mjs ci
+
+> Nota: Tras aplicar un ajuste de formato en `scripts/orchestrator.mjs` para eliminar una advertencia de Prettier, ejecuté `node .\scripts\orchestrator.mjs ci` localmente y el pipeline completo (lint, unit, e2e, build) se ejecutó con éxito; `ci:security` fue saltado porque no está definido.
 ```
 
 ## Si no tienes `nvm` (Windows) — comandos alternativos
@@ -79,7 +82,7 @@ git commit -m "chore: update package-lock for Node 20" || echo "No changes to lo
 git push origin fix/ci-orchestrator-lint
 ```
 
-2. Alternativa: usar Docker (si no quieres cambiar Node global)
+1. Alternativa: usar Docker (si no quieres cambiar Node global)
 
 ```powershell
 # Ejecuta npm install dentro de un contenedor Node 20 y actualiza lockfile
@@ -100,3 +103,5 @@ git push origin fix/ci-orchestrator-lint
 
 ---
 Solicito revisión de CI para validar migraciones en runner Linux y tests E2E (Playwright) en PR antes del merge.
+## Actualizacion 2025-11-22
+- lint/test/build/e2e pasaron localmente tras corregir rules-of-hooks en StorePage y endurecer sanitizeProductContent (placeholder https para imagenes maliciosas).

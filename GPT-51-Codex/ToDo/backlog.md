@@ -2,8 +2,8 @@
 
 ---
 
-version: 1.7
-updated: 2025-11-21
+version: 1.8
+updated: 2025-11-22
 owner: PM Técnico
 
 | T0.1 | 🔷 Media | Limpieza documental (Análisis GPT 51, docs, reports)                    | DevOps/PMO          | 2025-11-19 | ✅ Hecho    | Inventario docs_inventory.json |
@@ -20,7 +20,7 @@ owner: PM Técnico
 | T2.4 | 🔷 Media | Generar manifest de imágenes + alinear dataset (IMG-ASSET-010)          | Frontend/DevOps     | 2025-11-29 | ✅ Hecho    | T2.2                           |
 | T3.1 | 🔷 Media | Normalizar encoding/i18n (I18N-ENC-009)                                 | UX                  | 2025-12-02 | ✅ Hecho    | T2.1                           |
 | T4.1 | 🔷 Media | Refactor pruebas Playwright y helper (QA-E2E-007)                       | QA                  | 2025-12-03 | Planned     | T2.2                           |
-| T4.2 | 🔷 Media | Reparar workflows CI (CI-SEC-001 ?)                                     | DevOps              | 2025-11-24 | Ready for review | T1.2, T1.5                     |
+| T4.2 | ?? Media | Reparar workflows CI (CI-SEC-001 ?)                                     | DevOps              | 2025-11-24 | Hecho           | T1.2, T1.5                     |
 | T5.1 | ⚪ Baja  | Dashboard métricas automatizado                                         | PM/QA               | 2025-12-05 | Planned     | T2.x + T4.x                    |
 
 ## Notas operativas
@@ -33,6 +33,7 @@ owner: PM Técnico
 
 ### Historial de cambios
 
+- **2025-11-22 - v1.8** - T4.2 marcado como Hecho tras validar lint/test/build/e2e en local (Node 20) y ajustar sanitizaci��n de im��genes.
 - **2025-11-21 - v1.7** - T2.3 cerrada: `useAnalytics` consulta consentimiento y evita cargar GA/FB sin permiso.
 - **2025-11-21 - v1.6** - T2.1 completada: `withLazyLoading` consume loaders reales y habilita code-splitting.
 - **2025-11-21 - v1.5** - T2.2 completada: `scripts/optimizeImages.ts` ahora ejecuta `processProductImages` y valida resultados.
