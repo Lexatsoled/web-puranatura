@@ -13,3 +13,5 @@ This contains everything you need to run your app locally.
    `npm run dev`
 
 _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
+
+Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
