@@ -12,6 +12,7 @@
     "lint": "eslint src pages components tools scripts test --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src pages components tools scripts test --ext .ts,.tsx --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format",

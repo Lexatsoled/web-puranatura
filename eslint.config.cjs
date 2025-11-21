@@ -17,6 +17,10 @@ module.exports = [
       'temp_trace_extract1/**',
       'tools/githooks/**',
       'node_modules/**',
+      '*.min.js',
+      'vendor/**',
+      '.next/**',
+      'build/**',
     ],
     languageOptions: {
       ecmaVersion: 'latest',

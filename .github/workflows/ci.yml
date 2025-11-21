@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      DATABASE_URL: "file:./backend/prisma/database.sqlite"
-      JWT_SECRET: "ci-local-secret"
-      JWT_REFRESH_SECRET: "ci-local-refresh-secret"
-      JWT_EXPIRES_IN: "15m"
-      JWT_REFRESH_EXPIRES_IN: "7d"
-      ALLOWED_ORIGINS: "http://localhost:5173"
-      BASE_URL: "http://127.0.0.1:5173"
-      REUSE_VITE_SERVER: "1"
+      DATABASE_URL: 'file:./backend/prisma/database.sqlite'
+      JWT_SECRET: 'ci-local-secret'
+      JWT_REFRESH_SECRET: 'ci-local-refresh-secret'
+      JWT_EXPIRES_IN: '15m'
+      JWT_REFRESH_EXPIRES_IN: '7d'
+      ALLOWED_ORIGINS: 'http://localhost:5173'
+      BASE_URL: 'http://127.0.0.1:5173'
+      REUSE_VITE_SERVER: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,9 +51,15 @@ jobs:
           npm --prefix backend ci
           npm --prefix backend run build
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
       - name: Run DB migrations (non-interactive)
         env:
-          DATABASE_URL: "file:./backend/prisma/database.sqlite"
+          DATABASE_URL: 'file:./backend/prisma/database.sqlite'
         run: |
           if [ -d backend/prisma ]; then
             npx --yes prisma migrate deploy --schema=backend/prisma/schema.prisma || npx --yes prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss
