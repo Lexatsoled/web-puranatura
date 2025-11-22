@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -104,6 +106,16 @@ jobs:
         uses: zricethezav/gitleaks-action@v1
         with:
           args: detect --source . --no-banner --report-path gitleaks-report.json
+
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg ca-certificates lsb-release
+          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmour -o /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+          k6 version
 
       - name: Performance smoke (API)
         env:
