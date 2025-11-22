@@ -30,3 +30,10 @@ dist-ssr
 backend/.env
 backend/.env.*
 !backend/.env.example
+
+# Artefactos y binarios locales
+.cache/
+reports/tmp/
+reports/
+.tmp-lh/
+.lighthouse-temp/

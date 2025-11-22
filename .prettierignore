@@ -1,0 +1,27 @@
+# Dependencias y builds
+node_modules
+dist
+coverage
+public/optimized
+playwright-report
+test-results
+reports
+
+# Artifacts y snapshots pesados
+*.report.html
+*.log
+
+# Directorios de documentación/plan fuera del scope del lint
+archive
+GPT-51-Codex
+GPT-51-Codex-Max
+
+# Inventarios y binarios generados
+docs_inventory.json
+docs_inventory_summary.json
+docs_inventory.csv
+
+# Otros temporales
+.tmp-lh
+.lighthouse-temp
+.tmp

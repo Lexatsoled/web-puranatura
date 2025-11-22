@@ -36,8 +36,8 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "token": "<jwt-token>",
+    "refreshToken": "<refresh-token>",
     "user": {
       "id": 1,
       "email": "user@example.com",
@@ -535,7 +535,7 @@ curl https://api.purezanaturalis.com/api/products
 
 # Create order (authenticated)
 curl -X POST https://api.purezanaturalis.com/api/orders \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Authorization: Bearer <jwt-token-placeholder>" \
   -H "Content-Type: application/json" \
   -d '{"items":[{"product_id":1,"quantity":1}]}'
 ```

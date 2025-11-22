@@ -15,8 +15,12 @@ function run(cmd) {
 }
 
 const arg = process.argv[2];
-  if (arg === 'ci') {
-  const pkg = JSON.parse(execSync('node -e "console.log(JSON.stringify(require(\'./package.json\')))"').toString());
+if (arg === 'ci') {
+  const pkg = JSON.parse(
+    execSync(
+      'node -e "console.log(JSON.stringify(require(\'./package.json\')))"'
+    ).toString()
+  );
   run(commands.lint);
   run(commands.unit);
   run(commands.integration);

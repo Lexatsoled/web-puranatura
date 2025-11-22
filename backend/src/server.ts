@@ -11,6 +11,14 @@ app.use(cors({ origin: env.allowedOrigins, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Respuesta informativa en la raíz para evitar 404 en navegadores
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Backend PuraNatura operativo. Usa /api/health para diagnóstico.',
+  });
+});
+
 registerRoutes(app);
 
 app.use(

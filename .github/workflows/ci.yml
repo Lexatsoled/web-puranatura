@@ -5,22 +5,28 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ci:
+  quality:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      DATABASE_URL: "file:./backend/prisma/database.sqlite"
-      JWT_SECRET: "ci-local-secret"
-      JWT_REFRESH_SECRET: "ci-local-refresh-secret"
-      JWT_EXPIRES_IN: "15m"
-      JWT_REFRESH_EXPIRES_IN: "7d"
-      ALLOWED_ORIGINS: "http://localhost:5173"
-      BASE_URL: "http://127.0.0.1:5173"
-      REUSE_VITE_SERVER: "1"
+      DATABASE_URL: 'file:./backend/prisma/database.sqlite'
+      JWT_SECRET: 'ci-local-secret'
+      JWT_REFRESH_SECRET: 'ci-local-refresh-secret'
+      JWT_EXPIRES_IN: '15m'
+      JWT_REFRESH_EXPIRES_IN: '7d'
+      ALLOWED_ORIGINS: 'http://localhost:5173'
+      BASE_URL: 'http://127.0.0.1:5173'
+      REUSE_VITE_SERVER: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -51,9 +57,18 @@ jobs:
           npm --prefix backend ci
           npm --prefix backend run build
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type-check
+        run: npm run type-check
+
       - name: Run DB migrations (non-interactive)
         env:
-          DATABASE_URL: "file:./backend/prisma/database.sqlite"
+          DATABASE_URL: 'file:./backend/prisma/database.sqlite'
         run: |
           if [ -d backend/prisma ]; then
             npx --yes prisma migrate deploy --schema=backend/prisma/schema.prisma || npx --yes prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss
@@ -78,12 +93,40 @@ jobs:
       - name: Run unit tests (vitest)
         run: npm run test:ci
 
+      - name: Contract tests (OpenAPI mock)
+        run: npm run test:contract
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
       - name: Run E2E tests
         run: npm run test:e2e
 
+      - name: Security scan (gitleaks)
+        uses: zricethezav/gitleaks-action@v1
+        with:
+          args: detect --source . --no-banner --report-path gitleaks-report.json
+
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg ca-certificates lsb-release
+          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmour -o /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+          k6 version
+
+      - name: Performance smoke (API)
+        env:
+          BASE_URL: http://127.0.0.1:3001
+        run: npm run perf:api
+
+      - name: Ensure artifact paths exist
+        if: always()
+        run: |
+          mkdir -p test-results reports
+          touch backend.log
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -93,3 +136,34 @@ jobs:
             test-results/**
             reports/**
             backend.log
+          if-no-files-found: ignore
+
+  main-guard:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: quality
+    env:
+      DATABASE_URL: 'file:./backend/prisma/database.sqlite'
+      JWT_SECRET: 'ci-local-secret'
+      JWT_REFRESH_SECRET: 'ci-local-refresh-secret'
+      JWT_EXPIRES_IN: '15m'
+      JWT_REFRESH_EXPIRES_IN: '7d'
+      ALLOWED_ORIGINS: 'http://localhost:5173'
+      BASE_URL: 'http://127.0.0.1:5173'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm --prefix backend ci && npm --prefix backend run build
+      - name: Build frontend
+        run: npm run build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Performance web (LHCI)
+        run: npm run perf:web
+      - name: npm audit (high) as gate
+        run: npm audit --production --audit-level=high

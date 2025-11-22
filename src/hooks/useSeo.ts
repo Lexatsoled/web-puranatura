@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 import { NextSeoProps } from 'next-seo';
 import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
 
-// Genera configuraciones Next-SEO coherentes con la navegación actual y el branding del sitio.
+// Genera configuraciones Next-SEO coherentes con la navegacion actual y el branding del sitio.
 
 interface SeoProps extends Partial<NextSeoProps> {
   title?: string;
@@ -13,8 +13,16 @@ interface SeoProps extends Partial<NextSeoProps> {
 }
 
 export const useSeo = (props: SeoProps = {}): NextSeoProps => {
-  const router = useRouter();
-  const currentUrl = `${DEFAULT_SEO_CONFIG.openGraph?.url}${router.asPath}`;
+  const location = useLocation();
+  const baseUrl =
+    import.meta.env.VITE_APP_URL ||
+    DEFAULT_SEO_CONFIG.openGraph?.url ||
+    (typeof window !== 'undefined' ? window.location.origin : '');
+  const normalizedBaseUrl = baseUrl?.endsWith('/')
+    ? baseUrl.slice(0, -1)
+    : baseUrl;
+  const path = `${location.pathname}${location.search}`;
+  const currentUrl = `${normalizedBaseUrl}${path}`;
 
   return {
     ...DEFAULT_SEO_CONFIG,

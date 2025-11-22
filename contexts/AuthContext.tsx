@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
   createContext,
   useContext,
   useState,
@@ -66,7 +66,7 @@ interface ApiAuthResponse {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const USER_STORAGE_KEY = 'puranatura-user';
+let hasCheckedSession = false;
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -88,11 +88,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const response = await api.get<{ user: ApiAuthResponse['user'] }>(
         '/auth/me'
       );
-      const mapped = mapUser(response.user);
-      setUser(mapped);
-      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(mapped));
+      setUser(mapUser(response.user));
     } catch {
-      localStorage.removeItem(USER_STORAGE_KEY);
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -100,25 +97,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, [api]);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem(USER_STORAGE_KEY);
-    const hasSavedUser = !!savedUser;
-    if (hasSavedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem(USER_STORAGE_KEY);
-      }
-      // Sólo consultar /auth/me si tenemos una sesión previa almacenada
-      loadSession();
-    } else {
+    if (hasCheckedSession) {
       setIsLoading(false);
+      return;
     }
+    hasCheckedSession = true;
+    loadSession();
   }, [loadSession]);
-
-  const persistSession = (nextUser: User) => {
-    setUser(nextUser);
-    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(nextUser));
-  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
@@ -127,7 +112,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         password,
       });
-      persistSession(mapUser(response.user));
+      setUser(mapUser(response.user));
       return true;
     } catch {
       return false;
@@ -143,7 +128,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         '/auth/register',
         userData
       );
-      persistSession(mapUser(response.user));
+      setUser(mapUser(response.user));
       return true;
     } catch {
       return false;
@@ -156,9 +141,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       await api.post('/auth/logout');
     } catch {
-      // ignorar
+      // Ignorar fallo de logout del backend; limpiar la sesión igual.
     }
-    localStorage.removeItem(USER_STORAGE_KEY);
     setUser(null);
   }, [api]);
 
@@ -174,7 +158,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (!user) return false;
     const updatedUser = { ...user, ...userData };
     setUser(updatedUser);
-    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUser));
     return true;
   };
 
