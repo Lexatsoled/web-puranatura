@@ -100,21 +100,21 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e
 
-      - name: Install gitleaks
-        run: |
-          GITLEAKS_VER="8.17.0"
-          wget -qO- "https://github.com/zricethezav/gitleaks/releases/download/v${GITLEAKS_VER}/gitleaks_${GITLEAKS_VER}_Linux_x86_64.tar.gz" \
-          | tar -xz -C /usr/local/bin gitleaks
-          gitleaks version
-
       - name: Security scan (gitleaks)
-        run: npm run scan:security
+        uses: zricethezav/gitleaks-action@v1
+        with:
+          args: detect --source . --no-banner --report-path gitleaks-report.json
 
       - name: Performance smoke (API)
         env:
           BASE_URL: http://127.0.0.1:3001
         run: npm run perf:api
 
+      - name: Ensure artifact paths exist
+        if: always()
+        run: |
+          mkdir -p test-results reports
+          touch backend.log
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -124,6 +124,7 @@ jobs:
             test-results/**
             reports/**
             backend.log
+          if-no-files-found: ignore
 
   main-guard:
     if: github.ref == 'refs/heads/main'
