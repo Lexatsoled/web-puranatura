@@ -12,6 +12,62 @@ This contains everything you need to run your app locally.
 3. Run the app:
    `npm run dev`
 
+## Formato y hooks pre-commit (recomendado)
+
+Para evitar que commits o PRs fallen por reglas de formato, recomendamos habilitar hooks locales con Husky + lint-staged.
+
+1. Instalar las dev-deps localmente (si no están instaladas):
+
+```powershell
+npm install --save-dev husky lint-staged prettier
+```
+
+1. Activar husky (crea la carpeta .husky y los hooks):
+
+```powershell
+npm run prepare
+npx husky add .husky/pre-commit "npx --no-install lint-staged"
+```
+
+1. El proyecto ya incluye `.prettierrc.json` y `lint-staged` configurado para ejecutar Prettier en los archivos modificados antes de cada commit.
+
+Esto evita que archivos como `regression-suite.md` lleguen a la CI con formato incorrecto.
 _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
 
-Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
+<!-- Cambio inocuo: comentario de prueba para reintentar CI (no afecta funcionalidad) -->
+
+⚠️ **Nota para entornos con restricciones**: en algunos entornos de ejecución `npm` puede no estar disponible por motivos de seguridad o políticas (por ejemplo, entornos gestionados). Si encuentras errores relacionados con `npm` por favor revisa `HOW_TO_ENABLE_NPM.md` en la raíz del repo para pasos y recomendaciones sobre cómo habilitarlo o alternativas para ejecutar los checks.
+
+Para facilitar la Fase 0 (inventario/baseline) sin necesidad de `npm`, hay un script PowerShell que genera un inventario SHA256 de los ficheros del repo:
+
+```powershell
+.\scripts\generate-inventory.ps1 -OutFile inventory-baseline.json
+```
+
+⚠️ Nota importante sobre instalación de dependencias en Windows: algunos procesos (Vite, esbuild, Rollup, editores) pueden bloquear archivos binarios en node_modules y provocar errores EPERM al ejecutar `npm ci`. Si ves fallos como "EPERM: operation not permitted, unlink ... esbuild.exe" o `"vite" no se reconoce como un comando`, sigue estas opciones:
+
+- Cerrar VS Code / procesos que puedan usar node_modules (o reiniciar el equipo).
+- Ejecutar PowerShell como Administrador y luego forzar reinstall:
+
+```powershell
+$env:FORCE_REINSTALL='1'
+.\scripts\run-ci-smoke.ps1
+```
+
+- Si prefieres un approach manual:
+  1.  Cerrar procesos que bloqueen archivos (tasklist / findstr esbuild / node), detenerlos o reiniciar el sistema.
+  2.  Eliminar `node_modules` (Remove-Item -Recurse -Force .\node_modules) y volver a ejecutar `npm ci`.
+
+Si encuentras errores persistentes por archivos bloqueados (EPERM, esbuild.exe en uso), prueba el script de reparación (ejecutar PowerShell como Administrador):
+
+```powershell
+.\scripts\repair-node-modules.ps1 -Path .\node_modules -Force
+$env:FORCE_REINSTALL='1'
+.\scripts\run-ci-smoke.ps1
+```
+
+Esto evita errores durante la secuencia de validaciones (lint, type-check, build, tests).
+
+> > > > > > > origin/main
+> > > > > > > _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
+> > > > > > > Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
