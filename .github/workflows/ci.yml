@@ -100,6 +100,13 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e
 
+      - name: Install gitleaks
+        run: |
+          GITLEAKS_VER="8.17.0"
+          wget -qO- "https://github.com/zricethezav/gitleaks/releases/download/v${GITLEAKS_VER}/gitleaks_${GITLEAKS_VER}_Linux_x86_64.tar.gz" \
+          | tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+
       - name: Security scan (gitleaks)
         run: npm run scan:security
 
