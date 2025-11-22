@@ -53,8 +53,8 @@ $env:FORCE_REINSTALL='1'
 ```
 
 - Si prefieres un approach manual:
-   1) Cerrar procesos que bloqueen archivos (tasklist / findstr esbuild / node), detenerlos o reiniciar el sistema.
-   2) Eliminar `node_modules` (Remove-Item -Recurse -Force .\node_modules) y volver a ejecutar `npm ci`.
+  1.  Cerrar procesos que bloqueen archivos (tasklist / findstr esbuild / node), detenerlos o reiniciar el sistema.
+  2.  Eliminar `node_modules` (Remove-Item -Recurse -Force .\node_modules) y volver a ejecutar `npm ci`.
 
 Si encuentras errores persistentes por archivos bloqueados (EPERM, esbuild.exe en uso), prueba el script de reparación (ejecutar PowerShell como Administrador):
 
@@ -66,6 +66,6 @@ $env:FORCE_REINSTALL='1'
 
 Esto evita errores durante la secuencia de validaciones (lint, type-check, build, tests).
 
->>>>>>> origin/main
-_Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
-Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
+> > > > > > > origin/main
+> > > > > > > _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
+> > > > > > > Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
