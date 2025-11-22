@@ -12,28 +12,26 @@ This contains everything you need to run your app locally.
 3. Run the app:
    `npm run dev`
 
-   ## Formato y hooks pre-commit (recomendado)
+## Formato y hooks pre-commit (recomendado)
 
-   Para evitar que commits o PRs fallen por reglas de formato, recomendamos habilitar hooks locales con Husky + lint-staged.
+Para evitar que commits o PRs fallen por reglas de formato, recomendamos habilitar hooks locales con Husky + lint-staged.
 
-   1. Instalar las dev-deps localmente (si no están instaladas):
+1. Instalar las dev-deps localmente (si no están instaladas):
 
-   ```powershell
-   npm install --save-dev husky lint-staged prettier
-   ```
+```powershell
+npm install --save-dev husky lint-staged prettier
+```
 
-   1. Activar husky (crea la carpeta .husky y los hooks):
+1. Activar husky (crea la carpeta .husky y los hooks):
 
-   ```powershell
-   npm run prepare
-   npx husky add .husky/pre-commit "npx --no-install lint-staged"
-   ```
+```powershell
+npm run prepare
+npx husky add .husky/pre-commit "npx --no-install lint-staged"
+```
 
-   1. El proyecto ya incluye `.prettierrc.json` y `lint-staged` configurado para ejecutar Prettier en los archivos modificados antes de cada commit.
+1. El proyecto ya incluye `.prettierrc.json` y `lint-staged` configurado para ejecutar Prettier en los archivos modificados antes de cada commit.
 
-   Esto evita que archivos como `regression-suite.md` lleguen a la CI con formato incorrecto.
-
-
+Esto evita que archivos como `regression-suite.md` lleguen a la CI con formato incorrecto.
 _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
 
 ⚠️ **Nota para entornos con restricciones**: en algunos entornos de ejecución `npm` puede no estar disponible por motivos de seguridad o políticas (por ejemplo, entornos gestionados). Si encuentras errores relacionados con `npm` por favor revisa `HOW_TO_ENABLE_NPM.md` en la raíz del repo para pasos y recomendaciones sobre cómo habilitarlo o alternativas para ejecutar los checks.
@@ -68,4 +66,6 @@ $env:FORCE_REINSTALL='1'
 
 Esto evita errores durante la secuencia de validaciones (lint, type-check, build, tests).
 
+>>>>>>> origin/main
+_Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
 Pequeña nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
