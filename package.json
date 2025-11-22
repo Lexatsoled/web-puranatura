@@ -13,12 +13,8 @@
     "lint:fix": "eslint src pages components tools scripts test --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-<<<<<<< HEAD
     "prepare": "husky install",
-    "preview": "npx vite preview",
-=======
     "preview": "vite preview",
->>>>>>> origin/main
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format",
     "test": "vitest",
