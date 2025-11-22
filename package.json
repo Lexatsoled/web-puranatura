@@ -12,6 +12,7 @@
     "lint": "eslint src pages components tools scripts test --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src pages components tools scripts test --ext .ts,.tsx --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format",
@@ -21,6 +22,10 @@
     "test:ci": "vitest run",
     "test:unit": "vitest run",
     "test:e2e": "npm run build && node scripts/run-e2e.cjs",
+    "test:contract": "node scripts/run-contract.cjs",
+    "perf:api": "node scripts/run-k6.cjs GPT-51-Codex-Max/perf/k6-api-smoke.js",
+    "perf:web": "lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
+    "scan:security": "node scripts/run-gitleaks.cjs && node scripts/run-trivy.cjs",
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts"
   },
   "dependencies": {
@@ -56,6 +61,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^0.1.0",
     "@playwright/test": "^1.41.0",
+    "@redocly/cli": "^2.11.1",
+    "@stoplight/prism-cli": "^5.14.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/dom": "^10.4.1",

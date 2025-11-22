@@ -1,0 +1,210 @@
+openapi: 3.1.0
+info:
+  title: PuraNatura BFF API
+  version: 1.0.0
+  description: API para auth, catálogo y pedidos.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.puranatura.local
+paths:
+  /api/health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Solicitud inválida
+  /api/auth/register:
+    post:
+      operationId: authRegister
+      summary: Registro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201': { description: Creado }
+        '400': { description: Datos inválidos }
+  /api/auth/login:
+    post:
+      operationId: authLogin
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200': { description: OK }
+        '401': { description: Credenciales inválidas }
+        '400': { description: Datos inválidos }
+  /api/auth/logout:
+    post:
+      operationId: authLogout
+      summary: Logout
+      responses:
+        '200': { description: OK }
+        '400': { description: Solicitud inválida }
+  /api/auth/refresh:
+    post:
+      operationId: authRefresh
+      summary: Refresh token
+      responses:
+        '200': { description: OK }
+        '400': { description: Solicitud inválida }
+  /api/auth/me:
+    get:
+      operationId: authMe
+      summary: Usuario actual
+      responses:
+        '200': { description: OK }
+        '401': { description: No autenticado }
+        '400': { description: Solicitud inválida }
+  /api/products:
+    get:
+      operationId: listProducts
+      summary: Lista paginada de productos
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, minimum: 1, maximum: 50 }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: search
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '400': { description: Solicitud inválida }
+    post:
+      operationId: createProduct
+      summary: Crear producto (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201': { description: Creado }
+        '401': { description: No autenticado }
+        '403': { description: Prohibido }
+        '400': { description: Solicitud inválida }
+  /api/products/{id}:
+    get:
+      operationId: getProductById
+      summary: Obtener producto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '404': { description: No encontrado }
+        '400': { description: Solicitud inválida }
+  /api/orders:
+    get:
+      operationId: listOrders
+      summary: Listar órdenes del usuario
+      responses:
+        '200': { description: OK }
+        '401': { description: No autenticado }
+        '400': { description: Solicitud inválida }
+    post:
+      operationId: createOrder
+      summary: Crear orden
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201': { description: Creado }
+        '400': { description: Datos inválidos }
+        '401': { description: No autenticado }
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type:
+            - string
+            - 'null'
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    Product:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        imageUrl:
+          type: string
+    CreateOrderRequest:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - productId
+              - quantity
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+security:
+  - cookieAuth: []
