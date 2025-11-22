@@ -25,7 +25,7 @@
     "test:contract": "redocly lint api/openapi.yaml",
     "perf:api": "npx --yes k6 run GPT-51-Codex-Max/perf/k6-api-smoke.js",
     "perf:web": "lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
-    "scan:security": "npx --yes gitleaks detect --no-banner",
+    "scan:security": "gitleaks detect --no-banner",
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts"
   },
   "dependencies": {
