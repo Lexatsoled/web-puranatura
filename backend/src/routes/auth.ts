@@ -5,7 +5,7 @@ import ms from 'ms';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { env } from '../config/env';
-import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
+import { AuthenticatedRequest, getUserIdFromRequest } from '../middleware/auth';
 
 const router = Router();
 
@@ -159,12 +159,17 @@ router.post('/refresh', (req, res) => {
   }
 });
 
-router.get('/me', requireAuth, async (req: AuthenticatedRequest, res, next) => {
+router.get('/me', async (req: AuthenticatedRequest, res, next) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      clearAuthCookies(res);
+      return res.json({ user: null });
+    }
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       clearAuthCookies(res);
-      return res.status(401).json({ message: 'No autenticado' });
+      return res.json({ user: null });
     }
     res.json({ user: userPayload(user) });
   } catch (error) {
