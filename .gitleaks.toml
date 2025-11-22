@@ -1,0 +1,23 @@
+title = "Gitleaks default config"
+
+[rules]
+
+[[rules.rules]]
+description = "Generic high entropy strings (API keys, tokens)"
+regex = '''(?i)(?:apikey|api_key|secret|token|password|pwd|bearer)\W*[:=]\W*[\"']?[A-Za-z0-9\-_/+=]{20,}[\"']?'''
+tags = ["key", "secret", "credential"]
+
+[[rules.rules]]
+description = "AWS Access Key ID (short)"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["aws", "access-key"]
+
+[[rules.rules]]
+description = "Slack tokens"
+regex = '''xox[baprs]-[0-9A-Za-z-]{10,}'''
+tags = ["slack", "token"]
+
+# Exclude common false positives and allowed files
+[[allowlist]]
+description = "Ignore vendors / third-party / archives"
+paths = ["^archive/", "^node_modules/", "^playwright-report/", "^coverage/", "^backup/", "^GPT-51-Codex/", "^GPT-51-Codex-Max/legacy-*"]
