@@ -34,5 +34,6 @@ backend/.env.*
 # Artefactos y binarios locales
 .cache/
 reports/tmp/
+reports/
 .tmp-lh/
 .lighthouse-temp/
