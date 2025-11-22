@@ -120,6 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         <motion.div
           className="absolute inset-0 bg-black bg-opacity-10 transition-opacity duration-300"
+          initial={{ opacity: 0.1 }}
           animate={{ opacity: isHovered ? 0 : 0.1 }}
         />
       </div>
