@@ -34,8 +34,6 @@ npx husky add .husky/pre-commit "npx --no-install lint-staged"
 Esto evita que archivos como `regression-suite.md` lleguen a la CI con formato incorrecto.
 _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
 
-<!-- Cambio inocuo: comentario de prueba para reintentar CI (no afecta funcionalidad) -->
-
 ⚠️ **Nota para entornos con restricciones**: en algunos entornos de ejecución `npm` puede no estar disponible por motivos de seguridad o políticas (por ejemplo, entornos gestionados). Si encuentras errores relacionados con `npm` por favor revisa `HOW_TO_ENABLE_NPM.md` en la raíz del repo para pasos y recomendaciones sobre cómo habilitarlo o alternativas para ejecutar los checks.
 
 Para facilitar la Fase 0 (inventario/baseline) sin necesidad de `npm`, hay un script PowerShell que genera un inventario SHA256 de los ficheros del repo:

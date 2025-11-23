@@ -11,7 +11,7 @@ const router = Router();
 
 const cookieBase = {
   httpOnly: true,
-  sameSite: 'lax' as const,
+  sameSite: 'strict' as const,
   secure: env.nodeEnv === 'production',
 };
 
@@ -74,6 +74,7 @@ const userPayload = (user: {
   firstName: user.firstName,
   lastName: user.lastName,
   phone: user.phone ?? undefined,
+  isAdmin: env.adminEmails.includes(user.email.toLowerCase()),
 });
 
 const registerSchema = z.object({
