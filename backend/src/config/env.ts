@@ -1,4 +1,4 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
 
 dotenv.config({ path: process.env.BACKEND_ENV_PATH || undefined });
@@ -33,7 +33,9 @@ const requireEnv = (value: string | undefined, key: string): string => {
   if ((process.env.NODE_ENV || 'development') !== 'production') {
     const generated = randomBytes(32).toString('hex');
     // eslint-disable-next-line no-console
-    console.warn(`[env] variable ${key} no definida - usando valor efímero (solo dev)`);
+    console.warn(
+      `[env] variable ${key} no definida - usando valor efímero (solo dev)`
+    );
     return generated;
   }
 
