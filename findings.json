@@ -89,12 +89,12 @@
       "where": {
         "file": "backend/.env",
         "line": "12-18",
-        "snippet": "JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef\nJWT_REFRESH_SECRET=dev_refresh_secret_cambiar_en_produccion_min_64_chars"
+        "snippet": "JWT_SECRET=<REDACTED>\nJWT_REFRESH_SECRET=<REDACTED>"
       },
       "evidence": "El repositorio expone claves JWT y configuración sensible. No hay .env.example ni exclusión git para impedir nuevos leaks.",
       "impact": "Si se reutilizan en cualquier entorno, los tokens son falsificables y deben rotarse inmediatamente.",
       "recommendation": "Mover las llaves a un gestor (Vault/KeyVault), versionar sólo .env.example sin valores y añadir escaneo de secretos en CI.",
-      "fix_example": "```diff\n-JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef\n-JWT_REFRESH_SECRET=dev_refresh_secret_cambiar_en_produccion_min_64_chars\n+JWT_SECRET=\n+JWT_REFRESH_SECRET=\n```",
+      "fix_example": "Recomendación: eliminar valores sensibles de 'backend/.env' y dejar las variables vacías (o usar un gestor de secretos).",
       "references": ["https://12factor.net/config"],
       "tests": ["secret-scan", "npm run lint -- backend"],
       "metrics": { "secrets_in_repo": 2 }

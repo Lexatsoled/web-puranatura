@@ -19,8 +19,11 @@ const orderSchema = z.object({
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res, next) => {
   try {
     const { items } = orderSchema.parse(req.body);
-    const products = await prisma.product.findMany({
+    type ProductPricing = { id: string; price: number };
+
+    const products: ProductPricing[] = await prisma.product.findMany({
       where: { id: { in: items.map((item) => item.productId) } },
+      select: { id: true, price: true },
     });
 
     if (products.length !== items.length) {
@@ -30,7 +33,14 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res, next) => {
     }
 
     const itemsWithPricing = items.map((item) => {
-      const product = products.find((p) => p.id === item.productId)!;
+      const product = products.find(
+        (product: ProductPricing) => product.id === item.productId
+      );
+
+      if (!product) {
+        throw new Error('Producto no encontrado tras la validacion previa');
+      }
+
       return {
         productId: product.id,
         quantity: item.quantity,

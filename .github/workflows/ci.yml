@@ -15,8 +15,9 @@ jobs:
     timeout-minutes: 60
     env:
       DATABASE_URL: 'file:./backend/prisma/database.sqlite'
-      JWT_SECRET: 'ci-local-secret'
-      JWT_REFRESH_SECRET: 'ci-local-refresh-secret'
+      # Preferir secrets en GitHub Actions cuando estén disponibles, fallback se aplica más abajo
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
       JWT_EXPIRES_IN: '15m'
       JWT_REFRESH_EXPIRES_IN: '7d'
       ALLOWED_ORIGINS: 'http://localhost:5173'
@@ -38,6 +39,20 @@ jobs:
         run: |
           echo "Node version:" && node -v
           echo "npm version:" && npm -v
+
+      - name: Set runtime env defaults (JWT)
+        # This step will write safe defaults into GITHUB_ENV so subsequent steps have required values
+        run: |
+          if [ -z "${{ env.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET=ci-local" >> $GITHUB_ENV
+          else
+            echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
+            echo "JWT_REFRESH_SECRET=ci-refresh" >> $GITHUB_ENV
+          else
+            echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
+          fi
 
       - name: Cache root node_modules
         uses: actions/cache@v4
@@ -103,9 +118,12 @@ jobs:
         run: npm run test:e2e
 
       - name: Security scan (gitleaks)
-        uses: zricethezav/gitleaks-action@v1
-        with:
-          args: detect --source . --no-banner --report-path gitleaks-report.json
+        # Use the official gitleaks action (v2) which is configured via env vars
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: specify a custom gitleaks config at repo root if present
+          GITLEAKS_CONFIG: .gitleaks.toml
 
       - name: Install k6
         run: |
@@ -144,8 +162,9 @@ jobs:
     needs: quality
     env:
       DATABASE_URL: 'file:./backend/prisma/database.sqlite'
-      JWT_SECRET: 'ci-local-secret'
-      JWT_REFRESH_SECRET: 'ci-local-refresh-secret'
+      # Use GitHub secrets for real pipelines; fallback defaults are set at runtime
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
       JWT_EXPIRES_IN: '15m'
       JWT_REFRESH_EXPIRES_IN: '7d'
       ALLOWED_ORIGINS: 'http://localhost:5173'
@@ -163,6 +182,18 @@ jobs:
         run: npm run build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Set runtime env defaults (JWT)
+        run: |
+          if [ -z "${{ env.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET=ci-local" >> $GITHUB_ENV
+          else
+            echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
+            echo "JWT_REFRESH_SECRET=ci-refresh" >> $GITHUB_ENV
+          else
+            echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
+          fi
       - name: Performance web (LHCI)
         run: npm run perf:web
       - name: npm audit (high) as gate
