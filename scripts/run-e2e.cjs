@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 const waitOn = require('wait-on');
 const path = require('node:path');
+const { randomBytes } = require('node:crypto');
 
 const envWithDefaults = {
   ...process.env,
@@ -10,8 +11,13 @@ const envWithDefaults = {
     process.env.DATABASE_URL ||
     `file:${path.join(process.cwd(), 'backend', 'prisma', 'database.sqlite')}`,
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || 'http://localhost:5173',
-  JWT_SECRET: process.env.JWT_SECRET || 'ci-local',
-  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'ci-refresh',
+  // If JWT secrets are not provided via environment, generate ephemeral
+  // non-deterministic secrets at runtime. This avoids committing static
+  // secret literals into the repo (reduces gitleaks false positives) and
+  // is fine for ephemeral CI/test runs.
+  JWT_SECRET: process.env.JWT_SECRET || randomBytes(32).toString('hex'),
+  JWT_REFRESH_SECRET:
+    process.env.JWT_REFRESH_SECRET || randomBytes(32).toString('hex'),
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '15m',
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
 };
