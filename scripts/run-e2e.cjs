@@ -49,10 +49,14 @@ const spawnBackend = () =>
     env: envWithDefaults,
   });
 
-const checkBackendUp = (baseUrl = `http://127.0.0.1:${envWithDefaults.PORT}/api/health`, timeout = 2000) =>
+const checkBackendUp = (
+  baseUrl = `http://127.0.0.1:${envWithDefaults.PORT}/api/health`,
+  timeout = 2000
+) =>
   new Promise((resolve) => {
     const req = http.get(baseUrl, (res) => {
-      const ok = res.statusCode && res.statusCode >= 200 && res.statusCode < 400;
+      const ok =
+        res.statusCode && res.statusCode >= 200 && res.statusCode < 400;
       // consume and close
       res.resume();
       resolve(Boolean(ok));
@@ -72,7 +76,11 @@ const ensureBackend = async () => {
   if (skip) {
     const healthy = await checkBackendUp();
     if (!healthy) {
-      throw new Error('SKIP_START_BACKEND is set but backend is not reachable at http://127.0.0.1:' + envWithDefaults.PORT + '/api/health');
+      throw new Error(
+        'SKIP_START_BACKEND is set but backend is not reachable at http://127.0.0.1:' +
+          envWithDefaults.PORT +
+          '/api/health'
+      );
     }
     console.log('SKIP_START_BACKEND set and backend is up — skipping start.');
     return { proc: null, startedByUs: false };
@@ -80,7 +88,11 @@ const ensureBackend = async () => {
 
   const already = await checkBackendUp();
   if (already) {
-    console.log('Backend already running at http://127.0.0.1:' + envWithDefaults.PORT + ' — skipping start.');
+    console.log(
+      'Backend already running at http://127.0.0.1:' +
+        envWithDefaults.PORT +
+        ' — skipping start.'
+    );
     return { proc: null, startedByUs: false };
   }
 
@@ -88,7 +100,10 @@ const ensureBackend = async () => {
   const proc = spawnBackend();
   // wait for health using waitOnPromise
   try {
-    await waitOnPromise({ resources: [`http://127.0.0.1:${envWithDefaults.PORT}/api/health`], timeout: 30000 });
+    await waitOnPromise({
+      resources: [`http://127.0.0.1:${envWithDefaults.PORT}/api/health`],
+      timeout: 30000,
+    });
     console.log('Backend ready');
     return { proc, startedByUs: true };
   } catch (err) {
@@ -96,7 +111,10 @@ const ensureBackend = async () => {
     try {
       if (proc && !proc.killed) proc.kill('SIGTERM');
     } catch {}
-    throw new Error('Backend failed to become healthy in time: ' + (err && err.message ? err.message : String(err)));
+    throw new Error(
+      'Backend failed to become healthy in time: ' +
+        (err && err.message ? err.message : String(err))
+    );
   }
 };
 
