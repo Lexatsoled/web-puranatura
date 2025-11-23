@@ -44,12 +44,13 @@ jobs:
         # This step will write safe defaults into GITHUB_ENV so subsequent steps have required values
         run: |
           if [ -z "${{ env.JWT_SECRET }}" ]; then
-            echo "JWT_SECRET=ci-local" >> $GITHUB_ENV
+            # Generate a secure ephemeral secret to avoid static literals in the repo
+            echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
           else
             echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
           fi
           if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
-            echo "JWT_REFRESH_SECRET=ci-refresh" >> $GITHUB_ENV
+            echo "JWT_REFRESH_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
           else
             echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
           fi
@@ -185,12 +186,12 @@ jobs:
       - name: Set runtime env defaults (JWT)
         run: |
           if [ -z "${{ env.JWT_SECRET }}" ]; then
-            echo "JWT_SECRET=ci-local" >> $GITHUB_ENV
+            echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
           else
             echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
           fi
           if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
-            echo "JWT_REFRESH_SECRET=ci-refresh" >> $GITHUB_ENV
+            echo "JWT_REFRESH_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
           else
             echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
           fi
