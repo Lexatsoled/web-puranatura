@@ -5,6 +5,13 @@ on:
   pull_request:
     branches: [main]
 
+# Explicit permissions for the workflow. This grants only the minimal
+# privileges gitleaks needs to create checks/comments (and nothing more).
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -121,6 +128,9 @@ jobs:
         run: npm run test:e2e
 
       - name: Security scan (gitleaks)
+        # Only run gitleaks on push events and on PRs originating from this repository
+        # (skip PRs from forks because GITHUB_TOKEN/Secrets are restricted there).
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         # Use the official gitleaks action (v2) which is configured via env vars
         uses: gitleaks/gitleaks-action@v2
         env:
