@@ -116,6 +116,8 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run E2E tests
+        env:
+          SKIP_START_BACKEND: '1'
         run: npm run test:e2e
 
       - name: Security scan (gitleaks)
