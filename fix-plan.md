@@ -72,11 +72,8 @@
 
     ```
 
-- JWT_SECRET=dev_secret_cambiar_en_produccion_min_64_chars_1234567890abcdef
-- JWT_REFRESH_SECRET=dev_refresh_secret_cambiar_en_produccion_min_64_chars
-
-* JWT_SECRET=
-* JWT_REFRESH_SECRET=
+- JWT_SECRET=REDACTED
+- JWT_REFRESH_SECRET=REDACTED
   ```
   - **Pruebas:** `npm run lint -- backend`, `gitleaks detect`.
   - **Métrica éxito:** 0 hallazgos críticos de secretos después de pipeline.
