@@ -1,15 +1,51 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import { registerRoutes } from './routes';
 import { env } from './config/env';
 import { prisma } from './prisma';
+import { csrfDoubleSubmit } from './middleware/csrf';
 
 const app = express();
 
-app.use(cors({ origin: env.allowedOrigins, credentials: true }));
-app.use(express.json());
+app.disable('x-powered-by');
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        frameAncestors: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    hsts: { maxAge: 15552000, includeSubDomains: true, preload: false },
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+  })
+);
+app.use(
+  rateLimit({
+    windowMs: env.rateLimitWindowMs,
+    max: env.rateLimitMax,
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
+);
+app.use(
+  cors({
+    origin: env.allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  })
+);
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
+app.use(csrfDoubleSubmit);
 
 // Respuesta informativa en la raíz para evitar 404 en navegadores
 app.get('/', (_req, res) => {
@@ -24,14 +60,17 @@ registerRoutes(app);
 app.use(
   (
     error: Error,
-    _req: express.Request,
+    req: express.Request,
     res: express.Response,
     _next: express.NextFunction
   ) => {
     console.error('[API error]', error);
-    res
-      .status(500)
-      .json({ message: 'Error interno en el backend', details: error.message });
+    res.status(500).json({
+      code: 'INTERNAL_ERROR',
+      message: 'Error interno en el backend',
+      traceId: req.headers['x-request-id'],
+      details: env.nodeEnv === 'development' ? error.message : undefined,
+    });
   }
 );
 

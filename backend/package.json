@@ -6,7 +6,9 @@
     "node": ">=20"
   },
   "scripts": {
+    "predev": "prisma generate",
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "postinstall": "prisma generate",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "migrate": "prisma migrate dev",

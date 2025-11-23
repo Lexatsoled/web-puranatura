@@ -1,4 +1,5 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
+import { randomBytes } from 'crypto';
 
 dotenv.config({ path: process.env.BACKEND_ENV_PATH || undefined });
 
@@ -15,11 +16,30 @@ const parseOrigins = (value: string | undefined): string[] => {
     .filter(Boolean);
 };
 
+const parseList = (value: string | undefined): string[] =>
+  value
+    ? value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [];
+
 const requireEnv = (value: string | undefined, key: string): string => {
-  if (!value) {
-    throw new Error(`Falta la variable de entorno ${key}`);
+  if (value) return value;
+
+  // In non-production environments, provide a secure ephemeral secret so
+  // developers can run the backend locally without needing to set real
+  // secrets. In production we still fail fast to avoid silent misconfiguration.
+  if ((process.env.NODE_ENV || 'development') !== 'production') {
+    const generated = randomBytes(32).toString('hex');
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[env] variable ${key} no definida - usando valor efímero (solo dev)`
+    );
+    return generated;
   }
-  return value;
+
+  throw new Error(`Falta la variable de entorno ${key}`);
 };
 
 export const env = {
@@ -33,4 +53,7 @@ export const env = {
     'JWT_REFRESH_SECRET'
   ),
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN ?? '7d',
+  rateLimitMax: toNumber(process.env.RATE_LIMIT_MAX, 300),
+  rateLimitWindowMs: toNumber(process.env.RATE_LIMIT_WINDOW, 15 * 60 * 1000),
+  adminEmails: parseList(process.env.ADMIN_EMAILS),
 };
