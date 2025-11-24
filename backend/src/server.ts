@@ -2,11 +2,9 @@ import { app, closeApp } from './app';
 import { env } from './config/env';
 import { prisma } from './prisma';
 
-// Start server with simple retry logic if the default port is busy.
-// This helps local development when a previous process didn't exit or
-// the dev environment has another service using the port.
+// Arranque con reintentos si el puerto está ocupado (útil en dev).
 const startPort = env.port;
-const maxAttempts = 10; // try up to startPort + maxAttempts
+const maxAttempts = 10; // probar hasta startPort + maxAttempts - 1
 
 const startServer = (port: number) => {
   const server = app.listen(port, () => {
@@ -16,11 +14,10 @@ const startServer = (port: number) => {
 
   server.on('error', (err: any) => {
     if (err && err.code === 'EADDRINUSE') {
-      // Rethrow and let caller decide to retry
+      // Rethrow para que el caller decida si reintenta
       throw err;
     }
-
-    // For all other errors, just log and rethrow so nodemon shows the trace
+    // Otros errores: log y relanzar
     // eslint-disable-next-line no-console
     console.error('Error al arrancar el servidor', err);
     throw err;
@@ -31,43 +28,41 @@ const startServer = (port: number) => {
 
 let server: ReturnType<typeof app.listen> | undefined;
 
-// try sequential ports until success or until max attempts reached
+// Intenta puertos secuenciales hasta que funcione o se agoten los intentos.
 for (let attempt = 0; attempt < maxAttempts; attempt++) {
   const portToTry = startPort + attempt;
   try {
     server = startServer(portToTry);
-    // successful start -> break out
-    break;
+    break; // Éxito, salir del bucle.
   } catch (err: any) {
     if (err && err.code === 'EADDRINUSE') {
       // eslint-disable-next-line no-console
-      console.warn(`Puerto ${portToTry} ocupado. Intentando puerto ${portToTry + 1}...`);
-      // if this was the last attempt, print helpful note and exit
+      console.warn(
+        `Puerto ${portToTry} ocupado. Intentando puerto ${portToTry + 1}...`
+      );
       if (attempt === maxAttempts - 1) {
         // eslint-disable-next-line no-console
         console.error(
-          `No se pudo iniciar el servidor. Todos los puertos desde ${startPort} a ${startPort + maxAttempts - 1} están ocupados.`
+          `No se pudo iniciar el servidor. Puertos ${startPort}-${startPort + maxAttempts - 1} ocupados.`
         );
-        // Rethrow so nodemon / process will show the error too
         throw err;
       }
-      // otherwise try next
       continue;
     }
-
-    // unknown error - rethrow
+    // Error desconocido -> relanzar.
     throw err;
   }
 }
 
 const gracefulShutdown = async () => {
-  // close the HTTP server so the port is freed
   if (server && typeof server.close === 'function') {
     // eslint-disable-next-line no-console
     console.log('Cerrando servidor HTTP...');
     try {
       await new Promise<void>((resolve, reject) => {
-        server!.close((closeErr: any) => (closeErr ? reject(closeErr) : resolve()));
+        server!.close((closeErr: any) =>
+          closeErr ? reject(closeErr) : resolve()
+        );
       });
     } catch (closeErr) {
       // eslint-disable-next-line no-console
