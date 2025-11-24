@@ -122,7 +122,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
         </motion.ol>
       </nav>
 
-      {/* Breadcrumbs móvil */}
+      {/* Breadcrumbs movil */}
       <nav aria-label="Breadcrumb" className={`md:hidden mt-2 ${className}`}>
         <motion.div
           variants={containerVariants}

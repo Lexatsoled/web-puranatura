@@ -16,9 +16,9 @@ const ContactPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí iría la lógica de envío del formulario (ej. a una API)
+    // Aqui iria la logica de envio del formulario (ej. a una API)
     console.log('Formulario enviado:', formData);
-    setStatus('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+    setStatus('Gracias por tu mensaje! Nos pondremos en contacto pronto.');
     setFormData({ name: '', email: '', message: '' });
   };
 
@@ -30,7 +30,7 @@ const ContactPage: React.FC = () => {
             Ponte en Contacto
           </h1>
           <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            ¿Tienes preguntas o quieres agendar una cita? Estamos aquí para
+            Tienes preguntas o quieres agendar una cita? Estamos aqui para
             ayudarte.
           </p>
         </div>
@@ -39,7 +39,7 @@ const ContactPage: React.FC = () => {
           {/* Formulario */}
           <div className="bg-white/60 backdrop-blur-sm p-8 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold font-display text-green-700 mb-6">
-              Envíanos un mensaje
+              Envianos un mensaje
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -64,7 +64,7 @@ const ContactPage: React.FC = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Correo Electrónico
+                  Correo Electronico
                 </label>
                 <input
                   type="email"
@@ -118,17 +118,17 @@ const ContactPage: React.FC = () => {
                 allowFullScreen={false}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Mapa de ubicación"
+                title="Mapa de ubicacion"
               ></iframe>
             </div>
-            <h3 className="text-xl font-bold text-green-700">Visítanos</h3>
+            <h3 className="text-xl font-bold text-green-700">Visitanos</h3>
             <p className="text-gray-600 mt-2">
-              Calle de la Salud 123, Ensanche Paraíso
+              Calle de la Salud 123, Ensanche Paraiso
             </p>
-            <p className="text-gray-600">Santo Domingo, República Dominicana</p>
+            <p className="text-gray-600">Santo Domingo, Republica Dominicana</p>
 
-            <h3 className="text-xl font-bold text-green-700 mt-6">Llámanos</h3>
-            <p className="text-gray-600 mt-2">Teléfono: (809) 555-1234</p>
+            <h3 className="text-xl font-bold text-green-700 mt-6">Llamanos</h3>
+            <p className="text-gray-600 mt-2">Telefono: (809) 555-1234</p>
           </div>
         </div>
       </div>

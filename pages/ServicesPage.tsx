@@ -10,8 +10,8 @@ const ServicesPage: React.FC = () => {
             Nuestros Servicios de Bienestar
           </h1>
           <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
-            Descubre nuestra gama de terapias naturales diseñadas para restaurar
-            tu vitalidad y promover un estado de salud óptimo.
+            Descubre nuestra gama de terapias naturales disenadas para restaurar
+            tu vitalidad y promover un estado de salud optimo.
           </p>
         </div>
 
