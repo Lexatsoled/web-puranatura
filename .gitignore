@@ -35,5 +35,7 @@ backend/.env.*
 .cache/
 reports/tmp/
 reports/
+!reports/
+!reports/axe-report.json
 .tmp-lh/
 .lighthouse-temp/

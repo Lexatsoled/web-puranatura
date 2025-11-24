@@ -1,10 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import {
-  products as legacyProducts,
-  productCategories,
-} from '../data/products';
 import ProductCard from '../components/ProductCard';
-import ProductDetailModal from '../components/ProductDetailModal';
+const ProductDetailModal = React.lazy(
+  () => import('../components/ProductDetailModal')
+);
 import { Product } from '../src/types/product';
 import { sanitizeProductContent } from '../src/utils/contentSanitizers';
 import { useApi } from '../src/utils/api';
@@ -26,27 +24,33 @@ const StorePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [products, setProducts] = useState<Product[]>([]);
+  const [productCategories, setProductCategories] = useState<
+    { id: string; name: string }[]
+  >([{ id: 'todos', name: 'Todas' }]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const api = useApi();
   const hasFetched = useRef(false);
 
-  const fallbackProducts = useMemo(
-    () => legacyProducts.map((product) => sanitizeProductContent(product)),
-    []
-  );
-
   useEffect(() => {
-    // Evitar doble ejecución en modo Strict (dev)
+    // Evitar doble ejecucion en modo Strict (dev)
     if (hasFetched.current) {
       setIsLoadingProducts(false);
       return;
     }
     hasFetched.current = true;
-    const applyFallback = () => {
+    const applyFallback = async () => {
+      const fallbackModule = await import('../data/products');
+      const fallbackProducts = fallbackModule.products.map((product) =>
+        sanitizeProductContent(product)
+      );
+      setProductCategories([
+        { id: 'todos', name: 'Todas' },
+        ...fallbackModule.productCategories,
+      ]);
       setProducts(fallbackProducts);
       setApiError(
-        'Mostrando catálogo provisional mientras conectamos con la API.'
+        'Mostrando catalogo provisional mientras conectamos con la API.'
       );
       setIsLoadingProducts(false);
     };
@@ -68,7 +72,7 @@ const StorePage: React.FC = () => {
           sanitizeProductContent(mapApiProduct(product))
         );
         if (mapped.length === 0) {
-          console.warn('API /products devolvió lista vacía; usando fallback.');
+          console.warn('API /products devolvio lista vacia; usando fallback.');
           applyFallback();
         } else {
           setProducts(mapped);
@@ -85,7 +89,7 @@ const StorePage: React.FC = () => {
 
     fetchProducts();
     return () => undefined;
-  }, [api, fallbackProducts]);
+  }, [api]);
 
   const processedProducts = useMemo(() => {
     let filtered = products;
@@ -240,9 +244,9 @@ const StorePage: React.FC = () => {
               onChange={handleItemsPerPageChange}
               className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
             >
-              <option value={12}>12 por página</option>
-              <option value={24}>24 por página</option>
-              <option value={48}>48 por página</option>
+              <option value={12}>12 por pagina</option>
+              <option value={24}>24 por pagina</option>
+              <option value={48}>48 por pagina</option>
             </select>
           </div>
         </div>
@@ -255,7 +259,7 @@ const StorePage: React.FC = () => {
 
         {isLoadingProducts && !apiError ? (
           <div className="text-center py-20 text-gray-500">
-            Cargando catálogo...
+            Cargando catalogo...
           </div>
         ) : paginatedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -273,7 +277,7 @@ const StorePage: React.FC = () => {
               No se encontraron productos
             </h2>
             <p className="text-gray-500 mt-2">
-              Intenta ajustar tu búsqueda o filtros.
+              Intenta ajustar tu busqueda o filtros.
             </p>
           </div>
         )}
@@ -289,7 +293,7 @@ const StorePage: React.FC = () => {
               Anterior
             </button>
             <span className="text-sm text-gray-700">
-              Página {currentPage} de {totalPages}
+              Pagina {currentPage} de {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}

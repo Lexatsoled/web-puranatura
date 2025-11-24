@@ -1,21 +1,14 @@
-import React from 'react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  ReferenceLine,
-} from 'recharts';
+import React, { Suspense } from 'react';
 import {
   metricCards,
   MetricCard,
   seriesTemporales,
   SerieTemporal,
 } from '../data/metricsDashboard';
+
+const ChartSection = React.lazy(
+  () => import('../components/metrics/ChartSection')
+);
 
 const formatValor = (valor: number, unidad: MetricCard['unidad']) => {
   if (unidad === 'ms') return `${Math.round(valor)} ms`;
@@ -49,20 +42,20 @@ const MetricsDashboardPage: React.FC = () => {
             Observabilidad
           </p>
           <h1 className="text-4xl font-bold text-emerald-900 leading-tight">
-            Dashboard de m&eacute;tricas
+            Dashboard de metricas
           </h1>
           <p className="text-gray-700 mt-3 max-w-3xl">
-            Seguimiento r&aacute;pido de salud del frontend/BFF: LCP, bundle,
-            auth, cobertura y telemetr&iacute;a. Los datos est&aacute;n
-            precargados con el baseline actual (2025-11-22) y pueden conectarse
-            a fuentes reales (GA/APM) m&aacute;s adelante.
+            Seguimiento rapido de salud del frontend/BFF: LCP, bundle, auth,
+            cobertura y telemetria. Los datos estan precargados con el baseline
+            actual (2025-11-22) y pueden conectarse a fuentes reales (GA/APM)
+            mas adelante.
           </p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-700">
             <span className="px-3 py-1 rounded-full bg-white shadow-sm border border-emerald-100">
               Fuente: reports/ + scripts locales
             </span>
             <span className="px-3 py-1 rounded-full bg-white shadow-sm border border-emerald-100">
-              Objetivo Q1 2026: LCP &lt; 2.5s / Bundle &lt;= 650 kB
+              Objetivo Q1 2026: LCP {'<='} 2.5s / Bundle {'<='} 650 kB
             </span>
           </div>
         </header>
@@ -105,61 +98,25 @@ const MetricsDashboardPage: React.FC = () => {
         </section>
 
         <section className="grid lg:grid-cols-2 gap-8 mb-10">
-          {seriesTemporales.map((serie: SerieTemporal) => (
-            <div
-              key={serie.id}
-              className="bg-white/90 border border-emerald-100 rounded-xl shadow-sm p-4"
-            >
-              <h3 className="text-xl font-semibold text-emerald-900 mb-1">
-                {serie.nombre}
-              </h3>
-              <p className="text-sm text-slate-600 mb-4">
-                Serie temporal con objetivo marcado en verde.
-              </p>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={serie.puntos}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#d1fae5" />
-                    <XAxis dataKey="label" stroke="#0f5132" />
-                    <YAxis
-                      stroke="#0f5132"
-                      tickFormatter={(v) => formatValor(v, serie.unidad)}
-                    />
-                    <Tooltip
-                      formatter={(value: number) =>
-                        formatValor(value, serie.unidad)
-                      }
-                      labelFormatter={(label) => `Fecha: ${label}`}
-                    />
-                    <Legend />
-                    {serie.objetivo !== undefined && (
-                      <ReferenceLine
-                        y={serie.objetivo}
-                        stroke="#16a34a"
-                        strokeDasharray="4 4"
-                        label="Objetivo"
-                      />
-                    )}
-                    <Line
-                      type="monotone"
-                      dataKey="valor"
-                      name={serie.nombre}
-                      stroke="#0f766e"
-                      strokeWidth={2}
-                      dot={{ r: 4 }}
-                      activeDot={{ r: 6 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          ))}
+          <Suspense
+            fallback={
+              <div className="text-sm text-slate-600">Cargando graficos...</div>
+            }
+          >
+            {seriesTemporales.map((serie: SerieTemporal) => (
+              <ChartSection
+                key={serie.id}
+                serie={serie}
+                formatValor={formatValor}
+              />
+            ))}
+          </Suspense>
         </section>
 
         <section className="bg-white/90 border border-emerald-100 rounded-xl shadow-sm p-4">
           <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
             <h3 className="text-xl font-semibold text-emerald-900">
-              Instrucciones r&aacute;pidas
+              Instrucciones rapidas
             </h3>
             <span className="text-xs text-slate-500">
               Ejecuta estos comandos y actualiza los valores en
