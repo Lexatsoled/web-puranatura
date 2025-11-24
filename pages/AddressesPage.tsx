@@ -23,17 +23,17 @@ const AddressesPage: React.FC = () => {
       street: 'Calle de la Naturaleza, 123',
       city: 'Madrid',
       postalCode: '28001',
-      country: 'España',
+      country: 'Espana',
       isDefault: true,
     },
     {
       id: '2',
       type: 'work',
       name: 'Oficina',
-      street: 'Avenida de los Remedios, 45, 2º',
+      street: 'Avenida de los Remedios, 45, 2o',
       city: 'Madrid',
       postalCode: '28003',
-      country: 'España',
+      country: 'Espana',
       isDefault: false,
     },
   ]);
@@ -45,13 +45,13 @@ const AddressesPage: React.FC = () => {
     street: '',
     city: '',
     postalCode: '',
-    country: 'España',
+    country: 'Espana',
   });
 
   // Referencia para hacer scroll al formulario
   const formRef = React.useRef<HTMLDivElement>(null);
 
-  // Función para hacer scroll al formulario cuando se abre
+  // Funcion para hacer scroll al formulario cuando se abre
   const scrollToForm = () => {
     setTimeout(() => {
       if (formRef.current) {
@@ -60,7 +60,7 @@ const AddressesPage: React.FC = () => {
           block: 'start',
         });
       }
-    }, 100); // Pequeño delay para que el componente se renderice
+    }, 100); // Pequeno delay para que el componente se renderice
   };
 
   if (!isAuthenticated || !user) {
@@ -71,7 +71,7 @@ const AddressesPage: React.FC = () => {
             Acceso Denegado
           </h2>
           <p className="text-gray-600">
-            Debes iniciar sesión para gestionar tus direcciones.
+            Debes iniciar sesion para gestionar tus direcciones.
           </p>
         </div>
       </div>
@@ -89,7 +89,7 @@ const AddressesPage: React.FC = () => {
     e.preventDefault();
 
     if (editingAddress) {
-      // Editar dirección existente
+      // Editar direccion existente
       setAddresses((prev) =>
         prev.map((addr) =>
           addr.id === editingAddress.id ? { ...addr, ...formData } : addr
@@ -97,11 +97,11 @@ const AddressesPage: React.FC = () => {
       );
       setEditingAddress(null);
     } else {
-      // Agregar nueva dirección
+      // Agregar nueva direccion
       const newAddress: Address = {
         id: Date.now().toString(),
         ...formData,
-        isDefault: addresses.length === 0, // Primera dirección es predeterminada
+        isDefault: addresses.length === 0, // Primera direccion es predeterminada
       };
       setAddresses((prev) => [...prev, newAddress]);
       setIsAddingAddress(false);
@@ -114,7 +114,7 @@ const AddressesPage: React.FC = () => {
       street: '',
       city: '',
       postalCode: '',
-      country: 'España',
+      country: 'Espana',
     });
   };
 
@@ -134,7 +134,7 @@ const AddressesPage: React.FC = () => {
 
   const handleDelete = (addressId: string) => {
     if (
-      window.confirm('¿Estás seguro de que quieres eliminar esta dirección?')
+      window.confirm('Estas seguro de que quieres eliminar esta direccion?')
     ) {
       setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
     }
@@ -158,7 +158,7 @@ const AddressesPage: React.FC = () => {
       street: '',
       city: '',
       postalCode: '',
-      country: 'España',
+      country: 'Espana',
     });
   };
 
@@ -242,13 +242,13 @@ const AddressesPage: React.FC = () => {
               Mis Direcciones
             </h1>
             <p className="text-gray-600">
-              Gestiona tus direcciones de envío y facturación
+              Gestiona tus direcciones de envio y facturacion
             </p>
           </div>
           <button
             onClick={() => {
               setIsAddingAddress(true);
-              scrollToForm(); // Hacer scroll al formulario cuando se agrega nueva dirección
+              scrollToForm(); // Hacer scroll al formulario cuando se agrega nueva direccion
             }}
             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center gap-2"
           >
@@ -265,7 +265,7 @@ const AddressesPage: React.FC = () => {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
             </svg>
-            Agregar Dirección
+            Agregar Direccion
           </button>
         </div>
 
@@ -374,7 +374,7 @@ const AddressesPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Formulario de agregar/editar dirección */}
+        {/* Formulario de agregar/editar direccion */}
         {isAddingAddress && (
           <motion.div
             ref={formRef}
@@ -383,7 +383,7 @@ const AddressesPage: React.FC = () => {
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
           >
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {editingAddress ? 'Editar Dirección' : 'Agregar Nueva Dirección'}
+              {editingAddress ? 'Editar Direccion' : 'Agregar Nueva Direccion'}
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -393,7 +393,7 @@ const AddressesPage: React.FC = () => {
                     htmlFor="type"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Tipo de dirección
+                    Tipo de direccion
                   </label>
                   <select
                     id="type"
@@ -413,7 +413,7 @@ const AddressesPage: React.FC = () => {
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Nombre de la dirección
+                    Nombre de la direccion
                   </label>
                   <input
                     type="text"
@@ -433,7 +433,7 @@ const AddressesPage: React.FC = () => {
                   htmlFor="street"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Dirección
+                  Direccion
                 </label>
                 <input
                   type="text"
@@ -442,7 +442,7 @@ const AddressesPage: React.FC = () => {
                   value={formData.street}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Calle, número, piso, puerta..."
+                  placeholder="Calle, numero, piso, puerta..."
                   required
                 />
               </div>
@@ -471,7 +471,7 @@ const AddressesPage: React.FC = () => {
                     htmlFor="postalCode"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Código Postal
+                    Codigo Postal
                   </label>
                   <input
                     type="text"
@@ -489,7 +489,7 @@ const AddressesPage: React.FC = () => {
                     htmlFor="country"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    País
+                    Pais
                   </label>
                   <select
                     id="country"
@@ -499,7 +499,7 @@ const AddressesPage: React.FC = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
                   >
-                    <option value="España">España</option>
+                    <option value="Espana">Espana</option>
                     <option value="Francia">Francia</option>
                     <option value="Portugal">Portugal</option>
                     <option value="Italia">Italia</option>
@@ -512,7 +512,7 @@ const AddressesPage: React.FC = () => {
                   type="submit"
                   className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
                 >
-                  {editingAddress ? 'Actualizar' : 'Agregar'} Dirección
+                  {editingAddress ? 'Actualizar' : 'Agregar'} Direccion
                 </button>
                 <button
                   type="button"

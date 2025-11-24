@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from './contexts/CartContext';
 import { useAuth } from './contexts/AuthContext';
-import AuthModal from './components/AuthModal';
+const AuthModal = React.lazy(() => import('./components/AuthModal'));
 import UserMenu from './components/UserMenu';
 
 interface SimpleLayoutProps {
@@ -143,7 +143,30 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
         `}
       </style>
 
-      {/* Header con navegación funcional y carrito */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          left: '-999px',
+          top: '-999px',
+          backgroundColor: '#0f5132',
+          color: '#fff',
+          padding: '0.75rem 1rem',
+          zIndex: 1000,
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.left = '1rem';
+          e.currentTarget.style.top = '1rem';
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.left = '-999px';
+          e.currentTarget.style.top = '-999px';
+        }}
+      >
+        Saltar al contenido principal
+      </a>
+
+      {/* Header con navegacion funcional y carrito */}
       <header
         style={{
           position: 'relative',
@@ -179,16 +202,16 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
             PuraNatura
           </h1>
 
-          {/* Controles del header - Autenticación y Carrito */}
+          {/* Controles del header - Autenticacion y Carrito */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {/* Sistema de autenticación */}
+            {/* Sistema de autenticacion */}
             {isAuthenticated ? (
               <UserMenu />
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
                 className="header-button"
-                aria-label="Abrir inicio de sesión"
+                aria-label="Abrir inicio de sesion"
               >
                 <svg
                   style={{ width: '18px', height: '18px' }}
@@ -203,11 +226,11 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                Iniciar Sesión
+                Iniciar sesion
               </button>
             )}
 
-            {/* Botón del carrito con estilo consistente */}
+            {/* Boton del carrito con estilo consistente */}
             <button
               onClick={onCartClick}
               className="header-button header-button--secondary"
@@ -268,7 +291,9 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
       </header>
 
       {/* Contenido principal */}
-      <main style={{ minHeight: 'calc(100vh - 120px)' }}>{children}</main>
+      <main id="main-content" style={{ minHeight: 'calc(100vh - 120px)' }}>
+        {children}
+      </main>
 
       {/* Footer */}
       <footer
@@ -279,14 +304,16 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
           textAlign: 'center',
         }}
       >
-        <p style={{ margin: 0 }}>© 2025 PuraNatura - Terapias Naturales</p>
+        <p style={{ margin: 0 }}>(c) 2025 PuraNatura - Terapias Naturales</p>
       </footer>
 
-      {/* Modal de autenticación */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
+      {/* Modal de autenticacion (carga diferida para reducir bundle inicial) */}
+      <React.Suspense fallback={null}>
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
+      </React.Suspense>
     </div>
   );
 };

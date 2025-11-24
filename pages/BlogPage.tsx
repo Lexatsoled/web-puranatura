@@ -32,8 +32,8 @@ const BlogPage: React.FC = () => {
               Nuestro Blog de Bienestar
             </h1>
             <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-              Artículos e información para inspirarte en tu camino hacia una
-              vida más saludable y consciente.
+              Articulos e informacion para inspirarte en tu camino hacia una
+              vida mas saludable y consciente.
             </p>
           </div>
 
@@ -57,7 +57,7 @@ const BlogPage: React.FC = () => {
                     onClick={() => handleReadMore(post)}
                     className="font-semibold text-green-600 hover:text-green-800 transition-colors duration-300 self-start mt-auto"
                   >
-                    Leer más &rarr;
+                    Leer mas &rarr;
                   </button>
                 </div>
               </div>

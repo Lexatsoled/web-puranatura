@@ -22,13 +22,12 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
 
-  // Prevenir scroll cuando el modal está abierto
+  // Prevenir scroll cuando el modal esta abierto
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
-      // Resetear estados cuando se cierre el modal
       setIsConfirmingClear(false);
       setIsProcessingPayment(false);
       setPaymentComplete(false);
@@ -38,7 +37,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  // Manejar tecla ESC y restore de foco
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -53,7 +51,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
         }
       }
 
-      // Basic focus trap: keep focus inside modal when open
       if (event.key === 'Tab' && isOpen && modalRef.current) {
         const focusable = modalRef.current.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
@@ -72,20 +69,17 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
 
     if (isOpen) {
-      previouslyFocusedRef.current =
-        document.activeElement as HTMLElement | null;
+      previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
       window.addEventListener('keydown', handleKeyDown);
-      // set focus to close button for screen reader users
       setTimeout(() => closeButtonRef.current?.focus(), 0);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      // restore focus to previously focused element
       try {
         previouslyFocusedRef.current?.focus();
       } catch {
-        // Ignorar errores al restaurar el foco (compatibilidad con browsers)
+        // Ignorar errores al restaurar el foco
       }
     };
   }, [isOpen, isConfirmingClear, onClose]);
@@ -104,15 +98,12 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const handleProceedToPayment = async () => {
     setIsProcessingPayment(true);
 
-    // Simular procesamiento de pago (3 segundos)
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    // Simular éxito o fallo aleatoriamente (90% éxito)
     const paymentSuccess = Math.random() > 0.1;
 
     if (paymentSuccess) {
       setPaymentComplete(true);
-      // Limpiar carrito después del pago exitoso
       setTimeout(() => {
         clearCart();
         setPaymentComplete(false);
@@ -121,9 +112,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       }, 2000);
     } else {
       setIsProcessingPayment(false);
-      alert(
-        'Error en el procesamiento del pago. Por favor, inténtalo de nuevo.'
-      );
+      alert('Error en el procesamiento del pago. Por favor, intentalo de nuevo.');
     }
   };
 
@@ -149,14 +138,13 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <h2 id="cart-modal-title" className="text-xl font-semibold">
               {isProcessingPayment
-                ? 'Procesando Pago'
+                ? 'Procesando pago'
                 : paymentComplete
-                  ? '¡Pago Exitoso!'
-                  : `Carrito (${cartCount} ${cartCount === 1 ? 'artículo' : 'artículos'})`}
+                  ? 'Pago exitoso'
+                  : `Carrito (${cartCount} ${cartCount === 1 ? 'articulo' : 'articulos'})`}
             </h2>
             <button
               ref={closeButtonRef}
@@ -184,11 +172,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          {/* Contenido */}
           <div className="p-4 overflow-y-auto max-h-96">
             {isProcessingPayment ? (
               <div className="text-center py-12">
-                <div className="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                <div className="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
                   Procesando pago...
                 </h3>
@@ -214,7 +201,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-green-800 mb-2">
-                  ¡¡Pago completado!
+                  Pago completado!
                 </h3>
                 <p className="text-gray-600">
                   Tu pedido ha sido procesado exitosamente
@@ -237,7 +224,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     />
                   </svg>
                 </div>
-                <p className="text-gray-600">Tu carrito está vacío</p>
+                <p className="text-gray-600">Tu carrito esta vacio</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -266,10 +253,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() =>
-                          handleQuantityChange(
-                            item.product.id,
-                            item.quantity - 1
-                          )
+                          handleQuantityChange(item.product.id, item.quantity - 1)
                         }
                         className="p-1 hover:bg-gray-100 rounded"
                         disabled={item.quantity <= 1}
@@ -297,10 +281,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       </span>
                       <button
                         onClick={() =>
-                          handleQuantityChange(
-                            item.product.id,
-                            item.quantity + 1
-                          )
+                          handleQuantityChange(item.product.id, item.quantity + 1)
                         }
                         className="p-1 hover:bg-gray-100 rounded"
                         aria-label={`Aumentar cantidad de ${item.product.name}`}
@@ -351,7 +332,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             )}
           </div>
 
-          {/* Footer */}
           {cartItems.length > 0 && !isProcessingPayment && !paymentComplete && (
             <div className="border-t p-4">
               <div className="flex items-center justify-between mb-4">
@@ -369,7 +349,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
                       type="button"
                     >
-                      Proceder al Pago
+                      Proceder al pago
                     </button>
                     <button
                       onClick={() => setIsConfirmingClear(true)}
@@ -396,12 +376,12 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         />
                       </svg>
                       <h3 className="text-red-800 font-semibold">
-                        ¿Vaciar carrito?
+                        Vaciar carrito?
                       </h3>
                     </div>
                     <p className="text-red-700 text-sm mb-4">
-                      Se eliminarán todos los productos del carrito. Esta acción
-                      no se puede deshacer.
+                      Se eliminaran todos los productos del carrito. Esta accion no se puede
+                      deshacer.
                     </p>
                     <div className="flex space-x-2">
                       <button
@@ -409,7 +389,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         className="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
                         type="button"
                       >
-                        Sí, vaciar carrito
+                        Si, vaciar carrito
                       </button>
                       <button
                         onClick={() => setIsConfirmingClear(false)}

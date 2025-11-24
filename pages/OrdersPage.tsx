@@ -31,7 +31,7 @@ const OrdersPage: React.FC = () => {
       items: [
         {
           id: '1',
-          name: 'Aceite Esencial de Lavanda Orgánico',
+          name: 'Aceite Esencial de Lavanda Organico',
           price: 24.99,
           quantity: 2,
           image: '/api/placeholder/80/80',
@@ -55,7 +55,7 @@ const OrdersPage: React.FC = () => {
       items: [
         {
           id: '3',
-          name: 'Infusión Detox Natural',
+          name: 'Infusion Detox Natural',
           price: 15.99,
           quantity: 3,
           image: '/api/placeholder/80/80',
@@ -99,7 +99,7 @@ const OrdersPage: React.FC = () => {
             Acceso Denegado
           </h2>
           <p className="text-gray-600">
-            Debes iniciar sesión para ver tus pedidos.
+            Debes iniciar sesion para ver tus pedidos.
           </p>
         </div>
       </div>
@@ -171,10 +171,10 @@ const OrdersPage: React.FC = () => {
               />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No tienes pedidos aún
+              No tienes pedidos aun
             </h3>
             <p className="text-gray-600 mb-6">
-              Cuando realices tu primera compra, aparecerá aquí.
+              Cuando realices tu primera compra, aparecera aqui.
             </p>
             <button className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">
               Explorar Productos
@@ -228,7 +228,7 @@ const OrdersPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Información de seguimiento */}
+                {/* Informacion de seguimiento */}
                 {order.trackingNumber && (
                   <div className="px-6 py-3 bg-blue-50 border-b border-gray-200">
                     <div className="flex items-center justify-between">
@@ -278,14 +278,14 @@ const OrdersPage: React.FC = () => {
                           className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
                         >
                           <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <span className="text-2xl">🌿</span>
+                            <span className="text-2xl"></span>
                           </div>
                           <div className="flex-1">
                             <h5 className="font-medium text-gray-900">
                               {item.name}
                             </h5>
                             <p className="text-sm text-gray-600">
-                              Cantidad: {item.quantity} ·{' '}
+                              Cantidad: {item.quantity} {' '}
                               {formatCurrency(item.price)}
                             </p>
                           </div>
@@ -307,7 +307,7 @@ const OrdersPage: React.FC = () => {
                       )}
                       {order.status === 'shipped' && (
                         <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm">
-                          Rastrear envío
+                          Rastrear envio
                         </button>
                       )}
                       {order.status === 'pending' && (
