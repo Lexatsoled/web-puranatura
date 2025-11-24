@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // Inicializa proveedores externos de analitica y expone helpers tipados para registrar eventos en toda la SPA.
@@ -32,6 +32,9 @@ class AnalyticsService {
   private initialized: boolean = false;
   private queue: AnalyticsEvent[] = [];
   private consentGranted: boolean = false;
+  private readonly enabled =
+    String(import.meta.env.VITE_ENABLE_ANALYTICS || '').toLowerCase() ===
+    'true';
   private readonly gaId = import.meta.env.VITE_GA_ID;
   private readonly fbPixelId = import.meta.env.VITE_FB_PIXEL_ID;
 
@@ -44,15 +47,21 @@ class AnalyticsService {
     return AnalyticsService.instance;
   }
 
+  isEnabled() {
+    return this.enabled;
+  }
+
   setConsent(granted: boolean) {
-    this.consentGranted = granted;
-    if (granted) {
+    this.consentGranted = granted && this.enabled;
+    if (this.consentGranted) {
       this.init();
+    } else {
+      this.queue = [];
     }
   }
 
   init() {
-    if (this.initialized || !this.consentGranted) return;
+    if (this.initialized || !this.consentGranted || !this.enabled) return;
 
     // Inicializar servicios de analytics
     if (typeof window !== 'undefined') {
@@ -100,7 +109,7 @@ class AnalyticsService {
   }
 
   trackEvent(event: AnalyticsEvent) {
-    if (!this.consentGranted) {
+    if (!this.consentGranted || !this.enabled) {
       return;
     }
     if (!this.initialized) {
@@ -128,12 +137,12 @@ class AnalyticsService {
       });
     }
 
-    // Registrar en nuestro backend para análisis personalizado
+    // Registrar en nuestro backend para analisis personalizado
     this.logEventToBackend(event);
   }
 
   trackPageView({ path, title, referrer }: PageViewEvent) {
-    if (!this.consentGranted) return;
+    if (!this.consentGranted || !this.enabled) return;
     this.trackEvent({
       category: 'page_view',
       action: 'view',
@@ -147,7 +156,7 @@ class AnalyticsService {
   }
 
   private async logEventToBackend(event: AnalyticsEvent) {
-    if (!this.consentGranted) return;
+    if (!this.consentGranted || !this.enabled) return;
     try {
       await fetch('/api/analytics/events', {
         method: 'POST',
@@ -178,27 +187,35 @@ class AnalyticsService {
 // Hook personalizado para analytics
 export function useAnalytics() {
   const location = useLocation();
-  const analytics = AnalyticsService.getInstance();
-  const consentGranted = useMemo(() => {
+  const analytics = useMemo(() => AnalyticsService.getInstance(), []);
+  const [consentGranted, setConsentGranted] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    if (!analytics.isEnabled()) return false;
     try {
-      if (typeof window === 'undefined') return false;
       return (
         window.localStorage.getItem('puranatura-consent-analytics') ===
         'granted'
       );
-    } catch (error) {
-      console.warn('No se pudo leer el consentimiento de analytics:', error);
+    } catch {
       return false;
     }
-  }, []);
+  });
 
   useEffect(() => {
+    if (!analytics.isEnabled()) return;
     analytics.setConsent(consentGranted);
+    try {
+      window.localStorage.setItem(
+        'puranatura-consent-analytics',
+        consentGranted ? 'granted' : 'denied'
+      );
+    } catch {
+      // Ignorar errores de almacenamiento
+    }
   }, [analytics, consentGranted]);
 
-  // Seguimiento automático de vistas de página
   useEffect(() => {
-    if (!consentGranted) return;
+    if (!analytics.isEnabled() || !consentGranted) return;
     analytics.trackPageView({
       path: location.pathname + location.search,
       title: document.title,
@@ -208,13 +225,17 @@ export function useAnalytics() {
 
   const trackEvent = useCallback(
     (event: Omit<AnalyticsEvent, 'timestamp'>) => {
-      if (!consentGranted) return;
+      if (!analytics.isEnabled() || !consentGranted) return;
       analytics.trackEvent(event);
     },
     [analytics, consentGranted]
   );
 
-  return { trackEvent };
+  const setConsent = useCallback((granted: boolean) => {
+    setConsentGranted(granted);
+  }, []);
+
+  return { trackEvent, setConsent, enabled: analytics.isEnabled(), consentGranted };
 }
 
 // Tipos de eventos predefinidos

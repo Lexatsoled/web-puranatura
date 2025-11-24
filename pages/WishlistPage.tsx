@@ -19,7 +19,7 @@ const WishlistPage: React.FC = () => {
             Acceso Denegado
           </h2>
           <p className="text-gray-600">
-            Debes iniciar sesión para ver tu lista de deseos.
+            Debes iniciar sesion para ver tu lista de deseos.
           </p>
         </div>
       </div>
@@ -54,7 +54,7 @@ const WishlistPage: React.FC = () => {
   const handleRemoveSelected = () => {
     if (
       window.confirm(
-        `¿Estás seguro de que quieres eliminar ${selectedItems.length} productos de tu lista de deseos?`
+        `Estas seguro de que quieres eliminar ${selectedItems.length} productos de tu lista de deseos?`
       )
     ) {
       selectedItems.forEach((itemId) => removeFromWishlist(itemId));
@@ -100,7 +100,7 @@ const WishlistPage: React.FC = () => {
                 Mi Lista de Deseos
               </h1>
               <p className="text-gray-600 mt-1">
-                Productos que te interesan para comprar más tarde
+                Productos que te interesan para comprar mas tarde
               </p>
             </div>
 
@@ -152,10 +152,10 @@ const WishlistPage: React.FC = () => {
                 />
               </svg>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Tu lista de deseos está vacía
+                Tu lista de deseos esta vacia
               </h3>
               <p className="text-gray-600 mb-4">
-                Agrega productos que te interesen para guardarlos aquí
+                Agrega productos que te interesen para guardarlos aqui
               </p>
               <a
                 href="/tienda"
@@ -273,7 +273,7 @@ const WishlistPage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Total de productos:</span>
                 <span className="font-medium">
-                  {wishlistItems.length} productos •{' '}
+                  {wishlistItems.length} productos {' '}
                   {wishlistItems.filter((item) => item.inStock).length}{' '}
                   disponibles
                 </span>
@@ -295,7 +295,7 @@ const WishlistPage: React.FC = () => {
                 onClick={() => {
                   if (
                     window.confirm(
-                      '¿Estás seguro de que quieres vaciar toda tu lista de deseos?'
+                      'Estas seguro de que quieres vaciar toda tu lista de deseos?'
                     )
                   ) {
                     clearWishlist();

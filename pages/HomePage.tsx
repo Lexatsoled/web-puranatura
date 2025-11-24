@@ -5,13 +5,10 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section
-        className="relative h-[60vh] md:h-[80vh] bg-cover bg-center"
-        style={{
-          backgroundImage: "url('https://picsum.photos/id/1018/1600/900')",
-        }}
-      >
-        <div className="absolute inset-0 bg-green-900 bg-opacity-50"></div>
+      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-green-900 via-emerald-800 to-amber-500">
+        {/* Sutil patron para dar textura sin imagenes pesadas */}
+        <div className="absolute inset-0 opacity-15 pointer-events-none mix-blend-soft-light bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.05),transparent_28%),radial-gradient(circle_at_40%_80%,rgba(255,255,255,0.06),transparent_26%)]" />
+        <div className="absolute inset-0 bg-green-900 bg-opacity-40" />
         <div className="relative z-10 flex flex-col justify-center items-center h-full text-center text-white px-4">
           {/* Deterministic background panel to make contrast calculable by axe */}
           <div className="bg-green-900 p-6 rounded-md md:max-w-3xl">
@@ -44,11 +41,11 @@ const HomePage: React.FC = () => {
       <section className="py-20 bg-emerald-50">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold font-display text-green-800 mb-4">
-            Tu Camino Hacia la Salud Holística
+            Tu Camino Hacia la Salud Holistica
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-            Ofrecemos una gama de terapias naturales diseñadas para tratar a la
-            persona en su totalidad, no solo los síntomas. Descubre un enfoque
+            Ofrecemos una gama de terapias naturales disenadas para tratar a la
+            persona en su totalidad, no solo los sintomas. Descubre un enfoque
             de salud que es a la vez suave y poderoso.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -57,8 +54,8 @@ const HomePage: React.FC = () => {
                 Terapias Personalizadas
               </h3>
               <p className="text-gray-600">
-                Planes de tratamiento únicos adaptados a tus necesidades
-                específicas.
+                Planes de tratamiento unicos adaptados a tus necesidades
+                especificas.
               </p>
             </div>
             <div className="p-8 bg-white/50 border border-green-100 rounded-lg shadow-sm">
@@ -66,7 +63,7 @@ const HomePage: React.FC = () => {
                 Productos Naturales
               </h3>
               <p className="text-gray-600">
-                Una selección cuidada de suplementos y remedios de la más alta
+                Una seleccion cuidada de suplementos y remedios de la mas alta
                 calidad.
               </p>
             </div>

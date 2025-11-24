@@ -1,5 +1,7 @@
 import React from 'react';
 
+const LOCAL_PLACEHOLDER = '/Jpeg/vitamina_c_1000_500x500.jpg';
+
 const AboutPage: React.FC = () => {
   return (
     <div className="bg-emerald-50 py-16 md:py-24">
@@ -16,27 +18,29 @@ const AboutPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
           <div className="order-2 md:order-1">
             <h2 className="text-3xl font-bold text-green-700 font-display mb-4">
-              Nuestra Filosofía
+              Nuestra Filosofia
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              En PuraNatura, nuestra filosofía se centra en la creencia de que
+              En PuraNatura, nuestra filosofia se centra en la creencia de que
               el cuerpo posee una capacidad innata para curarse. Nuestro papel
-              es facilitar este proceso a través de métodos naturales, no
+              es facilitar este proceso a traves de metodos naturales, no
               invasivos y personalizados. Vemos la salud como un estado de
-              equilibrio entre mente, cuerpo y espíritu, y cada terapia que
-              ofrecemos está diseñada para nutrir esta conexión fundamental.
+              equilibrio entre mente, cuerpo y espiritu, y cada terapia que
+              ofrecemos esta disenada para nutrir esta conexion fundamental.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              Creemos en la educación y el empoderamiento, guiando a nuestros
+              Creemos en la educacion y el empoderamiento, guiando a nuestros
               clientes para que tomen un papel activo en su propio viaje de
               bienestar.
             </p>
           </div>
           <div className="order-1 md:order-2">
             <img
-              src="https://picsum.photos/id/30/500/500"
+              src={LOCAL_PLACEHOLDER}
               alt="Naturaleza y bienestar"
               className="rounded-lg shadow-xl w-full h-auto object-cover aspect-square"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -44,9 +48,11 @@ const AboutPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <img
-              src="https://picsum.photos/id/152/500/500"
+              src={LOCAL_PLACEHOLDER}
               alt="Plantas medicinales"
               className="rounded-lg shadow-xl w-full h-auto object-cover aspect-square"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div>
@@ -54,24 +60,24 @@ const AboutPage: React.FC = () => {
               Nuestra Historia y Valores
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              PuraNatura nació de la pasión por la medicina herbal y un profundo
-              respeto por la sabiduría de la naturaleza. Fundada hace más de una
-              década, nuestro consultorio ha crecido hasta convertirse en un
+              PuraNatura nacio de la pasion por la medicina herbal y un profundo
+              respeto por la sabiduria de la naturaleza. Fundada hace mas de una
+              decada, nuestro consultorio ha crecido hasta convertirse en un
               referente de salud natural en la comunidad.
             </p>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
-                <span className="text-green-500 mr-2">✔</span>
+                <span className="text-green-500 mr-2"></span>
                 <strong>Integridad:</strong> Ofrecemos solo productos y terapias
                 en los que confiamos plenamente.
               </li>
               <li className="flex items-start">
-                <span className="text-green-500 mr-2">✔</span>
-                <strong>Compasión:</strong> Escuchamos con empatía y tratamos a
+                <span className="text-green-500 mr-2"></span>
+                <strong>Compasion:</strong> Escuchamos con empatia y tratamos a
                 cada cliente con calidez y respeto.
               </li>
               <li className="flex items-start">
-                <span className="text-green-500 mr-2">✔</span>
+                <span className="text-green-500 mr-2"></span>
                 <strong>Sostenibilidad:</strong> Nos comprometemos a utilizar
                 recursos de manera responsable, cuidando el planeta que nos
                 cuida.
