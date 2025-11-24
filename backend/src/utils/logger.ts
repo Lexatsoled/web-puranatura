@@ -1,37 +1,41 @@
-import { env } from '../config/env';
+/* Lightweight logger with named exports to satisfy TypeScript imports.
+	 Avoids default-export interop issues by providing a named `logger` object
+	 which contains the typical logging methods used across the backend. */
 
 export const logger = {
-  info: (msg: unknown, meta?: Record<string, unknown>): void => {
-    try {
-      const message = typeof msg === 'string' ? msg : JSON.stringify(msg);
-      // If your ESLint disallows console, replace these with your logger
-      // eslint-disable-next-line no-console
-      console.log('INFO', message, meta ?? '');
-    } catch (e) {
-      void e;
-    }
-  },
-
-  error: (msg: unknown, meta?: Record<string, unknown>): void => {
-    try {
-      const message = typeof msg === 'string' ? msg : JSON.stringify(msg);
-      // eslint-disable-next-line no-console
-      console.error('ERROR', message, meta ?? '');
-    } catch (e) {
-      void e;
-    }
-  },
-
-  warn: (msg: unknown, meta?: Record<string, unknown>): void => {
-    try {
-      const message = typeof msg === 'string' ? msg : JSON.stringify(msg);
-      // eslint-disable-next-line no-console
-      console.warn('WARN', message, meta ?? '');
-    } catch (e) {
-      void e;
-    }
-  },
+	info: (...args: unknown[]): void => {
+		try {
+			// eslint-disable-next-line no-console
+			console.log(...args);
+		} catch (e) {
+			void e;
+		}
+	},
+	warn: (...args: unknown[]): void => {
+		try {
+			// eslint-disable-next-line no-console
+			console.warn(...args);
+		} catch (e) {
+			void e;
+		}
+	},
+	error: (...args: unknown[]): void => {
+		try {
+			// eslint-disable-next-line no-console
+			console.error(...args);
+		} catch (e) {
+			void e;
+		}
+	},
+	debug: (...args: unknown[]): void => {
+		try {
+			// eslint-disable-next-line no-console
+			console.debug(...args);
+		} catch (e) {
+			void e;
+		}
+	},
 };
 
-// Keep a lightweight env reference in case other parts expect it.
-export const NODE_ENV = env.nodeEnv;
+export type Logger = typeof logger;
+
