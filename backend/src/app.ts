@@ -16,6 +16,9 @@ import { sendErrorResponse } from './utils/response';
 
 export const app = express();
 
+// Nota: pequeña modificación no funcional para forzar re-ejecución de CI
+// y asegurar que este archivo exista en la rama del PR.
+
 collectDefaultMetrics();
 
 app.disable('x-powered-by');
