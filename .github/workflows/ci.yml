@@ -1,9 +1,13 @@
 name: CI
 on:
   push:
-    branches: [main, fix/*, feat/*]
+    branches:
+      - main
+      - 'fix/*'
+      - 'feat/*'
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 # Explicit permissions for the workflow. This grants only the minimal
 # privileges gitleaks needs to create checks/comments (and nothing more).
@@ -75,29 +79,32 @@ jobs:
           set -o pipefail
           npm ci || (npm install && echo "WARNING: lockfile changed - update package-lock.json and push the changes")
 
-      - name: Install backend deps and build backend
-        run: |
-          npm --prefix backend ci
-          npm --prefix backend run build
+      - name: Install backend deps
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build
 
       - name: Check for NUL bytes in tracked files
         run: |
           set -e
           # Fail early and print offending files so the lint error is obvious
           git ls-files -z | xargs -0 -n1 python - <<'PY'
-import sys
-bad=[]
-for f in sys.argv[1:]:
-    try:
-        with open(f,'rb') as fh:
-            if b'\x00' in fh.read():
-                bad.append(f)
-    except:
-        pass
-if bad:
-    print("Files with NUL bytes:\n" + "\n".join(bad))
-    sys.exit(1)
-PY
+            import sys
+            bad=[]
+            for f in sys.argv[1:]:
+                try:
+                    with open(f,'rb') as fh:
+                        if b'\x00' in fh.read():
+                            bad.append(f)
+                except:
+                    pass
+            if bad:
+                print("Files with NUL bytes:\n" + "\n".join(bad))
+                sys.exit(1)
+          PY
 
       - name: Lint
         run: npm run lint
@@ -172,6 +179,11 @@ PY
           BASE_URL: http://127.0.0.1:3001
           PERF_API_STRICT: 'true'
         run: npm run perf:api
+      - name: Collect observability evidence
+        run: |
+          set -o pipefail
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/package-observability-artifacts.ps1
 
       - name: Ensure artifact paths exist
         if: always()
