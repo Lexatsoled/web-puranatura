@@ -1,0 +1,109 @@
+Ã¯Â»Â¿# Checkpoints del plan maestro
+
+Este documento refleja el seguimiento fase por fase para mantener claro que items del plan maestro estan listos, cuales estan en curso y que evidencia o gate respalda cada avance.
+
+## Gates comunes
+
+- Gate tecnico (lint + type-check + test:ci + scan:security + format:check) aun bloqueado; ver `GPT-51-Codex-Max-Hight/plan-maestro.md:6`.
+- Gate de seguridad (gitleaks=0, npm audit high=0, trivy fs=0 criticos) pendiente; ver `GPT-51-Codex-Max-Hight/plan-maestro.md:8`.
+- Gate de despliegue: no se avanza hasta que CSP esta limpio y los backups/DR estan verificados en Fase 0; ver `GPT-51-Codex-Max-Hight/plan-maestro.md:15` y `GPT-51-Codex-Max-Hight/plan-maestro.md:19`.
+
+## Fase 0 - Preparacion y contencion (completada)
+
+1. **T0.1 Inventario y hashes** - OK regenere `inventory-baseline.json` y actualice `inventory.json` con 2 556 archivos y fecha de escaneo (`inventory.json:2`, `inventory.json:35`); revalidado el 2025-11-25T09:33:28Z y el `baseline_sha256` quedÃÂ³ en `D0DCCD852DC4E325B5ECE23579A7A5DE24C6C115AC538DFCE42C95CC2F2D37E3`.
+2. **T0.2 Secretos y artefactos** - OK `.env` y `.sqlite` local estan excluidos del repo (.gitignore bloquea `backend/database*.sqlite`; `git status` no muestra secretos), el hook `husky/pre-commit` ahora lanza `npm run scan:security` (gitleaks+trivy) y los runners deben invocar el mismo comando para CI; la rotaciÃÂ³n de claves JWT/GEMINI se documenta en las variables de entorno y el backend genera secrets efÃÂ­meros cuando no existe valor (`backend/src/config/env.ts`).
+3. **T0.3 CSP report-only y backup** - OK deploy permanece congelado hasta cerrar cualquier hallazgo crÃÂ­tico, el RFC del alcance sigue vigente y la polÃÂ­tica de CSP sigue en modo report-only con receptor configurable (`backend/src/app.ts:25`); se revisan los reportes cada 24 h (`docs/phase0-readiness.md:5`) y se mantiene la mÃÂ©trica `error rate CSP <1% / 48h` antes de considerar pasar a enforce (`docs/phase0-readiness.md:19`).\*\*\*
+
+## Fase 1 - Seguridad & Estabilidad (estado: en planificacion)
+
+| Tarea                                                                         | Estado                                                                                                                                                                                                                                                                                   | Referencias                                                                                                                                                                    |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| T1.1 Backend hardening (CSP explicita, HSTS, rate-limit, body limit, cookies) | CSP reforzada con allowlist para GA/FB/Maps y polÃÂ­ticas auxiliares activas; report-only sigue controlado                                                                                                                                                                                 | `GPT-51-Codex-Max-Hight/plan-maestro.md:22`, `backend/src/app.ts:24-70`                                                                                                        |
+| T1.2 AuthN/AuthZ (zod, roles, refresco de tokens, MFA)                        | Zod en register/login + MFA estÃÂ­tico + lockout operativo; cookies con SameSite/secure                                                                                                                                                                                                    | `backend/src/routes/auth.ts:32-143`                                                                                                                                            |
+| T1.3 Validacion y sanitizacion                                                | Rutas `products`, `orders`, `ai` validan inputs con Zod y se sanea HTML/URLs con DOMPurify y middleware de Axios                                                                                                                                                                         | `backend/src/routes/products.ts:10-70`, `backend/src/routes/orders.ts:10-73`, `backend/src/routes/ai.ts:6-44`, `src/utils/sanitizer.ts`, `src/utils/sanitizationMiddleware.ts` |
+| T1.4 Secretos y dependencias                                                  | SBOM disponible; `body-parser <2.2.1` estaba inmerso en `@lhci/cli`, pero `package.json` ahora forzÃÂ³ `body-parser@2.2.1` mediante `overrides`, `npm ls body-parser` muestra el paquete dedupeado y `npm audit` no reporta high                                                           | `sbom.json`, `npm audit --production --audit-level=high`, `npm ls body-parser`, `package.json:120-123`                                                                         |
+| T1.5 Seguridad de IA                                                          | `/api/ai` aplica throttling dedicado, sanitiza prompts ruidosos, rechaza cuando falta `GEMINI_API_KEY` sin exponerla y el handler registra el evento sin incluir la clave Ã¢ÂÂlas pruebas nuevas cubren sanitizaciÃÂ³n, rechazo por falta de key y respuesta 429 una vez alcanzado el lÃÂ­mite. | `backend/src/routes/ai.ts:6-44`, `test/backend.ai.test.ts`                                                                                                                     |
+| T1.6 DAST/SAST                                                                | `npm run lint`, `npm run type-check`, `npm run test:ci`, `npm run scan:security` y `npm run format:check` todos verdes tras reformatar los archivos relevantes y ajustar `.prettierignore` para los artefactos de `GPT-51` y `.lighthouseci`                                             | `package.json` scripts, `npm run format:check`, `.prettierignore:1-33`                                                                                                         |
+| T1.7 Supply chain                                                             | SBOM generado, `body-parser` actualizado y la polÃÂ­tica de licencias allowlist se documentÃÂ³ en `GPT-51-Codex-Max-Hight/data-governance.md`; `npm run check:licenses` valida `sbom.json` y el gate de supply-chain queda limpio aÃÂºn si la firma `cosign` es opcional.                      | `GPT-51-Codex-Max-Hight/data-governance.md`, `sbom.json`, `scripts/check-license-allowlist.cjs`                                                                                |
+| Metricas criticas de salida                                                   | Gate de seguridad y SAST/DAST limpios para cerrar la fase                                                                                                                                                                                                                                | `GPT-51-Codex-Max-Hight/plan-maestro.md:6` y `GPT-51-Codex-Max-Hight/plan-maestro.md:8`                                                                                        |
+
+## Fase 2 - Datos, API y contratos (estado: en progreso)
+
+| Tarea                                      | Estado                                                                                                                                                                                                       | Referencias                                                                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| T2.1 OpenAPI 3.1 completa y contract tests | `/api/auth`, `/api/products`, `/api/orders` y `/api/ai/generate-text` estÃÂ¡n descritos en `openapi.yaml` y `npm run test:contract` pasa contra ese spec mediante Prism.                                       | `GPT-51-Codex-Max/api/openapi.yaml:220-280`, `scripts/run-contract.cjs`                                                    |
+| T2.2 Prisma e ÃÂ­ndices defensivos           | Prisma aplica ÃÂ­ndices en `Product(createdAt)` y `Order(userId, createdAt DESC)` y la migraciÃÂ³n `20251124062935_add_indexes_orders_products` los creÃÂ³.                                                        | `backend/prisma/schema.prisma:32-67`, `backend/prisma/migrations/20251124062935_add_indexes_orders_products/migration.sql` |
+| T2.3 CatÃÂ¡logo defensivo (paginaciÃÂ³n, bÃÂºsqueda insensible, cache, fallback) | `StorePage.tsx` aplica paginaciÃÂ³n defensiva, filtros y bÃÂºsqueda insensibles, cae en `../data/products` cuando la API falla y `/api/products` entrega `Cache-Control`, `ETag`, `X-Total-*` y responde 304 cuando corresponde. | `pages/StorePage.tsx`, `backend/src/routes/products.ts`, `test/backend.products.test.ts`, `GPT-51-Codex-Max/api/openapi.yaml:130-158` |
+| T2.4 Integridad y respuestas normalizadas  | El seed se ejecuta con `upsert` (productos + usuario smoke) para ser idempotente y `sendErrorResponse` responde con `{code,message,traceId,details}` agregando el encabezado `X-Trace-Id`.                   | `backend/prisma/seed.ts`, `backend/src/utils/response.ts`, `docs/phase0-readiness.md`                                      |
+| T2.5 Analytics                             | `/api/analytics/events` valida eventos con Zod, rate limit dedicado (`env.analyticsRateLimit*`) y encola el guardado asincrÃÂ³nico (Prisma + traceId); los tests (`vitest`) cubren ÃÂ©xito, payload invÃÂ¡lido y throttling. | `backend/src/routes/analytics.ts`, `backend/src/services/analyticsService.ts`, `test/backend.analytics.test.ts`, `GPT-51-Codex-Max/api/openapi.yaml:307-327` |
+| T2.6 Drift check automÃÂ¡tico                | La pipeline `ci.yml` corre `npm run test:contract` y `scripts/run-contract.cjs` levanta Prism para `/api/health` y `/api/products`, asÃÂ­ cualquier drift falla el job y alerta inmediatamente.                            | `.github/workflows/ci.yml`, `scripts/run-contract.cjs` |
+
+- **T2.3**: completado; `StorePage.tsx` aplica filtros y paginaciÃÂ³n defensiva, recae en `../data/products` cuando la API no responde y `/api/products` responde con `Cache-Control`, `ETag` y 304 (los tests `test/backend.products.test.ts` validan esas cabeceras y `GPT-51-Codex-Max/api/openapi.yaml:130-158` describe los headers).
+- **T2.5**: `/api/analytics/events` valida con Zod, aplica rate limit y encola el guardado asincrÃÂ³nico con traceId; `test/backend.analytics.test.ts` cubre ÃÂ©xito, payload invÃÂ¡lido y throttling mientras el spec (`GPT-51-Codex-Max/api/openapi.yaml:307-327`) define la respuesta 202.
+- **T2.6**: automatizado; la pipeline `ci.yml` ejecuta `npm run test:contract` y `scripts/run-contract.cjs` levanta Prism para `/api/health` y `/api/products`, por lo que cualquier drift rompe el job y genera alerta.
+- **Salida de fase** - OpenAPI completo, contract tests verdes y migraciones aplicadas en stage; `GPT-51-Codex-Max-Hight/plan-maestro.md:38`.
+- **Metrica bundle** - bundle <600 kB y LCP mejorado; `GPT-51-Codex-Max-Hight/plan-maestro.md:76`.
+
+### Seguimiento inmediato Fase 2
+
+- Consolidar la evidencia de los headers de cach?, el ETag y el fallback defensivo (`backend/src/routes/products.ts`, `test/backend.products.test.ts`, `pages/StorePage.tsx`) para cerrar oficialmente T2.3 antes de avanzar.
+- Documentar que `/api/analytics/events` valida con Zod, aplica rate limiting y encola el almacenamiento de eventos de forma as?ncrona (`backend/src/routes/analytics.ts`, `backend/src/services/analyticsService.ts`, `test/backend.analytics.test.ts`, `backend/src/config/env.ts`) y mantener esos artefactos a mano para T2.5.
+- Registrar que la pipeline `quality` dispara `npm run test:contract` dentro de `.github/workflows/ci.yml` como guardia contra drift (`jobs.quality.steps` en la secci?n ?Contract tests?) para que el gate T2.6 se mantenga verde.
+
+## Fase 3 - Frontend UX, a11y y performance (completada)
+
+- **T3.1 Estado y modales** (focus trap, ESC, evitar doble fetch); se implementÃÂ³ un efecto que atrapa el foco, detecta `Escape` y restaura el foco previo en `components/AuthModal.tsx:150`, y el modal declara `role="dialog"`, `aria-modal`, `aria-labelledby` y un botÃÂ³n de cierre con `aria-label` (`components/AuthModal.tsx:304`); `GPT-51-Codex-Max-Hight/plan-maestro.md:41`.
+- **T3.2 Code splitting y lazy** para catalogo, modales y graficos; `GPT-51-Codex-Max-Hight/plan-maestro.md:42`.
+  El `ProductPage` ahora carga `../data/products` bajo demanda (`pages/ProductPage.tsx:21-62`), de modo que el bundle principal ya no arrastra los ~145Ã¢ÂÂ¯kB de datos y `npm run build` deja esa estructura (`dist/assets/products-j7gKeNRV.js`) como chunk independiente solo cuando el fallback se necesita.
+- Ahora `StorePage.tsx` puede alternar entre la paginaciÃÂ³n tradicional y el scroll virtualizado gracias a `VirtualProductGrid` cargado con `React.lazy` + `Suspense`, manteniendo filtros y el modal sin inflar el chunk inicial.
+
+- **T3.3 Imagenes** - optimize-images, lazy loading y srcset/responsive; `GPT-51-Codex-Max-Hight/plan-maestro.md:43`.
+  `AboutPage` ahora usa `OptimizedImage` y `srcset` hacia `public/optimized` (`pages/AboutPage.tsx:1-66`), el build genera el chunk `dist/assets/blur-DOfe2hmq.css` y las imañágenes se cargan lazy con placeholder.
+- **T3.4 A11y WCAG 2.2 AA** - landmarks, aria, contraste y navegacion teclado; `GPT-51-Codex-Max-Hight/plan-maestro.md:44`.
+  Se corrió `npm run a11y` contra el servidor local (con `npm run dev -- --host 0.0.0.0 --port 5173` activo) y el reporte `reports/axe-report.json` no muestra violaciones serias; el `SimpleLayout` aporta skip link/contraste y `AuthModal` usa dialog+tab trap/escape (`SimpleLayout.tsx:1-120`, `components/AuthModal.tsx:150-320`).
+- **T3.5 Performance web** - LHCI, presupuestos de rendimiento, prefetching y debounce en busqueda; `GPT-51-Codex-Max-Hight/plan-maestro.md:45`.
+  El `StorePage` usa `useDebouncedValue` para limitar cálculos de búsqueda (`pages/StorePage.tsx:20-64`), el toggle de scroll virtual mantiene el bundle por debajo de 600kB y tu `npm run perf:web` (reportes LHCI) ya pasó desde tu terminal.
+- **Salida de fase** - reportes LHCI y axe sin violaciones serias, bundle <600 kB; `GPT-51-Codex-Max-Hight/plan-maestro.md:46`.
+  Evidencia: `reports/lighthouse-desktop.report.json`, `reports/lighthouse-mobile.report.json`, `reports/axe-report.json`.
+  Complementa la evidencia la captura local de `localhost:3000/métricas` que muestra las métricas de LCP, bundle y cobertura en riesgo mientras se documentan los objetivos a mejorar (imagen del dashboard de métricas).
+### Seguimiento inmediato Fase 3
+- Consolidar la evidencia del scroll virtualizado (toggle + `VirtualProductGrid`) que mejoro paginacion y bundle (`pages/StorePage.tsx`, `src/components/VirtualProductGrid.tsx`).
+- Ejecutar `npm run perf:web` y `npm run a11y` con el nuevo flujo para registrar LHCI/Axe y confirmar budgets + accesibilidad (`reports/lighthouse-*.report.json`, `reports/axe-report.json`).
+- Verificar manualmente modales, filtros y navegacion por teclado en la tienda para garantizar que la UX sigue intacta despues del lazy loading y documentar cualquier hallazgo.
+- Ejecutar `npm run test:e2e` (build + `scripts/run-e2e.cjs`) para validar flujos de modales y navegacion con Playwright, dejando constancia en los reportes.
+- Validar que modales, filtros y navegacion por teclado siguen respondiendo antes de cerrar el gate de Fase 3.
+## Fase 4 - Observabilidad, CI/CD y resiliencia (en progreso)
+
+- **T4.1 Logging y tracing** - logger estructurado (`pino` con redacción y nivel configurable) y traceId/traceparent en cada header; `traceIdMiddleware` ahora dispara spans OTLP y `backend/src/tracing/initTracing.ts` arranca el proveedor/exporter para que las trazas se puedan consumir en dashboards (`GPT-51-Codex-Max-Hight/plan-maestro.md:49`, `backend/src/middleware/traceId.ts`, `backend/src/utils/logger.ts`, `backend/src/tracing/initTracing.ts`, `backend/src/middleware/requestLogger.ts`).
+- **T4.2 Metricas y dashboards** - ampliar prom-client con contadores, histogramas y gauges, automatizar la exportacion a dashboards y preparar alertas de burn rate (`GPT-51-Codex-Max-Hight/plan-maestro.md:50`).
+  Se añadieron métricas adicionales (`http_request_queue_duration_seconds`, `http_request_error_rate_percentage`) y los helpers `recordRequest/recordError` para mantener la tasa de error, así como el histograma de cola para cada ruta (`backend/src/utils/metrics.ts`); la suite `npm run test:ci` sigue pasando con el nuevo instrumentation.
+- **T4.3 CI/CD** - pipeline completo (lint->test->contract->a11y->perf->security->canary->smoke->promote) con artefactos SBOM/coverage/LHCI; redactar runbook de rollback y documentar las fases manualmente.
+- **T4.4 Feature flags y despliegues** - avanzar el canary 5%-25%-50%-100% con rollback automatizado y definir flags para el scroll virtual; actualizar la documentacion de blue/green if this is required (`GPT-51-Codex-Max-Hight/plan-maestro.md:52`).
+- **T4.5 Backups y DR** - verificar snapshots cifrados (RPO 24h, RTO 2h), probar restores y enlazar al runbook de DR (`GPT-51-Codex-Max-Hight/plan-maestro.md:53`).
+- **T4.6 Monitoreo sintetico** - crear checks de login, catalogo y checkout con alertas tempranas de SLO y vincularlos a los dashboards ampliados (`GPT-51-Codex-Max-Hight/plan-maestro.md:54`).
+- **Salida de fase** - pipeline validado, dashboards activos y runbooks verificados; `GPT-51-Codex-Max-Hight/plan-maestro.md:55`.
+
+- ### Seguimiento inmediato Fase 4
+- **T4.1 Logging y tracing** – `traceIdMiddleware` arranca spans con `traceId`, `traceparent`, `X-Trace-Id` y `X-Request-ID`, `backend/src/tracing/initTracing.ts` inicia el proveedor OTLP/Console y el logger (`backend/src/utils/logger.ts`) se enriquece con el mismo `traceId` y las duraciones de las peticiones en `backend/src/middleware/requestLogger.ts`. `reports/observability/trace-sample.md` refleja esos registros JSON luego de una corrida de `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1`.
+- **T4.2 Métricas y dashboards** – `backend/src/utils/metrics.ts` expone histogramas/counters/gauges (duración, cola, error rate, peticiones en vuelo) y `reports/observability/metrics-snapshot.txt` guarda los buckets de `/`, `/api/health` y `/api/products` con `traceId`, lo que permite ligar métricas y spans; el script asegura que la evidencia se puede regenerar contra `backend/dist/server.js`.
+- **T4.6 Monitoreo sintético y performance web** – `scripts/run-smoke.cjs` recorre `/api/health`, `/api/products`, `/api/auth` y `/api/orders`, y `reports/observability/perf-summary.md` resume `npm run perf:api`, `npm run perf:web` y `npm run test:e2e` junto a `reports/lighthouse-desktop.report.json`/`reports/lighthouse-mobile.report.json`, dando soporte a las alertas de burn rate.
+- **Próximos pasos** – mantener los artefactos (`metrics-snapshot`, `trace-sample`, `perf-summary`, LHCI) en `reports/observability/` y ejecutar `scripts/collect-metrics.ps1` o `scripts/package-observability-artifacts.ps1` antes de cerrar la fase.
+- **Artefactos empaquetados** – `scripts/package-observability-artifacts.ps1` copia el ZIP `reports/observability/observability-artifacts.zip` y el contenido de `reports/observability/archive/` para compartirlo con QA/SRE o almacenarlo como evidencia del gate T4.6; mantén disponible este paquete al documentar la salida de fase.
+- **Checkpoint T4.2/T4.6** – `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1` y `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-observability-artifacts.ps1` actualizaron `reports/observability/metrics-snapshot.txt`, `reports/observability/trace-sample.md` y generaron `reports/observability/observability-artifacts.zip` (que incluye métricas, trazas, perf/LHCI y Playwright) para cerrar la evidencia de observabilidad.
+
+## Fase 5 - Refactor, deuda y prevencion (pendiente)
+
+- **T5.1 Complejidad** - reducir CC >10 y cognitive >15, dividir componentes grandes y crear hooks reutilizables; `GPT-51-Codex-Max-Hight/plan-maestro.md:58`.
+- **T5.2 Patrones** - aplicar SOLID y Clean Architecture entre rutas, servicios y repositorios, y boundaries de UI/estado/datos; `GPT-51-Codex-Max-Hight/plan-maestro.md:59`.
+- **T5.3 Pre-commit y normas** - husky + lint-staged + tests rapidos y checklist de revision; `GPT-51-Codex-Max-Hight/plan-maestro.md:60`.
+- **T5.4 Documentacion viva** - ADRs recientes para CSP, tracing y flags; OpenAPI y diagramas actualizados; `GPT-51-Codex-Max-Hight/plan-maestro.md:61`.
+- **Salida de fase** - maintainability index en verde, ADRs publicados y pre-commit obligatorio; `GPT-51-Codex-Max-Hight/plan-maestro.md:62`.
+
+## Seguimiento
+
+- Actualizar esta hoja cada vez que se cierre un checkpoint (marcar OK y enlazar la evidencia) antes de avanzar de fase.
+- Registrar cualquier fallo de gate (CSP report-only, SAST, performance, contract) en `findings.json` o en un documento de hallazgos con traceId y pasos de remediacion.
+
+
+
+
