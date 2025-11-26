@@ -1,6 +1,6 @@
 # Run and deploy your AI Studio app
 
-<!-- ci: trivial touch to retrigger workflows (bot) -->
+<!-- ci: trivial touch to retrigger workflows (bot) - updated 2025-11-26 -->
 
 This contains everything you need to run your app locally.
 
