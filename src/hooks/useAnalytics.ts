@@ -235,7 +235,12 @@ export function useAnalytics() {
     setConsentGranted(granted);
   }, []);
 
-  return { trackEvent, setConsent, enabled: analytics.isEnabled(), consentGranted };
+  return {
+    trackEvent,
+    setConsent,
+    enabled: analytics.isEnabled(),
+    consentGranted,
+  };
 }
 
 // Tipos de eventos predefinidos

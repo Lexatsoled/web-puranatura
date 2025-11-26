@@ -273,7 +273,7 @@ const WishlistPage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Total de productos:</span>
                 <span className="font-medium">
-                  {wishlistItems.length} productos {' '}
+                  {wishlistItems.length} productos{' '}
                   {wishlistItems.filter((item) => item.inStock).length}{' '}
                   disponibles
                 </span>
