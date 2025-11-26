@@ -1,6 +1,6 @@
 # Run and deploy your AI Studio app
 
-<!-- ci: trivial touch to retrigger workflows -->
+<!-- ci: trivial touch to retrigger workflows (bot) -->
 
 This contains everything you need to run your app locally.
 
@@ -14,7 +14,7 @@ This contains everything you need to run your app locally.
 3. Run `npm run lint` to verify formatting and coding standards locally (opcionalmente con `-- --watch` para cambios rápidos).
 4. Opcionalmente, usa `npm run test:ci` para validar la suite completa localmente si necesitas confianza extra (especialmente antes de subir un PR).
 5. Si trabajas en Windows, detente y reintenta el lint con `cross-env` si ves errores raros de rutas o diferencias de mayúsculas; los símbolos ':' pueden fallar en algunos shells.
-6. Para contribuir, crea un branch de trabajo y sincroniza con `main` antes de hacer `npm install`.
+6. Para contribuir, crea un branch de trabajo y sincroniza con `main` antes de hacer `npm install`, así evitas divergencias del upstream.
 3. Run the app:
    `npm run dev`
 
