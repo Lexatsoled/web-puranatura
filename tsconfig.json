@@ -24,6 +24,7 @@
     }
   },
   "exclude": [
+    "backend",
     "node_modules",
     "dist",
     "coverage",
@@ -34,6 +35,7 @@
     "tmp",
     "temp_trace_extract1",
     "tools/githooks",
+    "scripts",
     "archive",
     "archive/**/*",
     "e2e",
