@@ -69,7 +69,8 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
 
     if (isOpen) {
-      previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+      previouslyFocusedRef.current =
+        document.activeElement as HTMLElement | null;
       window.addEventListener('keydown', handleKeyDown);
       setTimeout(() => closeButtonRef.current?.focus(), 0);
     }
@@ -112,7 +113,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       }, 2000);
     } else {
       setIsProcessingPayment(false);
-      alert('Error en el procesamiento del pago. Por favor, intentalo de nuevo.');
+      alert(
+        'Error en el procesamiento del pago. Por favor, intentalo de nuevo.'
+      );
     }
   };
 
@@ -253,7 +256,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() =>
-                          handleQuantityChange(item.product.id, item.quantity - 1)
+                          handleQuantityChange(
+                            item.product.id,
+                            item.quantity - 1
+                          )
                         }
                         className="p-1 hover:bg-gray-100 rounded"
                         disabled={item.quantity <= 1}
@@ -281,7 +287,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       </span>
                       <button
                         onClick={() =>
-                          handleQuantityChange(item.product.id, item.quantity + 1)
+                          handleQuantityChange(
+                            item.product.id,
+                            item.quantity + 1
+                          )
                         }
                         className="p-1 hover:bg-gray-100 rounded"
                         aria-label={`Aumentar cantidad de ${item.product.name}`}
@@ -380,8 +389,8 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                       </h3>
                     </div>
                     <p className="text-red-700 text-sm mb-4">
-                      Se eliminaran todos los productos del carrito. Esta accion no se puede
-                      deshacer.
+                      Se eliminaran todos los productos del carrito. Esta accion
+                      no se puede deshacer.
                     </p>
                     <div className="flex space-x-2">
                       <button

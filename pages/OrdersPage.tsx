@@ -285,7 +285,7 @@ const OrdersPage: React.FC = () => {
                               {item.name}
                             </h5>
                             <p className="text-sm text-gray-600">
-                              Cantidad: {item.quantity} {' '}
+                              Cantidad: {item.quantity}{' '}
                               {formatCurrency(item.price)}
                             </p>
                           </div>

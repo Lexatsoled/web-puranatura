@@ -1,4 +1,10 @@
-import { context, propagation, SpanContext, SpanStatusCode, trace } from '@opentelemetry/api';
+import {
+  context,
+  propagation,
+  SpanContext,
+  SpanStatusCode,
+  trace,
+} from '@opentelemetry/api';
 import { SemanticAttributes } from '@opentelemetry/semantic-conventions';
 import { NextFunction, Request, Response } from 'express';
 import { tracer } from '../tracing/initTracing';

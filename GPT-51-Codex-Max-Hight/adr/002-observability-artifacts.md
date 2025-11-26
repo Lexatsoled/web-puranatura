@@ -1,4 +1,5 @@
 # ADR-002: Evidencia de observabilidad empaquetada
+
 - Estado: aceptada
 - Fecha: 2025-11-26
 - Contexto: la fase 4 del plan maestro exige evidencia recurrente de trazas, métricas y reportes de performance por cada gate; hasta ahora esa evidencia residía en archivos dispersos de `reports/observability`.
