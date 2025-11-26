@@ -10,16 +10,13 @@ import { csrfDoubleSubmit } from './middleware/csrf';
 import { traceIdMiddleware } from './middleware/traceId';
 import { requestLogger } from './middleware/requestLogger';
 import metricsRouter from './routes/metrics';
-import { collectDefaultMetrics } from 'prom-client';
 import { logger } from './utils/logger';
 import { sendErrorResponse } from './utils/response';
 
 export const app = express();
 
-// Nota: pequeña modificación no funcional para forzar re-ejecución de CI
-// y asegurar que este archivo exista en la rama del PR.
-
-collectDefaultMetrics();
+// Default metrics are collected via `backend/src/utils/metrics.ts` to
+// avoid double-registration — keep the app bootstrap clean here.
 
 app.disable('x-powered-by');
 app.use(
