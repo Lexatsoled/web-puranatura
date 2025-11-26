@@ -49,8 +49,31 @@ module.exports = [
     },
   },
   // Scoped override for TypeScript files: enable type-aware linting only on .ts/.tsx
+  // Avoid type-aware parsing for build/tooling scripts which are excluded from tsconfig
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['scripts/**/*.ts', 'scripts/**/*.tsx'],
+    languageOptions: {
+      parser: require('@typescript-eslint/parser'),
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        // Intentionally no `project` here to avoid "file not found in project" errors
+      },
+    },
+  },
+  // Scoped override for TypeScript files: enable type-aware linting only on project source (exclude tooling scripts)
+  {
+    files: [
+      'src/**/*.ts',
+      'src/**/*.tsx',
+      'pages/**/*.ts',
+      'pages/**/*.tsx',
+      'components/**/*.ts',
+      'components/**/*.tsx',
+      'tools/**/*.ts',
+      'tools/**/*.tsx',
+      'test/**/*.ts',
+      'test/**/*.tsx',
+    ],
     languageOptions: {
       parser: require('@typescript-eslint/parser'),
       parserOptions: {

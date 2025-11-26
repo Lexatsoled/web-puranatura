@@ -1,6 +1,6 @@
 # Run and deploy your AI Studio app
 
-<!-- ci: trivial touch to retrigger workflows -->
+<!-- ci: trivial touch to retrigger workflows (bot) -->
 
 This contains everything you need to run your app locally.
 
@@ -9,8 +9,12 @@ This contains everything you need to run your app locally.
 **Prerequisites:** Node.js
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+   `npm install`  <!-- asegura que `node_modules` se genera antes de compilar -->
+2. Copy `.env.local.sample` to `.env.local` and set `GEMINI_API_KEY` to your Gemini API key.
+3. Run `npm run lint` to verify formatting and coding standards locally (opcionalmente con `-- --watch` para cambios rápidos).
+4. Opcionalmente, usa `npm run test:ci` para validar la suite completa localmente si necesitas confianza extra (especialmente antes de subir un PR).
+5. Si trabajas en Windows, detente y reintenta el lint con `cross-env` si ves errores raros de rutas o diferencias de mayúsculas; los símbolos ':' pueden fallar en algunos shells.
+6. Para contribuir, crea un branch de trabajo y sincroniza con `main` antes de hacer `npm install`, así evitas divergencias del upstream.
 3. Run the app:
    `npm run dev`
 

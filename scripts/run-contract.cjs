@@ -110,9 +110,47 @@ const run = async () => {
       });
     });
 
+  const fetchProducts = () =>
+    new Promise((resolve, reject) => {
+      const req = http.get(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/products?page=1&pageSize=2',
+          timeout: 5000,
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer contract-mock',
+            Cookie: 'token=contract-mock-token',
+          },
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/products: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/products del mock'));
+      });
+    });
+
   try {
     await waitForReady();
     await fetchHealth();
+    await fetchProducts();
     shutdown(0);
   } catch (error) {
     console.error('[test:contract] Error:', error.message || error);
