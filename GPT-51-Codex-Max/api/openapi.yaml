@@ -116,11 +116,57 @@ paths:
         '201': { description: Creado }
         '400': { description: Datos inválidos }
         '401': { description: No autenticado }
+  /api/analytics/events:
+    post:
+      summary: Registrar eventos de comportamiento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsEvent'
+      responses:
+        '202':
+          description: Evento aceptado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                  - ok
+        '400': { description: Payload inválido }
+        '429': { description: Límite de tasa alcanzado }
 components:
   securitySchemes:
     cookieAuth:
       type: apiKey
       in: cookie
       name: token
+  schemas:
+    AnalyticsEvent:
+      type: object
+      properties:
+        category:
+          type: string
+        action:
+          type: string
+        label:
+          type: string
+        value:
+          type: number
+        metadata:
+          type: object
+          additionalProperties: true
+        timestamp:
+          type: string
+          format: date-time
+        sessionId:
+          type: string
+      required:
+        - category
+        - action
 security:
   - cookieAuth: []

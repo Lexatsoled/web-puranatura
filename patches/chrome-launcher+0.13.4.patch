@@ -1,0 +1,19 @@
+diff --git a/node_modules/chrome-launcher/dist/chrome-launcher.js b/node_modules/chrome-launcher/dist/chrome-launcher.js
+index 837d39b..5e545b3 100644
+--- a/node_modules/chrome-launcher/dist/chrome-launcher.js
++++ b/node_modules/chrome-launcher/dist/chrome-launcher.js
+@@ -302,7 +302,13 @@ class Launcher {
+                 this.fs.closeSync(this.errFile);
+                 delete this.errFile;
+             }
+-            this.rimraf(this.userDataDir, () => resolve());
++            try {
++                this.rimraf(this.userDataDir, () => resolve());
++            }
++            catch (error) {
++                log.warn('ChromeLauncher', `Failed to remove temp profile: ${error.message}`);
++                resolve();
++            }
+         });
+     }
+ }

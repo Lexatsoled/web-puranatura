@@ -8,6 +8,11 @@ const toNumber = (value: string | undefined, fallback: number): number => {
   return Number.isFinite(parsed) ? parsed : fallback;
 };
 
+const toBoolean = (value: string | undefined, fallback: boolean): boolean => {
+  if (value === undefined) return fallback;
+  return value.toLowerCase() === 'true';
+};
+
 const parseOrigins = (value: string | undefined): string[] => {
   if (!value) return ['http://localhost:5173'];
   return value
@@ -56,4 +61,13 @@ export const env = {
   rateLimitMax: toNumber(process.env.RATE_LIMIT_MAX, 300),
   rateLimitWindowMs: toNumber(process.env.RATE_LIMIT_WINDOW, 15 * 60 * 1000),
   adminEmails: parseList(process.env.ADMIN_EMAILS),
+  analyticsRateLimitMax: toNumber(process.env.ANALYTICS_RATE_LIMIT_MAX, 20),
+  analyticsRateLimitWindowMs: toNumber(
+    process.env.ANALYTICS_RATE_LIMIT_WINDOW,
+    5 * 60 * 1000
+  ),
+  analyticsIngestEnabled: toBoolean(process.env.ANALYTICS_INGEST_ENABLED, true),
+  // Controla si la política CSP se aplica en modo report-only o enforce.
+  // En entornos de prueba/desarrollo defaulta a true (report-only).
+  cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };

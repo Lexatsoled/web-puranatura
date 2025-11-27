@@ -1,31 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
-// Inicializa proveedores externos de analitica y expone helpers tipados para registrar eventos en toda la SPA.
-
-type EventCategory =
-  | 'page_view'
-  | 'product'
-  | 'cart'
-  | 'checkout'
-  | 'search'
-  | 'user'
-  | 'blog'
-  | 'therapy';
-
-interface AnalyticsEvent {
-  category: EventCategory;
-  action: string;
-  label?: string;
-  value?: number;
-  metadata?: Record<string, any>;
-}
-
-interface PageViewEvent {
-  path: string;
-  title: string;
-  referrer: string;
-}
+import { AnalyticsEvent, PageViewEvent } from '../types/analytics';
+import {
+  initGoogleAnalytics,
+  initFacebookPixel,
+  logEventToProviders,
+  logEventToBackend,
+  getSessionId,
+} from '../services/analyticsProviders';
 
 class AnalyticsService {
   private static instance: AnalyticsService;
@@ -63,42 +45,21 @@ class AnalyticsService {
   init() {
     if (this.initialized || !this.consentGranted || !this.enabled) return;
 
-    // Inicializar servicios de analytics
     if (typeof window !== 'undefined') {
-      // Google Analytics
-      if (this.gaId) {
-        this.loadScript(
-          `https://www.googletagmanager.com/gtag/js?id=${this.gaId}`
-        );
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function () {
-          window.dataLayer.push(arguments);
-        };
-        window.gtag('js', new Date());
-        window.gtag('config', this.gaId);
-      }
-
-      // Facebook Pixel
-      if (this.fbPixelId) {
-        this.loadScript('https://connect.facebook.net/en_US/fbevents.js');
-        window.fbq =
-          window.fbq ||
-          function () {
-            (window.fbq.q = window.fbq.q || []).push(arguments);
-          };
-        window.fbq('init', this.fbPixelId);
-      }
+      this.initGoogleAnalytics();
+      this.initFacebookPixel();
     }
 
     this.initialized = true;
     this.flushQueue();
   }
 
-  private loadScript(src: string) {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = src;
-    document.head.appendChild(script);
+  private initGoogleAnalytics() {
+    initGoogleAnalytics(this.gaId);
+  }
+
+  private initFacebookPixel() {
+    initFacebookPixel(this.fbPixelId);
   }
 
   private flushQueue() {
@@ -117,28 +78,8 @@ class AnalyticsService {
       return;
     }
 
-    // Google Analytics
-    if (window.gtag) {
-      window.gtag('event', event.action, {
-        event_category: event.category,
-        event_label: event.label,
-        value: event.value,
-        ...event.metadata,
-      });
-    }
-
-    // Facebook Pixel
-    if (window.fbq) {
-      window.fbq('trackCustom', event.action, {
-        category: event.category,
-        label: event.label,
-        value: event.value,
-        ...event.metadata,
-      });
-    }
-
-    // Registrar en nuestro backend para analisis personalizado
-    this.logEventToBackend(event);
+    logEventToProviders(event);
+    void logEventToBackend(event, getSessionId());
   }
 
   trackPageView({ path, title, referrer }: PageViewEvent) {
@@ -155,33 +96,12 @@ class AnalyticsService {
     });
   }
 
-  private async logEventToBackend(event: AnalyticsEvent) {
-    if (!this.consentGranted || !this.enabled) return;
-    try {
-      await fetch('/api/analytics/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...event,
-          timestamp: new Date().toISOString(),
-          sessionId: this.getSessionId(),
-        }),
-      });
-    } catch (error) {
-      console.error('Error al registrar el evento de analitica:', error);
-    }
-  }
+  // El método interno 'logEventToBackend' se removió porque usamos
+  // el helper compartido `logEventToBackend` desde services/analyticsProviders
+  // (evita duplicidad y problemas de tipos LSP en el cliente).
 
-  private getSessionId(): string {
-    let sessionId = sessionStorage.getItem('analytics_session_id');
-    if (!sessionId) {
-      sessionId = Math.random().toString(36).substring(2);
-      sessionStorage.setItem('analytics_session_id', sessionId);
-    }
-    return sessionId;
-  }
+  // Session management uses the shared helper in services/analyticsProviders.
+  // Eliminar el helper local para evitar duplicidad y errores de linter/ts.
 }
 
 // Hook personalizado para analytics

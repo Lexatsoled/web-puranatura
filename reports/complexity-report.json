@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-11-27T20:58:48.887Z",
+  "top": [
+    {
+      "file": "src\\hooks\\useAnalytics.ts",
+      "complexity": 45,
+      "lines": 226
+    },
+    {
+      "file": "src\\utils\\errorHandler.ts",
+      "complexity": 39,
+      "lines": 176
+    },
+    {
+      "file": "src\\components\\SearchBar.tsx",
+      "complexity": 36,
+      "lines": 313
+    },
+    {
+      "file": "src\\components\\ShoppingCart.tsx",
+      "complexity": 35,
+      "lines": 387
+    },
+    {
+      "file": "src\\components\\ProductDetailModal.tsx",
+      "complexity": 34,
+      "lines": 334
+    },
+    {
+      "file": "src\\components\\OptimizedImage.tsx",
+      "complexity": 33,
+      "lines": 156
+    },
+    {
+      "file": "src\\utils\\api.ts",
+      "complexity": 33,
+      "lines": 157
+    },
+    {
+      "file": "pages\\ProfilePage.tsx",
+      "complexity": 33,
+      "lines": 319
+    },
+    {
+      "file": "src\\utils\\sanitizer.ts",
+      "complexity": 32,
+      "lines": 126
+    },
+    {
+      "file": "src\\components\\ProductCard.tsx",
+      "complexity": 31,
+      "lines": 212
+    }
+  ],
+  "totalFiles": 91
+}

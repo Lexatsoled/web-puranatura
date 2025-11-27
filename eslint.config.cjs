@@ -16,6 +16,7 @@ module.exports = [
       'tmp/**',
       'temp_trace_extract1/**',
       'tools/githooks/**',
+      'src/types/analytics.d.ts',
       'node_modules/**',
     ],
     languageOptions: {
@@ -27,6 +28,7 @@ module.exports = [
       },
     },
     plugins: {
+        security: require('eslint-plugin-security'),
       react: require('eslint-plugin-react'),
       'react-hooks': require('eslint-plugin-react-hooks'),
       tailwindcss: require('eslint-plugin-tailwindcss'),
@@ -43,6 +45,9 @@ module.exports = [
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       'prettier/prettier': 'warn',
+      // Basic security-focused rules — non-blocking for now (warn)
+      'security/detect-object-injection': 'warn',
+      'security/detect-unsafe-regex': 'warn',
     },
     settings: {
       react: { version: 'detect' },
@@ -63,16 +68,16 @@ module.exports = [
   // Scoped override for TypeScript files: enable type-aware linting only on project source (exclude tooling scripts)
   {
     files: [
-      'src/**/*.ts',
-      'src/**/*.tsx',
-      'pages/**/*.ts',
-      'pages/**/*.tsx',
-      'components/**/*.ts',
-      'components/**/*.tsx',
-      'tools/**/*.ts',
-      'tools/**/*.tsx',
-      'test/**/*.ts',
-      'test/**/*.tsx',
+      'src/**/!(*.d).ts',
+      'src/**/!(*.d).tsx',
+      'pages/**/!(*.d).ts',
+      'pages/**/!(*.d).tsx',
+      'components/**/!(*.d).ts',
+      'components/**/!(*.d).tsx',
+      'tools/**/!(*.d).ts',
+      'tools/**/!(*.d).tsx',
+      'test/**/!(*.d).ts',
+      'test/**/!(*.d).tsx',
     ],
     languageOptions: {
       parser: require('@typescript-eslint/parser'),
@@ -80,6 +85,21 @@ module.exports = [
         ecmaFeatures: { jsx: true },
         project: path.resolve(__dirname, './tsconfig.json'),
         tsconfigRootDir: __dirname,
+      },
+    },
+  },
+
+  // Avoid type-aware parsing for declaration files (d.ts) under src/types —
+  // these can be used as legacy stubs and shouldn't be evaluated as part
+  // of the type-aware ruleset which requires files to be found in the
+  // configured project.
+  {
+    files: ['src/types/**/*.d.ts'],
+    languageOptions: {
+      parser: require('@typescript-eslint/parser'),
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        // Intentionally no `project` here.
       },
     },
   },
