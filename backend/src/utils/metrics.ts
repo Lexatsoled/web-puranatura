@@ -56,7 +56,11 @@ export const errorCounter = new Counter({
 export const cspReportsCounter = new Counter({
   name: 'csp_reports_total',
   help: 'Total de informes CSP recibidos',
-  labelNames: ['violated_directive', 'blocked_uri', 'report_only'] as unknown as string[],
+  labelNames: [
+    'violated_directive',
+    'blocked_uri',
+    'report_only',
+  ] as unknown as string[],
 });
 
 export const cspReportsBlockedCounter = new Counter({

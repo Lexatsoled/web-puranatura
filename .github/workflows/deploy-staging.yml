@@ -44,4 +44,4 @@ jobs:
       - name: Staging deploy not configured
         if: ${{ !secrets.KUBECONFIG }}
         run: |
-          echo "No KUBECONFIG secret found — workflow completed in dry-run mode. Attach KUBECONFIG or DockerHub credentials to fully deploy to your staging environment." 
+          echo "No KUBECONFIG secret found — workflow completed in dry-run mode. Attach KUBECONFIG or DockerHub credentials to fully deploy to your staging environment."

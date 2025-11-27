@@ -56,16 +56,24 @@ const setAuthCookies = (res: Response, userId: string) => {
     expiresIn: Math.max(1, Math.floor(accessTokenMs / 1000)),
   });
   const refreshJti = randomUUID();
-  const refreshToken = jwt.sign({ sub: userId, jti: refreshJti }, env.jwtRefreshSecret, {
-    expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
-  });
+  const refreshToken = jwt.sign(
+    { sub: userId, jti: refreshJti },
+    env.jwtRefreshSecret,
+    {
+      expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
+    }
+  );
 
   res.cookie('token', token, accessCookieOptions);
   res.cookie('refreshToken', refreshToken, refreshCookieOptions);
 
   // persist refresh token (file-based store) to support rotation/revocation
   try {
-    addRefreshToken({ jti: refreshJti, userId, expiresAt: new Date(Date.now() + refreshTokenMs).toISOString() });
+    addRefreshToken({
+      jti: refreshJti,
+      userId,
+      expiresAt: new Date(Date.now() + refreshTokenMs).toISOString(),
+    });
   } catch (_) {
     // non fatal
   }
@@ -159,7 +167,9 @@ router.post('/logout', (req, res) => {
     const rt = req.cookies?.refreshToken;
     if (rt) {
       try {
-        const decoded = jwt.verify(rt, env.jwtRefreshSecret) as { jti?: string };
+        const decoded = jwt.verify(rt, env.jwtRefreshSecret) as {
+          jti?: string;
+        };
         if (decoded?.jti) revokeRefreshToken(decoded.jti);
       } catch (err) {
         // ignore
@@ -192,13 +202,21 @@ router.post('/refresh', (req, res) => {
 
     // generate a rotated refresh token
     const newJti = randomUUID();
-    const newRefreshToken = jwt.sign({ sub: decoded.sub, jti: newJti }, env.jwtRefreshSecret, {
-      expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
-    });
+    const newRefreshToken = jwt.sign(
+      { sub: decoded.sub, jti: newJti },
+      env.jwtRefreshSecret,
+      {
+        expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
+      }
+    );
 
     // replace persisted token
     try {
-      replaceRefreshToken(oldJti, { jti: newJti, userId: decoded.sub, expiresAt: new Date(Date.now() + refreshTokenMs).toISOString() });
+      replaceRefreshToken(oldJti, {
+        jti: newJti,
+        userId: decoded.sub,
+        expiresAt: new Date(Date.now() + refreshTokenMs).toISOString(),
+      });
     } catch (_) {
       // not fatal
     }

@@ -16,7 +16,8 @@ const rawCspSchema = z
 
 router.post('/csp-report', async (req, res) => {
   try {
-    const raw = req.body && Object.keys(req.body).length > 0 ? req.body : undefined;
+    const raw =
+      req.body && Object.keys(req.body).length > 0 ? req.body : undefined;
 
     // Validate at least a basic shape so we avoid accidental invalid payloads
     try {
@@ -29,8 +30,14 @@ router.post('/csp-report', async (req, res) => {
     const report = raw?.['csp-report'] ?? raw ?? {};
 
     // common fields
-    const violatedDirective = report['violated-directive'] ?? report['violatedDirective'] ?? 'unknown';
-    const blockedUri = report['blocked-uri'] ?? report['blockedUri'] ?? report['blocked_url'] ?? report['blockedURL'] ?? 'unknown';
+    const violatedDirective =
+      report['violated-directive'] ?? report['violatedDirective'] ?? 'unknown';
+    const blockedUri =
+      report['blocked-uri'] ??
+      report['blockedUri'] ??
+      report['blocked_url'] ??
+      report['blockedURL'] ??
+      'unknown';
 
     // Persist for later analysis
     await appendCspReport({
@@ -48,7 +55,9 @@ router.post('/csp-report', async (req, res) => {
         report_only: String(env.cspReportOnly),
       } as any);
       if (blockedUri && blockedUri !== 'unknown') {
-        cspReportsBlockedCounter.inc({ blocked_uri: String(blockedUri) } as any);
+        cspReportsBlockedCounter.inc({
+          blocked_uri: String(blockedUri),
+        } as any);
       }
     } catch (err) {
       logger.warn({ err }, 'Fallo incrementando métricas de CSP');
