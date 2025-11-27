@@ -1,11 +1,18 @@
 ﻿import { Router, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 import ms from 'ms';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { env } from '../config/env';
 import { AuthenticatedRequest, getUserIdFromRequest } from '../middleware/auth';
+import {
+  addToken as addRefreshToken,
+  hasToken as hasRefreshToken,
+  revokeToken as revokeRefreshToken,
+  replaceToken as replaceRefreshToken,
+} from '../storage/refreshTokenStore';
 
 const router = Router();
 
@@ -13,6 +20,7 @@ const cookieBase = {
   httpOnly: true,
   sameSite: 'strict' as const,
   secure: env.nodeEnv === 'production',
+  path: '/api/auth',
 };
 
 type DurationInput = Parameters<typeof ms>[0];
@@ -47,12 +55,20 @@ const setAuthCookies = (res: Response, userId: string) => {
   const token = jwt.sign({ sub: userId }, env.jwtSecret, {
     expiresIn: Math.max(1, Math.floor(accessTokenMs / 1000)),
   });
-  const refreshToken = jwt.sign({ sub: userId }, env.jwtRefreshSecret, {
+  const refreshJti = randomUUID();
+  const refreshToken = jwt.sign({ sub: userId, jti: refreshJti }, env.jwtRefreshSecret, {
     expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
   });
 
   res.cookie('token', token, accessCookieOptions);
   res.cookie('refreshToken', refreshToken, refreshCookieOptions);
+
+  // persist refresh token (file-based store) to support rotation/revocation
+  try {
+    addRefreshToken({ jti: refreshJti, userId, expiresAt: new Date(Date.now() + refreshTokenMs).toISOString() });
+  } catch (_) {
+    // non fatal
+  }
 
   return { token, refreshToken };
 };
@@ -137,7 +153,22 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
-router.post('/logout', (_req, res) => {
+router.post('/logout', (req, res) => {
+  // try to revoke a persisted refresh token (if any) when logging out
+  try {
+    const rt = req.cookies?.refreshToken;
+    if (rt) {
+      try {
+        const decoded = jwt.verify(rt, env.jwtRefreshSecret) as { jti?: string };
+        if (decoded?.jti) revokeRefreshToken(decoded.jti);
+      } catch (err) {
+        // ignore
+      }
+    }
+  } catch (err) {
+    // ignore
+  }
+
   clearAuthCookies(res);
   res.json({ ok: true });
 });
@@ -151,8 +182,33 @@ router.post('/refresh', (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, env.jwtRefreshSecret) as {
       sub: string;
+      jti?: string;
     };
-    setAuthCookies(res, decoded.sub);
+
+    const oldJti = decoded.jti;
+    if (!oldJti || !hasRefreshToken(oldJti)) {
+      return res.status(401).json({ message: 'Sesión inválida' });
+    }
+
+    // generate a rotated refresh token
+    const newJti = randomUUID();
+    const newRefreshToken = jwt.sign({ sub: decoded.sub, jti: newJti }, env.jwtRefreshSecret, {
+      expiresIn: Math.max(1, Math.floor(refreshTokenMs / 1000)),
+    });
+
+    // replace persisted token
+    try {
+      replaceRefreshToken(oldJti, { jti: newJti, userId: decoded.sub, expiresAt: new Date(Date.now() + refreshTokenMs).toISOString() });
+    } catch (_) {
+      // not fatal
+    }
+
+    // set rotated cookies
+    const newAccessToken = jwt.sign({ sub: decoded.sub }, env.jwtSecret, {
+      expiresIn: Math.max(1, Math.floor(accessTokenMs / 1000)),
+    });
+    res.cookie('token', newAccessToken, accessCookieOptions);
+    res.cookie('refreshToken', newRefreshToken, refreshCookieOptions);
     return res.json({ ok: true });
   } catch (error) {
     clearAuthCookies(res);

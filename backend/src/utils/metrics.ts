@@ -53,6 +53,18 @@ export const errorCounter = new Counter({
   labelNames: ['method', 'route', 'status'],
 });
 
+export const cspReportsCounter = new Counter({
+  name: 'csp_reports_total',
+  help: 'Total de informes CSP recibidos',
+  labelNames: ['violated_directive', 'blocked_uri', 'report_only'] as unknown as string[],
+});
+
+export const cspReportsBlockedCounter = new Counter({
+  name: 'csp_reports_blocked_total',
+  help: 'Total de informes CSP que corresponden a peticiones bloqueadas (posible ataque)',
+  labelNames: ['blocked_uri'] as unknown as string[],
+});
+
 export const inFlightGauge = new Gauge({
   name: 'http_requests_in_flight',
   help: 'Cantidad de solicitudes HTTP en curso',

@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2025-11-23T19:14:46.898Z",
+  "timestamp": "2025-11-27T06:49:16.837Z",
   "url": "http://localhost:5173/",
   "toolOptions": {
     "runOnly": {
@@ -399,9 +399,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button class=\"header-button\" aria-label=\"Abrir inicio de sesión\">",
+          "html": "<button class=\"header-button\" aria-label=\"Abrir inicio de sesion\">",
           "target": [
-            "button[aria-label=\"Abrir inicio de sesión\"]"
+            "button[aria-label=\"Abrir inicio de sesion\"]"
           ]
         },
         {
@@ -452,6 +452,13 @@
         {
           "any": [
             {
+              "id": "internal-link-present",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Valid skip link found"
+            },
+            {
               "id": "header-present",
               "data": null,
               "relatedNodes": [
@@ -468,7 +475,7 @@
                   ]
                 },
                 {
-                  "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
+                  "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holistica</h2>",
                   "target": [
                     "h2"
                   ]
@@ -500,9 +507,9 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<main style=\"min-height: calc(-120px + 100vh);\">",
+                  "html": "<main id=\"main-content\" style=\"min-height: calc(-120px + 100vh);\">",
                   "target": [
-                    "main"
+                    "#main-content"
                   ]
                 }
               ],
@@ -583,9 +590,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button class=\"header-button\" aria-label=\"Abrir inicio de sesión\">",
+          "html": "<button class=\"header-button\" aria-label=\"Abrir inicio de sesion\">",
           "target": [
-            "button[aria-label=\"Abrir inicio de sesión\"]"
+            "button[aria-label=\"Abrir inicio de sesion\"]"
           ]
         },
         {
@@ -685,7 +692,7 @@
           "impact": null,
           "html": "<a class=\"nav-link\" href=\"/servicios\" data-discover=\"true\">Servicios</a>",
           "target": [
-            ".nav-link[href$=\"servicios\"]"
+            ".nav-link[href$=\"servicios\"][data-discover=\"true\"]"
           ]
         },
         {
@@ -710,7 +717,7 @@
           "impact": null,
           "html": "<a class=\"nav-link\" href=\"/tienda\" data-discover=\"true\">Tienda</a>",
           "target": [
-            ".nav-link[href$=\"tienda\"]"
+            ".nav-link[href$=\"tienda\"][data-discover=\"true\"]"
           ]
         },
         {
@@ -933,7 +940,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
+          "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holistica</h2>",
           "target": [
             "h2"
           ]
@@ -958,7 +965,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-lg text-gray-600 max-w-3xl mx-auto mb-12\">Ofrecemos una gama de terapias naturales diseñadas para tratar a la persona en su totalidad, no solo los síntomas. Descubre un enfoque de salud que es a la vez suave y poderoso.</p>",
+          "html": "<p class=\"text-lg text-gray-600 max-w-3xl mx-auto mb-12\">Ofrecemos una gama de terapias naturales disenadas para tratar a la persona en su totalidad, no solo los sintomas. Descubre un enfoque de salud que es a la vez suave y poderoso.</p>",
           "target": [
             ".max-w-3xl"
           ]
@@ -1008,7 +1015,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-gray-600\">Planes de tratamiento únicos adaptados a tus necesidades específicas.</p>",
+          "html": "<p class=\"text-gray-600\">Planes de tratamiento unicos adaptados a tus necesidades especificas.</p>",
           "target": [
             ".p-8.bg-white\\/50.border:nth-child(1) > .text-gray-600"
           ]
@@ -1058,7 +1065,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-gray-600\">Una selección cuidada de suplementos y remedios de la más alta calidad.</p>",
+          "html": "<p class=\"text-gray-600\">Una seleccion cuidada de suplementos y remedios de la mas alta calidad.</p>",
           "target": [
             ".p-8.bg-white\\/50.border:nth-child(2) > .text-gray-600"
           ]
@@ -1182,6 +1189,32 @@
             }
           ],
           "impact": null,
+          "html": "<a href=\"#main-content\" style=\"position: absolute; left: -999px; top: -999px; background-color: rgb(15, 81, 50); color: rgb(255, 255, 255); padding: 0.75rem 1rem; z-index: 1000;\">Saltar al contenido principal</a>",
+          "target": [
+            "a[href$=\"#main-content\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
           "html": "<a class=\"nav-link nav-link--active\" aria-current=\"page\" href=\"/\" data-discover=\"true\">Inicio</a>",
           "target": [
             ".nav-link--active"
@@ -1236,7 +1269,7 @@
           "impact": null,
           "html": "<a class=\"nav-link\" href=\"/servicios\" data-discover=\"true\">Servicios</a>",
           "target": [
-            ".nav-link[href$=\"servicios\"]"
+            ".nav-link[href$=\"servicios\"][data-discover=\"true\"]"
           ]
         },
         {
@@ -1262,7 +1295,7 @@
           "impact": null,
           "html": "<a class=\"nav-link\" href=\"/tienda\" data-discover=\"true\">Tienda</a>",
           "target": [
-            ".nav-link[href$=\"tienda\"]"
+            ".nav-link[href$=\"tienda\"][data-discover=\"true\"]"
           ]
         },
         {

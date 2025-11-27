@@ -7,6 +7,8 @@ const CSRF_HEADER = 'x-csrf-token';
 const isSafeMethod = (method: string) =>
   ['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase());
 
+const skipPaths = new Set(['/api/analytics/events', '/api/security/csp-report']);
+
 const generateToken = () => randomBytes(16).toString('hex');
 
 export const csrfDoubleSubmit = (
@@ -23,6 +25,10 @@ export const csrfDoubleSubmit = (
       sameSite: 'lax',
       secure: req.secure,
     });
+  }
+
+  if (skipPaths.has(req.path)) {
+    return next();
   }
 
   if (isSafeMethod(req.method)) {

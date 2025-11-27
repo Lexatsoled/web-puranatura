@@ -4,6 +4,17 @@ import { expect } from 'vitest';
 // extend vitest expect with jest-dom matchers
 expect.extend(matchers as any);
 
+type TestImportMeta = ImportMeta & {
+  env: Record<string, string | undefined>;
+};
+
+const testEnv = (import.meta as TestImportMeta).env;
+if (testEnv) {
+  testEnv.VITE_ENABLE_ANALYTICS = testEnv.VITE_ENABLE_ANALYTICS ?? 'true';
+  testEnv.VITE_GA_ID = testEnv.VITE_GA_ID ?? 'G-TEST';
+  testEnv.VITE_FB_PIXEL_ID = testEnv.VITE_FB_PIXEL_ID ?? 'FB-TEST';
+}
+
 // Provide reliable localStorage mock regardless of environment flags
 class LocalStorageMock {
   private store: Record<string, string> = {};

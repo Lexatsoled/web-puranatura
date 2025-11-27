@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { requireAuth, requireAdmin } from '../middleware/auth';
+import { createHash } from 'crypto';
 
 const router = Router();
 
@@ -11,6 +12,40 @@ const querySchema = z.object({
   category: z.string().trim().optional(),
   search: z.string().trim().optional(),
 });
+
+const normalizeEtagValue = (value: string): string =>
+  value.replace(/^W\//i, '').trim();
+
+const parseIfNoneMatchHeader = (header?: string | string[]): string[] => {
+  if (!header) return [];
+  const values = Array.isArray(header) ? header : [header];
+  return values
+    .flatMap((value) => value.split(','))
+    .map((value) => value.trim())
+    .filter(Boolean);
+};
+
+const buildCatalogEtag = (
+  items: { id: string; updatedAt: Date }[],
+  total: number,
+  page: number,
+  pageSize: number,
+  category?: string,
+  search?: string
+): string => {
+  const payload = {
+    page,
+    pageSize,
+    category: category ?? null,
+    search: search ?? null,
+    total,
+    updates: items.map((item) => item.updatedAt.toISOString()),
+    ids: items.map((item) => item.id),
+  };
+  return `"${createHash('sha256')
+    .update(JSON.stringify(payload))
+    .digest('hex')}"`;
+};
 
 const createProductSchema = z.object({
   name: z.string().min(1),
@@ -48,11 +83,32 @@ router.get('/', async (req, res, next) => {
       prisma.product.count({ where }),
     ]);
 
-    res
+    const catalogEtag = buildCatalogEtag(
+      items.map((item) => ({ id: item.id, updatedAt: item.updatedAt })),
+      total,
+      page,
+      pageSize,
+      category,
+      search
+    );
+    const incomingEtags = parseIfNoneMatchHeader(req.headers['if-none-match']);
+    const normalizedEtag = normalizeEtagValue(catalogEtag);
+    const matchesIfNoneMatch = incomingEtags.some(
+      (value) => normalizeEtagValue(value) === normalizedEtag
+    );
+
+    const catalogResponse = res
       .header('X-Total-Count', total.toString())
       .header('X-Page', page.toString())
       .header('X-Page-Size', pageSize.toString())
-      .json(items);
+      .header('Cache-Control', 'public, max-age=300')
+      .header('ETag', catalogEtag);
+
+    if (matchesIfNoneMatch) {
+      return catalogResponse.status(304).end();
+    }
+
+    return catalogResponse.json(items);
   } catch (error) {
     next(error);
   }

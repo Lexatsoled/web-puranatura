@@ -30,46 +30,79 @@ export class NetworkError extends Error {
   }
 }
 
+export type NotificationPayload = {
+  type: 'error' | 'warning' | 'success';
+  title: string;
+  message: string;
+};
+
+const notificationRules: {
+  match: (error: unknown) => error is Error;
+  mapper: (error: Error) => NotificationPayload;
+}[] = [
+  {
+    match: (error): error is ApiError => error instanceof ApiError,
+    mapper: (error) => ({
+      type: 'error',
+      title: 'Error del servidor',
+      message: error.message,
+    }),
+  },
+  {
+    match: (error): error is ValidationError =>
+      error instanceof ValidationError,
+    mapper: (error) => ({
+      type: 'warning',
+      title: 'Error de validación',
+      message: error.message,
+    }),
+  },
+  {
+    match: (error): error is NetworkError => error instanceof NetworkError,
+    mapper: () => ({
+      type: 'error',
+      title: 'Error de conexión',
+      message:
+        'Por favor, verifica tu conexión a internet e intenta nuevamente.',
+    }),
+  },
+  {
+    match: (error): error is Error => error instanceof Error,
+    mapper: (error) => ({
+      type: 'error',
+      title: 'Error',
+      message: error.message,
+    }),
+  },
+];
+
+export function getNotificationForError(error: unknown): NotificationPayload {
+  for (const rule of notificationRules) {
+    if (rule.match(error)) {
+      return rule.mapper(error);
+    }
+  }
+  return {
+    type: 'error',
+    title: 'Error inesperado',
+    message: 'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
+  };
+}
+
+export function logAndNotifyError(
+  error: unknown,
+  notify: (payload: NotificationPayload) => void
+) {
+  console.error('Error capturado:', error);
+  notify(getNotificationForError(error));
+}
+
 // Hook para manejar errores
 export const useErrorHandler = () => {
   const { showNotification } = useNotifications();
 
   const handleError = (error: unknown) => {
-    console.error('Error capturado:', error);
-
-    if (error instanceof ApiError) {
-      showNotification({
-        type: 'error',
-        title: 'Error del servidor',
-        message: error.message,
-      });
-    } else if (error instanceof ValidationError) {
-      showNotification({
-        type: 'warning',
-        title: 'Error de validación',
-        message: error.message,
-      });
-    } else if (error instanceof NetworkError) {
-      showNotification({
-        type: 'error',
-        title: 'Error de conexión',
-        message:
-          'Por favor, verifica tu conexión a internet e intenta nuevamente.',
-      });
-    } else if (error instanceof Error) {
-      showNotification({
-        type: 'error',
-        title: 'Error',
-        message: error.message,
-      });
-    } else {
-      showNotification({
-        type: 'error',
-        title: 'Error inesperado',
-        message:
-          'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
-      });
-    }
+    logAndNotifyError(error, showNotification);
   };
 
   return { handleError };
@@ -82,12 +115,7 @@ export async function withErrorHandling<T>(
     onSuccess?: (data: T) => void;
     onError?: (error: unknown) => void;
     successMessage?: string;
-    // optional handlers to delegate notification/error handling responsibility
-    showNotification?: (payload: {
-      type: string;
-      title?: string;
-      message?: string;
-    }) => void;
+    showNotification?: (payload: NotificationPayload) => void;
     handleError?: (error: unknown) => void;
   } = {}
 ): Promise<T | undefined> {
@@ -97,6 +125,7 @@ export async function withErrorHandling<T>(
     if (options.successMessage && options.showNotification) {
       options.showNotification({
         type: 'success',
+        title: 'Éxito',
         message: options.successMessage,
       });
     }
@@ -108,8 +137,9 @@ export async function withErrorHandling<T>(
       options.onError(error);
     } else if (options.handleError) {
       options.handleError(error);
+    } else if (options.showNotification) {
+      logAndNotifyError(error, options.showNotification);
     } else {
-      // Fallback to console if no handler provided
       console.error('Unhandled error in withErrorHandling:', error);
       throw error;
     }

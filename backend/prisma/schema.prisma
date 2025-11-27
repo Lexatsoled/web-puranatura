@@ -68,3 +68,22 @@ model OrderItem {
   order     Order    @relation(fields: [orderId], references: [id])
   orderId   String
 }
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  category  String
+  action    String
+  label     String?
+  value     Float?
+  metadata  String?
+  sessionId String?
+  traceId   String?
+  userIp    String?
+  userAgent String?
+  eventTime DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([category, action])
+  @@index([sessionId])
+  @@index([createdAt])
+}
