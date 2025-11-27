@@ -3,6 +3,7 @@
 Objetivo: poner la CSP en modo report-only, recolectar informes de violaciones durante 48h y evaluar si la tasa de bloqueos/errors es < 1% antes de activar `enforce`.
 
 Qué hicimos (implementado):
+
 - Endpoint receptor: `POST /api/security/csp-report` recibe `application/csp-report` y `application/json`.
 - Persistencia local: `backend/reports/csp-reports.ndjson` (JSON Lines) — útil para auditoría y análisis forense.
 - Métricas: Prometheus counters expuestos en `/metrics`:
@@ -17,10 +18,11 @@ Cómo desplegar en report-only for 48h (simplificado):
 3. Verifica que los reports llegan a `backend/reports/csp-reports.ndjson` (ndjson con timestamps).
 
 Monitoreo y alertas (ejemplo Prometheus / Grafana):
+
 - Prometheus scrape `/metrics` cada 15s.
 - Regla de alerta (pseudo-PromQL) para detectar ratio de bloqueos > 1% en los últimos 48h:
 
-  (increase(csp_reports_blocked_total[48h]) / increase(csp_reports_total[48h])) * 100 > 1
+  (increase(csp_reports_blocked_total[48h]) / increase(csp_reports_total[48h])) \* 100 > 1
 
 - Crear un panel Grafana que muestre:
   - Total CSP reports (últimas 48h).
@@ -29,6 +31,6 @@ Monitoreo y alertas (ejemplo Prometheus / Grafana):
 
 Validación manual con script local:
 
-  node scripts/compute-csp-metrics.cjs
+node scripts/compute-csp-metrics.cjs
 
 Siguiente paso: si el ratio mantiene <1% durante 48h y no hay findigs operativos (terceros criticando contenido legítimo), preparar rollout a `enforce` vía canary (ver `docs/canary-rollout.md`).

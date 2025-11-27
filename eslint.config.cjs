@@ -28,7 +28,7 @@ module.exports = [
       },
     },
     plugins: {
-        security: require('eslint-plugin-security'),
+      security: require('eslint-plugin-security'),
       react: require('eslint-plugin-react'),
       'react-hooks': require('eslint-plugin-react-hooks'),
       tailwindcss: require('eslint-plugin-tailwindcss'),
