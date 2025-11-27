@@ -9,13 +9,22 @@ async function run() {
     process.exit(0);
   }
 
-  const data = fs.readFileSync(reportsFile, 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l));
+  const data = fs
+    .readFileSync(reportsFile, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map((l) => JSON.parse(l));
   const total = data.length;
   let blocked = 0;
 
   for (const rec of data) {
     const payload = rec.payload?.['csp-report'] ?? rec.payload ?? {};
-    const b = payload['blocked-uri'] ?? payload['blockedUri'] ?? payload['blocked_url'] ?? payload['blockedURL'];
+    const b =
+      payload['blocked-uri'] ??
+      payload['blockedUri'] ??
+      payload['blocked_url'] ??
+      payload['blockedURL'];
+
     if (b) blocked++;
   }
 
@@ -25,4 +34,7 @@ async function run() {
   console.log('Blocked %:', total === 0 ? 0 : ((blocked / total) * 100).toFixed(4));
 }
 
-run().catch(err => { console.error(err); process.exit(2); });
+run().catch((err) => {
+  console.error(err);
+  process.exit(2);
+});
