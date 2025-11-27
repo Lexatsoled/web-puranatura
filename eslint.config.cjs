@@ -45,8 +45,9 @@ module.exports = [
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       'prettier/prettier': 'warn',
-      // Basic security-focused rules — non-blocking for now (warn)
-      'security/detect-object-injection': 'warn',
+      // Basic security-focused rules — object-injection generates many false-positives
+      // across the legacy codebase; disable for now and add targeted fixes later.
+      'security/detect-object-injection': 'off',
       'security/detect-unsafe-regex': 'warn',
     },
     settings: {

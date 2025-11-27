@@ -19,7 +19,7 @@ afterAll(async () => {
   if (closeApp) await closeApp();
   try {
     if (fs.existsSync(reportsFile)) fs.unlinkSync(reportsFile);
-  } catch (err) {
+  } catch {
     // ignore
   }
 });
