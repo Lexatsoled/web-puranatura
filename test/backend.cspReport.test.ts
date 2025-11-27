@@ -7,7 +7,12 @@ import path from 'path';
 let app: any;
 let closeApp: () => Promise<void>;
 
-const reportsFile = path.join(process.cwd(), 'backend', 'reports', 'csp-reports.ndjson');
+const reportsFile = path.join(
+  process.cwd(),
+  'backend',
+  'reports',
+  'csp-reports.ndjson'
+);
 
 beforeAll(async () => {
   const backend = await import('../backend/src/app');

@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const reportsFile = path.join(process.cwd(), 'backend', 'reports', 'csp-reports.ndjson');
+const reportsFile = path.join(
+  process.cwd(),
+  'backend',
+  'reports',
+  'csp-reports.ndjson'
+);
 
 async function run() {
   if (!fs.existsSync(reportsFile)) {
@@ -31,7 +36,10 @@ async function run() {
   console.log('CSP Reports metrics');
   console.log('Total reports:', total);
   console.log('Blocked reports:', blocked);
-  console.log('Blocked %:', total === 0 ? 0 : ((blocked / total) * 100).toFixed(4));
+  console.log(
+    'Blocked %:',
+    total === 0 ? 0 : ((blocked / total) * 100).toFixed(4)
+  );
 }
 
 run().catch((err) => {
