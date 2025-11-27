@@ -14,7 +14,7 @@ This contains everything you need to run your app locally.
 3. Run `npm run lint` to verify formatting and coding standards locally (opcionalmente con `-- --watch` para cambios rápidos).
 4. Opcionalmente, usa `npm run test:ci` para validar la suite completa localmente si necesitas confianza extra (especialmente antes de subir un PR).
 5. Si trabajas en Windows, detente y reintenta el lint con `cross-env` si ves errores raros de rutas o diferencias de mayúsculas; los símbolos ':' pueden fallar en algunos shells.
-6. Para contribuir, crea un branch de trabajo y sincroniza con `main` antes de hacer `npm install`, así evitas divergencias del upstream (especialmente tras rebases o force pushes).
+6. Para contribuir, crea un branch de trabajo y sincroniza con `main` antes de hacer `npm install`, así evitas divergencias del upstream (especialmente tras rebases o force pushes). Si trabajas con forks, apunta `origin` al tuyo y `upstream` al repo oficial.
 7. Run the app:
    `npm run dev`
 
