@@ -2,9 +2,9 @@ name: CSP monitoring checks
 
 on:
   push:
-    branches: [ 'feat/staging-csp-monitor', 'main' ]
+    branches: ['feat/staging-csp-monitor', 'main']
   pull_request:
-    paths: [ 'backend/**', 'infra/**', 'docs/**', 'test/**' ]
+    paths: ['backend/**', 'infra/**', 'docs/**', 'test/**']
 
 jobs:
   test-csp-report:
