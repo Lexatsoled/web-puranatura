@@ -22,10 +22,29 @@ app.disable('x-powered-by');
 app.use(
   helmet({
     contentSecurityPolicy: {
+      // `reportOnly` controlado por env para permitir monitorización
+      // en producción pausada y un pase final a enforce.
+      reportOnly: env.cspReportOnly,
       useDefaults: false,
       directives: {
         defaultSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
+        scriptSrc: [
+          "'self'",
+          'https://www.googletagmanager.com',
+          'https://www.google-analytics.com',
+          'https://connect.facebook.net',
+        ],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        connectSrc: [
+          "'self'",
+          'https://www.google-analytics.com',
+          'https://www.googletagmanager.com',
+          'https://maps.googleapis.com',
+          'https://maps.gstatic.com',
+          'https://connect.facebook.net',
+        ],
+        imgSrc: ["'self'", 'data:', 'https:', 'https://maps.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'none'"],
@@ -52,7 +71,17 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   })
 );
-app.use(express.json({ limit: '1mb' }));
+// parse standard json and CSP report content-type (some browsers use application/csp-report)
+app.use(
+  express.json({
+    limit: '1mb',
+    type: (req) => {
+      const t = String(req.headers['content-type'] ?? '');
+      if (t.includes('application/csp-report')) return true;
+      return t.includes('application/json');
+    },
+  })
+);
 app.use(cookieParser());
 app.use(traceIdMiddleware);
 app.use(requestLogger);

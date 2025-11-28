@@ -72,8 +72,122 @@ const downloadBinary = () => {
     }
   }
 
-  fs.chmodSync(cachedBinary, 0o755);
-  return cachedBinary;
+  // Ensure we actually found a binary at the expected path.
+  let extractedBinary = cachedBinary;
+  if (!fs.existsSync(extractedBinary)) {
+    // Fallback: search recursively for any file that looks like the trivy binary
+    const findCandidate = (dir) => {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const e of entries) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) {
+          const found = findCandidate(full);
+          if (found) return found;
+        } else if (e.isFile()) {
+          const lower = e.name.toLowerCase();
+          if (
+            lower === binaryName ||
+            lower.startsWith('trivy') ||
+            lower.includes('trivy')
+          ) {
+            return full;
+          }
+        }
+      }
+      return null;
+    };
+
+    const found = findCandidate(cacheDir);
+    if (!found) {
+      // If nothing obvious named 'trivy' was found, check for any
+      // executable-looking files by inspecting the file magic bytes.
+      const isExecutableBinary = (filePath) => {
+        try {
+          const fd = fs.openSync(filePath, 'r');
+          const buf = Buffer.alloc(4);
+          fs.readSync(fd, buf, 0, 4, 0);
+          fs.closeSync(fd);
+          // ELF: 0x7f 'E' 'L' 'F'
+          if (
+            buf[0] === 0x7f &&
+            buf[1] === 0x45 &&
+            buf[2] === 0x4c &&
+            buf[3] === 0x46
+          )
+            return true;
+          // PE (Windows .exe): 'M' 'Z'
+          if (buf[0] === 0x4d && buf[1] === 0x5a) return true;
+          // Mach-O (common macOS headers) – check some known bytes
+          // Mach-O / other binaries: compare magic bytes using Buffer.equals
+          if (Buffer.from([0xfe, 0xed, 0xfa, 0xce]).equals(buf)) return true;
+          if (Buffer.from([0xca, 0xfe, 0xba, 0xbe]).equals(buf)) return true;
+          return false;
+        } catch {
+          return false;
+        }
+      };
+
+      const allFiles = [];
+      const collectFiles = (dir) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const e of entries) {
+          const full = path.join(dir, e.name);
+          if (e.isDirectory()) collectFiles(full);
+          else allFiles.push(full);
+        }
+      };
+      collectFiles(cacheDir);
+
+      const exeCandidate = allFiles.find((f) => isExecutableBinary(f));
+      if (exeCandidate) {
+        console.log('[trivy] posible binario:', exeCandidate);
+        found = exeCandidate;
+      }
+      // dump directory listing to aid debugging in CI logs
+      const dump = (dir, indent = '') => {
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        for (const it of items) {
+          const full = path.join(dir, it.name);
+          console.log(`${indent}${it.name}${it.isDirectory() ? '/' : ''}`);
+          if (it.isDirectory()) dump(full, indent + '  ');
+        }
+      };
+      console.error('[trivy] Estructura de cacheDir:');
+      dump(cacheDir);
+      throw new Error('No se encontró binario Trivy tras la extracción');
+    }
+
+    // If we found a candidate, prefer an executable one — try version check
+    const tryExec = (candidate) => {
+      try {
+        const r = spawnSync(candidate, ['--version'], { stdio: 'ignore' });
+        return r.status === 0 ? candidate : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const execCandidate = tryExec(found);
+    if (execCandidate) {
+      extractedBinary = execCandidate;
+    } else {
+      // attempt chmod and test again
+      try {
+        fs.chmodSync(found, 0o755);
+        const after = tryExec(found);
+        if (after) extractedBinary = after;
+      } catch {
+        // ignore chmod errors here — we'll fail below if not executable
+      }
+    }
+
+    if (!fs.existsSync(extractedBinary)) {
+      throw new Error('No se encontró binario Trivy tras la extracción');
+    }
+  }
+
+  fs.chmodSync(extractedBinary, 0o755);
+  return extractedBinary;
 };
 
 const resolveBinary = () => {

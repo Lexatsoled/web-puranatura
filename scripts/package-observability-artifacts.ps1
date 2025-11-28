@@ -5,6 +5,9 @@ $artifacts = @(
   'reports/observability/metrics-snapshot.txt',
   'reports/observability/trace-sample.md',
   'reports/observability/perf-summary.md',
+  'reports/observability/collect-metrics-server.log',
+  'reports/observability/collect-metrics-server.stderr.log',
+  'reports/observability/collect-metrics-server.stdout.log',
   'reports/lighthouse-desktop.report.json',
   'reports/lighthouse-mobile.report.json'
 )

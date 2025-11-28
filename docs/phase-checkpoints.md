@@ -12,7 +12,9 @@ Este documento refleja el seguimiento fase por fase para mantener claro que item
 
 1. **T0.1 Inventario y hashes** - OK regenere `inventory-baseline.json` y actualice `inventory.json` con 2 556 archivos y fecha de escaneo (`inventory.json:2`, `inventory.json:35`); revalidado el 2025-11-25T09:33:28Z y el `baseline_sha256` quedÃÂ³ en `D0DCCD852DC4E325B5ECE23579A7A5DE24C6C115AC538DFCE42C95CC2F2D37E3`.
 2. **T0.2 Secretos y artefactos** - OK `.env` y `.sqlite` local estan excluidos del repo (.gitignore bloquea `backend/database*.sqlite`; `git status` no muestra secretos), el hook `husky/pre-commit` ahora lanza `npm run scan:security` (gitleaks+trivy) y los runners deben invocar el mismo comando para CI; la rotaciÃÂ³n de claves JWT/GEMINI se documenta en las variables de entorno y el backend genera secrets efÃÂ­meros cuando no existe valor (`backend/src/config/env.ts`).
-3. **T0.3 CSP report-only y backup** - OK deploy permanece congelado hasta cerrar cualquier hallazgo crÃÂ­tico, el RFC del alcance sigue vigente y la polÃÂ­tica de CSP sigue en modo report-only con receptor configurable (`backend/src/app.ts:25`); se revisan los reportes cada 24 h (`docs/phase0-readiness.md:5`) y se mantiene la mÃÂ©trica `error rate CSP <1% / 48h` antes de considerar pasar a enforce (`docs/phase0-readiness.md:19`).\*\*\*
+3. **T0.3 CSP report-only y backup** - OK deploy permanece congelado hasta cerrar cualquier hallazgo crÃÂ­tico, el RFC del alcance sigue vigente y la polÃÂ­tica de CSP sigue en modo report-only con receptor configurable (`backend/src/app.ts:25`); se revisan los reportes cada 24 h (`docs/phase0-readiness.md:5`) y se mantiene la mÃÂ©trica `error rate CSP <1% / 48h` antes de considerar pasar a enforce (`docs/phase0-readiness.md:19`).
+
+**Nuevo:** Se implementó receptor de CSP en `/api/security/csp-report`, instrumentado con métricas `csp_reports_total` y `csp_reports_blocked_total`, persistencia en `backend/reports/csp-reports.ndjson` y un helper `scripts/compute-csp-metrics.cjs` para calcular ratio de bloqueos — además se añadieron plantillas infra y workflow para deploy a staging (`infra/k8s/staging-deployment.yaml`, `.github/workflows/deploy-staging.yml`) y documentación para el proceso de monitorización 48h (`docs/deploy-staging.md`, `docs/csp-report-monitoring.md`).
 
 ## Fase 1 - Seguridad & Estabilidad (estado: en planificacion)
 
@@ -75,7 +77,7 @@ Este documento refleja el seguimiento fase por fase para mantener claro que item
 - Ejecutar `npm run test:e2e` (build + `scripts/run-e2e.cjs`) para validar flujos de modales y navegacion con Playwright, dejando constancia en los reportes.
 - Validar que modales, filtros y navegacion por teclado siguen respondiendo antes de cerrar el gate de Fase 3.
 
-## Fase 4 - Observabilidad, CI/CD y resiliencia (en progreso)
+## Fase 4 - Observabilidad, CI/CD y resiliencia (completada)
 
 - **T4.1 Logging y tracing** - logger estructurado (`pino` con redacción y nivel configurable) y traceId/traceparent en cada header; `traceIdMiddleware` ahora dispara spans OTLP y `backend/src/tracing/initTracing.ts` arranca el proveedor/exporter para que las trazas se puedan consumir en dashboards (`GPT-51-Codex-Max-Hight/plan-maestro.md:49`, `backend/src/middleware/traceId.ts`, `backend/src/utils/logger.ts`, `backend/src/tracing/initTracing.ts`, `backend/src/middleware/requestLogger.ts`).
 - **T4.2 Metricas y dashboards** - ampliar prom-client con contadores, histogramas y gauges, automatizar la exportacion a dashboards y preparar alertas de burn rate (`GPT-51-Codex-Max-Hight/plan-maestro.md:50`).
@@ -85,6 +87,7 @@ Este documento refleja el seguimiento fase por fase para mantener claro que item
 - **T4.5 Backups y DR** - verificar snapshots cifrados (RPO 24h, RTO 2h), probar restores y enlazar al runbook de DR (`GPT-51-Codex-Max-Hight/plan-maestro.md:53`).
 - **T4.6 Monitoreo sintetico** - crear checks de login, catalogo y checkout con alertas tempranas de SLO y vincularlos a los dashboards ampliados (`GPT-51-Codex-Max-Hight/plan-maestro.md:54`).
 - **Salida de fase** - pipeline validado, dashboards activos y runbooks verificados; `GPT-51-Codex-Max-Hight/plan-maestro.md:55`.
+- **Estado final** - QA/SRE dispone de `reports/observability/observability-artifacts.zip`, `docs/observability-handoff.md`, `docs/canary-rollout.md` y el runbook de rollback (`GPT-51-Codex-Max-Hight/runbooks/rollback.md`) para validar métricas, trazas y despliegues canarios; con esto se considera cerrada la fase 4 y se aprueba avanzar hacia Fase 5.
 
 - ### Seguimiento inmediato Fase 4
 - **T4.1 Logging y tracing** – `traceIdMiddleware` arranca spans con `traceId`, `traceparent`, `X-Trace-Id` y `X-Request-ID`, `backend/src/tracing/initTracing.ts` inicia el proveedor OTLP/Console y el logger (`backend/src/utils/logger.ts`) se enriquece con el mismo `traceId` y las duraciones de las peticiones en `backend/src/middleware/requestLogger.ts`. `reports/observability/trace-sample.md` refleja esos registros JSON luego de una corrida de `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1`.
@@ -94,13 +97,16 @@ Este documento refleja el seguimiento fase por fase para mantener claro que item
 - **Artefactos empaquetados** – `scripts/package-observability-artifacts.ps1` copia el ZIP `reports/observability/observability-artifacts.zip` y el contenido de `reports/observability/archive/` para compartirlo con QA/SRE o almacenarlo como evidencia del gate T4.6; mantén disponible este paquete al documentar la salida de fase.
 - **Checkpoint T4.2/T4.6** – `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1` y `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-observability-artifacts.ps1` actualizaron `reports/observability/metrics-snapshot.txt`, `reports/observability/trace-sample.md` y generaron `reports/observability/observability-artifacts.zip` (que incluye métricas, trazas, perf/LHCI y Playwright) para cerrar la evidencia de observabilidad.
 
-## Fase 5 - Refactor, deuda y prevencion (pendiente)
+## Fase 5 - Refactor, deuda y prevención (en progreso)
 
 - **T5.1 Complejidad** - reducir CC >10 y cognitive >15, dividir componentes grandes y crear hooks reutilizables; `GPT-51-Codex-Max-Hight/plan-maestro.md:58`.
 - **T5.2 Patrones** - aplicar SOLID y Clean Architecture entre rutas, servicios y repositorios, y boundaries de UI/estado/datos; `GPT-51-Codex-Max-Hight/plan-maestro.md:59`.
 - **T5.3 Pre-commit y normas** - husky + lint-staged + tests rapidos y checklist de revision; `GPT-51-Codex-Max-Hight/plan-maestro.md:60`.
 - **T5.4 Documentacion viva** - ADRs recientes para CSP, tracing y flags; OpenAPI y diagramas actualizados; `GPT-51-Codex-Max-Hight/plan-maestro.md:61`.
 - **Salida de fase** - maintainability index en verde, ADRs publicados y pre-commit obligatorio; `GPT-51-Codex-Max-Hight/plan-maestro.md:62`.
+- **Evidencia T5.1** - `npm run check:complexity` produjo `reports/complexity-report.json` con las entradas más complejas (useAnalytics.ts, errorHandler.ts, SearchBar.tsx, ShoppingCart.tsx, ProductDetailModal.tsx, OptimizedImage.tsx, api.ts, ProfilePage.tsx, sanitizer.ts, ProductCard.tsx) para priorizar las refactorizaciones iniciales e informar al ADR `docs/adr/0002-useanalytics-refactor.md`.
+- **Evidencia T5.1 (tests)** - `test/hooks/useAnalytics.test.tsx` valida consentimiento, persistencia y trackeo de eventos dentro de un Router simulado, y QA puede repetir `npm run test:ci` para confirmar la suite completa; el issue `docs/tickets/use-analytics-tests.md` documenta pasos y criterios que QA/SRE debe cubrir para cerrar T5.1.
+- **Evidencia T5.1 (errorHandler)** - `docs/adr/0003-errorhandler-refactor.md` describe la nueva estrategia para mapear notificaciones y `test/utils/errorHandler.test.ts` valida los distintos tipos de error y el envoltorio `withErrorHandling`. Esto mantiene la traza del checklist mientras se sigue avanzando con los siguientes refactors (errorHandler → SearchBar → etc.).
 
 ## Seguimiento
 

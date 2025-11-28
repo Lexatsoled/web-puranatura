@@ -1,0 +1,18 @@
+{
+  "flag.cspEnforce": {
+    "enabled": false,
+    "rollout": 0
+  },
+  "flag.analyticsIngest": {
+    "enabled": true,
+    "rollout": 100
+  },
+  "flag.lazyLegacyCatalog": {
+    "enabled": true,
+    "rollout": 100
+  },
+  "flag.aiEnabled": {
+    "enabled": true,
+    "rollout": 100
+  }
+}

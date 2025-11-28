@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-csp-alerts
+  labels:
+    grafana: alert-rules
+data:
+  csp-alerts.yml: |
+    groups:
+      - name: csp.rules
+        rules:
+          - alert: HighCspBlockedRatio
+            expr: |
+              (increase(csp_reports_blocked_total[48h])
+               /
+               increase(csp_reports_total[48h])) * 100 > 1
+            for: 30m
+            labels:
+              severity: warning
+            annotations:
+              summary: "CSP blocked ratio has exceeded 1% in the last 48h"
+              description: "{{ $value }}% of CSP reports in the last 48h were for blocked URIs — review the reports at backend/reports/csp-reports.ndjson and /metrics."
