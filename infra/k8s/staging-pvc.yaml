@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: puranatura-reports-pvc
+  labels:
+    app: puranatura-backend
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # NOTE: for staging we assume a default StorageClass is available. Adjust as needed.

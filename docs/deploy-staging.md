@@ -30,7 +30,8 @@ Despliegue paso-a-paso (uso del workflow GitHub Actions):
 4. Habilitar Prometheus scraping de la `infra/prometheus/prometheus-scrape.yaml` y aplicar las reglas de alerta (Grafana/Prometheus) con `infra/grafana/csp-alerts.yaml`.
 
 5. Recoger reports durante 48 horas:
-   - Los reports se persistirán en `backend/reports/csp-reports.ndjson` dentro del pod (o donde configures el volumen). Opcionalmente enviar a un endpoint centralizado.
+   - Los reports se persistirán en `backend/reports/csp-reports.ndjson` dentro del pod. Por defecto la manifest de ejemplo usa `emptyDir` (ephemeral) — para retención entre pod restarts, aplica la PVC `infra/k8s/staging-pvc.yaml` y enlaza la `volumeMount` correspondiente.
+   - Opcionalmente enviar los reports a un endpoint centralizado o object storage para persistencia a largo plazo.
    - Ejecutar `node scripts/compute-csp-metrics.cjs` para obtener resumen localmente (si puedes acceder al archivo ndjson) o usar Prometheus/Grafana para chequear métricas.
 
 6. Policy decision: si ratio < 1% durante 48h, preparar canary rollout a `enforce` con `docs/canary-rollout.md`.

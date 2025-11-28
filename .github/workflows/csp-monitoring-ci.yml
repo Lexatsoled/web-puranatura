@@ -1,0 +1,33 @@
+name: CSP monitoring checks
+
+on:
+  push:
+    branches: ['feat/staging-csp-monitor', 'main']
+  pull_request:
+    paths: ['backend/**', 'infra/**', 'docs/**', 'test/**']
+
+jobs:
+  test-csp-report:
+    name: Run CSP ingest & PII tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run CSP-related tests
+        run: npx vitest run test/backend.cspReport.test.ts test/backend.cspHeader.test.ts --run
+
+      - name: Run compute metrics helper (sanity)
+        run: node scripts/compute-csp-metrics.cjs || true
