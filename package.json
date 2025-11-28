@@ -29,6 +29,7 @@
     "perf:web": "npx lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
     "a11y": "node scripts/run-a11y.cjs",
     "scan:security": "node scripts/run-gitleaks.cjs && node scripts/run-trivy.cjs",
+    "check:no-secrets": "node scripts/check-no-secrets.cjs",
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts",
     "rollout:canary": "node scripts/rollout-canary.cjs",
     "verify:observability": "node scripts/verify-observability-artifacts.cjs",

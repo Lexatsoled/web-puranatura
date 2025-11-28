@@ -29,7 +29,7 @@ spec:
               value: 'true'
             - name: PORT
               value: '3001'
-            # DB/Secrets should be provided via k8s Secrets in a real deploy
+            # DB/Secrets should be provided via your platform's secret mechanism (secret manager / orchestrator secrets) in a real deploy
       volumes:
         - name: reports-volume
           emptyDir: {}
