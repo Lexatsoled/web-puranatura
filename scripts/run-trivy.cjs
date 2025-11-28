@@ -99,6 +99,43 @@ const downloadBinary = () => {
 
     const found = findCandidate(cacheDir);
     if (!found) {
+      // If nothing obvious named 'trivy' was found, check for any
+      // executable-looking files by inspecting the file magic bytes.
+      const isExecutableBinary = (filePath) => {
+        try {
+          const fd = fs.openSync(filePath, 'r');
+          const buf = Buffer.alloc(4);
+          fs.readSync(fd, buf, 0, 4, 0);
+          fs.closeSync(fd);
+          // ELF: 0x7f 'E' 'L' 'F'
+          if (buf[0] === 0x7f && buf[1] === 0x45 && buf[2] === 0x4c && buf[3] === 0x46) return true;
+          // PE (Windows .exe): 'M' 'Z'
+          if (buf[0] === 0x4d && buf[1] === 0x5a) return true;
+          // Mach-O (common macOS headers) – check some known bytes
+          if ([0xfe, 0xed, 0xfa, 0xce].every((b, i) => buf[i] === b)) return true;
+          if ([0xca, 0xfe, 0xba, 0xbe].every((b, i) => buf[i] === b)) return true;
+          return false;
+        } catch (err) {
+          return false;
+        }
+      };
+
+      const allFiles = [];
+      const collectFiles = (dir) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const e of entries) {
+          const full = path.join(dir, e.name);
+          if (e.isDirectory()) collectFiles(full);
+          else allFiles.push(full);
+        }
+      };
+      collectFiles(cacheDir);
+
+      const exeCandidate = allFiles.find((f) => isExecutableBinary(f));
+      if (exeCandidate) {
+        console.log(`[trivy] Encontrado posible binario ejecutable: ${exeCandidate}`);
+        found = exeCandidate;
+      }
       // dump directory listing to aid debugging in CI logs
       const dump = (dir, indent = '') => {
         const items = fs.readdirSync(dir, { withFileTypes: true });
