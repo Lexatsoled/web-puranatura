@@ -213,13 +213,23 @@ try {
   $env:PORT = $port
   Write-Host "[collect-metrics] Iniciando backend en puerto $port..."
   $quotedEntry = '"' + $backendEntry + '"'
-  $serverProcess = Start-Process -FilePath $nodeBinary `
-    -ArgumentList @($quotedEntry) `
-    -WorkingDirectory $repoRoot `
-    -RedirectStandardOutput $stdoutLog `
-    -RedirectStandardError $stderrLog `
-    -WindowStyle Hidden `
-    -PassThru
+  # Start-Process on Linux (pwsh core) doesn't support -WindowStyle; only use it on Windows
+  if ($IsWindows) {
+    $serverProcess = Start-Process -FilePath $nodeBinary `
+      -ArgumentList @($quotedEntry) `
+      -WorkingDirectory $repoRoot `
+      -RedirectStandardOutput $stdoutLog `
+      -RedirectStandardError $stderrLog `
+      -WindowStyle Hidden `
+      -PassThru
+  } else {
+    $serverProcess = Start-Process -FilePath $nodeBinary `
+      -ArgumentList @($quotedEntry) `
+      -WorkingDirectory $repoRoot `
+      -RedirectStandardOutput $stdoutLog `
+      -RedirectStandardError $stderrLog `
+      -PassThru
+  }
 
   $client = [System.Net.Http.HttpClient]::new()
   $client.Timeout = [TimeSpan]::FromSeconds(20)
