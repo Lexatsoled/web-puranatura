@@ -85,7 +85,11 @@ const downloadBinary = () => {
           if (found) return found;
         } else if (e.isFile()) {
           const lower = e.name.toLowerCase();
-          if (lower === binaryName || lower.startsWith('trivy') || lower.includes('trivy')) {
+          if (
+            lower === binaryName ||
+            lower.startsWith('trivy') ||
+            lower.includes('trivy')
+          ) {
             return full;
           }
         }
@@ -106,7 +110,7 @@ const downloadBinary = () => {
       };
       console.error('[trivy] Estructura de cacheDir:');
       dump(cacheDir);
-      throw new Error('No se encontró ningún archivo de Trivy tras la extracción');
+      throw new Error('No se encontró binario Trivy tras la extracción');
     }
 
     // If we found a candidate, prefer an executable one — try version check
@@ -114,7 +118,7 @@ const downloadBinary = () => {
       try {
         const r = spawnSync(candidate, ['--version'], { stdio: 'ignore' });
         return r.status === 0 ? candidate : null;
-      } catch (e) {
+      } catch {
         return null;
       }
     };
@@ -128,13 +132,13 @@ const downloadBinary = () => {
         fs.chmodSync(found, 0o755);
         const after = tryExec(found);
         if (after) extractedBinary = after;
-      } catch (e) {
+      } catch {
         // ignore chmod errors here — we'll fail below if not executable
       }
     }
 
     if (!fs.existsSync(extractedBinary)) {
-      throw new Error('No se encontró el binario trivy tras la extracción');
+      throw new Error('No se encontró binario Trivy tras la extracción');
     }
   }
 
