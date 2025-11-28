@@ -153,17 +153,6 @@ jobs:
           SKIP_START_BACKEND: '1'
         run: npm run test:e2e
 
-      - name: Security scan (gitleaks)
-        # Only run gitleaks on push events and on PRs originating from this repository
-        # (skip PRs from forks because GITHUB_TOKEN/Secrets are restricted there).
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        # Use the official gitleaks action (v2) which is configured via env vars
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: specify a custom gitleaks config at repo root if present
-          GITLEAKS_CONFIG: .gitleaks.toml
-
       - name: Install k6
         run: |
           sudo apt-get update
@@ -179,6 +168,24 @@ jobs:
           BASE_URL: http://127.0.0.1:3001
           PERF_API_STRICT: 'true'
         run: npm run perf:api
+      - name: Accessibility audits (axe + Lighthouse)
+        run: npm run a11y
+      - name: Performance web (LHCI)
+        run: npm run perf:web
+      - name: Security scan - gitleaks
+        run: node scripts/run-gitleaks.cjs
+
+      - name: Security scan - Trivy (aquasecurity/trivy-action)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          scanners: 'vuln,secret'
+          severity: 'HIGH,CRITICAL'
+          format: 'table'
+          exit-code: '1'
+      - name: npm audit (high) gate
+        run: npm audit --production --audit-level=high
       - name: Collect observability evidence
         run: |
           set -o pipefail

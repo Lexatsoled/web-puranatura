@@ -1,0 +1,47 @@
+name: Deploy to staging
+on:
+  workflow_dispatch: {}
+
+permissions: read-all
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build backend image
+        run: |
+          echo "Building backend image (local tag: puranatura-backend:staging)"
+          docker build -t puranatura-backend:staging backend || true
+
+      - name: Push image to registry (optional)
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          echo 'Logging into DockerHub'
+          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker tag puranatura-backend:staging ${{ secrets.DOCKERHUB_USERNAME }}/puranatura-backend:staging
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/puranatura-backend:staging
+
+      - name: Deploy to Kubernetes (if KUBECONFIG present)
+        if: ${{ secrets.KUBECONFIG }}
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          echo "Applying manifests to staging cluster"
+          kubectl apply -f infra/k8s/staging-deployment.yaml
+          # Apply Prometheus & Grafana examples only if cluster has those components
+          kubectl apply -f infra/prometheus/prometheus-scrape.yaml || true
+          kubectl apply -f infra/grafana/csp-alerts.yaml || true
+
+      - name: Staging deploy not configured
+        if: ${{ !secrets.KUBECONFIG }}
+        run: |
+          echo "No KUBECONFIG secret found — workflow completed in dry-run mode. Attach KUBECONFIG or DockerHub credentials to fully deploy to your staging environment."
