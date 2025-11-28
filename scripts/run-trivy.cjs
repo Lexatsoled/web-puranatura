@@ -108,14 +108,23 @@ const downloadBinary = () => {
           fs.readSync(fd, buf, 0, 4, 0);
           fs.closeSync(fd);
           // ELF: 0x7f 'E' 'L' 'F'
-          if (buf[0] === 0x7f && buf[1] === 0x45 && buf[2] === 0x4c && buf[3] === 0x46) return true;
+          if (
+            buf[0] === 0x7f &&
+            buf[1] === 0x45 &&
+            buf[2] === 0x4c &&
+            buf[3] === 0x46
+          ) return true;
           // PE (Windows .exe): 'M' 'Z'
           if (buf[0] === 0x4d && buf[1] === 0x5a) return true;
           // Mach-O (common macOS headers) – check some known bytes
-          if ([0xfe, 0xed, 0xfa, 0xce].every((b, i) => buf[i] === b)) return true;
-          if ([0xca, 0xfe, 0xba, 0xbe].every((b, i) => buf[i] === b)) return true;
+          if (
+            [0xfe, 0xed, 0xfa, 0xce].every((b, i) => buf[i] === b)
+          ) return true;
+          if (
+            [0xca, 0xfe, 0xba, 0xbe].every((b, i) => buf[i] === b)
+          ) return true;
           return false;
-        } catch (err) {
+        } catch {
           return false;
         }
       };
@@ -133,7 +142,7 @@ const downloadBinary = () => {
 
       const exeCandidate = allFiles.find((f) => isExecutableBinary(f));
       if (exeCandidate) {
-        console.log(`[trivy] Encontrado posible binario ejecutable: ${exeCandidate}`);
+        console.log('[trivy] Encontrado posible binario ejecutable:', exeCandidate);
         found = exeCandidate;
       }
       // dump directory listing to aid debugging in CI logs
