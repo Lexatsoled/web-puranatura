@@ -19,6 +19,9 @@ spec:
           image: ${IMAGE_PLACEHOLDER:-puranatura-backend:staging}
           ports:
             - containerPort: 3001
+          volumeMounts:
+            - name: reports-volume
+              mountPath: /app/backend/reports
           env:
             - name: NODE_ENV
               value: 'production'
@@ -27,6 +30,9 @@ spec:
             - name: PORT
               value: '3001'
             # DB/Secrets should be provided via k8s Secrets in a real deploy
+      volumes:
+        - name: reports-volume
+          emptyDir: {}
 
 ---
 apiVersion: v1

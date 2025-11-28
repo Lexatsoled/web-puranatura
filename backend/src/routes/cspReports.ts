@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { appendCspReport } from '../storage/cspReportStore';
 import { z } from 'zod';
 import { cspReportsCounter, cspReportsBlockedCounter } from '../utils/metrics';
+import { maskIp, hashString } from '../utils/pseudonymize';
 import { logger } from '../utils/logger';
 import { env } from '../config/env';
 
@@ -39,11 +40,15 @@ router.post('/csp-report', async (req, res) => {
       report['blockedURL'] ??
       'unknown';
 
-    // Persist for later analysis
+    // Pseudonymize PII before persisting: mask IPs and hash user-agent
+    const maskedIp = maskIp(req.ip);
+    const uaHash = hashString(req.get('user-agent'));
+
+    // Persist for later analysis (PII pseudonymized)
     await appendCspReport({
       report,
-      ip: req.ip,
-      userAgent: req.get('user-agent') ?? 'unknown',
+      ip: maskedIp,
+      userAgentHash: uaHash,
       traceId: res.locals.traceId ?? undefined,
     });
 

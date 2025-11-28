@@ -48,13 +48,17 @@ describe('POST /api/security/csp-report', () => {
 
     expect(res.status).toBe(204);
 
-    // metrics should expose our CSP counter
+    // metrics should expose our CSP counters
     const metrics = await request(app).get('/metrics');
     expect(metrics.text).toMatch(/csp_reports_total/);
+    expect(metrics.text).toMatch(/csp_reports_blocked_total/);
 
     // persisted file should contain a line
     const content = fs.readFileSync(reportsFile, 'utf8');
     expect(content).toContain('https://example.com/');
     expect(content).toContain('malicious.example');
+    // ensure we don't store raw IP addresses and we persist a userAgent hash instead
+    expect(content).not.toMatch(/127\.0\.0\.1/);
+    expect(content).toMatch(/"userAgentHash"\s*:\s*"[a-f0-9]{16}"/i);
   });
 });

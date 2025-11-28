@@ -6,6 +6,7 @@ Qué hicimos (implementado):
 
 - Endpoint receptor: `POST /api/security/csp-report` recibe `application/csp-report` y `application/json`.
 - Persistencia local: `backend/reports/csp-reports.ndjson` (JSON Lines) — útil para auditoría y análisis forense.
+  - Datos PII: los reports son pseudonimizados antes de persistir — IPs enmascaradas (ej. x.x.x.0/24) y `user-agent` almacenado como hash truncado.
 - Métricas: Prometheus counters expuestos en `/metrics`:
   - `csp_reports_total{violated_directive,blocked_uri,report_only}`
   - `csp_reports_blocked_total{blocked_uri}`
