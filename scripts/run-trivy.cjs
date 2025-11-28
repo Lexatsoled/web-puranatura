@@ -117,12 +117,9 @@ const downloadBinary = () => {
           // PE (Windows .exe): 'M' 'Z'
           if (buf[0] === 0x4d && buf[1] === 0x5a) return true;
           // Mach-O (common macOS headers) – check some known bytes
-          if (
-            [0xfe, 0xed, 0xfa, 0xce].every((b, i) => buf[i] === b)
-          ) return true;
-          if (
-            [0xca, 0xfe, 0xba, 0xbe].every((b, i) => buf[i] === b)
-          ) return true;
+          // Mach-O / other binaries: compare magic bytes using Buffer.equals
+          if (Buffer.from([0xfe, 0xed, 0xfa, 0xce]).equals(buf)) return true;
+          if (Buffer.from([0xca, 0xfe, 0xba, 0xbe]).equals(buf)) return true;
           return false;
         } catch {
           return false;
@@ -142,7 +139,7 @@ const downloadBinary = () => {
 
       const exeCandidate = allFiles.find((f) => isExecutableBinary(f));
       if (exeCandidate) {
-        console.log('[trivy] Encontrado posible binario ejecutable:', exeCandidate);
+        console.log('[trivy] posible binario:', exeCandidate);
         found = exeCandidate;
       }
       // dump directory listing to aid debugging in CI logs
