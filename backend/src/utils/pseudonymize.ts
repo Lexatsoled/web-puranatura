@@ -23,8 +23,10 @@ export const maskIp = (ip?: string | null) => {
 };
 
 export const hashString = (s?: string | null) => {
-  if (!s) return 'unknown';
-  return crypto.createHash('sha256').update(s).digest('hex').slice(0, 16);
+  // Always return a stable short hex hash (16 chars) even when the input is missing.
+  // Use empty string as fallback so we still produce a hash instead of 'unknown'.
+  const input = s ?? '';
+  return crypto.createHash('sha256').update(input).digest('hex').slice(0, 16);
 };
 
 export default { maskIp, hashString };
