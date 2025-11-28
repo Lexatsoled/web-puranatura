@@ -113,7 +113,8 @@ const downloadBinary = () => {
             buf[1] === 0x45 &&
             buf[2] === 0x4c &&
             buf[3] === 0x46
-          ) return true;
+          )
+            return true;
           // PE (Windows .exe): 'M' 'Z'
           if (buf[0] === 0x4d && buf[1] === 0x5a) return true;
           // Mach-O (common macOS headers) – check some known bytes
