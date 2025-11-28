@@ -26,7 +26,7 @@
     "test:e2e": "npm run build && node scripts/run-e2e.cjs",
     "test:contract": "node scripts/run-contract.cjs",
     "perf:api": "node scripts/run-k6.cjs GPT-51-Codex-Max/perf/k6-api-smoke.js",
-    "perf:web": "lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
+    "perf:web": "npx lhci autorun --config=GPT-51-Codex-Max/perf/lhci-config.json",
     "a11y": "node scripts/run-a11y.cjs",
     "scan:security": "node scripts/run-gitleaks.cjs && node scripts/run-trivy.cjs",
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts",
