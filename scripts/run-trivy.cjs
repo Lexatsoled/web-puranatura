@@ -75,26 +75,67 @@ const downloadBinary = () => {
   // Ensure we actually found a binary at the expected path.
   let extractedBinary = cachedBinary;
   if (!fs.existsSync(extractedBinary)) {
-    // Fallback: search recursively for a file named like the binary
-    const findBinary = (dir) => {
+    // Fallback: search recursively for any file that looks like the trivy binary
+    const findCandidate = (dir) => {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       for (const e of entries) {
         const full = path.join(dir, e.name);
         if (e.isDirectory()) {
-          const found = findBinary(full);
+          const found = findCandidate(full);
           if (found) return found;
-        } else if (e.isFile() && e.name === binaryName) {
-          return full;
+        } else if (e.isFile()) {
+          const lower = e.name.toLowerCase();
+          if (lower === binaryName || lower.startsWith('trivy') || lower.includes('trivy')) {
+            return full;
+          }
         }
       }
       return null;
     };
 
-    const found = findBinary(cacheDir);
+    const found = findCandidate(cacheDir);
     if (!found) {
+      // dump directory listing to aid debugging in CI logs
+      const dump = (dir, indent = '') => {
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        for (const it of items) {
+          const full = path.join(dir, it.name);
+          console.log(`${indent}${it.name}${it.isDirectory() ? '/' : ''}`);
+          if (it.isDirectory()) dump(full, indent + '  ');
+        }
+      };
+      console.error('[trivy] Estructura de cacheDir:');
+      dump(cacheDir);
+      throw new Error('No se encontró ningún archivo de Trivy tras la extracción');
+    }
+
+    // If we found a candidate, prefer an executable one — try version check
+    const tryExec = (candidate) => {
+      try {
+        const r = spawnSync(candidate, ['--version'], { stdio: 'ignore' });
+        return r.status === 0 ? candidate : null;
+      } catch (e) {
+        return null;
+      }
+    };
+
+    const execCandidate = tryExec(found);
+    if (execCandidate) {
+      extractedBinary = execCandidate;
+    } else {
+      // attempt chmod and test again
+      try {
+        fs.chmodSync(found, 0o755);
+        const after = tryExec(found);
+        if (after) extractedBinary = after;
+      } catch (e) {
+        // ignore chmod errors here — we'll fail below if not executable
+      }
+    }
+
+    if (!fs.existsSync(extractedBinary)) {
       throw new Error('No se encontró el binario trivy tras la extracción');
     }
-    extractedBinary = found;
   }
 
   fs.chmodSync(extractedBinary, 0o755);
