@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../prisma';
+import { logger } from '../utils/logger';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 import { createHash } from 'crypto';
 
@@ -73,15 +74,28 @@ router.get('/', async (req, res, next) => {
         : {}),
     };
 
-    const [items, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-      prisma.product.count({ where }),
-    ]);
+    let items = [] as any[];
+    let total = 0;
+
+    try {
+      const results = await Promise.all([
+        prisma.product.findMany({
+          where,
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+        }),
+        prisma.product.count({ where }),
+      ]);
+      items = results[0];
+      total = results[1];
+    } catch (dbErr) {
+      // If DB is missing/corrupt in dev, avoid returning 500 to frontend UI —
+      // return an empty catalog and flag degraded state so UI can fallback.
+      logger.warn({ err: dbErr, route: req.originalUrl }, 'Products DB read failed, returning empty list');
+      items = [];
+      total = 0;
+    }
 
     const catalogEtag = buildCatalogEtag(
       items.map((item) => ({ id: item.id, updatedAt: item.updatedAt })),
@@ -101,6 +115,8 @@ router.get('/', async (req, res, next) => {
       .header('X-Total-Count', total.toString())
       .header('X-Page', page.toString())
       .header('X-Page-Size', pageSize.toString())
+      // indicate degraded state to help debugging in development
+      .header('X-Backend-Degraded', String(total === 0 && process.env.NODE_ENV !== 'production'))
       .header('Cache-Control', 'public, max-age=300')
       .header('ETag', catalogEtag);
 

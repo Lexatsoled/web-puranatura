@@ -26,7 +26,8 @@ app.use(
       // en producción pausada y un pase final a enforce.
       reportOnly: env.cspReportOnly,
       useDefaults: false,
-      directives: {
+      directives: (() => {
+        const d: Record<string, unknown> = {
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
@@ -48,8 +49,11 @@ app.use(
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'none'"],
-        upgradeInsecureRequests: [],
-      },
+      };
+      // Only add upgradeInsecureRequests directive when CSP is enforced
+      if (!env.cspReportOnly) d.upgradeInsecureRequests = [];
+      return d;
+    })(),
     },
     hsts: { maxAge: 15552000, includeSubDomains: true, preload: false },
     crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },

@@ -44,10 +44,10 @@ const StorePage: React.FC = () => {
       const fallbackProducts = fallbackModule.products.map((product) =>
         sanitizeProductContent(product)
       );
-      setProductCategories([
-        { id: 'todos', name: 'Todas' },
-        ...fallbackModule.productCategories,
-      ]);
+      // Merge default category with fallback list, avoiding duplicate ids
+      const merged = [{ id: 'todos', name: 'Todas' }, ...fallbackModule.productCategories];
+      const deduped = Array.from(new Map(merged.map((c) => [c.id, c])).values());
+      setProductCategories(deduped);
       setProducts(fallbackProducts);
       setApiError(
         'Mostrando catalogo provisional mientras conectamos con la API.'
