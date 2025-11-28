@@ -72,8 +72,33 @@ const downloadBinary = () => {
     }
   }
 
-  fs.chmodSync(cachedBinary, 0o755);
-  return cachedBinary;
+  // Ensure we actually found a binary at the expected path.
+  let extractedBinary = cachedBinary;
+  if (!fs.existsSync(extractedBinary)) {
+    // Fallback: search recursively for a file named like the binary
+    const findBinary = (dir) => {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const e of entries) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) {
+          const found = findBinary(full);
+          if (found) return found;
+        } else if (e.isFile() && e.name === binaryName) {
+          return full;
+        }
+      }
+      return null;
+    };
+
+    const found = findBinary(cacheDir);
+    if (!found) {
+      throw new Error('No se encontró el binario trivy después de extraer el fichero');
+    }
+    extractedBinary = found;
+  }
+
+  fs.chmodSync(extractedBinary, 0o755);
+  return extractedBinary;
 };
 
 const resolveBinary = () => {
