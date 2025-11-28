@@ -92,7 +92,7 @@ const downloadBinary = () => {
 
     const found = findBinary(cacheDir);
     if (!found) {
-      throw new Error('No se encontró el binario trivy después de extraer el fichero');
+      throw new Error('No se encontró el binario trivy tras la extracción');
     }
     extractedBinary = found;
   }
