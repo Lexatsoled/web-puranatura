@@ -1,4 +1,4 @@
-Ã¯Â»Â¿# Checkpoints del plan maestro
+# Checkpoints del plan maestro
 
 Este documento refleja el seguimiento fase por fase para mantener claro que items del plan maestro estan listos, cuales estan en curso y que evidencia o gate respalda cada avance.
 
