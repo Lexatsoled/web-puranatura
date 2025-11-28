@@ -36,6 +36,8 @@ jobs:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           echo "Applying manifests to staging cluster"
+          # Apply PVC first so deployment can mount persistent storage if configured
+          kubectl apply -f infra/k8s/staging-pvc.yaml || true
           kubectl apply -f infra/k8s/staging-deployment.yaml
           # Apply Prometheus & Grafana examples only if cluster has those components
           kubectl apply -f infra/prometheus/prometheus-scrape.yaml || true

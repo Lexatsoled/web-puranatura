@@ -34,11 +34,15 @@ Preparar al equipo para ejecutar un experimento de 48 horas en staging con CSP e
 ## Notas operacionales
 
 - El almacenamiento de reports en este PR es un PoC (NDJSON en disco). Para producción recomendamos persistir en DB o object storage y controlar la retención y privacidad de los reports.
+- El almacenamiento de reports en este PR es un PoC (NDJSON en disco). Para producción recomendamos persistir en DB o object storage y controlar la retención y privacidad de los reports.
+- Privacidad/PII: los informes son pseudonimizados por diseño (IPs enmascaradas y `user-agent` almacenado como hash truncado). Añadir tests en la CI que verifiquen que no se almacena PII sin autorización.
 - El alertado y scraping proporcionados son ejemplos — adáptalos al entorno Prometheus/Grafana del cluster.
 
 ## Checklist para la fase de 48h (operación en staging)
 
 - [ ] Desplegar con CSP_REPORT_ONLY=true y confirmar /api/security/csp-report recibe reports.
+- [ ] Desplegar con CSP_REPORT_ONLY=true y confirmar /api/security/csp-report recibe reports.
+- [ ] Validar que los reports persistidos no contienen IPs completas ni `user-agent` sin pseudonimizar (ejecutar test/unit que lo verifique).
 - [ ] Confirmar Prometheus raspa /metrics y vemos incrementos en csp_reports_total.
 - [ ] Esperar 48 horas y evaluar la ratio: increase(csp_reports_blocked_total[48h]) / increase(csp_reports_total[48h]) \* 100
 - [ ] Si ratio < 1% → plan canary para habilitar enforce gradualmente.
