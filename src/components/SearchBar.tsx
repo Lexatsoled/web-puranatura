@@ -1,18 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OptimizedImage } from './OptimizedImage';
-import debounce from 'lodash/debounce';
+import useSearchBar, { SearchResult } from '../hooks/useSearchBar';
 import { Product } from '../types';
-
-interface SearchResult {
-  type: 'product' | 'category' | 'suggestion';
-  id: string;
-  title: string;
-  subtitle?: string;
-  image?: string;
-  url: string;
-  relevance?: number;
-}
 
 interface SearchBarProps {
   onSearch: (query: string) => Promise<SearchResult[]>;
@@ -29,81 +19,24 @@ const SearchBar: React.FC<SearchBarProps> = ({
   recentSearches = [],
   popularProducts = [],
   categories = [],
-  isLoading = false,
 }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const searchRef = useRef<HTMLDivElement>(null);
+  // delegate all behavior to the hook for clarity / testability
+  const {
+    query,
+    setQuery,
+    results,
+    isOpen,
+    isLoading,
+    activeIndex,
+    searchRef,
+    handleSearchChange,
+    handleKeyDown,
+    handleResultClick,
+    setIsOpen,
+  } = useSearchBar({ onSearch, onResultClick });
 
-  // Cerrar al hacer clic fuera
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Búsqueda con debounce
-  const debouncedSearch = useCallback(
-    debounce(async (searchQuery: string) => {
-      if (searchQuery.length >= 2) {
-        const searchResults = await onSearch(searchQuery);
-        setResults(searchResults);
-        setIsOpen(true);
-      } else {
-        setResults([]);
-      }
-    }, 300),
-    [onSearch]
-  );
-
-  // Manejar cambios en la búsqueda
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    debouncedSearch(value);
-  };
-
-  // Navegación con teclado
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (activeIndex >= 0 && results[activeIndex]) {
-          handleResultClick(results[activeIndex]);
-        }
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        break;
-    }
-  };
-
-  const handleResultClick = (result: SearchResult) => {
-    onResultClick(result);
-    setQuery('');
-    setResults([]);
-    setIsOpen(false);
-  };
+  // All behaviour (outside clicks, debounced search and keyboard navigation)
+  // is handled by the useSearchBar hook.
 
   return (
     <div className="relative" ref={searchRef}>
@@ -111,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <input
           type="text"
           value={query}
-          onChange={handleSearchChange}
+          onChange={(e) => handleSearchChange(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
           placeholder="Buscar productos, categorías..."
