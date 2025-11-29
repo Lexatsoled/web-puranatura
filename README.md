@@ -28,6 +28,13 @@ This contains everything you need to run your app locally.
   de integración backend (`test/backend.seedFallback.test.ts`) que simula fallos
   en la lectura de la BD y comprueba que el endpoint utiliza el fallback legacy
   cuando procede.
+  - Implementación adicional (dev-only): si la lectura de la BD falla el
+    servidor intentará sembrar la base de datos (seed) y re-consultar. Si el
+    seed falla como último recurso se utiliza el `data/products.ts` legacy del
+    frontend para mantener la UI funcional en entornos locales. Los objetos de
+    este fallback ahora usan campos deterministas (`id` y `updatedAt`) para
+    asegurar que los cálculos de `ETag` sean estables entre llamadas — esto
+    evita inconsistencias en tests y necesidades de recarga en la UI.
 
 ## Formato y hooks pre-commit (recomendado)
 
