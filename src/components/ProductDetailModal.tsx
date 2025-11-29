@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { Product, ProductImage } from '../types';
 import { OptimizedImage } from './OptimizedImage';
 import { useCartStore } from '../store/cartStore';
+import useProductDetail from '../hooks/useProductDetail';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductDetailModalProps {
@@ -17,90 +18,22 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onClose,
   onAddToCartSuccess,
 }) => {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { addToCart } = useCartStore();
 
-  // Reset estado cuando el modal se abre
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedImage(0);
-      setQuantity(1);
-      setIsZoomed(false);
-      setIsAddingToCart(false);
-    }
-  }, [isOpen]);
+  const {
+    selectedImage,
+    setSelectedImage,
+    quantity,
+    setQuantity,
+    isZoomed,
+    setIsZoomed,
+    mousePosition,
+    isAddingToCart,
+    handleMouseMove,
+    handleAddToCart,
+  } = useProductDetail({ product, isOpen, onClose, addToCart });
 
-  // Manejar teclas
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-
-      switch (e.key) {
-        case 'Escape':
-          onClose();
-          break;
-        case 'ArrowLeft':
-          setSelectedImage((prev) =>
-            prev === 0 ? product.images.length - 1 : prev - 1
-          );
-          break;
-        case 'ArrowRight':
-          setSelectedImage((prev) =>
-            prev === product.images.length - 1 ? 0 : prev + 1
-          );
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, product.images.length, onClose]);
-
-  // Prevenir scroll cuando el modal está abierto
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  // Manejar zoom de imagen
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!isZoomed) return;
-
-      const bounds = e.currentTarget.getBoundingClientRect();
-      const x = ((e.clientX - bounds.left) / bounds.width) * 100;
-      const y = ((e.clientY - bounds.top) / bounds.height) * 100;
-      setMousePosition({ x, y });
-    },
-    [isZoomed]
-  );
-
-  // Añadir al carrito con manejo de errores
-  const handleAddToCart = async () => {
-    if (isAddingToCart) return;
-
-    setIsAddingToCart(true);
-    try {
-      await addToCart(product as any, quantity);
-      onAddToCartSuccess?.();
-      onClose();
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      // Aquí podrías mostrar una notificación de error
-    } finally {
-      setIsAddingToCart(false);
-    }
-  };
+  // All interactive behaviours are handled by the useProductDetail hook
 
   // const handleAddToCartSimple = () => {
   //   addToCart(product, quantity);
@@ -279,7 +212,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={handleAddToCart}
+                    onClick={async () => {
+                      await handleAddToCart();
+                      onAddToCartSuccess?.();
+                      onClose();
+                    }}
                     disabled={isAddingToCart || quantity <= 0}
                     className={`
                       w-full px-6 py-3 rounded-md font-semibold
