@@ -1,15 +1,10 @@
 {
-  "timestamp": "2025-11-27T20:58:48.887Z",
+  "timestamp": "2025-11-29T16:11:09.046Z",
   "top": [
-    {
-      "file": "src\\hooks\\useAnalytics.ts",
-      "complexity": 45,
-      "lines": 226
-    },
     {
       "file": "src\\utils\\errorHandler.ts",
       "complexity": 39,
-      "lines": 176
+      "lines": 178
     },
     {
       "file": "src\\components\\SearchBar.tsx",
@@ -32,11 +27,6 @@
       "lines": 156
     },
     {
-      "file": "src\\utils\\api.ts",
-      "complexity": 33,
-      "lines": 157
-    },
-    {
       "file": "pages\\ProfilePage.tsx",
       "complexity": 33,
       "lines": 319
@@ -50,7 +40,17 @@
       "file": "src\\components\\ProductCard.tsx",
       "complexity": 31,
       "lines": 212
+    },
+    {
+      "file": "pages\\AddressesPage.tsx",
+      "complexity": 31,
+      "lines": 534
+    },
+    {
+      "file": "src\\components\\FAQSection.tsx",
+      "complexity": 29,
+      "lines": 279
     }
   ],
-  "totalFiles": 91
+  "totalFiles": 94
 }
