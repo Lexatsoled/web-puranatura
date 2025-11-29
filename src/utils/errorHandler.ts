@@ -1,34 +1,10 @@
 import { useNotifications } from '../contexts/NotificationContext';
-
-// Tipos de error personalizados
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public statusCode: number,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'ApiError';
-  }
-}
-
-export class ValidationError extends Error {
-  constructor(
-    message: string,
-    public field?: string,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'ValidationError';
-  }
-}
-
-export class NetworkError extends Error {
-  constructor(message: string = 'Error de conexión') {
-    super(message);
-    this.name = 'NetworkError';
-  }
-}
+import transformApiError, {
+  ApiError,
+  ValidationError,
+  NetworkError,
+} from './transformApiError';
+export { ApiError, ValidationError, NetworkError } from './transformApiError';
 
 export type NotificationPayload = {
   type: 'error' | 'warning' | 'success';
@@ -147,31 +123,4 @@ export async function withErrorHandling<T>(
 }
 
 // Utilidad para transformar errores de la API
-export function transformApiError(error: any): Error {
-  if (!error.response) {
-    return new NetworkError();
-  }
-
-  const { status, data } = error.response;
-
-  switch (status) {
-    case 400:
-      return new ValidationError(
-        data.message || 'Datos inválidos',
-        data.field,
-        data
-      );
-    case 401:
-      return new ApiError('No autorizado', status, data);
-    case 403:
-      return new ApiError('Acceso denegado', status, data);
-    case 404:
-      return new ApiError('Recurso no encontrado', status, data);
-    case 429:
-      return new ApiError('Demasiadas solicitudes', status, data);
-    case 500:
-      return new ApiError('Error interno del servidor', status, data);
-    default:
-      return new ApiError(data.message || 'Error desconocido', status, data);
-  }
-}
+// transformApiError implementation has been moved to src/utils/transformApiError.ts

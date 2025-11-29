@@ -1,11 +1,6 @@
 {
-  "timestamp": "2025-11-29T15:57:08.877Z",
+  "timestamp": "2025-11-29T16:11:09.046Z",
   "top": [
-    {
-      "file": "src\\hooks\\useAnalytics.ts",
-      "complexity": 39,
-      "lines": 205
-    },
     {
       "file": "src\\utils\\errorHandler.ts",
       "complexity": 39,
@@ -50,7 +45,12 @@
       "file": "pages\\AddressesPage.tsx",
       "complexity": 31,
       "lines": 534
+    },
+    {
+      "file": "src\\components\\FAQSection.tsx",
+      "complexity": 29,
+      "lines": 279
     }
   ],
-  "totalFiles": 93
+  "totalFiles": 94
 }
