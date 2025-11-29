@@ -1,6 +1,8 @@
 import { app, closeApp } from './app';
 import { env } from './config/env';
 import { prisma } from './prisma';
+import { execSync } from 'child_process';
+import { seedProducts } from '../prisma/seed';
 
 // Arranque con reintentos si el puerto está ocupado (útil en dev).
 const startPort = env.port;
@@ -39,9 +41,72 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const c = await prisma.product.count();
         // eslint-disable-next-line no-console
         console.log(`[startup] DB product count: ${c}`);
+        // If DB is empty in non-production, seed it automatically to help
+        // local development and avoid the front-end falling back to legacy
+        // hardcoded fixtures.
+        if (c === 0 && env.nodeEnv !== 'production') {
+          // eslint-disable-next-line no-console
+          console.log(
+            '[startup] DB empty — running dev seed to populate sample products.'
+          );
+          try {
+            await seedProducts(prisma);
+            const newCount = await prisma.product.count();
+            // eslint-disable-next-line no-console
+            console.log(`[startup] Seed complete — product count: ${newCount}`);
+          } catch (seedErr) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              '[startup] Seed failed:',
+              seedErr && (seedErr as any).message
+                ? (seedErr as any).message
+                : seedErr
+            );
+          }
+        }
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.warn('[startup] DB check failed:', err && (err as any).message ? (err as any).message : err);
+        console.warn(
+          '[startup] DB check failed:',
+          err && (err as any).message ? (err as any).message : err
+        );
+
+        // In development, try to auto-apply migrations (prisma migrate deploy)
+        // then re-run seed. This helps new contributors avoid manual steps.
+        if (env.nodeEnv !== 'production') {
+          try {
+            // eslint-disable-next-line no-console
+            console.log(
+              '[startup] Attempting to apply migrations automatically (dev).'
+            );
+            execSync(
+              'npx prisma migrate deploy --schema=prisma/schema.prisma',
+              {
+                stdio: 'inherit',
+              }
+            );
+            // After migrations, try seeding again
+            try {
+              // eslint-disable-next-line no-console
+              console.log('[startup] Running seed after migrate (dev).');
+              await seedProducts(prisma);
+            } catch (seedErr) {
+              // eslint-disable-next-line no-console
+              console.warn(
+                '[startup] Seed after migrate failed:',
+                seedErr && (seedErr as any).message
+                  ? (seedErr as any).message
+                  : seedErr
+              );
+            }
+          } catch (mErr) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              '[startup] Auto-migrate failed (dev):',
+              mErr && (mErr as any).message ? (mErr as any).message : mErr
+            );
+          }
+        }
       }
     })();
     break; // Éxito, salir del bucle.

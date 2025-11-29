@@ -18,6 +18,17 @@ This contains everything you need to run your app locally.
 7. Run the app:
    `npm run dev`
 
+### Nota para desarrollo local: auto-seed y pruebas E2E 🧪
+
+- El servidor backend en modo desarrollo intentará auto-popular la base de datos
+  si detecta que está vacía (seed). Esto evita que la UI caiga a datos hardcode
+  al iniciar un entorno nuevo.
+- Añadimos una prueba E2E nueva para la tienda (`e2e/store.spec.ts`) que valida
+  que la página `/tienda` renderiza tarjetas de producto. También hay una prueba
+  de integración backend (`test/backend.seedFallback.test.ts`) que simula fallos
+  en la lectura de la BD y comprueba que el endpoint utiliza el fallback legacy
+  cuando procede.
+
 ## Formato y hooks pre-commit (recomendado)
 
 Para evitar que commits o PRs fallen por reglas de formato, recomendamos habilitar hooks locales con Husky + lint-staged.
