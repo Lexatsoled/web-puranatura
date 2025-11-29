@@ -40,6 +40,8 @@ backend/logs/
 # ignore prisma test dbs and local generated DB files inside prisma
 backend/prisma/**/*.sqlite
 backend/prisma/**/test-*.sqlite
+# ignore sqlite journal/temp files
+**/*.sqlite-journal
 # Artefactos y binarios locales
 .cache/
 reports/tmp/
