@@ -85,7 +85,7 @@ Notas generales:
 			- Se eliminó la práctica de ejecutar migraciones por cada test (migraciones centralizadas previo a la suite).
 		- Resultado: la suite de unit + integration tests pasó localmente en modo CI (ver registro de ejecución: `npm run test:ci`, 33 tests pasaron durante las sesiones recientes). Las pruebas E2E pasaron en ejecución local; además el workflow CI ha sido actualizado para ejecutar limpieza de artefactos Prisma, despliegue de migraciones y seeds antes de unit/integration + Playwright (quality job).
 	- Problemas / pendientes:
-	- Validación final: esperar la ejecución del pipeline en el Pull Request para confirmar que la orquestación completa (migraciones -> seed -> unit/integration -> e2e) es estable en runners. Si aparecen fallos en CI, se corregirán y re-ejecutará hasta estabilizar.
+	- Validación final: la rama de la feature fue mergeada a `main` (PR #14) y los checks de CI asociados se completaron con éxito. Seguimos pendientes de validar tareas de refactor y más tests de integración de larga duración en entornos controlados.
 	- Siguientes pasos prioritarios:
 		- Ejecutar los tests e2e (Playwright) localmente y en CI; documentar fallos y arreglos.
 		- Añadir y documentar un pequeño script de limpieza de binarios Prisma y confirmar su uso en CI antes de `prisma generate`/`prisma migrate`.
@@ -116,7 +116,7 @@ Notas generales:
 - [x] Regenerar Prisma client + resolver bloqueos de binarios nativos (Fase 2.5).
  - [x] Semilla y verificación básica de datos (3 productos) en `backend/prisma/database.sqlite`.
  - [x] Ejecutar suite de unit + integration tests en modo CI local (migraciones desplegadas antes) — PASS.
- - [x] Ejecutar suite completa incluyendo E2E (Playwright) y preparar workflow CI para E2E.
+ - [x] Ejecutar suite completa incluyendo E2E (Playwright) y preparar workflow CI para E2E (PR #14 mergeado, checks OK).
  - [x] Añadir seeds y migraciones reproducibles en CI (Fase 2.5/5).
  - [ ] Finalizar refactors y score de complejidad (Fase 6) antes de la validación final.
 
@@ -131,7 +131,7 @@ Acciones realizadas desde la última actualización:
 - [x] Integrar y testear un workflow de CI (GitHub Actions) que:
 	- aplique migraciones -> limpie artefactos de Prisma -> `prisma generate` -> seed -> run unit/integration tests -> opcional e2e en condiciones controladas.
 - [x] Añadido paso CI para detectar archivos sensibles (`check:no-secrets`) y limpieza de artefactos Prisma antes de migraciones; seeds ahora se ejecutan en las etapas relevantes.
- - [ ] Esperar la validación del pipeline en PR (CI run) — si CI falla, arreglar y re-ejecutar.
+ - [ ] Monitorizar ejecuciones de CI en `main` y programar correcciones si aparecen nuevos fallos en runners.
 
 ---
 
