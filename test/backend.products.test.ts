@@ -1,6 +1,6 @@
 // @vitest-environment node
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 
 // Set test database URL
 process.env.BACKEND_ENV_PATH = './backend/.env';
@@ -9,12 +9,11 @@ process.env.JWT_SECRET = "test-jwt-secret";
 process.env.JWT_REFRESH_SECRET = "test-jwt-refresh-secret";
 
 import { app, closeApp } from '../backend/src/app';
-import { execSync } from 'child_process';
-
-beforeAll(async () => {
-  // Run prisma migrate for test database
-  execSync('cd backend && npx prisma migrate dev --name test', { stdio: 'inherit' });
-});
+// NOTE: migrations are applied globally before tests (test:ci runs a
+// `prisma migrate deploy` step). Tests assume the test database has the
+// migrations already applied. Keep this lean to avoid races on Windows
+// where Prisma query-engine binary renames can conflict when run
+// concurrently.
 
 afterAll(async () => {
   await closeApp();
