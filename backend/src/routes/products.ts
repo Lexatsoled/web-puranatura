@@ -115,8 +115,8 @@ router.get('/', async (req, res, next) => {
       .header('X-Total-Count', total.toString())
       .header('X-Page', page.toString())
       .header('X-Page-Size', pageSize.toString())
-      // indicate degraded state to help debugging in development
-      .header('X-Backend-Degraded', String(total === 0 && process.env.NODE_ENV !== 'production'))
+  // indicate degraded state to help debugging in development
+  .header('X-Backend-Degraded', String(total === 0 && process.env.NODE_ENV !== 'production'))
       .header('Cache-Control', 'public, max-age=300')
       .header('ETag', catalogEtag);
 

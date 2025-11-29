@@ -27,7 +27,9 @@ app.use(
       reportOnly: env.cspReportOnly,
       useDefaults: false,
       directives: (() => {
-        const d: Record<string, unknown> = {
+        // Construimos las directivas y añadimos upgradeInsecureRequests
+        // solo cuando CSP esté en modo enforce.
+        const d: Record<string, any> = {
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
@@ -49,11 +51,10 @@ app.use(
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'none'"],
-      };
-      // Only add upgradeInsecureRequests directive when CSP is enforced
-      if (!env.cspReportOnly) d.upgradeInsecureRequests = [];
-      return d;
-    })(),
+        };
+        if (!env.cspReportOnly) d.upgradeInsecureRequests = [];
+        return d as any; // cast para cuadrar con la firma de helmet
+      })(),
     },
     hsts: { maxAge: 15552000, includeSubDomains: true, preload: false },
     crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
