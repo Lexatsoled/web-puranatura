@@ -90,11 +90,78 @@ router.get('/', async (req, res, next) => {
       items = results[0];
       total = results[1];
     } catch (dbErr) {
-      // If DB is missing/corrupt in dev, avoid returning 500 to frontend UI —
-      // return an empty catalog and flag degraded state so UI can fallback.
-      logger.warn({ err: dbErr, route: req.originalUrl }, 'Products DB read failed, returning empty list');
-      items = [];
-      total = 0;
+      // If DB read fails in development try to recover gracefully:
+      // 1) attempt to seed the DB using the bundled seeder (dev-only)
+      // 2) re-query the DB
+      // 3) as a last resort load the legacy frontend data/products.ts module
+      //    (keeps the frontend functional for local development)
+      logger.warn(
+        { err: dbErr, route: req.originalUrl },
+        'Products DB read failed, trying seeding/fallback (dev)'
+      );
+
+      // Dev-only: try to seed and re-read if possible
+      if (process.env.NODE_ENV !== 'production') {
+        try {
+          logger.info(
+            'Attempting to seed products after DB read failure (dev)'
+          );
+          // dynamic import and cast to any to avoid ESM/CJS and typing friction in tests
+          const seedModule: any = await import('../../prisma/seed');
+          if (typeof seedModule?.seedProducts === 'function') {
+            await seedModule.seedProducts(prisma);
+            logger.info('Seeding completed, re-querying products (dev)');
+            const results = await Promise.all([
+              prisma.product.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip: (page - 1) * pageSize,
+                take: pageSize,
+              }),
+              prisma.product.count({ where }),
+            ]);
+            items = results[0];
+            total = results[1];
+          }
+        } catch (seedErr) {
+          logger.warn(
+            { err: seedErr },
+            'Seed attempt failed, falling back to legacy frontend data (dev)'
+          );
+
+          // Last-resort fallback -> use frontend bundled data/products.ts so UI remains useful locally
+          try {
+            const fallbackModule: any = await import('../../../data/products');
+            const legacy =
+              fallbackModule?.products ?? fallbackModule?.default ?? [];
+            // Normalize fallback records so they are stable across requests
+            items = legacy.map((p: any, idx: number) => ({
+              ...p,
+              // prefer explicit id/slug; otherwise build a deterministic fallback id
+              id: p.id ?? p.slug ?? `legacy-${idx}`,
+              // ensure a stable updatedAt so computed ETags stay consistent
+              updatedAt: p.updatedAt
+                ? new Date(p.updatedAt)
+                : new Date('1970-01-01T00:00:00.000Z'),
+            }));
+            total = Array.isArray(items) ? items.length : 0;
+            logger.warn(
+              'Using legacy products fallback due to DB failure (dev)'
+            );
+          } catch (legacyErr) {
+            logger.error(
+              { err: legacyErr },
+              'Legacy products fallback failed as well'
+            );
+            items = [];
+            total = 0;
+          }
+        }
+      } else {
+        // In production behave conservatively and surface empty list so callers can decide
+        items = [];
+        total = 0;
+      }
     }
 
     const catalogEtag = buildCatalogEtag(
@@ -115,8 +182,11 @@ router.get('/', async (req, res, next) => {
       .header('X-Total-Count', total.toString())
       .header('X-Page', page.toString())
       .header('X-Page-Size', pageSize.toString())
-  // indicate degraded state to help debugging in development
-  .header('X-Backend-Degraded', String(total === 0 && process.env.NODE_ENV !== 'production'))
+      // indicate degraded state to help debugging in development
+      .header(
+        'X-Backend-Degraded',
+        String(total === 0 && process.env.NODE_ENV !== 'production')
+      )
       .header('Cache-Control', 'public, max-age=300')
       .header('ETag', catalogEtag);
 

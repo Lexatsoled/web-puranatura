@@ -38,9 +38,10 @@ const products = [
   },
 ];
 
-async function main() {
+export async function seedProducts(prismaClient?: PrismaClient) {
+  const client = prismaClient ?? prisma;
   for (const product of products) {
-    await prisma.product.upsert({
+    await client.product.upsert({
       where: { slug: product.slug },
       create: product,
       update: product,
@@ -48,11 +49,14 @@ async function main() {
   }
 }
 
-main()
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// CLI-friendly entrypoint so this file remains runnable directly.
+if (require.main === module) {
+  seedProducts()
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
