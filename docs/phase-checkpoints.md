@@ -106,6 +106,7 @@ Notas generales:
   - Acciones realizadas:
     - Fixes inmediatos aplicados (CSP consolidation, merge conflict cleanups, prisma lock cleanup, normalize DB path).
     - Extracción de `RateLimiter` a `src/utils/rateLimiter.ts` y pruebas unitarias añadidas (`test/utils/rateLimiter.test.ts`) — paso inicial para Fase 6.
+    - Extracción de `AnalyticsService` desde `src/hooks/useAnalytics.ts` hacia `src/services/analyticsService.ts` y añadidos tests unitarios (`test/services/analyticsService.test.ts`) para reducir complejidad del hook.
   - Siguientes pasos:
     - Analizar `reports/complexity-report.json` y plan de refactor (Fase 5 → T5.x tasks).
     - Introducir tests adicionales para las utilidades y scripts nuevos (p. ej., limpieza de Prisma, check_products) para evitar regresiones. (Acción: añadida prueba unitaria `test/scripts/cleanup-prisma-tmp.test.ts` para validar `scripts/cleanup-prisma-tmp.cjs`.)
