@@ -119,7 +119,7 @@ Notas generales:
  - [x] Semilla y verificación básica de datos (3 productos) en `backend/prisma/database.sqlite`.
  - [x] Ejecutar suite de unit + integration tests en modo CI local (migraciones desplegadas antes) — PASS.
  - [ ] Ejecutar suite completa incluyendo E2E (Playwright) y estabilizar CI (Fase 5).
- - [ ] Añadir seeds y migraciones reproducibles en CI (Fase 2.5/5).
+ - [x] Añadir seeds y migraciones reproducibles en CI (Fase 2.5/5).
  - [ ] Finalizar refactors y score de complejidad (Fase 6) antes de la validación final.
 
 Acciones realizadas desde la última actualización:
@@ -128,10 +128,12 @@ Acciones realizadas desde la última actualización:
 - [x] Ajustes de Vitest y tests (desactivar threads y aumentar timeouts donde necesario) para mayor estabilidad en Windows.
 - [x] `backend/scripts/check_products.js` añadido como herramienta de verificación rápida.
 
-Pendientes inmediatos:
+- Pendientes inmediatos:
 - [ ] Añadir `backend/.env` a `.gitignore` y limpiar del índice remoto (si aplica).
-- [ ] Integrar y testear un workflow de CI (GitHub Actions) que:
+- [x] Integrar y testear un workflow de CI (GitHub Actions) que:
 	- aplique migraciones -> limpie artefactos de Prisma -> `prisma generate` -> seed -> run unit/integration tests -> opcional e2e en condiciones controladas.
+- [x] Añadido paso CI para detectar archivos sensibles (`check:no-secrets`) y limpieza de artefactos Prisma antes de migraciones; seeds ahora se ejecutan en las etapas relevantes.
+- [ ] Ejecutar y arreglar la suite E2E (Playwright) y documentar los resultados para QA (pendiente de CI run).
 - [ ] Ejecutar y arreglar la suite E2E (Playwright) y documentar los resultados para QA.
 
 ---

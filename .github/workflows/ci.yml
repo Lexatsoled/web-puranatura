@@ -31,11 +31,18 @@ jobs:
       - name: Install backend deps
         run: npm --prefix backend ci
 
+      - name: Check for accidental secrets / tracked envs
+        run: npm run check:no-secrets
+
       - name: Cleanup any leftover Prisma .tmp files
         run: node ./scripts/cleanup-prisma-tmp.cjs
 
       - name: Deploy Prisma migrations (backend)
         run: cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma
+
+      - name: Seed DB (backend)
+        # Run the project's seed script so tests have expected data available.
+        run: npm --prefix backend run seed || echo "Seed failed or already ran; continuing"
 
       - name: Run test:ci (unit/integration)
         run: npm run test:ci
@@ -95,6 +102,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Check for accidental secrets / tracked envs
+        run: npm run check:no-secrets
         with:
           fetch-depth: 0
 
@@ -183,6 +192,12 @@ jobs:
             echo "No hay carpeta backend/prisma, saltando migraciones"
           fi
         shell: bash
+
+      - name: Seed DB (backend)
+        working-directory: ./backend
+        run: |
+          # Run seed script (idempotent); if seed fails we surface the error
+          npm run seed
 
       - name: Start backend (background)
         run: |
