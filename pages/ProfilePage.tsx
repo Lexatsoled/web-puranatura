@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import React from 'react';
+import useProfile from '../src/hooks/useProfile';
 import { motion } from 'framer-motion';
 
 const ProfilePage: React.FC = () => {
-  const { user, updateProfile, isLoading } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
-    phone: user?.phone || '',
-    email: user?.email || '',
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState('');
+  const {
+    user,
+    isLoading,
+    isEditing,
+    setIsEditing,
+    formData,
+    setFormData,
+    isSaving,
+    saveMessage,
+    handleInputChange,
+    handleSave,
+    handleCancel,
+    memberSinceText,
+  } = useProfile();
 
   if (!user) {
     return (
@@ -29,54 +33,7 @@ const ProfilePage: React.FC = () => {
     );
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-    setSaveMessage('');
-
-    try {
-      const success = await updateProfile({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone || undefined,
-      });
-
-      if (success) {
-        setIsEditing(false);
-        setSaveMessage('Perfil actualizado correctamente');
-        setTimeout(() => setSaveMessage(''), 3000);
-      } else {
-        setSaveMessage('Error al actualizar el perfil');
-      }
-    } catch {
-      setSaveMessage('Error al actualizar el perfil');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setFormData({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone || '',
-      email: user.email,
-    });
-    setIsEditing(false);
-    setSaveMessage('');
-  };
-
-  const memberSinceText = (() => {
-    if (!user.createdAt) return 'Reciente';
-    const parsed = new Date(user.createdAt);
-    return Number.isNaN(parsed.getTime())
-      ? 'Reciente'
-      : parsed.toLocaleDateString();
-  })();
+  // behaviour is managed by useProfile hook
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
