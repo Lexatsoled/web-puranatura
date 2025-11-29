@@ -4,9 +4,10 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 // Set test database URL
 process.env.BACKEND_ENV_PATH = './backend/.env';
-process.env.DATABASE_URL = "file:./backend/test-database.sqlite";
-process.env.JWT_SECRET = "test-jwt-secret";
-process.env.JWT_REFRESH_SECRET = "test-jwt-refresh-secret";
+process.env.DATABASE_URL = 'file:./backend/test-database.sqlite';
+// Use short, low-entropy placeholders for tests to avoid gitleaks false positives
+process.env.JWT_SECRET = 'test';
+process.env.JWT_REFRESH_SECRET = 'refresh';
 
 import { app, closeApp } from '../backend/src/app';
 // NOTE: migrations are applied globally before tests (test:ci runs a

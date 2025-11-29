@@ -5,6 +5,7 @@ import {
   sanitizeRequestMiddleware,
   sanitizeResponseMiddleware,
 } from './sanitizationMiddleware';
+import RateLimiter from './rateLimiter';
 
 const apiBaseUrl =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
@@ -23,56 +24,9 @@ const api = axios.create({
 api.interceptors.request.use(sanitizeRequestMiddleware);
 api.interceptors.response.use(sanitizeResponseMiddleware);
 
-// Configuración de rate limiting
-interface RateLimitConfig {
-  maxRequests: number; // Número máximo de solicitudes
-  timeWindow: number; // Ventana de tiempo en milisegundos
-  retryAfter: number; // Tiempo de espera antes de reintentar en milisegundos
-}
+// RateLimiter se exporta desde src/utils/rateLimiter.ts — lo importamos
 
-const defaultRateLimitConfig: RateLimitConfig = {
-  maxRequests: 60, // 60 solicitudes
-  timeWindow: 60000, // por minuto
-  retryAfter: 1000, // esperar 1 segundo antes de reintentar
-};
-
-// Clase para manejar el rate limiting
-class RateLimiter {
-  private requests: number[] = [];
-  private config: RateLimitConfig;
-
-  constructor(config: Partial<RateLimitConfig> = {}) {
-    this.config = { ...defaultRateLimitConfig, ...config };
-  }
-
-  async checkRateLimit(): Promise<boolean> {
-    const now = Date.now();
-
-    // Limpiar solicitudes antiguas
-    this.requests = this.requests.filter(
-      (timestamp) => now - timestamp < this.config.timeWindow
-    );
-
-    // Verificar si excedemos el límite
-    if (this.requests.length >= this.config.maxRequests) {
-      return false;
-    }
-
-    // Registrar nueva solicitud
-    this.requests.push(now);
-    return true;
-  }
-
-  async waitForSlot(): Promise<void> {
-    while (!(await this.checkRateLimit())) {
-      await new Promise((resolve) =>
-        setTimeout(resolve, this.config.retryAfter)
-      );
-    }
-  }
-}
-
-// Instancia global del rate limiter
+// Instancia global del rate limiter (usar implementación centralizada)
 const rateLimiter = new RateLimiter();
 
 // Hook personalizado para hacer peticiones a la API
