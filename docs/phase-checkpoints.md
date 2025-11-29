@@ -1,6 +1,6 @@
 ﻿# Checkpoints del plan maestro
 
-Última actualización: 2025-11-28
+Última actualización: 2025-11-29
 
 Este documento centraliza el estado actual del "Plan Maestro" — checkpoints por fases, evidencias concretas y próximos pasos. Está pensado para ser el único punto de verdad (source-of-truth) para el progreso del plan en este repositorio.
 
@@ -53,8 +53,8 @@ Notas generales:
 	- Riesgos / pendientes:
 		- `backend/.env` local está presente solo para dev; confirmar política para CI/producción (usar secrets manager/variables CI). Evitar subir `.env` con secretos.
 	- Siguientes pasos:
-		- Añadir seed en CI (si procede) o documentar migraciones/seed como parte del pipeline (usar `DATABASE_URL` de CI).
-		- Ejecutar suites de integración / e2e completas para validar contrato frontend-backend.
+		- Asegurar seeds idempotentes y documentar los pasos para CI (se añadieron seeds al workflow de quality en CI).
+		- Ejecutar suites de integración / e2e completas para validar contrato frontend-backend y ajustar fixtures si aparece flakiness.
 
 ## Fase 3 — Identificación de problemas (Estado: ✅ Completado)
 - Objetivo: Mapear y priorizar bugs, vulnerabilidades y puntos de mejora.
@@ -83,10 +83,9 @@ Notas generales:
 			- Script local de limpieza para artefactos temporales de Prisma (quita `.tmp` problemáticos antes de `prisma generate`).
 			- `vitest.config.ts` configurado para evitar ejecución multi-hilo (threads=false) y varios tests backend aumentaron timeouts en hooks `beforeAll` para reducir flakiness.
 			- Se eliminó la práctica de ejecutar migraciones por cada test (migraciones centralizadas previo a la suite).
-		- Resultado: la suite de unit + integration tests pasó localmente en modo CI (ver registro de ejecución: `npm run test:ci`, 33 tests pasaron durante las sesiones recientes). Las pruebas E2E también pasan en ejecución local y el workflow CI ha sido actualizado para ejecutar seeds y E2E en la etapa de quality.
+		- Resultado: la suite de unit + integration tests pasó localmente en modo CI (ver registro de ejecución: `npm run test:ci`, 33 tests pasaron durante las sesiones recientes). Las pruebas E2E pasaron en ejecución local; además el workflow CI ha sido actualizado para ejecutar limpieza de artefactos Prisma, despliegue de migraciones y seeds antes de unit/integration + Playwright (quality job).
 	- Problemas / pendientes:
-	- Esperar la ejecución del pipeline en Pull Request para validar E2E/Quality en runners (CI). Si el PR CI detecta fallos, se corregirán y re-run hasta estabilizar en CI.
-		- Asegurar CI/runner que ejecute migraciones & seed para entorno de tests.
+	- Validación final: esperar la ejecución del pipeline en el Pull Request para confirmar que la orquestación completa (migraciones -> seed -> unit/integration -> e2e) es estable en runners. Si aparecen fallos en CI, se corregirán y re-ejecutará hasta estabilizar.
 	- Siguientes pasos prioritarios:
 		- Ejecutar los tests e2e (Playwright) localmente y en CI; documentar fallos y arreglos.
 		- Añadir y documentar un pequeño script de limpieza de binarios Prisma y confirmar su uso en CI antes de `prisma generate`/`prisma migrate`.
@@ -117,7 +116,7 @@ Notas generales:
 - [x] Regenerar Prisma client + resolver bloqueos de binarios nativos (Fase 2.5).
  - [x] Semilla y verificación básica de datos (3 productos) en `backend/prisma/database.sqlite`.
  - [x] Ejecutar suite de unit + integration tests en modo CI local (migraciones desplegadas antes) — PASS.
- - [ ] Ejecutar suite completa incluyendo E2E (Playwright) y estabilizar CI (Fase 5).
+ - [x] Ejecutar suite completa incluyendo E2E (Playwright) y preparar workflow CI para E2E.
  - [x] Añadir seeds y migraciones reproducibles en CI (Fase 2.5/5).
  - [ ] Finalizar refactors y score de complejidad (Fase 6) antes de la validación final.
 
@@ -132,8 +131,7 @@ Acciones realizadas desde la última actualización:
 - [x] Integrar y testear un workflow de CI (GitHub Actions) que:
 	- aplique migraciones -> limpie artefactos de Prisma -> `prisma generate` -> seed -> run unit/integration tests -> opcional e2e en condiciones controladas.
 - [x] Añadido paso CI para detectar archivos sensibles (`check:no-secrets`) y limpieza de artefactos Prisma antes de migraciones; seeds ahora se ejecutan en las etapas relevantes.
-- [ ] Ejecutar y arreglar la suite E2E (Playwright) y documentar los resultados para QA (pendiente de CI run).
-- [ ] Ejecutar y arreglar la suite E2E (Playwright) y documentar los resultados para QA.
+ - [ ] Esperar la validación del pipeline en PR (CI run) — si CI falla, arreglar y re-ejecutar.
 
 ---
 
