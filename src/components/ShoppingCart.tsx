@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OptimizedImage } from './OptimizedImage';
 
@@ -33,6 +33,8 @@ interface ShoppingCartProps {
   maxQuantityPerItem?: number;
 }
 
+import useShoppingCart from '../hooks/useShoppingCart';
+
 const ShoppingCart: React.FC<ShoppingCartProps> = ({
   items,
   onUpdateQuantity,
@@ -45,56 +47,26 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   taxRate = 0,
   maxQuantityPerItem = 99,
 }) => {
-  // Memoizar cálculos costosos
-  const { subtotal, discount, tax, total, totalItems } = useMemo(() => {
-    const subtotal = items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    const discount = items.reduce(
-      (acc, item) => acc + (item.discount || 0) * item.quantity,
-      0
-    );
-    const taxableAmount = subtotal - discount;
-    const tax = taxableAmount * taxRate;
-    const total = taxableAmount + tax + shippingCost;
-    const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
-    const totalWeight = items.reduce(
-      (acc, item) => acc + (item.weight || 0) * item.quantity,
-      0
-    );
-
-    return {
-      subtotal,
-      discount,
-      tax,
-      total,
-      totalItems,
-      totalWeight,
-    };
-  }, [items, taxRate, shippingCost]);
+  const {
+    subtotal,
+    discount,
+    tax,
+    total,
+    totalItems,
+    totalWeight,
+    handleQuantityChange,
+    handleVariantChange,
+  } = useShoppingCart({
+    items,
+    taxRate,
+    shippingCost,
+    maxQuantityPerItem,
+    onUpdateQuantity,
+    onUpdateVariant,
+  });
 
   // Manejadores de eventos optimizados
-  const handleQuantityChange = useCallback(
-    (itemId: string, newQuantity: number) => {
-      const item = items.find((i) => i.id === itemId);
-      if (!item) return;
-
-      const validQuantity = Math.min(
-        Math.max(1, newQuantity),
-        item.maxQuantity || maxQuantityPerItem
-      );
-      onUpdateQuantity(itemId, validQuantity);
-    },
-    [items, maxQuantityPerItem, onUpdateQuantity]
-  );
-
-  const handleVariantChange = useCallback(
-    (itemId: string, variantId: string) => {
-      onUpdateVariant?.(itemId, variantId);
-    },
-    [onUpdateVariant]
-  );
+  // handlers provided by useShoppingCart
 
   // Animaciones de elementos
   const containerVariants = {
