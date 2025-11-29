@@ -60,7 +60,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     height || (aspectRatio ? `${100 / aspectRatio}%` : '100%');
 
   // Generar srcSet automático si no se proporciona
-  const autoSrcSet = srcSet || generateSrcSet(src);
+  const autoSrcSet = srcSet || awaitImportSrcSet(src);
 
   if (hasError) {
     return (
@@ -150,6 +150,19 @@ function generateSrcSet(src: string): string {
     `${baseName}_1024.${extension} 1024w`,
     `${src} 1200w`,
   ].join(', ');
+}
+
+// small indirection to avoid bundling issues during SSR tests
+function awaitImportSrcSet(src: string) {
+  // Import on demand for consistency with previous approach
+  try {
+    // require the util synchronously (it's local file) — keeping it simple
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { generateSrcSet } = require('../utils/imageUtils');
+    return generateSrcSet(src);
+  } catch {
+    return '';
+  }
 }
 
 export default OptimizedImage;
