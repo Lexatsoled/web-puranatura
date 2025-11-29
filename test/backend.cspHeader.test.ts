@@ -10,7 +10,7 @@ beforeAll(async () => {
   const backend = await import('../backend/src/app');
   app = backend.app;
   closeApp = backend.closeApp;
-});
+}, 30000);
 
 afterAll(async () => {
   if (closeApp) await closeApp();

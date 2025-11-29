@@ -1,4 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Run lightweight secrets scan before allowing commit
+node scripts/run-gitleaks.cjs || { echo "gitleaks found potential secrets — aborting commit"; exit 1; }
+
+# Quick repo-level sensitive-file check
+npm run check:no-secrets || { echo "sensitive files detected — aborting commit"; exit 1; }
+
 npm run lint-staged && npm run check:complexity

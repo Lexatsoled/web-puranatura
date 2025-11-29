@@ -14,7 +14,7 @@ Preparar al equipo para ejecutar un experimento de 48 horas en staging con CSP e
 - [ ] Type-check
 - [ ] Tests unitarios y de integración (vitest)
 - [ ] /metrics expone contadores: csp_reports_total y csp_reports_blocked_total
-- [ ] Infra (manifiestos k8s) añadidos en infra/ y workflow manual en .github/workflows/deploy-staging.yml
+- [ ] Infra (manifiestos de orquestador — opcional) añadidos en infra/ y workflow manual en .github/workflows/deploy-staging.yml
 
 ## Pasos para ejecutar localmente antes de push
 
@@ -29,7 +29,7 @@ Preparar al equipo para ejecutar un experimento de 48 horas en staging con CSP e
    - npm run dev
    - curl http://127.0.0.1:3001/metrics | Select-String csp_reports_total
 
-3. Si quieres desplegar en staging manualmente, utiliza infra/k8s/staging-deployment.yaml y aplica la manifest con kubectl (asegúrate del context y namespace).
+3. Si quieres desplegar en staging manualmente, utiliza los manifiestos de ejemplo en `infra/` y aplica la manifest con la herramienta CLI o consola de tu proveedor (asegúrate del context/target y namespace/entorno).
 
 ## Notas operacionales
 

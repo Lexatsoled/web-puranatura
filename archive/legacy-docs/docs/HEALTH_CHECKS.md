@@ -6,7 +6,7 @@ Este backend expone tres endpoints orientados a orquestadores y plataformas obse
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /health`       | Probe de **liveness + readiness combinados**. Responde `200` cuando todas las comprobaciones internas pasan, `503` en caso contrario. |
 | `GET /health/ready` | Readiness probe que valida sólo dependencias críticas (base de datos y Redis). Devuelve `503` cuando una de ellas no está disponible. |
-| `GET /health/live`  | Liveness básica para Kubernetes/Docker. Siempre responde `200` con `status: "alive"` y el uptime actual.                              |
+| `GET /health/live`  | Liveness básica para orquestadores / plataformas de contenedores. Siempre responde `200` con `status: "alive"` y el uptime actual.      |
 
 ## Formato de respuesta (`/health`, `/health/ready`)
 
@@ -45,9 +45,9 @@ Cada check aporta un objeto con `healthy`, `durationMs`, y `error` cuando algo s
 
 Las constantes de timeout (`5s` para DB, `3s` para Redis y `2s` para filesystem) están documentadas en `backend/src/config/health.ts`.
 
-## Kubernetes / Docker
+## Container probe examples
 
-Ejemplo de probes recomendadas:
+Ejemplo de probes recomendadas para orquestadores o plataformas de contenedores:
 
 ```yaml
 livenessProbe:

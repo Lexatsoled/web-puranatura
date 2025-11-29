@@ -1,4 +1,62 @@
 name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache node modules (root)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-npm-root-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install root deps
+        run: npm ci
+
+      - name: Install backend deps
+        run: npm --prefix backend ci
+
+      - name: Cleanup any leftover Prisma .tmp files
+        run: node ./scripts/cleanup-prisma-tmp.cjs
+
+      - name: Deploy Prisma migrations (backend)
+        run: cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma
+
+      - name: Run test:ci (unit/integration)
+        run: npm run test:ci
+
+  e2e:
+    needs: tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm ci
+      - name: Start backend & run Playwright E2E
+        run: |
+          npm run build
+          node scripts/run-e2e.cjs
+name: CI
 on:
   push:
     branches:

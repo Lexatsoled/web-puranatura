@@ -33,6 +33,17 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
   const portToTry = startPort + attempt;
   try {
     server = startServer(portToTry);
+    // Quick DB sanity check after server starts — helps surface problems
+    (async () => {
+      try {
+        const c = await prisma.product.count();
+        // eslint-disable-next-line no-console
+        console.log(`[startup] DB product count: ${c}`);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('[startup] DB check failed:', err && (err as any).message ? (err as any).message : err);
+      }
+    })();
     break; // Éxito, salir del bucle.
   } catch (err: any) {
     if (err && err.code === 'EADDRINUSE') {

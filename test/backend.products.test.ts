@@ -1,7 +1,20 @@
 // @vitest-environment node
 import request from 'supertest';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+
+// Set test database URL
+process.env.BACKEND_ENV_PATH = './backend/.env';
+process.env.DATABASE_URL = "file:./backend/test-database.sqlite";
+process.env.JWT_SECRET = "test-jwt-secret";
+process.env.JWT_REFRESH_SECRET = "test-jwt-refresh-secret";
+
 import { app, closeApp } from '../backend/src/app';
+import { execSync } from 'child_process';
+
+beforeAll(async () => {
+  // Run prisma migrate for test database
+  execSync('cd backend && npx prisma migrate dev --name test', { stdio: 'inherit' });
+});
 
 afterAll(async () => {
   await closeApp();
