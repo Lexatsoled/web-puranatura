@@ -21,12 +21,28 @@ function removeTmpFiles(baseDir) {
   return removed;
 }
 
-const candidates = [
-  path.join(__dirname, '..', 'backend', 'node_modules', '.prisma', 'client'),
-  path.join(__dirname, '..', 'backend', 'node_modules', '@prisma', 'client'),
-  path.join(__dirname, '..', 'node_modules', '.prisma', 'client'),
-  path.join(__dirname, '..', 'node_modules', '@prisma', 'client')
-];
+// Allow overriding candidate directories from an environment variable for
+// testability and flexible CI usage. Provide a JSON array in
+// PRISMA_TMP_CANDIDATES, or fallback to the default list.
+let candidates = [];
+if (process.env.PRISMA_TMP_CANDIDATES) {
+  try {
+    const parsed = JSON.parse(process.env.PRISMA_TMP_CANDIDATES);
+    if (Array.isArray(parsed)) candidates = parsed.map((p) => path.resolve(p));
+  } catch (e) {
+    // fall back to default if parsing fails
+    console.warn('PRISMA_TMP_CANDIDATES parse failed, using default paths');
+  }
+}
+
+if (!candidates.length) {
+  candidates = [
+    path.join(__dirname, '..', 'backend', 'node_modules', '.prisma', 'client'),
+    path.join(__dirname, '..', 'backend', 'node_modules', '@prisma', 'client'),
+    path.join(__dirname, '..', 'node_modules', '.prisma', 'client'),
+    path.join(__dirname, '..', 'node_modules', '@prisma', 'client'),
+  ];
+}
 
 let total = 0;
 for (const c of candidates) {
