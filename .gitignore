@@ -45,8 +45,9 @@ backend/prisma/**/test-*.sqlite
 # Artefactos y binarios locales
 .cache/
 reports/tmp/
+# Ignore all reports by default (we generate them in CI and archive as artifacts)
 reports/
-!reports/
+# Keep axe-report.json tracked because we rely on it for local QA
 !reports/axe-report.json
 .tmp-lh/
 .lighthouse-temp/
