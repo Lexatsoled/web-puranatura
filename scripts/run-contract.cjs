@@ -149,7 +149,7 @@ const run = async () => {
 
   const fetchLogin = () =>
     new Promise((resolve, reject) => {
-      const body = JSON.stringify({ username: 'contract', password: 'secret' });
+      const body = JSON.stringify({ username: 'contract', password: 'contract-dummy-pass' });
       const req = http.request(
         {
           hostname: HOST,
@@ -190,7 +190,7 @@ const run = async () => {
 
   const fetchRefresh = () =>
     new Promise((resolve, reject) => {
-      const body = JSON.stringify({ refreshToken: 'contract-refresh-token' });
+      const body = JSON.stringify({ refreshToken: 'contract-refresh-dummy' });
       const req = http.request(
         {
           hostname: HOST,
@@ -239,8 +239,8 @@ const run = async () => {
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            Authorization: 'Bearer contract-mock',
-            Cookie: 'token=contract-mock-token',
+            Authorization: 'Bearer contract-mock-dummy',
+            Cookie: 'token=contract-mock-dummy',
           },
           timeout: 5000,
         },
