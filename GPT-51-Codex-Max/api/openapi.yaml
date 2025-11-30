@@ -1,0 +1,199 @@
+openapi: 3.1.0
+info:
+  title: PuraNatura API
+  version: 0.1.0
+  description: Especificación OpenAPI 3.1 (inicial) para PuraNatura — fase 2 (contratos y tests).
+  x-spec-status: draft
+  contact:
+    name: PuraNatura Team
+    email: ops+security@puranatura.example
+servers:
+  - url: https://api.example.com
+    description: API de producción (placeholder)
+  - url: http://localhost:3000
+    description: Desarrollo local
+tags:
+  - name: health
+    description: Health / diagnostic endpoints
+  - name: products
+    description: Product catalog endpoints
+paths:
+  /api/health:
+    get:
+      summary: Estado del backend
+      description: Devuelve el estado operativo del backend y el conteo de productos.
+      operationId: getHealth
+      tags:
+        - health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+
+  /api/products:
+    get:
+      summary: Lista de productos (catálogo)
+      description: Devuelve una lista paginada de productos.
+      operationId: listProducts
+      tags:
+        - products
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista paginada de productos
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+            X-Page:
+              schema:
+                type: integer
+            X-Page-Size:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+    post:
+      summary: Crear producto (admin)
+      description: Crea un nuevo producto (acceso admin requerido).
+      operationId: createProduct
+      tags:
+        - products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+      responses:
+        '201':
+          description: Producto creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /api/products/{id}:
+    get:
+      summary: Obtener producto por id
+      description: Recupera un producto por su identificador.
+      operationId: getProductById
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+
+components:
+  schemas:
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        timestamp:
+          type: string
+          format: date-time
+        productCount:
+          type: integer
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: float
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        stock:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProductCreate:
+      type: object
+      required: [name, slug, price]
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        imageUrl:
+          type: string
+          format: uri
+        stock:
+          type: integer
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+
+security:
+  - cookieAuth: []
