@@ -104,7 +104,7 @@ Prioridad alta: terminar hardening backend, auth, CSRF, rate limiting, SAST/DAST
 Iniciamos formalmente Fase 2 el 2025-11-30: priorizar OpenAPI completo, migraciones versionadas de Prisma y contratos API. He creado issues iniciales en el repositorio para T2.1..T2.6 (ver enlaces en la sección a continuación) para trabajar de forma trazable.
 
 - [ ] T2.1 OpenAPI 3.1 completo
-  - Estado: EN PROGRESO — Prioridad alta. `openapi.yaml` inicial añadido (PR #39). Se han añadido linter (Spectral) y job de contract-tests (Prism) en CI.
+  - Estado: EN PROGRESO — Prioridad alta. `openapi.yaml` inicial añadido (PR #39). Se han añadido linter (Spectral) y job de contract-tests (Prism) en CI. Continuamos incrementando la cobertura de la spec — añadidos endpoints de autenticación (`/api/auth`) y pruebas de contrato relacionadas en PR #40.
   - Issue: https://github.com/Lexatsoled/web-puranatura/issues/33 — PR #39: https://github.com/Lexatsoled/web-puranatura/pull/39
 - [ ] T2.2 Prisma: migraciones versionadas y estabilidad
   - Estado: PENDIENTE — definir folder de migraciones versionadas, asegurar procesos de CI para aplicar migraciones en staging.
