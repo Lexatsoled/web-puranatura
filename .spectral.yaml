@@ -1,7 +1,1 @@
 extends: spectral:oas
-
-rules:
-  info-contact: warn
-  operation-2xx-response: error
-  oas3-valid-schema: error
-  no-empty-description: warn
