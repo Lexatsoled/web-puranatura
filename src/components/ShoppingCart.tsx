@@ -53,7 +53,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     tax,
     total,
     totalItems,
-    totalWeight,
     handleQuantityChange,
     handleVariantChange,
   } = useShoppingCart({

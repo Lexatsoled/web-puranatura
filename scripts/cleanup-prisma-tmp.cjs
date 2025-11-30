@@ -12,10 +12,17 @@ function removeTmpFiles(baseDir) {
   for (const f of files) {
     const full = path.join(baseDir, f);
     if (f.includes('.tmp') || f.endsWith('.tmp')) {
-      try { fs.unlinkSync(full); removed++; } catch (err) { /* best-effort */ }
+      try {
+        fs.unlinkSync(full);
+        removed++;
+      } catch {
+        /* best-effort */
+      }
     } else {
       // Recurse into directories
-      try { if (fs.statSync(full).isDirectory()) removed += removeTmpFiles(full); } catch (err) {}
+      try {
+        if (fs.statSync(full).isDirectory()) removed += removeTmpFiles(full);
+      } catch {}
     }
   }
   return removed;
@@ -29,7 +36,7 @@ if (process.env.PRISMA_TMP_CANDIDATES) {
   try {
     const parsed = JSON.parse(process.env.PRISMA_TMP_CANDIDATES);
     if (Array.isArray(parsed)) candidates = parsed.map((p) => path.resolve(p));
-  } catch (e) {
+  } catch {
     // fall back to default if parsing fails
     console.warn('PRISMA_TMP_CANDIDATES parse failed, using default paths');
   }

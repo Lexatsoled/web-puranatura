@@ -11,7 +11,7 @@ param(
   [string]$Repo = 'Lexatsoled/web-puranatura'
 )
 
-$names = @('JWT_SECRET','JWT_REFRESH_SECRET','GEMINI_API_KEY','BACKUP_ENCRYPTION_KEY','SENTRY_DSN','REDIS_PASSWORD')
+ $names = @('JWT_SECRET','JWT_REFRESH_SECRET','BACKUP_ENCRYPTION_KEY','SENTRY_DSN','REDIS_PASSWORD')
 
 foreach ($n in $names) {
   $bytes = New-Object byte[] 48

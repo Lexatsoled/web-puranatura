@@ -13,4 +13,7 @@ export const registerRoutes = (app: Express) => {
   app.use('/api/security', cspReportsRouter);
   app.use('/api/products', productsRouter);
   app.use('/api/orders', ordersRouter);
+  // /api/ai removed — this project intentionally does not include a built-in
+  // LLM provider integration. Use external orchestration (e.g. n8n webhooks)
+  // if you need to add AI provider integration later.
 };

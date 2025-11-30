@@ -8,7 +8,7 @@
 - JWT_SECRET / JWT_REFRESH_SECRET: únicos por env; rotación trimestral
 - JWT_EXPIRES_IN: 15m; JWT_REFRESH_EXPIRES_IN: 7d
 - DATABASE_URL: sqlite (dev), postgres (stage/prod)
-- GEMINI_API_KEY: solo en stage/prod, nunca en repo
+ - PROVIDER_API_KEY (e.g. keys for external services): only in stage/prod, never in repo. Prefer vault/CI secrets and rotate regularly.
 - ADMIN_EMAILS: lista minificada
 - MFA_STATIC_CODE: solo para QA; ausente en prod
 

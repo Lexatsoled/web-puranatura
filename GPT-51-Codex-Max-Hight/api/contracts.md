@@ -27,8 +27,10 @@
 
 ## AI
 
-- POST `/api/ai/generate-text`: body `{prompt}`; valida longitud; timeout 10s; rate-limit 20/5m.
-- Respuesta 200: `{generatedText}`; 400 prompt vacío; 500 fallback sin filtrar secretos.
+The project no longer exposes a built-in `/api/ai` endpoint or performs
+direct calls to third-party LLM providers. If you need AI functionality
+in the future, integrate via an external webhook/orchestration system (e.g.
+n8n) and keep provider keys out of the repo.
 
 ## Health / Metrics
 

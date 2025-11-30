@@ -22,11 +22,19 @@ for (const p of checks) {
 }
 
 if (found.length > 0) {
-  console.error('[check-no-secrets] Se detectaron archivos sensibles en el repositorio:');
-  found.forEach(f => console.error('  -', f));
-  console.error('\nPor seguridad, elimina estos archivos del repositorio y purga el historial (BFG/git filter-repo).');
-  console.error('Asegúrate de rotar las claves/secretos afectados (JWT, GEMINI_API_KEY, etc.).');
+  console.error(
+    '[check-no-secrets] Se detectaron archivos sensibles en el repositorio:'
+  );
+  found.forEach((f) => console.error('  -', f));
+  console.error(
+    '\nPor seguridad, elimina estos archivos del repositorio y purga el historial (BFG/git filter-repo).'
+  );
+  console.error(
+    'Asegúrate de rotar las claves/secretos afectados (JWT, provider API keys, etc.).'
+  );
   process.exit(1);
 }
 
-console.log('[check-no-secrets] OK — No se han detectado archivos sensibles en la raíz del repo.');
+console.log(
+  '[check-no-secrets] OK — No se han detectado archivos sensibles en la raíz del repo.'
+);

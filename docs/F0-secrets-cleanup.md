@@ -17,12 +17,12 @@ Pasos recomendados para eliminar secretos de la historia de Git (manual, requier
 
 ### Acción: rotación de secretos (automática)
 
-  - JWT_SECRET
-  - JWT_REFRESH_SECRET
-  - GEMINI_API_KEY
-  - BACKUP_ENCRYPTION_KEY
-  - SENTRY_DSN
-  - REDIS_PASSWORD
+- JWT_SECRET
+- JWT_REFRESH_SECRET
+PROVIDER_API_KEY (e.g. LLM/provider keys)
+- BACKUP_ENCRYPTION_KEY
+- SENTRY_DSN
+- REDIS_PASSWORD
 
 Notas: después de rotación se deben desplegar estos cambios (staging → smoke tests → production). Asegúrate de que el servicio acepte la nueva `JWT_SECRET` (usa la estrategia dual-key si quieres evitar logout forzado).
 
@@ -35,6 +35,7 @@ Notas: después de rotación se deben desplegar estos cambios (staging → smoke
 IMPORTANTE: Esta operación es destructiva — todos los colaboradores deben reclonar el repositorio y re-sincronizar sus ramas locales.
 
 Ejemplo de instrucción para el equipo:
+
 ```text
 git clone git@github.com:Lexatsoled/web-puranatura.git
 # o si ya tienen repo local:
@@ -44,7 +45,7 @@ git clone git@github.com:Lexatsoled/web-puranatura.git
 
 Recomendación: coordinar con SRE/Security y ejecutar las pruebas de staging inmediatamente después del reclonado.
 
-1. Rotar / revocar inmediatamente todos los secretos que estuvieron expuestos: JWT secret, GEMINI_API_KEY, SENTRY_DSN, etc. (treat as compromised).
+1. Rotar / revocar inmediatamente todos los secretos que estuvieron expuestos: JWT secret, provider API keys (e.g. LLM/provider keys), SENTRY_DSN, etc. (treat as compromised).
 2. Purga de Git history (elige una herramienta):
    - Recomendado: usar `git filter-repo` (preferido) o BFG. Ejemplo con git filter-repo:
      - git clone --mirror <repo-url>

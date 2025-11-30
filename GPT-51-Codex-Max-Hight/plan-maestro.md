@@ -17,24 +17,26 @@ principios: seguridad-primero, prueba-antes-de-avanzar, evidencia medible
 ## Fase 0 — Preparación y contención (2-3 días)
 
 - T0.1 Inventario y hashes (refrescar `inventory.json`) y comparar con baseline.
-- T0.2 Secretos: eliminar .env/.sqlite versionados; rotar JWT/GEMINI; reforzar .gitignore; activar gitleaks pre-commit y en CI.
+- T0.2 Secretos: eliminar .env/.sqlite versionados; rotar JWT y otras claves/provider keys; reforzar .gitignore; activar gitleaks pre-commit y en CI.
 - T0.3 Congelar deploy hasta cerrar críticos; RFC del alcance; habilitar CSP en report-only.
 - Entregables: plan de trabajo aprobado, secrets rotados, CSP report-only activa, respaldo cifrado (RPO 24h) probado.
+
+> Nota: Para seguimiento fino y evidencia del progreso, consulta `CheckList.md` en esta misma carpeta; contiene el estado actual, evidencia y próximos pasos por tarea.
 
 ## Fase 1 — Seguridad & Estabilidad (5-7 días)
 
 - T1.1 Backend hardening: helmet CSP explícita (dominios GA/FB/Maps), HSTS, rate-limit por ruta, body limit 1MB, CORS mínimo, cookies Secure/HttpOnly/SameSite=strict.
 - T1.2 AuthN/AuthZ: zod en entradas, roles admin/user, bloqueo login (ya), MFA estática → dinámica; refresh token rotación.
-- T1.3 Validación/sanitización: zod en /products, /orders, /ai; DOMPurify en frontend; escape server-side.
+	- T1.3 Validación/sanitización: zod en /products, /orders; DOMPurify en frontend; escape server-side.
 - T1.4 Gestión de secretos y dependencias: vault/gh-secrets; SBOM (CycloneDX); npm audit + overrides documentados.
-- T1.5 Seguridad de IA: no log de claves; timeout y rate-limit en /api/ai; validación prompt y tamaño.
+- T1.5 Seguridad de IA: ENABLED via external integrations only — project removed built-in /api/ai; any LLM integration should be handled externally and follow secrets best-practices.
 - T1.6 DAST/SAST: eslint-plugin-security, trivy fs, zap-baseline; gitleaks en PR.
 - T1.7 Supply chain: attestation/firmas (cosign) opcional; política de licencias (allowlist).
 - Entregables: security-playbook actualizado, threat-model, CSP enforce lista, report SAST/DAST adjunto.
 
 ## Fase 2 — Datos, API y contratos (5-7 días)
 
-- T2.1 OpenAPI 3.1 completa (auth/products/orders/health/analytics/ai) + tests de contrato (Prism/Dredd).
+	- T2.1 OpenAPI 3.1 completa (auth/products/orders/health/analytics) + tests de contrato (Prism/Dredd).
 - T2.2 Prisma: migraciones versionadas; índices para products (createdAt), orders (userId, createdAt DESC), stock decrements transaccionales.
 - T2.3 Catálogo: paginación defensiva, búsqueda insensible, ETag + Cache-Control 5m; fallback catálogo lazy import (remover bundle gordo).
 - T2.4 Integridad: seeds idempotentes; validación de cantidades/stock; respuestas normalizadas `{code,message,traceId}`.
@@ -89,7 +91,7 @@ principios: seguridad-primero, prueba-antes-de-avanzar, evidencia medible
 
 ## RACI (resumen)
 
-- BE: rutas, Prisma, auth/ai/analytics, observabilidad backend.
+- BE: rutas, Prisma, auth/analytics, observabilidad backend.
 - FE: UX/A11y/perf, stores, modales, lazy/catalog.
 - SRE: CI/CD, IaC, monitoreo, backups, canary/blue-green.
 - Sec: secretos, CSP/CORS, SAST/DAST, SBOM/licencias.

@@ -1,0 +1,40 @@
+name: 'Block accidental .env commits'
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  check-for-env-files:
+    runs-on: ubuntu-latest
+    name: Fail CI if .env files are added
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Search for forbidden env files
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden=(".env" "backend/.env" "*.secret" "*.key")
+          found=()
+          for p in "${forbidden[@]}"; do
+            matches=$(git ls-files --others --cached --exclude-standard --full-name | grep -E "(^$p$|$p$)" || true)
+            if [ -n "$matches" ]; then
+              found+=($matches)
+            fi
+          done
+          # Also search the whole tree for files literally named .env
+          env_hits=$(git ls-files --full-name | grep -E "(^|/)(\.env|backend/\.env)$" || true)
+          if [ -n "$env_hits" ]; then
+            found+=($env_hits)
+          fi
+
+          if [ ${#found[@]} -ne 0 ]; then
+            echo "ERROR: se han detectado archivos que contienen secretos (p. ej. .env):"
+            printf "%s\n" "${found[@]}"
+            echo "Por seguridad, por favor use GitHub Secrets / Vault y elimine estos archivos del repo."
+            exit 1
+          fi
+          echo "No se han detectado archivos .env ni equivalentes. OK."

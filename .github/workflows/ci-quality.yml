@@ -1,0 +1,264 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - 'fix/*'
+      - 'feat/*'
+  pull_request:
+    branches:
+      - main
+
+# Explicit permissions for the workflow. This grants only the minimal
+# privileges gitleaks needs to create checks/comments (and nothing more).
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DATABASE_URL: 'file:${{ github.workspace }}/backend/prisma/database.sqlite'
+      # Preferir secrets en GitHub Actions cuando estén disponibles, fallback se aplica más abajo
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_EXPIRES_IN: '15m'
+      JWT_REFRESH_EXPIRES_IN: '7d'
+      ALLOWED_ORIGINS: 'http://localhost:5173'
+      BASE_URL: 'http://127.0.0.1:5173'
+      REUSE_VITE_SERVER: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check for accidental secrets / tracked envs
+        run: npm run check:no-secrets
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Verify Node & npm
+        run: |
+          echo "Node version:" && node -v
+          echo "npm version:" && npm -v
+
+      - name: Set runtime env defaults (JWT)
+        # This step will write safe defaults into GITHUB_ENV so subsequent steps have required values
+        run: |
+          if [ -z "${{ env.JWT_SECRET }}" ]; then
+            # Generate a secure ephemeral secret to avoid static literals in the repo
+            echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+          else
+            echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
+            echo "JWT_REFRESH_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+          else
+            echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
+          fi
+
+      - name: Cache root node_modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (root)
+        run: |
+          set -o pipefail
+          npm ci || (npm install && echo "WARNING: lockfile changed - update package-lock.json and push the changes")
+
+      - name: Generate complexity report
+        # Generate a repo-level complexity report and write to reports/complexity-report.json
+        run: npm run check:complexity
+
+      - name: Install backend deps
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build
+
+      - name: Check for NUL bytes in tracked files
+        run: |
+          set -e
+          # Fail early and print offending files so the lint error is obvious
+          git ls-files -z | xargs -0 -n1 python - <<'PY'
+            import sys
+            bad=[]
+            for f in sys.argv[1:]:
+                try:
+                    with open(f,'rb') as fh:
+                        if b'\x00' in fh.read():
+                            bad.append(f)
+                except:
+                    pass
+            if bad:
+                print("Files with NUL bytes:\n" + "\n".join(bad))
+                sys.exit(1)
+          PY
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Run DB migrations (non-interactive)
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+        run: |
+          if [ -d backend/prisma ]; then
+            npx --yes prisma migrate deploy --schema=backend/prisma/schema.prisma || npx --yes prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss
+          else
+            echo "No hay carpeta backend/prisma, saltando migraciones"
+          fi
+        shell: bash
+
+      - name: Seed DB (backend)
+        working-directory: ./backend
+        run: |
+          # Run seed script (idempotent); if seed fails we surface the error
+          npm run seed
+
+      - name: Start backend (background)
+        run: |
+          nohup node backend/dist/server.js > backend.log 2>&1 &
+          echo $! > backend.pid
+          echo "Backend started, pid $(cat backend.pid)"
+        shell: bash
+
+      - name: Wait for backend /api/health
+        run: npx wait-on --timeout 30000 http://127.0.0.1:3001/api/health
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run unit tests (vitest)
+        run: npm run test:ci
+
+      - name: Contract tests (OpenAPI mock)
+        run: npm run test:contract
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        env:
+          SKIP_START_BACKEND: '1'
+        run: npm run test:e2e
+
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg ca-certificates lsb-release
+          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmour -o /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+          k6 version
+
+      - name: Performance smoke (API)
+        env:
+          BASE_URL: http://127.0.0.1:3001
+          PERF_API_STRICT: 'true'
+        run: npm run perf:api
+      - name: Accessibility audits (axe + Lighthouse)
+        run: npm run a11y
+      - name: Performance web (LHCI)
+        run: npm run perf:web
+      - name: Security scan - gitleaks
+        run: node scripts/run-gitleaks.cjs
+
+      - name: Security scan - Trivy (aquasecurity/trivy-action)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          scanners: 'vuln,secret'
+          severity: 'HIGH,CRITICAL'
+          format: 'table'
+          exit-code: '1'
+      - name: npm audit (high) gate
+        run: npm audit --production --audit-level=high
+      - name: Collect observability evidence
+        run: |
+          set -o pipefail
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/collect-metrics.ps1
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/package-observability-artifacts.ps1
+
+      - name: Ensure artifact paths exist
+        if: always()
+        run: |
+          mkdir -p test-results reports
+          touch backend.log
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            test-results/**
+            reports/**
+            backend.log
+          if-no-files-found: ignore
+
+  main-guard:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: quality
+    env:
+      DATABASE_URL: 'file:${{ github.workspace }}/backend/prisma/database.sqlite'
+      # Use GitHub secrets for real pipelines; fallback defaults are set at runtime
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_EXPIRES_IN: '15m'
+      JWT_REFRESH_EXPIRES_IN: '7d'
+      ALLOWED_ORIGINS: 'http://localhost:5173'
+      BASE_URL: 'http://127.0.0.1:5173'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm --prefix backend ci && npm --prefix backend run build
+      - name: Build frontend
+        run: npm run build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Set runtime env defaults (JWT)
+        run: |
+          if [ -z "${{ env.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+          else
+            echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${{ env.JWT_REFRESH_SECRET }}" ]; then
+            echo "JWT_REFRESH_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+          else
+            echo "JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }}" >> $GITHUB_ENV
+          fi
+      - name: Performance web (LHCI)
+        run: npm run perf:web
+      - name: npm audit (high) as gate
+        run: npm audit --production --audit-level=high

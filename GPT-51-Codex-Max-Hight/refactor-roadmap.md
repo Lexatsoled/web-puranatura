@@ -8,11 +8,11 @@
 
 ## Backend
 
-- Extraer servicios: AuthService, ProductService, OrderService, AiService, AnalyticsService.
+	- Extraer servicios: AuthService, ProductService, OrderService, AnalyticsService. (LLM/AI integrations should be handled externally via orchestrators or provider-specific services, not embedded in the core repo.)
 - Repositorios Prisma delgados (selects explícitos, sin lógica de dominio).
 - Middleware común de errores con códigos consistentes; reuse sendErrorResponse.
 - Logger estructurado (pino) con child por traceId.
-- Circuit breaker/retry con jitter y timeout (Gemini y otros externos).
+	- Circuit breaker/retry con jitter y timeout para integraciones externas.
 
 ## Frontend
 

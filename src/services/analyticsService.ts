@@ -34,7 +34,6 @@ export class AnalyticsService {
 
   // For tests -> allow resetting the singleton
   static __resetInstanceForTests() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (AnalyticsService as any).instance = undefined;
   }
 

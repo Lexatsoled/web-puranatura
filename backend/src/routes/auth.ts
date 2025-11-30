@@ -1,4 +1,5 @@
 ﻿import { Router, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
@@ -15,6 +16,53 @@ import {
 } from '../storage/refreshTokenStore';
 
 const router = Router();
+
+// Per-route limiter for all auth routes — protects login/register/refresh endpoints
+// from abuse (brute force, credential stuffing, refresh abuse).
+const authLimiter = rateLimit({
+  windowMs: env.authRateLimitWindowMs,
+  // Allow per-request override of the limit via `x-rate-max` header to make
+  // tests deterministic even if modules were initialized earlier.
+    // Allow per-request override of the limit only in `test` environment so that
+    // tests can be deterministic even under module caching. Do NOT honor this
+    // header in production.
+    max: (req) => {
+      if (env.nodeEnv === 'test') {
+        const header = req.headers['x-rate-max'];
+        const parsed = Number(typeof header === 'string' ? header : String(header ?? ''));
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : env.authRateLimitMax;
+      }
+      return env.authRateLimitMax;
+    },
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    code: 'RATE_LIMIT_EXCEEDED',
+    message: 'Demasiadas solicitudes en el endpoint de auth',
+  },
+  // Allow using a test header to key the limiter so tests can deterministically
+  // hit the same bucket — when running in production this header is ignored.
+    // In tests we allow a header override to make the limiter deterministic.
+    // In non-test envs, always use req.ip to avoid trusting client-supplied data.
+    keyGenerator: (req) => {
+      if (env.nodeEnv === 'test') return String(req.headers['x-rate-key'] ?? req.ip);
+      return String(req.ip);
+    },
+
+  handler: (req, res) => {
+    const traceId = (res.locals && res.locals.traceId) || 'unknown';
+    res.setHeader('X-Trace-Id', traceId);
+    res.status(429).json({
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Demasiadas solicitudes en el endpoint de auth',
+      traceId,
+    });
+  },
+});
+
+router.use(authLimiter);
+
+// no-op: limiter is attached above; keep handlers concise
 
 const cookieBase = {
   httpOnly: true,
@@ -82,8 +130,26 @@ const setAuthCookies = (res: Response, userId: string) => {
 };
 
 const clearAuthCookies = (res: Response) => {
-  res.clearCookie('token');
-  res.clearCookie('refreshToken');
+  // Use the same non-ephemeral options used to set the cookie so the
+  // browser removes the cookie correctly; do NOT pass maxAge into
+  // clearCookie (deprecated) — express will set the cookie to expire.
+  const clearOpts = {
+    path: cookieBase.path,
+    httpOnly: cookieBase.httpOnly,
+    sameSite: cookieBase.sameSite,
+    secure: cookieBase.secure,
+  } as any;
+
+  try {
+    res.clearCookie('token', clearOpts);
+  } catch (_) {
+    // best-effort
+  }
+  try {
+    res.clearCookie('refreshToken', clearOpts);
+  } catch (_) {
+    // best-effort
+  }
 };
 
 const userPayload = (user: {
@@ -184,6 +250,7 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/refresh', (req, res) => {
+  // refresh handler
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
     return res.status(401).json({ message: 'No hay sesión' });
@@ -194,6 +261,7 @@ router.post('/refresh', (req, res) => {
       sub: string;
       jti?: string;
     };
+    // debug the decoded token + check presence in persisted store
 
     const oldJti = decoded.jti;
     if (!oldJti || !hasRefreshToken(oldJti)) {

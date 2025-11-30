@@ -14,3 +14,5 @@ cloudflared tunnel run web.purezanaturalis.com
 o 
 
 cloudflared tunnel run web.purezanaturalis.com --url localhost:3500
+
+

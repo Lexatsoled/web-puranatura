@@ -39,17 +39,17 @@ describe('X-Backend-Degraded header semantics', () => {
 
   it('returns X-Backend-Degraded true when DB read fails, seed fails and legacy fallback provides no items', async () => {
     // Simulate DB failures
-    vi.spyOn(prisma.product, 'findMany').mockImplementation(async () => {
-      throw new Error('Simulated DB read failure');
-    });
-    vi.spyOn(prisma.product, 'count').mockImplementation(async () => {
-      throw new Error('Simulated DB count failure');
-    });
+    vi.spyOn(prisma.product, 'findMany').mockRejectedValue(
+      new Error('Simulated DB read failure') as any
+    );
+    vi.spyOn(prisma.product, 'count').mockRejectedValue(
+      new Error('Simulated DB count failure') as any
+    );
 
     // Make seed fail so code reaches legacy fallback
-    vi.spyOn(seedModule, 'seedProducts').mockImplementation(async () => {
-      throw new Error('Simulated seed failure');
-    });
+    vi.spyOn(seedModule, 'seedProducts').mockRejectedValue(
+      new Error('Simulated seed failure') as any
+    );
 
     // Mock legacy module to return empty products array
     const path = await import('path');

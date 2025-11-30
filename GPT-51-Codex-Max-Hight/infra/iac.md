@@ -7,12 +7,12 @@
 
 ## Componentes sugeridos
 
- - Compute: contenedores (Docker) orquestados por un orquestador de contenedores (opcional) o VM con systemd.
- - Red: TLS/HTTPS terminación (NGINX/ALB), WAF opcional, rate-limit en edge.
- - Storage: DB gestionada (Postgres) para prod; volúmenes cifrados.
- - Deploy: ECS u otro orquestador de contenedores (imagen backend/frontend).
- - Observabilidad: Prometheus/Grafana stack; Loki/ELK para logs; Tempo/Jaeger para trazas.
- - CI/CD: runners con permisos mínimos; deploy canary/blue-green soportado.
+- Compute: contenedores (Docker) orquestados por un orquestador de contenedores (opcional) o VM con systemd.
+- Red: TLS/HTTPS terminación (NGINX/ALB), WAF opcional, rate-limit en edge.
+- Storage: DB gestionada (Postgres) para prod; volúmenes cifrados.
+- Deploy: ECS u otro orquestador de contenedores (imagen backend/frontend).
+- Observabilidad: Prometheus/Grafana stack; Loki/ELK para logs; Tempo/Jaeger para trazas.
+- CI/CD: runners con permisos mínimos; deploy canary/blue-green soportado.
 
 ## Módulos (Terraform)
 
@@ -21,7 +21,7 @@
 - ecs / orquestador de contenedores deployment (imagen backend/frontend)
 - lb + certs + waf rules
 - prom/grafana stack (o uso de SaaS APM)
-- secrets (JWT, GEMINI, DB)
+- secrets (JWT, provider keys, DB)
 
 ## Configuración mínima NGINX (si aplica)
 

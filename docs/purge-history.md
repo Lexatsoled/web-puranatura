@@ -35,7 +35,7 @@ Paths sensibles sugeridos para purga (editar según hallazgos):
 Checklist previo a la purga (ejecutar en orden):
 
 - [ ] Aprobar plan con SRE/Sec/PM
-- [ ] Rotar credenciales críticas (JWT_SECRET, GEMINI_API_KEY, SENTRY_DSN, BACKUP_ENCRYPTION_KEY, etc.)
+- [ ] Rotar credenciales críticas (JWT_SECRET, provider API keys, SENTRY_DSN, BACKUP_ENCRYPTION_KEY, etc.)
 - [ ] Identificar y extraer datos que deben permanecer (migrar backups a almacenamiento seguro y cifrado)
 - [ ] Ejecutar `npm run scan:security` en la rama actual y archivar el reporte
 - [ ] Crear mirror del repo (git clone --mirror) y comprobar integridad

@@ -1,0 +1,50 @@
+name: DAST - OWASP ZAP baseline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  zap-baseline:
+    name: ZAP baseline scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps (root)
+        run: npm ci
+
+      - name: Build web preview
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          # Start vite preview in background then wait for it to be ready
+          npm run preview -- --port 5173 &
+          npx wait-on http://localhost:5173 -t 30000
+
+      - name: Run ZAP Baseline scan
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: 'http://localhost:5173'
+          # Don't auto-fail the workflow on first pass so results can be reviewed
+          fail_action: 'false'
+          allow_issue_writing: 'false'
+          artifact_name: 'zap_scan'
+
+      - name: Upload raw ZAP result (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-scan-report
+          path: .

@@ -9,7 +9,7 @@ const ProfilePage: React.FC = () => {
     isEditing,
     setIsEditing,
     formData,
-    setFormData,
+    // setFormData is provided by the hook but not used in this component
     isSaving,
     saveMessage,
     handleInputChange,
@@ -168,7 +168,7 @@ const ProfilePage: React.FC = () => {
               {isEditing && (
                 <div className="flex gap-3 mt-6 pt-6 border-t border-gray-200">
                   <button
-                    onClick={handleSave}
+                    onClick={() => handleSave()}
                     disabled={isSaving || isLoading}
                     className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >

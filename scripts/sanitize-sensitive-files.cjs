@@ -16,7 +16,10 @@ const targets = [
 
 function sanitizeFile(fp) {
   try {
-    fs.writeFileSync(fp, '*** SANITIZED - removed sensitive content (see .env.example) ***\n');
+    fs.writeFileSync(
+      fp,
+      '*** SANITIZED - removed sensitive content (see .env.example) ***\n'
+    );
     console.log('[sanitize] sanitized', fp);
   } catch (err) {
     console.error('[sanitize] failed to sanitize', fp, err.message);
@@ -37,7 +40,10 @@ function sanitizeDir(dir) {
     }
     // add README placeholder to dir
     const readme = path.join(dir, 'README.md');
-    fs.writeFileSync(readme, '# This directory previously contained backups or logs — contents removed for security.');
+    fs.writeFileSync(
+      readme,
+      '# This directory previously contained backups or logs — contents removed for security.'
+    );
     console.log('[sanitize] wrote README to', readme);
   } catch (err) {
     console.error('[sanitize] failed to sanitize dir', dir, err.message);
@@ -51,7 +57,11 @@ for (const t of targets) {
     if (fs.existsSync(dir)) {
       const items = fs.readdirSync(dir);
       for (const it of items) {
-        if (it.endsWith('.sqlite') || it.includes('.sqlite-') || it.endsWith('.backup')) {
+        if (
+          it.endsWith('.sqlite') ||
+          it.includes('.sqlite-') ||
+          it.endsWith('.backup')
+        ) {
           sanitizeFile(path.join(dir, it));
         }
       }
@@ -66,4 +76,6 @@ for (const t of targets) {
   else if (st.isDirectory()) sanitizeDir(full);
 }
 
-console.log('Sanitization complete — review git status and then purge history (BFG/git filter-repo) if required.');
+console.log(
+  'Sanitization complete — review git status and then purge history (BFG/git filter-repo) if required.'
+);

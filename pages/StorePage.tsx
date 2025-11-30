@@ -45,8 +45,13 @@ const StorePage: React.FC = () => {
         sanitizeProductContent(product)
       );
       // Merge default category with fallback list, avoiding duplicate ids
-      const merged = [{ id: 'todos', name: 'Todas' }, ...fallbackModule.productCategories];
-      const deduped = Array.from(new Map(merged.map((c) => [c.id, c])).values());
+      const merged = [
+        { id: 'todos', name: 'Todas' },
+        ...fallbackModule.productCategories,
+      ];
+      const deduped = Array.from(
+        new Map(merged.map((c) => [c.id, c])).values()
+      );
       setProductCategories(deduped);
       setProducts(fallbackProducts);
       setApiError(

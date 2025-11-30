@@ -5,7 +5,8 @@ export function useProductDetail(opts: {
   product: Product;
   isOpen: boolean;
   onClose: () => void;
-  addToCart: (product: Product, quantity: number) => Promise<any>;
+  // accept either sync or async addToCart implementations (store may be sync)
+  addToCart: (product: Product, quantity: number) => Promise<any> | void;
 }) {
   const { product, isOpen, onClose, addToCart } = opts;
 
@@ -54,7 +55,10 @@ export function useProductDetail(opts: {
     if (isOpen) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
 
-    return () => (document.body.style.overflow = 'unset');
+    // cleanup should be a function (avoid returning the assignment result)
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   const handleMouseMove = useCallback(

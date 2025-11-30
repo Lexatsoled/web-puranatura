@@ -1,161 +1,28 @@
-﻿# Checkpoints del plan maestro
+## Estado de fases — índice y punto de entrada canonical
 
-Última actualización: 2025-11-29 (verificado localmente)
+Este documento ahora actúa como un stub/index de compatibilidad en `docs/` que apunta a la fuente de verdad canonica del plan maestro.
 
-Este documento centraliza el estado actual del "Plan Maestro" — checkpoints por fases, evidencias concretas y próximos pasos. Está pensado para ser el único punto de verdad (source-of-truth) para el progreso del plan en este repositorio.
+La documentación y el seguimiento detallado de fases se mantiene en:
 
-Notas generales:
+  - `GPT-51-Codex-Max-Hight/CheckList.md` (FUENTE DE VERDAD — checklist maestro, evidencia y pasos por fase)
 
-- Este repositorio fue saneado y se eliminaron/aislaron varios secretos y artefactos corruptos. Muchas correcciones se aplicaron durante la sesión de depuración/merge del 2025-11-26 → 2025-11-28.
-- Evidencias (logs/artefactos/tests) se encuentran referenciadas en cada fase y en los directorios `reports/`, `backend/prisma/`, `GPT-51-Codex/` y `docs/`.
+¿Por qué este cambio?
+  - Evitamos duplicidad y drift entre documentos.
+  - Conservamos un punto de entrada en `docs/` para herramientas o lectores que navegan esa carpeta.
 
----
+Uso recomendado:
+  - Para trabajo operativo y actualizaciones del plan maestro, edita únicamente `GPT-51-Codex-Max-Hight/CheckList.md`.
+  - Si encuentras referencias externas apuntando a `docs/phase-checkpoints.md`, permanecen válidas pero redirigidas a la fuente canonical.
 
-## Fase 0 — Preparación y checkpoints iniciales (Estado: ✅ Completado)
+Última actualización: 2025-11-29 — actualizado desde CheckList.md (automático).
+Última actualización: 2025-11-29 — actualizado desde CheckList.md (automático).
 
-- Objetivo: saneamiento básico del repo, crear checkpoints locales, comprobar encoding, y aislar secretos sensibles.
-- Estado actual: COMPLETADO
-  - Acciones realizadas:
-    - Eliminación y regeneración de ficheros corruptos (ej. `docs/phase-checkpoints.md`, múltiples `docs/*`).
-    - Scripts y herramientas para auditoría / saneamiento añadidas al repo.
-  - Evidencia:
-    - Archivos corregidos: `docs/phase-checkpoints.md` (regenerado), `docs/deploy-staging.md`, `docs/phase-checkpoints.md` (historia antigua removida)
-    - Artefactos en: `archive/legacy-analysis/*` y `reports/*` (logs, auditorías históricas).
-  - Siguientes pasos:
-    - Mantener `backend/.env` local en `.gitignore` (no subir valores reales).
+Resumen de cambios recientes:
 
-## Fase 1 — Configuración inicial (Estado: ✅ Completado)
+- 2025-11-29: Se actualizó `GPT-51-Codex-Max-Hight/CheckList.md` para reflejar la retirada del endpoint integrado de IA, la eliminación de referencias a proveedores LLM (OpenAI, Gemini) en la documentación y manifiestos, y la verificación de la suite de pruebas (tests verdes). Para detalles y evidencia completa consulte la fuente canonical `GPT-51-Codex-Max-Hight/CheckList.md`.
 
-- Objetivo: Estructura de documentación y scaffolding (GPT-51-Codex y plantillas).
-- Estado actual: COMPLETADO
-  - Acciones realizadas:
-    - `GPT-51-Codex/` y `Plan_Ejecucion/plan-maestro.md` consolidados y sincronizados.
-  - Evidencia:
-    - `GPT-51-Codex/*` (plantillas y guías) y `README.md` referenciando el plan maestro.
-
-## Fase 2 — Análisis del estado actual (Estado: ✅ Completado)
-
-- Objetivo: Auditoría de seguridad, tests y calidad del proyecto.
-- Estado actual: COMPLETADO (hallazgos identificados y documentados)
-  - Acciones realizadas:
-    - Hallazgos de seguridad y tests volcados en `archive/legacy-analysis/` y `GPT-51-Codex/Hallazgos/`.
-  - Evidencia:
-    - Varios reports e inventarios (`inventory.json`, `findings.json`, `reports/`) con la clasificación de problemas y su gravedad.
-
-## Fase 2.5 — Integración Front–Back (Estado: ✅ Completado / Verificado)
-
-- Objetivo: levantar backend real (Express + Prisma + SQLite) y conectar el frontend al BFF para pasar de mocks -> API reales.
-  - Estado actual: COMPLETADO / VERIFICADO
-  - Acciones realizadas (hecho durante las sesiones actuales):
-    - Se resolvieron múltiples conflictos de merge en `backend/src/*` y se limpió `app.ts` (CSP, headers, etc.).
-    - Normalización del acceso a DB: `backend/src/prisma.ts` ahora convierte `DATABASE_URL file:` relativo → absoluto para evitar errores por CWD.
-    - Creación de `backend/.env` local (dev-only) con `DATABASE_URL` apuntando a `backend/prisma/database.sqlite` (archivo local) — esto permitió ejecutar `prisma generate` con éxito.
-    - Eliminación de binarios temporales .tmp de Prisma y regeneración del client (resuelto EPERM/locks en dev Windows).
-    - Seed aplicado (productos de ejemplo) y verificación por script utilitario (`backend/scripts/check_products.js`) → PRODUCT_COUNT = 3.
-  - Evidencia:
-    - Archivos modificados: `backend/src/prisma.ts`, `backend/src/server.ts` (log de conteo de arranque), `backend/.env` (dev), `backend/scripts/check_products.js`.
-    - Logs: `npm run seed` y `prisma generate` (mostrados en las sesiones de terminal). El servidor en `http://localhost:3001` responde y `GET /api/products` devolvió 200 tras los fixes.
-  - Riesgos / pendientes:
-    - `backend/.env` local está presente solo para dev; confirmar política para CI/producción (usar secrets manager/variables CI). Evitar subir `.env` con secretos.
-  - Siguientes pasos:
-    - Asegurar seeds idempotentes y documentar los pasos para CI (se añadieron seeds al workflow de quality en CI).
-    - Ejecutar suites de integración / e2e completas para validar contrato frontend-backend y ajustar fixtures si aparece flakiness.
-
-## Fase 3 — Identificación de problemas (Estado: ✅ Completado)
-
-- Objetivo: Mapear y priorizar bugs, vulnerabilidades y puntos de mejora.
-- Estado actual: COMPLETADO (problemas documentados y priorizados)
-  - Acciones realizadas:
-    - Resolución de una amplia clase de merge-conflicts y limpieza de archivos corruptos (null/BOM). Tests básicos restaurados.
-  - Evidencia:
-    - Cambios en `backend/src/*`, resolución de merge markers, test fixes en `test/backend.products.test.ts` y otros tests restaurados.
-
-## Fase 4 — Desarrollo de herramientas (Estado: ✅ Parcial)
-
-- Objetivo: crear utilidades y scripts para debugging, imagenes, y automatización.
-- Estado actual: PARCIAL
-  - Acciones realizadas:
-    - Scripts utilitarios añadidos (e.g., `backend/scripts/check_products.js`, `scripts/*` para auditoría y sanitización, `optimizeImages.ts` en `scripts/`).
-  - Evidencia:
-    - `scripts/*`, `backend/scripts/*` y documentación en `docs/` y `GPT-51-Codex-Max/*`.
-  - Siguientes pasos:
-    - Consolidar scripts documentados en un README de `tools/` y agregar tests automatizados básicos para cada script crítico.
-
-## Fase 5 — Refactor, deuda y prevención (Estado: ✅ Parcialmente completado)
-
-- Objetivo: estabilizar y ejecutar suite de tests unitarios, integración, e2e, y seguridad.
-  - Estado actual: PARCIALMENTE COMPLETADO
-  - Acciones realizadas (reciente):
-    - Se estabilizó la ejecución de tests unitarios e integración en local: `npm run test:ci` (ejecuta `prisma migrate deploy` antes de correr vitest). Se resolvieron carreras de Prisma/SQLite en Windows.
-    - Ajustes aplicados para fiabilidad:
-      - Script local de limpieza para artefactos temporales de Prisma (quita `.tmp` problemáticos antes de `prisma generate`).
-      - `vitest.config.ts` configurado para evitar ejecución multi-hilo (threads=false) y varios tests backend aumentaron timeouts en hooks `beforeAll` para reducir flakiness.
-      - Se eliminó la práctica de ejecutar migraciones por cada test (migraciones centralizadas previo a la suite).
-    - Resultado: la suite de unit + integration tests pasó localmente en modo CI (ver registro de ejecución: `npm run test:ci`, 34 tests pasaron durante las sesiones recientes). Las pruebas E2E pasaron en ejecución local; además el workflow CI ha sido actualizado para ejecutar limpieza de artefactos Prisma, despliegue de migraciones y seeds antes de unit/integration + Playwright (quality job).
-  - Problemas / pendientes:
-  - Validación final: la rama de la feature fue mergeada a `main` (PR #14) y los checks de CI asociados se completaron con éxito. Seguimos pendientes de validar tareas de refactor y más tests de integración de larga duración en entornos controlados.
-  - Siguientes pasos prioritarios:
-    - Ejecutar los tests e2e (Playwright) localmente y en CI; documentar fallos y arreglos. (Acción: E2E locales pasaron (2 tests) — `npm run test:e2e`.)
-    - Añadir y documentar un pequeño script de limpieza de binarios Prisma y confirmar su uso en CI antes de `prisma generate`/`prisma migrate`.
-    - Añadir `backend/.env` a `.gitignore` y documentar variables necesarias para CI (usar secrets). Evitar subir `.env` con valores reales.
-
-## Fase 6 — Corrección y optimización (Estado: ⚠️ En progreso)
-
-- Objetivo: aplicar fixes de rendimiento, seguridad, y reducir la complejidad del código.
-- Estado actual: EN PROGRESO
-  - Acciones realizadas:
-    - Fixes inmediatos aplicados (CSP consolidation, merge conflict cleanups, prisma lock cleanup, normalize DB path).
-    - Extracción de `RateLimiter` a `src/utils/rateLimiter.ts` y pruebas unitarias añadidas (`test/utils/rateLimiter.test.ts`) — paso inicial para Fase 6.
-    - Extracción de `AnalyticsService` desde `src/hooks/useAnalytics.ts` hacia `src/services/analyticsService.ts` y añadidos tests unitarios (`test/services/analyticsService.test.ts`) para reducir complejidad del hook.
-  - Siguientes pasos:
-    - Analizar `reports/complexity-report.json` y plan de refactor (Fase 5 → T5.x tasks).
-    - Introducir tests adicionales para las utilidades y scripts nuevos (p. ej., limpieza de Prisma, check_products) para evitar regresiones. (Acción: añadida prueba unitaria `test/scripts/cleanup-prisma-tmp.test.ts` para validar `scripts/cleanup-prisma-tmp.cjs`.)
-    - Priorizar fixes críticos en backlog y asegurar PRs con tests y métricas.
-
-## Fase 7 — Validación final (Estado: ⏳ Pendiente)
-
-- Objetivo: completar la regresión, preparar release y documentación final.
-- Estado actual: PENDIENTE (esperando tests / CI en verde y validaciones finales)
-  - Requisitos para finalizar:
-    - CI verde en todas las ramas y release candidate validado.
-    - Documentación final en `docs/` y sign-off de QA/AppSec.
+_Contenido fuente (primera sección de CheckList.md resumida):_
 
 ---
 
-## Resumen ejecutivo / To‑do inmediato
-
-- [x] Saneamiento y eliminación de corrupciones / secretos versionados (Fase 0, 1, 2).
-- [x] Resolver conflictos de merge y restaurar compilación de backend (Fases 2–3).
-- [x] Regenerar Prisma client + resolver bloqueos de binarios nativos (Fase 2.5).
-- [x] Semilla y verificación básica de datos (3 productos) en `backend/prisma/database.sqlite`.
-- [x] Ejecutar suite de unit + integration tests en modo CI local (migraciones desplegadas antes) — PASS.
-- [x] Ejecutar suite completa incluyendo E2E (Playwright) y preparar workflow CI para E2E (PR #14 mergeado, checks OK).
-- [x] Añadir seeds y migraciones reproducibles en CI (Fase 2.5/5).
-- [ ] Finalizar refactors y score de complejidad (Fase 6) antes de la validación final.
-
-Acciones realizadas desde la última actualización:
-
-- [x] Añadidas correcciones para evitar condiciones de carrera de Prisma en Windows (eliminación de `.tmp` previo a `prisma generate`).
-- [x] `test:ci` actualizado (orquestación: deploy migrations -> tests) y pruebas unitarias/integración validadas localmente.
-- [x] Ajustes de Vitest y tests (desactivar threads y aumentar timeouts donde necesario) para mayor estabilidad en Windows.
-- [x] `backend/scripts/check_products.js` añadido como herramienta de verificación rápida.
-
-- Pendientes inmediatos:
-- [x] Añadir `backend/.env` a `.gitignore` y limpiar del índice remoto (si aplica) — verificado: `backend/.env` no está en el índice y `.gitignore` ya contiene la regla.
-- [x] Integrar y testear un workflow de CI (GitHub Actions) que:
-  - aplique migraciones -> limpie artefactos de Prisma -> `prisma generate` -> seed -> run unit/integration tests -> opcional e2e en condiciones controladas.
-- [x] Añadido paso CI para detectar archivos sensibles (`check:no-secrets`) y limpieza de artefactos Prisma antes de migraciones; seeds ahora se ejecutan en las etapas relevantes.
-- [ ] Monitorizar ejecuciones de CI en `main` y programar correcciones si aparecen nuevos fallos en runners.
-
----
-
-Si quieres, puedo ahora:
-
-- Ejecutar la suite de tests completa y corregir las fallas inmediatamente (si me das permiso para correr tests aquí).
-- Preparar PR/commit con la actualización formal de este `docs/phase-checkpoints.md` y abrirlo para revisión.
-
-Evidencias y logs usados para actualizar este documento: terminal logs (prisma generate, npm run seed), archivos editados en `backend/src/*`, `backend/.env`, `backend/scripts/check_products.js`, y el `StorePage` / frontend log que caía al fallback mientras `/api/products` devolvía [] (capturas provistas por el usuario).
-
----
-
-Document revision path: `docs/phase-checkpoints.md` — mantenlo actualizado al completar los siguientes pasos.
+# CheckList - Seguimiento detallado del Plan Maestro (PuraNatura)
