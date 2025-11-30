@@ -49,7 +49,7 @@ const authLimiter = rateLimit({
       return String(req.ip);
     },
 
-  handler: (req, res) => {
+  handler: (_req, res) => {
     const traceId = (res.locals && res.locals.traceId) || 'unknown';
     res.setHeader('X-Trace-Id', traceId);
     res.status(429).json({
