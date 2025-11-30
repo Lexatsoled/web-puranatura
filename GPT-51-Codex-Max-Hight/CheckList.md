@@ -5,7 +5,7 @@ del Plan Maestro (`plan-maestro.md`). Cualquier agente o persona que lea
 `prompt-inicial.md` debe también consultar este `CheckList.md` para conocer el
 estado real y los artefactos de evidencia.
 
-Última actualización: 2025-11-29
+Última actualización: 2025-11-30
 
 ## Resumen rápido ✅
 
@@ -37,7 +37,7 @@ estado real y los artefactos de evidencia.
 
 ---
 
-## Fase 1 — Seguridad & Estabilidad (Estado: EN PROGRESO) ⚙️
+## Fase 1 — Seguridad & Estabilidad (Estado: COMPLETADO — revisión final pendiente) ✅
 
 Prioridad alta: terminar hardening backend, auth, CSRF, rate limiting, SAST/DAST, secret management.
 
@@ -57,13 +57,12 @@ Prioridad alta: terminar hardening backend, auth, CSRF, rate limiting, SAST/DAST
 - Next: created the GH repository secrets and verified via `gh secret list`. Evidence: `docs/secrets-migration.md`, `docs/runbooks/secrets-onboarding.md`, `.github/required-secrets.yml`, `.github/workflows/validate-required-secrets.yml`, `.github/workflows/deploy-check-secrets.yml`.
 - Rotation + scan: repository secrets were rotated on 2025-11-30 and a gitleaks scan was performed. The working-tree scan found 2 matches (local `.env.local`) and the git-history scan reported ~104 matches in historical commits (reports/gitleaks-report-history.json). Next recommended action: consider history purge (git-filter-repo/BFG) or rotation of any external keys exposed in history.
 - Rotation + scan: repository secrets were rotated on 2025-11-30 and a gitleaks scan was performed. The working-tree scan found 2 matches (local `.env.local`) and the git-history scan reported ~104 matches in historical commits (reports/gitleaks-report-history.json).
-- Next actions taken: `.env.local` removed from working tree, history remediation helpers added (`scripts/purge-history.sh` / `purge-history.ps1`) and runbook created `docs/runbooks/history-remediation.md`. Remaining: decide whether to purge history now — this is disruptive and requires coordination.
-- Next actions taken: `.env.local` removed from working tree, history remediation helpers added (`scripts/purge-history.sh` / `purge-history.ps1`) and runbook created `docs/runbooks/history-remediation.md`.
-- I created a purged mirror at `tmp-repo-purged.git` (local) after iteratively removing sensitive paths and verified with gitleaks — the purged mirror reports no leaks. Next step: _decide whether to force-push the purged history to the remote origin_ (this will rewrite history and requires all contributors to re-clone).
+- Next actions taken: `.env.local` removed from working tree, history remediation helpers added (`scripts/purge-history.sh` / `purge-history.ps1`) and runbook created `docs/runbooks/history-remediation.md`. Un PR con estos cambios (runbooks, helpers y hardening de CI) fue fusionado en `main` — PR #32 (2025-11-30). Queda pendiente la decisión sobre la reescritura destructiva del historial: es una operación de alto impacto que requiere coordinación con los administradores del repositorio y la rotación de secrets fuera del repo.
+  I created a purged mirror at `tmp-repo-purged.git` (local) after iteratively removing sensitive paths and verified with gitleaks — the purged mirror reports no leaks. Next step: _decide whether to force-push the purged history to the remote origin_ (this will rewrite history and requires all contributors to re-clone). Esta acción se mantiene en espera hasta que el equipo coordine la ventana de mantenimiento, confirme la rotación de credenciales externas y notifique a todos los colaboradores.
 - Nota operativa: Se aplicó una mejora para facilitar el arranque local sin `DATABASE_URL` explícito — PR #30 fue fusionado en `main` y ahora la carga prioriza `./backend/.env.local` y aplica un fallback de `DATABASE_URL=file:./prisma/dev.db` en entornos no-production. Esto evita la excepción de Prisma (P1012) durante arranques locales y mejora la ergonomía de desarrollo.
 - [x] T1.5 Seguridad de IA — endpoint retired / removed
 - Status: el endpoint integrado de IA (`/api/ai`) y las integraciones directas con proveedores LLM fueron retiradas (2025-11-29). Todas las referencias explícitas a claves de proveedor (p. ej. `OPENAI_API_KEY`, `GEMINI_API_KEY`) fueron eliminadas de los manifiestos y la documentación. Recomendamos integrar capacidades LLM a través de orquestadores externos (ej. n8n) y webhooks seguros.
-- [x] T1.6 DAST/SAST — SAST integration (CodeQL) added
+- [x] T1.6 DAST/SAST — SAST integration (CodeQL) added (CI checks actualmente verdes)
   - Status: SAST added + DAST added + Trivy FS scan added to CI.
   - Evidence:
     - SAST: `.github/workflows/codeql-analysis.yml`
@@ -95,7 +94,7 @@ Prioridad alta: terminar hardening backend, auth, CSRF, rate limiting, SAST/DAST
 
 - Codigo modificado: `backend/src/routes/auth.ts`, `backend/src/middleware/csrf.ts`, `backend/src/config/env.ts`.
 - Limpieza/configuración relacionada con LLM: `.env.example` neutralizado, `.github/required-secrets.yml` actualizado, `.github/workflows/deploy-check-secrets.yml` limpiado, múltiples docs y archivos `archive/` neutralizados/eliminados.
-- Tests: `test/backend.auth.test.ts` (rate-limit tests), `npm run test:ci` green.
+- Tests: `test/backend.auth.test.ts` (rate-limit tests), `npm run test:ci` green. CI checks (CodeQL, Trivy, tests) están en verde en `main`.
 - CI: `ci-quality.yml` gate for quality; security scanners ran locally.
 
 ---
