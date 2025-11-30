@@ -1,5 +1,4 @@
-extends: |
-  spectral:oas
+extends: spectral:oas
 
 rules:
   info-contact: warn
