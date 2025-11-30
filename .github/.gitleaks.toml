@@ -6,5 +6,9 @@ title = "gitleaks config - ignore generated reports with embedded base64 data"
     '''reports/lighthouse-.*\\.html''',
     '''reports/lighthouse-.*\\.json''',
     '''reports/axe-.*\\.html''',
-    '''reports/axe-.*\\.json'''
+    '''reports/axe-.*\\.json''',
+    '''^reports/tmp/''',
+    '''\.env\.local\.sample''',
+    '''\.env\.example''',
+    '''reports/gitleaks-report.json'''
   ]
