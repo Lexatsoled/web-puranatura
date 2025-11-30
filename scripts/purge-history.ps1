@@ -1,133 +1,103 @@
 <#
-PowerShell helper to perform a safe, auditable, destructive purge of sensitive files from git history
-
-USAGE (run locally on a machine with git + python installed):
-  1) Review and rotate secrets first (see README below).
-  2) Run this script to create a mirror, run git-filter-repo and produce verification reports.
-  3) Only after manual verification, answer the final prompt to push --force to origin.
-
-This script DOES NOT push by default. It requires a confirmation step.
+Purge history helper (PowerShell)
+#
+# This script creates a mirrored clone of the repository, runs git-filter-repo
+# to remove sensitive paths and artifacts, and leaves the cleaned mirror in
+# a directory (`$PurgedDir`) for inspection. It does NOT push anything to
+# the origin by default — after manual verification you can push the cleaned
+# mirror with `git push --force --all` and `git push --force --tags`.
+#
+# Requirements: git, python (pip), git-filter-repo (the script will try to
+# install it into a temporary venv if not present).
+#
+# Use: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/purge-history.ps1 -Repo <remote-url> -AutoYes
+#
+# WARNING: Rewriting history is destructive. Coordinate with your team before
+# force-pushing to the origin (everyone must re-clone or reset their local branches).
 #>
 
 param(
-  [string]$RepoUrl = $(git config --get remote.origin.url),
-  [string]$MirrorDir = "$(Join-Path $env:TEMP 'purge-repo-mirror')",
-  [switch]$DryRun
+  [string]$Repo = 'git@github.com:Lexatsoled/web-puranatura.git',
+  [string]$MirrorDir = './tmp-repo-mirror.git',
+  [string]$PurgedDir = './tmp-repo-purged.git',
+  [switch]$AutoYes
 )
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-  Write-Error 'git is required. Install git and re-run.'
-  exit 1
+  Write-Error 'git is required. Install git and re-run.'; exit 1
 }
 
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-  Write-Error 'python is required (git-filter-repo is a python tool). Install python and re-run.'
-  exit 1
+  Write-Error 'python is required (git-filter-repo is a python tool). Install python and re-run.'; exit 1
 }
 
-# Recommended sensitive paths to remove. Edit this list to add any other paths to purge.
-$pathsToPurge = @(
-  '.env',
-  '.env.local',
-  'backend/.env',
-  'backend/backups',
-  'backend/*.sqlite',
-  'backend/*sqlite*',
-  'backend/database.sqlite.backup',
-  'backend/database.legacy-before-bff.sqlite',
-  'backend/out.log',
-  'backend/logs'
-)
+Write-Host "Mirror clone will be created from: $Repo"
+Write-Host "Mirror dir: $MirrorDir"; Write-Host "Purged result dir: $PurgedDir"
 
-Write-Host 'Repository URL:' $RepoUrl
-Write-Host 'Mirror working directory:' $MirrorDir
+if (-not $AutoYes) {
+  $confirm = Read-Host 'Continue? type Y to proceed'
+  if ($confirm -ne 'Y') { Write-Host 'Aborted'; exit 1 }
+} else { Write-Host 'AutoYes: proceeding without interactive confirm.' }
 
-if (Test-Path $MirrorDir) {
-  Write-Host "Cleaning existing mirror dir: $MirrorDir"
-  Remove-Item -Recurse -Force $MirrorDir
-}
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $MirrorDir, $PurgedDir
 
-Write-Host 'Creating a bare mirror clone (this is safe) ...'
-git clone --mirror $RepoUrl $MirrorDir
+Write-Host 'Cloning mirror...' -ForegroundColor Cyan
+# When cloning from a local repo use --no-local to get a clean mirror suitable
+# for filter-repo operations (git may otherwise create local-packed clones)
+git clone --mirror --no-local $Repo $MirrorDir
 if ($LASTEXITCODE -ne 0) { Write-Error 'mirror clone failed'; exit 2 }
 
 Push-Location $MirrorDir
 
-Write-Host "--- Purge plan (dry run=${DryRun}) ---"
-Write-Host "Paths to purge:"; $pathsToPurge | ForEach-Object { Write-Host "  - $_" }
+$pathsToRemove = @(
+  'archive/legacy-docs/',
+  'reports/tmp/',
+  'reports/tmp/*',
+  '*.env.local',
+  'reports/tmp/lighthouse.*'
+)
 
-if ($DryRun) {
-  Write-Host "Dry run: inspecting which refs would be affected..."
-} else {
-  Write-Host "Preparing to run git-filter-repo. This will rewrite history in the mirror clone only."
-}
+Write-Host 'Paths to remove:'; $pathsToRemove | ForEach-Object { Write-Host " - $_" }
 
-# Build filter-repo args
-$invertArgs = @()
-foreach ($p in $pathsToPurge) { $invertArgs += "--path"; $invertArgs += $p }
+if (-not $AutoYes) {
+  $ok = Read-Host 'Proceed with rewrite in the mirror clone? Type Y to proceed'
+  if ($ok -ne 'Y') { Write-Host 'Cancelled'; Pop-Location; exit 0 }
+} else { Write-Host 'AutoYes: running rewrite now.' }
 
-Write-Host 'Checking git-filter-repo availability...'
+Write-Host 'Ensuring git-filter-repo is available (attempt to install in a temporary venv if needed)...'
 try { python -c "import git_filter_repo"; $hasGR = $true } catch { $hasGR = $false }
 if (-not $hasGR) {
-  Write-Host 'git-filter-repo not found in python environment. Installing locally to a temp venv (recommended).' -ForegroundColor Yellow
-  python -m venv venv-filterrepo
-  $venvPip = Join-Path -Path (Join-Path $PWD 'venv-filterrepo') -ChildPath 'Scripts\\pip.exe'
-  if (Test-Path $venvPip) {
-    & $venvPip install --upgrade pip
-    & $venvPip install git-filter-repo
-    # use venv python for subsequent invocation
-    $pythonCmd = Join-Path -Path (Join-Path $PWD 'venv-filterrepo') -ChildPath 'Scripts\\python.exe'
-    # verify git_filter_repo is importable from the chosen python
-    try { & $pythonCmd -c "import git_filter_repo"; $hasGR = $true } catch { $hasGR = $false }
-    if (-not $hasGR) { Write-Warning 'git-filter-repo still not importable from venv python.' }
-  } else {
-    Write-Warning 'Failed to prepare a venv pip. Attempting system python install (may require privileges).'
-    & python -m pip install --user git-filter-repo
-    $pythonCmd = 'python'
-    try { & python -c "import git_filter_repo"; $hasGR = $true } catch { $hasGR = $false }
-  }
-} else {
-  $pythonCmd = 'python'
-}
+  Write-Host 'Installing git-filter-repo into a temporary venv...' -ForegroundColor Yellow
+  $venvDir = Join-Path $PWD 'venv-filterrepo'
+  python -m venv $venvDir
+  $venvPip = Join-Path -Path $venvDir -ChildPath 'Scripts\pip.exe'
+  & $venvPip install --upgrade pip
+  & $venvPip install git-filter-repo
+  $pythonCmd = Join-Path -Path $venvDir -ChildPath 'Scripts\python.exe'
+} else { $pythonCmd = 'python' }
 
-if ($DryRun) {
-  Write-Host 'Running a check-only simulation (git-filter-repo has no true dry-run) — we will run the tool against a fresh mirror and check results.'
-}
+Write-Host 'Writing remove-file list...' -ForegroundColor Cyan
+$removeFile = Join-Path $PWD 'remove-paths.txt'
+Set-Content -Path $removeFile -Value ($pathsToRemove -join "`n")
 
 Write-Host 'Running git-filter-repo to remove sensitive paths...' -ForegroundColor Cyan
-# Use the selected python executable so a venv-installed git-filter-repo is used
-if (-not $hasGR) {
-  Write-Error 'git-filter-repo is not installed and could not be prepared. Please install git-filter-repo manually and re-run the script.'
-  Pop-Location
-  exit 4
-}
+& $pythonCmd -m git_filter_repo --invert-paths --paths-from-file $removeFile
+if ($LASTEXITCODE -ne 0) { Write-Error 'git-filter-repo failed; inspect mirror repo and logs'; Pop-Location; exit 3 }
 
-& $pythonCmd -m git_filter_repo --invert-paths $invertArgs
-
-if ($LASTEXITCODE -ne 0) {
-  Write-Error ("git-filter-repo failed. Inspect the mirror repo at $MirrorDir")
-  Pop-Location
-  exit 3
-}
-
-Write-Host 'Purged history in mirror clone. Verifying the files are gone...'
-Write-Host 'Listing files that still match suspect patterns (if any):'
-# Search for any remaining candidate files
-foreach ($p in $pathsToPurge) {
+Write-Host 'Rewrite complete in mirror. Verifying results...'
+Write-Host 'Searching for remaining candidate files (this may list artifacts)' -ForegroundColor Yellow
+foreach ($p in $pathsToRemove) {
   git ls-files | Select-String -Pattern ([regex]::Escape($p)) -SimpleMatch | ForEach-Object { Write-Host "REMAIN: $_" }
 }
 
-Write-Host 'Now run a secrets scan inside mirror to confirm (gitleaks):'
-if (Get-Command gitleaks -ErrorAction SilentlyContinue) {
-  & gitleaks detect --source . --report-path .\\gitleaks-report.json
-  if ($LASTEXITCODE -ne 0) { Write-Warning 'gitleaks may have found issues — review gitleaks-report.json' }
-  if (Test-Path .\\gitleaks-report.json) { Get-Content .\\gitleaks-report.json | Out-Host }
-} else { Write-Host 'gitleaks not installed — install or run the scan manually.' }
-
-Write-Host '`IMPORTANT:` The mirror clone now has a rewritten history. If you intend to push the cleaned repo to origin, you must coordinate with the team and be prepared to instruct everyone to re-clone.
-This script does not push by default. To push, run the `git push --force --all` and `git push --force --tags` commands from inside the mirror directory AFTER you have communicated the change.' -ForegroundColor Yellow
+Write-Host 'Optional: run gitleaks inside the mirror (if installed) to confirm no leaks remain.'
+if (Get-Command gitleaks -ErrorAction SilentlyContinue) { gitleaks detect --source . --report-path ./gitleaks-report.json }
 
 Pop-Location
 
-Write-Host 'Mirror clone cleaned at:' $MirrorDir
-Write-Host 'Next steps: (1) rotate secrets, (2) verify CI changes, (3) push --force from mirror, (4) make security announcement and require team to re-clone.'
+Move-Item -Force $MirrorDir $PurgedDir
+
+Write-Host "Purged mirror ready at: $PurgedDir" -ForegroundColor Green
+Write-Host 'Review thoroughly before force-pushing to origin. To push (manual):' -ForegroundColor Yellow
+Write-Host "  cd $PurgedDir`n  git push --force --all`n  git push --force --tags"
+

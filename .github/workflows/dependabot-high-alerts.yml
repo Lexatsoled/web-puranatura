@@ -1,0 +1,58 @@
+name: Dependabot alerts — HIGH/CRITICAL handler
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # daily at 06:00 UTC
+  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+
+permissions:
+  issues: write
+  security-events: read
+
+jobs:
+  on-high-critical:
+    name: Create issue for HIGH/CRITICAL Dependabot alerts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch open Dependabot alerts and create issues for HIGH/CRITICAL
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // This job runs daily (or ad-hoc via workflow_dispatch).
+            // We call the Dependabot REST API to list repo alerts and create issues
+            // for any open HIGH/CRITICAL alerts, avoiding duplicates.
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // List Dependabot alerts (open)
+            const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open' });
+            const alerts = res.data || [];
+            core.info(`Found ${alerts.length} dependabot alerts (open)`);
+
+            for (const alert of alerts) {
+              const severity = (alert.security_advisory?.severity || alert.severity || '').toLowerCase();
+              if (severity !== 'high' && severity !== 'critical') continue;
+
+              const pkg = alert.dependency?.package || alert.security_advisory?.package || alert.package || 'dependency';
+              const title = `Security: Dependabot ${severity.toUpperCase()} alert — ${pkg}`;
+
+              // Avoid duplicates: look for an open issue with the same title
+              const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open' });
+              if (issues.find(i => i.title === title)) {
+                core.info(`Issue already exists for ${title} — skipping`);
+                continue;
+              }
+
+              const body = `Dependabot detected a **${severity.toUpperCase()}** alert for ${pkg}.\n\n` +
+                `-- Dependabot alert details --\n` +
+                `- Ecosystem: ${alert.dependency?.ecosystem || alert.security_advisory?.ecosystem || 'unknown'}\n` +
+                `- Affected version: ${alert.dependency?.vulnerable_version_range || alert.installed_version || alert.security_advisory?.vulnerable_version_range || 'unknown'}\n` +
+                `- Advisory: ${alert.security_advisory?.summary || alert.summary || 'No advisory text available.'}\n\n` +
+                `Please triage and create a remediation plan (bump, patch, or mitigation).`;
+
+              const created = await github.rest.issues.create({ owner, repo, title, body, labels: ['security', 'dependabot', `severity:${severity}`] });
+              core.info(`Created issue #${created.data.number} for ${pkg}`);
+            }

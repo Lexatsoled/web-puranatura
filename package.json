@@ -22,6 +22,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:ci": "node ./scripts/cleanup-prisma-tmp.cjs && cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma && cd .. && vitest run",
+    "generate:sbom": "npx @cyclonedx/cdxgen -o sbom.json",
+    "check:licenses": "node scripts/check-licenses.cjs",
     "test:unit": "vitest run",
     "docs:regen": "node ./scripts/generate-phase-checkpoints.cjs",
     "test:e2e": "npm run build && node scripts/run-e2e.cjs",

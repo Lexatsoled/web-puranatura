@@ -1,0 +1,40 @@
+name: Generate SBOM & check licenses
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 3 * * *' # daily at 03:00 UTC
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    name: Generate CycloneDX SBOM and validate licenses
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate SBOM (CycloneDX) — cdxgen
+        run: npm run generate:sbom
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-json
+          path: sbom.json
+
+      - name: Run license check
+        run: npm run check:licenses
