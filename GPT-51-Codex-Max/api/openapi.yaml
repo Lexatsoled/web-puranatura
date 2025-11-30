@@ -3,6 +3,7 @@ info:
   title: PuraNatura API
   version: 0.1.0
   description: Especificación OpenAPI 3.1 (inicial) para PuraNatura — fase 2 (contratos y tests).
+  x-spec-status: draft
   contact:
     name: PuraNatura Team
     email: ops+security@puranatura.example
@@ -11,6 +12,11 @@ servers:
     description: API de producción (placeholder)
   - url: http://localhost:3000
     description: Desarrollo local
+tags:
+  - name: health
+    description: Health / diagnostic endpoints
+  - name: products
+    description: Product catalog endpoints
 paths:
   /api/health:
     get:
@@ -183,11 +189,11 @@ components:
         stock:
           type: integer
 
-security:
-  - cookieAuth: []
-
   securitySchemes:
     cookieAuth:
       type: apiKey
       in: cookie
       name: token
+
+security:
+  - cookieAuth: []
