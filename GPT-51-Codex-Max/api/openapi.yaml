@@ -3,6 +3,9 @@ info:
   title: PuraNatura API
   version: 0.1.0
   description: Especificación OpenAPI 3.1 (inicial) para PuraNatura — fase 2 (contratos y tests).
+  contact:
+    name: PuraNatura Team
+    email: ops+security@puranatura.example
 servers:
   - url: https://api.example.com
     description: API de producción (placeholder)
@@ -12,6 +15,10 @@ paths:
   /api/health:
     get:
       summary: Estado del backend
+      description: Devuelve el estado operativo del backend y el conteo de productos.
+      operationId: getHealth
+      tags:
+        - health
       responses:
         '200':
           description: OK
@@ -23,6 +30,10 @@ paths:
   /api/products:
     get:
       summary: Lista de productos (catálogo)
+      description: Devuelve una lista paginada de productos.
+      operationId: listProducts
+      tags:
+        - products
       parameters:
         - name: page
           in: query
@@ -70,6 +81,10 @@ paths:
 
     post:
       summary: Crear producto (admin)
+      description: Crea un nuevo producto (acceso admin requerido).
+      operationId: createProduct
+      tags:
+        - products
       requestBody:
         required: true
         content:
@@ -87,6 +102,10 @@ paths:
   /api/products/{id}:
     get:
       summary: Obtener producto por id
+      description: Recupera un producto por su identificador.
+      operationId: getProductById
+      tags:
+        - products
       parameters:
         - name: id
           in: path
@@ -167,8 +186,8 @@ components:
 security:
   - cookieAuth: []
 
-securitySchemes:
-  cookieAuth:
-    type: apiKey
-    in: cookie
-    name: token
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
