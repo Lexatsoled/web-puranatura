@@ -67,6 +67,10 @@ export const env = {
     5 * 60 * 1000
   ),
   analyticsIngestEnabled: toBoolean(process.env.ANALYTICS_INGEST_ENABLED, true),
+  // Per-route rate-limits (defaults chosen for sensible protection in dev)
+  authRateLimitMax: toNumber(process.env.AUTH_RATE_LIMIT_MAX, 10),
+  authRateLimitWindowMs: toNumber(process.env.AUTH_RATE_LIMIT_WINDOW, 60 * 1000),
+  // (previously) AI endpoint rate-limits removed — no built-in AI endpoint
   // Controla si la política CSP se aplica en modo report-only o enforce.
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),

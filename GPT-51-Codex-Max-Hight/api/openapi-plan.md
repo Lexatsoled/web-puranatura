@@ -2,7 +2,7 @@
 
 ## Alcance
 
-- Documentar: /api/auth (register/login/logout/refresh/me), /api/products (GET list/paginado, GET detail, POST admin), /api/orders (POST, GET user), /api/analytics/events (nuevo), /api/ai/generate-text, /api/health, /metrics (solo referencia).
+- Documentar: /api/auth (register/login/logout/refresh/me), /api/products (GET list/paginado, GET detail, POST admin), /api/orders (POST, GET user), /api/analytics/events (nuevo), /api/health, /metrics (solo referencia).
 
 ## Pasos
 

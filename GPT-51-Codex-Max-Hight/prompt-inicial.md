@@ -15,6 +15,7 @@
 - Versiones/herramientas: `tooling-versions.md`
 - Trazabilidad hallazgos→tareas: sección en `plan-maestro.md`
 - Checklists: `checklists/` (seguridad, code review, pre-commit, a11y, perf, rollout)
+- Estado / seguimiento maestro: `CheckList.md` (archivo central para evidencias y checkpoints del Plan Maestro). **IMPORTANTE**: cuando abras `prompt-inicial.md` también lee `CheckList.md` para comprobar el estado actual y las pruebas/evidencias.
 - Runbooks: `runbooks/` (incidentes, rollback, DR, perf-hotfix, oncall)
 - Scripts: en `package.json` y `scripts/` (ver “Comandos clave” abajo)
 - Datos/seed: `backend/prisma/seed.ts`

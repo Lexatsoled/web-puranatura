@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AnalyticsEvent, PageViewEvent } from '../types/analytics';
+import { AnalyticsEvent } from '../types/analytics';
 import AnalyticsService from '../services/analyticsService';
 
 // AnalyticsService behaviour has been extracted into `src/services/analyticsService.ts`

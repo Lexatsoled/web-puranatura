@@ -32,7 +32,7 @@ VITE_JWT_SECRET=your_jwt_secret_here
 
 # External Services
 VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
-VITE_GEMINI_API_KEY=your_gemini_api_key
+<!-- removed legacy provider build key placeholder -->
 
 # CDN
 VITE_CDN_BASE_URL=https://cdn.bunny.net/your-pull-zone

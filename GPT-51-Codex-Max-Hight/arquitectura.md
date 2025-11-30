@@ -2,7 +2,7 @@
 
 ## Contexto (C4 nivel 1)
 
-- Usuario → SPA (Vite/React) → BFF Express (Node 20) → Prisma/SQLite (upgradeable a Postgres) → Integraciones opcionales (Gemini API, GA, FB Pixel).
+Usuario → SPA (Vite/React) → BFF Express (Node 20) → Prisma/SQLite (upgradeable a Postgres) → Integraciones opcionales (servicios externos: GA, FB Pixel, etc.).
 - Observabilidad: Prometheus + (future) Grafana; LHCI para web; k6 para API.
 
 ## Componentes (C4 nivel 2)
@@ -14,7 +14,7 @@
   - SEO/A11y: next-seo, Breadcrumbs JSON-LD, DOMPurify sanitization.
 - BFF / API
   - Entrypoint: Express app con helmet, cors, rate-limit, csrf doble submit, prom-client.
-  - Rutas: auth (JWT cookies), products (paginado + cache headers), orders (transacción stock), ai (Gemini), health, metrics, analytics (a implementar).
+  - Rutas: auth (JWT cookies), products (paginado + cache headers), orders (transacción stock), health, metrics, analytics (a implementar).
   - Middlewares: traceId, requestLogger (histogram), auth (JWT decode + admin), error envelope.
   - Datos: Prisma models User/Product/Order/Review; seeds; migraciones.
 - Infra / CI
@@ -38,7 +38,7 @@ User → SPA `/login` → `useApi.post /api/auth/login` (CSRF token) → Express
     - AuthService (bcrypt/jwt)
     - ProductService (cache headers, search/paginate)
     - OrderService (transaction stock)
-    - AiService (Gemini client con timeout)
+    - External provider clients (if added) should live out-of-repo and be injected via orchestration; prefer webhooks/orchestrators for LLM calls.
     - AnalyticsService (ingest + persist)
   - Utilidades: logger, response envelope, loginLockout.
 

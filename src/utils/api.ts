@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useNotifications } from '../contexts/NotificationContext';
-import { transformApiError } from './errorHandler';
+import transformApiError from './transformApiError';
 import {
   sanitizeRequestMiddleware,
   sanitizeResponseMiddleware,
 } from './sanitizationMiddleware';
-import RateLimiter from './rateLimiter';
+import RateLimiter, { RateLimitConfig } from './rateLimiter';
 
 const apiBaseUrl =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||

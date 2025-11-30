@@ -23,4 +23,4 @@
 - `flag.cspEnforce`: activar CSP enforce cuando los terceros estén listados.
 - `flag.analyticsIngest`: activar nuevo endpoint /api/analytics/events.
 - `flag.lazyLegacyCatalog`: habilitar lazy import del catálogo.
-- `flag.aiEnabled`: cortar /api/ai si falla proveedor.
+<!-- `flag.aiEnabled` removed: this project no longer exposes a built-in /api/ai endpoint. Use external orchestrator flags if required -->

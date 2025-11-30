@@ -1,0 +1,36 @@
+name: 'Auto-generate phase-checkpoints from canonical CheckList'
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 3 * * *' # daily at 03:00 UTC
+
+jobs:
+  regen-and-pr:
+    runs-on: ubuntu-latest
+    name: Regenerate docs/phase-checkpoints.md and open PR if changed
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run generator script
+        shell: bash
+        run: |
+          node ./scripts/generate-phase-checkpoints.cjs
+
+      - name: Create Pull Request if there are changes
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/regen-phase-checkpoints
+          commit-message: 'chore(docs): regen phase-checkpoints from CheckList.md'
+          title: 'chore(docs): regen phase-checkpoints from CheckList.md'
+          body: |
+            This PR updates `docs/phase-checkpoints.md` from `GPT-51-Codex-Max-Hight/CheckList.md`.
+            The change was generated automatically by the repository workflow to keep pages in sync.
+          labels: automation, docs

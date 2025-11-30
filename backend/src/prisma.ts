@@ -12,7 +12,10 @@ if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('file:')) {
       const resolved = path.resolve(__dirname, '..', filePath);
       process.env.DATABASE_URL = `file:${resolved}`;
       // eslint-disable-next-line no-console
-      console.log('[prisma] normalized DATABASE_URL to', process.env.DATABASE_URL);
+      console.log(
+        '[prisma] normalized DATABASE_URL to',
+        process.env.DATABASE_URL
+      );
     }
   } catch (e) {
     // If anything goes wrong here we don't want to crash on import — Prisma

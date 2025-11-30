@@ -23,9 +23,10 @@ export const csrfDoubleSubmit = (
 
   // Siempre emitimos cookie para que el cliente pueda reenviar el token
   if (!cookieToken) {
+    // Emit CSRF cookie with SameSite=strict to reduce cross-site leakage.
     res.cookie(CSRF_COOKIE, generateToken(), {
       httpOnly: false,
-      sameSite: 'lax',
+      sameSite: 'strict',
       secure: req.secure,
     });
   }

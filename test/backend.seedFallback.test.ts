@@ -15,17 +15,18 @@ import * as seedModule from '../backend/prisma/seed';
 
 beforeAll(() => {
   // Ensure we don't hit the real DB in this test - simulate DB read failure
-  vi.spyOn(prisma.product, 'findMany').mockImplementation(async () => {
-    throw new Error('Simulated DB read failure');
-  });
-  vi.spyOn(prisma.product, 'count').mockImplementation(async () => {
-    throw new Error('Simulated DB count failure');
-  });
+
+  vi.spyOn(prisma.product, 'findMany').mockRejectedValue(
+    new Error('Simulated DB read failure') as any
+  );
+  vi.spyOn(prisma.product, 'count').mockRejectedValue(
+    new Error('Simulated DB count failure') as any
+  );
 
   // Make seed fail as well so code takes the legacy fallback path
-  vi.spyOn(seedModule, 'seedProducts').mockImplementation(async () => {
-    throw new Error('Simulated seed failure');
-  });
+  vi.spyOn(seedModule, 'seedProducts').mockRejectedValue(
+    new Error('Simulated seed failure') as any
+  );
 });
 
 afterAll(async () => {

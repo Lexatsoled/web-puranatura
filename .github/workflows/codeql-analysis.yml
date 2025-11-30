@@ -1,0 +1,40 @@
+name: "CodeQL SAST scan"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * 2' # weekly on Tuesdays at 02:00 UTC
+
+jobs:
+  analyze:
+    name: Analyze (CodeQL)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'javascript,typescript'
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Run CodeQL Analysis
+      # Don't fail the whole workflow if CodeQL fails to upload results or
+      # the repository doesn't have Code Scanning enabled. We still want PRs
+      # to proceed while the repo owner enables Code Scanning separately.
+      continue-on-error: true
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: '/language:javascript'

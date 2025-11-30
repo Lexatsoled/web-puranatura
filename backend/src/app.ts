@@ -30,27 +30,31 @@ app.use(
         // Construimos las directivas y añadimos upgradeInsecureRequests
         // solo cuando CSP esté en modo enforce.
         const d: Record<string, any> = {
-        defaultSrc: ["'self'"],
-        scriptSrc: [
-          "'self'",
-          'https://www.googletagmanager.com',
-          'https://www.google-analytics.com',
-          'https://connect.facebook.net',
-        ],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        connectSrc: [
-          "'self'",
-          'https://www.google-analytics.com',
-          'https://www.googletagmanager.com',
-          'https://maps.googleapis.com',
-          'https://maps.gstatic.com',
-          'https://connect.facebook.net',
-        ],
-        imgSrc: ["'self'", 'data:', 'https:', 'https://maps.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        objectSrc: ["'none'"],
-        baseUri: ["'self'"],
-        frameAncestors: ["'none'"],
+          defaultSrc: ["'self'"],
+          scriptSrc: [
+            "'self'",
+            'https://www.googletagmanager.com',
+            'https://www.google-analytics.com',
+            'https://connect.facebook.net',
+          ],
+          styleSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://fonts.googleapis.com',
+          ],
+          connectSrc: [
+            "'self'",
+            'https://www.google-analytics.com',
+            'https://www.googletagmanager.com',
+            'https://maps.googleapis.com',
+            'https://maps.gstatic.com',
+            'https://connect.facebook.net',
+          ],
+          imgSrc: ["'self'", 'data:', 'https:', 'https://maps.googleapis.com'],
+          fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+          objectSrc: ["'none'"],
+          baseUri: ["'self'"],
+          frameAncestors: ["'none'"],
         };
         if (!env.cspReportOnly) d.upgradeInsecureRequests = [];
         return d as any; // cast para cuadrar con la firma de helmet

@@ -93,13 +93,7 @@
       "hash": "sha256:bce75e66db1f8e04c1cbe28fa047ef232abb5ed1e46da080d7f794461a325bfd",
       "module_id": "misc"
     },
-    {
-      "path": "GEMINI.md",
-      "size": 3140,
-      "lang": "md",
-      "hash": "sha256:eb82b825012b48ae56cb64d592b6f322ad8d6d825bb3fed59c070634491ad121",
-      "module_id": "misc"
-    },
+    
     {
       "path": "index.css",
       "size": 59,
@@ -12046,7 +12040,7 @@
         "ANÁLISIS_Y_MEJORAS.md",
         "ERRORES_JSX_CORREGIDOS.md",
         "ESTADO_ERRORES.md",
-        "GEMINI.md",
+        
         "README.md",
         "_tmp_inventory.py",
         "index.css",

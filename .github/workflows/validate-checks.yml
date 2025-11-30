@@ -1,0 +1,45 @@
+name: 'Validate docs & memory checks'
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  validate-checks:
+    runs-on: ubuntu-latest
+    name: Comprueba que los archivos de checkpoints y memoria existen y están en sync
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validar que docs/phase-checkpoints.md referencia CheckList.md
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f docs/phase-checkpoints.md ]; then
+            echo "ERROR: docs/phase-checkpoints.md no existe." >&2
+            exit 1
+          fi
+          if ! grep -q "GPT-51-Codex-Max-Hight/CheckList.md" docs/phase-checkpoints.md; then
+            echo "ERROR: docs/phase-checkpoints.md no contiene referencia a GPT-51-Codex-Max-Hight/CheckList.md" >&2
+            echo "Sugerencia: actualiza docs/phase-checkpoints.md para redirigir al CheckList maestro." >&2
+            exit 1
+          fi
+          echo "docs/phase-checkpoints.md verifica OK (ref a CheckList.md encontrada)."
+
+      - name: Validar que .github/instructions/memory.instruction.md existe y marca idioma español
+        shell: bash
+        run: |
+          set -euo pipefail
+          MEMPATH=".github/instructions/memory.instruction.md"
+          if [ ! -f "$MEMPATH" ]; then
+            echo "ERROR: $MEMPATH no existe." >&2
+            exit 1
+          fi
+          if ! grep -q "preferencia_idioma:\s*\"español\"" "$MEMPATH" && ! grep -q "El asistente debe hablar SIEMPRE en español" "$MEMPATH"; then
+            echo "ERROR: Preferencia de idioma 'español' no encontrada en $MEMPATH" >&2
+            echo "Sugerencia: añade preferencia_idioma: \"español\" o el texto 'El asistente debe hablar SIEMPRE en español'" >&2
+            exit 1
+          fi
+          echo "$MEMPATH verifica OK (preferencia de idioma encontrada)."
