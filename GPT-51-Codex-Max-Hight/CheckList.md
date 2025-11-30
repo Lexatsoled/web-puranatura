@@ -99,16 +99,39 @@ Prioridad alta: terminar hardening backend, auth, CSRF, rate limiting, SAST/DAST
 
 ---
 
-## Fase 2 — Datos, API y contratos (Estado: PENDIENTE)
+## Fase 2 — Datos, API y contratos (Estado: EN PROGRESO) ⚙️
+
+Iniciamos formalmente Fase 2 el 2025-11-30: priorizar OpenAPI completo, migraciones versionadas de Prisma y contratos API. He creado issues iniciales en el repositorio para T2.1..T2.6 (ver enlaces en la sección a continuación) para trabajar de forma trazable.
 
 - [ ] T2.1 OpenAPI 3.1 completo
+  - Estado: EN PROGRESO — Prioridad alta. Crear `openapi.yaml`, añadir contract tests y CI checks (Prism/ Spectral / Dredd / OpenAPI Validator).
+  - Issue: _por crear_ (se añadirá enlace al issue una vez generado)
 - [ ] T2.2 Prisma: migraciones versionadas y estabilidad
+  - Estado: PENDIENTE — definir folder de migraciones versionadas, asegurar procesos de CI para aplicar migraciones en staging.
+  - Issue: _por crear_
 - [ ] T2.3 Catálogo: paginación defensiva, ETag + cache
+  - Estado: PENDIENTE — definir límites por defecto y headers ETag/Cache-Control.
+  - Issue: _por crear_
 - [ ] T2.4 Seeds idempotentes y validaciones
+  - Estado: PENDIENTE — crear seeds idempotentes para entornos locales y staging; añadir validaciones invariantes.
+  - Issue: _por crear_
 - [ ] T2.5 Analytics endpoint con zod & rate-limit
+  - Estado: PENDIENTE — definir contract, schema (zod), y aplicar rate limits y pruebas.
+  - Issue: _por crear_
 - [ ] T2.6 Drift check OpenAPI ↔ implementaciones
+  - Estado: PENDIENTE — configurar CI para comprobar descuadres entre `openapi.yaml` y las rutas reales.
+  - Issue: _por crear_
 
 Evidencia a recoger para cierre: `openapi.yaml` en repo, contract test logs (Prism/Dredd), Prisma migration files aplicadas en stage.
+
+Issues creados (T2 iniciales):
+
+- T2.1 OpenAPI 3.1 completo — https://github.com/Lexatsoled/web-puranatura/issues/33
+- T2.2 Prisma: migraciones versionadas y estabilidad — https://github.com/Lexatsoled/web-puranatura/issues/34
+- T2.3 Catálogo: paginación defensiva, ETag + cache — https://github.com/Lexatsoled/web-puranatura/issues/35
+- T2.4 Seeds idempotentes y validaciones — https://github.com/Lexatsoled/web-puranatura/issues/36
+- T2.5 Analytics endpoint con zod & rate-limit — https://github.com/Lexatsoled/web-puranatura/issues/37
+- T2.6 Drift check OpenAPI ↔ implementaciones — https://github.com/Lexatsoled/web-puranatura/issues/38
 
 ---
 

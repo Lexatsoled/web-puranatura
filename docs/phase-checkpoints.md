@@ -18,6 +18,8 @@ Uso recomendado:
 
 Última actualización: 2025-11-29 — actualizado desde CheckList.md (automático).
 Última actualización: 2025-11-30 — novedades: Dependabot configurado y `dependabot.yml` fusionado en `main` (PR #28). Además se creó un workflow para auto-merge seguro de parches y se fusionó en `main` (PR #29 — `.github/workflows/dependabot-auto-merge.yml`). Se añadió una mejora backend para desarrollo local (PR #30) que prioriza `.env.local` y aplica un fallback `DATABASE_URL=file:./prisma/dev.db` en entornos no-production. Dependabot rules en progreso (preparadas para HIGH/CRITICAL, por implementar). Adicionalmente, PR #32 (hardening, runbooks y helpers) fue fusionada a `main` el 2025-11-30. Se ha actualizado `GPT-51-Codex-Max-Hight/CheckList.md` como fuente de verdad canónica y contiene el estado actual de fases.
+
+Estado actual: **Fase 2 iniciada (EN PROGRESO)** — se prioriza OpenAPI y migraciones de Prisma. Consulte `GPT-51-Codex-Max-Hight/CheckList.md` para el seguimiento detallado y enlaces a tareas.
 Se añadió workflow para detectar alertas Dependabot de severidad HIGH/CRITICAL y crear issues automáticamente (`.github/workflows/dependabot-high-alerts.yml`).
 Se añadió generación de SBOM y comprobación de licencias en CI (`.github/workflows/generate-sbom.yml`, `scripts/check-licenses.cjs`, package.json scripts `generate:sbom` y `check:licenses`).
 
