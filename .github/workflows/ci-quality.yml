@@ -188,7 +188,7 @@ jobs:
         run: node scripts/run-gitleaks.cjs
 
       - name: Security scan - Trivy (aquasecurity/trivy-action)
-        uses: aquasecurity/trivy-action@v0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: 'fs'
           scan-ref: '.'
