@@ -33,6 +33,14 @@ jobs:
 
           if [ ${#found[@]} -ne 0 ]; then
             echo "ERROR: se han detectado archivos que contienen secretos (p. ej. .env):"
+            echo "--- DEBUG: list of found matches (for troubleshooting) ---"
+            printf "%s\n" "${found[@]}"
+            echo "--- DEBUG: full repo files matching suspicious patterns ---"
+            git ls-files --full-name | grep -E "(^|/)(\.env|backend/\.env)$|\\.key$|\\.secret$|token|secret|refresh" -n || true
+            echo "--- DEBUG: searching in scripts for token-like strings (scripts/run-contract.cjs) ---"
+            if [ -f scripts/run-contract.cjs ]; then
+              grep -nE "token|secret|refresh|Bearer" scripts/run-contract.cjs || true
+            fi
             printf "%s\n" "${found[@]}"
             echo "Por seguridad, por favor use GitHub Secrets / Vault y elimine estos archivos del repo."
             exit 1
