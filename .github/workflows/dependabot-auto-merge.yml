@@ -26,7 +26,12 @@ jobs:
         with:
           script: |
             // Try to locate the PR reliably across different triggering events
-            const payload = github.context.payload;
+            // 'context' contains the event payload in actions/github-script
+            const payload = context.payload;
+
+            // define owner/repo early — we'll need them if we lookup PRs by commit SHA
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
             let pr = payload.pull_request;
 
             // If the workflow run was triggered by a check_run/check_suite event,
