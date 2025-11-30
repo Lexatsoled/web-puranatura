@@ -106,7 +106,7 @@
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "jsdom": "^26.1.0",
-    "lint-staged": "^14.0.0",
+    "lint-staged": "^16.2.7",
     "msw": "^2.10.4",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
