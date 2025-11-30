@@ -1,4 +1,4 @@
-## Estado de fases — índice y punto de entrada canonical
+# Estado de fases — índice y punto de entrada canonical
 
 Este documento ahora actúa como un stub/index de compatibilidad en `docs/` que apunta a la fuente de verdad canonica del plan maestro.
 
@@ -18,6 +18,8 @@ Uso recomendado:
 
 Última actualización: 2025-11-29 — actualizado desde CheckList.md (automático).
 Última actualización: 2025-11-30 — novedades: Dependabot configurado y `dependabot.yml` fusionado en `main` (PR #28). Además se creó un workflow para auto-merge seguro de parches y se fusionó en `main` (PR #29 — `.github/workflows/dependabot-auto-merge.yml`). Se añadió una mejora backend para desarrollo local (PR #30) que prioriza `.env.local` y aplica un fallback `DATABASE_URL=file:./prisma/dev.db` en entornos no-production. Dependabot rules en progreso (preparadas para HIGH/CRITICAL, por implementar).
+Se añadió workflow para detectar alertas Dependabot de severidad HIGH/CRITICAL y crear issues automáticamente (`.github/workflows/dependabot-high-alerts.yml`).
+Se añadió generación de SBOM y comprobación de licencias en CI (`.github/workflows/generate-sbom.yml`, `scripts/check-licenses.cjs`, package.json scripts `generate:sbom` y `check:licenses`).
 
 Resumen de cambios recientes:
 
@@ -28,4 +30,4 @@ _Contenido fuente (primera sección de CheckList.md resumida):_
 
 ---
 
-# CheckList - Seguimiento detallado del Plan Maestro (PuraNatura)
+## CheckList - Seguimiento detallado del Plan Maestro (PuraNatura)

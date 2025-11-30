@@ -1,4 +1,63 @@
 #!/usr/bin/env bash
+# Purge history helper (POSIX / Linux / macOS)
+# WARNING: This rewrites git history. Use with extreme care. Run locally only
+# after reading the runbook docs/runbooks/history-remediation.md and coordinate
+# with all collaborators (they will need to re-clone). This script does not
+# force-push anything by default — it creates a cleaned mirror repo under
+# ./tmp-repo-purged.git that you can inspect and push manually.
+
+set -euo pipefail
+
+REPO_REMOTE=${1:-git@github.com:Lexatsoled/web-puranatura.git}
+MIRROR_DIR=./tmp-repo-mirror.git
+PURGED_DIR=./tmp-repo-purged.git
+
+echo "This will create a mirror clone of ${REPO_REMOTE} into ${MIRROR_DIR}"
+echo "It will then run git-filter-repo to remove sensitive paths and write output to ${PURGED_DIR}"
+echo
+read -p "Continue? [y/N]: " conf
+if [[ "$conf" != "y" && "$conf" != "Y" ]]; then
+  echo "Aborting"
+  exit 1
+fi
+
+rm -rf "$MIRROR_DIR" "$PURGED_DIR"
+
+echo "Cloning mirror..."
+git clone --mirror "$REPO_REMOTE" "$MIRROR_DIR"
+
+pushd "$MIRROR_DIR" >/dev/null
+
+echo "Running git-filter-repo (requires git-filter-repo installed)"
+# Example removal list (update if you need to add or remove paths)
+cat > remove-paths.txt <<'EOF'
+archive/legacy-docs/
+reports/tmp/
+reports/tmp/*
+*.env.local
+reports/tmp/lighthouse.*
+EOF
+
+echo "The following paths will be removed from history:"
+cat remove-paths.txt
+
+read -p "Proceed with rewrite? This is destructive for the mirror only (Y to proceed): " proceed
+if [[ "$proceed" != "Y" ]]; then
+  echo "Cancelled rewrite. Mirror is at ${MIRROR_DIR}" && popd >/dev/null
+  exit 0
+fi
+
+# Run git-filter-repo removing listed paths
+git filter-repo --invert-paths --paths-from-file remove-paths.txt
+
+popd >/dev/null
+
+echo "Move purged mirror to ${PURGED_DIR}"
+mv "$MIRROR_DIR" "$PURGED_DIR"
+
+echo "Purged repo created at ${PURGED_DIR}. Inspect before force-pushing."
+echo "If you want to push, run: git push --force --all and git push --force --tags from inside ${PURGED_DIR}" 
+#!/usr/bin/env bash
 # Safe helper for purging sensitive files from repo history using git-filter-repo
 # This script creates a mirror clone, runs git-filter-repo (removal list below) and
 # prints verification instructions. It will NOT push by default — push only after manual verification.

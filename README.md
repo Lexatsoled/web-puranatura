@@ -48,14 +48,25 @@ for LLMs to be present in the repository or CI. If you need LLM capabilities,
 integrate them via an external orchestrator (for example n8n) using secure
 webhooks and properly rotated keys managed outside the repo.
 
-Changelog: removal of built-in AI endpoint
--------------------------------------------------
+## Changelog: removal of built-in AI endpoint
+
 - 2025-11-29: The project removed the built-in `/api/ai` endpoint and removed direct integrations with LLM providers. This keeps the codebase free of provider keys and avoids accidental provider usage. Use external orchestrators (n8n, workflows, webhooks) to integrate LLMs if needed.
 
 - Useful scripts:
   - `node scripts/list-required-secrets.cjs --write` — scans the code base for env vars and writes `.github/required-secrets.yml`.
   - `node scripts/gh-set-secrets.cjs --file .github/required-secrets.yml --env-file .env.local` — helper to upload secrets using `gh` CLI (requires gh auth).
   - `npm run deploy:check` — dry-run check to verify required secrets are available in the environment.
+
+  - `node scripts/gh-set-secrets.cjs --file .github/required-secrets.yml --env-file .env.local --dry-run` — prueba (no cambia nada) para validar qué secrets se subirían.
+  - `node scripts/generate-env-local.cjs --file .env.local --dry-run` — genera localmente un `.env.local` poblado (dry-run muestra el resultado sin escribir).
+  - `node scripts/generate-env-local.cjs --file .env.local --yes` — escribe `.env.local` con valores seguros (útil para desarrollo local).
+  - `scripts/purge-history.sh` / `scripts/purge-history.ps1` — helpers para preparar (mirror clone) y ejecutar `git-filter-repo` para purgar rutas sensibles del historial. **No** fuerces push sin coordinación.
+
+  ### Runbook y guía paso a paso
+
+  Si necesitas una guía paso a paso (en español) para preparar y subir secretos de forma segura sin usar la UI del administrador, revisa el runbook:
+
+  `docs/runbooks/secrets-onboarding.md`
 
 Make sure `.env.local` or any real secret files are never committed and remain in `.gitignore`.
 

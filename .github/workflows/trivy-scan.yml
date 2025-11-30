@@ -15,9 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Trivy (pull_request: non-blocking)
+      - name: "Run Trivy (pull_request: non-blocking)"
         if: github.event_name == 'pull_request'
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -27,9 +27,9 @@ jobs:
           ignore-unfixed: true
           exit-code: '0'
 
-      - name: Run Trivy (push to main: blocking on HIGH/CRITICAL)
+      - name: "Run Trivy (push to main: blocking on HIGH/CRITICAL)"
         if: github.event_name == 'push'
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -40,7 +40,10 @@ jobs:
           exit-code: '1'
 
       - name: Upload SARIF results to GitHub code scanning
-        if: always()
+        # Upload SARIF only on push (not on PRs)
+        if: always() && github.event_name != 'pull_request'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+
+
