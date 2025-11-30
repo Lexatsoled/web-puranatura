@@ -25,9 +25,36 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const pr = github.context.payload.pull_request;
+            // Try to locate the PR reliably across different triggering events
+            const payload = github.context.payload;
+            let pr = payload.pull_request;
+
+            // If the workflow run was triggered by a check_run/check_suite event,
+            // the pull_request might be under check_run.pull_requests or check_suite.pull_requests
             if (!pr) {
-              core.info('Not a pull_request event, skipping.');
+              if (payload.check_run?.pull_requests?.length) {
+                pr = payload.check_run.pull_requests[0];
+              } else if (payload.check_suite?.pull_requests?.length) {
+                pr = payload.check_suite.pull_requests[0];
+              }
+            }
+
+            // If still no PR object, try to find PRs associated with the head SHA
+            if (!pr) {
+              const possibleSha = payload.check_run?.check_suite?.head_sha || payload.check_run?.head_sha || payload.check_suite?.head_sha || null;
+              if (possibleSha) {
+                core.info(`Looking up PRs associated with commit SHA: ${possibleSha}`);
+                const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ owner, repo, commit_sha: possibleSha });
+                if (prs && prs.length > 0) {
+                  // Prefer open PRs
+                  pr = prs.find(p => p.state === 'open') || prs[0];
+                  core.info(`Found associated PR #${pr.number} (state=${pr.state})`);
+                }
+              }
+            }
+
+            if (!pr) {
+              core.info('No pull request found in the event payload and no PR associated with commit SHA — skipping.');
               return;
             }
 
@@ -44,9 +71,10 @@ jobs:
             const title = (pr.title || '').toLowerCase();
 
             // Try multiple common title formats to extract versions
+            // Match version-like strings with 1 to 3 numeric components (e.g. 4, 4.17, 4.17.21)
             const regexes = [
-              /from\s+v?(\d+\.\d+\.\d+)\s+to\s+v?(\d+\.\d+\.\d+)/i,
-              /bump\s.*?from\s+v?(\d+\.\d+\.\d+)\s+to\s+v?(\d+\.\d+\.\d+)/i
+              /from\s+v?(\d+(?:\.\d+){0,2})\s+to\s+v?(\d+(?:\.\d+){0,2})/i,
+              /bump\s.*?from\s+v?(\d+(?:\.\d+){0,2})\s+to\s+v?(\d+(?:\.\d+){0,2})/i
             ];
 
             let m = null;
@@ -57,8 +85,18 @@ jobs:
               return;
             }
 
-            const from = m[1].split('.').map(n => parseInt(n,10));
-            const to = m[2].split('.').map(n => parseInt(n,10));
+            const fromParts = m[1].split('.').map(n => parseInt(n,10));
+            const toParts = m[2].split('.').map(n => parseInt(n,10));
+
+            // Normalize to [major, minor, patch] for comparison
+            function normalize(parts){
+              const out = [0,0,0];
+              for (let i=0;i<Math.min(parts.length,3);i++) out[i] = parts[i] || 0;
+              return out;
+            }
+
+            const from = normalize(fromParts);
+            const to = normalize(toParts);
 
             function semverType(a,b){
               if (a[0] !== b[0]) return 'major';
