@@ -31,6 +31,10 @@ jobs:
       uses: github/codeql-action/autobuild@v2
 
     - name: Run CodeQL Analysis
+      # Don't fail the whole workflow if CodeQL fails to upload results or
+      # the repository doesn't have Code Scanning enabled. We still want PRs
+      # to proceed while the repo owner enables Code Scanning separately.
+      continue-on-error: true
       uses: github/codeql-action/analyze@v2
       with:
         category: '/language:javascript'
