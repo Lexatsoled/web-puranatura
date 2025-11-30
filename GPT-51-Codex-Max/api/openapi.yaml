@@ -20,6 +20,10 @@ tags:
     description: Product catalog endpoints
   - name: auth
     description: Authentication endpoints (login, refresh, logout)
+  - name: orders
+    description: Orders and checkout endpoints
+  - name: cart
+    description: Shopping cart management
 paths:
   /api/health:
     get:
@@ -192,6 +196,86 @@ paths:
         '401':
           description: No autorizado
 
+  /api/orders:
+    get:
+      summary: Lista de órdenes del usuario
+      description: Devuelve las órdenes del usuario autenticado.
+      operationId: listOrders
+      tags:
+        - orders
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de órdenes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+    post:
+      summary: Crear orden
+      description: Crea una nueva orden para el usuario autenticado.
+      operationId: createOrder
+      tags:
+        - orders
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Orden creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+  /api/cart:
+    get:
+      summary: Obtener carrito
+      description: Devuelve el carrito del usuario (autenticado).
+      operationId: getCart
+      tags:
+        - cart
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+    post:
+      summary: Añadir item al carrito
+      description: Añade un producto al carrito del usuario.
+      operationId: addCartItem
+      tags:
+        - cart
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+      responses:
+        '200':
+          description: Carrito actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
 components:
   schemas:
     Health:
@@ -279,6 +363,57 @@ components:
         expiresIn:
           type: integer
           description: Expiration time in seconds for the access token
+
+    OrderItem:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+
+    CreateOrderRequest:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        total:
+          type: number
+          format: float
+
+    CartItem:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+          format: float
 
   securitySchemes:
     cookieAuth:
