@@ -1,7 +1,40 @@
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 import { randomBytes } from 'crypto';
 
-dotenv.config({ path: process.env.BACKEND_ENV_PATH || undefined });
+// Load environment variables for the backend.
+// Priority:
+//  1. process.env.BACKEND_ENV_PATH (explicit)
+//  2. ./backend/.env.local if present (developer local overrides)
+//  3. default dotenv resolution (./.env)
+const explicitPath = process.env.BACKEND_ENV_PATH;
+let envPath: string | undefined = undefined;
+if (explicitPath) {
+  envPath = explicitPath;
+} else {
+  const localDotEnv = path.resolve(process.cwd(), '.env.local');
+  if (fs.existsSync(localDotEnv)) {
+    envPath = localDotEnv;
+  }
+}
+
+dotenv.config({ path: envPath });
+
+// If no DATABASE_URL is defined in the environment and we are in a
+// non-production environment, choose a sensible default for local dev
+// to avoid failing out when running `npm run dev`.
+if (
+  !process.env.DATABASE_URL &&
+  (process.env.NODE_ENV || 'development') !== 'production'
+) {
+  // Use the sqlite file inside the backend/prisma folder
+  process.env.DATABASE_URL = 'file:./prisma/dev.db';
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[env] DATABASE_URL not found — falling back to file:./prisma/dev.db for local development'
+  );
+}
 
 const toNumber = (value: string | undefined, fallback: number): number => {
   const parsed = Number(value);
@@ -69,7 +102,10 @@ export const env = {
   analyticsIngestEnabled: toBoolean(process.env.ANALYTICS_INGEST_ENABLED, true),
   // Per-route rate-limits (defaults chosen for sensible protection in dev)
   authRateLimitMax: toNumber(process.env.AUTH_RATE_LIMIT_MAX, 10),
-  authRateLimitWindowMs: toNumber(process.env.AUTH_RATE_LIMIT_WINDOW, 60 * 1000),
+  authRateLimitWindowMs: toNumber(
+    process.env.AUTH_RATE_LIMIT_WINDOW,
+    60 * 1000
+  ),
   // (previously) AI endpoint rate-limits removed — no built-in AI endpoint
   // Controla si la política CSP se aplica en modo report-only o enforce.
   // En entornos de prueba/desarrollo defaulta a true (report-only).
