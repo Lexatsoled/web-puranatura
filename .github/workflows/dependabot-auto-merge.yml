@@ -1,0 +1,145 @@
+name: Dependabot — safe auto-merge (patches only)
+
+on:
+  pull_request:
+    types: [opened, reopened, labeled, synchronize, edited]
+  # Listen to check run/suite completion so action can re-run when CI finishes
+  check_run:
+    types: [completed]
+  check_suite:
+    types: [completed]
+
+permissions:
+  checks: read
+  statuses: read
+  pull-requests: write
+
+jobs:
+  auto-merge-patch:
+    name: Auto-merge Dependabot patch updates (only when CI passes)
+    runs-on: ubuntu-latest
+    # We'll validate author + version bump inside the job — this makes the job safe
+
+    steps:
+      - name: Verify Dependabot patch update and merge only when CI passed
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Try to locate the PR reliably across different triggering events
+            // 'context' contains the event payload in actions/github-script
+            const payload = context.payload;
+
+            // define owner/repo early — we'll need them if we lookup PRs by commit SHA
+            // owner/repo already defined above
+            let pr = payload.pull_request;
+
+            // If the workflow run was triggered by a check_run/check_suite event,
+            // the pull_request might be under check_run.pull_requests or check_suite.pull_requests
+            if (!pr) {
+              if (payload.check_run?.pull_requests?.length) {
+                pr = payload.check_run.pull_requests[0];
+              } else if (payload.check_suite?.pull_requests?.length) {
+                pr = payload.check_suite.pull_requests[0];
+              }
+            }
+
+            // If still no PR object, try to find PRs associated with the head SHA
+            if (!pr) {
+              const possibleSha = payload.check_run?.check_suite?.head_sha || payload.check_run?.head_sha || payload.check_suite?.head_sha || null;
+              if (possibleSha) {
+                core.info(`Looking up PRs associated with commit SHA: ${possibleSha}`);
+                const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ owner, repo, commit_sha: possibleSha });
+                if (prs && prs.length > 0) {
+                  // Prefer open PRs
+                  pr = prs.find(p => p.state === 'open') || prs[0];
+                  core.info(`Found associated PR #${pr.number} (state=${pr.state})`);
+                }
+              }
+            }
+
+            if (!pr) {
+              core.info('No pull request found in the event payload and no PR associated with commit SHA — skipping.');
+              return;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = pr.number;
+            const author = pr.user?.login || '';
+
+            if (!author.includes('dependabot')) {
+              core.info(`PR author is not dependabot: ${author}; skipping.`);
+              return;
+            }
+
+            const title = (pr.title || '').toLowerCase();
+
+            // Try multiple common title formats to extract versions
+            // Match version-like strings with 1 to 3 numeric components (e.g. 4, 4.17, 4.17.21)
+            const regexes = [
+              /from\s+v?(\d+(?:\.\d+){0,2})\s+to\s+v?(\d+(?:\.\d+){0,2})/i,
+              /bump\s.*?from\s+v?(\d+(?:\.\d+){0,2})\s+to\s+v?(\d+(?:\.\d+){0,2})/i
+            ];
+
+            let m = null;
+            for (const r of regexes) { m = title.match(r); if (m) break; }
+
+            if (!m) {
+              core.info('Could not detect semver-like "from X to Y" in PR title — skipping auto-merge');
+              return;
+            }
+
+            const fromParts = m[1].split('.').map(n => parseInt(n,10));
+            const toParts = m[2].split('.').map(n => parseInt(n,10));
+
+            // Normalize to [major, minor, patch] for comparison
+            function normalize(parts){
+              const out = [0,0,0];
+              for (let i=0;i<Math.min(parts.length,3);i++) out[i] = parts[i] || 0;
+              return out;
+            }
+
+            const from = normalize(fromParts);
+            const to = normalize(toParts);
+
+            function semverType(a,b){
+              if (a[0] !== b[0]) return 'major';
+              if (a[1] !== b[1]) return 'minor';
+              if (a[2] !== b[2]) return 'patch';
+              return 'none';
+            }
+
+            const change = semverType(from,to);
+            core.info(`Dependabot update detected: ${m[1]} → ${m[2]} => ${change}`);
+
+            if (change !== 'patch') {
+              core.info('Update is not a patch → skipping auto-merge to stay safe.');
+              return;
+            }
+
+            // Now ensure CI checks finished successfully for the head SHA
+            const sha = pr.head.sha;
+
+            const combined = await github.rest.repos.getCombinedStatusForRef({owner, repo, ref: sha});
+            core.info(`Combined status: ${combined.data.state}`);
+
+            const checks = await github.rest.checks.listForRef({owner, repo, ref: sha});
+            const runs = checks.data.check_runs || [];
+
+            const combinedOk = combined.data.state === 'success';
+            const runsOk = runs.length > 0 && runs.every(r => r.status === 'completed' && r.conclusion === 'success');
+
+            core.info(`Check-run count: ${runs.length}, runsOk=${runsOk}, combinedOk=${combinedOk}`);
+
+            if (!(combinedOk || runsOk)) {
+              core.info('CI checks not green yet — waiting for checks to pass (this workflow is also triggered on check_run/check_suite events).');
+              return;
+            }
+
+            // CI passed — attempt a safe merge
+            try {
+              const merge = await github.rest.pulls.merge({owner, repo, pull_number: prNumber, merge_method: 'squash'});
+              core.info(`Merged PR #${prNumber}: ${JSON.stringify(merge.data)}`);
+            } catch (err) {
+              core.setFailed(`Auto-merge attempt failed: ${err.message}`);
+            }
