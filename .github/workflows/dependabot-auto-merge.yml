@@ -1,0 +1,103 @@
+name: Dependabot — safe auto-merge (patches only)
+
+on:
+  pull_request:
+    types: [opened, reopened, labeled, synchronize, edited]
+  # Listen to check run/suite completion so action can re-run when CI finishes
+  check_run:
+    types: [completed]
+  check_suite:
+    types: [completed]
+
+permissions:
+  checks: read
+  statuses: read
+  pull-requests: write
+
+jobs:
+  auto-merge-patch:
+    name: Auto-merge Dependabot patch updates (only when CI passes)
+    runs-on: ubuntu-latest
+    # We'll validate author + version bump inside the job — this makes the job safe
+
+    steps:
+      - name: Verify Dependabot patch update and merge only when CI passed
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = github.context.payload.pull_request;
+            if (!pr) {
+              core.info('Not a pull_request event, skipping.');
+              return;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = pr.number;
+            const author = pr.user?.login || '';
+
+            if (!author.includes('dependabot')) {
+              core.info(`PR author is not dependabot: ${author}; skipping.`);
+              return;
+            }
+
+            const title = (pr.title || '').toLowerCase();
+
+            // Try multiple common title formats to extract versions
+            const regexes = [
+              /from\s+v?(\d+\.\d+\.\d+)\s+to\s+v?(\d+\.\d+\.\d+)/i,
+              /bump\s.*?from\s+v?(\d+\.\d+\.\d+)\s+to\s+v?(\d+\.\d+\.\d+)/i
+            ];
+
+            let m = null;
+            for (const r of regexes) { m = title.match(r); if (m) break; }
+
+            if (!m) {
+              core.info('Could not detect semver-like "from X to Y" in PR title — skipping auto-merge');
+              return;
+            }
+
+            const from = m[1].split('.').map(n => parseInt(n,10));
+            const to = m[2].split('.').map(n => parseInt(n,10));
+
+            function semverType(a,b){
+              if (a[0] !== b[0]) return 'major';
+              if (a[1] !== b[1]) return 'minor';
+              if (a[2] !== b[2]) return 'patch';
+              return 'none';
+            }
+
+            const change = semverType(from,to);
+            core.info(`Dependabot update detected: ${m[1]} → ${m[2]} => ${change}`);
+
+            if (change !== 'patch') {
+              core.info('Update is not a patch → skipping auto-merge to stay safe.');
+              return;
+            }
+
+            // Now ensure CI checks finished successfully for the head SHA
+            const sha = pr.head.sha;
+
+            const combined = await github.rest.repos.getCombinedStatusForRef({owner, repo, ref: sha});
+            core.info(`Combined status: ${combined.data.state}`);
+
+            const checks = await github.rest.checks.listForRef({owner, repo, ref: sha});
+            const runs = checks.data.check_runs || [];
+
+            const combinedOk = combined.data.state === 'success';
+            const runsOk = runs.length > 0 && runs.every(r => r.status === 'completed' && r.conclusion === 'success');
+
+            core.info(`Check-run count: ${runs.length}, runsOk=${runsOk}, combinedOk=${combinedOk}`);
+
+            if (!(combinedOk || runsOk)) {
+              core.info('CI checks not green yet — waiting for checks to pass (this workflow is also triggered on check_run/check_suite events).');
+              return;
+            }
+
+            // CI passed — attempt a safe merge
+            try {
+              const merge = await github.rest.pulls.merge({owner, repo, pull_number: prNumber, merge_method: 'squash'});
+              core.info(`Merged PR #${prNumber}: ${JSON.stringify(merge.data)}`);
+            } catch (err) {
+              core.setFailed(`Auto-merge attempt failed: ${err.message}`);
+            }
