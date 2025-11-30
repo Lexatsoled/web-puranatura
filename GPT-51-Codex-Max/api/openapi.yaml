@@ -17,6 +17,8 @@ tags:
     description: Health / diagnostic endpoints
   - name: products
     description: Product catalog endpoints
+  - name: auth
+    description: Authentication endpoints (login, refresh, logout)
 paths:
   /api/health:
     get:
@@ -128,6 +130,67 @@ paths:
         '404':
           description: Producto no encontrado
 
+  /api/auth/login:
+    post:
+      summary: Login de usuario
+      description: Autentica a un usuario y devuelve un token de acceso.
+      operationId: loginUser
+      tags:
+        - auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+      responses:
+        '200':
+          description: Autenticación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Credenciales inválidas
+
+  /api/auth/refresh:
+    post:
+      summary: Refresh token
+      description: Intercambia un refresh token por un nuevo access token.
+      operationId: refreshToken
+      tags:
+        - auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Nuevo token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Token inválido o expirado
+
+  /api/auth/logout:
+    post:
+      summary: Logout
+      description: Invalida el token/session del usuario.
+      operationId: logoutUser
+      tags:
+        - auth
+      responses:
+        '204':
+          description: Cerró la sesión correctamente
+        '401':
+          description: No autorizado
+
 components:
   schemas:
     Health:
@@ -188,6 +251,33 @@ components:
           format: uri
         stock:
           type: integer
+
+    AuthLoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    RefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Expiration time in seconds for the access token
 
   securitySchemes:
     cookieAuth:

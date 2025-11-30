@@ -147,10 +147,134 @@ const run = async () => {
       });
     });
 
+  const fetchLogin = () =>
+    new Promise((resolve, reject) => {
+      const body = JSON.stringify({ username: 'contract', password: 'secret' });
+      const req = http.request(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/auth/login',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+            Accept: 'application/json',
+          },
+          timeout: 5000,
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/auth/login: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/auth/login del mock'));
+      });
+      req.write(body);
+      req.end();
+    });
+
+  const fetchRefresh = () =>
+    new Promise((resolve, reject) => {
+      const body = JSON.stringify({ refreshToken: 'contract-refresh-token' });
+      const req = http.request(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/auth/refresh',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+            Accept: 'application/json',
+          },
+          timeout: 5000,
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/auth/refresh: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/auth/refresh del mock'));
+      });
+      req.write(body);
+      req.end();
+    });
+
+  const fetchLogout = () =>
+    new Promise((resolve, reject) => {
+      const req = http.request(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/auth/logout',
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer contract-mock',
+            Cookie: 'token=contract-mock-token',
+          },
+          timeout: 5000,
+        },
+        (res) => {
+          if (res.statusCode && (res.statusCode === 204 || res.statusCode < 300)) {
+            resolve();
+          } else {
+            const chunks = [];
+            res.on('data', (c) => chunks.push(c));
+            res.on('end', () =>
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/auth/logout: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              )
+            );
+          }
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/auth/logout del mock'));
+      });
+      req.end();
+    });
+
   try {
     await waitForReady();
     await fetchHealth();
     await fetchProducts();
+    await fetchLogin();
+    await fetchRefresh();
+    await fetchLogout();
     shutdown(0);
   } catch (error) {
     console.error('[test:contract] Error:', error.message || error);
