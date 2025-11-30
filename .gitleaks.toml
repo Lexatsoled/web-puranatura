@@ -1,3 +1,12 @@
+useDefault = true
+
+[[allowlists]]
+description = "Ignore benign sample env files and internal reports used by gitleaks"
+paths = [
+  '''\.env\.local\.sample''',
+  '''\.env\.example''',
+  '''reports/gitleaks-report.json''',
+]
 title = "Gitleaks default config"
 
 [[rules]]
@@ -19,6 +28,16 @@ regex = '''xox[baprs]-[0-9A-Za-z-]{10,}'''
 tags = ["slack", "token"]
 
 # Exclude common false positives and allowed files
-[allowlist]
+[allowlists]
 description = "Ignore vendors / third-party / archives"
-paths = ["^archive/", "(?:^|/)node_modules/", "^playwright-report/", "^coverage/", "^backup/", "^reports/", "^GPT-51-Codex/", "^GPT-51-Codex-Max/legacy-*", "^backend/.env"]
+paths = [
+  '''^archive/''',
+  '''(?:^|/)node_modules/''',
+  '''^playwright-report/''',
+  '''^coverage/''',
+  '''^backup/''',
+  '''^reports/''',
+  '''^GPT-51-Codex/''',
+  '''^GPT-51-Codex-Max/legacy-*''',
+  '''^backend/.env'''
+]

@@ -9,6 +9,10 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      # Use a local sqlite file for CI runs so Prisma migrations / seeds can run
+      # in PRs without requiring a DATABASE_URL secret stored in repo secrets.
+      DATABASE_URL: "file:./backend/test-local.sqlite"
     steps:
       - uses: actions/checkout@v4
 
