@@ -143,6 +143,7 @@ Iniciamos formalmente Fase 2 el 2025-11-30: priorizar OpenAPI completo, migracio
   - Unit tests (Vitest) — `npm run test:unit` — OK
   - Contract smoke tests (Prism via `scripts/run-contract.cjs`) — OK (verificado localmente el 2025-12-01 — exit code 0)
   - E2E (Playwright) — `npm run test:e2e` — OK (verificado localmente el 2025-12-01 — exit code 0)
+  - PR / flujo de integración — `feat/t2-orders` ⇒ `feat/t2-auth` — fusionado (PR #41, squash merge 2025-12-01). Se creó PR #42 (`feat/t2-auth` → `main`) para promover a main; CI en PR #42 está en verde (checks OK) — listo para merge a `main`.
   - Coverage report — `npm run test:coverage` — informe generado en `coverage/`
 
 Issues creados (T2 iniciales):
