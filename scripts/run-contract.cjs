@@ -268,6 +268,162 @@ const run = async () => {
       req.end();
     });
 
+  const fetchOrders = () =>
+    new Promise((resolve, reject) => {
+      const req = http.get(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/orders',
+          timeout: 5000,
+          headers: {
+            Accept: 'application/json',
+            Cookie: 'token=contract-mock-dummy',
+          },
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/orders: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/orders del mock'));
+      });
+    });
+
+  const fetchCreateOrder = () =>
+    new Promise((resolve, reject) => {
+      const body = JSON.stringify({ items: [{ productId: 'abc', quantity: 1 }] });
+      const req = http.request(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/orders',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+            Accept: 'application/json',
+            Cookie: 'token=contract-mock-dummy',
+          },
+          timeout: 5000,
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && (res.statusCode === 201 || res.statusCode < 300)) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de POST /api/orders: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout creando orden en /api/orders del mock'));
+      });
+      req.write(body);
+      req.end();
+    });
+
+  const fetchGetCart = () =>
+    new Promise((resolve, reject) => {
+      const req = http.get(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/cart',
+          timeout: 5000,
+          headers: {
+            Accept: 'application/json',
+            Cookie: 'token=contract-mock-dummy',
+          },
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de /api/cart: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout consultando /api/cart del mock'));
+      });
+    });
+
+  const fetchAddCartItem = () =>
+    new Promise((resolve, reject) => {
+      const body = JSON.stringify({ productId: 'abc', quantity: 1 });
+      const req = http.request(
+        {
+          hostname: HOST,
+          port,
+          path: '/api/cart',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+            Accept: 'application/json',
+            Cookie: 'token=contract-mock-dummy',
+          },
+          timeout: 5000,
+        },
+        (res) => {
+          const chunks = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode < 300) {
+              resolve();
+            } else {
+              reject(
+                new Error(
+                  `Respuesta inesperada de POST /api/cart: ${res.statusCode} ${Buffer.concat(chunks).toString()}`
+                )
+              );
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout añadiendo item a /api/cart del mock'));
+      });
+      req.write(body);
+      req.end();
+    });
+
   try {
     await waitForReady();
     await fetchHealth();
@@ -275,6 +431,11 @@ const run = async () => {
     await fetchLogin();
     await fetchRefresh();
     await fetchLogout();
+    // Orders + cart smoke tests
+    await fetchOrders();
+    await fetchCreateOrder();
+    await fetchGetCart();
+    await fetchAddCartItem();
     shutdown(0);
   } catch (error) {
     console.error('[test:contract] Error:', error.message || error);
