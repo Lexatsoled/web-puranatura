@@ -228,6 +228,8 @@ Issues creados (T2 iniciales):
   - Avance 2025-12-xx: `src/components/ShoppingCart.tsx` delega el listado en `CartItemsList`, `CartItemRow` y `CartQuantityControl`, y el resumen en `CartSummary`/`CheckoutButton`; el hook `useShoppingCart` se concentra en totales. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` muestra `ShoppingCart.tsx` en 27.
   - Avance 2025-12-03: `pages/StorePage.tsx` usa `useStorePage` (fetch, filtros, orden, paginación) y subcomponentes (header, controles, grid, estados vacíos/errores, paginación). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; StorePage sale del top de complejidad.
   - Avance 2025-12-03: `src/utils/api.ts` (2ª pasada) mueve helpers a `apiHelpers.ts` y reduce CC manteniendo la interfaz CRUD. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` ya no lista api.ts en el top.
+  - Avance 2025-12-03: `src/components/ShoppingCart.tsx` (2ª pasada) orquesta subcomponentes en `components/cart/*` con `useCartItemState`; CC fuera del top. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+  - Avance 2025-12-03: `src/types/product.ts` y `src/utils/transformApiError.ts` simplificados (Partial para opcionales, mapa de mensajes). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
   - Estado CC (2025-12-02): los módulos refactorizados quedan por debajo de CC 15 y salen del top del `complexity-report.json`.
 - [ ] T5.2 Clean Architecture y separación de responsabilidades
   - Evidencia: ajustes en los servicios/rutas y la documentación en la ADR `docs/adr/0003-phase5-maintainability.md`.

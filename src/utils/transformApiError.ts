@@ -1,8 +1,17 @@
+const defaultMessages: Record<number, string> = {
+  400: 'Datos inválidos',
+  401: 'No autorizado',
+  403: 'Acceso denegado',
+  404: 'Recurso no encontrado',
+  429: 'Demasiadas solicitudes',
+  500: 'Error interno del servidor',
+};
+
 export class ApiError extends Error {
   constructor(
     message: string,
     public statusCode: number,
-    public details?: any
+    public details?: unknown
   ) {
     super(message);
     this.name = 'ApiError';
@@ -13,7 +22,7 @@ export class ValidationError extends Error {
   constructor(
     message: string,
     public field?: string,
-    public details?: any
+    public details?: unknown
   ) {
     super(message);
     this.name = 'ValidationError';
@@ -27,36 +36,19 @@ export class NetworkError extends Error {
   }
 }
 
-/**
- * map an axios-like error/response shape into domain errors used across the app
- */
-export function transformApiError(error: any): Error {
-  if (!error?.response) {
-    return new NetworkError();
+export function transformApiError(error: unknown): Error {
+  const response = (error as any)?.response;
+  if (!response) return new NetworkError();
+
+  const { status, data } = response;
+  const message =
+    data?.message || defaultMessages[status] || 'Error desconocido';
+
+  if (status === 400) {
+    return new ValidationError(message, data?.field, data);
   }
 
-  const { status, data } = error.response;
-
-  switch (status) {
-    case 400:
-      return new ValidationError(
-        data.message || 'Datos inválidos',
-        data.field,
-        data
-      );
-    case 401:
-      return new ApiError('No autorizado', status, data);
-    case 403:
-      return new ApiError('Acceso denegado', status, data);
-    case 404:
-      return new ApiError('Recurso no encontrado', status, data);
-    case 429:
-      return new ApiError('Demasiadas solicitudes', status, data);
-    case 500:
-      return new ApiError('Error interno del servidor', status, data);
-    default:
-      return new ApiError(data?.message || 'Error desconocido', status, data);
-  }
+  return new ApiError(message, status, data);
 }
 
 export default transformApiError;

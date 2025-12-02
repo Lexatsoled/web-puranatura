@@ -9,7 +9,7 @@ export interface ProductCategory {
   name: string;
 }
 
-export interface Product {
+type ProductRequired = {
   id: string;
   name: string;
   description: string;
@@ -19,28 +19,31 @@ export interface Product {
   stock: number;
   sku: string;
   tags: string[];
-  inStock?: boolean;
-  brand?: string;
-  benefits?: string[];
-  featured?: boolean;
-  seoDescription?: string;
-  ingredients?: string[];
-  compareAtPrice?: number;
-  specifications?: {
-    [key: string]: string;
-  };
-  relatedProducts?: string[];
-  isNew?: boolean;
-  isBestSeller?: boolean;
-  detailedDescription?: string;
-  mechanismOfAction?: string;
-  benefitsDescription?: string[];
-  healthIssues?: string[];
-  components?: Array<{ name: string; description?: string; amount?: string }>;
-  faqs?: Array<{ question: string; answer: string }>;
-  dosage?: string;
-  administrationMethod?: string;
-}
+};
+
+type ProductOptional = Partial<{
+  inStock: boolean;
+  brand: string;
+  benefits: string[];
+  featured: boolean;
+  seoDescription: string;
+  ingredients: string[];
+  compareAtPrice: number;
+  specifications: Record<string, string>;
+  relatedProducts: string[];
+  isNew: boolean;
+  isBestSeller: boolean;
+  detailedDescription: string;
+  mechanismOfAction: string;
+  benefitsDescription: string[];
+  healthIssues: string[];
+  components: Array<{ name: string; description?: string; amount?: string }>;
+  faqs: Array<{ question: string; answer: string }>;
+  dosage: string;
+  administrationMethod: string;
+}>;
+
+export type Product = ProductRequired & ProductOptional;
 
 export type SortOption =
   | 'name-asc'
