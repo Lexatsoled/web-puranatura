@@ -209,6 +209,7 @@ Issues creados (T2 iniciales):
   - Evidencia: `lint-staged`/`husky` en `package.json`, instrucciones de validación en `docs/runbooks/fase5-maintainability.md` y el checklist adicional para reviewers.
 - [ ] T5.4 ADRs/documentación viva
   - Evidencia: ADR 0003 + actualizaciones en el plan (doc anterior) y confirmación de que los artefactos del release se adjuntan en cada PR.
+- Plan detallado: `GPT-51-Codex-Max-Hight/plan-maestro-fase-5.md` resume objetivos, sprint y artefactos obligatorios.
 
 - Acciones actuales: ejecutar `npm run check:complexity`, documentar los refactors, mantener el plan del sprint en `docs/runbooks/fase5-maintainability.md` y registrar las decisiones en `docs/adr/0003-phase5-maintainability.md`.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
