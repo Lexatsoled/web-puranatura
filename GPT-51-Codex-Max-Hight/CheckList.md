@@ -180,7 +180,7 @@ Issues creados (T2 iniciales):
 
 ---
 
-## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: EN PROGRESO)
+## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: COMPLETADO)
 
 - [x] T4.1 Tracing/logging con OpenTelemetry y traceId en headers
   - Evidencia: `backend/src/tracing/initTracing.ts`, `backend/src/middleware/traceId.ts`, `reports/observability/trace-sample.md`, `docs/runbooks/observability.md`.
@@ -191,11 +191,22 @@ Issues creados (T2 iniciales):
 - [x] T4.4 Feature flags + canary automation
   - Evidencia: `docs/runbooks/ci-canary.md`, `scripts/rollout-canary.cjs`, `scripts/update-flag.cjs`, `config/flags.json`, `reports/observability/dashboard-summary.md` (alertas/monitorización sugerida del canary).
 - [x] T4.5 Backups/DR tests
-  - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
+- Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [x] T4.6 Synthetic monitoring
-  - Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
-- [ ] Sintéticos + evidencia de release (2025-12-02)
-  - Comando: `npm run synthetic:checks` genera `reports/synthetic/synthetic-report.json` con login/catálogo/checkout y `reports/observability/observability-artifacts.zip` + `reports/observability/metrics-snapshot.txt`; SBOM actualizado con `npm run generate:sbom`. Adjuntar estos artefactos a cada release o ticket de rollback para triage inmediato.
+- Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
+- [x] Sintéticos + evidencia de release (2025-12-02)
+  - Comando: `npm run synthetic:checks` generó `reports/synthetic/synthetic-report.json`; los artefactos `reports/observability/observability-artifacts.zip`, `reports/observability/metrics-snapshot.txt` y `sbom.json` se guardan junto a cada release/ticket para auditoría.
+- [x] Fase 4 cerrada (Sprint 1–3 completados + artefactos archivados)
+  - Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
+
+## Fase 5 – Refactor, deuda y prevención (Estado: INICIADA)
+
+- [ ] T5.1 Reducir CC y deuda técnica (evidence plan pending)
+- [ ] T5.2 Clean Architecture y separación de responsabilidades (planificar módulos)
+- [ ] T5.3 Pre-commit obligatorio y normas de revisión (documentar hooks/workflows)
+- [ ] T5.4 ADRs/documentación viva (lista de ADRs por actualizar)
+
+- Acciones iniciales: diseñar un sprint de refactor con métricas CC<10, preparar hooks/pre-commit y acordar qué ADRs/documentación se actualizan antes de la próxima release.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
 
 Evidencia a recoger: pipeline YAML actualizado, dashboards y runbooks verificados.
