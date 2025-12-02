@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+﻿import DOMPurify from 'dompurify';
 import sanitizerConfig from './sanitizerConfig.json';
 
 type PurifyConfig = typeof sanitizerConfig & {
