@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Address, FormData } from './useAddressesState';
 import { InputField, SelectField, FormActions } from './AddressFormFields';
 
 type Props = {
-  formRef: React.RefObject<HTMLDivElement>;
+  formRef: React.RefObject<HTMLDivElement | null>;
   formData: FormData;
   editingAddress: Address | null;
   onChange: (
