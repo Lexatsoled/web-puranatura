@@ -15,8 +15,8 @@ updates:
     schedule: { interval: 'weekly' }
     open-pull-requests-limit: 5
 
-commit-message:
-  prefix: 'chore(deps)'
-
-labels:
-  - 'dependencies'
+# NOTE: Removed top-level `commit-message` / `labels` —
+# Dependabot's config schema on the repository rejects these top-level
+# keys (validator -> failure). If you want commit message prefixes or
+# labels applied, add them to each `updates` entry or configure via
+# repository-level automation instead.
