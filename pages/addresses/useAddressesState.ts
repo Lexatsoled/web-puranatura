@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+﻿import { useCallback, useRef, useState } from 'react';
 
 export interface Address {
   id: string;
@@ -50,7 +50,7 @@ export const useAddressesState = (initialAddresses: Address[]) => {
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [formData, setFormData] = useState<FormData>(DEFAULT_FORM);
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToForm = useCallback(() => {
     setTimeout(() => {
