@@ -1,22 +1,22 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule: { interval: "weekly" }
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule: { interval: 'weekly' }
     open-pull-requests-limit: 10
 
-  - package-ecosystem: "npm"
-    directory: "/backend"
-    schedule: { interval: "weekly" }
+  - package-ecosystem: 'npm'
+    directory: '/backend'
+    schedule: { interval: 'weekly' }
     open-pull-requests-limit: 6
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule: { interval: "weekly" }
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule: { interval: 'weekly' }
     open-pull-requests-limit: 5
 
-commit-message:
-  prefix: "chore(deps)"
-
-labels:
-  - "dependencies"
+# NOTE: Removed top-level `commit-message` / `labels` —
+# Dependabot's config schema on the repository rejects these top-level
+# keys (validator -> failure). If you want commit message prefixes or
+# labels applied, add them to each `updates` entry or configure via
+# repository-level automation instead.

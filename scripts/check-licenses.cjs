@@ -6,12 +6,25 @@ const path = require('path');
 // dependency uses a license outside the project's allowlist.
 
 const ALLOWLIST = new Set([
-  'MIT', 'Apache-2.0', '0BSD', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause',
-  'BlueOak-1.0.0', 'CC-BY-4.0', 'CC0-1.0', 'ISC', 'MIT-0', 'Python-2.0', 'Unlicense', 'W3C-20150513'
+  'MIT',
+  'Apache-2.0',
+  '0BSD',
+  'BSD',
+  'BSD-2-Clause',
+  'BSD-3-Clause',
+  'BlueOak-1.0.0',
+  'CC-BY-4.0',
+  'CC0-1.0',
+  'ISC',
+  'MIT-0',
+  'Python-2.0',
+  'Unlicense',
+  'W3C-20150513',
 ]);
 
 function readLock(file) {
-  if (!fs.existsSync(file)) throw new Error('No package-lock.json found at ' + file);
+  if (!fs.existsSync(file))
+    throw new Error('No package-lock.json found at ' + file);
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
@@ -22,7 +35,14 @@ function collectDeps(lock) {
     if (!obj || typeof obj !== 'object') return;
     if (obj.dependencies && typeof obj.dependencies === 'object') {
       for (const [name, info] of Object.entries(obj.dependencies)) {
-        deps.set(name + '@' + (info.version || 'unknown'), info.license || info.licenses || info['x-license'] || info.licenseText || null);
+        deps.set(
+          name + '@' + (info.version || 'unknown'),
+          info.license ||
+            info.licenses ||
+            info['x-license'] ||
+            info.licenseText ||
+            null
+        );
         walk(info);
       }
     }
@@ -40,7 +60,7 @@ function normalizeLicenseField(lf) {
   return null;
 }
 
-(function main(){
+(function main() {
   try {
     const lockFile = path.resolve(process.cwd(), 'package-lock.json');
     const lock = readLock(lockFile);
@@ -56,14 +76,23 @@ function normalizeLicenseField(lf) {
 
     if (disallowed.length) {
       console.error('Found dependencies with non-allowlisted licenses:');
-      disallowed.slice(0, 30).forEach(d => console.error(` - ${d.nameVer} => ${d.license}`));
-      console.error('\nIf any of these are false positives, add an exception in docs/data-governance.md or update the allowlist.');
+      disallowed
+        .slice(0, 30)
+        .forEach((d) => console.error(` - ${d.nameVer} => ${d.license}`));
+      console.error(
+        '\nIf any of these are false positives, add an exception in docs/data-governance.md or update the allowlist.'
+      );
       process.exit(2);
     }
 
-    console.log('License check passed: all detected licenses are on the allowlist.');
+    console.log(
+      'License check passed: all detected licenses are on the allowlist.'
+    );
   } catch (err) {
-    console.error('License checker failed:', err && err.message ? err.message : String(err));
+    console.error(
+      'License checker failed:',
+      err && err.message ? err.message : String(err)
+    );
     process.exit(1);
   }
 })();

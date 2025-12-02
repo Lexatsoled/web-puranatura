@@ -76,19 +76,21 @@ router.get('/', async (req, res, next) => {
 
     let items = [] as any[];
     let total = 0;
+    let normalizedPage = page;
+    const clampPage = (count: number) => {
+      const maxPage = Math.max(1, Math.ceil(count / pageSize));
+      return Math.min(page, maxPage);
+    };
 
     try {
-      const results = await Promise.all([
-        prisma.product.findMany({
-          where,
-          orderBy: { createdAt: 'desc' },
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-        }),
-        prisma.product.count({ where }),
-      ]);
-      items = results[0];
-      total = results[1];
+      total = await prisma.product.count({ where });
+      normalizedPage = clampPage(total);
+      items = await prisma.product.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (normalizedPage - 1) * pageSize,
+        take: pageSize,
+      });
     } catch (dbErr) {
       // If DB read fails in development try to recover gracefully:
       // 1) attempt to seed the DB using the bundled seeder (dev-only)
@@ -135,7 +137,7 @@ router.get('/', async (req, res, next) => {
             const legacy =
               fallbackModule?.products ?? fallbackModule?.default ?? [];
             // Normalize fallback records so they are stable across requests
-            items = legacy.map((p: any, idx: number) => ({
+            const normalizedLegacy = legacy.map((p: any, idx: number) => ({
               ...p,
               // prefer explicit id/slug; otherwise build a deterministic fallback id
               id: p.id ?? p.slug ?? `legacy-${idx}`,
@@ -144,7 +146,11 @@ router.get('/', async (req, res, next) => {
                 ? new Date(p.updatedAt)
                 : new Date('1970-01-01T00:00:00.000Z'),
             }));
-            total = Array.isArray(items) ? items.length : 0;
+            total = normalizedLegacy.length;
+            const fallbackPage = clampPage(total);
+            const offset = (fallbackPage - 1) * pageSize;
+            items = normalizedLegacy.slice(offset, offset + pageSize);
+            normalizedPage = fallbackPage;
             logger.warn(
               'Using legacy products fallback due to DB failure (dev)'
             );
@@ -167,7 +173,7 @@ router.get('/', async (req, res, next) => {
     const catalogEtag = buildCatalogEtag(
       items.map((item) => ({ id: item.id, updatedAt: item.updatedAt })),
       total,
-      page,
+      normalizedPage,
       pageSize,
       category,
       search
@@ -180,14 +186,17 @@ router.get('/', async (req, res, next) => {
 
     const catalogResponse = res
       .header('X-Total-Count', total.toString())
-      .header('X-Page', page.toString())
+      .header('X-Page', normalizedPage.toString())
       .header('X-Page-Size', pageSize.toString())
       // indicate degraded state to help debugging in development
       .header(
         'X-Backend-Degraded',
         String(total === 0 && process.env.NODE_ENV !== 'production')
       )
-      .header('Cache-Control', 'public, max-age=300')
+      .header(
+        'Cache-Control',
+        'public, max-age=300, s-maxage=300, stale-while-revalidate=60'
+      )
       .header('ETag', catalogEtag);
 
     if (matchesIfNoneMatch) {

@@ -123,6 +123,8 @@ const ProductPage: React.FC = () => {
               src={product.images[0]?.full}
               alt={product.name}
               className="object-cover w-full h-full"
+              loading="lazy"
+              decoding="async"
             />
           </div>
 

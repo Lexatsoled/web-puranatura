@@ -3,6 +3,7 @@
 ## Contexto (C4 nivel 1)
 
 Usuario → SPA (Vite/React) → BFF Express (Node 20) → Prisma/SQLite (upgradeable a Postgres) → Integraciones opcionales (servicios externos: GA, FB Pixel, etc.).
+
 - Observabilidad: Prometheus + (future) Grafana; LHCI para web; k6 para API.
 
 ## Componentes (C4 nivel 2)

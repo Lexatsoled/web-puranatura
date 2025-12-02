@@ -19,11 +19,11 @@ const orderSchema = z.object({
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res, next) => {
   try {
     const { items } = orderSchema.parse(req.body);
-    type ProductPricing = { id: string; price: number };
+    type ProductPricing = { id: string; price: number; stock: number };
 
     const products: ProductPricing[] = await prisma.product.findMany({
       where: { id: { in: items.map((item) => item.productId) } },
-      select: { id: true, price: true },
+      select: { id: true, price: true, stock: true },
     });
 
     if (products.length !== items.length) {
@@ -41,6 +41,10 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res, next) => {
         throw new Error('Producto no encontrado tras la validacion previa');
       }
 
+      if (product.stock < item.quantity) {
+        throw new Error('Stock insuficiente para uno de los productos');
+      }
+
       return {
         productId: product.id,
         quantity: item.quantity,
@@ -53,19 +57,40 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res, next) => {
       0
     );
 
-    const order = await prisma.order.create({
-      data: {
-        userId: req.userId!,
-        total,
-        items: {
-          create: itemsWithPricing,
+    const order = await prisma.$transaction(async (tx) => {
+      await Promise.all(
+        itemsWithPricing.map((item) =>
+          tx.product.update({
+            where: { id: item.productId },
+            data: {
+              stock: {
+                decrement: item.quantity,
+              },
+            },
+          })
+        )
+      );
+
+      return tx.order.create({
+        data: {
+          userId: req.userId!,
+          total,
+          items: {
+            create: itemsWithPricing,
+          },
         },
-      },
-      include: { items: true },
+        include: { items: true },
+      });
     });
 
     res.status(201).json(order);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === 'Stock insuficiente para uno de los productos'
+    ) {
+      return res.status(400).json({ message: error.message });
+    }
     next(error);
   }
 });

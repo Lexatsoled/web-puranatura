@@ -25,6 +25,8 @@ const ServicesPage: React.FC = () => {
                 src={service.imageUrl}
                 alt={service.title}
                 className="w-full h-48 object-cover"
+                loading="lazy"
+                decoding="async"
               />
               <div className="p-6 flex flex-col justify-center">
                 <h3 className="text-2xl font-bold text-green-700 font-display mb-2">

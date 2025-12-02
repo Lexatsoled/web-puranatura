@@ -81,6 +81,9 @@ jobs:
           set -o pipefail
           npm ci || (npm install && echo "WARNING: lockfile changed - update package-lock.json and push the changes")
 
+      - name: Generate SBOM
+        run: npm run generate:sbom
+
       - name: Generate complexity report
         # Generate a repo-level complexity report and write to reports/complexity-report.json
         run: npm run check:complexity
@@ -218,6 +221,7 @@ jobs:
             test-results/**
             reports/**
             backend.log
+            sbom.json
           if-no-files-found: ignore
 
   main-guard:

@@ -51,10 +51,7 @@ jobs:
         with:
           name: zap-scan-report
           continue-on-error: true
-        with:
-          name: zap-scan-report
           path: |
             report_json.json
             report_md.md
             report_html.html
-

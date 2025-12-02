@@ -27,7 +27,7 @@ principios: seguridad-primero, prueba-antes-de-avanzar, evidencia medible
 
 - T1.1 Backend hardening: helmet CSP explícita (dominios GA/FB/Maps), HSTS, rate-limit por ruta, body limit 1MB, CORS mínimo, cookies Secure/HttpOnly/SameSite=strict.
 - T1.2 AuthN/AuthZ: zod en entradas, roles admin/user, bloqueo login (ya), MFA estática → dinámica; refresh token rotación.
-	- T1.3 Validación/sanitización: zod en /products, /orders; DOMPurify en frontend; escape server-side.
+  - T1.3 Validación/sanitización: zod en /products, /orders; DOMPurify en frontend; escape server-side.
 - T1.4 Gestión de secretos y dependencias: vault/gh-secrets; SBOM (CycloneDX); npm audit + overrides documentados.
 - T1.5 Seguridad de IA: ENABLED via external integrations only — project removed built-in /api/ai; any LLM integration should be handled externally and follow secrets best-practices.
 - T1.6 DAST/SAST: eslint-plugin-security, trivy fs, zap-baseline; gitleaks en PR.
@@ -36,7 +36,8 @@ principios: seguridad-primero, prueba-antes-de-avanzar, evidencia medible
 
 ## Fase 2 — Datos, API y contratos (5-7 días)
 
-	- T2.1 OpenAPI 3.1 completa (auth/products/orders/health/analytics) + tests de contrato (Prism/Dredd).
+    - T2.1 OpenAPI 3.1 completa (auth/products/orders/health/analytics) + tests de contrato (Prism/Dredd).
+
 - T2.2 Prisma: migraciones versionadas; índices para products (createdAt), orders (userId, createdAt DESC), stock decrements transaccionales.
 - T2.3 Catálogo: paginación defensiva, búsqueda insensible, ETag + Cache-Control 5m; fallback catálogo lazy import (remover bundle gordo).
 - T2.4 Integridad: seeds idempotentes; validación de cantidades/stock; respuestas normalizadas `{code,message,traceId}`.

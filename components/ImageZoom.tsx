@@ -34,6 +34,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, zoom = 2 }) => {
         src={src}
         alt={alt}
         className="w-full h-full object-cover rounded-lg"
+        loading="lazy"
+        decoding="async"
       />
 
       {showZoom && (

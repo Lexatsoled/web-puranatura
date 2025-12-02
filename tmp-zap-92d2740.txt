@@ -1,0 +1,419 @@
+﻿ZAP baseline scan	Set up job	´╗┐2025-11-30T17:51:20.9996287Z Current runner version: '2.329.0'
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0033366Z ##[group]Runner Image Provisioner
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0034664Z Hosted Compute Agent
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0035570Z Version: 20251016.436
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0036566Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0037638Z Build Date: 2025-10-15T20:44:12Z
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0038989Z ##[endgroup]
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0039859Z ##[group]Operating System
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0040846Z Ubuntu
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0041518Z 24.04.3
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0042380Z LTS
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0043076Z ##[endgroup]
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0043842Z ##[group]Runner Image
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0044909Z Image: ubuntu-24.04
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0045749Z Version: 20251112.124.1
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0047572Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0050404Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0052474Z ##[endgroup]
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0054319Z ##[group]GITHUB_TOKEN Permissions
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0056916Z Contents: read
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0058222Z Metadata: read
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0059164Z Packages: read
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0059997Z ##[endgroup]
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0063125Z Secret source: Actions
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0064321Z Prepare workflow directory
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0733372Z Prepare all required actions
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.0792311Z Getting action download info
+ZAP baseline scan	Set up job	2025-11-30T17:51:21.6603482Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+ZAP baseline scan	Set up job	2025-11-30T17:51:22.2818366Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+ZAP baseline scan	Set up job	2025-11-30T17:51:22.4143665Z Download action repository 'zaproxy/action-baseline@v0.15.0' (SHA:de8ad967d3548d44ef623df22cf95c3b0baf8b25)
+ZAP baseline scan	Set up job	2025-11-30T17:51:23.0380275Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+ZAP baseline scan	Set up job	2025-11-30T17:51:23.2897658Z Complete job name: ZAP baseline scan
+ZAP baseline scan	Checkout	´╗┐2025-11-30T17:51:23.3667444Z ##[group]Run actions/checkout@v4
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3668867Z with:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3669616Z   repository: Lexatsoled/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3670881Z   token: ***
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3671564Z   ssh-strict: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3672323Z   ssh-user: git
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3673052Z   persist-credentials: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3673867Z   clean: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3674607Z   sparse-checkout-cone-mode: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3675518Z   fetch-depth: 1
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3676218Z   fetch-tags: false
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3676962Z   show-progress: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3677697Z   lfs: false
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3678497Z   submodules: false
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3679241Z   set-safe-directory: true
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.3680278Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.4854701Z Syncing repository: Lexatsoled/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.4859149Z ##[group]Getting Git version info
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.4861165Z Working directory is '/home/runner/work/web-puranatura/web-puranatura'
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.4863688Z [command]/usr/bin/git version
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.4969648Z git version 2.51.2
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5001922Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5018949Z Temporarily overriding HOME='/home/runner/work/_temp/4c2ce96a-7442-4685-b8d9-89f2eabbab34' before making global git config changes
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5026201Z Adding repository directory to the temporary git global config as a safe directory
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5030623Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/web-puranatura/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5084537Z Deleting the contents of '/home/runner/work/web-puranatura/web-puranatura'
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5090179Z ##[group]Initializing the repository
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5093451Z [command]/usr/bin/git init /home/runner/work/web-puranatura/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5216280Z hint: Using 'master' as the name for the initial branch. This default branch name
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5220007Z hint: is subject to change. To configure the initial branch name to use in all
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5222884Z hint: of your new repositories, which will suppress this warning, call:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5225066Z hint:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5226501Z hint: 	git config --global init.defaultBranch <name>
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5228560Z hint:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5230328Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5233422Z hint: 'development'. The just-created branch can be renamed via this command:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5235776Z hint:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5236980Z hint: 	git branch -m <name>
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5238670Z hint:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5240624Z hint: Disable this message with "git config set advice.defaultBranchName false"
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5244261Z Initialized empty Git repository in /home/runner/work/web-puranatura/web-puranatura/.git/
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5249810Z [command]/usr/bin/git remote add origin https://github.com/Lexatsoled/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5293965Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5299731Z ##[group]Disabling automatic garbage collection
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5301733Z [command]/usr/bin/git config --local gc.auto 0
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5330981Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5333074Z ##[group]Setting up auth
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5340232Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5377007Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5740628Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.5775667Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6004057Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6050409Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6286504Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6325580Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6328071Z ##[group]Fetching the repository
+ZAP baseline scan	Checkout	2025-11-30T17:51:23.6337565Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cc27a8eef7942c39e4994d04675f05e2282393ce:refs/remotes/pull/32/merge
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2846414Z From https://github.com/Lexatsoled/web-puranatura
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2854685Z  * [new ref]         cc27a8eef7942c39e4994d04675f05e2282393ce -> pull/32/merge
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2891140Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2895528Z ##[group]Determining the checkout info
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2897565Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.2906300Z [command]/usr/bin/git sparse-checkout disable
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.3219527Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.3246667Z ##[group]Checking out the ref
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.3263364Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/32/merge
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8927599Z Note: switching to 'refs/remotes/pull/32/merge'.
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8929387Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8930011Z You are in 'detached HEAD' state. You can look around, make experimental
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8931359Z changes and commit them, and you can discard any commits you make in this
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8939614Z state without impacting any branches by switching back to a branch.
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8940172Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8940608Z If you want to create a new branch to retain commits you create, you may
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8941529Z do so (now or later) by using -c with the switch command. Example:
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8942155Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8942659Z   git switch -c <new-branch-name>
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8942990Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8943225Z Or undo this operation with:
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8943606Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8943791Z   git switch -
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8944050Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8944470Z Turn off this advice by setting config variable advice.detachedHead to false
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8944994Z 
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.8945595Z HEAD is now at cc27a8e Merge 92d27407ac3b39cbb326aa1df381319c4d68d3f6 into 273f82c47c70cfbb34db0f3b62c4752c2a49df4f
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.9009418Z ##[endgroup]
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.9077673Z [command]/usr/bin/git log -1 --format=%H
+ZAP baseline scan	Checkout	2025-11-30T17:51:26.9102577Z cc27a8eef7942c39e4994d04675f05e2282393ce
+ZAP baseline scan	Use Node.js 20	´╗┐2025-11-30T17:51:26.9361883Z ##[group]Run actions/setup-node@v4
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9362282Z with:
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9362561Z   node-version: 20
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9362859Z   always-auth: false
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9363167Z   check-latest: false
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9363590Z   token: ***
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:26.9363900Z ##[endgroup]
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:27.1540906Z Found in cache @ /opt/hostedtoolcache/node/20.19.5/x64
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:27.1556437Z ##[group]Environment details
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:28.9272650Z node: v20.19.5
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:28.9273742Z npm: 10.8.2
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:28.9275537Z yarn: 1.22.22
+ZAP baseline scan	Use Node.js 20	2025-11-30T17:51:28.9278243Z ##[endgroup]
+ZAP baseline scan	Install deps (root)	´╗┐2025-11-30T17:51:28.9390926Z ##[group]Run npm ci
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:28.9391207Z [36;1mnpm ci[0m
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:28.9434853Z shell: /usr/bin/bash -e {0}
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:28.9435108Z ##[endgroup]
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:38.6088140Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:46.0476035Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:46.6689041Z npm warn deprecated json-schema-ref-parser@6.1.0: Please switch to @apidevtools/json-schema-ref-parser
+ZAP baseline scan	Install deps (root)	2025-11-30T17:51:57.7655693Z npm warn deprecated @faker-js/faker@5.5.3: Please update to a newer version.
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.1496125Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.1504483Z > web-puranatura---terapias-naturales@0.0.0 prepare
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.1506215Z > husky install
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.1509038Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.1935375Z husky - Git hooks installed
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2218701Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2219863Z added 1541 packages, and audited 1542 packages in 52s
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2220419Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2220783Z 284 packages are looking for funding
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2221418Z   run `npm fund` for details
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2339737Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2341445Z 3 moderate severity vulnerabilities
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2346841Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2348581Z To address issues that do not require attention, run:
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2350274Z   npm audit fix
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2351531Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2352357Z To address all issues (including breaking changes), run:
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2353182Z   npm audit fix --force
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2353642Z 
+ZAP baseline scan	Install deps (root)	2025-11-30T17:52:21.2353916Z Run `npm audit` for details.
+ZAP baseline scan	Install backend deps	´╗┐2025-11-30T17:52:21.2937122Z ##[group]Run npm ci --prefix backend
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:21.2937600Z [36;1mnpm ci --prefix backend[0m
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:21.2970015Z shell: /usr/bin/bash -e {0}
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:21.2970251Z ##[endgroup]
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:26.1549232Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:26.1550379Z > puranatura-backend@0.1.0 postinstall
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:26.1551134Z > prisma generate
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:26.1551680Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:26.5826380Z Prisma schema loaded from prisma/schema.prisma
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0678897Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0681314Z Ô£ö Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 120ms
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0682106Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0683978Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0685598Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0686573Z Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.0688070Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2739009Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2741437Z added 198 packages, and audited 199 packages in 6s
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2745356Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2745648Z 21 packages are looking for funding
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2746129Z   run `npm fund` for details
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2754865Z 
+ZAP baseline scan	Install backend deps	2025-11-30T17:52:27.2755532Z found 0 vulnerabilities
+ZAP baseline scan	Build web preview	´╗┐2025-11-30T17:52:27.3002262Z ##[group]Run npm run build
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.3002551Z [36;1mnpm run build[0m
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.3035624Z shell: /usr/bin/bash -e {0}
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.3035863Z ##[endgroup]
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.4238850Z 
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.4240032Z > web-puranatura---terapias-naturales@0.0.0 build
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.4241115Z > npm run optimize-images && npx tsc && npx vite build
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.4243646Z 
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.5653557Z 
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.5658878Z > web-puranatura---terapias-naturales@0.0.0 optimize-images
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.5663375Z > node --loader ts-node/esm scripts/optimizeImages.ts
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.5668055Z 
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.8870120Z (node:2267) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.8880005Z --import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-node/esm", pathToFileURL("./"));'
+ZAP baseline scan	Build web preview	2025-11-30T17:52:27.8881690Z (Use `node --trace-warnings ...` to show where the warning was created)
+ZAP baseline scan	Build web preview	2025-11-30T17:52:30.5966321Z [optimize-images] Iniciando optimizaci├│n de im├ígenes...
+ZAP baseline scan	Build web preview	2025-11-30T17:52:30.5995389Z [optimize-images] Procesando desde /home/runner/work/web-puranatura/web-puranatura/public/Jpeg hacia /home/runner/work/web-puranatura/web-puranatura/public/optimized (archivos previos: 1270).
+ZAP baseline scan	Build web preview	2025-11-30T17:53:22.2153864Z [optimize-images] Optimizaci├│n completada. Total actual: 1270. Nuevos o actualizados: 0.
+ZAP baseline scan	Build web preview	2025-11-30T17:53:33.6838668Z [36mvite v6.4.1 [32mbuilding for production...[36m[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:33.9881710Z transforming...
+ZAP baseline scan	Build web preview	2025-11-30T17:53:34.3186768Z [33mnode_modules/react-router/dist/development/index.mjs (11:0): Module level directives cause errors when bundled, "use client" in "node_modules/react-router/dist/development/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:34.6180918Z [33mnode_modules/react-router/dist/development/dom-export.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/react-router/dist/development/dom-export.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.1245565Z [33mnode_modules/framer-motion/dist/es/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4276415Z [33mnode_modules/framer-motion/dist/es/components/LayoutGroup/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/LayoutGroup/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4291838Z [33mnode_modules/framer-motion/dist/es/components/LazyMotion/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/LazyMotion/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4308508Z [33mnode_modules/framer-motion/dist/es/components/MotionConfig/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/MotionConfig/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4682314Z [33mnode_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4688130Z [33mnode_modules/framer-motion/dist/es/context/MotionConfigContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4692342Z [33mnode_modules/framer-motion/dist/es/context/MotionContext/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/MotionContext/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4695895Z [33mnode_modules/framer-motion/dist/es/context/PresenceContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/PresenceContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.4713302Z [33mnode_modules/framer-motion/dist/es/context/SwitchLayoutGroupContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/SwitchLayoutGroupContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.5959225Z [33mnode_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.6771958Z [33mnode_modules/framer-motion/dist/es/context/LazyContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/LazyContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.6980632Z [33mnode_modules/framer-motion/dist/es/components/Reorder/Group.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/Reorder/Group.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.6995044Z [33mnode_modules/framer-motion/dist/es/components/Reorder/Item.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/Reorder/Item.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.7849805Z [33mnode_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.8837977Z [33mnode_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.8868243Z [33mnode_modules/framer-motion/dist/es/context/ReorderContext.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/context/ReorderContext.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.9183788Z [33mnode_modules/framer-motion/dist/es/components/AnimatePresence/PopChild.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/components/AnimatePresence/PopChild.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:35.9322222Z [33mnode_modules/framer-motion/dist/es/motion/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "node_modules/framer-motion/dist/es/motion/index.mjs" was ignored.[39m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:37.4502765Z [32mÔ£ô[39m 525 modules transformed.
+ZAP baseline scan	Build web preview	2025-11-30T17:53:37.9500807Z rendering chunks...
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1424515Z computing gzip size...
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1636767Z [2mdist/[22m[32mindex.html                               [39m[1m[2m  1.78 kB[22m[1m[22m[2m Ôöé gzip:   0.77 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1640206Z [2mdist/[22m[2massets/[22m[35mindex-D8mRyMEJ.css                [39m[1m[2m 30.13 kB[22m[1m[22m[2m Ôöé gzip:   5.75 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1641948Z [2mdist/[22m[2massets/[22m[36mintl-Dj1cUQuv.js                  [39m[1m[2m  0.20 kB[22m[1m[22m[2m Ôöé gzip:   0.18 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1643558Z [2mdist/[22m[2massets/[22m[36mChartSection-dFndVlGQ.js          [39m[1m[2m  0.90 kB[22m[1m[22m[2m Ôöé gzip:   0.46 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1645301Z [2mdist/[22m[2massets/[22m[36mcontentSanitizers-DgRYKeun.js     [39m[1m[2m  1.21 kB[22m[1m[22m[2m Ôöé gzip:   0.60 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1647559Z [2mdist/[22m[2massets/[22m[36mTestimonialsPage-CGVX_4zy.js      [39m[1m[2m  2.10 kB[22m[1m[22m[2m Ôöé gzip:   1.08 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1649368Z [2mdist/[22m[2massets/[22m[36mProductDetailModal-BriXeZmo.js    [39m[1m[2m  3.01 kB[22m[1m[22m[2m Ôöé gzip:   1.42 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1651014Z [2mdist/[22m[2massets/[22m[36mServicesPage-Q-v1REzB.js          [39m[1m[2m  3.12 kB[22m[1m[22m[2m Ôöé gzip:   1.38 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1679914Z [2mdist/[22m[2massets/[22m[36mAboutPage-BtPIEeH_.js             [39m[1m[2m  3.14 kB[22m[1m[22m[2m Ôöé gzip:   1.18 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1681445Z [2mdist/[22m[2massets/[22m[36mHomePage-uFSyuJml.js              [39m[1m[2m  3.17 kB[22m[1m[22m[2m Ôöé gzip:   1.16 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1682950Z [2mdist/[22m[2massets/[22m[36mContactPage-DEWabj8x.js           [39m[1m[2m  3.71 kB[22m[1m[22m[2m Ôöé gzip:   1.42 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1684535Z [2mdist/[22m[2massets/[22m[36mMetricsDashboardPage-D0TDql0J.js  [39m[1m[2m  6.14 kB[22m[1m[22m[2m Ôöé gzip:   2.15 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1686138Z [2mdist/[22m[2massets/[22m[36mWishlistPage-4RvnU9SH.js          [39m[1m[2m  6.45 kB[22m[1m[22m[2m Ôöé gzip:   2.17 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1687647Z [2mdist/[22m[2massets/[22m[36mOrdersPage-Dj9mmIex.js            [39m[1m[2m  6.74 kB[22m[1m[22m[2m Ôöé gzip:   2.16 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1689458Z [2mdist/[22m[2massets/[22m[36mProfilePage-DuW57DOE.js           [39m[1m[2m  7.96 kB[22m[1m[22m[2m Ôöé gzip:   2.31 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1690950Z [2mdist/[22m[2massets/[22m[36mCartModal-4hOfkmxK.js             [39m[1m[2m  8.02 kB[22m[1m[22m[2m Ôöé gzip:   2.56 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1692420Z [2mdist/[22m[2massets/[22m[36mStorePage-CjD8qS_x.js             [39m[1m[2m  8.56 kB[22m[1m[22m[2m Ôöé gzip:   3.22 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1693900Z [2mdist/[22m[2massets/[22m[36mAddressesPage-DjgYoTwK.js         [39m[1m[2m  9.42 kB[22m[1m[22m[2m Ôöé gzip:   2.62 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1695445Z [2mdist/[22m[2massets/[22m[36mAuthModal-ChyfaYqD.js             [39m[1m[2m 10.42 kB[22m[1m[22m[2m Ôöé gzip:   2.70 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1696927Z [2mdist/[22m[2massets/[22m[36mBlogPage-CMCshhgs.js              [39m[1m[2m 13.16 kB[22m[1m[22m[2m Ôöé gzip:   5.01 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1698945Z [2mdist/[22m[2massets/[22m[36mproducts-j7gKeNRV.js              [39m[1m[2m145.75 kB[22m[1m[22m[2m Ôöé gzip:  38.49 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1700506Z [2mdist/[22m[2massets/[22m[36mindex-JLqXMwAN.js                 [39m[1m[2m420.32 kB[22m[1m[22m[2m Ôöé gzip: 140.26 kB[22m
+ZAP baseline scan	Build web preview	2025-11-30T17:53:38.1701358Z [32mÔ£ô built in 4.45s[39m
+ZAP baseline scan	Start preview server	´╗┐2025-11-30T17:53:38.2152188Z ##[group]Run # Start vite preview in background then wait for it to be ready
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.2153116Z [36;1m# Start vite preview in background then wait for it to be ready[0m
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.2153783Z [36;1mnpm run preview -- --port 5173 &[0m
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.2154393Z [36;1mnpx wait-on http://localhost:5173 -t 30000[0m
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.2204162Z shell: /usr/bin/bash -e {0}
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.2204570Z ##[endgroup]
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.4093066Z 
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.4098039Z > web-puranatura---terapias-naturales@0.0.0 preview
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.4102748Z > vite preview --port 5173
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.4106387Z 
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.7859953Z   [32mÔ×£[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+ZAP baseline scan	Start preview server	2025-11-30T17:53:38.7913093Z [2m  [32mÔ×£[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+ZAP baseline scan	Run ZAP Baseline scan	´╗┐2025-11-30T17:53:44.3233265Z ##[group]Run zaproxy/action-baseline@v0.15.0
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3233552Z with:
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3234061Z   token: ***
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3234274Z   target: http://localhost:5173
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3234505Z   fail_action: false
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3234704Z   allow_issue_writing: false
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3234914Z   artifact_name: zap_scan
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3235148Z   docker_name: ghcr.io/zaproxy/zaproxy:stable
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3235607Z   issue_title: ZAP Scan Baseline Report
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:44.3235842Z ##[endgroup]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:45.3169658Z starting the program
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:45.3203356Z github run id :19802656247
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:45.3204156Z [command]/usr/bin/chmod a+w /home/runner/work/web-puranatura/web-puranatura
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:45.3204963Z [command]/usr/bin/docker pull ghcr.io/zaproxy/zaproxy:stable -q
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:46.3165077Z (node:2559) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:53:46.3187520Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:16.6181019Z ghcr.io/zaproxy/zaproxy:stable
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:16.6212283Z [command]/usr/bin/docker run -v /home/runner/work/web-puranatura/web-puranatura:/zap/wrk/:rw --network=host -e ZAP_AUTH_HEADER -e ZAP_AUTH_HEADER_VALUE -e ZAP_AUTH_HEADER_SITE -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://localhost:5173 -J report_json.json -w report_md.md -r report_html.html
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:17.1841810Z Using the Automation Framework
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5767049Z Total of 7 URLs
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5779136Z PASS: Vulnerable JS Library (Powered by Retire.js) [10003]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5781192Z PASS: In Page Banner Information Leak [10009]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5784276Z PASS: Cookie No HttpOnly Flag [10010]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5784927Z PASS: Cookie Without Secure Flag [10011]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5785499Z PASS: Re-examine Cache-control Directives [10015]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5786166Z PASS: Cross-Domain JavaScript Source File Inclusion [10017]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5786815Z PASS: Content-Type Header Missing [10019]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5787443Z PASS: Information Disclosure - Debug Error Messages [10023]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5788382Z PASS: Information Disclosure - Sensitive Information in URL [10024]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5789301Z PASS: Information Disclosure - Sensitive Information in HTTP Referrer Header [10025]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5790049Z PASS: HTTP Parameter Override [10026]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5790497Z PASS: Off-site Redirect [10028]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5790920Z PASS: Cookie Poisoning [10029]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5791361Z PASS: User Controllable Charset [10030]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5792043Z PASS: User Controllable HTML Element Attribute (Potential XSS) [10031]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5792591Z PASS: Viewstate [10032]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5792980Z PASS: Directory Browsing [10033]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5793571Z PASS: Heartbleed OpenSSL Vulnerability (Indicative) [10034]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5794210Z PASS: Strict-Transport-Security Header [10035]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5794786Z PASS: HTTP Server Response Header [10036]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5795585Z PASS: Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s) [10037]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5796371Z PASS: X-Backend-Server Header Information Leak [10039]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5796974Z PASS: Secure Pages Include Mixed Content [10040]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5797671Z PASS: HTTP to HTTPS Insecure Transition in Form Post [10041]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5815405Z PASS: HTTPS to HTTP Insecure Transition in Form Post [10042]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5816291Z PASS: User Controllable JavaScript Event (XSS) [10043]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5817235Z PASS: Big Redirect Detected (Potential Sensitive Information Leak) [10044]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5818178Z PASS: Retrieved from Cache [10050]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5818990Z PASS: X-ChromeLogger-Data (XCOLD) Header Information Leak [10052]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5819826Z PASS: Cookie without SameSite Attribute [10054]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5820272Z PASS: CSP [10055]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5821292Z PASS: X-Debug-Token Information Leak [10056]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5821795Z PASS: Username Hash Found [10057]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5822518Z PASS: X-AspNet-Version Response Header [10061]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5822990Z PASS: PII Disclosure [10062]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5823417Z PASS: Timestamp Disclosure [10096]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5823870Z PASS: Hash Disclosure [10097]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5824743Z PASS: Cross-Domain Misconfiguration [10098]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5825262Z PASS: Source Code Disclosure [10099]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5825756Z PASS: Weak Authentication Method [10105]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5826222Z PASS: Reverse Tabnabbing [10108]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5826670Z PASS: Dangerous JS Functions [10110]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5827174Z PASS: Authentication Request Identified [10111]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5828097Z PASS: Session Management Response Identified [10112]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5828724Z PASS: Verification Request Identified [10113]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5829374Z PASS: Script Served From Malicious Domain (polyfill) [10115]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5829961Z PASS: ZAP is Out of Date [10116]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5830438Z PASS: Absence of Anti-CSRF Tokens [10202]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5830905Z PASS: Private IP Disclosure [2]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5831341Z PASS: Session ID in URL Rewrite [3]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5831814Z PASS: Script Passive Scan Rules [50001]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5832310Z PASS: Stats Passive Scan Rule [50003]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5832785Z PASS: Insecure JSF ViewState [90001]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5833264Z PASS: Java Serialization Object [90002]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5833736Z PASS: Charset Mismatch [90011]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5834210Z PASS: Application Error Disclosure [90022]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5834703Z PASS: WSDL File Detection [90030]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5835354Z PASS: Loosely Scoped Cookie [90033]
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5835929Z WARN-NEW: Missing Anti-clickjacking Header [10020] x 3 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5836476Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5836914Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5837369Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5838225Z WARN-NEW: X-Content-Type-Options Header Missing [10021] x 6 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5838797Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5839305Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5839870Z 	http://localhost:5173/assets/index-D8mRyMEJ.css (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5840496Z 	http://localhost:5173/assets/index-JLqXMwAN.js (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5841049Z 	http://localhost:5173/robots.txt (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5841744Z WARN-NEW: Information Disclosure - Suspicious Comments [10027] x 1 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5842420Z 	http://localhost:5173/assets/index-JLqXMwAN.js (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5843136Z WARN-NEW: Content Security Policy (CSP) Header Not Set [10038] x 3 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5843713Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5844119Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5844533Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5845123Z WARN-NEW: Storable but Non-Cacheable Content [10049] x 6 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5845652Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5846062Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5846578Z 	http://localhost:5173/assets/index-D8mRyMEJ.css (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5847202Z 	http://localhost:5173/assets/index-JLqXMwAN.js (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5848018Z 	http://localhost:5173/robots.txt (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5848844Z WARN-NEW: Permissions Policy Header Not Set [10063] x 4 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5849374Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5849803Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5850346Z 	http://localhost:5173/assets/index-JLqXMwAN.js (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5850928Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5851516Z WARN-NEW: Modern Web Application [10109] x 3 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5852004Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5852414Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5852926Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5853809Z WARN-NEW: Sub Resource Integrity Attribute Missing [90003] x 3 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5854358Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5854760Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5855206Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5855991Z WARN-NEW: Insufficient Site Isolation Against Spectre Vulnerability [90004] x 10 
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5856911Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5857335Z 	http://localhost:5173/ (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5857967Z 	http://localhost:5173/robots.txt (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5858507Z 	http://localhost:5173/sitemap.xml (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5859032Z 	http://localhost:5173 (200 OK)
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:57.5859819Z FAIL-NEW: 0	FAIL-INPROG: 0	WARN-NEW: 9	WARN-INPROG: 0	INFO: 0	IGNORE: 0	PASS: 58
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:58.1262752Z Scanning process completed, starting to analyze the results!
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:58.1312007Z Artifact name is valid!
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:58.1367926Z Root directory input is valid!
+ZAP baseline scan	Run ZAP Baseline scan	2025-11-30T17:54:58.3559323Z ##[error]Failed to CreateArtifact: Artifact storage quota has been hit. Unable to upload any new artifacts. Usage is recalculated every 6-12 hours.
+ZAP baseline scan	Run ZAP Baseline scan	More info on storage limits: https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#calculating-minute-and-storage-spending
+ZAP baseline scan	Upload raw ZAP result (if present)	´╗┐2025-11-30T17:54:58.3697359Z ##[group]Run actions/upload-artifact@v4
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3697639Z with:
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3698121Z   name: zap-scan-report
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3698406Z   path: .
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3698577Z   if-no-files-found: warn
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3698791Z   compression-level: 6
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3698976Z   overwrite: false
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3699164Z   include-hidden-files: false
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:54:58.3699370Z ##[endgroup]
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:55:14.3424701Z With the provided path, there will be 95477 files uploaded
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:55:14.3431160Z Artifact name is valid!
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:55:14.3433013Z Root directory input is valid!
+ZAP baseline scan	Upload raw ZAP result (if present)	2025-11-30T17:55:15.3983870Z ##[error]Failed to CreateArtifact: Artifact storage quota has been hit. Unable to upload any new artifacts. Usage is recalculated every 6-12 hours.
+ZAP baseline scan	Upload raw ZAP result (if present)	More info on storage limits: https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#calculating-minute-and-storage-spending
+ZAP baseline scan	Post Checkout	´╗┐2025-11-30T17:55:15.4293769Z Post job cleanup.
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5340663Z [command]/usr/bin/git version
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5406958Z git version 2.51.2
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5494442Z Temporarily overriding HOME='/home/runner/work/_temp/d569cbfa-3789-4810-8d33-cea5f934a44f' before making global git config changes
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5495930Z Adding repository directory to the temporary git global config as a safe directory
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5502656Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/web-puranatura/web-puranatura
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5558479Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5626297Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5948992Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5971794Z http.https://github.com/.extraheader
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.5987237Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.6022557Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.6271971Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ZAP baseline scan	Post Checkout	2025-11-30T17:55:15.6306488Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ZAP baseline scan	Complete job	´╗┐2025-11-30T17:55:15.6647420Z Cleaning up orphan processes
+ZAP baseline scan	Complete job	2025-11-30T17:55:15.6898270Z Terminate orphan process: pid (2506) (npm run preview --port 5173)
+ZAP baseline scan	Complete job	2025-11-30T17:55:15.6932306Z Terminate orphan process: pid (2528) (sh)
+ZAP baseline scan	Complete job	2025-11-30T17:55:15.6954602Z Terminate orphan process: pid (2529) (node)
+ZAP baseline scan	Complete job	2025-11-30T17:55:15.6990407Z Terminate orphan process: pid (2540) (esbuild)

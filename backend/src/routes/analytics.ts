@@ -79,7 +79,8 @@ router.post(
         userAgent: req.headers['user-agent'],
       });
 
-      return res.status(202).json({ ok: true });
+      res.setHeader('X-Trace-Id', traceId);
+      return res.status(202).json({ ok: true, traceId });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({

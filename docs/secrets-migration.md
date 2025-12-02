@@ -6,12 +6,14 @@ Azure Key Vault, etc.) y asegurar que el proyecto no dependa de ficheros `.env`
 almacenados en el repo.
 
 Resumen rápido
+
 - Objetivo: eliminar secretos del repo y centralizar el almacenado en un vault
   o en GitHub Secrets con roles/rotación periódica.
 - Riesgo inmediato: `.env` o cualquier archivo que contenga credenciales examinado
   por CI y eliminado/rotado si aparece.
 
 Pasos recomendados (bajo-prioridad: alto impacto)
+
 1. Inventario de secretos requeridos
    - Recolectar la lista por lectura de `backend/src/config/env.ts` y otras
      componentes que referencien variables de entorno (ej: `JWT_SECRET`,
@@ -27,24 +29,28 @@ Pasos recomendados (bajo-prioridad: alto impacto)
    - Añadir plantilla PR y checklist de verificación de secretos para reviewers.
 
 Checklist mínimo (por migración)
+
 - [ ] Lista de secretos detectados en repo y en infra.
 - [ ] Crear secrets por entorno en GitHub y actualizar workflows con `secrets.`
 - [ ] Actualizar runners/stage para leer desde vault (secrets provider).
 - [ ] Eliminar `.env` y credenciales del repo. Añadir comprobación CI obligatoria.
 
 Automation & handy helpers (new)
+
 - `scripts/list-required-secrets.cjs` — escanea el código y sugiere una lista de vars de entorno (puede escribir `.github/required-secrets.yml` con `--write`).
 - `scripts/gh-set-secrets.cjs` — helper local que usa `gh secret set` para subir valores desde `.env.local` o variables de entorno (requiere `gh` autenticado).
 - `scripts/deploy-check.cjs` + workflow `.github/workflows/deploy-check-secrets.yml` — verificación de humo de despliegue que asegura los secretos necesarios estén en el runner antes de lanzar un deploy.
 
 How to use (quick):
+
 1. Run a quick scan to detect env vars and update the manifest:
-  node scripts/list-required-secrets.cjs --write
+   node scripts/list-required-secrets.cjs --write
 2. Prepare a local `.env.local` with secret values (DO NOT commit this file) and then push secrets to GitHub with gh cli:
-  node scripts/gh-set-secrets.cjs --file .github/required-secrets.yml --env-file .env.local
+   node scripts/gh-set-secrets.cjs --file .github/required-secrets.yml --env-file .env.local
 3. Confirm CI sees secrets via the `Validate required repo secrets` workflow or use the deploy-check workflow which runs a dry-run verification of deployment secrets.
 
 Notes / Safety
+
 - Do not commit `.env.local`, `.env`, or any plaintext secrets.
 - Always review `required-secrets.yml` and keep it minimal — only variables the runtime actually needs in production.
 - Prefer organization-level secrets or environment-scoped secrets for production pipelines and control access with repository selections.
@@ -60,11 +66,13 @@ repositorio y de la CI, y permite gestionar su ciclo de vida por separado.
 keeps provider keys out of the repo and CI, and allows independent lifecycle
 management of LLM credentials.
 Comprobación CI ya implementada (sugerencia de bloqueo)
+
 - El repo tiene `scripts/check-no-secrets.cjs` y un workflow `ci-quality.yml`.
   Se recomienda mantener esta comprobación y además añadir un job específico
   que bloquee la inclusión accidental de ficheros `.env` o `*.secret`.
 
 Evidencia / Artefactos a crear
+
 - Workflow GitHub Actions que falla si `.env` o `backend/.env` se introducen.
 - Documentación (este archivo) y un script `scripts/list-required-secrets.cjs`
   (opcional) para generar inventario desde `env.ts`.

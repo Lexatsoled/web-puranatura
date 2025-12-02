@@ -21,7 +21,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "node ./scripts/cleanup-prisma-tmp.cjs && cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma && cd .. && vitest run",
+    "test:ci": "cross-env-shell \"DATABASE_URL=file:./backend/prisma/dev.db\" \"node ./scripts/cleanup-prisma-tmp.cjs && cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma && cd .. && vitest run\"",
     "generate:sbom": "npx @cyclonedx/cdxgen -o sbom.json",
     "check:licenses": "node scripts/check-licenses.cjs",
     "test:unit": "vitest run",
@@ -38,6 +38,7 @@
     "optimize-images": "node --loader ts-node/esm scripts/optimizeImages.ts",
     "rollout:canary": "node scripts/rollout-canary.cjs",
     "verify:observability": "node scripts/verify-observability-artifacts.cjs",
+    "synthetic:checks": "node --loader ts-node/esm scripts/synthetic-checks.ts",
     "check:complexity": "node scripts/check-complexity.cjs"
   },
   "lint-staged": {

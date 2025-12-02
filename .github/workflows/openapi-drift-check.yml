@@ -1,0 +1,32 @@
+name: OpenAPI Drift Check
+
+on:
+  pull_request:
+    paths:
+      - 'GPT-51-Codex-Max/api/**'
+      - 'backend/src/**'
+      - 'scripts/check-openapi-drift.cjs'
+  push:
+    branches: [main]
+
+jobs:
+  drift-check:
+    name: OpenAPI ↔ Backend drift check (report-only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run drift check (do not fail PR yet)
+        # we intentionally do not fail the job yet; this workflow is report-only
+        run: |
+          npm run check:openapi-drift > drift-report.txt 2>&1 || true
+      - name: Save drift log
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-drift-report
+          path: |
+            drift-report.txt

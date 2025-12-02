@@ -45,7 +45,9 @@ function extractSummary(source) {
 
 function main() {
   if (!fs.existsSync(sourcePath)) {
-    console.error('ERROR: no encuentro GPT-51-Codex-Max-Hight/CheckList.md — no puedo regenerar el stub.');
+    console.error(
+      'ERROR: no encuentro GPT-51-Codex-Max-Hight/CheckList.md — no puedo regenerar el stub.'
+    );
     process.exit(1);
   }
 
@@ -58,14 +60,18 @@ function main() {
   }
 
   if (current.trim() === newContent.trim()) {
-    console.log('No hay cambios en docs/phase-checkpoints.md — ya está sincronizado.');
+    console.log(
+      'No hay cambios en docs/phase-checkpoints.md — ya está sincronizado.'
+    );
     process.exit(0);
   }
 
   // Ensure target dir exists
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.writeFileSync(targetPath, newContent, 'utf8');
-  console.log('docs/phase-checkpoints.md actualizado correctamente (generado desde CheckList.md).');
+  console.log(
+    'docs/phase-checkpoints.md actualizado correctamente (generado desde CheckList.md).'
+  );
   process.exit(0);
 }
 

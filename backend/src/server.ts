@@ -2,11 +2,18 @@ import { app, closeApp } from './app';
 import { env } from './config/env';
 import { prisma } from './prisma';
 import { execSync } from 'child_process';
-import { seedProducts } from '../prisma/seed';
+import { ensureSmokeUser, seedProducts } from '../prisma/seed';
 
 // Arranque con reintentos si el puerto está ocupado (útil en dev).
 const startPort = env.port;
 const maxAttempts = 10; // probar hasta startPort + maxAttempts - 1
+
+// eslint-disable-next-line no-console
+console.log('[env] rate limits', {
+  globalMax: env.rateLimitMax,
+  authMax: env.authRateLimitMax,
+  analyticsMax: env.analyticsRateLimitMax,
+});
 
 const startServer = (port: number) => {
   const server = app.listen(port, () => {
@@ -37,6 +44,20 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
     server = startServer(portToTry);
     // Quick DB sanity check after server starts — helps surface problems
     (async () => {
+      const safeEnsureSmoke = async () => {
+        try {
+          await ensureSmokeUser(prisma);
+        } catch (seedErr) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            '[startup] ensureSmokeUser failed:',
+            seedErr && (seedErr as any).message
+              ? (seedErr as any).message
+              : seedErr
+          );
+        }
+      };
+
       try {
         const c = await prisma.product.count();
         // eslint-disable-next-line no-console
@@ -47,13 +68,13 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
         if (c === 0 && env.nodeEnv !== 'production') {
           // eslint-disable-next-line no-console
           console.log(
-            '[startup] DB empty — running dev seed to populate sample products.'
+            '[startup] DB empty – running dev seed to populate sample products.'
           );
           try {
             await seedProducts(prisma);
             const newCount = await prisma.product.count();
             // eslint-disable-next-line no-console
-            console.log(`[startup] Seed complete — product count: ${newCount}`);
+            console.log(`[startup] Seed complete – product count: ${newCount}`);
           } catch (seedErr) {
             // eslint-disable-next-line no-console
             console.warn(
@@ -64,6 +85,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
             );
           }
         }
+        await safeEnsureSmoke();
       } catch (err) {
         // eslint-disable-next-line no-console
         console.warn(
@@ -90,6 +112,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
               // eslint-disable-next-line no-console
               console.log('[startup] Running seed after migrate (dev).');
               await seedProducts(prisma);
+              await safeEnsureSmoke();
             } catch (seedErr) {
               // eslint-disable-next-line no-console
               console.warn(

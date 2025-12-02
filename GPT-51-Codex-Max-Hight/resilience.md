@@ -3,7 +3,7 @@
 ## Circuit Breaker y Retry
 
 - Cliente `useApi`: retry exponencial con jitter para 429/5xx transitivos; límite 3 intentos; timeout por request.
--- External provider clients: enforce timeout (e.g. 10s), limit retries with jitter, and open circuit breaker when sustained error rates are observed.
+  -- External provider clients: enforce timeout (e.g. 10s), limit retries with jitter, and open circuit breaker when sustained error rates are observed.
 - Backend externo: usar AbortController y timeouts; no colgar request.
 
 ## Fallbacks
@@ -16,7 +16,7 @@
 
 - Inyectar latencia/errores en /api/products y /api/orders para validar retry/circuit breaker.
 - Simular caída de DB (read-only) para validar mensajes y degradación controlada.
--- Simular timeouts en integraciones externas si procede (p. ej. 10s) para validar degradación.
+  -- Simular timeouts en integraciones externas si procede (p. ej. 10s) para validar degradación.
 
 ## Métricas de resiliencia
 

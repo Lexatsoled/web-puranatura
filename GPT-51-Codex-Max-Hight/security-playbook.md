@@ -11,10 +11,10 @@
 - Red/Edge: CSP completa (script/style/connect/frame/src/img), HSTS, X-Frame-Options DENY, Referrer-Policy no-referrer, X-Content-Type-Options nosniff.
 - AuthN/AuthZ: JWT cookies httpOnly Secure SameSite=strict; refresh rotation; MFA; adminEmails lista blanca; lockout.
 - CSRF: cookie + header (double submit), cookies secure; excluir GET/HEAD/OPTIONS.
- - Inputs: zod en todas las rutas (auth/products/orders/analytics); tipos estrictos.
+- Inputs: zod en todas las rutas (auth/products/orders/analytics); tipos estrictos.
 - Salida: JSON escape; DOMPurify en cliente para HTML; sin render sin sanitizar.
- - Rate limiting: auth/orders/analytics dedicados; global limiter.
- - Secrets: .env.example solo placeholders; usar vault/gh-secrets; claves rotadas trimestral; zeroization ante fuga.
+- Rate limiting: auth/orders/analytics dedicados; global limiter.
+- Secrets: .env.example solo placeholders; usar vault/gh-secrets; claves rotadas trimestral; zeroization ante fuga.
 - Dependencias: SBOM CycloneDX; `npm audit --production --audit-level=high`; overrides documentados; política de licencias (allowlist).
 - SAST/DAST: eslint-plugin-security, trivy fs, zap-baseline; gitleaks en pre-commit y CI; fuzzing ligero en endpoints críticos.
 - Logs: estructurados, niveles, sin datos sensibles; traceId en todas las respuestas; scrub de tokens/PII; truncar payloads grandes.

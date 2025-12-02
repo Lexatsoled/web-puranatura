@@ -1,0 +1,248 @@
+Param(
+    [string]$Port = '5173',
+    [string]$BaseHost = 'http://localhost',
+    [string]$ReportsDir = 'reports',
+    [int]$ChromeDebugPort = 0,
+    [switch]$FailOnAxe
+)
+
+$url = "$BaseHost`:$Port"
+$previewProc = $null
+
+Write-Host "Starting preview (background)..."
+# ensure reports dir exists and a tmp base for runs
+if (!(Test-Path $ReportsDir)) { New-Item -ItemType Directory -Path $ReportsDir | Out-Null }
+$tmpBase = Join-Path $ReportsDir 'tmp'
+if (!(Test-Path $tmpBase)) { New-Item -ItemType Directory -Path $tmpBase | Out-Null }
+
+# create a per-run tmp folder to isolate chrome/lighthouse/playwright artifacts and avoid collisions
+$runId = [System.Guid]::NewGuid().ToString('N')
+$runTmp = Join-Path $tmpBase "run-$runId"
+New-Item -ItemType Directory -Path $runTmp | Out-Null
+
+# point TEMP/TMP to this run-specific tmp for spawned Chrome instances
+$env:TEMP = (Resolve-Path $runTmp).ProviderPath
+$env:TMP = (Resolve-Path $runTmp).ProviderPath
+
+$startInfo = @{FilePath='npm.cmd'; ArgumentList=@('run','preview','--','--port',$Port); NoNewWindow=$true}
+$previewProc = Start-Process @startInfo -PassThru
+
+Write-Host "Waiting for $url to be ready..."
+for ($i=0; $i -lt 60; $i++) {
+    try {
+        Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2 | Out-Null
+        Write-Host "$url is responding"
+        break
+    } catch {
+        Start-Sleep -Seconds 1
+    }
+}
+
+if (!(Test-Path $ReportsDir)) { New-Item -ItemType Directory -Path $ReportsDir | Out-Null }
+
+Write-Host "Running Lighthouse (desktop)..."
+$desktopProfile = Join-Path $runTmp ("chrome-profile-desktop-{0}" -f ([System.Guid]::NewGuid().ToString('N')))
+if (!(Test-Path $desktopProfile)) { New-Item -ItemType Directory -Path $desktopProfile | Out-Null }
+
+$lhDesktopBase = "--output html --output json --output-path $ReportsDir/lighthouse-desktop --quiet --emulated-form-factor=desktop"
+$lhDesktopChromeFlags = "--no-sandbox --headless=new --disable-gpu --user-data-dir=$desktopProfile"
+$lhDesktopArgs = "$lhDesktopBase --chrome-flags='$lhDesktopChromeFlags'"
+if ($ChromeDebugPort -gt 0) {
+    Write-Host "Connecting Lighthouse to existing Chrome on port $ChromeDebugPort"
+    $lhDesktopArgs = "$lhDesktopArgs --port $ChromeDebugPort"
+}
+
+    # Try to start a dedicated chrome instance and connect Lighthouse to it (helps avoid chrome-launcher tmp removal races)
+$lighthouseStart = Get-Date
+$chromeExe = $null
+try {
+    # attempt to find a local chrome/msedge binary
+    function Find-ChromeExe() {
+        $candidates = @(
+            "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
+            "$env:ProgramFiles(x86)\Google\Chrome\Application\chrome.exe",
+            "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe",
+            "$env:ProgramFiles(x86)\Microsoft\Edge\Application\msedge.exe"
+        )
+        foreach ($c in $candidates) { if (Test-Path $c) { return $c } }
+        try { $cmd = Get-Command chrome -ErrorAction SilentlyContinue; if ($cmd -and $cmd.Source) { return $cmd.Source } } catch {}
+        try { $cmd = Get-Command msedge -ErrorAction SilentlyContinue; if ($cmd -and $cmd.Source) { return $cmd.Source } } catch {}
+        try { $where = (where.exe chrome.exe 2>$null | Select-Object -First 1); if ($where) { return $where } } catch {}
+        return $null
+    }
+
+    $chromeExe = Find-ChromeExe
+} catch { $chromeExe = $null }
+
+if ($chromeExe) {
+    $debugPortLocal = if ($ChromeDebugPort -gt 0) { $ChromeDebugPort } else { (Get-Random -Minimum 9222 -Maximum 9322) }
+    Write-Host "Starting local Chrome/Edge for Lighthouse on port $debugPortLocal (exe: $chromeExe)"
+    $chromeArgs = @("--remote-debugging-port=$debugPortLocal", "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--user-data-dir=$desktopProfile", "--disable-dev-shm-usage", "--disable-extensions")
+    $chromeProc = Start-Process -FilePath $chromeExe -ArgumentList $chromeArgs -PassThru
+
+    # wait for remote debugger
+    $attempt = 0
+    while ($attempt -lt 30) {
+        try { Invoke-WebRequest -Uri "http://localhost:$debugPortLocal/json/version" -TimeoutSec 2 -UseBasicParsing | Out-Null; break } catch { Start-Sleep -Seconds 1; $attempt++ }
+    }
+
+    try {
+        # Ensure Playwright Chromium is installed (idempotent) so the helper can launch a browser reliably
+        Write-Host "Ensuring Playwright Chromium is installed..."
+        $installResult = & node -e "process.exitCode = 0" # placeholder to get consistent env
+        try {
+            $installExit = & npx playwright install chromium
+        } catch {
+            Write-Host "Error ejecutando 'npx playwright install chromium': $($_.Exception.Message)" -ForegroundColor Red
+            exit 2
+        }
+
+        # Run Lighthouse via our Playwright helper (no fallback) — fail loud so CI/local gating catches problems
+        Write-Host "Running lighthouse via Playwright helper (desktop) — strict mode"
+        $nodeArgs = @('scripts/run-lighthouse-with-playwright.cjs', $url, "$ReportsDir/lighthouse-desktop", 'desktop', $desktopProfile)
+        & node $nodeArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Lighthouse (desktop via Playwright) failed (exit code $LASTEXITCODE). Aborting run." -ForegroundColor Red
+            exit $LASTEXITCODE
+        }
+    } catch {
+        Write-Host "Fallo inesperado en Lighthouse (desktop via Playwright): $($_.Exception.Message)" -ForegroundColor Red
+        exit 3
+    }
+} else {
+    try { npx lighthouse $url $lhDesktopArgs } catch { Write-Host "Lighthouse (desktop) failed with error: $($_.Exception.Message)" -ForegroundColor Yellow; Write-Host "Continuando con la auditoría a11y (Playwright/axe)." -ForegroundColor Yellow }
+}
+
+# Ensure any Chrome processes using the desktop profile are stopped before cleanup
+function Kill-ProcessesUsingProfile($profilePath, $since = $null) {
+    try {
+        $escaped = $profilePath -replace "'", "''"
+        $procs = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine -like "*" + $escaped + "*" }
+        foreach ($p in $procs) {
+            try {
+                Write-Host "Stopping process with PID $($p.ProcessId) using profile $profilePath"
+                Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue
+            } catch { }
+        }
+
+        # If none found via command line, look for chrome/msedge processes created since $since
+        if (($procs | Measure-Object).Count -eq 0 -and $since -ne $null) {
+            try {
+                $sinceWmi = $since.ToUniversalTime().ToString("yyyyMMddHHmmss.ffffff+000")
+                $candidates = Get-CimInstance Win32_Process | Where-Object { ($_.Name -match "(?i)chrome.exe|msedge.exe") -and $_.CreationDate -ge $sinceWmi }
+                foreach ($c in $candidates) {
+                    try {
+                        Write-Host "Stopping candidate process (PID $($c.ProcessId), name=$($c.Name), started=$($c.CreationDate))"
+                        Stop-Process -Id $c.ProcessId -Force -ErrorAction SilentlyContinue
+                    } catch { }
+                }
+            } catch { }
+        }
+    } catch { }
+}
+Kill-ProcessesUsingProfile $desktopProfile $lighthouseStart
+
+Write-Host "Running Lighthouse (mobile)..."
+$mobileProfile = Join-Path $runTmp ("chrome-profile-mobile-{0}" -f ([System.Guid]::NewGuid().ToString('N')))
+if (!(Test-Path $mobileProfile)) { New-Item -ItemType Directory -Path $mobileProfile | Out-Null }
+
+$lhMobileArgs = "--output html --output json --output-path $ReportsDir/lighthouse-mobile --quiet --chrome-flags='--no-sandbox --headless=new --disable-gpu --user-data-dir=$mobileProfile' --emulated-form-factor=mobile"
+if ($ChromeDebugPort -gt 0) {
+    $lhMobileArgs = "$lhMobileArgs --port $ChromeDebugPort"
+}
+$lighthouseStartMobile = Get-Date
+    try {
+        Write-Host "Ensuring Playwright Chromium is installed (mobile)..."
+        try {
+            $installExit = & npx playwright install chromium
+        } catch {
+            Write-Host "Error ejecutando 'npx playwright install chromium': $($_.Exception.Message)" -ForegroundColor Red
+            exit 2
+        }
+
+        Write-Host "Running lighthouse via Playwright helper (mobile) — strict mode"
+        $nodeArgs = @('scripts/run-lighthouse-with-playwright.cjs', $url, "$ReportsDir/lighthouse-mobile", 'mobile', $mobileProfile)
+        & node $nodeArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Lighthouse (mobile via Playwright) failed (exit code $LASTEXITCODE). Aborting run." -ForegroundColor Red
+            exit $LASTEXITCODE
+        }
+    } catch {
+        Write-Host "Fallo inesperado en Lighthouse (mobile via Playwright): $($_.Exception.Message)" -ForegroundColor Red
+        exit 4
+    }
+}
+
+Kill-ProcessesUsingProfile $mobileProfile $lighthouseStartMobile
+
+# give the OS a moment to release file handles before Playwright attempts to create its own temp files
+Start-Sleep -Seconds 2
+
+# Attempt to clean up temporary files used by Chrome/Lighthouse in a robust way on Windows
+function Remove-WithRetries($path, $retries = 5, $delaySeconds = 1) {
+    for ($i = 0; $i -lt $retries; $i++) {
+        try {
+            if (Test-Path $path) {
+                Remove-Item -Path $path -Recurse -Force -ErrorAction Stop
+            }
+            return $true
+        } catch {
+            Write-Host "Failed to remove $path (attempt $($i+1)/$retries): $($_.Exception.Message)"
+            Start-Sleep -Seconds $delaySeconds
+        }
+    }
+    return $false
+}
+
+# Try best-effort cleanup of the run-specific tmp folder to avoid EPERM next run
+$tmpCleanupSuccess = Remove-WithRetries -path $runTmp -retries 8 -delaySeconds 2
+if (-not $tmpCleanupSuccess) {
+    # attempt to move to a stale folder so future runs aren't blocked, and preserve artifacts for inspection
+    $staleTarget = Join-Path $tmpBase ("stale-$runId-{0}" -f ((Get-Date).ToString('yyyyMMdd-HHmmss')))
+    try {
+        Move-Item -Path $runTmp -Destination $staleTarget -Force -ErrorAction Stop
+        Write-Host "Moved $runTmp to $staleTarget (couldn't delete; preserved for inspection)." -ForegroundColor Yellow
+    } catch {
+        Write-Host "Advertencia: no se pudo limpiar ni mover $runTmp. Esto puede causar errores EPERM en Windows en ejecuciones futuras." -ForegroundColor Yellow
+        # If Sysinternals handle.exe is available, try to report who holds a lock in the run tmp dir for diagnostics
+        try { $handleCmd = Get-Command handle.exe -ErrorAction SilentlyContinue } catch { $handleCmd = $null }
+
+        if ($null -ne $handleCmd) {
+            $handlePath = $handleCmd.Source
+            Write-Host "Encontrado handle.exe en: $handlePath — ejecutando diagnóstico para $runTmp" -ForegroundColor Cyan
+            $lockReport = Join-Path $ReportsDir ("locks-$runId.txt")
+            try {
+                & $handlePath "$runTmp" /accepteula > $lockReport 2>&1
+                Write-Host "Informe de bloqueo guardado en: $lockReport" -ForegroundColor Green
+            } catch {
+                Write-Host "No fue posible ejecutar handle.exe: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "handle.exe no encontrado: omitiendo diagnóstico de bloqueo. (Instalar Sysinternals handle para diagnóstico avanzado)" -ForegroundColor Yellow
+        }
+    }
+}
+
+Write-Host "Preparing Playwright temp folder and running axe-core scan..."
+# isolate Playwright artifacts in their own tmp so leftover Lighthouse files don't interfere
+$playTmp = Join-Path $tmpBase "playwright-$runId"
+if (!(Test-Path $playTmp)) { New-Item -ItemType Directory -Path $playTmp | Out-Null }
+$env:TEMP = (Resolve-Path $playTmp).ProviderPath
+$env:TMP = (Resolve-Path $playTmp).ProviderPath
+
+$axeArgs = @($url, "$ReportsDir/axe-report.json")
+if ($FailOnAxe) { $axeArgs += '--fail' }
+$exit = & node scripts/axe-playwright.cjs $axeArgs
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "axe-playwright returned an error (exit code $LASTEXITCODE)." -ForegroundColor Red
+    if ($FailOnAxe) { exit $LASTEXITCODE }
+}
+
+Write-Host "Reports saved to: $ReportsDir"
+
+if ($previewProc -ne $null) {
+    Write-Host "Stopping preview (PID $($previewProc.Id))..."
+    try { Stop-Process -Id $previewProc.Id -Force } catch {}
+}
+
+Write-Host "Done."

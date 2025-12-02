@@ -21,7 +21,8 @@ function walk(dir, files = []) {
   for (const e of entries) {
     const p = path.join(dir, e.name);
     if (e.isDirectory()) {
-      if (['node_modules', '.git', 'coverage', 'dist'].includes(e.name)) continue;
+      if (['node_modules', '.git', 'coverage', 'dist'].includes(e.name))
+        continue;
       walk(p, files);
     } else {
       files.push(p);
@@ -54,11 +55,11 @@ for (const file of filesToScan) {
         else if (m[0]) {
           // capture direct names from the last regex
           const parts = m[0].match(/[A-Z0-9_]{3,}/g);
-          if (parts) parts.forEach(p => found.add(p));
+          if (parts) parts.forEach((p) => found.add(p));
         }
       }
     }
-  } catch (err) {
+  } catch {
     // ignore read errors
   }
 }
@@ -66,9 +67,9 @@ for (const file of filesToScan) {
 const arr = [...found].sort();
 const outPath = path.join(root, '.github', 'required-secrets.yml');
 console.log('# Detected environment variable candidates:');
-arr.forEach(i => console.log('- ' + i));
+arr.forEach((i) => console.log('- ' + i));
 
 if (process.argv.includes('--write')) {
-  fs.writeFileSync(outPath, arr.map(i => '- ' + i).join('\n') + '\n');
+  fs.writeFileSync(outPath, arr.map((i) => '- ' + i).join('\n') + '\n');
   console.log('\nWrote ' + outPath);
 }

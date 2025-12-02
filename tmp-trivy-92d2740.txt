@@ -1,0 +1,326 @@
+﻿Trivy filesystem/Repo scan	UNKNOWN STEP	´╗┐2025-11-30T17:51:20.8622383Z Current runner version: '2.329.0'
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8659119Z ##[group]Runner Image Provisioner
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8660347Z Hosted Compute Agent
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8661299Z Version: 20251016.436
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8662788Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8664052Z Build Date: 2025-10-15T20:44:12Z
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8665048Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8666092Z ##[group]Operating System
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8667061Z Ubuntu
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8667849Z 24.04.3
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8668801Z LTS
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8669586Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8670522Z ##[group]Runner Image
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8671622Z Image: ubuntu-24.04
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8672791Z Version: 20251112.124.1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8674520Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8677458Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8679236Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8681305Z ##[group]GITHUB_TOKEN Permissions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8684594Z Contents: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8685776Z Metadata: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8686614Z Packages: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8687398Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8690600Z Secret source: Actions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.8691664Z Prepare workflow directory
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.9156562Z Prepare all required actions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:20.9211190Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:21.2400826Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:21.5242931Z Download action repository 'aquasecurity/trivy-action@0.33.1' (SHA:b6643a29fecd7f34b3597bc6acb0a98b03d33ff8)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:21.7549898Z Download action repository 'github/codeql-action@v3' (SHA:d3ced5c96c16c4332e2a61eb6f3649d6f1b20bb8)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:22.4445650Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:22.6050895Z Download action repository 'aquasecurity/setup-trivy@e6c2c5e321ed9123bda567646e2f96565e34abe1' (SHA:e6c2c5e321ed9123bda567646e2f96565e34abe1)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:22.7601416Z Download action repository 'actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809' (SHA:0400d5f644dc74513175e3cd8d07132dd4860809)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:22.9166893Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.0346644Z Download action repository 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' (SHA:08c6903cd8c0fde910a37f88322edcfb5dd907a8)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.1576931Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.3200018Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.5325283Z Complete job name: Trivy filesystem/Repo scan
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6019284Z ##[group]Run actions/checkout@v4
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6020361Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6020979Z   repository: Lexatsoled/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6022134Z   token: ***
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6022831Z   ssh-strict: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6023438Z   ssh-user: git
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6024035Z   persist-credentials: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6024726Z   clean: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6025326Z   sparse-checkout-cone-mode: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6026018Z   fetch-depth: 1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6026613Z   fetch-tags: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6027218Z   show-progress: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6027830Z   lfs: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6028402Z   submodules: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6029014Z   set-safe-directory: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.6029961Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7213375Z Syncing repository: Lexatsoled/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7216552Z ##[group]Getting Git version info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7218177Z Working directory is '/home/runner/work/web-puranatura/web-puranatura'
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7220160Z [command]/usr/bin/git version
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7252302Z git version 2.51.2
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7286124Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7299726Z Temporarily overriding HOME='/home/runner/work/_temp/ec0b90dc-8dfb-4b30-9152-ad95da6408fd' before making global git config changes
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7305108Z Adding repository directory to the temporary git global config as a safe directory
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7307846Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/web-puranatura/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7346893Z Deleting the contents of '/home/runner/work/web-puranatura/web-puranatura'
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7351685Z ##[group]Initializing the repository
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7356126Z [command]/usr/bin/git init /home/runner/work/web-puranatura/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7458483Z hint: Using 'master' as the name for the initial branch. This default branch name
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7460369Z hint: is subject to change. To configure the initial branch name to use in all
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7467515Z hint: of your new repositories, which will suppress this warning, call:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7469126Z hint:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7470389Z hint: 	git config --global init.defaultBranch <name>
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7472136Z hint:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7473484Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7482026Z hint: 'development'. The just-created branch can be renamed via this command:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7483579Z hint:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7484614Z hint: 	git branch -m <name>
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7485682Z hint:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7486905Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7488927Z Initialized empty Git repository in /home/runner/work/web-puranatura/web-puranatura/.git/
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7492636Z [command]/usr/bin/git remote add origin https://github.com/Lexatsoled/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7521134Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7525627Z ##[group]Disabling automatic garbage collection
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7529595Z [command]/usr/bin/git config --local gc.auto 0
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7563699Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7565448Z ##[group]Setting up auth
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7572957Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7605933Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7915464Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.7949405Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.8180844Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.8223511Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.9321156Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.9325566Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.9327222Z ##[group]Fetching the repository
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:23.9329702Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cc27a8eef7942c39e4994d04675f05e2282393ce:refs/remotes/pull/32/merge
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1791656Z From https://github.com/Lexatsoled/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1794390Z  * [new ref]         cc27a8eef7942c39e4994d04675f05e2282393ce -> pull/32/merge
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1832055Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1833467Z ##[group]Determining the checkout info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1835610Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1841636Z [command]/usr/bin/git sparse-checkout disable
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1886131Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1916344Z ##[group]Checking out the ref
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.1921508Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/32/merge
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7681346Z Note: switching to 'refs/remotes/pull/32/merge'.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7689643Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7690043Z You are in 'detached HEAD' state. You can look around, make experimental
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7690908Z changes and commit them, and you can discard any commits you make in this
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7691787Z state without impacting any branches by switching back to a branch.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7692524Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7692869Z If you want to create a new branch to retain commits you create, you may
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7693609Z do so (now or later) by using -c with the switch command. Example:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7694051Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7694240Z   git switch -c <new-branch-name>
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7694576Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7694780Z Or undo this operation with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7695064Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7695221Z   git switch -
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7695475Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7695839Z Turn off this advice by setting config variable advice.detachedHead to false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7696392Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7696992Z HEAD is now at cc27a8e Merge 92d27407ac3b39cbb326aa1df381319c4d68d3f6 into 273f82c47c70cfbb34db0f3b62c4752c2a49df4f
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7742649Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7784325Z [command]/usr/bin/git log -1 --format=%H
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.7808654Z cc27a8eef7942c39e4994d04675f05e2282393ce
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8180784Z ##[group]Run aquasecurity/trivy-action@0.33.1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8181126Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8181343Z   scan-type: fs
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8181557Z   scan-ref: .
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8181764Z   format: sarif
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8182343Z   output: trivy-results.sarif
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8182620Z   severity: CRITICAL,HIGH
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8182887Z   ignore-unfixed: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8183128Z   exit-code: 0
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8183342Z   vuln-type: os,library
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8183691Z   cache-dir: /home/runner/work/web-puranatura/web-puranatura/.cache/trivy
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8184117Z   list-all-pkgs: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8184348Z   version: v0.65.0
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8184561Z   cache: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8184799Z   skip-setup-trivy: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8185219Z   token-setup-trivy: ***
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8185472Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8331133Z ##[group]Run aquasecurity/setup-trivy@e6c2c5e321ed9123bda567646e2f96565e34abe1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8331573Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8331778Z   version: v0.65.0
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8332147Z   cache: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8332495Z   token: ***
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8332714Z   path: $HOME/.local/bin
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8332991Z   github-server-url: https://github.com
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8333281Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8409485Z ##[group]Run echo "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8409994Z [36;1mecho "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8449707Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8450089Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8639891Z ##[group]Run actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8640261Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8640495Z   path: /home/runner/.local/bin/trivy-bin
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8640805Z   key: trivy-binary-v0.65.0-Linux-X64
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8641104Z   enableCrossOsArchive: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8641385Z   fail-on-cache-miss: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8641635Z   lookup-only: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8642108Z   save-always: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:26.8642359Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:27.1031781Z Cache hit for: trivy-binary-v0.65.0-Linux-X64
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:27.6740472Z Received 42139159 of 42139159 (100.0%), 78.5 MBs/sec
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:27.6744945Z Cache Size: ~40 MB (42139159 B)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:27.6804461Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e168ea9f-d72f-4601-87a8-daa338fa7473/cache.tzst -P -C /home/runner/work/web-puranatura/web-puranatura --use-compress-program unzstd
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.0696583Z Cache restored successfully
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.0861082Z Cache restored from key: trivy-binary-v0.65.0-Linux-X64
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.0968765Z ##[group]Run echo /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.0969197Z [36;1mecho /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1003760Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1004107Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1087285Z ##[group]Run echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1087663Z [36;1mecho "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1119378Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1119707Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1220162Z ##[group]Run actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1220479Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1220757Z   path: /home/runner/work/web-puranatura/web-puranatura/.cache/trivy
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1221103Z   key: cache-trivy-2025-11-30
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1221337Z   restore-keys: cache-trivy-
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1221565Z   enableCrossOsArchive: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1221803Z   fail-on-cache-miss: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1222321Z   lookup-only: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1222517Z   save-always: false
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.1222707Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.3381739Z Cache hit for restore-key: cache-trivy-2025-11-28
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.8269194Z Received 55545023 of 55545023 (100.0%), 126.1 MBs/sec
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.8285027Z Cache Size: ~53 MB (55545023 B)
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:28.8305241Z [command]/usr/bin/tar -xf /home/runner/work/_temp/77852c93-2370-467b-a504-006016291296/cache.tzst -P -C /home/runner/work/web-puranatura/web-puranatura --use-compress-program unzstd
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.3643323Z Cache restored successfully
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6329731Z Cache restored from key: cache-trivy-2025-11-28
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6435388Z ##[group]Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6435758Z [36;1mecho "$GITHUB_ACTION_PATH" >> $GITHUB_PATH[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6469999Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6470335Z env:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6470641Z   GITHUB_ACTION_PATH: /home/runner/work/_actions/aquasecurity/trivy-action/0.33.1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.6471005Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9186220Z ##[group]Run rm -f trivy_envs.txt
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9186705Z [36;1mrm -f trivy_envs.txt[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9187101Z [36;1mtouch trivy_envs.txt[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9219903Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9220248Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9536036Z ##[group]Run # Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9536848Z [36;1m# Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9537445Z [36;1m# This limitation affects how we handle default values and empty inputs.[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9537950Z [36;1m# For more information, see: https://github.com/actions/runner/issues/924[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9538329Z [36;1m[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9538663Z [36;1m# The following logic implements the configuration priority described in the README:[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9539061Z [36;1m#[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9539243Z [36;1m# Inputs[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9539458Z [36;1m# Environment Variables[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9539699Z [36;1m# Config File[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9539899Z [36;1m# Defaults[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9540091Z [36;1m#[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9540466Z [36;1m# As noted above defaults are awkward to handle as GitHub Actions will inject those values as the input[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9541079Z [36;1m# if the caller doesn't provide them, thus if the input matches the default we don't set it as we[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9541685Z [36;1m# can't tell the difference.  Plus if we did set it when it was the default value then it could potentially [0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9542651Z [36;1m# override an external environment variable, or something in the callers configuration file, which then wouldn't [0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9543380Z [36;1m# match the configuration priority that is documented.[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9543700Z [36;1mset_env_var_if_provided() {[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9543943Z [36;1m  local var_name="$1"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9544186Z [36;1m  local input_value="$2"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9544433Z [36;1m  local default_value="$3"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9544664Z [36;1m[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9544927Z [36;1m  if [ ! -z "$input_value" ] && [ "$input_value" != "$default_value" ]; then[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9545353Z [36;1m    # If action was provided with explicit input by the caller set that[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9545758Z [36;1m    echo "export $var_name=$input_value" >> trivy_envs.txt[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9546057Z [36;1m  fi[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9546234Z [36;1m}[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9546404Z [36;1m[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9546676Z [36;1m# Set environment variables, handling those with default values[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9547211Z [36;1m# cf. https://aquasecurity.github.io/trivy/latest/docs/configuration/#environment-variables[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9547715Z [36;1mset_env_var_if_provided "TRIVY_INPUT" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9548063Z [36;1mset_env_var_if_provided "TRIVY_EXIT_CODE" "0" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9548579Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_UNFIXED" "true" "false"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9549015Z [36;1mset_env_var_if_provided "TRIVY_PKG_TYPES" "os,library" "os,library"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9549537Z [36;1mset_env_var_if_provided "TRIVY_SEVERITY" "CRITICAL,HIGH" "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9550025Z [36;1mset_env_var_if_provided "TRIVY_FORMAT" "sarif" "table"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9550374Z [36;1mset_env_var_if_provided "TRIVY_TEMPLATE" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9550744Z [36;1mset_env_var_if_provided "TRIVY_OUTPUT" "trivy-results.sarif" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9551119Z [36;1mset_env_var_if_provided "TRIVY_SKIP_DIRS" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9551443Z [36;1mset_env_var_if_provided "TRIVY_SKIP_FILES" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9551779Z [36;1mset_env_var_if_provided "TRIVY_TIMEOUT" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9553007Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_POLICY" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9553368Z [36;1mset_env_var_if_provided "TRIVY_QUIET" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9553729Z [36;1mset_env_var_if_provided "TRIVY_LIST_ALL_PKGS" "false" "false"[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9554094Z [36;1mset_env_var_if_provided "TRIVY_SCANNERS" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9554447Z [36;1mset_env_var_if_provided "TRIVY_CONFIG" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9554756Z [36;1mset_env_var_if_provided "TRIVY_TF_VARS" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9555081Z [36;1mset_env_var_if_provided "TRIVY_DOCKER_HOST" "" ""[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9584406Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:30.9584730Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0333856Z ##[group]Run entrypoint.sh
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0334111Z [36;1mentrypoint.sh[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0364391Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0364707Z env:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0364887Z   INPUT_SCAN_TYPE: fs
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0365089Z   INPUT_IMAGE_REF: 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0365277Z   INPUT_SCAN_REF: .
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0365480Z   INPUT_TRIVYIGNORES: 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0365678Z   INPUT_GITHUB_PAT: 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0365886Z   INPUT_LIMIT_SEVERITIES_FOR_SARIF: 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0366374Z   TRIVY_CACHE_DIR: /home/runner/work/web-puranatura/web-puranatura/.cache/trivy
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0366786Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0550649Z Building SARIF report with all severities
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.0552873Z Running Trivy with options: trivy fs .
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.1124180Z 2025-11-30T17:51:31Z	INFO	[vulndb] Need to update DB
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.1125059Z 2025-11-30T17:51:31Z	INFO	[vulndb] Downloading vulnerability DB...
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:31.1126149Z 2025-11-30T17:51:31Z	INFO	[vulndb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-db:2"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:35.3043676Z 30.08 MiB / 76.57 MiB [----------------------->_____________________________________] 39.28% ? p/s ?62.74 MiB / 76.57 MiB [------------------------------------------------->___________] 81.94% ? p/s ?76.57 MiB / 76.57 MiB [----------------------------------------------------------->] 100.00% ? p/s ?76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 77.43 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 77.43 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 77.43 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 72.44 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 72.44 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 72.44 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 67.76 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 67.76 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 67.76 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 63.39 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 63.39 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 63.39 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [---------------------------------------------->] 100.00% 59.30 MiB p/s ETA 0s76.57 MiB / 76.57 MiB [-------------------------------------------------] 100.00% 24.90 MiB p/s 3.3s2025-11-30T17:51:35Z	INFO	[vulndb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-db:2"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:35.3049287Z 2025-11-30T17:51:35Z	INFO	[vuln] Vulnerability scanning is enabled
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:35.3065861Z 2025-11-30T17:51:35Z	INFO	[secret] Secret scanning is enabled
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:35.3066895Z 2025-11-30T17:51:35Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:51:35.3068399Z 2025-11-30T17:51:35Z	INFO	[secret] Please see also https://trivy.dev/v0.65/docs/scanner/secret#recommendation for faster secret detection
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.0798720Z 2025-11-30T17:52:31Z	INFO	[npm] To collect the license information of packages, "npm install" needs to be performed beforehand	dir="backend/node_modules"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.0819595Z 2025-11-30T17:52:31Z	INFO	[npm] To collect the license information of packages, "npm install" needs to be performed beforehand	dir="node_modules"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1225228Z 2025-11-30T17:52:31Z	INFO	Suppressing dependencies for development and testing. To display them, try the '--include-dev-deps' flag.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1229061Z 2025-11-30T17:52:31Z	INFO	Number of language-specific files	num=2
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1231645Z 2025-11-30T17:52:31Z	INFO	[npm] Detecting vulnerabilities...
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1348376Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1350996Z ­ƒôú [34mNotices:[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1353741Z   - Version 0.67.2 of Trivy is now available, current version is 0.65.0
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1358347Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1358750Z To suppress version checks, run Trivy scans with the --skip-version-check flag
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1359275Z 
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1443927Z ##[group]Run rm -f trivy_envs.txt
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1444206Z [36;1mrm -f trivy_envs.txt[0m
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1481678Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1482456Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1616802Z ##[group]Run github/codeql-action/upload-sarif@v3
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1617123Z with:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1617316Z   sarif_file: trivy-results.sarif
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1617652Z   checkout_path: /home/runner/work/web-puranatura/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1618086Z   token: ***
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1618274Z   matrix: null
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1618473Z   wait-for-processing: true
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.1618694Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.3190107Z ##[warning]CodeQL Action v3 will be deprecated in December 2026. Please update all occurrences of the CodeQL Action in your workflow files to v4. For more information, see https://github.blog/changelog/2025-10-28-upcoming-deprecation-of-codeql-action-v3/
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.4965485Z ##[warning]Caught an exception while gathering information for telemetry: HttpError: Resource not accessible by integration - https://docs.github.com/rest/actions/workflow-runs#get-a-workflow-run. Will skip sending status report.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.4983433Z Post-processing sarif files: ["trivy-results.sarif"]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.4983943Z Validating trivy-results.sarif
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.5818751Z Adding fingerprints to SARIF file. See https://docs.github.com/en/enterprise-cloud@latest/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning#providing-data-to-track-code-scanning-alerts-across-runs for more information.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.8410808Z ##[error]Resource not accessible by integration - https://docs.github.com/rest/actions/workflow-runs#get-a-workflow-run
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.9462062Z ##[warning]Caught an exception while gathering information for telemetry: HttpError: Resource not accessible by integration - https://docs.github.com/rest/actions/workflow-runs#get-a-workflow-run. Will skip sending status report.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:31.9649029Z Post job cleanup.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.1552986Z ##[group]Uploading combined SARIF debug artifact
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.1556930Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.1748593Z Post job cleanup.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.1803562Z Post job cleanup.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.1873553Z Post job cleanup.
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.2867859Z [command]/usr/bin/git version
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.2920538Z git version 2.51.2
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.2968920Z Temporarily overriding HOME='/home/runner/work/_temp/4eeb067a-34e7-4990-ac76-ceb1ce1e5332' before making global git config changes
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.2970807Z Adding repository directory to the temporary git global config as a safe directory
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.2975587Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/web-puranatura/web-puranatura
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3014525Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3051181Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3295159Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3319926Z http.https://github.com/.extraheader
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3334941Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3369823Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3612964Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.3650308Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:52:32.4175892Z Cleaning up orphan processes

@@ -47,4 +47,16 @@ describe('GET /api/products', () => {
     expect(cachedResponse.status).toBe(304);
     expect(cachedResponse.text).toBe('');
   });
+
+  it('normaliza solicitudes de página fuera de rango', async () => {
+    const response = await request(app)
+      .get('/api/products')
+      .query({ page: 999, pageSize: 1 });
+
+    expect(response.status).toBe(200);
+    const total = Number(response.headers['x-total-count']);
+    const pageSize = Number(response.headers['x-page-size']);
+    const expectedMaxPage = Math.max(1, Math.ceil(total / pageSize));
+    expect(Number(response.headers['x-page'])).toBe(expectedMaxPage);
+  });
 });

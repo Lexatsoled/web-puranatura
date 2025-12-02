@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../contexts/CartContext';
 import { formatCurrency } from '../src/utils/intl';
+import { useFocusTrap } from '../src/hooks/useFocusTrap';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -37,53 +38,24 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        if (isConfirmingClear) {
-          setIsConfirmingClear(false);
-        } else {
-          onClose();
-        }
-      }
-
-      if (event.key === 'Tab' && isOpen && modalRef.current) {
-        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    };
-
-    if (isOpen) {
-      previouslyFocusedRef.current =
-        document.activeElement as HTMLElement | null;
-      window.addEventListener('keydown', handleKeyDown);
-      setTimeout(() => closeButtonRef.current?.focus(), 0);
+  const handleEscape = useCallback(() => {
+    if (isConfirmingClear) {
+      setIsConfirmingClear(false);
+      return;
     }
+    if (!isProcessingPayment) {
+      onClose();
+    }
+  }, [isConfirmingClear, isProcessingPayment, onClose]);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      try {
-        previouslyFocusedRef.current?.focus();
-      } catch {
-        // Ignorar errores al restaurar el foco
-      }
-    };
-  }, [isOpen, isConfirmingClear, onClose]);
+  useFocusTrap(modalRef, {
+    isActive: isOpen,
+    onEscape: handleEscape,
+    initialFocusRef: closeButtonRef,
+  });
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (newQuantity >= 1) {
@@ -242,6 +214,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                           src={item.product.images[0].thumbnail}
                           alt={item.product.name}
                           className="h-12 w-12 object-cover rounded"
+                          loading="lazy"
+                          decoding="async"
+                          width={48}
+                          height={48}
                         />
                       )}
                     </div>

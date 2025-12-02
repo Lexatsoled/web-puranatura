@@ -17,7 +17,7 @@
 
 - Índices Prisma (products.createdAt, orders.userId+createdAt).
 - Cache headers en GET /products (ya con ETag); añadir 304 handling en cliente.
-	- Pool/timeout: axios client con timeout; external providers should have enforced timeouts (e.g. 10s) and safe fallbacks.
+  - Pool/timeout: axios client con timeout; external providers should have enforced timeouts (e.g. 10s) and safe fallbacks.
 - Rate-limit por ruta; body limit 1MB; evitar N+1 (Prisma include selectivo).
 
 ## Medición
