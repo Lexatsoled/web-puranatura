@@ -8,7 +8,14 @@ type ProfileForm = {
   email: string;
 };
 
-const buildInitialForm = (user?: { firstName?: string; lastName?: string; phone?: string | null; email?: string } | null) => ({
+const buildInitialForm = (
+  user?: {
+    firstName?: string;
+    lastName?: string;
+    phone?: string | null;
+    email?: string;
+  } | null
+) => ({
   firstName: user?.firstName || '',
   lastName: user?.lastName || '',
   phone: user?.phone || '',

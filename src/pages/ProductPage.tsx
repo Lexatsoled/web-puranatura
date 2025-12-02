@@ -1,63 +1,48 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { NextSeo, ProductJsonLd } from 'next-seo';
 import { useParams, useLocation } from 'react-router-dom';
 import { useSeo } from '../hooks/useSeo';
 import { motion } from 'framer-motion';
-import { Product, ProductImage } from '../types/product';
-import { products as legacyProducts } from '../../data/products';
+import {
+  ProductJsonLd as ProductJsonLdProps,
+  ProductImage,
+} from '../types/product';
 import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
 import { sanitizeHtml } from '../utils/sanitizer';
-import { sanitizeProductContent } from '../utils/contentSanitizers';
-import { useApi } from '../utils/api';
-import { mapApiProduct, ApiProduct } from '../utils/productMapper';
 import { formatCurrency } from '../utils/intl';
+import { useProductDetails } from '../hooks/useProductDetails';
+
+const ProductHero = ({ product }: { product: ProductJsonLdProps }) => (
+  <div className="relative aspect-square rounded-lg overflow-hidden">
+    <img
+      src={product.images[0]?.full}
+      alt={product.name}
+      className="object-cover w-full h-full"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+);
+
+const ProductInfo = ({ product }: { product: ProductJsonLdProps }) => (
+  <div className="space-y-6">
+    <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+    <p className="text-xl text-gray-600">{formatCurrency(product.price)}</p>
+    <div className="prose prose-green">
+      <p>{product.description}</p>
+    </div>
+    <button
+      type="button"
+      className="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors"
+    >
+      Añadir al carrito
+    </button>
+  </div>
+);
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const api = useApi();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
-    'loading'
-  );
-
-  const fallbackProducts = useMemo(
-    () => legacyProducts.map((legacy) => sanitizeProductContent(legacy)),
-    []
-  );
-
-  useEffect(() => {
-    if (!id) {
-      setStatus('error');
-      return;
-    }
-
-    let active = true;
-    const fetchProduct = async () => {
-      setStatus('loading');
-      try {
-        const apiProduct = await api.get<ApiProduct>(`/products/${id}`);
-        if (!active) return;
-        setProduct(sanitizeProductContent(mapApiProduct(apiProduct)));
-        setStatus('ready');
-      } catch (error) {
-        console.error('Error cargando producto', error);
-        if (!active) return;
-        const fallback = fallbackProducts.find((item) => item.id === id);
-        if (fallback) {
-          setProduct(fallback);
-          setStatus('ready');
-        } else {
-          setStatus('error');
-        }
-      }
-    };
-
-    fetchProduct();
-    return () => {
-      active = false;
-    };
-  }, [api, fallbackProducts, id]);
-
+  const { product, status } = useProductDetails(id);
   const location = useLocation();
   const currentUrl = `${window.location.origin}${location.pathname}`;
 
@@ -118,32 +103,8 @@ const ProductPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          <div className="relative aspect-square rounded-lg overflow-hidden">
-            <img
-              src={product.images[0]?.full}
-              alt={product.name}
-              className="object-cover w-full h-full"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-            <p className="text-xl text-gray-600">
-              {formatCurrency(product.price)}
-            </p>
-            <div className="prose prose-green">
-              <p>{product.description}</p>
-            </div>
-
-            <button
-              type="button"
-              className="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors"
-            >
-              Añadir al carrito
-            </button>
-          </div>
+          <ProductHero product={product} />
+          <ProductInfo product={product} />
         </motion.div>
       </div>
     </>

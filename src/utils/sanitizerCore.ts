@@ -1,7 +1,9 @@
 ﻿import DOMPurify from 'dompurify';
 import sanitizerConfig from './sanitizerConfig.json';
 
-type PurifyConfig = Omit<typeof sanitizerConfig, "ALLOWED_URI_REGEXP"> & { ALLOWED_URI_REGEXP: RegExp };
+type PurifyConfig = Omit<typeof sanitizerConfig, 'ALLOWED_URI_REGEXP'> & {
+  ALLOWED_URI_REGEXP: RegExp;
+};
 
 const purifyConfig: PurifyConfig = {
   ...sanitizerConfig,

@@ -7,29 +7,71 @@ import {
 } from './sanitizationMiddleware';
 import RateLimiter, { RateLimitConfig } from './rateLimiter';
 
+const API_TIMEOUT_MS = 10000;
 const apiBaseUrl =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
   '/api';
 
 const api = axios.create({
   baseURL: apiBaseUrl,
-  timeout: 10000,
+  timeout: API_TIMEOUT_MS,
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
 
-// Añadir middleware de sanitización
 api.interceptors.request.use(sanitizeRequestMiddleware);
 api.interceptors.response.use(sanitizeResponseMiddleware);
 
-// RateLimiter se exporta desde src/utils/rateLimiter.ts — lo importamos
-
-// Instancia global del rate limiter (usar implementación centralizada)
 const rateLimiter = new RateLimiter();
 
-// Hook personalizado para hacer peticiones a la API
+const isHtmlResponse = (value: unknown) =>
+  typeof value === 'string' && value.trim().startsWith('<');
+
+const buildConfig = (
+  url: string,
+  method: AxiosRequestConfig['method'],
+  data?: any,
+  config?: AxiosRequestConfig
+) => ({ ...config, method, url, data });
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const handleRateLimit = async (
+  error: AxiosError,
+  config: AxiosRequestConfig,
+  rateLimitConfig: Partial<RateLimitConfig> | undefined,
+  showNotification: ReturnType<typeof useNotifications>['showNotification'],
+  retry: () => Promise<unknown>
+) => {
+  showNotification({
+    type: 'warning',
+    title: 'Demasiadas solicitudes',
+    message: 'Por favor, espera un momento antes de intentar nuevamente.',
+  });
+
+  const retryAfter =
+    Number(error.response?.headers['retry-after']) * 1000 || 5000;
+  await delay(retryAfter);
+  return retry();
+};
+
+const sendRequest = async <T>(
+  config: AxiosRequestConfig,
+  limiter: RateLimiter
+): Promise<T> => {
+  await limiter.waitForSlot();
+  const response = await api(config);
+  if (isHtmlResponse(response.data)) {
+    throw new Error('Unexpected HTML response from API');
+  }
+  return response.data;
+};
+
+const isRateLimitError = (error: unknown): error is AxiosError =>
+  error instanceof AxiosError && error.response?.status === 429;
+
 export const useApi = () => {
   const { showNotification } = useNotifications();
 
@@ -41,61 +83,39 @@ export const useApi = () => {
       ? new RateLimiter(rateLimitConfig)
       : rateLimiter;
 
+    const execute = () => makeRequest<T>(config, rateLimitConfig);
+
     try {
-      // Esperar si es necesario por el rate limiting
-      await limiter.waitForSlot();
-
-      const response = await api(config);
-      // Detect accidental HTML responses (e.g., when preview serves index.html
-      // for unknown /api routes) and treat them as errors so the caller falls
-      // back to legacy data instead of attempting to .map() a string.
-      if (
-        response &&
-        response.data &&
-        typeof response.data === 'string' &&
-        response.data.trim().startsWith('<')
-      ) {
-        throw new Error('Unexpected HTML response from API');
-      }
-
-      return response.data;
+      return await sendRequest<T>(config, limiter);
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 429) {
-        showNotification({
-          type: 'warning',
-          title: 'Demasiadas solicitudes',
-          message: 'Por favor, espera un momento antes de intentar nuevamente.',
-        });
-
-        // Esperar el tiempo indicado y reintentar
-        await new Promise((resolve) =>
-          setTimeout(
-            resolve,
-            Number(error.response?.headers['retry-after']) * 1000 || 5000
-          )
+      if (isRateLimitError(error)) {
+        return handleRateLimit(
+          error,
+          config,
+          rateLimitConfig,
+          showNotification,
+          execute
         );
-        return makeRequest(config, rateLimitConfig);
       }
-
       throw transformApiError(error);
     }
   };
 
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
-      makeRequest<T>({ ...config, method: 'GET', url }),
+      makeRequest<T>(buildConfig(url, 'GET', undefined, config)),
 
     post: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>({ ...config, method: 'POST', url, data }),
+      makeRequest<T>(buildConfig(url, 'POST', data, config)),
 
     put: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>({ ...config, method: 'PUT', url, data }),
+      makeRequest<T>(buildConfig(url, 'PUT', data, config)),
 
     patch: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>({ ...config, method: 'PATCH', url, data }),
+      makeRequest<T>(buildConfig(url, 'PATCH', data, config)),
 
     delete: <T>(url: string, config?: AxiosRequestConfig) =>
-      makeRequest<T>({ ...config, method: 'DELETE', url }),
+      makeRequest<T>(buildConfig(url, 'DELETE', undefined, config)),
   };
 };
 

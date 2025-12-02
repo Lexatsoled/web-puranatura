@@ -181,10 +181,14 @@ Issues creados (T2 iniciales):
 ---
 
 <<<<<<< HEAD
+
 ## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: COMPLETADO)
+
 =======
+
 ## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: EN PROGRESO)
->>>>>>> origin/main
+
+> > > > > > > origin/main
 
 - [x] T4.1 Tracing/logging con OpenTelemetry y traceId en headers
   - Evidencia: `backend/src/tracing/initTracing.ts`, `backend/src/middleware/traceId.ts`, `reports/observability/trace-sample.md`, `docs/runbooks/observability.md`.
@@ -195,22 +199,21 @@ Issues creados (T2 iniciales):
 - [x] T4.4 Feature flags + canary automation
   - Evidencia: `docs/runbooks/ci-canary.md`, `scripts/rollout-canary.cjs`, `scripts/update-flag.cjs`, `config/flags.json`, `reports/observability/dashboard-summary.md` (alertas/monitorización sugerida del canary).
 - [x] T4.5 Backups/DR tests
-<<<<<<< HEAD
+      <<<<<<< HEAD
 - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [x] T4.6 Synthetic monitoring
 - Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
 - [x] Sintéticos + evidencia de release (2025-12-02)
   - Comando: `npm run synthetic:checks` generó `reports/synthetic/synthetic-report.json`; los artefactos `reports/observability/observability-artifacts.zip`, `reports/observability/metrics-snapshot.txt` y `sbom.json` se guardan junto a cada release/ticket para auditoría.
 - [x] Fase 4 cerrada (Sprint 1–3 completados + artefactos archivados)
-  - Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
-=======
+  - # Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
   - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [x] T4.6 Synthetic monitoring
   - Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
 - [ ] Sintéticos + evidencia de release (2025-12-02)
   - Comando: `npm run synthetic:checks` genera `reports/synthetic/synthetic-report.json` con login/catálogo/checkout y `reports/observability/observability-artifacts.zip` + `reports/observability/metrics-snapshot.txt`; SBOM actualizado con `npm run generate:sbom`. Adjuntar estos artefactos a cada release o ticket de rollback para triage inmediato.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
->>>>>>> origin/main
+  > > > > > > > origin/main
 
 ## Fase 5 – Refactor, deuda y prevención (Estado: EN PROGRESO)
 
@@ -220,6 +223,10 @@ Issues creados (T2 iniciales):
   - Avance 2025-12-02 (cont.): refactor de `src/components/OptimizedImage.tsx` (derivación con `useMemo`, placeholders/fallback desacoplados, blur-css sólo en cliente) y `src/utils/sanitizer.ts` (helpers pequeños para sanitización recursiva). Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
   - Avance 2025-12-02 (cont.): refactor de `src/components/ProductCard.tsx` (subcomponentes + hook `useProductCardState`) y `pages/AddressesPage.tsx` (hook `useAddressesState` + subcomponentes). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` refleja la caída de estos módulos fuera del top inmediato.
   - Avance 2025-12-02 (extra): refactor de `src/components/FAQSection.tsx` (hook `useFaqFilters` + subcomponentes) y simplificación de `src/hooks/useSearchBar.ts` (debounce memorizado, mapa de acciones). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+  - Avance 2025-12-xx: `src/pages/ProductPage.tsx` ahora usa `useProductDetails` para fetch/fallback y componentes `ProductHero`/`ProductInfo`; breadcrumbs/SEO calculados con hooks/memos. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
+  - Avance 2025-12-xx: `src/utils/api.ts` reestructura los helpers (`buildConfig`, `sendRequest`, `handleRateLimit`), detecta HTML por error y centraliza `RateLimiter`; la interfaz GET/POST/PUT/PATCH/DELETE sigue igual. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` registra la caída de `api.ts` (ahora 31).
+  - Avance 2025-12-xx: `src/components/ShoppingCart.tsx` delega el listado en `CartItemsList`, `CartItemRow` y `CartQuantityControl`, y el resumen en `CartSummary`/`CheckoutButton`; el hook `useShoppingCart` se concentra en totales. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` muestra `ShoppingCart.tsx` en 27.
+  - Avance 2025-12-03: `pages/StorePage.tsx` usa `useStorePage` (fetch, filtros, orden, paginación) y subcomponentes (header, controles, grid, estados vacíos/errores, paginación). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; StorePage sale del top de complejidad.
   - Estado CC (2025-12-02): los módulos refactorizados quedan por debajo de CC 15 y salen del top del `complexity-report.json`.
 - [ ] T5.2 Clean Architecture y separación de responsabilidades
   - Evidencia: ajustes en los servicios/rutas y la documentación en la ADR `docs/adr/0003-phase5-maintainability.md`.
