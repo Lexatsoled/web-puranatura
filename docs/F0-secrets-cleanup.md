@@ -19,7 +19,7 @@ Pasos recomendados para eliminar secretos de la historia de Git (manual, requier
 
 - JWT_SECRET
 - JWT_REFRESH_SECRET
-PROVIDER_API_KEY (e.g. LLM/provider keys)
+  PROVIDER_API_KEY (e.g. LLM/provider keys)
 - BACKUP_ENCRYPTION_KEY
 - SENTRY_DSN
 - REDIS_PASSWORD

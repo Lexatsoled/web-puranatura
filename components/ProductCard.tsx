@@ -44,6 +44,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
           src={cardImageUrl}
           alt={product.name}
           className="w-full h-full object-contain p-2"
+          loading="lazy"
+          decoding="async"
+          width={320}
+          height={224}
         />
         <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-0 transition-all duration-300"></div>
 

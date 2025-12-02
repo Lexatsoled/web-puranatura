@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { blogPosts } from '../data/blog';
 import { BlogPost } from '../types';
-import BlogPostModal from '../components/BlogPostModal';
 import { sanitizeBlogPostContent } from '../src/utils/contentSanitizers';
+
+const BlogPostModal = React.lazy(() => import('../components/BlogPostModal'));
 
 const BlogPage: React.FC = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
@@ -47,6 +48,8 @@ const BlogPage: React.FC = () => {
                   src={post.imageUrl}
                   alt={post.title}
                   className="w-full h-48 object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-2xl font-bold text-green-800 font-display mb-3 group-hover:text-green-600 transition-colors duration-300">
@@ -65,11 +68,13 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <BlogPostModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        post={selectedPost}
-      />
+      <Suspense fallback={null}>
+        <BlogPostModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          post={selectedPost}
+        />
+      </Suspense>
     </>
   );
 };

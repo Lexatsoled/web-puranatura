@@ -6,7 +6,7 @@ on:
       - 'GPT-51-Codex-Max/api/**'
       - 'scripts/run-contract.cjs'
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint-openapi:

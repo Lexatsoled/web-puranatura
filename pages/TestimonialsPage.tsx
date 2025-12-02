@@ -30,6 +30,10 @@ const TestimonialsPage: React.FC = () => {
                     src={testimonial.imageUrl}
                     alt={testimonial.name}
                     className="w-14 h-14 rounded-full mr-4 object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    width={56}
+                    height={56}
                   />
                 )}
                 <div className={!testimonial.imageUrl ? 'ml-2' : ''}>

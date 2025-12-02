@@ -276,7 +276,9 @@ describe('Auth routes (/api/auth)', () => {
       : setCookieHeader
         ? [String(setCookieHeader)]
         : [];
-    const csrfCookie = cookiesArr.find((c: string) => c.startsWith('csrfToken='));
+    const csrfCookie = cookiesArr.find((c: string) =>
+      c.startsWith('csrfToken=')
+    );
     const csrfToken = csrfCookie?.split(';')[0].split('=')[1];
 
     // Make requests until we hit limit (AUTH_RATE_LIMIT_MAX is 2)

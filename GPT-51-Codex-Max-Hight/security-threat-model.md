@@ -4,8 +4,8 @@
 
 - Tokens JWT (auth/refresh), cookies httpOnly.
 - Datos de usuarios, órdenes, productos.
- - Claves sensibles (JWT keys, DB credentials, provider API keys), DB.
- - Endpoints: /api/auth, /api/products, /api/orders, /api/analytics (nuevo), /metrics.
+- Claves sensibles (JWT keys, DB credentials, provider API keys), DB.
+- Endpoints: /api/auth, /api/products, /api/orders, /api/analytics (nuevo), /metrics.
 - Frontend: rutas SPA, modales, catálogos, mapas/iframes, GA/FB scripts.
 
 ## Amenazas (STRIDE)
@@ -14,7 +14,7 @@
 - Tampering: manipulación de payloads (zod, tipos, transacciones Prisma).
 - Repudiation: falta de trazas (traceId en logs/headers, logger estructurado).
 - Information disclosure: XSS (DOMPurify), secrets en repo (gitleaks), CSP incompleta.
- - DoS: abuse en /auth, /orders (rate-limit, body limit, captchas opcionales).
+- DoS: abuse en /auth, /orders (rate-limit, body limit, captchas opcionales).
 - Elevation of privilege: roles admin vía adminEmails; validar en requireAdmin.
 
 ## Controles clave
@@ -31,7 +31,7 @@
 
 - SQLite en repo (actual) debe eliminarse; riesgo de fuga hasta que se limpie y roten secretos.
 - GA/FB Pixel requieren dominios en CSP; riesgo de rotura si se omiten.
- - IA endpoint retired; if integrated externally validate inputs, rate-limit and billing controls.
+- IA endpoint retired; if integrated externally validate inputs, rate-limit and billing controls.
 - Frontend StrictMode duplica efectos; asegurar idempotencia de efectos y fetch con guards.
 
 ## Plan de validación

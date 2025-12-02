@@ -7,7 +7,7 @@
 | DATABASE_URL       | file:./database.sqlite | postgres://stage/...          | postgres://prod/...    |
 | JWT_SECRET         | dev-secret (random)    | secret stage (vault)          | secret prod (vault)    |
 | JWT_REFRESH_SECRET | dev-refresh (random)   | secret stage (vault)          | secret prod (vault)    |
-| PROVIDER_API_KEY     | (vacío)                | stage key (vault)             | prod key (vault)       |
+| PROVIDER_API_KEY   | (vacío)                | stage key (vault)             | prod key (vault)       |
 | ADMIN_EMAILS       | dev admin              | stage admins                  | prod admins            |
 | RATE_LIMIT_MAX     | 300                    | 200                           | 150                    |
 | RATE_LIMIT_WINDOW  | 15m                    | 15m                           | 15m                    |

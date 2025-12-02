@@ -1,52 +1,205 @@
 openapi: 3.1.0
 info:
   title: PuraNatura API
-  version: 0.1.0
-  description: Especificación OpenAPI 3.1 (inicial) para PuraNatura — fase 2 (contratos y tests).
-  x-ci-note: "ci-debug: trigger re-run to collect logs"
+  version: 0.2.0
+  description: Documentación OpenAPI de la API BFF (Fase 2 – datos, contratos).
   x-spec-status: draft
   contact:
-    name: PuraNatura Team
+    name: Equipo PuraNatura
     email: ops+security@puranatura.example
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
-  - url: https://api.example.com
-    description: API de producción (placeholder)
-  - url: http://localhost:3000
-    description: Desarrollo local
+  - url: https://api.puranatura.local
+    description: Entorno de staging / producción simulado
+  - url: http://localhost:3001
+    description: Backend local para desarrollo
 tags:
   - name: health
-    description: Health / diagnostic endpoints
-  - name: products
-    description: Product catalog endpoints
+    description: Health-check y diagnósticos operativos
   - name: auth
-    description: Authentication endpoints (login, refresh, logout)
+    description: Autenticación, sesiones y autorización
+  - name: catalog
+    description: Catálogo de productos y consultas de inventario
   - name: orders
-    description: Orders and checkout endpoints
-  - name: cart
-    description: Shopping cart management
+    description: Creación y consulta de pedidos
+  - name: analytics
+    description: Ingesta controlada de eventos de analytics
+  - name: security
+    description: Reportes de CSP y telemetría de seguridad
 paths:
   /api/health:
     get:
-      summary: Estado del backend
-      description: Devuelve el estado operativo del backend y el conteo de productos.
-      operationId: getHealth
       tags:
         - health
+      summary: Estado operativo del backend
+      description: Devuelve status, timestamp y conteo de productos para supervisión.
+      operationId: getHealth
       responses:
         '200':
-          description: OK
+          description: Backend operativo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Health'
-
+        '500':
+          description: Error interno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Registrar un usuario nuevo
+      description: Crea una cuenta y emite cookies de sesión con rotación de refresh.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRegisterRequest'
+      responses:
+        '201':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponse'
+        '400':
+          description: Payload inválido o correo duplicado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Límite de solicitudes excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      summary: Autenticar usuario
+      description: Valida credenciales y devuelve los datos del usuario autenticado.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+      responses:
+        '200':
+          description: Login exitoso (cookies + payload del usuario)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponse'
+        '400':
+          description: Payload inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/logout:
+    post:
+      tags:
+        - auth
+      summary: Cerrar sesión
+      description: Invalida cookies de sesión en el navegador.
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Sesión cerrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        '500':
+          description: Error general
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Rotar tokens (refresh)
+      description: Intercambia refresh token válido por nuevas cookies y token de sesión.
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Refresh token exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        '401':
+          description: Refresh token inválido o expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/me:
+    get:
+      tags:
+        - auth
+      summary: Usuario autenticado actual
+      security:
+        - cookieAuth: []
+      description: Retorna la entidad del usuario o null cuando no hay sesión activa.
+      operationId: getCurrentUser
+      responses:
+        '200':
+          description: Información del usuario o null si no hay sesión activa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthMeResponse'
+        '401':
+          description: Sesión inválida / expiró (cookies limpiadas)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/products:
     get:
-      summary: Lista de productos (catálogo)
-      description: Devuelve una lista paginada de productos.
-      operationId: listProducts
       tags:
-        - products
+        - catalog
+      summary: Catálogo paginado de productos
+      description: Devuelve los productos paginados junto con metadatos de caché y conteo.
+      operationId: listProducts
       parameters:
         - name: page
           in: query
@@ -71,7 +224,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Lista paginada de productos
+          description: Lista de productos con metadatos de paginación
           headers:
             X-Total-Count:
               schema:
@@ -82,6 +235,9 @@ paths:
             X-Page-Size:
               schema:
                 type: integer
+            Cache-Control:
+              schema:
+                type: string
             ETag:
               schema:
                 type: string
@@ -91,13 +247,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-
+        '304':
+          description: No hubo cambios desde el último ETag
+        '400':
+          description: Parámetros inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
-      summary: Crear producto (admin)
-      description: Crea un nuevo producto (acceso admin requerido).
-      operationId: createProduct
       tags:
-        - products
+        - catalog
+      summary: Crear producto (solo admin)
+      description: Crea un producto nuevo para administradores autenticados.
+      operationId: createProduct
+      security:
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -111,14 +276,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-
+        '401':
+          description: Requiere autenticación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Solo administradores
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Payload inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit excedido (limite global)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/products/{id}:
     get:
-      summary: Obtener producto por id
-      description: Recupera un producto por su identificador.
-      operationId: getProductById
       tags:
-        - products
+        - catalog
+      summary: Obtener un producto por ID
+      description: Devuelve un producto específico por su identificador único.
+      operationId: getProductById
       parameters:
         - name: id
           in: path
@@ -127,102 +315,51 @@ paths:
             type: string
       responses:
         '200':
-          description: Producto
+          description: Producto encontrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Producto no encontrado
-
-  /api/auth/login:
-    post:
-      summary: Login de usuario
-      description: Autentica a un usuario y devuelve un token de acceso.
-      operationId: loginUser
-      tags:
-        - auth
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthLoginRequest'
-      responses:
-        '200':
-          description: Autenticación exitosa
+        '400':
+          description: ID inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
-          description: Credenciales inválidas
-
-  /api/auth/refresh:
-    post:
-      summary: Refresh token
-      description: Intercambia un refresh token por un nuevo access token.
-      operationId: refreshToken
-      tags:
-        - auth
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshRequest'
-      responses:
-        '200':
-          description: Nuevo token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
-          description: Token inválido o expirado
-
-  /api/auth/logout:
-    post:
-      summary: Logout
-      description: Invalida el token/session del usuario.
-      operationId: logoutUser
-      tags:
-        - auth
-      responses:
-        '204':
-          description: Cerró la sesión correctamente
-        '401':
-          description: No autorizado
-
+                $ref: '#/components/schemas/ErrorResponse'
   /api/orders:
     get:
-      summary: Lista de órdenes del usuario
-      description: Devuelve las órdenes del usuario autenticado.
-      operationId: listOrders
       tags:
         - orders
+      summary: Lista de órdenes del usuario autenticado
       security:
         - cookieAuth: []
+      description: Retorna todas las órdenes del usuario ordenadas por fecha reciente.
+      operationId: listOrders
       responses:
         '200':
-          description: Lista de órdenes
+          description: Órdenes del usuario
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Order'
-
+        '401':
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
-      summary: Crear orden
-      description: Crea una nueva orden para el usuario autenticado.
-      operationId: createOrder
       tags:
         - orders
+      summary: Crear una nueva orden
       security:
         - cookieAuth: []
+      description: Valida productos existentes y genera la orden del usuario autenticado.
+      operationId: createOrder
       requestBody:
         required: true
         content:
@@ -236,46 +373,87 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
-
-  /api/cart:
-    get:
-      summary: Obtener carrito
-      description: Devuelve el carrito del usuario (autenticado).
-      operationId: getCart
-      tags:
-        - cart
-      security:
-        - cookieAuth: []
-      responses:
-        '200':
-          description: Carrito
+        '400':
+          description: Productos inválidos o cantidades incorrectas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cart'
-
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/analytics/events:
     post:
-      summary: Añadir item al carrito
-      description: Añade un producto al carrito del usuario.
-      operationId: addCartItem
       tags:
-        - cart
-      security:
-        - cookieAuth: []
+        - analytics
+      summary: Registrar eventos de analytics (solo cuando la flag está habilitada)
+      description:
+        Accepta eventos y los persiste de forma asíncrona para evitar latencia en el UI. La
+        respuesta incluye el identificador de traza (`X-Trace-Id`) para correlación.
+      operationId: ingestAnalyticsEvent
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItem'
+              $ref: '#/components/schemas/AnalyticsEventPayload'
       responses:
-        '200':
-          description: Carrito actualizado
+        '202':
+          description: Evento aceptado
+          headers:
+            X-Trace-Id:
+              schema:
+                type: string
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cart'
-
+                $ref: '#/components/schemas/OkResponse'
+        '400':
+          description: Payload inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit de analytics excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Ingesta deshabilitada por feature flag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/security/csp-report:
+    post:
+      tags:
+        - security
+      summary: Recepción de reportes CSP
+      description: Recibe payloads `application/csp-report` o JSON con los datos de la violación detectada.
+      operationId: receiveCspReport
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CspReportPayload'
+          application/csp-report:
+            schema:
+              $ref: '#/components/schemas/CspReportPayload'
+      responses:
+        '204':
+          description: Reporte aceptado sin contenido
+        '400':
+          description: Formato inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     Health:
@@ -289,7 +467,6 @@ components:
           format: date-time
         productCount:
           type: integer
-
     Product:
       type: object
       properties:
@@ -300,6 +477,9 @@ components:
         slug:
           type: string
         description:
+          type: string
+          nullable: true
+        category:
           type: string
           nullable: true
         price:
@@ -317,16 +497,20 @@ components:
         updatedAt:
           type: string
           format: date-time
-
     ProductCreate:
       type: object
-      required: [name, slug, price]
+      required:
+        - name
+        - slug
+        - price
       properties:
         name:
           type: string
         slug:
           type: string
         description:
+          type: string
+        category:
           type: string
         price:
           type: number
@@ -336,90 +520,195 @@ components:
           format: uri
         stock:
           type: integer
-
-    AuthLoginRequest:
-      type: object
-      required: [username, password]
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    RefreshRequest:
-      type: object
-      required: [refreshToken]
-      properties:
-        refreshToken:
-          type: string
-
-    AuthResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-        refreshToken:
-          type: string
-        expiresIn:
-          type: integer
-          description: Expiration time in seconds for the access token
-
     OrderItem:
       type: object
-      required: [productId, quantity]
       properties:
         productId:
           type: string
         quantity:
           type: integer
-
-    CreateOrderRequest:
+        unitPrice:
+          type: number
+          format: float
+    OrderItemInput:
       type: object
-      required: [items]
+      required:
+        - productId
+        - quantity
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderItem'
-
+        productId:
+          type: string
+        quantity:
+          type: integer
     Order:
       type: object
       properties:
         id:
           type: string
+        total:
+          type: number
+          format: float
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
         items:
           type: array
           items:
             $ref: '#/components/schemas/OrderItem'
-        total:
-          type: number
-          format: float
-
-    CartItem:
+    CreateOrderRequest:
       type: object
-      required: [productId, quantity]
-      properties:
-        productId:
-          type: string
-        quantity:
-          type: integer
-
-    Cart:
-      type: object
+      required:
+        - items
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CartItem'
-        total:
+            $ref: '#/components/schemas/OrderItemInput'
+    AuthRegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+    AuthLoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+    RefreshRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+    AuthUser:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        isAdmin:
+          type: boolean
+    AuthUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/AuthUser'
+    AuthMeResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/AuthUser'
+          nullable: true
+    AnalyticsEventPayload:
+      type: object
+      required:
+        - category
+        - action
+      properties:
+        category:
+          type: string
+          minLength: 1
+        action:
+          type: string
+          minLength: 1
+        label:
+          type: string
+          nullable: true
+        value:
           type: number
           format: float
-
+          nullable: true
+        metadata:
+          type: object
+          description: Datos adicionales sin esquema fijo
+          additionalProperties: true
+        sessionId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    CspReportDetail:
+      type: object
+      properties:
+        'document-uri':
+          type: string
+        'violated-directive':
+          type: string
+        'blocked-uri':
+          type: string
+        'effective-directive':
+          type: string
+        'original-policy':
+          type: string
+        'disposition':
+          type: string
+    CspReportPayload:
+      type: object
+      properties:
+        'csp-report':
+          $ref: '#/components/schemas/CspReportDetail'
+      additionalProperties: true
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        traceId:
+          type: string
+          description: Identificador de traza asociado con la solicitud (cuando está disponible).
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        traceId:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
   securitySchemes:
     cookieAuth:
       type: apiKey
       in: cookie
       name: token
-
-security:
-  - cookieAuth: []

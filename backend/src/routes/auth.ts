@@ -23,17 +23,21 @@ const authLimiter = rateLimit({
   windowMs: env.authRateLimitWindowMs,
   // Allow per-request override of the limit via `x-rate-max` header to make
   // tests deterministic even if modules were initialized earlier.
-    // Allow per-request override of the limit only in `test` environment so that
-    // tests can be deterministic even under module caching. Do NOT honor this
-    // header in production.
-    max: (req) => {
-      if (env.nodeEnv === 'test') {
-        const header = req.headers['x-rate-max'];
-        const parsed = Number(typeof header === 'string' ? header : String(header ?? ''));
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : env.authRateLimitMax;
-      }
-      return env.authRateLimitMax;
-    },
+  // Allow per-request override of the limit only in `test` environment so that
+  // tests can be deterministic even under module caching. Do NOT honor this
+  // header in production.
+  max: (req) => {
+    if (env.nodeEnv === 'test') {
+      const header = req.headers['x-rate-max'];
+      const parsed = Number(
+        typeof header === 'string' ? header : String(header ?? '')
+      );
+      return Number.isFinite(parsed) && parsed > 0
+        ? parsed
+        : env.authRateLimitMax;
+    }
+    return env.authRateLimitMax;
+  },
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -42,12 +46,13 @@ const authLimiter = rateLimit({
   },
   // Allow using a test header to key the limiter so tests can deterministically
   // hit the same bucket — when running in production this header is ignored.
-    // In tests we allow a header override to make the limiter deterministic.
-    // In non-test envs, always use req.ip to avoid trusting client-supplied data.
-    keyGenerator: (req) => {
-      if (env.nodeEnv === 'test') return String(req.headers['x-rate-key'] ?? req.ip);
-      return String(req.ip);
-    },
+  // In tests we allow a header override to make the limiter deterministic.
+  // In non-test envs, always use req.ip to avoid trusting client-supplied data.
+  keyGenerator: (req) => {
+    if (env.nodeEnv === 'test')
+      return String(req.headers['x-rate-key'] ?? req.ip);
+    return String(req.ip);
+  },
 
   handler: (_req, res) => {
     const traceId = (res.locals && res.locals.traceId) || 'unknown';

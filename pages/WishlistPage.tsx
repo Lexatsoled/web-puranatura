@@ -190,6 +190,10 @@ const WishlistPage: React.FC = () => {
                       src={item.image}
                       alt={item.name}
                       className="w-20 h-20 object-cover rounded-lg"
+                      loading="lazy"
+                      decoding="async"
+                      width={80}
+                      height={80}
                     />
                   </div>
 

@@ -19,13 +19,21 @@ const crypto = require('crypto');
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const res = { file: '.env.local', example: '.env.local.example', dryRun: true, yes: false };
+  const res = {
+    file: '.env.local',
+    example: '.env.local.example',
+    dryRun: true,
+    yes: false,
+  };
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--file') res.file = args[++i];
     if (args[i] === '--example') res.example = args[++i];
     if (args[i] === '--dry-run') res.dryRun = true;
     if (args[i] === '--no-dry-run') res.dryRun = false;
-    if (args[i] === '--yes') { res.yes = true; res.dryRun = false; }
+    if (args[i] === '--yes') {
+      res.yes = true;
+      res.dryRun = false;
+    }
   }
   return res;
 }
@@ -35,9 +43,9 @@ function parseYamlList(filepath) {
   const txt = fs.readFileSync(filepath, 'utf8');
   return txt
     .split('\n')
-    .map(l => l.replace(/^[\s-]*/g, '').trim())
+    .map((l) => l.replace(/^[\s-]*/g, '').trim())
     .filter(Boolean)
-    .filter(l => !l.startsWith('#')); // ignore comments
+    .filter((l) => !l.startsWith('#')); // ignore comments
 }
 
 function parseExampleFile(examplePath) {
@@ -62,7 +70,7 @@ function genSecretForKey(key) {
   }
   if (lower.includes('password')) {
     // base64 without trailing = to make it shell friendly
-    return crypto.randomBytes(24).toString('base64').replace(/=+$/,'');
+    return crypto.randomBytes(24).toString('base64').replace(/=+$/, '');
   }
   if (lower.includes('url')) {
     return 'file:./prisma/database.sqlite';
@@ -85,7 +93,8 @@ async function main() {
   // example has a placeholder like REPLACE_WITH or is empty, we'll generate.
   for (const key of keys) {
     const exampleVal = exampleValues[key];
-    const isPlaceholder = !exampleVal || /^REPLACE_/i.test(exampleVal) || exampleVal.trim() === '';
+    const isPlaceholder =
+      !exampleVal || /^REPLACE_/i.test(exampleVal) || exampleVal.trim() === '';
     if (!isPlaceholder) {
       output.push(`${key}=${exampleVal}`);
     } else {
@@ -105,8 +114,14 @@ async function main() {
     process.exit(2);
   }
 
-  fs.writeFileSync(absFile, output.join('\n') + '\n', { encoding: 'utf8', flag: 'w' });
+  fs.writeFileSync(absFile, output.join('\n') + '\n', {
+    encoding: 'utf8',
+    flag: 'w',
+  });
   console.log(`Wrote ${absFile}`);
 }
 
-main().catch(err => { console.error(err); process.exit(1); });
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

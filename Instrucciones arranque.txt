@@ -1,8 +1,11 @@
+cd "C:\Users\Usuario\Desktop\Web Puranatura\web-puranatura---terapias-naturales"
+
+
 npm run dev
 
 o
 
-npm run dev -- --port 3500
+npm run dev -- --port 3000
 
 
 Ademas ahora que tiene Backend hay que inciarlo tambie mediante "npm run dev" en la carpeta "C:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3\backend".

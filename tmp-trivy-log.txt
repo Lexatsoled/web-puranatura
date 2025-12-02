@@ -1,0 +1,28 @@
+﻿Trivy filesystem/Repo scan	UNKNOWN STEP	´╗┐2025-11-30T17:34:25.5022849Z Current runner version: '2.329.0'
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5055493Z ##[group]Runner Image Provisioner
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5056868Z Hosted Compute Agent
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5057761Z Version: 20251016.436
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5058763Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5060395Z Build Date: 2025-10-15T20:44:12Z
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5061384Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5062205Z ##[group]Operating System
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5063183Z Ubuntu
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5064003Z 24.04.3
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5064702Z LTS
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5065610Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5066383Z ##[group]Runner Image
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5067510Z Image: ubuntu-24.04
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5068356Z Version: 20251112.124.1
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5070495Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5073244Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5075106Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5077045Z ##[group]GITHUB_TOKEN Permissions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5079803Z Contents: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5080716Z Metadata: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5081740Z Packages: read
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5082586Z ##[endgroup]
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5085511Z Secret source: Actions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5086552Z Prepare workflow directory
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5859057Z Prepare all required actions
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:25.5976426Z Getting action download info
+Trivy filesystem/Repo scan	UNKNOWN STEP	2025-11-30T17:34:26.0953023Z ##[error]Unable to resolve action `aquasecurity/trivy-action@v0`, unable to find version `v0`

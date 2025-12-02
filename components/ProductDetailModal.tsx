@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
 import ImageZoom from './ImageZoom';
@@ -8,6 +8,7 @@ import {
   sanitizeUrl,
 } from '../src/utils/sanitizer';
 import { formatCurrency } from '../src/utils/intl';
+import { useFocusTrap } from '../src/hooks/useFocusTrap';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -22,6 +23,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   const { addToCart } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const safeProduct = useMemo(() => {
     if (!product) return null;
@@ -37,11 +40,17 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     };
   }, [product]);
 
+  useFocusTrap(dialogRef, {
+    isActive: isOpen && Boolean(safeProduct),
+    onEscape: onClose,
+    initialFocusRef: closeButtonRef,
+  });
+
   if (!isOpen || !safeProduct) return null;
 
   const handleAddToCart = () => {
     addToCart(safeProduct);
-    onClose(); // Optionally close modal on add
+    onClose();
   };
 
   const currentImage = safeProduct.images[selectedImage];
@@ -49,21 +58,37 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"
-      onClick={onClose}
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
       <div
         className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(event) => event.stopPropagation()}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-detail-title"
+        tabIndex={-1}
       >
         <div className="w-full md:w-1/2 p-4 flex flex-col items-center">
           <ImageZoom src={currentImage.full} alt={safeProduct.name} />
           <div className="flex space-x-2 mt-4">
             {safeProduct.images.map((img, index) => (
               <img
-                key={index}
+                key={img.thumbnail}
                 src={img.thumbnail}
-                alt={`${safeProduct.name} thumbnail ${index + 1}`}
-                className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${selectedImage === index ? 'border-green-600' : 'border-transparent'}`}
+                alt={`${safeProduct.name} miniatura ${index + 1}`}
+                className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${
+                  selectedImage === index
+                    ? 'border-green-600'
+                    : 'border-transparent'
+                }`}
+                loading="lazy"
+                decoding="async"
+                width={64}
+                height={64}
                 onClick={() => setSelectedImage(index)}
               />
             ))}
@@ -71,7 +96,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
         <div className="w-full md:w-1/2 p-6 flex flex-col">
           <div className="flex-grow overflow-y-auto">
-            <h2 className="text-3xl font-bold font-display text-gray-800">
+            <h2
+              className="text-3xl font-bold font-display text-gray-800"
+              id="product-detail-title"
+            >
               {safeProduct.name}
             </h2>
             <p className="text-md text-gray-500 mt-1 mb-4">
@@ -89,8 +117,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <button
                 onClick={handleAddToCart}
                 className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition-colors duration-300"
+                type="button"
               >
-                Añadir al Carrito
+                Anadir al carrito
               </button>
             </div>
           </div>
@@ -98,6 +127,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          aria-label="Cerrar detalle de producto"
+          ref={closeButtonRef}
+          type="button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
