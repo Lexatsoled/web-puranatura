@@ -20,6 +20,7 @@ Este runbook describe los pasos que estamos ejecutando para cerrar **T5.1–T5.4
 - 2025-12-02: `src/utils/api.ts` — helpers `buildConfig`, `sendRequest` y `handleRateLimit` desenredan el request/retry, detectan respuestas HTML y reutilizan `RateLimiter` global. La API mantiene GET/POST/PUT/PATCH/DELETE y reaplica la validación de logout en 401. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
 - 2025-12-03: `src/components/ShoppingCart.tsx` — refactor a subcomponentes (`CartItemsList`, `CartItemRow`, `CartSummary`, acciones), se separan controles y resumen, la lógica de cálculo vuelve al hook `useShoppingCart` y el componente solo compone. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
 - 2025-12-03: `pages/StorePage.tsx` — hook `useStorePage` para fetch, filtros, orden y paginación; subcomponentes (`StoreHeader`, `StoreControls`, `StoreBody`, `PaginationControls`, `ErrorAlert`, `LoadingState`, `EmptyState`). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` ya no lista StorePage en el top.
+- 2025-12-03: `src/utils/api.ts` (2ª pasada) — lógica movida a `apiHelpers.ts` (`buildRequestConfig`, `sendRequest`, `handleRateLimitRetry`, `handleAuthError`) para bajar CC sin cambiar la interfaz. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
 - Resultado: `reports/complexity-report.json` ya no incluye estos módulos en el top; todas las piezas refactorizadas quedan <15 de CC según la métrica interna.
 
 ## T5.2 – Clean Architecture y separación
