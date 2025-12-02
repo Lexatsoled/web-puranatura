@@ -8,7 +8,7 @@
  */
 
 const fs = require('fs');
-const { execSync, execFileSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const path = require('path');
 let checkedGh = false;
 
@@ -28,9 +28,9 @@ function parseYamlList(filepath) {
   const txt = fs.readFileSync(filepath, 'utf8');
   return txt
     .split('\n')
-    .map(l => l.replace(/^[\s-]*/g, '').trim())
+    .map((l) => l.replace(/^[\s-]*/g, '').trim())
     .filter(Boolean)
-    .filter(l => !l.startsWith('#')); // ignore commented lines
+    .filter((l) => !l.startsWith('#')); // ignore commented lines
 }
 
 function parseEnvFile(envPath) {
@@ -38,15 +38,20 @@ function parseEnvFile(envPath) {
   const txt = fs.readFileSync(envPath, 'utf8');
   const out = {};
   for (const line of txt.split('\n')) {
-    const cleaned = line.replace(/\r$/,'');
+    const cleaned = line.replace(/\r$/, '');
     const m = cleaned.match(/^([^=\s]+)=(.*)$/);
     if (m) out[m[1]] = m[2];
   }
   return out;
 }
 
-(async function main(){
-  const { file = '.github/required-secrets.yml', envFile = '.env.local', org, dryRun } = parseArgs();
+(async function main() {
+  const {
+    file = '.github/required-secrets.yml',
+    envFile = '.env.local',
+    org,
+    dryRun,
+  } = parseArgs();
   const absFile = path.resolve(file);
   if (!fs.existsSync(absFile)) {
     console.error('manifest not found:', absFile);
@@ -62,7 +67,9 @@ function parseEnvFile(envPath) {
   const envValues = parseEnvFile(path.resolve(envFile));
 
   if (!fs.existsSync(path.resolve(envFile))) {
-    console.error(`env-file not found: ${envFile} — crea un archivo .env.local a partir de .env.local.example antes de ejecutar este helper`);
+    console.error(
+      `env-file not found: ${envFile} — crea un archivo .env.local a partir de .env.local.example antes de ejecutar este helper`
+    );
     process.exit(2);
   }
 
@@ -72,7 +79,9 @@ function parseEnvFile(envPath) {
   for (const key of keys) {
     const val = process.env[key] || envValues[key];
     if (!val) {
-      console.warn(`Missing value for ${key} — skipping (set via env or ${envFile})`);
+      console.warn(
+        `Missing value for ${key} — skipping (set via env or ${envFile})`
+      );
       continue;
     }
 
@@ -83,28 +92,44 @@ function parseEnvFile(envPath) {
       if (!dryRun && !checkedGh) {
         try {
           execFileSync('gh', ['--version'], { stdio: 'ignore' });
-        } catch (err) {
-          console.error('GitHub CLI (`gh`) not found in PATH. Install it from https://cli.github.com/ and authenticate with `gh auth login`.');
+        } catch {
+          console.error(
+            'GitHub CLI (`gh`) not found in PATH. Install it from https://cli.github.com/ and authenticate with `gh auth login`.'
+          );
           process.exit(3);
         }
 
         try {
           // Check auth status, but allow this to fail gracefully with a helpful message
           execFileSync('gh', ['auth', 'status'], { stdio: 'ignore' });
-        } catch (err) {
-          console.error('GitHub CLI is installed but not authenticated or lacks permission. Run `gh auth login` and ensure your account has permission to set repository secrets.');
+        } catch {
+          console.error(
+            'GitHub CLI is installed but not authenticated or lacks permission. Run `gh auth login` and ensure your account has permission to set repository secrets.'
+          );
           process.exit(4);
         }
 
         checkedGh = true;
       }
       if (dryRun) {
-        console.log(`[dry-run] would set secret ${key}` + (org ? ` (org ${org})` : ''));
+        console.log(
+          `[dry-run] would set secret ${key}` + (org ? ` (org ${org})` : '')
+        );
         continue;
       }
 
       const args = org
-        ? ['secret', 'set', key, '-R', process.env.GITHUB_REPOSITORY, '--org', org, '--body', val]
+        ? [
+            'secret',
+            'set',
+            key,
+            '-R',
+            process.env.GITHUB_REPOSITORY,
+            '--org',
+            org,
+            '--body',
+            val,
+          ]
         : ['secret', 'set', key, '--body', val];
 
       console.log('Setting secret', key);
