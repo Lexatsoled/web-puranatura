@@ -203,6 +203,11 @@ Issues creados (T2 iniciales):
 
 - [ ] T5.1 Reducir CC y deuda técnica
   - Evidencia objetivo: `reports/complexity-report.json` con caída en los módulos críticos y el plan descrito en `docs/runbooks/fase5-maintainability.md`.
+  - Avance 2025-12-02: refactor de `src/hooks/useProfile.ts` separando inicialización del formulario y handlers memoizados; el módulo ya no figura en el top de complejidad. Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity` (artefacto actualizado).
+  - Avance 2025-12-02 (cont.): refactor de `src/components/OptimizedImage.tsx` (derivación con `useMemo`, placeholders/fallback desacoplados, blur-css sólo en cliente) y `src/utils/sanitizer.ts` (helpers pequeños para sanitización recursiva). Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
+  - Avance 2025-12-02 (cont.): refactor de `src/components/ProductCard.tsx` (subcomponentes + hook `useProductCardState`) y `pages/AddressesPage.tsx` (hook `useAddressesState` + subcomponentes). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` refleja la caída de estos módulos fuera del top inmediato.
+  - Avance 2025-12-02 (extra): refactor de `src/components/FAQSection.tsx` (hook `useFaqFilters` + subcomponentes) y simplificación de `src/hooks/useSearchBar.ts` (debounce memorizado, mapa de acciones). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+  - Estado CC (2025-12-02): los módulos refactorizados quedan por debajo de CC 15 y salen del top del `complexity-report.json`.
 - [ ] T5.2 Clean Architecture y separación de responsabilidades
   - Evidencia: ajustes en los servicios/rutas y la documentación en la ADR `docs/adr/0003-phase5-maintainability.md`.
 - [ ] T5.3 Pre-commit obligatorio y normas de revisión
@@ -215,15 +220,6 @@ Issues creados (T2 iniciales):
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
 
 Evidencia a recoger: pipeline YAML actualizado, dashboards y runbooks verificados.
-
----
-
-## Fase 5 — Refactor, deuda y prevención (Estado: PENDIENTE)
-
-- [ ] T5.1 Reducir CC y deuda técnica
-- [ ] T5.2 Clean Architecture y separación de responsabilidades
-- [ ] T5.3 Pre-commit obligatorio y normas de revisión
-- [ ] T5.4 ADRs/documentación viva
 
 ---
 

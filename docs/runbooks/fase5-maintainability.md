@@ -7,6 +7,15 @@ Este runbook describe los pasos que estamos ejecutando para cerrar **T5.1–T5.4
 1. Analiza `reports/complexity-report.json` (generado por `npm run check:complexity`). Identifica los _top 5_ módulos con mayor complejidad (por ejemplo `src/hooks/useProfile.ts`, `src/components/ProductCard.tsx`) y prioriza dividirlos en hooks/functions más pequeños con responsabilidades claras.
 2. Aplica refactor objetivo en un módulo a la vez, midiendo el impacto en el `complexity-report`. Documenta cada refactor como un paso en este runbook (`docs/runbooks/fase5-maintainability.md`) y referencia el archivo modificado.
 3. Siempre corre `npm run lint` y `npm run test:ci` tras cada refactor para asegurar que el cambio no rompe; el gate de Fase 5 exige que la complejidad promedio baje (ideal <7) y que los tests/lint sigan verdes.
+4. Log de refactors:
+   - 2025-12-02: `src/hooks/useProfile.ts` — separada la inicialización (`buildInitialForm`), handlers memoizados (`useCallback`) y cálculo de `memberSinceText` con `useMemo`. Resultado: sale del top 10 del `complexity-report`. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity` (artefacto actualizado).
+   - 2025-12-02: `src/components/OptimizedImage.tsx` — cálculo derivado de dimensiones y srcSet con `useMemo`, placeholders y fallback extraídos en componentes puros; maneja blur-css sólo en cliente. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - 2025-12-02: `src/utils/sanitizer.ts` — funciones pequeñas (`sanitizeUnknown`, `sanitizeArray`, `sanitizePrimitiveByKey`) para reducir ramas; mismo comportamiento recursivo. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - 2025-12-02: `src/components/ProductCard.tsx` — extraídos subcomponentes (`ImageCarousel`, `BadgeList`, `AddToCartButton`) y hook `useProductCardState`; se reducen ternarios y lógica duplicada. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - 2025-12-02: `pages/AddressesPage.tsx` — hook `useAddressesState` + subcomponentes (`Header`, `AddressList`, `AddressForm`, `CardActions`); separación de handlers y helpers de iconos. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - 2025-12-02: `src/components/FAQSection.tsx` — se divide en hook `useFaqFilters` y subcomponentes (`FaqHeader`, `FaqSearch`, `FaqCategoryTabs`, `FaqList`, `FaqEmptyState`, `FaqSupport`). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - 2025-12-02: `src/hooks/useSearchBar.ts` — simplificación con key-actions map, reset helper y debounce memorizado; mantiene API. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+   - Resultado: `reports/complexity-report.json` ya no incluye estos módulos en el top; todas las piezas refactorizadas quedan <15 de CC según la métrica interna.
 
 ## T5.2 – Clean Architecture y separación
 
