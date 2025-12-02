@@ -199,14 +199,18 @@ Issues creados (T2 iniciales):
 - [x] Fase 4 cerrada (Sprint 1–3 completados + artefactos archivados)
   - Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
 
-## Fase 5 – Refactor, deuda y prevención (Estado: INICIADA)
+## Fase 5 – Refactor, deuda y prevención (Estado: EN PROGRESO)
 
-- [ ] T5.1 Reducir CC y deuda técnica (evidence plan pending)
-- [ ] T5.2 Clean Architecture y separación de responsabilidades (planificar módulos)
-- [ ] T5.3 Pre-commit obligatorio y normas de revisión (documentar hooks/workflows)
-- [ ] T5.4 ADRs/documentación viva (lista de ADRs por actualizar)
+- [ ] T5.1 Reducir CC y deuda técnica
+  - Evidencia objetivo: `reports/complexity-report.json` con caída en los módulos críticos y el plan descrito en `docs/runbooks/fase5-maintainability.md`.
+- [ ] T5.2 Clean Architecture y separación de responsabilidades
+  - Evidencia: ajustes en los servicios/rutas y la documentación en la ADR `docs/adr/0003-phase5-maintainability.md`.
+- [ ] T5.3 Pre-commit obligatorio y normas de revisión
+  - Evidencia: `lint-staged`/`husky` en `package.json`, instrucciones de validación en `docs/runbooks/fase5-maintainability.md` y el checklist adicional para reviewers.
+- [ ] T5.4 ADRs/documentación viva
+  - Evidencia: ADR 0003 + actualizaciones en el plan (doc anterior) y confirmación de que los artefactos del release se adjuntan en cada PR.
 
-- Acciones iniciales: diseñar un sprint de refactor con métricas CC<10, preparar hooks/pre-commit y acordar qué ADRs/documentación se actualizan antes de la próxima release.
+- Acciones actuales: ejecutar `npm run check:complexity`, documentar los refactors, mantener el plan del sprint en `docs/runbooks/fase5-maintainability.md` y registrar las decisiones en `docs/adr/0003-phase5-maintainability.md`.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
 
 Evidencia a recoger: pipeline YAML actualizado, dashboards y runbooks verificados.
