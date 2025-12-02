@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 
 export type SearchResult = {
@@ -32,13 +32,16 @@ export function useSearchBar({
 
   const searchRef = useRef<HTMLDivElement | null>(null);
 
-  // click outside closes the dropdown
+  const resetState = useCallback(() => {
+    setQuery('');
+    setResults([]);
+    setIsOpen(false);
+    setActiveIndex(-1);
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
+      if (!searchRef.current?.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -67,8 +70,8 @@ export function useSearchBar({
     [onSearch, minQueryLength]
   );
 
-  const debouncedSearch = useCallback(
-    debounce((q: string) => void doSearch(q), debounceMs),
+  const debouncedSearch = useMemo(
+    () => debounce((q: string) => void doSearch(q), debounceMs),
     [doSearch, debounceMs]
   );
 
@@ -82,39 +85,33 @@ export function useSearchBar({
   const handleKeyDown = (e: { key: string; preventDefault?: () => void }) => {
     if (!isOpen) return;
 
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault?.();
+    const actions: Record<string, () => void> = {
+      ArrowDown: () => {
         setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
-        break;
-      case 'ArrowUp':
-        e.preventDefault?.();
+      },
+      ArrowUp: () => {
         setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case 'Enter':
-        e.preventDefault?.();
-        if (activeIndex >= 0 && results[activeIndex]) {
-          const r = results[activeIndex];
-          if (onResultClick) onResultClick(r);
-          // reset
-          setQuery('');
-          setResults([]);
-          setIsOpen(false);
-          setActiveIndex(-1);
+      },
+      Enter: () => {
+        const r = results[activeIndex];
+        if (r) {
+          onResultClick?.(r);
+          resetState();
         }
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        break;
+      },
+      Escape: () => setIsOpen(false),
+    };
+
+    const action = actions[e.key];
+    if (action) {
+      e.preventDefault?.();
+      action();
     }
   };
 
   const handleResultClick = (result: SearchResult) => {
     onResultClick?.(result);
-    setQuery('');
-    setResults([]);
-    setIsOpen(false);
-    setActiveIndex(-1);
+    resetState();
   };
 
   return {

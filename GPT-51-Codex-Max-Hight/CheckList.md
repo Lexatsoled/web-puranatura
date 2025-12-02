@@ -180,7 +180,11 @@ Issues creados (T2 iniciales):
 
 ---
 
+<<<<<<< HEAD
+## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: COMPLETADO)
+=======
 ## Fase 4 – Observabilidad, CI/CD y Resiliencia (Estado: EN PROGRESO)
+>>>>>>> origin/main
 
 - [x] T4.1 Tracing/logging con OpenTelemetry y traceId en headers
   - Evidencia: `backend/src/tracing/initTracing.ts`, `backend/src/middleware/traceId.ts`, `reports/observability/trace-sample.md`, `docs/runbooks/observability.md`.
@@ -191,23 +195,44 @@ Issues creados (T2 iniciales):
 - [x] T4.4 Feature flags + canary automation
   - Evidencia: `docs/runbooks/ci-canary.md`, `scripts/rollout-canary.cjs`, `scripts/update-flag.cjs`, `config/flags.json`, `reports/observability/dashboard-summary.md` (alertas/monitorización sugerida del canary).
 - [x] T4.5 Backups/DR tests
+<<<<<<< HEAD
+- Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
+- [x] T4.6 Synthetic monitoring
+- Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
+- [x] Sintéticos + evidencia de release (2025-12-02)
+  - Comando: `npm run synthetic:checks` generó `reports/synthetic/synthetic-report.json`; los artefactos `reports/observability/observability-artifacts.zip`, `reports/observability/metrics-snapshot.txt` y `sbom.json` se guardan junto a cada release/ticket para auditoría.
+- [x] Fase 4 cerrada (Sprint 1–3 completados + artefactos archivados)
+  - Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
+=======
   - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (política documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integración con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [x] T4.6 Synthetic monitoring
   - Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
 - [ ] Sintéticos + evidencia de release (2025-12-02)
   - Comando: `npm run synthetic:checks` genera `reports/synthetic/synthetic-report.json` con login/catálogo/checkout y `reports/observability/observability-artifacts.zip` + `reports/observability/metrics-snapshot.txt`; SBOM actualizado con `npm run generate:sbom`. Adjuntar estos artefactos a cada release o ticket de rollback para triage inmediato.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
+>>>>>>> origin/main
 
-Evidencia a recoger: pipeline YAML actualizado, dashboards y runbooks verificados.
-
----
-
-## Fase 5 — Refactor, deuda y prevención (Estado: PENDIENTE)
+## Fase 5 – Refactor, deuda y prevención (Estado: EN PROGRESO)
 
 - [ ] T5.1 Reducir CC y deuda técnica
+  - Evidencia objetivo: `reports/complexity-report.json` con caída en los módulos críticos y el plan descrito en `docs/runbooks/fase5-maintainability.md`.
+  - Avance 2025-12-02: refactor de `src/hooks/useProfile.ts` separando inicialización del formulario y handlers memoizados; el módulo ya no figura en el top de complejidad. Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity` (artefacto actualizado).
+  - Avance 2025-12-02 (cont.): refactor de `src/components/OptimizedImage.tsx` (derivación con `useMemo`, placeholders/fallback desacoplados, blur-css sólo en cliente) y `src/utils/sanitizer.ts` (helpers pequeños para sanitización recursiva). Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
+  - Avance 2025-12-02 (cont.): refactor de `src/components/ProductCard.tsx` (subcomponentes + hook `useProductCardState`) y `pages/AddressesPage.tsx` (hook `useAddressesState` + subcomponentes). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` refleja la caída de estos módulos fuera del top inmediato.
+  - Avance 2025-12-02 (extra): refactor de `src/components/FAQSection.tsx` (hook `useFaqFilters` + subcomponentes) y simplificación de `src/hooks/useSearchBar.ts` (debounce memorizado, mapa de acciones). Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+  - Estado CC (2025-12-02): los módulos refactorizados quedan por debajo de CC 15 y salen del top del `complexity-report.json`.
 - [ ] T5.2 Clean Architecture y separación de responsabilidades
+  - Evidencia: ajustes en los servicios/rutas y la documentación en la ADR `docs/adr/0003-phase5-maintainability.md`.
 - [ ] T5.3 Pre-commit obligatorio y normas de revisión
+  - Evidencia: `lint-staged`/`husky` en `package.json`, instrucciones de validación en `docs/runbooks/fase5-maintainability.md` y el checklist adicional para reviewers.
 - [ ] T5.4 ADRs/documentación viva
+  - Evidencia: ADR 0003 + actualizaciones en el plan (doc anterior) y confirmación de que los artefactos del release se adjuntan en cada PR.
+- Plan detallado: `GPT-51-Codex-Max-Hight/plan-maestro-fase-5.md` resume objetivos, sprint y artefactos obligatorios.
+
+- Acciones actuales: ejecutar `npm run check:complexity`, documentar los refactors, mantener el plan del sprint en `docs/runbooks/fase5-maintainability.md` y registrar las decisiones en `docs/adr/0003-phase5-maintainability.md`.
+- Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
+
+Evidencia a recoger: pipeline YAML actualizado, dashboards y runbooks verificados.
 
 ---
 
