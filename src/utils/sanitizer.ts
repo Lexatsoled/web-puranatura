@@ -1,4 +1,4 @@
-import { sanitizeHtml, sanitizeText, sanitizeUrl } from './sanitizerCore';
+﻿import { sanitizeHtml, sanitizeText, sanitizeUrl } from './sanitizerCore';
 import { sanitizeObject } from './sanitizeObject';
 
 export { sanitizeHtml, sanitizeText, sanitizeUrl, sanitizeObject };
