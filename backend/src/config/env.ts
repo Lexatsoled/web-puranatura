@@ -43,6 +43,21 @@ try {
   console.warn('[env] could not apply .env.example defaults:', err?.message || err);
 }
 
+
+// Development-friendly deterministic fallbacks for JWT secrets
+if ((process.env.NODE_ENV || 'development') !== 'production') {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
+    process.env.JWT_SECRET = 'dev_jwt_secret_change_me';
+    // eslint-disable-next-line no-console
+    console.info('[env] JWT_SECRET not set  using deterministic dev fallback (change in backend/.env.local)');
+  }
+  if (!process.env.JWT_REFRESH_SECRET || process.env.JWT_REFRESH_SECRET.trim() === '') {
+    process.env.JWT_REFRESH_SECRET = 'dev_jwt_refresh_secret_change_me';
+    // eslint-disable-next-line no-console
+    console.info('[env] JWT_REFRESH_SECRET not set  using deterministic dev fallback (change in backend/.env.local)');
+  }
+}
+
 // If no DATABASE_URL is defined in the environment and we are in a
 // non-production environment, choose a sensible default for local dev
 // to avoid failing out when running `npm run dev`.
@@ -133,5 +148,8 @@ export const env = {
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };
+
+
+
 
 
