@@ -83,6 +83,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     phone: apiUser.phone ?? undefined,
   });
 
+  // Keep track of mount state so async flows don't try to update state
+  // after the provider has been unmounted (prevents React post-teardown
+  // commits that can cause "instanceof" errors during tests).
+  const mountedRef = React.useRef(true);
+
   const loadSession = useCallback(async () => {
     try {
       const response = await api.get<{ user: ApiAuthResponse['user'] }>(
@@ -90,9 +95,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       );
       setUser(mapUser(response.user));
     } catch {
-      setUser(null);
+      if (mountedRef.current) setUser(null);
     } finally {
-      setIsLoading(false);
+      if (mountedRef.current) setIsLoading(false);
     }
   }, [api]);
 
@@ -105,6 +110,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     loadSession();
   }, [loadSession]);
 
+  // track mount/unmount so async functions can avoid updating state post-unmount
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
@@ -112,12 +125,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email,
         password,
       });
-      setUser(mapUser(response.user));
+      if (mountedRef.current) setUser(mapUser(response.user));
       return true;
     } catch {
       return false;
     } finally {
-      setIsLoading(false);
+      if (mountedRef.current) setIsLoading(false);
     }
   };
 
@@ -128,12 +141,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         '/auth/register',
         userData
       );
-      setUser(mapUser(response.user));
+      if (mountedRef.current) setUser(mapUser(response.user));
       return true;
     } catch {
       return false;
     } finally {
-      setIsLoading(false);
+      if (mountedRef.current) setIsLoading(false);
     }
   };
 
