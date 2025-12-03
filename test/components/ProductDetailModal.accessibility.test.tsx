@@ -28,14 +28,12 @@ describe('ProductDetailModal accessibility', () => {
       </AuthProvider>
     );
 
-    const closeButton = screen.getByRole('button', {
-      name: /cerrar producto/i,
-    });
+    const closeButton = screen.getByRole('button', { name: /cerrar/i });
     expect(closeButton).toBeInTheDocument();
     closeButton.focus();
     expect(document.activeElement).toBe(closeButton);
 
-    fireEvent.keyDown(window, { key: 'Escape', code: 'Escape' });
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
     expect(onClose).toHaveBeenCalled();
   });
 });

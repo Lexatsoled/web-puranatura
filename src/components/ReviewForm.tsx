@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-interface ReviewFormData {
+export interface ReviewFormData {
   userName: string;
   rating: number;
   comment: string;
@@ -10,7 +10,7 @@ interface ReviewFormData {
   userImage?: string;
 }
 
-interface ReviewFormProps {
+export interface ReviewFormProps {
   onSubmit: (review: ReviewFormData) => Promise<void>;
   onCancel: () => void;
 }

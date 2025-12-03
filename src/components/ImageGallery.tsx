@@ -21,7 +21,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
   } = useImageGallery(images.length);
 
   return (
-    <div className="space-y-4" onKeyDown={handleKeyPress} tabIndex={0}>
+    <div
+      className="space-y-4"
+      onKeyDown={(e) => handleKeyPress(e.key)}
+      tabIndex={0}
+    >
       <ImageGalleryMain
         images={images}
         productName={productName}

@@ -53,7 +53,8 @@ describe('X-Backend-Degraded header semantics', () => {
 
     // Mock legacy module to return empty products array
     const path = await import('path');
-    const abs = path.resolve(__dirname, '../data/products');
+    // tests now mock the backend-local fallback module path
+    const abs = path.resolve(__dirname, '../backend/src/data/products');
     // ensure the dynamic import used by the route picks up our mock
     // use doMock (not hoisted) so we can compute the absolute path at runtime
     vi.doMock(abs, () => ({ products: [] }));

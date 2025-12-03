@@ -6,7 +6,7 @@ import {
   ensureDir,
   ProcessImageOptions,
   resizeAndFormat,
-} from './imageProcessor.helpers';
+} from './imageProcessor.helpers.ts';
 
 async function processImage(
   inputPath: string,

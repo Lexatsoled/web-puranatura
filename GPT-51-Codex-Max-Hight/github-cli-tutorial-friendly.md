@@ -21,105 +21,90 @@ Si esto suena nuevo, no te preocupes — las instrucciones más abajo son paso a
 
 Si necesitas instalar Git y la GitHub CLI en Windows, puedes usar el gestor `winget` (Windows 10/11) o descargar los instaladores desde la web.
 
-Usando winget (PowerShell):
+Or download the installers from:
+
+- Git: [https://git-scm.com/download/win](https://git-scm.com/download/win)
+- GitHub CLI: [https://cli.github.com/](https://cli.github.com/)
+
+After installation configure Git with your name and email (they identify your commits):
+
+`git config --global user.email "tu@correo.com"`
+
+Authenticate gh the first time with:
+
+1. Commit y push de la rama
+
+Sigue una convención de commit breve y clara del tipo:
+
+- `fix(backend): arregla double collectDefaultMetrics`
 
 ```powershell
-winget install --id Git.Git -e --source winget
-winget install --id GitHub.cli -e --source winget
+git add <archivos>
+git commit -m "fix(ci): descripción corta y clara"
+git push -u origin HEAD
 ```
 
-O descarga los instaladores desde:
-
-- Git: https://git-scm.com/download/win
-- GitHub CLI: https://cli.github.com/
-
-Después de instalar, configura Git con tu nombre y correo (esto identifica tus commits):
-
-git config --global user.email "tu@correo.com"
-
-````
-
-Y autentica `gh` la primera vez con:
+1. Abrir Pull Request desde la terminal
 
 ```powershell
-gh auth login
-````
+gh pr create --title "fix(ci): breve descripción" --body "Explica aquí el problema y la solución.\nLogs relevantes: link o notas" --base main
+```
 
-Esto te pedirá iniciar sesión en GitHub y darle permisos al CLI.
+1. Verificar el estado de la CI y esperar a que corra
 
-## Resumen — qué vas a poder hacer
-
-- Crear una rama y hacer push con un cambio mínimo para reactivar la pipeline.
-- Abrir un PR desde la terminal.
-- Consultar el estado de checks del PR.
-- Ver logs detallados de ejecuciones / jobs de GitHub Actions.
-- Descargar artefactos (por ejemplo `backend.log`) que ayudan a diagnosticar fallos.
-
-## Herramientas necesarias
-
-- Git
-- GitHub CLI (`gh`) — [GitHub CLI](https://cli.github.com/)
-
-## Pasos prácticos (PowerShell)
-
-1. Crear y cambiar a una rama:
+Para una vista rápida del estado del PR:
 
 ```powershell
-git checkout -b chore/retrigger-readme-ci
+gh pr checks <PR-number> --repo owner/repo
 ```
 
-2. Hacer cambios, commit y push:
+1. Inspección de fallos — ver logs y artefactos
 
 ```powershell
-git add README.md
-git commit -m "chore(ci): tiny README comment update to retrigger CI"
-git push -u origin chore/retrigger-readme-ci
+gh run view run-id --repo owner/repo --log -v
+gh run download run-id --repo owner/repo --name test-artifacts
+# o descargar artefacto por su id
+gh run download artifact-id --repo owner/repo
 ```
 
-3. Abrir un PR con la GitHub CLI:
+1. Qué buscar en los artefactos / logs
 
-gh pr create --title "chore(ci): tiny README comment update to retrigger CI" --body "Touch README to re-run CI" --base main
+- Excepciones en runtime (stack trace en `backend.log`).
+- Mensajes de lint/format que bloquean (prettier/ESLint con max-warnings=0).
+- Scripts faltantes referenciados por workflows que terminan con código != 0.
 
-```
-gh pr checks 9 --repo Lexatsoled/web-puranatura (o la que corresponda)
-```
+1. Aplicar un fix y volver a iterar
 
-Sustituye `9` por el número real del PR en tu repo.
+- Corrige localmente según lo que encontraste.
+- Commit → push y GitHub Actions volverá a ejecutarse automáticamente para el PR.
 
-4. Ver logs detallados de una ejecución (cuando conoces el run-id):
+1. Re-ejecutar / volver a lanzar jobs manualmente (si procede)
 
 ```powershell
-gh run view <run-id> --repo Lexatsoled/web-puranatura --log -v
+gh run rerun run-id --repo owner/repo
+# Para reintentar solo un job específico (si conoces job id):
+gh api -X POST /repos/owner/repo/actions/runs/run-id/rerun-jobs
 ```
 
-gh run download <artifact-id> --repo Lexatsoled/web-puranatura
+1. Fusionar PR cuando todo esté verde
 
----
+Una vez todos los checks pasen y el PR tenga aprobación (si aplica), haz merge.
 
-## ¿Qué buscar en los logs / artefactos?
+Plantilla de descripción de PR (útil para repetir):
 
-- Errores de TypeScript (p. ej. "Cannot find module 'prom-client'") → falta dependencia.
-- Errores de bundling / import (p. ej. componente faltante) → añadir componente o corregir import.
+```
+Título: fix(ci): breve descripción
 
-## Ciclo de trabajo recomendado
+Qué arregla: describe la regla / test / job que fallaba
 
-1. Crear una rama pequeña para un fix.
-2. Subir el commit + abrir PR.
-3. Aplicar un fix localmente y repetir (commit → push → PR se actualiza automáticamente).
+Prueba local: comandos que ejecutaste y resultado
 
-## Buenas prácticas
+Logs relevantes: run-id o enlaces (incluir artefactos si los descargaste)
 
-- No empujar directamente a `main` en proyectos colaborativos.
-- Mantén commits pequeños y con un mensaje claro.
-- Añade tests (unitario/e2e) para endpoints críticos como `/api/health` y `/metrics` para evitar regresiones.
-- Documenta brevemente en el PR por qué cambiaste algo (logs/artefactos que demuestran la razón).
-
----
-
-## Procedimiento reproducible: paso a paso (detallado)
+Notas: cualquier nota adicional
+```
 
 Este procedimiento está pensado para que puedas repetir todo el flujo (crear rama → PR → depurar CI → arreglar → repetir) tantas veces como haga falta.
-
 Requisitos previos:
 
 - GitHub CLI (`gh`) instalada y autenticada con un token que tenga permisos de push/PR en el repo.
@@ -147,77 +132,63 @@ npm run test:ci    # (o el script de tests de la carpeta que estés cambiando)
 - Si arreglas código backend, prueba arrancar el servidor localmente y verifica /api/health y /metrics:
 
 ```powershell
-cd backend
+Set-Location backend
 npm ci
 npm run dev       # o el comando que use el proyecto para dev
 curl http://127.0.0.1:3001/api/health
 curl http://127.0.0.1:3001/metrics
 ```
 
-3. Commit y push de la rama
+1. Commit y push de la rama
 
 - Sigue una convención de commit breve y clara del tipo:
   - fix(backend): arregla double collectDefaultMetrics
-  - feat(metrics): añade endpoint /metrics
-  - test(ci): añade test e2e de /api/health
 
 ```powershell
 git add <archivos>
 git commit -m "fix(ci): descripción corta y clara"
-git push -u origin HEAD
-```
 
-4. Abrir Pull Request desde la terminal
+1. Abrir Pull Request desde la terminal
 
-```powershell
 gh pr create --title "fix(ci): breve descripción" --body "Explica aquí el problema y la solución.\nLogs relevantes: <link o notas>" --base main
 ```
 
-5. Verificar el estado de la CI y esperar a que corra
+1. Verificar el estado de la CI y esperar a que corra
 
 Para una vista rápida del estado del PR:
 
 ```powershell
 gh pr checks <PR-number> --repo <owner>/<repo>
-```
 
 Si quieres esperar y ver los runs activos, lista los últimos runs:
+1. Inspección de fallos — ver logs y artefactos
 
-6. Inspección de fallos — ver logs y artefactos
+`gh run view \`run-id\` --repo \`owner/repo\` --log -v`
 
-gh run view <run-id> --repo <owner>/<repo> --log -v
-
-````
-
+```
 
 ```powershell
-gh run download <run-id> --repo <owner>/<repo> --name test-artifacts
+`gh run download \`run-id\` --repo \`owner/repo\` --name test-artifacts`
 # o descargar artefacto por su id
 gh run download <artifact-id> --repo <owner>/<repo>
-````
+```
 
-7. Qué buscar en los artefactos / logs
+1. Qué buscar en los artefactos / logs
 
 - Excepciones en runtime (stack trace en `backend.log`).
-- Mensajes de lint/format que bloquean (prettier/ESLint con max-warnings=0).
-- Scripts faltantes referenciados por workflows que terminan con código <>0.
-
-8. Aplicar un fix y volver a iterar
-
 - Corrige localmente según lo que encontraste.
-- Commit → push y GitHub Actions volverá a ejecutarse automáticamente para el PR.
 
-9. Re-ejecutar / volver a lanzar jobs manualmente (si procede)
+1. Re-ejecutar / volver a lanzar jobs manualmente (si procede)
 
 - Puedes re-lanzar un run completo o solamente jobs fallidos usando `gh run rerun`:
 
 ```powershell
-gh run rerun <run-id> --repo <owner>/<repo>
+`gh run rerun \`run-id\` --repo \`owner/repo\``
 # Para reintentar solo un job específico (si conoces job id)
-gh api -X POST /repos/<owner>/<repo>/actions/runs/<run-id>/rerun-jobs
+`gh api -X POST /repos/owner/repo/actions/runs/run-id/rerun-jobs`
 ```
 
-10. Fusionar PR cuando todo esté verde
+1. Fusionar PR cuando todo esté verde
 
 - Una vez todos los checks pasen y el PR tenga aprobación (si aplica), haz merge:
 
@@ -225,15 +196,15 @@ gh api -X POST /repos/<owner>/<repo>/actions/runs/<run-id>/rerun-jobs
 - Plantilla de descripción de PR (útil para repetir):
 ```
 
-Título: fix(ci): <breve descripción>
+Título: fix(ci): breve descripción
 
-Qué arregla: <describe la regla / test / job que fallaba>
+Qué arregla: describe la regla / test / job que fallaba
 
-Prueba local: <comandos que ejecutaste y resultado>
+Prueba local: `comandos que ejecutaste y resultado`
 
-Logs relevantes: <run-id o enlaces> (incluir artefactos si los descargaste)
+Logs relevantes: `run-id` o enlaces (incluir artefactos si los descargaste)
 
-Notas: <cualquier nota adicional>
+Notas: cualquier nota adicional
 
 ```
 

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { CartItem } from '../../hooks/useShoppingCart';
-import { CartItemRow, itemVariants } from './CartItemRow';
+import { CartItemRow } from './CartItemRow';
 
 export const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,7 +38,6 @@ export const CartItemsList = ({
         <CartItemRow
           key={item.id}
           item={item}
-          itemVariants={itemVariants}
           currencySymbol={currencySymbol}
           maxQuantityPerItem={maxQuantityPerItem}
           handleQuantityChange={handleQuantityChange}

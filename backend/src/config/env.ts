@@ -29,13 +29,22 @@ try {
   const examplePath = path.resolve(process.cwd(), '.env.example');
   if (fs.existsSync(examplePath)) {
     const defaults = dotenv.parse(fs.readFileSync(examplePath));
+    const appliedDefaults: string[] = [];
     for (const [k, v] of Object.entries(defaults)) {
       if (!process.env[k] && v && String(v).trim() !== '') {
-        // Only set missing values  do not override explicit env vars.
+        // Only set missing values — do not override explicit env vars.
         process.env[k] = v;
-        // eslint-disable-next-line no-console
-        console.info(`[env] applying default from .env.example for ${k}`);
+        appliedDefaults.push(k);
       }
+    }
+    // Log a compact summary so the startup log isn't flooded with one-line prints
+    if (appliedDefaults.length > 0) {
+      // eslint-disable-next-line no-console
+      console.info(
+        `[env] applied ${appliedDefaults.length} defaults from .env.example: ${appliedDefaults.join(
+          ', '
+        )}`
+      );
     }
   }
 } catch (err) {
@@ -43,18 +52,24 @@ try {
   console.warn('[env] could not apply .env.example defaults:', String(err));
 }
 
-
 // Development-friendly deterministic fallbacks for JWT secrets
 if ((process.env.NODE_ENV || 'development') !== 'production') {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
     process.env.JWT_SECRET = 'dev_jwt_secret_change_me';
     // eslint-disable-next-line no-console
-    console.info('[env] JWT_SECRET not set  using deterministic dev fallback (change in backend/.env.local)');
+    console.info(
+      '[env] JWT_SECRET not set  using deterministic dev fallback (change in backend/.env.local)'
+    );
   }
-  if (!process.env.JWT_REFRESH_SECRET || process.env.JWT_REFRESH_SECRET.trim() === '') {
+  if (
+    !process.env.JWT_REFRESH_SECRET ||
+    process.env.JWT_REFRESH_SECRET.trim() === ''
+  ) {
     process.env.JWT_REFRESH_SECRET = 'dev_jwt_refresh_secret_change_me';
     // eslint-disable-next-line no-console
-    console.info('[env] JWT_REFRESH_SECRET not set  using deterministic dev fallback (change in backend/.env.local)');
+    console.info(
+      '[env] JWT_REFRESH_SECRET not set  using deterministic dev fallback (change in backend/.env.local)'
+    );
   }
 }
 
@@ -148,9 +163,3 @@ export const env = {
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };
-
-
-
-
-
-
