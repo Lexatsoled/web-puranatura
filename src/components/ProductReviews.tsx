@@ -4,10 +4,11 @@ import { ReviewCard } from './productReviews/ReviewCard';
 import { ReviewModal } from './productReviews/ReviewModal';
 import { ReviewsSummary } from './productReviews/ReviewsSummary';
 import { Review, useProductReviews } from './productReviews/useProductReviews';
+import { ReviewFormData } from './ReviewForm';
 
 interface ProductReviewsProps {
   reviews: Review[];
-  onAddReview?: (review: Omit<Review, 'id' | 'date'>) => Promise<void>;
+  onAddReview?: (review: ReviewFormData) => Promise<void>;
 }
 
 const ProductReviews: React.FC<ProductReviewsProps> = ({

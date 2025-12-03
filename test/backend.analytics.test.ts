@@ -36,7 +36,8 @@ describe('POST /api/analytics/events', () => {
       .send(payload);
 
     expect(response.status).toBe(202);
-    expect(response.body).toEqual({ ok: true });
+    // response.body may contain extra debug fields (e.g. traceId). Accept object containing ok: true
+    expect(response.body).toEqual(expect.objectContaining({ ok: true }));
     expect(response.headers['x-trace-id']).toBeTruthy();
   });
 

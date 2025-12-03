@@ -107,3 +107,4 @@ export function useSearchBar({
 }
 
 export default useSearchBar;
+export type { SearchResult };

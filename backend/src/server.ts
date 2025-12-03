@@ -2,7 +2,7 @@ import { app, closeApp } from './app';
 import { env } from './config/env';
 import { prisma } from './prisma';
 import { execSync } from 'child_process';
-import { ensureSmokeUser, seedProducts } from '../prisma/seed';
+import { ensureSmokeUser, seedProducts } from './prisma/seed';
 
 // Arranque con reintentos si el puerto está ocupado (útil en dev).
 const startPort = env.port;

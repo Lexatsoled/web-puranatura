@@ -1,5 +1,6 @@
 import * as matchers from '@testing-library/jest-dom/matchers';
-import { expect } from 'vitest';
+import { expect, vi } from 'vitest';
+import React from 'react';
 
 // extend vitest expect with jest-dom matchers
 expect.extend(matchers as any);
@@ -13,6 +14,22 @@ if (testEnv) {
   testEnv.VITE_ENABLE_ANALYTICS = testEnv.VITE_ENABLE_ANALYTICS ?? 'true';
   testEnv.VITE_GA_ID = testEnv.VITE_GA_ID ?? 'G-TEST';
   testEnv.VITE_FB_PIXEL_ID = testEnv.VITE_FB_PIXEL_ID ?? 'FB-TEST';
+}
+
+// Mock framer-motion to avoid animation side effects in tests which
+// can lead to unhandled errors in the JSDOM environment. Tests don't
+// need motion behaviour — only structure and accessibility.
+try {
+  vi.mock('framer-motion', () => ({
+    // Proxy any motion.<tag> usage to a plain React element of that tag
+    motion: new Proxy({}, {
+      get: (_target, prop: string) => (props: any) =>
+        React.createElement(String(prop), props, props?.children),
+    }),
+    AnimatePresence: ({ children }: any) => React.createElement(React.Fragment, null, children),
+  }));
+} catch {
+  // If mocking isn't available in a particular runner, ignore.
 }
 
 // Provide reliable localStorage mock regardless of environment flags

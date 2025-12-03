@@ -24,7 +24,7 @@ Preparar al equipo para ejecutar un experimento de 48 horas en staging con CSP e
    - npm run test:ci
 
 2. Verificar que el backend expone /metrics y que contiene csp_reports_total (arrancar el backend y comprobar):
-   - cd backend
+   - Set-Location backend
    - npm ci
    - npm run dev
    - curl http://127.0.0.1:3001/metrics | Select-String csp_reports_total

@@ -1,11 +1,8 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { NextSeo, ProductJsonLd } from 'next-seo';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
-import {
-  ProductJsonLd as ProductJsonLdProps,
-  ProductImage,
-} from '../types/product';
+import { Product, ProductImage } from '../types/product';
 import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
 import { sanitizeHtml } from '../utils/sanitizer';
 import { useProductDetails } from '../hooks/useProductDetails';
@@ -68,8 +65,8 @@ const ProductPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          <ProductHero product={product as ProductJsonLdProps} />
-          <ProductInfo product={product as ProductJsonLdProps} />
+          <ProductHero product={product as Product} />
+          <ProductInfo product={product as Product} />
         </motion.div>
       </div>
     </>

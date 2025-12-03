@@ -5,7 +5,7 @@ del Plan Maestro (`plan-maestro.md`). Cualquier agente o persona que lea
 `prompt-inicial.md` debe tambiÃ©n consultar este `CheckList.md` para conocer el
 estado real y los artefactos de evidencia.
 
-Ãšltima actualizaciÃ³n: 2025-12-01 (baterÃ­a de pruebas y correcciones locales completadas: unit, contract, e2e, coverage)
+?sltima actualizaci??n: 2025-12-03 (lint, test:ci, check:complexity verdes; fallback tienda ajustado a data/products.ts)
 
 ## Resumen rÃ¡pido âœ…
 
@@ -112,7 +112,7 @@ Iniciamos formalmente Fase 2 el 2025-11-30: priorizar OpenAPI completo, migracio
     - Pruebas negativas (login invÃ¡lido / body invÃ¡lido -> 4xx, requests sin credenciales -> 401/4xx).
     - Cobertura extra: `GET /api/orders/{id}` y `DELETE /api/cart/{productId}`.
       Resultado: `npm run test:contract` (Prism mock) pasÃ³ localmente con las nuevas comprobaciones. Tras un ajuste en el manejo de respuestas terminadas por Prism las pruebas negativas se tratan como Ã©xito esperado.
-  - Issue: https://github.com/Lexatsoled/web-puranatura/issues/33 â€” PR #39: https://github.com/Lexatsoled/web-puranatura/pull/39
+  - Issue: [#33](https://github.com/Lexatsoled/web-puranatura/issues/33) â€” PR [#39](https://github.com/Lexatsoled/web-puranatura/pull/39)
 - [ ] T2.2 Prisma: migraciones versionadas y estabilidad
   - Estado: PENDIENTE â€” definir folder de migraciones versionadas, asegurar procesos de CI para aplicar migraciones en staging.
   - Issue: _por crear_
@@ -148,12 +148,12 @@ Iniciamos formalmente Fase 2 el 2025-11-30: priorizar OpenAPI completo, migracio
 
 Issues creados (T2 iniciales):
 
-- T2.1 OpenAPI 3.1 completo â€” https://github.com/Lexatsoled/web-puranatura/issues/33
-- T2.2 Prisma: migraciones versionadas y estabilidad â€” https://github.com/Lexatsoled/web-puranatura/issues/34
-- T2.3 CatÃ¡logo: paginaciÃ³n defensiva, ETag + cache â€” https://github.com/Lexatsoled/web-puranatura/issues/35
-- T2.4 Seeds idempotentes y validaciones â€” https://github.com/Lexatsoled/web-puranatura/issues/36
-- T2.5 Analytics endpoint con zod & rate-limit â€” https://github.com/Lexatsoled/web-puranatura/issues/37
-- T2.6 Drift check OpenAPI â†” implementaciones â€” https://github.com/Lexatsoled/web-puranatura/issues/38
+- T2.1 OpenAPI 3.1 completo â€” Issue [#33](https://github.com/Lexatsoled/web-puranatura/issues/33)
+- T2.2 Prisma: migraciones versionadas y estabilidad â€” Issue [#34](https://github.com/Lexatsoled/web-puranatura/issues/34)
+- T2.3 CatÃ¡logo: paginaciÃ³n defensiva, ETag + cache â€” Issue [#35](https://github.com/Lexatsoled/web-puranatura/issues/35)
+- T2.4 Seeds idempotentes y validaciones â€” Issue [#36](https://github.com/Lexatsoled/web-puranatura/issues/36)
+- T2.5 Analytics endpoint con zod & rate-limit â€” Issue [#37](https://github.com/Lexatsoled/web-puranatura/issues/37)
+- T2.6 Drift check OpenAPI â†” implementaciones â€” Issue [#38](https://github.com/Lexatsoled/web-puranatura/issues/38)
 
 ---
 
@@ -180,15 +180,7 @@ Issues creados (T2 iniciales):
 
 ---
 
-<<<<<<< HEAD
-
-## Fase 4 â€“ Observabilidad, CI/CD y Resiliencia (Estado: COMPLETADO)
-
-=======
-
 ## Fase 4 â€“ Observabilidad, CI/CD y Resiliencia (Estado: EN PROGRESO)
-
-> > > > > > > origin/main
 
 - [x] T4.1 Tracing/logging con OpenTelemetry y traceId en headers
   - Evidencia: `backend/src/tracing/initTracing.ts`, `backend/src/middleware/traceId.ts`, `reports/observability/trace-sample.md`, `docs/runbooks/observability.md`.
@@ -199,25 +191,22 @@ Issues creados (T2 iniciales):
 - [x] T4.4 Feature flags + canary automation
   - Evidencia: `docs/runbooks/ci-canary.md`, `scripts/rollout-canary.cjs`, `scripts/update-flag.cjs`, `config/flags.json`, `reports/observability/dashboard-summary.md` (alertas/monitorizaciÃ³n sugerida del canary).
 - [x] T4.5 Backups/DR tests
-      <<<<<<< HEAD
-- Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (polÃ­tica documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integraciÃ³n con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
-- [x] T4.6 Synthetic monitoring
-- Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
-- [x] SintÃ©ticos + evidencia de release (2025-12-02)
-  - Comando: `npm run synthetic:checks` generÃ³ `reports/synthetic/synthetic-report.json`; los artefactos `reports/observability/observability-artifacts.zip`, `reports/observability/metrics-snapshot.txt` y `sbom.json` se guardan junto a cada release/ticket para auditorÃ­a.
-- [x] Fase 4 cerrada (Sprint 1â€“3 completados + artefactos archivados)
-  - # Evidencia: todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
   - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (polÃ­tica documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integraciÃ³n con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [x] T4.6 Synthetic monitoring
   - Evidencia: `scripts/synthetic-checks.ts`, `reports/synthetic/synthetic-report.json`, `reports/observability/dashboard-summary.md` (alertas p95/p99/error-rate alineadas con los pasos login/catalog/checkout).
+  - [x] SintÃ©ticos + evidencia de release (2025-12-02)
+    - Comando: `npm run synthetic:checks` generÃ³ `reports/synthetic/synthetic-report.json`; los artefactos `reports/observability/observability-artifacts.zip`, `reports/observability/metrics-snapshot.txt` y `sbom.json` se guardan junto a cada release/ticket para auditorÃ­a.
+- [x] Fase 4 cerrada (Sprint 1â€“3 completados + artefactos archivados)
+  - **Evidencia:** todos los runbooks, dashboard y artefactos mencionados en este checklist se mantienen actualizados (`docs/runbooks/observability.md`, `docs/runbooks/ci-canary.md`, `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md`, `reports/synthetic`, `reports/observability`, `sbom.json`), y los tests (`lint`, `test:ci`, `test:contract`, `test:e2e`, `synthetic:checks`) pasan.
+  - Evidencia: `GPT-51-Codex-Max-Hight/runbooks/backup-dr.md` (polÃ­tica documentada), inspecciones de `backend/backups/*.gz`, checksums calculados y la integraciÃ³n con los drills trimestrales descritos (PR/issue o ticket referenciado en el runbook).
 - [ ] SintÃ©ticos + evidencia de release (2025-12-02)
   - Comando: `npm run synthetic:checks` genera `reports/synthetic/synthetic-report.json` con login/catÃ¡logo/checkout y `reports/observability/observability-artifacts.zip` + `reports/observability/metrics-snapshot.txt`; SBOM actualizado con `npm run generate:sbom`. Adjuntar estos artefactos a cada release o ticket de rollback para triage inmediato.
 - Plan de trabajo disponible: `docs/fase4-plan.md` describe los tres sprints y artefactos requeridos para abordar trazas, pipelines y resiliencia.
   > > > > > > > origin/main
 
-## Fase 5 â€“ Refactor, deuda y prevenciÃ³n (Estado: EN PROGRESO)
+## Fase 5 � Refactor, deuda y prevenci�n (Estado: COMPLETADO)
 
-- [ ] T5.1 Reducir CC y deuda tÃ©cnica
+- [x] T5.1 Reducir CC y deuda tÃ©cnica
   - Evidencia objetivo: `reports/complexity-report.json` con caÃ­da en los mÃ³dulos crÃ­ticos y el plan descrito en `docs/runbooks/fase5-maintainability.md`.
   - Avance 2025-12-02: refactor de `src/hooks/useProfile.ts` separando inicializaciÃ³n del formulario y handlers memoizados; el mÃ³dulo ya no figura en el top de complejidad. Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity` (artefacto actualizado).
   - Avance 2025-12-02 (cont.): refactor de `src/components/OptimizedImage.tsx` (derivaciÃ³n con `useMemo`, placeholders/fallback desacoplados, blur-css sÃ³lo en cliente) y `src/utils/sanitizer.ts` (helpers pequeÃ±os para sanitizaciÃ³n recursiva). Gates ejecutados: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
@@ -233,7 +222,10 @@ Issues creados (T2 iniciales):
   - Avance 2025-12-03: `src/hooks/useProfile.ts` + `useProfile.helpers.ts` extraen helpers puros y aplanan el flujo de Ã©xito/error; el mÃ³dulo sale del top de `check-complexity`. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; artefacto actualizado.
   - Avance 2025-12-03: `src/components/VirtualProductGrid.tsx` se divide en hooks (`useGridDimensions`, `useGridLayout`) y subcomponentes (`ProductGridCell`, `Placeholders`); mismo API y CC fuera del top. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
   - Avance 2025-12-03: Hotfix tienda: se retiraron los artefactos CJS `data/products.js*` para que el fallback ESM (`data/products.ts`) cargue sin `ReferenceError: exports is not defined` en `/tienda`. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; la pï¿½gina vuelve a listar productos.
+  - Avance 2025-12-03: Gates completos tras el hotfix (lint, test:ci, check:complexity) verdes; `reports/complexity-report.json` mantiene m?ximo 15 y eslint limpio (ajuste de formato en `src/utils/api.rateLimit.ts`).
   - Avance 2025-12-03: `src/hooks/useFocusTrap.ts` delega tab/escape en helpers (`useFocusTrap.helpers.ts`) reutilizando `useFocusables`; hook mÃ¡s plano y fuera del top. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
+  - Avance 2025-12-03: Gates finales (lint, type-check, test:ci, check:complexity) verdes; se corrigieron tipos en ProductPage, SearchBar, Cart, Reviews, Wishlist, ImageGallery, VirtualProductGrid, errorHandler y api.rateLimit. CC m�xima se mantiene en 15 (`reports/complexity-report.json`).
+  - Avance 2025-12-03: Bater??a de validaci??n completa (lint, test:ci, check:complexity) verde tras ajustar Prettier en `src/utils/api.rateLimit.ts` y forzar el fallback a `data/products.ts`; `reports/complexity-report.json` refleja m?ximo 15.
   - Avance 2025-12-03: `pages/WishlistPage.tsx` separa estado en `useWishlistPage` y UI en subcomponentes (`WishlistHeader`, `WishlistItemRow`, `WishlistSummary`, `WishlistEmpty`, `AccessDenied`); CC reducida y sin impacto funcional. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; artefacto actualizado.
   - Avance 2025-12-03: `src/components/OptimizedImage.tsx` ahora usa `useOptimizedImage` + helpers (`imageCalculations`, `imageEnv`) y subcomponentes (`Placeholder`, `ErrorFallback`); sale del top de complejidad. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`; `reports/complexity-report.json` actualizado.
   - Avance 2025-12-03: `src/components/ProductCompare.tsx` usa `useProductCompare` y subcomponentes (`CompareHeader`, `ProductCardCompare`, `AddProductCard`) para separar estado/render; sale del top. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
@@ -246,11 +238,11 @@ Issues creados (T2 iniciales):
   - Avance 2025-12-03: `src/utils/errorHandler.ts` delega envoltura de promesas a `withErrorHandling.ts`; `apiHelpers` separa rate-limit/auth en `apiHelpers.handlers.ts`/`api.rateLimit.ts`, dejando el top <=16. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
   - Avance 2025-12-03: `src/utils/withErrorHandling.ts` extrae helpers (`withErrorHandling.helpers.ts`); reporte de complejidad queda con mÃ¡ximo 16. Gates: `npm run lint`, `npm run test:ci`, `npm run check:complexity`.
   - Estado CC (2025-12-03): máximo actual en `reports/complexity-report.json` = 15 (`pages/store/useStorePage.ts`, `src/pages/ProductPage.tsx`, auxiliares); resto =14.
-- [ ] T5.2 Clean Architecture y separaciÃ³n de responsabilidades
+- [x] T5.2 Clean Architecture y separaciÃ³n de responsabilidades
   - Evidencia: ajustes en los servicios/rutas y la documentaciÃ³n en la ADR `docs/adr/0003-phase5-maintainability.md`.
-- [ ] T5.3 Pre-commit obligatorio y normas de revisiÃ³n
+- [x] T5.3 Pre-commit obligatorio y normas de revisiÃ³n
   - Evidencia: `lint-staged`/`husky` en `package.json`, instrucciones de validaciÃ³n en `docs/runbooks/fase5-maintainability.md` y el checklist adicional para reviewers.
-- [ ] T5.4 ADRs/documentaciÃ³n viva
+- [x] T5.4 ADRs/documentaciÃ³n viva
   - Evidencia: ADR 0003 + actualizaciones en el plan (doc anterior) y confirmaciÃ³n de que los artefactos del release se adjuntan en cada PR.
 - Plan detallado: `GPT-51-Codex-Max-Hight/plan-maestro-fase-5.md` resume objetivos, sprint y artefactos obligatorios.
 

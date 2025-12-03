@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { Grid } from 'react-window';
 import { Product } from '../types/product';
 import { ProductGridCell } from './virtualGrid/ProductGridCell';
@@ -49,7 +49,7 @@ export const VirtualProductGrid: React.FC<VirtualProductGridProps> = ({
         <EmptyState />
       ) : (
         <Grid
-          cellComponent={(cellProps) => (
+          cellComponent={(cellProps: any) => (
             <ProductGridCell
               {...cellProps}
               cardHeight={cardHeight}

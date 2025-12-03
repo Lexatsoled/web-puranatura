@@ -6,8 +6,10 @@ import {
   Rule,
 } from './errorHandler.rules';
 export { withErrorHandling } from './withErrorHandling';
+export { ApiError, NetworkError, ValidationError } from './transformApiError';
+export { notificationRules, defaultNotification };
 
-const getNotificationForError = (
+export const getNotificationForError = (
   error: unknown,
   rules: Rule[] = notificationRules
 ): NotificationPayload =>

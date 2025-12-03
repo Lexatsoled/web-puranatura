@@ -109,7 +109,7 @@ router.get('/', async (req, res, next) => {
             'Attempting to seed products after DB read failure (dev)'
           );
           // dynamic import and cast to any to avoid ESM/CJS and typing friction in tests
-          const seedModule: any = await import('../../prisma/seed');
+          const seedModule: any = await import('../prisma/seed');
           if (typeof seedModule?.seedProducts === 'function') {
             await seedModule.seedProducts(prisma);
             logger.info('Seeding completed, re-querying products (dev)');
@@ -133,7 +133,7 @@ router.get('/', async (req, res, next) => {
 
           // Last-resort fallback -> use frontend bundled data/products.ts so UI remains useful locally
           try {
-            const fallbackModule: any = await import('../../../data/products');
+            const fallbackModule: any = await import('../data/products');
             const legacy =
               fallbackModule?.products ?? fallbackModule?.default ?? [];
             // Normalize fallback records so they are stable across requests
