@@ -1,0 +1,55 @@
+name: CI health monitor (hourly)
+
+on:
+  # hourly scheduled check
+  schedule:
+    - cron: '0 * * * *'
+  # allow manual runs for debugging
+  workflow_dispatch: {}
+  # run on pushes to this branch so PRs can be tested
+  push:
+    branches: [ ci/monitor-main ]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  check-main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Run CI health check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Generate a short hourly summary of workflow runs on main
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            // Look back one hour
+            const since = new Date(Date.now() - 1000 * 60 * 60).toISOString();
+
+            const runsResp = await github.rest.actions.listWorkflowRunsForRepo({ owner, repo, per_page: 100, branch: 'main' });
+            const recent = runsResp.data.workflow_runs.filter(r => r.created_at >= since);
+
+            const total = recent.length;
+            const success = recent.filter(r => r.conclusion === 'success').length;
+            const failed = recent.filter(r => r.conclusion === 'failure').length;
+            const skipped = recent.filter(r => r.conclusion === 'skipped').length;
+
+            const failures = recent.filter(r => r.conclusion === 'failure').map(r => `- ${r.name}: ${r.html_url}`).join('\n') || 'None';
+
+            const body = `CI Health report for main (last 1 hour UTC: ${new Date().toISOString()}):\n\n- Total runs: ${total}\n- Success: ${success}\n- Failed: ${failed}\n- Skipped: ${skipped}\n\nFailures (if any):\n${failures}`;
+
+            // find an existing open issue with label 'ci-monitor' to post updates, otherwise create one
+            const issues = await github.rest.issues.listForRepo({ owner, repo, state: 'open', labels: 'ci-monitor', per_page: 100 });
+            if ((issues.data || []).length === 0) {
+              const created = await github.rest.issues.create({ owner, repo, title: 'CI Health Monitor — hourly report', body, labels: ['ci-monitor'] });
+              console.log(`Created CI health issue #${created.data.number}`);
+            } else {
+              // add a comment to the first matching issue
+              const issueNumber = issues.data[0].number;
+              await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body });
+              console.log(`Appended CI health report to issue #${issueNumber}`);
+            }
