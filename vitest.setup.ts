@@ -105,3 +105,39 @@ try {
 } catch {
   // ignore — test environment may disallow global mutation
 }
+
+try {
+  if (typeof (globalThis as any).window !== 'undefined') {
+    try {
+      if (typeof (globalThis as any).window.HTMLIFrameElement === 'undefined') {
+        (globalThis as any).window.HTMLIFrameElement = (
+          globalThis as any
+        ).HTMLIFrameElement;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+} catch {
+  /* ignore */
+}
+
+// Provide a safe, no-op global fetch for tests so Happy DOM's
+// default fetch won't attempt real network connections and produce
+// noisy "socket hang up" errors in CI/local runs. Individual tests
+// can override this with `vi.spyOn(globalThis, 'fetch')` or set their
+// own implementations as needed.
+try {
+  // Always stub global fetch for tests so Happy DOM doesn't attempt
+  // real HTTP requests which can produce noisy socket errors in CI.
+  globalThis.fetch = vi.fn(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+      text: async () => '',
+    } as any)
+  ) as typeof fetch;
+} catch {
+  // ignore if we can't override globals in this environment
+}
