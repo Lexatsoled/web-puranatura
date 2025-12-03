@@ -6,9 +6,15 @@ on:
   push:
     # Only run the full quality pipeline on pushes to the default branch.
     branches: [ main ]
+    # Avoid triggering this heavy pipeline when the push only changes workflow/configuration files
+    paths-ignore:
+      - '.github/**'
   pull_request:
     # Run for pull requests targeting main; PRs from feature branches will trigger checks
     branches: [ main ]
+    # Avoid triggering the heavy pipeline when only workflow/config files are modified in the PR
+    paths-ignore:
+      - '.github/**'
 
 # Explicit permissions for the workflow. This grants only the minimal
 # privileges gitleaks needs to create checks/comments (and nothing more).

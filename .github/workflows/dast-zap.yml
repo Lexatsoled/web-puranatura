@@ -3,8 +3,14 @@ name: DAST - OWASP ZAP baseline
 on:
   push:
     branches: [main]
+    # Avoid running baseline DAST when only workflow files change
+    paths-ignore:
+      - '.github/**'
   pull_request:
     branches: [main]
+    # Skip DAST for PRs that only modify workflows/config
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   zap-baseline:

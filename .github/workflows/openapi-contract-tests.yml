@@ -7,6 +7,9 @@ on:
       - 'scripts/run-contract.cjs'
   push:
     branches: [main]
+    # avoid running contract tests on pushes that only change workflow/config
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   lint-openapi:
