@@ -3,6 +3,9 @@ name: CSP monitoring checks
 on:
   push:
     branches: ['feat/staging-csp-monitor', 'main']
+    # don't run for pushes that only modify workflow files
+    paths-ignore:
+      - '.github/**'
   pull_request:
     paths: ['backend/**', 'infra/**', 'docs/**', 'test/**']
 
