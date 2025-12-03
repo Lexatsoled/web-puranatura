@@ -54,3 +54,5 @@ reports/
 backend/prisma/prisma/dev.db
 
 backend/prisma/prisma/dev.db
+data/products.js
+data/products.js.map

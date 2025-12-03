@@ -1,75 +1,38 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import { useNotifications } from '../contexts/NotificationContext';
-import transformApiError from './transformApiError';
-import {
-  sanitizeRequestMiddleware,
-  sanitizeResponseMiddleware,
-} from './sanitizationMiddleware';
-import RateLimiter, { RateLimitConfig } from './rateLimiter';
-import {
-  buildLimiter,
-  buildRequestConfig,
-  handleAuthError,
-  handleRateLimitRetry,
-  isRateLimitError,
-  sendRequest,
-} from './apiHelpers';
-
-const API_TIMEOUT_MS = 10000;
-const apiBaseUrl =
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-  '/api';
-
-const api = axios.create({
-  baseURL: apiBaseUrl,
-  timeout: API_TIMEOUT_MS,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
-
-api.interceptors.request.use(sanitizeRequestMiddleware);
-api.interceptors.response.use(sanitizeResponseMiddleware);
+import { api } from './api.client';
+import { buildRequestConfig, handleAuthError } from './apiHelpers';
+import { createRateLimitedRequester } from './api.rateLimit';
+import RateLimiter from './rateLimiter';
+import { Method } from './api.types';
 
 const rateLimiter = new RateLimiter();
 
+const makeRequestByMethod =
+  (makeRequest: <T>(config: AxiosRequestConfig) => Promise<T>) =>
+  <T>(method: Method, url: string, data?: any, config?: AxiosRequestConfig) =>
+    makeRequest<T>(buildRequestConfig(url, method, data, config));
+
 export const useApi = () => {
   const { showNotification } = useNotifications();
-
-  const makeRequest = async <T>(
-    config: AxiosRequestConfig,
-    rateLimitConfig?: Partial<RateLimitConfig>
-  ): Promise<T> => {
-    const limiter = buildLimiter(rateLimitConfig, rateLimiter) ?? rateLimiter;
-
-    const execute = () => makeRequest<T>(config, rateLimitConfig);
-
-    try {
-      return await sendRequest<T>(api, config, limiter);
-    } catch (error) {
-      if (isRateLimitError(error)) {
-        return handleRateLimitRetry(error, showNotification, execute);
-      }
-      throw transformApiError(error);
-    }
-  };
+  const { makeRequest } = createRateLimitedRequester(
+    api,
+    rateLimiter,
+    showNotification
+  );
+  const withMethod = makeRequestByMethod(makeRequest);
 
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
-      makeRequest<T>(buildRequestConfig(url, 'GET', undefined, config)),
-
+      withMethod<T>('GET', url, undefined, config),
     post: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>(buildRequestConfig(url, 'POST', data, config)),
-
+      withMethod<T>('POST', url, data, config),
     put: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>(buildRequestConfig(url, 'PUT', data, config)),
-
+      withMethod<T>('PUT', url, data, config),
     patch: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-      makeRequest<T>(buildRequestConfig(url, 'PATCH', data, config)),
-
+      withMethod<T>('PATCH', url, data, config),
     delete: <T>(url: string, config?: AxiosRequestConfig) =>
-      makeRequest<T>(buildRequestConfig(url, 'DELETE', undefined, config)),
+      withMethod<T>('DELETE', url, undefined, config),
   };
 };
 

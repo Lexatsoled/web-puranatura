@@ -15,6 +15,42 @@ export type Category = { id: string; name: string };
 
 const DEFAULT_CATEGORY: Category = { id: 'todos', name: 'Todas' };
 
+const applyCategory = (products: Product[], categoryId: string) =>
+  categoryId === 'todos'
+    ? products
+    : products.filter((product) => product.category === categoryId);
+
+const applySearch = (products: Product[], term: string) => {
+  if (!term) return products;
+  const normalized = term.toLowerCase();
+  return products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(normalized) ||
+      product.description.toLowerCase().includes(normalized)
+  );
+};
+
+const sortProducts = (products: Product[], sortOption: SortOption) => {
+  const sorted = [...products];
+  const sorters: Record<SortOption, (a: Product, b: Product) => number> = {
+    'name-asc': (a, b) => a.name.localeCompare(b.name),
+    'name-desc': (a, b) => b.name.localeCompare(a.name),
+    'price-asc': (a, b) => a.price - b.price,
+    'price-desc': (a, b) => b.price - a.price,
+    default: () => 0,
+  };
+  return sorted.sort(sorters[sortOption]);
+};
+
+const paginate = (
+  products: Product[],
+  currentPage: number,
+  itemsPerPage: number
+) => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  return products.slice(startIndex, startIndex + itemsPerPage);
+};
+
 export const useStorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('todos');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -40,7 +76,7 @@ export const useStorePage = () => {
     hasFetched.current = true;
 
     const applyFallback = async () => {
-      const fallbackModule = await import('../../data/products');
+      const fallbackModule = await import('../../data/products.ts');
       const fallbackProducts = fallbackModule.products.map((product) =>
         sanitizeProductContent(product)
       );
@@ -86,44 +122,15 @@ export const useStorePage = () => {
   }, [api]);
 
   const processedProducts = useMemo(() => {
-    let filtered = products;
-
-    if (selectedCategory !== 'todos') {
-      filtered = filtered.filter(
-        (product) => product.category === selectedCategory
-      );
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    const sorted = [...filtered].sort((a, b) => {
-      switch (sortOption) {
-        case 'name-asc':
-          return a.name.localeCompare(b.name);
-        case 'name-desc':
-          return b.name.localeCompare(a.name);
-        case 'price-asc':
-          return a.price - b.price;
-        case 'price-desc':
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
-
-    return sorted;
+    const byCategory = applyCategory(products, selectedCategory);
+    const bySearch = applySearch(byCategory, searchTerm);
+    return sortProducts(bySearch, sortOption);
   }, [products, selectedCategory, searchTerm, sortOption]);
 
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return processedProducts.slice(startIndex, startIndex + itemsPerPage);
-  }, [processedProducts, currentPage, itemsPerPage]);
+  const paginatedProducts = useMemo(
+    () => paginate(processedProducts, currentPage, itemsPerPage),
+    [processedProducts, currentPage, itemsPerPage]
+  );
 
   const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
 

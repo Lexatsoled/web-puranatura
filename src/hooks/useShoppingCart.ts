@@ -1,4 +1,6 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useCartTotals } from './cart/useCartTotals';
+import { useCartQuantity } from './cart/useCartQuantity';
 
 export type CartItem = {
   id: string;
@@ -34,40 +36,12 @@ export function useShoppingCart(opts: {
     onUpdateVariant,
   } = opts;
 
-  const { subtotal, discount, tax, total, totalItems, totalWeight } =
-    useMemo(() => {
-      const subtotal = items.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      );
-      const discount = items.reduce(
-        (acc, item) => acc + (item.discount || 0) * item.quantity,
-        0
-      );
-      const taxableAmount = subtotal - discount;
-      const tax = taxableAmount * taxRate;
-      const total = taxableAmount + tax + shippingCost;
-      const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
-      const totalWeight = items.reduce(
-        (acc, item) => acc + (item.weight || 0) * item.quantity,
-        0
-      );
+  const totals = useCartTotals(items, taxRate, shippingCost);
 
-      return { subtotal, discount, tax, total, totalItems, totalWeight };
-    }, [items, taxRate, shippingCost]);
-
-  const handleQuantityChange = useCallback(
-    (itemId: string, newQuantity: number) => {
-      const item = items.find((i) => i.id === itemId);
-      if (!item) return;
-
-      const validQuantity = Math.min(
-        Math.max(1, newQuantity),
-        item.maxQuantity || maxQuantityPerItem
-      );
-      onUpdateQuantity(itemId, validQuantity);
-    },
-    [items, maxQuantityPerItem, onUpdateQuantity]
+  const handleQuantityChange = useCartQuantity(
+    items,
+    maxQuantityPerItem,
+    onUpdateQuantity
   );
 
   const handleVariantChange = useCallback(
@@ -78,12 +52,12 @@ export function useShoppingCart(opts: {
   );
 
   return {
-    subtotal,
-    discount,
-    tax,
-    total,
-    totalItems,
-    totalWeight,
+    subtotal: totals.subtotal,
+    discount: totals.discount,
+    tax: totals.tax,
+    total: totals.total,
+    totalItems: totals.totalItems,
+    totalWeight: totals.totalWeight,
     handleQuantityChange,
     handleVariantChange,
   };

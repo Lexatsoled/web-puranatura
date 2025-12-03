@@ -1,22 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
-
-export type SearchResult = {
-  type: 'product' | 'category' | 'suggestion';
-  id: string;
-  title: string;
-  subtitle?: string;
-  image?: string;
-  url: string;
-  relevance?: number;
-};
-
-export type UseSearchBarOptions = {
-  onSearch: (q: string) => Promise<SearchResult[]>;
-  onResultClick?: (r: SearchResult) => void;
-  minQueryLength?: number;
-  debounceMs?: number;
-};
+import { buildActions, shouldSearch } from './useSearchBar.helpers';
+import { SearchResult, UseSearchBarOptions } from './useSearchBar.types';
 
 export function useSearchBar({
   onSearch,
@@ -52,7 +37,7 @@ export function useSearchBar({
 
   const doSearch = useCallback(
     async (q: string) => {
-      if (q.length < minQueryLength) {
+      if (!shouldSearch(q, minQueryLength)) {
         setResults([]);
         setIsLoading(false);
         return;
@@ -84,25 +69,16 @@ export function useSearchBar({
 
   const handleKeyDown = (e: { key: string; preventDefault?: () => void }) => {
     if (!isOpen) return;
+    const actions = buildActions(
+      results,
+      activeIndex,
+      onResultClick,
+      resetState,
+      setActiveIndex,
+      setIsOpen
+    );
 
-    const actions: Record<string, () => void> = {
-      ArrowDown: () => {
-        setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
-      },
-      ArrowUp: () => {
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
-      },
-      Enter: () => {
-        const r = results[activeIndex];
-        if (r) {
-          onResultClick?.(r);
-          resetState();
-        }
-      },
-      Escape: () => setIsOpen(false),
-    };
-
-    const action = actions[e.key];
+    const action = (actions as Record<string, () => void>)[e.key];
     if (action) {
       e.preventDefault?.();
       action();

@@ -2,6 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AnalyticsEvent } from '../types/analytics';
 import AnalyticsService from '../services/analyticsService';
+import {
+  readConsentFromStorage,
+  writeConsentToStorage,
+} from './analytics/useConsentStorage';
 
 // AnalyticsService behaviour has been extracted into `src/services/analyticsService.ts`
 
@@ -12,27 +16,13 @@ export function useAnalytics() {
   const [consentGranted, setConsentGranted] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     if (!analytics.isEnabled()) return false;
-    try {
-      return (
-        window.localStorage.getItem('puranatura-consent-analytics') ===
-        'granted'
-      );
-    } catch {
-      return false;
-    }
+    return readConsentFromStorage('puranatura-consent-analytics');
   });
 
   useEffect(() => {
     if (!analytics.isEnabled()) return;
     analytics.setConsent(consentGranted);
-    try {
-      window.localStorage.setItem(
-        'puranatura-consent-analytics',
-        consentGranted ? 'granted' : 'denied'
-      );
-    } catch {
-      // Ignorar errores de almacenamiento
-    }
+    writeConsentToStorage('puranatura-consent-analytics', consentGranted);
   }, [analytics, consentGranted]);
 
   useEffect(() => {

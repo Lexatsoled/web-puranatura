@@ -1,26 +1,14 @@
 ﻿import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-
-type ProfileForm = {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-};
-
-const buildInitialForm = (
-  user?: {
-    firstName?: string;
-    lastName?: string;
-    phone?: string | null;
-    email?: string;
-  } | null
-) => ({
-  firstName: user?.firstName || '',
-  lastName: user?.lastName || '',
-  phone: user?.phone || '',
-  email: user?.email || '',
-});
+import {
+  buildInitialForm,
+  buildPayload,
+  clearMessageLater,
+  computeMemberSince,
+  ProfileForm,
+  resetFormState,
+  saveProfileData,
+} from './useProfile.helpers';
 
 export function useProfile() {
   const { user, updateProfile, isLoading } = useAuth();
@@ -42,48 +30,56 @@ export function useProfile() {
     []
   );
 
+  const resetForm = useCallback(() => {
+    resetFormState(setFormData, setIsEditing, setSaveMessage, user);
+  }, [user]);
+
+  const markSuccess = useCallback((onSuccess?: () => void) => {
+    setIsEditing(false);
+    setSaveMessage('Perfil actualizado correctamente');
+    onSuccess?.();
+    clearMessageLater(setSaveMessage);
+  }, []);
+
+  const markFailure = useCallback(() => {
+    setSaveMessage('Error al actualizar el perfil');
+  }, []);
+
   const handleSave = useCallback(
     async (onSuccess?: () => void) => {
       setIsSaving(true);
       setSaveMessage('');
 
       try {
-        const success = await updateProfile({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone || undefined,
-        });
+        const payload = buildPayload(formData);
+        const success = await saveProfileData(payload, updateProfile);
 
-        if (success) {
-          setIsEditing(false);
-          setSaveMessage('Perfil actualizado correctamente');
-          onSuccess?.();
-          setTimeout(() => setSaveMessage(''), 3000);
-        } else {
-          setSaveMessage('Error al actualizar el perfil');
-        }
+        if (success) markSuccess(onSuccess);
+        else markFailure();
       } catch {
-        setSaveMessage('Error al actualizar el perfil');
+        markFailure();
       } finally {
         setIsSaving(false);
       }
     },
-    [formData.firstName, formData.lastName, formData.phone, updateProfile]
+    [
+      formData.firstName,
+      formData.lastName,
+      formData.phone,
+      markFailure,
+      markSuccess,
+      updateProfile,
+    ]
   );
 
   const handleCancel = useCallback(() => {
-    setFormData(buildInitialForm(user));
-    setIsEditing(false);
-    setSaveMessage('');
-  }, [user]);
+    resetForm();
+  }, [resetForm]);
 
-  const memberSinceText = useMemo(() => {
-    if (!user?.createdAt) return 'Reciente';
-    const parsed = new Date(user.createdAt);
-    return Number.isNaN(parsed.getTime())
-      ? 'Reciente'
-      : parsed.toLocaleDateString();
-  }, [user?.createdAt]);
+  const memberSinceText = useMemo(
+    () => computeMemberSince(user?.createdAt),
+    [user?.createdAt]
+  );
 
   return {
     user,

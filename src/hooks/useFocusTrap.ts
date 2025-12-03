@@ -1,7 +1,6 @@
 import { RefObject, useEffect } from 'react';
-
-const FOCUSABLE_SELECTORS =
-  'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+import { useFocusables } from './useFocusables';
+import { createKeydownHandler, focusInitial } from './useFocusTrap.helpers';
 
 interface FocusTrapOptions {
   isActive: boolean;
@@ -13,59 +12,16 @@ export const useFocusTrap = (
   containerRef: RefObject<HTMLElement | null>,
   { isActive, onEscape, initialFocusRef }: FocusTrapOptions
 ) => {
+  const { getFocusable } = useFocusables(containerRef);
+
   useEffect(() => {
     if (!isActive || !containerRef.current) return undefined;
     const root = containerRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
-    const getFocusable = (): HTMLElement[] =>
-      Array.from(
-        root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS)
-      ).filter(
-        (node) =>
-          !node.hasAttribute('disabled') &&
-          node.getAttribute('aria-hidden') !== 'true' &&
-          node.tabIndex !== -1
-      );
+    focusInitial(getFocusable, initialFocusRef);
 
-    const focusInitial = () => {
-      const fallback = getFocusable()[0];
-      const preferred = initialFocusRef?.current ?? fallback;
-      preferred?.focus();
-    };
-
-    focusInitial();
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        if (onEscape) {
-          event.preventDefault();
-          onEscape();
-        }
-        return;
-      }
-
-      if (event.key !== 'Tab') return;
-      const focusable = getFocusable();
-      if (focusable.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const current = document.activeElement;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (event.shiftKey) {
-        if (current === first || !root.contains(current)) {
-          event.preventDefault();
-          last.focus();
-        }
-      } else if (current === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
+    const handleKeyDown = createKeydownHandler(getFocusable, root, onEscape);
 
     document.addEventListener('keydown', handleKeyDown);
 
