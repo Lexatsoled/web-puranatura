@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+﻿import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { randomBytes } from 'crypto';
@@ -21,6 +21,28 @@ if (explicitPath) {
 
 dotenv.config({ path: envPath });
 
+// If there is a local example env file, load its values as *defaults*
+// for any variables not already set. This helps avoid \"undefined\" warnings
+// during local development while still encouraging developers to set
+// real secrets in `backend/.env.local` when needed.
+try {
+  const examplePath = path.resolve(process.cwd(), '.env.example');
+  if (fs.existsSync(examplePath)) {
+    const defaults = dotenv.parse(fs.readFileSync(examplePath));
+    for (const [k, v] of Object.entries(defaults)) {
+      if (!process.env[k]) {
+        // Only set missing values  do not override explicit env vars.
+        process.env[k] = v;
+        // eslint-disable-next-line no-console
+        console.info(`[env] applying default from .env.example for ${k}`);
+      }
+    }
+  }
+} catch (err) {
+  // eslint-disable-next-line no-console
+  console.warn('[env] could not apply .env.example defaults:', err?.message || err);
+}
+
 // If no DATABASE_URL is defined in the environment and we are in a
 // non-production environment, choose a sensible default for local dev
 // to avoid failing out when running `npm run dev`.
@@ -32,7 +54,7 @@ if (
   process.env.DATABASE_URL = 'file:./prisma/dev.db';
   // eslint-disable-next-line no-console
   console.warn(
-    '[env] DATABASE_URL not found — falling back to file:./prisma/dev.db for local development'
+    '[env] DATABASE_URL not found â€” falling back to file:./prisma/dev.db for local development'
   );
 }
 
@@ -72,7 +94,7 @@ const requireEnv = (value: string | undefined, key: string): string => {
     const generated = randomBytes(32).toString('hex');
     // eslint-disable-next-line no-console
     console.warn(
-      `[env] variable ${key} no definida - usando valor efímero (solo dev)`
+      `[env] variable ${key} no definida - usando valor efÃ­mero (solo dev)`
     );
     return generated;
   }
@@ -106,8 +128,9 @@ export const env = {
     process.env.AUTH_RATE_LIMIT_WINDOW,
     60 * 1000
   ),
-  // (previously) AI endpoint rate-limits removed — no built-in AI endpoint
-  // Controla si la política CSP se aplica en modo report-only o enforce.
+  // (previously) AI endpoint rate-limits removed â€” no built-in AI endpoint
+  // Controla si la polÃ­tica CSP se aplica en modo report-only o enforce.
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };
+
