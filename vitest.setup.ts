@@ -141,3 +141,43 @@ try {
 } catch {
   // ignore if we can't override globals in this environment
 }
+
+// Silence known noisy warnings/errors that are either expected in the
+// test harness or caused by third-party libs (but keep other console
+// output showing so we don't hide real problems). We match a small set
+// of patterns and let everything else pass through.
+(() => {
+  const origWarn = console.warn.bind(console);
+  const origError = console.error.bind(console);
+
+  const warnIgnore = [
+    /useNotifications usado sin NotificationProvider - usando stub/i,
+  ];
+
+  const errorIgnore = [
+    /Fetch\.onError/i,
+    /socket hang up/i,
+    /Received `true` for a non-boolean attribute `layout`/i,
+    /Unknown event handler property `onHover(Start|End)`/i,
+  ];
+
+  console.warn = (...args: any[]) => {
+    try {
+      const text = args.join(' ');
+      if (warnIgnore.some((rx) => rx.test(text))) return;
+    } catch {
+      /* fall through to original */
+    }
+    return origWarn(...args);
+  };
+
+  console.error = (...args: any[]) => {
+    try {
+      const text = args.join(' ');
+      if (errorIgnore.some((rx) => rx.test(text))) return;
+    } catch {
+      /* fall through to original */
+    }
+    return origError(...args);
+  };
+})();
