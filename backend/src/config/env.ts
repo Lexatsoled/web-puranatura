@@ -1,4 +1,4 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { randomBytes } from 'crypto';
@@ -40,7 +40,7 @@ try {
   }
 } catch (err) {
   // eslint-disable-next-line no-console
-  console.warn('[env] could not apply .env.example defaults:', err?.message || err);
+  console.warn('[env] could not apply .env.example defaults:', String(err));
 }
 
 
@@ -69,7 +69,7 @@ if (
   process.env.DATABASE_URL = 'file:./prisma/dev.db';
   // eslint-disable-next-line no-console
   console.warn(
-    '[env] DATABASE_URL not found â€” falling back to file:./prisma/dev.db for local development'
+    '[env] DATABASE_URL not found — falling back to file:./prisma/dev.db for local development'
   );
 }
 
@@ -109,7 +109,7 @@ const requireEnv = (value: string | undefined, key: string): string => {
     const generated = randomBytes(32).toString('hex');
     // eslint-disable-next-line no-console
     console.warn(
-      `[env] variable ${key} no definida - usando valor efÃ­mero (solo dev)`
+      `[env] variable ${key} no definida - usando valor efímero (solo dev)`
     );
     return generated;
   }
@@ -143,11 +143,12 @@ export const env = {
     process.env.AUTH_RATE_LIMIT_WINDOW,
     60 * 1000
   ),
-  // (previously) AI endpoint rate-limits removed â€” no built-in AI endpoint
-  // Controla si la polÃ­tica CSP se aplica en modo report-only o enforce.
+  // (previously) AI endpoint rate-limits removed — no built-in AI endpoint
+  // Controla si la política CSP se aplica en modo report-only o enforce.
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };
+
 
 
 
