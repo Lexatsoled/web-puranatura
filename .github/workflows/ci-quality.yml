@@ -1,4 +1,7 @@
 name: CI
+# NOTE: This is the heavy quality pipeline — it intentionally runs only for pushes
+#       to `main` and pull requests targeting `main`. Heavy checks (E2E, perf, LHCI)
+#       are run only on main to reduce noise and runner usage.
 on:
   push:
     # Only run the full quality pipeline on pushes to the default branch.
