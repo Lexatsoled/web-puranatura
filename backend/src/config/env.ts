@@ -30,7 +30,7 @@ try {
   if (fs.existsSync(examplePath)) {
     const defaults = dotenv.parse(fs.readFileSync(examplePath));
     for (const [k, v] of Object.entries(defaults)) {
-      if (!process.env[k]) {
+      if (!process.env[k] && v && String(v).trim() !== '') {
         // Only set missing values  do not override explicit env vars.
         process.env[k] = v;
         // eslint-disable-next-line no-console
@@ -133,4 +133,5 @@ export const env = {
   // En entornos de prueba/desarrollo defaulta a true (report-only).
   cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
 };
+
 
