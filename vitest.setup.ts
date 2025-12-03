@@ -22,11 +22,15 @@ if (testEnv) {
 try {
   vi.mock('framer-motion', () => ({
     // Proxy any motion.<tag> usage to a plain React element of that tag
-    motion: new Proxy({}, {
-      get: (_target, prop: string) => (props: any) =>
-        React.createElement(String(prop), props, props?.children),
-    }),
-    AnimatePresence: ({ children }: any) => React.createElement(React.Fragment, null, children),
+    motion: new Proxy(
+      {},
+      {
+        get: (_target, prop: string) => (props: any) =>
+          React.createElement(String(prop), props, props?.children),
+      }
+    ),
+    AnimatePresence: ({ children }: any) =>
+      React.createElement(React.Fragment, null, children),
   }));
 } catch {
   // If mocking isn't available in a particular runner, ignore.
@@ -86,4 +90,18 @@ if (typeof window !== 'undefined') {
   } catch {
     // Ignorar si no se puede sobrescribir (entorno test no soporta overrides)
   }
+}
+
+// Some DOM runner environments (e.g. minimal Happy DOM setups) don't
+// provide certain built-in element constructors like HTMLIFrameElement.
+// react-dom's internal getActiveElementDeep does an `instanceof` check
+// against window.HTMLIFrameElement which will throw if the RHS is
+// undefined. Add a small, safe shim to avoid "Right-hand side of
+// 'instanceof' is not an object" errors in tests.
+try {
+  if (typeof (globalThis as any).HTMLIFrameElement === 'undefined') {
+    (globalThis as any).HTMLIFrameElement = class HTMLIFrameElement {};
+  }
+} catch {
+  // ignore — test environment may disallow global mutation
 }
