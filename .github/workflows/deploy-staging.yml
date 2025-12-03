@@ -6,6 +6,7 @@ permissions: read-all
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     environment: staging
     steps:

@@ -1,13 +1,11 @@
 name: CI
 on:
   push:
-    branches:
-      - main
-      - 'fix/*'
-      - 'feat/*'
+    # Only run the full quality pipeline on pushes to the default branch.
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    # Run for pull requests targeting main; PRs from feature branches will trigger checks
+    branches: [ main ]
 
 # Explicit permissions for the workflow. This grants only the minimal
 # privileges gitleaks needs to create checks/comments (and nothing more).
