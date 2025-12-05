@@ -5,6 +5,7 @@ Este índice en `docs/` resume dónde se encuentra el plan maestro y cuáles son
 Fuente canonical:
 
 - `Plan-mejora/Checklist-Plan-Maestro.md` (checklist maestro, evidencias y pasos por fase).
+- `GPT-51-Codex-Max-Hight/CheckList.md` (CheckList maestro - referencia compartida para validación y sincronización).
 
 Última actualización: 2025-12-05 – sincronizado con el checklist maestro tras cerrar la observabilidad y avanzar la fase 5.
 
