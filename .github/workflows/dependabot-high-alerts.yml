@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch open Dependabot alerts and create issues for HIGH/CRITICAL
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             // This job runs daily (or ad-hoc via workflow_dispatch).
