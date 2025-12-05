@@ -50,9 +50,13 @@ reports/
 # Keep axe-report.json tracked because we rely on it for local QA
 !reports/axe-report.json
 .tmp-lh/
+tmp-lh/
 .lighthouse-temp/
 backend/prisma/prisma/dev.db
-
-backend/prisma/prisma/dev.db
+backend/prisma/*.db
 data/products.js
 data/products.js.map
+Secretos/
+backups/
+localhost_*.report.html
+reports/observability/

@@ -208,6 +208,8 @@ try {
   const binary = resolveBinary();
   console.log(`[trivy] Usando binario: ${binary}`);
   const args = process.argv.slice(2);
+  const reportPath = path.join('reports', 'trivy-report.json');
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   const defaultArgs = [
     'fs',
     '.',
@@ -215,6 +217,10 @@ try {
     'vuln,secret',
     '--severity',
     'HIGH,CRITICAL',
+    '--format',
+    'json',
+    '--output',
+    reportPath,
   ];
 
   const result = spawnSync(binary, args.length ? args : defaultArgs, {

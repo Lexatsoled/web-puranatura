@@ -158,8 +158,21 @@ export const env = {
     process.env.AUTH_RATE_LIMIT_WINDOW,
     60 * 1000
   ),
-  // (previously) AI endpoint rate-limits removed — no built-in AI endpoint
+  metricsToken: process.env.METRICS_TOKEN?.trim(),
+  breakerEnabled: process.env.BREAKER_ENABLED === 'true',
+  legacyFallbackEnabled:
+    process.env.LEGACY_FALLBACK_ENABLED !== 'false' &&
+    (process.env.NODE_ENV || 'development') !== 'production',
+  sqliteBusyTimeoutMs: toNumber(process.env.SQLITE_BUSY_TIMEOUT_MS, 5000),
+  sqlitePragmas: {
+    journalMode: process.env.SQLITE_JOURNAL_MODE || 'wal',
+    synchronous: process.env.SQLITE_SYNCHRONOUS || 'normal',
+  },
+  // (previously) AI endpoint rate-limits removed – no built-in AI endpoint
   // Controla si la política CSP se aplica en modo report-only o enforce.
-  // En entornos de prueba/desarrollo defaulta a true (report-only).
-  cspReportOnly: toBoolean(process.env.CSP_REPORT_ONLY, true),
+  // Si no se define la variable, en producciÓn se fuerza enforce (false) y en dev/staging se usa report-only (true).
+  cspReportOnly:
+    process.env.CSP_REPORT_ONLY !== undefined
+      ? toBoolean(process.env.CSP_REPORT_ONLY, true)
+      : (process.env.NODE_ENV || 'development') !== 'production',
 };

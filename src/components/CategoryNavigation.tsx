@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { OptimizedImage } from './OptimizedImage';
-
-interface Category {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  productCount: number;
-  featured?: boolean;
-}
+import {
+  Category,
+  CategoryScrollBar,
+  FeaturedCategoryCard,
+  RegularCategoryCard,
+} from './CategoryNavigation.helpers';
 
 interface CategoryNavigationProps {
   categories: Category[];
   onCategorySelect: (categoryId: string) => void;
   activeCategory?: string;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
 
 const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   categories,
@@ -25,7 +34,6 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
-  // Monitorear el scroll para efectos visuales
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -38,54 +46,22 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   const featuredCategories = categories.filter((cat) => cat.featured);
   const regularCategories = categories.filter((cat) => !cat.featured);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
-
   return (
     <div className="mb-8">
-      {/* Barra de navegación horizontal sticky */}
       <div
         className={`sticky top-0 z-10 bg-white transition-shadow ${
           isScrolled ? 'shadow-md' : ''
         }`}
       >
         <div className="max-w-7xl mx-auto px-4">
-          <div className="overflow-x-auto py-4 hide-scrollbar">
-            <div className="flex space-x-4 min-w-max">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => onCategorySelect(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                    activeCategory === category.id
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category.name}
-                  <span className="ml-2 text-xs opacity-75">
-                    ({category.productCount})
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <CategoryScrollBar
+            categories={categories}
+            activeCategory={activeCategory}
+            onSelect={onCategorySelect}
+          />
         </div>
       </div>
 
-      {/* Grid de categorías destacadas */}
       <div className="max-w-7xl mx-auto px-4 mt-8">
         <motion.div
           variants={containerVariants}
@@ -94,38 +70,15 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {featuredCategories.map((category) => (
-            <motion.div
+            <FeaturedCategoryCard
               key={category.id}
+              category={category}
               variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="relative rounded-xl overflow-hidden cursor-pointer group"
-              onClick={() => onCategorySelect(category.id)}
-            >
-              <div className="aspect-[16/9] relative">
-                <OptimizedImage
-                  src={category.image}
-                  alt={category.name}
-                  className="object-cover"
-                  aspectRatio={16 / 9}
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-opacity" />
-              </div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-xl font-bold text-white mb-2">
-                  {category.name}
-                </h3>
-                <p className="text-white text-sm opacity-90 mb-4">
-                  {category.description}
-                </p>
-                <span className="text-white text-sm">
-                  {category.productCount} productos
-                </span>
-              </div>
-            </motion.div>
+              onSelect={onCategorySelect}
+            />
           ))}
         </motion.div>
 
-        {/* Categorías regulares en grid más pequeño */}
         <AnimatePresence>
           {(showAllCategories || regularCategories.length <= 6) && (
             <motion.div
@@ -135,30 +88,12 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
               className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
             >
               {regularCategories.map((category) => (
-                <motion.div
+                <RegularCategoryCard
                   key={category.id}
+                  category={category}
                   variants={itemVariants}
-                  whileHover={{ y: -3 }}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
-                  onClick={() => onCategorySelect(category.id)}
-                >
-                  <div className="aspect-square relative">
-                    <OptimizedImage
-                      src={category.image}
-                      alt={category.name}
-                      className="object-cover"
-                      aspectRatio={1}
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h4 className="text-sm font-medium text-gray-800 text-center">
-                      {category.name}
-                    </h4>
-                    <p className="text-xs text-gray-500 text-center mt-1">
-                      {category.productCount} productos
-                    </p>
-                  </div>
-                </motion.div>
+                  onSelect={onCategorySelect}
+                />
               ))}
             </motion.div>
           )}
@@ -191,7 +126,6 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
         )}
       </div>
 
-      {/* Estilos para ocultar la barra de desplazamiento */}
       <style>{`
         .hide-scrollbar {
           -ms-overflow-style: none;

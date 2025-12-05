@@ -1,33 +1,21 @@
-import { useMemo } from 'react';
 import { NextSeo, ProductJsonLd } from 'next-seo';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { Product, ProductImage } from '../types/product';
-import { generateBreadcrumbJsonLd } from '../utils/schemaGenerators';
-import { sanitizeHtml } from '../utils/sanitizer';
 import { useProductDetails } from '../hooks/useProductDetails';
 import { ProductHero } from '../../pages/product/components/ProductHero';
 import { ProductInfo } from '../../pages/product/components/ProductInfo';
 import { useProductSeo } from '../../pages/product/hooks/useProductSeo';
+import { useProductBreadcrumbs } from './product/hooks/useProductBreadcrumbs';
+import BreadcrumbStructuredData from '../../components/product/BreadcrumbStructuredData';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { product, status } = useProductDetails(id);
   const { currentUrl, seoConfig } = useProductSeo(product);
-
-  const breadcrumbs = useMemo(
-    () => [
-      { name: 'Inicio', url: '/' },
-      { name: 'Tienda', url: '/store' },
-      { name: product?.category ?? 'Tienda', url: `/store` },
-      { name: product?.name ?? 'Producto', url: currentUrl },
-    ],
-    [product?.category, product?.name, currentUrl]
-  );
-
-  const sanitizedBreadcrumbJsonLd = useMemo(
-    () => sanitizeHtml(JSON.stringify(generateBreadcrumbJsonLd(breadcrumbs))),
-    [breadcrumbs]
+  const { sanitizedBreadcrumbJsonLd } = useProductBreadcrumbs(
+    product ?? undefined,
+    currentUrl
   );
 
   if (status === 'loading') {
@@ -52,12 +40,7 @@ const ProductPage: React.FC = () => {
           url: currentUrl,
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: sanitizedBreadcrumbJsonLd,
-        }}
-      />
+      <BreadcrumbStructuredData sanitizedJson={sanitizedBreadcrumbJsonLd} />
       <div className="container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

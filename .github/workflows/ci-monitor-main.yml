@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
   # run on pushes to this branch so PRs can be tested
   push:
-    branches: [ ci/monitor-main ]
+    branches: [ci/monitor-main]
 
 permissions:
   actions: read

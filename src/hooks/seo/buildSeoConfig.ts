@@ -1,5 +1,9 @@
 import { NextSeoProps } from 'next-seo';
 import { DEFAULT_SEO_CONFIG } from '../../config/seo.config';
+import {
+  buildCurrentUrl,
+  buildOpenGraphImages,
+} from './buildSeoConfig.helpers';
 
 type SeoProps = Partial<NextSeoProps> & {
   title?: string;
@@ -17,28 +21,22 @@ export const buildSeoConfig = (
   baseUrl: string,
   path: string
 ): NextSeoProps => {
-  const currentUrl = `${baseUrl}${path}`;
+  const currentUrl = buildCurrentUrl(baseUrl, path);
+  const description = props.description || DEFAULT_SEO_CONFIG.description;
+  const canonical = props.url || currentUrl;
+  const type = props.type || 'website';
   return {
     ...DEFAULT_SEO_CONFIG,
     title: props.title,
-    description: props.description || DEFAULT_SEO_CONFIG.description,
-    canonical: props.url || currentUrl,
+    description,
+    canonical,
     openGraph: {
       ...DEFAULT_SEO_CONFIG.openGraph,
       title: props.title,
-      description: props.description || DEFAULT_SEO_CONFIG.description,
-      url: props.url || currentUrl,
-      type: props.type || 'website',
-      images: props.image
-        ? [
-            {
-              url: props.image,
-              width: 1200,
-              height: 630,
-              alt: props.title || DEFAULT_SEO_CONFIG.defaultTitle,
-            },
-          ]
-        : DEFAULT_SEO_CONFIG.openGraph?.images,
+      description,
+      url: canonical,
+      type,
+      images: buildOpenGraphImages(props.image, props.title),
     },
   };
 };

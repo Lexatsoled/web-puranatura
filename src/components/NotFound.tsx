@@ -197,6 +197,10 @@ const NotFound: React.FC<NotFoundProps> = ({
                             src={product.images[0].thumbnail}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
+                            width={300}
+                            height={300}
                           />
                         </div>
                         <h3 className="mt-2 text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">

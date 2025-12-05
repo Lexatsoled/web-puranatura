@@ -4,6 +4,18 @@ import { prisma } from '../prisma';
 import { logger } from '../utils/logger';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 import { createHash } from 'crypto';
+import { CatalogBreaker } from '../services/catalogBreaker';
+import { env } from '../config/env';
+
+const breakerEnabled = env.breakerEnabled;
+const breaker = breakerEnabled
+  ? new CatalogBreaker({
+      failureThreshold: Number(process.env.BREAKER_THRESHOLD ?? 5),
+      windowMs: Number(process.env.BREAKER_WINDOW_MS ?? 30_000),
+      openTimeoutMs: Number(process.env.BREAKER_OPEN_TIMEOUT ?? 60_000),
+      halfOpenProbes: Number(process.env.BREAKER_HALF_OPEN_PROBES ?? 2),
+    })
+  : null;
 
 const router = Router();
 
@@ -58,6 +70,16 @@ const createProductSchema = z.object({
 });
 
 router.get('/', async (req, res, next) => {
+  if (breaker && breaker.shouldShortCircuit()) {
+    return res
+      .status(503)
+      .setHeader('X-Backend-Degraded', 'true')
+      .setHeader('Retry-After', '30')
+      .json({
+        code: 'CATALOG_DEGRADED',
+        message: 'Catálogo temporalmente no disponible',
+      });
+  }
   try {
     const { page, pageSize, category, search } = querySchema.parse(req.query);
     const where = {
@@ -91,82 +113,50 @@ router.get('/', async (req, res, next) => {
         skip: (normalizedPage - 1) * pageSize,
         take: pageSize,
       });
+      breaker?.recordSuccess();
     } catch (dbErr) {
-      // If DB read fails in development try to recover gracefully:
-      // 1) attempt to seed the DB using the bundled seeder (dev-only)
-      // 2) re-query the DB
-      // 3) as a last resort load the legacy frontend data/products.ts module
-      //    (keeps the frontend functional for local development)
+      breaker?.recordFailure();
       logger.warn(
         { err: dbErr, route: req.originalUrl },
-        'Products DB read failed, trying seeding/fallback (dev)'
+        'Products DB read failed'
       );
 
-      // Dev-only: try to seed and re-read if possible
-      if (process.env.NODE_ENV !== 'production') {
+      const allowLegacy =
+        env.legacyFallbackEnabled &&
+        process.env.LEGACY_FALLBACK_ENABLED !== 'false';
+      if (allowLegacy) {
         try {
-          logger.info(
-            'Attempting to seed products after DB read failure (dev)'
+          const fallbackModule: any = await import('../data/products');
+          const legacy =
+            fallbackModule?.products ?? fallbackModule?.default ?? [];
+          const normalizedLegacy = legacy.map((p: any, idx: number) => ({
+            ...p,
+            id: p.id ?? p.slug ?? `legacy-${idx}`,
+            updatedAt: p.updatedAt
+              ? new Date(p.updatedAt)
+              : new Date('1970-01-01T00:00:00.000Z'),
+          }));
+          total = normalizedLegacy.length;
+          const fallbackPage = clampPage(total);
+          const offset = (fallbackPage - 1) * pageSize;
+          items = normalizedLegacy.slice(offset, offset + pageSize);
+          normalizedPage = fallbackPage;
+          res.setHeader('X-Backend-Degraded', 'true');
+        } catch (legacyErr) {
+          logger.error(
+            { err: legacyErr },
+            'Legacy products fallback failed as well'
           );
-          // dynamic import and cast to any to avoid ESM/CJS and typing friction in tests
-          const seedModule: any = await import('../prisma/seed');
-          if (typeof seedModule?.seedProducts === 'function') {
-            await seedModule.seedProducts(prisma);
-            logger.info('Seeding completed, re-querying products (dev)');
-            const results = await Promise.all([
-              prisma.product.findMany({
-                where,
-                orderBy: { createdAt: 'desc' },
-                skip: (page - 1) * pageSize,
-                take: pageSize,
-              }),
-              prisma.product.count({ where }),
-            ]);
-            items = results[0];
-            total = results[1];
-          }
-        } catch (seedErr) {
-          logger.warn(
-            { err: seedErr },
-            'Seed attempt failed, falling back to legacy frontend data (dev)'
-          );
-
-          // Last-resort fallback -> use frontend bundled data/products.ts so UI remains useful locally
-          try {
-            const fallbackModule: any = await import('../data/products');
-            const legacy =
-              fallbackModule?.products ?? fallbackModule?.default ?? [];
-            // Normalize fallback records so they are stable across requests
-            const normalizedLegacy = legacy.map((p: any, idx: number) => ({
-              ...p,
-              // prefer explicit id/slug; otherwise build a deterministic fallback id
-              id: p.id ?? p.slug ?? `legacy-${idx}`,
-              // ensure a stable updatedAt so computed ETags stay consistent
-              updatedAt: p.updatedAt
-                ? new Date(p.updatedAt)
-                : new Date('1970-01-01T00:00:00.000Z'),
-            }));
-            total = normalizedLegacy.length;
-            const fallbackPage = clampPage(total);
-            const offset = (fallbackPage - 1) * pageSize;
-            items = normalizedLegacy.slice(offset, offset + pageSize);
-            normalizedPage = fallbackPage;
-            logger.warn(
-              'Using legacy products fallback due to DB failure (dev)'
-            );
-          } catch (legacyErr) {
-            logger.error(
-              { err: legacyErr },
-              'Legacy products fallback failed as well'
-            );
-            items = [];
-            total = 0;
-          }
+          return res.status(503).setHeader('X-Backend-Degraded', 'true').json({
+            code: 'CATALOG_DEGRADED',
+            message: 'Catálogo temporalmente no disponible',
+          });
         }
       } else {
-        // In production behave conservatively and surface empty list so callers can decide
-        items = [];
-        total = 0;
+        return res.status(503).setHeader('X-Backend-Degraded', 'true').json({
+          code: 'CATALOG_DEGRADED',
+          message: 'Catálogo temporalmente no disponible',
+        });
       }
     }
 
@@ -203,8 +193,11 @@ router.get('/', async (req, res, next) => {
       return catalogResponse.status(304).end();
     }
 
-    return catalogResponse.json(items);
+    const response = catalogResponse.json(items);
+    breaker?.recordSuccess();
+    return response;
   } catch (error) {
+    breaker?.recordFailure();
     next(error);
   }
 });

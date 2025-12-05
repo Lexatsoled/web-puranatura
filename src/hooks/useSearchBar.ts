@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import { buildActions, shouldSearch } from './useSearchBar.helpers';
 import { SearchResult, UseSearchBarOptions } from './useSearchBar.types';
+import { useClickOutside } from './useClickOutside';
 
 export function useSearchBar({
   onSearch,
@@ -15,7 +16,7 @@ export function useSearchBar({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const searchRef = useRef<HTMLDivElement | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const resetState = useCallback(() => {
     setQuery('');
@@ -24,16 +25,7 @@ export function useSearchBar({
     setActiveIndex(-1);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!searchRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(searchRef, () => setIsOpen(false));
 
   const doSearch = useCallback(
     async (q: string) => {
@@ -69,6 +61,7 @@ export function useSearchBar({
 
   const handleKeyDown = (e: { key: string; preventDefault?: () => void }) => {
     if (!isOpen) return;
+
     const actions = buildActions(
       results,
       activeIndex,

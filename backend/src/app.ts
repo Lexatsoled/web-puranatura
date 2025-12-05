@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
+import { randomBytes } from 'crypto';
 import { registerRoutes } from './routes';
 import { env } from './config/env';
 import { prisma } from './prisma';
@@ -15,55 +16,60 @@ import { sendErrorResponse } from './utils/response';
 
 export const app = express();
 
+// Detrás de proxies (NGINX / hosts locales) confiar en el primer proxy
+// para respetar cabeceras como X-Forwarded-For y permitir que cookies Secure
+// y rutas dependientes del proxy funcionen correctamente en staging/infra.
+app.set('trust proxy', 1);
 // Default metrics are collected via `backend/src/utils/metrics.ts` to
 // avoid double-registration — keep the app bootstrap clean here.
 
 app.disable('x-powered-by');
-app.use(
-  helmet({
+
+// CSP con nonce por petición; enforce/reportOnly via env
+app.use((req, res, next) => {
+  const nonce = randomBytes(16).toString('base64');
+  res.locals.cspNonce = nonce;
+
+  const directives: Record<string, any> = {
+    defaultSrc: ["'self'"],
+    scriptSrc: [
+      "'self'",
+      `'nonce-${nonce}'`,
+      'https://www.googletagmanager.com',
+      'https://www.google-analytics.com',
+      'https://connect.facebook.net',
+    ],
+    scriptSrcAttr: ["'none'"],
+    styleSrc: ["'self'", `'nonce-${nonce}'`, 'https://fonts.googleapis.com'],
+    styleSrcAttr: ["'none'"],
+    connectSrc: [
+      "'self'",
+      'https://www.google-analytics.com',
+      'https://www.googletagmanager.com',
+      'https://maps.googleapis.com',
+      'https://maps.gstatic.com',
+      'https://connect.facebook.net',
+    ],
+    imgSrc: ["'self'", 'data:', 'https:', 'https://maps.googleapis.com'],
+    fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    objectSrc: ["'none'"],
+    baseUri: ["'self'"],
+    frameAncestors: ["'none'"],
+    reportUri: ['/api/security/csp-report'],
+  };
+  if (!env.cspReportOnly) directives.upgradeInsecureRequests = [];
+
+  return helmet({
     contentSecurityPolicy: {
-      // `reportOnly` controlado por env para permitir monitorización
-      // en producción pausada y un pase final a enforce.
       reportOnly: env.cspReportOnly,
       useDefaults: false,
-      directives: (() => {
-        // Construimos las directivas y añadimos upgradeInsecureRequests
-        // solo cuando CSP esté en modo enforce.
-        const d: Record<string, any> = {
-          defaultSrc: ["'self'"],
-          scriptSrc: [
-            "'self'",
-            'https://www.googletagmanager.com',
-            'https://www.google-analytics.com',
-            'https://connect.facebook.net',
-          ],
-          styleSrc: [
-            "'self'",
-            "'unsafe-inline'",
-            'https://fonts.googleapis.com',
-          ],
-          connectSrc: [
-            "'self'",
-            'https://www.google-analytics.com',
-            'https://www.googletagmanager.com',
-            'https://maps.googleapis.com',
-            'https://maps.gstatic.com',
-            'https://connect.facebook.net',
-          ],
-          imgSrc: ["'self'", 'data:', 'https:', 'https://maps.googleapis.com'],
-          fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-          objectSrc: ["'none'"],
-          baseUri: ["'self'"],
-          frameAncestors: ["'none'"],
-        };
-        if (!env.cspReportOnly) d.upgradeInsecureRequests = [];
-        return d as any; // cast para cuadrar con la firma de helmet
-      })(),
+      directives,
     },
     hsts: { maxAge: 15552000, includeSubDomains: true, preload: false },
     crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
-  })
-);
+  })(req, res, next);
+});
+
 app.use(
   rateLimit({
     windowMs: env.rateLimitWindowMs,
@@ -95,6 +101,24 @@ app.use(cookieParser());
 app.use(traceIdMiddleware);
 app.use(requestLogger);
 app.use(csrfDoubleSubmit);
+
+// Hardening: headers adicionales base mínimos
+app.use((_req, res, next) => {
+  // Evitar que el Referer salga a terceros por defecto
+  res.setHeader('Referrer-Policy', 'same-origin');
+
+  // Permitir únicamente capacidades muy limitadas (deny-by-default)
+  // Estas directivas son deliberadamente restrictivas; añadir excepciones
+  // solo cuando sean necesarias y documentadas.
+  res.setHeader(
+    'Permissions-Policy',
+    'geolocation=(), microphone=(), camera=(), payment=()'
+  );
+
+  // Protege a usuarios de ciertas descargas inseguras en navegadores antiguos
+  res.setHeader('X-Download-Options', 'noopen');
+  next();
+});
 
 // Respuesta informativa en la raíz para evitar 404 en navegadores
 app.get('/', (_req, res) => {

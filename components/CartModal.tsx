@@ -10,6 +10,7 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
+  const modalTitleId = 'cart-modal-title';
   const {
     cartItems,
     removeFromCart,
@@ -109,7 +110,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           ref={modalRef}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="cart-modal-title"
+          aria-labelledby={modalTitleId}
           className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >

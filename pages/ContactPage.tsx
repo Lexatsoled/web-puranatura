@@ -56,6 +56,7 @@ const ContactPage: React.FC = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
+                  autoComplete="name"
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 />
               </div>
@@ -73,6 +74,7 @@ const ContactPage: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
+                  autoComplete="name"
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 />
               </div>
@@ -90,6 +92,7 @@ const ContactPage: React.FC = () => {
                   required
                   value={formData.message}
                   onChange={handleChange}
+                  autoComplete="name"
                   className="mt-1 block w-full px-3 py-2 bg-white/80 border border-green-200 rounded-md shadow-sm focus:outline-none focus:ring-green-400 focus:border-green-500"
                 ></textarea>
               </div>
