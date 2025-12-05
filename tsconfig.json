@@ -36,6 +36,7 @@
     "temp_trace_extract1",
     "tools/githooks",
     "scripts",
+    "Plan-mejora",
     "archive",
     "archive/**/*",
     "e2e",

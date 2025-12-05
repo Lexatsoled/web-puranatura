@@ -20,18 +20,42 @@ if (testEnv) {
 // can lead to unhandled errors in the JSDOM environment. Tests don't
 // need motion behaviour — only structure and accessibility.
 try {
-  vi.mock('framer-motion', () => ({
-    // Proxy any motion.<tag> usage to a plain React element of that tag
-    motion: new Proxy(
-      {},
-      {
-        get: (_target, prop: string) => (props: any) =>
-          React.createElement(String(prop), props, props?.children),
+  vi.mock('framer-motion', () => {
+    // Remove motion-only props so they don't end up as invalid DOM attributes.
+    const stripMotionProps = (props: any = {}) => {
+      const { children, ...rest } = props;
+      const domSafe = { ...rest };
+      const toRemove = [
+        'whileHover',
+        'onHoverStart',
+        'onHoverEnd',
+        'layout',
+        'layoutId',
+        'transition',
+        'animate',
+        'initial',
+        'exit',
+      ];
+      for (const key of toRemove) {
+        if (key in domSafe) delete (domSafe as any)[key];
       }
-    ),
-    AnimatePresence: ({ children }: any) =>
-      React.createElement(React.Fragment, null, children),
-  }));
+      return { children, domSafe };
+    };
+
+    return {
+      motion: new Proxy(
+        {},
+        {
+          get: (_target, prop: string) => (props: any) => {
+            const { children, domSafe } = stripMotionProps(props);
+            return React.createElement(String(prop), domSafe, children);
+          },
+        }
+      ),
+      AnimatePresence: ({ children }: any) =>
+        React.createElement(React.Fragment, null, children),
+    };
+  });
 } catch {
   // If mocking isn't available in a particular runner, ignore.
 }

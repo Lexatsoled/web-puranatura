@@ -35,11 +35,15 @@ export const ProfileForm: React.FC<Props> = ({
   <div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label
+          className="block text-sm font-medium text-gray-700"
+          htmlFor="profile-first-name"
+        >
           Nombre
         </label>
         <input
           type="text"
+          id="profile-first-name"
           name="firstName"
           value={formData.firstName}
           onChange={onChange}
@@ -48,11 +52,15 @@ export const ProfileForm: React.FC<Props> = ({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label
+          className="block text-sm font-medium text-gray-700"
+          htmlFor="profile-last-name"
+        >
           Apellido
         </label>
         <input
           type="text"
+          id="profile-last-name"
           name="lastName"
           value={formData.lastName}
           onChange={onChange}
@@ -61,11 +69,15 @@ export const ProfileForm: React.FC<Props> = ({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label
+          className="block text-sm font-medium text-gray-700"
+          htmlFor="profile-phone"
+        >
           Teléfono
         </label>
         <input
           type="tel"
+          id="profile-phone"
           name="phone"
           value={formData.phone}
           onChange={onChange}
@@ -74,9 +86,15 @@ export const ProfileForm: React.FC<Props> = ({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <label
+          className="block text-sm font-medium text-gray-700"
+          htmlFor="profile-email"
+        >
+          Email
+        </label>
         <input
           type="email"
+          id="profile-email"
           name="email"
           value={formData.email}
           onChange={onChange}

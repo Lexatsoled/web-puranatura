@@ -23,8 +23,9 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       className="bg-white shadow-md sticky top-0 z-50"
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

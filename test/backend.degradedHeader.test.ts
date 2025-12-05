@@ -8,10 +8,11 @@ process.env.DATABASE_URL = 'file:./backend/test-degraded.sqlite';
 process.env.JWT_SECRET = 'test';
 process.env.JWT_REFRESH_SECRET = 'refresh';
 process.env.NODE_ENV = 'development';
+process.env.BREAKER_ENABLED = 'true';
+process.env.LEGACY_FALLBACK_ENABLED = 'false';
 
 import { app, closeApp } from '../backend/src/app';
 import { prisma } from '../backend/src/prisma';
-import * as seedModule from '../backend/prisma/seed';
 
 afterAll(async () => {
   vi.restoreAllMocks();
@@ -23,22 +24,9 @@ describe('X-Backend-Degraded header semantics', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns X-Backend-Degraded true when DB read succeeds but total is 0 (empty DB)', async () => {
-    // simulate a healthy DB returning empty result set
-    vi.spyOn(prisma.product, 'findMany').mockResolvedValue([] as any);
-    vi.spyOn(prisma.product, 'count').mockResolvedValue(0 as any);
-
-    const res = await request(app).get('/api/products');
-    expect(res.status).toBe(200);
-    expect(res.headers['x-backend-degraded']).toBe('true');
-  });
-
-  // NOTE: a DB-failure -> seed-succeeds path is tricky to simulate reliably in this
-  // test harness (seed may attempt real Prisma writes). Keep a deterministic
-  // case: DB empty -> degraded=true.
-
-  it('returns X-Backend-Degraded true when DB read fails, seed fails and legacy fallback provides no items', async () => {
-    // Simulate DB failures
+  it('returns 503 with X-Backend-Degraded when DB read fails and fallback disabled', async () => {
+    process.env.BREAKER_ENABLED = 'true';
+    process.env.LEGACY_FALLBACK_ENABLED = 'false';
     vi.spyOn(prisma.product, 'findMany').mockRejectedValue(
       new Error('Simulated DB read failure') as any
     );
@@ -46,24 +34,8 @@ describe('X-Backend-Degraded header semantics', () => {
       new Error('Simulated DB count failure') as any
     );
 
-    // Make seed fail so code reaches legacy fallback
-    vi.spyOn(seedModule, 'seedProducts').mockRejectedValue(
-      new Error('Simulated seed failure') as any
-    );
-
-    // Mock legacy module to return empty products array
-    const path = await import('path');
-    // tests now mock the backend-local fallback module path
-    const abs = path.resolve(__dirname, '../backend/src/data/products');
-    // ensure the dynamic import used by the route picks up our mock
-    // use doMock (not hoisted) so we can compute the absolute path at runtime
-    vi.doMock(abs, () => ({ products: [] }));
-
     const res = await request(app).get('/api/products');
-    expect(res.status).toBe(200);
-    // final total is 0 -> degraded true
+    expect(res.status).toBe(503);
     expect(res.headers['x-backend-degraded']).toBe('true');
-    // Reset module registry after test to avoid mock leakage
-    vi.resetModules();
   });
 });

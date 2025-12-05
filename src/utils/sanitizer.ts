@@ -4,7 +4,7 @@ import { sanitizeObject } from './sanitizeObject';
 export { sanitizeHtml, sanitizeText, sanitizeUrl, sanitizeObject };
 
 export const useSanitizer = () => ({
-  sanitizeFormData: <T extends object>(formData: T): T =>
+  sanitizeFormData: <T extends Record<string, unknown>>(formData: T): T =>
     sanitizeObject(formData),
   sanitizeHtml,
   sanitizeText,

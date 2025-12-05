@@ -1,12 +1,8 @@
 import React from 'react';
 import type { SerieTemporal } from '../../data/metricsDashboard';
+import { formatMetricValue } from './metricCardUtils';
 
-export interface ChartSectionProps {
-  serie: SerieTemporal;
-  formatValor: (valor: number, unidad: SerieTemporal['unidad']) => string;
-}
-
-const ChartSection: React.FC<ChartSectionProps> = ({ serie, formatValor }) => {
+const ChartSection: React.FC<{ serie: SerieTemporal }> = ({ serie }) => {
   return (
     <article className="bg-white/90 border border-emerald-100 rounded-xl shadow-sm p-4">
       <header className="mb-3 flex items-center justify-between">
@@ -23,7 +19,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({ serie, formatValor }) => {
             <li key={p.label} className="flex justify-between">
               <span className="text-slate-600">{p.label}</span>
               <strong className="text-slate-900">
-                {formatValor(p.valor, serie.unidad)}
+                {formatMetricValue(p.valor, serie.unidad)}
               </strong>
             </li>
           ))}

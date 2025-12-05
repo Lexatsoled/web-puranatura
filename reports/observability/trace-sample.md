@@ -1,22 +1,22 @@
 ﻿# Muestras de trazas
 
 ```
-  traceId: '61f027a37afa1bd71a74b60281cb31c2',
+  traceId: '91d883b521c9d419493087f2aedb4b8c',
   parentSpanContext: undefined,
   traceState: undefined,
   name: 'GET /api/health',
-  id: '40bff408f0bd6ca1',
+  id: 'f7bf7efabcfd54ea',
 ---
-  traceId: '61f027a37afa1bd71a74b60281cb31c2'
+  traceId: '91d883b521c9d419493087f2aedb4b8c'
 } GET /api/health 200
 {
   resource: {
     attributes: { 'service.name': 'puranatura-api', 'service.version': '0.0.0' }
 ---
-  traceId: 'e6b08072a1594643a81097dfcb654584',
+  traceId: '6429bf3c88b7f97f1acb81ec6c01e7fc',
   parentSpanContext: undefined,
   traceState: undefined,
   name: 'GET /',
-  id: 'b9da8844666a72bc',
+  id: 'a96c1a9d533760a9',
 ---
 ```

@@ -1,9 +1,19 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, test, expect, vi } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import AuthModal from '../../components/AuthModal';
 import { AuthProvider } from '../../contexts/AuthContext';
 
 describe('AuthModal accessibility', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
+    cleanup();
+  });
+
   test('focus moves to close button when opened and Escape calls onClose', () => {
     const onClose = vi.fn();
     render(

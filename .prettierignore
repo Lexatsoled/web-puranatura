@@ -25,3 +25,6 @@ docs_inventory.csv
 .tmp-lh
 .lighthouse-temp
 .tmp
+
+# Ignore Plan-mejora design and skeleton files (formatting not required)
+Plan-mejora/**

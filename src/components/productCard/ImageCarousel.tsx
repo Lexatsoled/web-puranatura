@@ -44,7 +44,10 @@ export const ImageCarousel = ({
         {images.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 rounded-full transition-colors ${
+            type="button"
+            aria-label={`Ver imagen ${index + 1} de ${images.length}`}
+            aria-pressed={index === currentImageIndex}
+            className={`w-3 h-3 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
               index === currentImageIndex
                 ? 'bg-green-500'
                 : 'bg-white/50 hover:bg-white/70'

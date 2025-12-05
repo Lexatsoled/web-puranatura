@@ -1,11 +1,7 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { CartProvider } from './contexts/CartContext';
-import { AuthProvider } from './contexts/AuthContext';
-import { WishlistProvider } from './contexts/WishlistContext';
-import { NotificationProvider } from './src/contexts/NotificationContext';
-import SimpleLayout from './SimpleLayout';
 
+const SimpleLayout = React.lazy(() => import('./SimpleLayout'));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
@@ -20,50 +16,43 @@ const WishlistPage = React.lazy(() => import('./pages/WishlistPage'));
 const MetricsDashboardPage = React.lazy(
   () => import('./pages/MetricsDashboardPage')
 );
-const CartModal = React.lazy(() => import('./components/CartModal'));
+
+const LayoutFallback = () => (
+  <div className="flex min-h-screen items-center justify-center bg-emerald-50 text-green-800 p-6">
+    <div role="status" aria-live="polite">
+      Cargando la capa visual…
+    </div>
+  </div>
+);
 
 const App: React.FC = () => {
-  const [isCartOpen, setCartOpen] = useState(false);
-
   return (
-    <NotificationProvider>
-      <AuthProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <SimpleLayout onCartClick={() => setCartOpen(true)}>
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center py-16 text-gray-600">
-                    Cargando...
-                  </div>
-                }
-              >
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/sobre-nosotros" element={<AboutPage />} />
-                  <Route path="/servicios" element={<ServicesPage />} />
-                  <Route path="/tienda" element={<StorePage />} />
-                  <Route path="/testimonios" element={<TestimonialsPage />} />
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/contacto" element={<ContactPage />} />
-                  <Route path="/perfil" element={<ProfilePage />} />
-                  <Route path="/pedidos" element={<OrdersPage />} />
-                  <Route path="/direcciones" element={<AddressesPage />} />
-                  <Route path="/lista-deseos" element={<WishlistPage />} />
-                  <Route path="/metricas" element={<MetricsDashboardPage />} />
-                </Routes>
-              </Suspense>
-            </SimpleLayout>
-            <Suspense fallback={null}>
-              <CartModal
-                isOpen={isCartOpen}
-                onClose={() => setCartOpen(false)}
-              />
-            </Suspense>
-          </WishlistProvider>
-        </CartProvider>
-      </AuthProvider>
-    </NotificationProvider>
+    <Suspense fallback={<LayoutFallback />}>
+      <SimpleLayout>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center py-16 text-gray-600">
+              Cargando...
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/sobre-nosotros" element={<AboutPage />} />
+            <Route path="/servicios" element={<ServicesPage />} />
+            <Route path="/tienda" element={<StorePage />} />
+            <Route path="/testimonios" element={<TestimonialsPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contacto" element={<ContactPage />} />
+            <Route path="/perfil" element={<ProfilePage />} />
+            <Route path="/pedidos" element={<OrdersPage />} />
+            <Route path="/direcciones" element={<AddressesPage />} />
+            <Route path="/lista-deseos" element={<WishlistPage />} />
+            <Route path="/metricas" element={<MetricsDashboardPage />} />
+          </Routes>
+        </Suspense>
+      </SimpleLayout>
+    </Suspense>
   );
 };
 

@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { AnalyticsEvent } from '../../types/analytics';
+import { getClientIp } from './network.helpers';
 
 export interface ExtendedAnalyticsEvent extends AnalyticsEvent {
   timestamp: string;
@@ -12,11 +13,6 @@ export interface ExtendedAnalyticsEvent extends AnalyticsEvent {
 
 export const validateEvent = (event: Partial<ExtendedAnalyticsEvent>) =>
   Boolean(event?.category && event?.action);
-
-export const getClientIp = (req: Request) =>
-  Array.isArray(req.headers['x-forwarded-for'])
-    ? req.headers['x-forwarded-for'][0]
-    : req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
 export const enrichEvent = (event: ExtendedAnalyticsEvent, req: Request) => ({
   ...event,

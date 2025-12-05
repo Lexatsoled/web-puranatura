@@ -49,8 +49,15 @@ const authLimiter = rateLimit({
   // In tests we allow a header override to make the limiter deterministic.
   // In non-test envs, always use req.ip to avoid trusting client-supplied data.
   keyGenerator: (req) => {
-    if (env.nodeEnv === 'test')
-      return String(req.headers['x-rate-key'] ?? req.ip);
+    if (env.nodeEnv === 'test') {
+      const key = req.headers['x-rate-key'];
+      if (key) return String(key);
+    }
+    const bodyEmail =
+      typeof req.body === 'object' && req.body?.email
+        ? String(req.body.email).toLowerCase()
+        : null;
+    if (bodyEmail) return bodyEmail;
     return String(req.ip);
   },
 
@@ -69,12 +76,16 @@ router.use(authLimiter);
 
 // no-op: limiter is attached above; keep handlers concise
 
-const cookieBase = {
+const isSecureCookies = () =>
+  (process.env.NODE_ENV ?? env.nodeEnv) === 'production' ||
+  process.env.FORCE_SECURE_COOKIES === 'true';
+
+const cookieBase = () => ({
   httpOnly: true,
   sameSite: 'strict' as const,
-  secure: env.nodeEnv === 'production',
+  secure: isSecureCookies(),
   path: '/api/auth',
-};
+});
 
 type DurationInput = Parameters<typeof ms>[0];
 
@@ -94,15 +105,15 @@ const refreshTokenMs = toMilliseconds(
   7 * 24 * 60 * 60 * 1000
 );
 
-const accessCookieOptions = {
-  ...cookieBase,
+const accessCookieOptions = () => ({
+  ...cookieBase(),
   maxAge: accessTokenMs,
-};
+});
 
-const refreshCookieOptions = {
-  ...cookieBase,
+const refreshCookieOptions = () => ({
+  ...cookieBase(),
   maxAge: refreshTokenMs,
-};
+});
 
 const setAuthCookies = (res: Response, userId: string) => {
   const token = jwt.sign({ sub: userId }, env.jwtSecret, {
@@ -117,8 +128,8 @@ const setAuthCookies = (res: Response, userId: string) => {
     }
   );
 
-  res.cookie('token', token, accessCookieOptions);
-  res.cookie('refreshToken', refreshToken, refreshCookieOptions);
+  res.cookie('token', token, accessCookieOptions());
+  res.cookie('refreshToken', refreshToken, refreshCookieOptions());
 
   // persist refresh token (file-based store) to support rotation/revocation
   try {
@@ -138,11 +149,12 @@ const clearAuthCookies = (res: Response) => {
   // Use the same non-ephemeral options used to set the cookie so the
   // browser removes the cookie correctly; do NOT pass maxAge into
   // clearCookie (deprecated) — express will set the cookie to expire.
+  const base = cookieBase();
   const clearOpts = {
-    path: cookieBase.path,
-    httpOnly: cookieBase.httpOnly,
-    sameSite: cookieBase.sameSite,
-    secure: cookieBase.secure,
+    path: base.path,
+    httpOnly: base.httpOnly,
+    sameSite: base.sameSite,
+    secure: base.secure,
   } as any;
 
   try {
@@ -298,8 +310,8 @@ router.post('/refresh', (req, res) => {
     const newAccessToken = jwt.sign({ sub: decoded.sub }, env.jwtSecret, {
       expiresIn: Math.max(1, Math.floor(accessTokenMs / 1000)),
     });
-    res.cookie('token', newAccessToken, accessCookieOptions);
-    res.cookie('refreshToken', newRefreshToken, refreshCookieOptions);
+    res.cookie('token', newAccessToken, accessCookieOptions());
+    res.cookie('refreshToken', newRefreshToken, refreshCookieOptions());
     return res.json({ ok: true });
   } catch (error) {
     clearAuthCookies(res);
