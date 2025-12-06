@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // Use simple CSS transitions for NotFound page instead of framer-motion
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
-import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 interface NotFoundProps {
   suggestedProducts?: Product[];
@@ -33,9 +33,7 @@ const NotFound: React.FC<NotFoundProps> = ({
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-3xl w-full space-y-8 text-center">
         {/* Código de error animado */}
-        <div className="text-9xl font-bold text-green-600 opacity-20">  
-          404
-        </div>
+        <div className="text-9xl font-bold text-green-600 opacity-20">404</div>
 
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -142,59 +140,62 @@ const NotFound: React.FC<NotFoundProps> = ({
         {/* Sugerencias */}
         {showSuggestions && (
           <div className="mt-12">
-              {suggestedProducts.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-lg font-medium text-gray-900 mb-4">
-                    Productos que te podrían interesar
-                  </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {suggestedProducts.slice(0, 3).map((product) => (
-                      <Link
-                        key={product.id}
-                        to={`/product/${product.id}`}
-                        className="group block"
-                      >
-                        <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                          <img
-                            src={product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            loading="lazy"
-                            decoding="async"
-                            width={300}
-                            height={300}
-                          />
-                        </div>
-                        <h3 className="mt-2 text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm text-green-600">
-                          DOP ${product.price.toFixed(2)}
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
+            {suggestedProducts.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">
+                  Productos que te podrían interesar
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {suggestedProducts.slice(0, 3).map((product) => (
+                    <Link
+                      key={product.id}
+                      to={`/product/${product.id}`}
+                      className="group block"
+                    >
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                          src={
+                            product?.images?.[0]?.thumbnail ??
+                            DEFAULT_PRODUCT_IMAGE
+                          }
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          decoding="async"
+                          width={300}
+                          height={300}
+                        />
+                      </div>
+                      <h3 className="mt-2 text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-green-600">
+                        DOP ${product.price.toFixed(2)}
+                      </p>
+                    </Link>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {popularCategories.length > 0 && (
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900 mb-4">
-                    Categorías populares
-                  </h2>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {popularCategories.map((category) => (
-                      <Link
-                        key={category.id}
-                        to={`/category/${category.id}`}
-                        className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border border-gray-200"
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                  </div>
+            {popularCategories.length > 0 && (
+              <div>
+                <h2 className="text-lg font-medium text-gray-900 mb-4">
+                  Categorías populares
+                </h2>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {popularCategories.map((category) => (
+                    <Link
+                      key={category.id}
+                      to={`/category/${category.id}`}
+                      className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border border-gray-200"
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 // Use CSS-based cross-fade for carousel images instead of framer-motion
 import { Product } from '../../types/product';
 import { OptimizedImage } from '../OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 type Props = {
   images: Product['images'];
@@ -32,8 +32,9 @@ export const ImageCarousel = ({
           <OptimizedImage
             src={
               (idx === currentImageIndex
-                ? img?.full ?? img?.thumbnail
-                : images?.[0]?.full ?? images?.[0]?.thumbnail) ?? DEFAULT_PRODUCT_IMAGE
+                ? (img?.full ?? img?.thumbnail)
+                : (images?.[0]?.full ?? images?.[0]?.thumbnail)) ??
+              DEFAULT_PRODUCT_IMAGE
             }
             alt={productName}
             className="w-full h-full object-cover"

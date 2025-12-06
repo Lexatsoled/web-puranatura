@@ -3,7 +3,7 @@ import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { formatCurrency } from '../src/utils/intl';
-import { DEFAULT_PRODUCT_IMAGE } from '../src/constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 interface ProductCardProps {
   product: Product;
@@ -33,7 +33,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // defensive: product.images might be undefined or empty — use safe access + fallback
   const cardImageUrl =
-    product?.images?.[1]?.full ?? product?.images?.[0]?.full ?? DEFAULT_PRODUCT_IMAGE;
+    product?.images?.[1]?.full ??
+    product?.images?.[0]?.full ??
+    DEFAULT_PRODUCT_IMAGE;
   const isProductInWishlist = isInWishlist(product.id);
 
   return (

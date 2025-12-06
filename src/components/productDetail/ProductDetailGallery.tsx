@@ -3,7 +3,7 @@ import React from 'react';
 // the framer-motion runtime into shared bundles.
 import { Product, ProductImage } from '../../types';
 import { OptimizedImage } from '../OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 type Props = {
   product: Product;

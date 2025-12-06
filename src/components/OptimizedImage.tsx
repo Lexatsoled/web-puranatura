@@ -4,7 +4,7 @@ import { ImageErrorFallback } from './optimizedImage/ErrorFallback';
 import { ImagePlaceholder } from './optimizedImage/Placeholder';
 import { OptimizedImageProps } from './optimizedImage/types';
 import { useOptimizedImage } from './optimizedImage/useOptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,

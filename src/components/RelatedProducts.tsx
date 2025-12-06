@@ -2,7 +2,7 @@ import React from 'react';
 // Use CSS/Tailwind for simple card hover effects instead of framer-motion
 import { Product } from '../types';
 import { OptimizedImage } from './OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 interface RelatedProductsProps {
   currentProduct: Product;

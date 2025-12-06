@@ -1,7 +1,7 @@
 // Use CSS cross-fade for gallery main image; avoid framer-motion
 import { OptimizedImage } from '../OptimizedImage';
 import { ProductImage } from '../../types/product';
-import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 export const GalleryMainImage = ({
   images,
@@ -26,7 +26,7 @@ export const GalleryMainImage = ({
         <OptimizedImage
           src={
             (idx === selectedImage
-              ? img?.full ?? img?.thumbnail
+              ? (img?.full ?? img?.thumbnail)
               : images?.[0]?.thumbnail) ?? DEFAULT_PRODUCT_IMAGE
           }
           alt={`${productName} - Imagen ${idx + 1}`}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Product } from '../../types';
 import { OptimizedImage } from '../OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 type Props = {
   product: Product;
@@ -9,7 +9,6 @@ type Props = {
   differentFeatures: string[];
   onRemove: (id: string) => void;
 };
-
 
 export const ProductCardCompare: React.FC<Props> = ({
   product,

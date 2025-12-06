@@ -2,7 +2,7 @@ import React from 'react';
 import { OptimizedImage } from '../OptimizedImage';
 import { SearchResult } from '../../hooks/useSearchBar';
 import { Product } from '../../types';
-import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 import { Category } from './SearchBar.types';
 
 type Props = {
@@ -97,15 +97,18 @@ export const SearchBarSuggestions: React.FC<Props> = ({
                     id: product.id,
                     title: product.name,
                     subtitle: `DOP $${product.price.toFixed(2)}`,
-                    image: product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE,
+                    image:
+                      product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE,
                     url: `/product/${product.id}`,
                   })
                 }
                 className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="w-12 h-12 rounded-lg overflow-hidden mr-3">
-                    <OptimizedImage
-                    src={product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE}
+                  <OptimizedImage
+                    src={
+                      product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE
+                    }
                     alt={product.name}
                     className="w-full h-full object-cover"
                     aspectRatio={1}

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '../types';
-import { DEFAULT_PRODUCT_IMAGE } from '../src/constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 // Mantiene la lista de deseos sincronizada con localStorage y expone utilidades para la UI.
 

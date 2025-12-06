@@ -2,7 +2,7 @@ import React from 'react';
 // Using CSS-based transitions for wishlist items instead of framer-motion
 import { Product } from '../types';
 import { OptimizedImage } from './OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 // Layout/animation behavior replaced with CSS classes
 

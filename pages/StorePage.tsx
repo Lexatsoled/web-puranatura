@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import ProductCard from '../components/ProductCard';
-import ErrorBoundary from '../src/components/ErrorBoundary';
+import ErrorBoundary from '@/src/components/ErrorBoundary';
 import { useStorePage, SortOption } from './store/useStorePage';
 
 const ProductDetailModal = React.lazy(
@@ -30,10 +30,10 @@ const StorePage: React.FC = () => {
 
         <ErrorBoundary>
           <StoreBody
-          isLoading={state.isLoadingProducts}
-          apiError={state.apiError}
-          products={state.paginatedProducts}
-          onViewDetails={state.handleViewDetails}
+            isLoading={state.isLoadingProducts}
+            apiError={state.apiError}
+            products={state.paginatedProducts}
+            onViewDetails={state.handleViewDetails}
           />
         </ErrorBoundary>
 
