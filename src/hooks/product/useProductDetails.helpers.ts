@@ -22,7 +22,7 @@ export const getFallbackProducts = async (): Promise<Product[]> => {
         return fallbackCache;
       }
     }
-  } catch (err) {
+  } catch {
     // ignore and fall back to module import in dev
   }
 

@@ -1,6 +1,6 @@
 import * as matchers from '@testing-library/jest-dom/matchers';
 import { expect, vi } from 'vitest';
-import React from 'react';
+// React import removed — not needed in this setup file (avoids unused var TS error)
 
 // extend vitest expect with jest-dom matchers
 expect.extend(matchers as any);

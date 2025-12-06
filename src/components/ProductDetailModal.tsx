@@ -35,14 +35,18 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
   // Keep this component simple: animate only on mount with CSS classes.
   // We remove framer-motion so the runtime won't be pulled into shared chunks.
-  if (!isOpen) return null;
 
+  // NOTE: hooks must be executed in the same order every render. Keep
+  // state/effect hooks at the top-level even if rendering early-return
+  // paths are used later.
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
+  if (!isOpen) return null;
 
   const onAddAndClose = async () => {
     await handleAddToCart();
@@ -63,28 +67,28 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         }`}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
-            <div className="grid md:grid-cols-2 h-full">
-              <ProductDetailGallery
-                product={product}
-                selectedImage={selectedImage}
-                setSelectedImage={setSelectedImage}
-                isZoomed={isZoomed}
-                setIsZoomed={setIsZoomed}
-                mousePosition={mousePosition}
-                onMouseMove={handleMouseMove}
-              />
+        <div className="grid md:grid-cols-2 h-full">
+          <ProductDetailGallery
+            product={product}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            isZoomed={isZoomed}
+            setIsZoomed={setIsZoomed}
+            mousePosition={mousePosition}
+            onMouseMove={handleMouseMove}
+          />
 
-              <ProductDetailInfo
-                product={product}
-                quantity={quantity}
-                setQuantity={setQuantity}
-                isAddingToCart={isAddingToCart}
-                onAddToCart={onAddAndClose}
-              />
-            </div>
-          </div>
+          <ProductDetailInfo
+            product={product}
+            quantity={quantity}
+            setQuantity={setQuantity}
+            isAddingToCart={isAddingToCart}
+            onAddToCart={onAddAndClose}
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ProductDetailModal;

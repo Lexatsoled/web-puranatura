@@ -16,16 +16,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onViewDetails,
   priority = false,
 }) => {
-  // defensive: if a consumer accidentally passes undefined/null, render empty placeholder
-  if (!product) {
-    // eslint-disable-next-line no-console
-    console.warn('ProductCard rendered without a product');
-    return (
-      <div className="product-card bg-white rounded-lg shadow-sm overflow-hidden p-4">
-        <div className="text-sm text-gray-500">Producto no disponible</div>
-      </div>
-    );
-  }
+  // product is a required prop for this component — callers must provide it.
+  // The consumer of ProductCard should always pass a valid `product` object.
 
   const {
     isHovered,
