@@ -59,4 +59,23 @@ describe('ProductCard', () => {
     const image = getAllByAltText(mockProduct.name)[0];
     expect(image).toHaveAttribute('src', mockProduct.images[0].full);
   });
+
+  it('renders correctly when images are missing (no crash)', () => {
+    const handleViewDetails = vi.fn();
+    const noImagesProduct = {
+      ...mockProduct,
+      id: '2',
+      images: undefined as any,
+    };
+
+    const { getByRole, queryByAltText } = render(
+      <ProductCard product={noImagesProduct} onViewDetails={handleViewDetails} />
+    );
+
+    // Product info should still render
+    expect(getByRole('heading', { name: noImagesProduct.name })).toBeInTheDocument();
+
+    // There should be no image rendered for the product name (image carousel is empty)
+    expect(queryByAltText(noImagesProduct.name)).toBeNull();
+  });
 });

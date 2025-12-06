@@ -1,6 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS cross-fade for gallery main image; avoid framer-motion
 import { OptimizedImage } from '../OptimizedImage';
 import { ProductImage } from '../../types/product';
+import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
 
 export const GalleryMainImage = ({
   images,
@@ -14,24 +15,26 @@ export const GalleryMainImage = ({
   onClick: () => void;
 }) => (
   <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group">
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={selectedImage}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="absolute inset-0 cursor-zoom-in"
+    {images.map((img, idx) => (
+      <div
+        key={idx}
         onClick={onClick}
+        className={`absolute inset-0 cursor-zoom-in transition-opacity duration-300 ${
+          idx === selectedImage ? 'opacity-100 z-10' : 'opacity-0 z-0'
+        }`}
       >
         <OptimizedImage
-          src={images[selectedImage]?.full || images[selectedImage]?.thumbnail}
-          alt={`${productName} - Imagen ${selectedImage + 1}`}
+          src={
+            (idx === selectedImage
+              ? img?.full ?? img?.thumbnail
+              : images?.[0]?.thumbnail) ?? DEFAULT_PRODUCT_IMAGE
+          }
+          alt={`${productName} - Imagen ${idx + 1}`}
           className="w-full h-full object-cover"
-          priority={selectedImage === 0}
+          priority={idx === 0}
           aspectRatio={1}
         />
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    ))}
   </div>
 );

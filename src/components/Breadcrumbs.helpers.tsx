@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+// Using CSS/Tailwind transitions instead of framer-motion for simple breadcrumb
 
 export interface BreadcrumbItemProps {
   label: string;
@@ -8,17 +8,14 @@ export interface BreadcrumbItemProps {
   isCurrentPage?: boolean;
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: { opacity: 1, x: 0 },
-};
+// Keep markup simple — CSS handles hover/appearance animations.
 
 export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({
   label,
   path,
   isCurrentPage,
 }) => (
-  <motion.li variants={itemVariants} className="flex items-center">
+  <li className="flex items-center transition-all duration-150 ease-out transform -translate-x-1 opacity-0 animate-breadcrumb-in">
     {isCurrentPage ? (
       <span className="text-gray-500 font-medium" aria-current="page">
         {label}
@@ -31,17 +28,13 @@ export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({
         {label}
       </Link>
     )}
-  </motion.li>
+  </li>
 );
 
 export const BreadcrumbSeparator: React.FC<{
   separator: React.ReactNode;
 }> = ({ separator }) => (
-  <motion.li
-    variants={itemVariants}
-    className="mx-2 text-gray-400"
-    aria-hidden="true"
-  >
+  <li className="mx-2 text-gray-400" aria-hidden="true">
     {separator}
-  </motion.li>
+  </li>
 );

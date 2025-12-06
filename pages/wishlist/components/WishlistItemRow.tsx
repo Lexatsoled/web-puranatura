@@ -1,11 +1,10 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS transitions instead of framer-motion for list rows
 import { formatCurrency } from '../../../src/utils/intl';
 import { WishlistItem } from '../useWishlistPage';
 
 type Props = {
   item: WishlistItem;
-  index: number;
   selected: boolean;
   onToggleSelect: (id: string) => void;
   onAddToCart: (item: WishlistItem) => void;
@@ -15,19 +14,15 @@ type Props = {
 
 export const WishlistItemRow: React.FC<Props> = ({
   item,
-  index,
   selected,
   onToggleSelect,
   onAddToCart,
   onRemove,
   formatDate,
 }) => (
-  <motion.div
+  <div
     key={item.id}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.1 }}
-    className={`flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow ${
+    className={`flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow transform-gpu ${
       selected ? 'border-blue-300 bg-blue-50' : 'border-gray-200'
     }`}
   >
@@ -108,5 +103,5 @@ export const WishlistItemRow: React.FC<Props> = ({
         </svg>
       </button>
     </div>
-  </motion.div>
+  </div>
 );

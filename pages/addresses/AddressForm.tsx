@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+﻿// Use static rendering + CSS transitions for address form
 import { Address, FormData } from './useAddressesState';
 import { InputField, SelectField, FormActions } from './AddressFormFields';
 
@@ -21,11 +21,9 @@ export const AddressForm = ({
   onSubmit,
   onCancel,
 }: Props) => (
-  <motion.div
+  <div
     ref={formRef}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-opacity duration-200"
   >
     <h3 className="text-lg font-semibold text-gray-900 mb-4">
       {editingAddress ? 'Editar Direccion' : 'Agregar Nueva Direccion'}
@@ -105,5 +103,5 @@ export const AddressForm = ({
 
       <FormActions isEditing={Boolean(editingAddress)} onCancel={onCancel} />
     </form>
-  </motion.div>
+  </div>
 );

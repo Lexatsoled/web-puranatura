@@ -1,7 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS/Tailwind for simple card hover effects instead of framer-motion
 import { Product } from '../types';
 import { OptimizedImage } from './OptimizedImage';
+import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
 
 interface RelatedProductsProps {
   currentProduct: Product;
@@ -24,20 +25,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     )
     .slice(0, 4); // Mostrar máximo 4 productos relacionados
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
+  // Stagger/enter animations handled by CSS (if needed) — use simple hover translate for cards
 
   if (relatedProducts.length === 0) return null;
 
@@ -48,23 +36,16 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
           Productos Relacionados
         </h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {relatedProducts.map((product) => (
-            <motion.div
+            <div
               key={product.id}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
+              className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform transition-transform duration-150 hover:-translate-y-1"
               onClick={() => onProductClick(product)}
             >
               <div className="aspect-square relative">
                 <OptimizedImage
-                  src={product.images[0].full}
+                  src={product?.images?.[0]?.full ?? DEFAULT_PRODUCT_IMAGE}
                   alt={product.name}
                   className="object-cover w-full h-full"
                   aspectRatio={1}
@@ -110,9 +91,9 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

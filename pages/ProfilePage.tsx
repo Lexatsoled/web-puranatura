@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Replace simple view animations with CSS transitions (no framer-motion)
 import useProfile from '../src/hooks/useProfile';
 import { ProfileHeader } from './profile/ProfileHeader';
 import { ProfileForm } from './profile/ProfileForm';
@@ -29,12 +29,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6"
-      >
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6 transition-transform duration-400">
         <ProfileHeader
           user={user}
           isEditing={isEditing}
@@ -51,7 +46,7 @@ const ProfilePage: React.FC = () => {
           onSave={() => handleSave()}
           onCancel={handleCancel}
         />
-      </motion.div>
+      </div>
     </div>
   );
 };

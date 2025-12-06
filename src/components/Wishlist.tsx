@@ -1,12 +1,11 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Replaced framer-motion with CSS transitions in helpers
 import { Product } from '../types';
 import { useWishlistSelection } from '../hooks/wishlist/useWishlistSelection';
 import {
   WishlistSkeleton,
   WishlistHeader,
   WishlistEmptyState,
-  containerVariants,
   WishlistItem,
   WishlistActions,
 } from './Wishlist.helpers';
@@ -60,25 +59,18 @@ const Wishlist: React.FC<WishlistProps> = ({
         <WishlistEmptyState />
       ) : (
         <>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-4"
-          >
-            <AnimatePresence>
-              {items.map((item) => (
-                <WishlistItem
-                  key={item.id}
-                  item={item}
-                  isSelected={selectedItems.has(item.id)}
-                  onToggle={() => toggleItem(item.id)}
-                  onMoveToCart={onMoveToCart}
-                  onRemove={onRemoveItem}
-                />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <div className="space-y-4">
+            {items.map((item) => (
+              <WishlistItem
+                key={item.id}
+                item={item}
+                isSelected={selectedItems.has(item.id)}
+                onToggle={() => toggleItem(item.id)}
+                onMoveToCart={onMoveToCart}
+                onRemove={onRemoveItem}
+              />
+            ))}
+          </div>
 
           {selectedItems.size > 0 && (
             <WishlistActions

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS transitions for page-level visuals instead of framer-motion
 import { AccessDenied } from './wishlist/components/AccessDenied';
 import { WishlistEmpty } from './wishlist/components/WishlistEmpty';
 import { WishlistHeader } from './wishlist/components/WishlistHeader';
@@ -28,11 +28,7 @@ const WishlistPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6"
-        >
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6 transition-opacity duration-300">
           <WishlistHeader
             selectedCount={selectedItems.length}
             total={wishlistItems.length}
@@ -43,11 +39,10 @@ const WishlistPage: React.FC = () => {
 
           {hasItems ? (
             <div className="space-y-4">
-              {wishlistItems.map((item, index) => (
+              {wishlistItems.map((item) => (
                 <WishlistItemRow
                   key={item.id}
                   item={item}
-                  index={index}
                   selected={selectedItems.includes(item.id)}
                   onToggleSelect={handleSelectItem}
                   onAddToCart={handleAddToCart}
@@ -59,22 +54,18 @@ const WishlistPage: React.FC = () => {
           ) : (
             <WishlistEmpty />
           )}
-        </motion.div>
+        </div>
 
         {/* Resumen de la lista de deseos */}
         {hasItems && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div className="transition-opacity duration-300 delay-200">
             <WishlistSummary
               total={summary.total}
               available={summary.available}
               totalValue={summary.totalValue}
               onClear={handleClearWishlist}
             />
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

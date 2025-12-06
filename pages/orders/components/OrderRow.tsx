@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS-only transitions for order rows (no framer-motion)
 import { Order } from '../types';
 import { formatCurrency } from '../../../src/utils/intl';
 import { OrderStatusBadge } from './OrderStatusBadge';
@@ -13,12 +13,7 @@ type Props = {
 };
 
 export const OrderRow: React.FC<Props> = ({ order, selected, onToggle }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.05 }}
-    className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
-  >
+  <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-transform duration-150">
     <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -49,12 +44,7 @@ export const OrderRow: React.FC<Props> = ({ order, selected, onToggle }) => (
     <OrderTracking order={order} />
 
     {selected && (
-      <motion.div
-        initial={{ opacity: 0, height: 0 }}
-        animate={{ opacity: 1, height: 'auto' }}
-        exit={{ opacity: 0, height: 0 }}
-        className="px-6 py-4"
-      >
+      <div className="px-6 py-4 transition-all duration-150">
         <OrderProducts order={order} />
         <div className="mt-6 flex space-x-3 flex-wrap">
           {order.status === 'delivered' && (
@@ -76,7 +66,7 @@ export const OrderRow: React.FC<Props> = ({ order, selected, onToggle }) => (
             Descargar factura
           </button>
         </div>
-      </motion.div>
+      </div>
     )}
-  </motion.div>
+  </div>
 );

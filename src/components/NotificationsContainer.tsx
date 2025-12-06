@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS transitions instead of framer-motion to avoid bundling motion runtime
 import { useNotificationTimer } from '../hooks/useNotificationTimer';
 import { NotificationIcon } from './NotificationsContainer.icons';
 
@@ -66,21 +66,10 @@ const NotificationItem: React.FC<NotificationProps> = ({
   const handleClose = () => onClose(id);
   const progress = useNotificationTimer(duration, autoClose, handleClose);
 
-  const variants = {
-    initial: { opacity: 0, y: 50, scale: 0.3 },
-    animate: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, scale: 0.5, transition: { duration: 0.2 } },
-  };
-
   return (
-    <motion.div
-      layout
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="relative w-96 bg-white rounded-lg shadow-lg overflow-hidden"
+    <div
       role="alert"
+      className="relative w-96 bg-white rounded-lg shadow-lg overflow-hidden transition-transform transition-opacity duration-200 ease-out transform"
     >
       <div className="p-4">
         <div className="flex items-start">
@@ -99,7 +88,7 @@ const NotificationItem: React.FC<NotificationProps> = ({
         </div>
       </div>
       {autoClose && <ProgressBar progress={progress} />}
-    </motion.div>
+    </div>
   );
 };
 
@@ -121,15 +110,13 @@ const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
       role="status"
       aria-live="polite"
     >
-      <AnimatePresence>
-        {notifications.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            notification={notification}
-            onClose={onClose}
-          />
-        ))}
-      </AnimatePresence>
+      {notifications.map((notification) => (
+        <NotificationItem
+          key={notification.id}
+          notification={notification}
+          onClose={onClose}
+        />
+      ))}
     </div>
   );
 };

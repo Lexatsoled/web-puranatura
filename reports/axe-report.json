@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2025-12-02T00:40:55.146Z",
+  "timestamp": "2025-12-05T19:14:13.574Z",
   "url": "http://localhost:5173/",
   "toolOptions": {
     "runOnly": {
@@ -507,7 +507,7 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<main id=\"main-content\" style=\"min-height: calc(-120px + 100vh);\">",
+                  "html": "<main id=\"main-content\" style=\"min-height: 100vh;\">",
                   "target": [
                     "#main-content"
                   ]

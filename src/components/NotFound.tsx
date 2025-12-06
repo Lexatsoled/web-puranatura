@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use simple CSS transitions for NotFound page instead of framer-motion
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
+import { DEFAULT_PRODUCT_IMAGE } from '../constants/images';
 
 interface NotFoundProps {
   suggestedProducts?: Product[];
@@ -26,60 +27,28 @@ const NotFound: React.FC<NotFoundProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        when: 'beforeChildren',
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
-  const errorCode = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-    },
-  };
+  // Use CSS for appearance — remove framer-motion variants
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <motion.div
-        className="max-w-3xl w-full space-y-8 text-center"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className="max-w-3xl w-full space-y-8 text-center">
         {/* Código de error animado */}
-        <motion.div
-          className="text-9xl font-bold text-green-600 opacity-20"
-          variants={errorCode}
-        >
+        <div className="text-9xl font-bold text-green-600 opacity-20">  
           404
-        </motion.div>
+        </div>
 
-        <motion.div variants={itemVariants}>
+        <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Página no encontrada
           </h1>
           <p className="text-lg text-gray-600">
             Lo sentimos, la página que buscas no existe o ha sido movida.
           </p>
-        </motion.div>
+        </div>
 
         {/* Búsqueda */}
         {onSearch && (
-          <motion.div variants={itemVariants} className="max-w-md mx-auto">
+          <div className="max-w-md mx-auto">
             <div className="relative">
               <input
                 type="text"
@@ -104,11 +73,11 @@ const NotFound: React.FC<NotFoundProps> = ({
                 </svg>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Enlaces rápidos */}
-        <motion.div variants={itemVariants}>
+        <div>
           <div className="flex justify-center space-x-4">
             <Link
               to="/"
@@ -168,18 +137,11 @@ const NotFound: React.FC<NotFoundProps> = ({
               Contacto
             </Link>
           </div>
-        </motion.div>
+        </div>
 
         {/* Sugerencias */}
-        <AnimatePresence>
-          {showSuggestions && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="mt-12"
-            >
+        {showSuggestions && (
+          <div className="mt-12">
               {suggestedProducts.length > 0 && (
                 <div className="mb-8">
                   <h2 className="text-lg font-medium text-gray-900 mb-4">
@@ -194,7 +156,7 @@ const NotFound: React.FC<NotFoundProps> = ({
                       >
                         <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
                           <img
-                            src={product.images[0].thumbnail}
+                            src={product?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
@@ -233,10 +195,9 @@ const NotFound: React.FC<NotFoundProps> = ({
                   </div>
                 </div>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

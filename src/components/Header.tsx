@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS transitions instead of framer-motion for header/menu/modal
 
 interface HeaderProps {
   onCartClick: () => void;
@@ -22,12 +22,7 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
   ];
 
   return (
-    <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
-      className="bg-white shadow-md sticky top-0 z-50"
-    >
+    <header className="bg-white shadow-md sticky top-0 z-50 transition-opacity duration-200">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -118,47 +113,34 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
         </div>
 
         {/* Menú móvil */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden bg-white border-t"
-            >
-              <div className="py-2">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    className="block px-4 py-3 text-gray-700 hover:bg-gray-50"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Menú móvil: simple colapso por CSS, animación con transition */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden overflow-hidden bg-white border-t transition-all duration-200">
+            <div className="py-2">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className="block px-4 py-3 text-gray-700 hover:bg-gray-50"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Modal de búsqueda */}
-        <AnimatePresence>
-          {isSearchVisible && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-              onClick={() => setIsSearchVisible(false)}
+        {isSearchVisible && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            onClick={() => setIsSearchVisible(false)}
+          >
+            <div
+              className="bg-white rounded-lg p-6 w-full max-w-md mx-4 transform transition-transform duration-150 scale-100"
+              onClick={(e) => e.stopPropagation()}
             >
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white rounded-lg p-6 w-full max-w-md mx-4"
-                onClick={(e) => e.stopPropagation()}
-              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Buscar</h3>
                   <button
@@ -186,12 +168,11 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   autoFocus
                 />
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
       </nav>
-    </motion.header>
+    </header>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS to show/hide the filter controls instead of framer-motion
 import debounce from 'lodash/debounce';
 import { Product } from '../types';
 import { applyFilters, defaultFilters } from './filters/FilterBar.helpers';
@@ -50,19 +50,11 @@ const FilterBar: React.FC<FilterBarProps> = ({ products, onFilterChange }) => {
         </button>
       </div>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="p-4 border-t border-gray-200"
-          >
-            <FilterControls filters={filters} onChange={handleFilterChange} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div className="p-4 border-t border-gray-200">
+          <FilterControls filters={filters} onChange={handleFilterChange} />
+        </div>
+      )}
     </div>
   );
 };

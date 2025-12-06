@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Simple CSS transitions instead of framer-motion for category cards
 import { OptimizedImage } from './OptimizedImage';
 
 export interface Category {
@@ -40,13 +40,10 @@ export const CategoryScrollBar: React.FC<{
 
 export const FeaturedCategoryCard: React.FC<{
   category: Category;
-  variants: any;
   onSelect: (id: string) => void;
-}> = ({ category, variants, onSelect }) => (
-  <motion.div
-    variants={variants}
-    whileHover={{ y: -5 }}
-    className="relative rounded-xl overflow-hidden cursor-pointer group"
+}> = ({ category, onSelect }) => (
+  <div
+    className="relative rounded-xl overflow-hidden cursor-pointer group transform transition-transform duration-150 hover:-translate-y-1"
     onClick={() => onSelect(category.id)}
   >
     <div className="aspect-[16/9] relative">
@@ -67,18 +64,15 @@ export const FeaturedCategoryCard: React.FC<{
         {category.productCount} productos
       </span>
     </div>
-  </motion.div>
+  </div>
 );
 
 export const RegularCategoryCard: React.FC<{
   category: Category;
-  variants: any;
   onSelect: (id: string) => void;
-}> = ({ category, variants, onSelect }) => (
-  <motion.div
-    variants={variants}
-    whileHover={{ y: -3 }}
-    className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
+}> = ({ category, onSelect }) => (
+  <div
+    className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform transition-transform duration-150 hover:-translate-y-0.5"
     onClick={() => onSelect(category.id)}
   >
     <div className="aspect-square relative">
@@ -97,5 +91,5 @@ export const RegularCategoryCard: React.FC<{
         {category.productCount} productos
       </p>
     </div>
-  </motion.div>
+  </div>
 );

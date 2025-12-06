@@ -5,14 +5,35 @@ import { sanitizeProductContent } from '../../utils/contentSanitizers';
 let fallbackCache: Product[] | null = null;
 
 const FALLBACK_MODULE_PATH = '../../data/products';
+const FALLBACK_JSON_PATH = '/data/fallback-products.json';
 
 const sanitizeFallbackProducts = (products: ApiProduct[]) =>
   products.map((legacy) => sanitizeProductContent(mapApiProduct(legacy)));
 
 export const getFallbackProducts = async (): Promise<Product[]> => {
   if (fallbackCache) return fallbackCache;
-  const fallbackModule = await import(FALLBACK_MODULE_PATH);
-  fallbackCache = sanitizeFallbackProducts(fallbackModule.products);
+  // Try fetch JSON first (public/data/fallback-products.json). Keep dynamic import only in dev.
+  try {
+    const res = await fetch(FALLBACK_JSON_PATH, { cache: 'force-cache' });
+    if (res.ok) {
+      const parsed = await res.json();
+      if (parsed && Array.isArray(parsed.products)) {
+        fallbackCache = sanitizeFallbackProducts(parsed.products);
+        return fallbackCache;
+      }
+    }
+  } catch (err) {
+    // ignore and fall back to module import in dev
+  }
+
+  if (import.meta.env?.DEV) {
+    const fallbackModule = await import(FALLBACK_MODULE_PATH);
+    fallbackCache = sanitizeFallbackProducts(fallbackModule.products);
+    return fallbackCache;
+  }
+
+  // Production: return empty set if JSON missing
+  fallbackCache = [];
   return fallbackCache;
 };
 

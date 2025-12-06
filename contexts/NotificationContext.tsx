@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Notification animations replaced with CSS to avoid bundling framer-motion in initial bundles
 
 // Orquesta la creacion y el renderizado de notificaciones en toda la SPA.
 // Tipos de notificacin
@@ -98,23 +98,19 @@ const NotificationContainer: React.FC<{
 }> = ({ notifications, onRemove }) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-4 min-w-[320px]">
-      <AnimatePresence>
-        {notifications.map((notification) => (
-          <motion.div
-            key={notification.id}
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className={`p-4 rounded-lg shadow-lg ${
-              notification.type === 'error'
-                ? 'bg-red-50 border-l-4 border-red-500'
-                : notification.type === 'success'
-                  ? 'bg-green-50 border-l-4 border-green-500'
-                  : notification.type === 'warning'
-                    ? 'bg-yellow-50 border-l-4 border-yellow-500'
-                    : 'bg-blue-50 border-l-4 border-blue-500'
-            }`}
-          >
+      {notifications.map((notification) => (
+        <div
+          key={notification.id}
+          className={`p-4 rounded-lg shadow-lg transition-all duration-200 transform ${
+            notification.type === 'error'
+              ? 'bg-red-50 border-l-4 border-red-500'
+              : notification.type === 'success'
+              ? 'bg-green-50 border-l-4 border-green-500'
+              : notification.type === 'warning'
+              ? 'bg-yellow-50 border-l-4 border-yellow-500'
+              : 'bg-blue-50 border-l-4 border-blue-500'
+          }`}
+        >
             <div className="flex justify-between items-start">
               <div>
                 {notification.title && (
@@ -172,9 +168,8 @@ const NotificationContainer: React.FC<{
                 </svg>
               </button>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </AnimatePresence>
     </div>
   );
 };

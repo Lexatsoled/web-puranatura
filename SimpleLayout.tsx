@@ -4,7 +4,7 @@ import { CartProvider, useCart } from './contexts/CartContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { WishlistProvider } from './contexts/WishlistContext';
 import { NotificationProvider } from './src/contexts/NotificationContext';
-import UserMenu from './components/UserMenu';
+const UserMenu = React.lazy(() => import('./components/UserMenu'));
 
 const AuthModal = React.lazy(() => import('./components/AuthModal'));
 const CartModal = React.lazy(() => import('./components/CartModal'));
@@ -213,7 +213,9 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {isAuthenticated ? (
-              <UserMenu />
+              <React.Suspense fallback={null}>
+                <UserMenu />
+              </React.Suspense>
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}

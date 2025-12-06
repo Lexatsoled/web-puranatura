@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Product } from '../types/product';
 import { StockStatus } from '../hooks/useProductCardState';
 import { ImageCarousel } from './productCard/ImageCarousel';
@@ -25,8 +24,8 @@ export const ProductImageSection: React.FC<ProductImageSectionProps> = ({
 }) => (
   <div className="relative aspect-square bg-gray-100">
     <ImageCarousel
-      images={product.images}
-      productName={product.name}
+      images={product?.images ?? []}
+      productName={product?.name ?? 'Producto'}
       currentImageIndex={currentImageIndex}
       onSelectImage={selectImage}
       isHovered={isHovered}
@@ -35,10 +34,8 @@ export const ProductImageSection: React.FC<ProductImageSectionProps> = ({
 
     <BadgeList product={product} stockStatus={stockStatus} />
 
-    <motion.div
-      className="absolute inset-0 bg-black bg-opacity-10 transition-opacity duration-300"
-      initial={{ opacity: 0.1 }}
-      animate={{ opacity: isHovered ? 0 : 0.1 }}
+    <div
+      className={`absolute inset-0 bg-black bg-opacity-10 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-10'}`}
     />
   </div>
 );
@@ -57,24 +54,21 @@ export const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({
   handleAddToCart,
 }) => (
   <div className="p-4 flex flex-col flex-grow">
-    <motion.h3
-      className="text-lg font-semibold text-gray-800 truncate group-hover:text-green-600 transition-colors"
-      layout
-    >
-      {product.name}
-    </motion.h3>
-    <p className="text-sm text-gray-500 mb-3">{product.category}</p>
+    <h3 className="text-lg font-semibold text-gray-800 truncate group-hover:text-green-600 transition-colors">
+      {product?.name ?? 'Producto sin nombre'}
+    </h3>
+    <p className="text-sm text-gray-500 mb-3">{product?.category ?? ''}</p>
 
     <div className="mt-auto flex justify-between items-center">
-      <motion.p className="text-xl font-bold text-green-700" layout>
-        DOP ${product.price.toFixed(2)}
-      </motion.p>
+        <p className="text-xl font-bold text-green-700">DOP ${
+          typeof product?.price === 'number' ? product.price.toFixed(2) : '--'
+        }</p>
 
       <AddToCartButton
         stockStatus={stockStatus}
         isAddingToCart={isAddingToCart}
         onAddToCart={handleAddToCart}
-        stock={product.stock}
+        stock={typeof product?.stock === 'number' ? product.stock : 0}
       />
     </div>
   </div>
