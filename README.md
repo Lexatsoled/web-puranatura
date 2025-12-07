@@ -156,6 +156,21 @@ Consejo: las reglas de exclusión deben ser concretas. Evita patterns demasiado 
 
 Esto evita errores durante la secuencia de validaciones (lint, type-check, build, tests).
 
+### Dependabot handler PAT (opcional pero recomendado)
+
+Si la acción encargada de crear issues a partir de alertas de Dependabot devuelve `403 Resource not accessible by integration`, lo más probable es que el token automático (GITHUB_TOKEN) no tenga permisos suficientes en la configuración de tu organización.
+
+Para resolverlo de forma estable se recomienda crear un Personal Access Token (PAT) con permisos mínimos y guardarlo como secreto de Actions con el nombre `DEPENDABOT_TOKEN`.
+
+Pasos recomendados:
+
+1. En GitHub, ve a Settings → Developer settings → Personal access tokens → Tokens (classic) y crea un token nuevo.
+2. Otorga al token al menos el scope `repo` (y `security_events` / `vulnerability_alerts` si tu organización lo exige).
+3. Copia el token y en el repositorio abre Settings → Secrets → Actions → New repository secret. Nombra el secreto `DEPENDABOT_TOKEN` y pega el token.
+4. Re-ejecuta manualmente la workflow `Dependabot alerts — HIGH/CRITICAL handler` (desde la pestaña Actions o usando workflow_dispatch) y comprueba que deja de devolver 403.
+
+El workflow está preparado para usar `secrets.DEPENDABOT_TOKEN` cuando exista; si no está configurado, hace un fallback con el GITHUB_TOKEN e imprimirá una recomendación para añadir el PAT si la API devuelve 403.
+
 > > > > > > > origin/main
 > > > > > > > _Nota:_ este README se actualiz├│ solo para reactivar el pipeline y no cambia el comportamiento de la aplicaci├│n.
 > > > > > > > Peque├▒a nota para CI: este commit es solo para re-lanzar los checks y asegurar que lint/format/contract sigan verdes.
