@@ -51,8 +51,7 @@
   "lint-staged": {
     "*.{js,ts,tsx,md,json,css,scss,html}": [
       "prettier --write"
-    ],
-    "concurrent": false
+    ]
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
