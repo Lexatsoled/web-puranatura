@@ -26,6 +26,7 @@
     "check:licenses": "node scripts/check-licenses.cjs",
     "check:openapi-drift": "node scripts/check-openapi-drift.cjs",
     "check:secret-drift": "node scripts/check-secret-drift.cjs",
+    "check:forbidden-artifacts": "node scripts/check-forbidden-artifacts.cjs",
     "check:setup-plan": "node scripts/setup-plan.cjs",
     "backup:safe": "node backend/scripts/safe-backup.cjs",
     "test:breaker": "node scripts/test-breaker.cjs",
@@ -49,8 +50,7 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,md,json,css,scss,html}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "dependencies": {

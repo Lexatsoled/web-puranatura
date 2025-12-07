@@ -123,7 +123,7 @@ for p in "${paths_to_purge[@]}"; do
 done
 
 if command -v gitleaks >/dev/null 2>&1; then
-  gitleaks detect --source . --report-path ./gitleaks-report.json || echo "gitleaks found issues — check gitleaks-report.json"
+  gitleaks detect --config .github/.gitleaks.toml --source . --report-path ./gitleaks-report.json || echo "gitleaks found issues — check gitleaks-report.json"
   [ -f ./gitleaks-report.json ] && cat ./gitleaks-report.json
 else
   echo "gitleaks not installed — run it manually to verify secret absence."

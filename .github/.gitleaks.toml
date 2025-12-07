@@ -20,3 +20,18 @@ title = "gitleaks config - ignore generated reports with embedded base64 data"
     '''\.env\.example''',
     '''reports/gitleaks-report.json'''
   ]
+
+[[allowlists]]
+  description = "Ignore transient artifacts and generated files that would create false positives"
+  paths = [
+    '''^tmp/''',
+    '''^temp/''',
+    '''^coverage/''',
+    '''^reports/''',
+    '''.*\.db$''',
+    '''.*dev\.db.*$''',
+    '''^backend/prisma/.*dev\.db.*$''',
+    '''^node_modules/''',
+    '''^dist/''',
+    '''^build/'''
+  ]

@@ -91,7 +91,7 @@ foreach ($p in $pathsToRemove) {
 }
 
 Write-Host 'Optional: run gitleaks inside the mirror (if installed) to confirm no leaks remain.'
-if (Get-Command gitleaks -ErrorAction SilentlyContinue) { gitleaks detect --source . --report-path ./gitleaks-report.json }
+if (Get-Command gitleaks -ErrorAction SilentlyContinue) { gitleaks detect --config .github/.gitleaks.toml --source . --report-path ./gitleaks-report.json }
 
 Pop-Location
 
