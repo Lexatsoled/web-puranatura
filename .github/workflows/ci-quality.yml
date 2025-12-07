@@ -22,6 +22,7 @@ permissions:
   contents: read
   checks: write
   pull-requests: write
+  security-events: write
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
