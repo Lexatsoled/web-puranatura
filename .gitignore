@@ -60,3 +60,10 @@ Secretos/
 backups/
 localhost_*.report.html
 reports/observability/
+
+# Transient and coverage artifacts we don't want in the repo
+coverage/
+tmp/
+**/dev.db*
+**/*.db
+**/*.sqlite

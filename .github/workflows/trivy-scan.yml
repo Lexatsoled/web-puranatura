@@ -21,6 +21,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Fail on forbidden tracked artifacts
+        run: |
+          echo 'Checking for forbidden tracked files (dev.db, tmp/, coverage/, *.db, *.sqlite)'
+          set -e
+          forbidden=$(git ls-files | grep -E '(^|/)(tmp|temp|coverage)/|\.db($|[^a-zA-Z0-9])|\.sqlite' || true)
+          if [ -n "$forbidden" ]; then
+            echo 'Forbidden tracked files found:'
+            echo "$forbidden"
+            exit 1
+          fi
+
+      - name: Ensure Trivy ignore & cleanup transient artifacts
+        run: |
+          echo '--- .trivyignore contents ---'
+          if [ -f .trivyignore ]; then
+            cat .trivyignore
+          else
+            echo 'no .trivyignore found in repo root'
+          fi
+
+          # Remove transient test/dev artifacts to avoid false positive scanning
+          # Be conservative: remove local sqlite/db artifacts and tmp/ coverage/ dirs
+          find . -type f -iname "dev.db*" -print -delete || true
+          rm -rf tmp coverage || true
+
       - name: 'Run Trivy (pull_request: non-blocking)'
         if: github.event_name == 'pull_request'
         uses: aquasecurity/trivy-action@0.33.1

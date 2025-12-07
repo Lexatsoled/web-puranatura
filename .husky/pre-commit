@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
+
 . "$(dirname -- "$0")/_/husky.sh"
+
+# Prevent commits that include forbidden artifacts (dev DBs, tmp/, coverage/)
+npm run check:forbidden-artifacts || { echo "forbidden artifacts found in staged/tracked files – aborting commit"; exit 1; }
 
 # Run lightweight secrets scan before allowing commit
 node scripts/run-gitleaks.cjs || { echo "gitleaks found potential secrets – aborting commit"; exit 1; }

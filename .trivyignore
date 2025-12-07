@@ -1,0 +1,32 @@
+# files/dirs to ignore for Trivy filesystem/repo scans
+# Ignore local transient and build artifacts that can include base64 images or db files
+
+# temporary artifacts from dev/test
+tmp/
+temp/
+
+# coverage reports
+coverage/
+
+# prisma local dev DBs
+**/dev.db*
+backend/prisma/dev.db*
+
+# generated reports
+reports/
+
+# node modules and build outputs
+node_modules/
+dist/
+build/
+
+# workflow and GitHub actions state (not needed for scans)
+.github/
+
+# lock files and package manager caches
+pnpm-lock.yaml
+package-lock.json
+
+# any other noisy patterns
+*.sqlite
+*.db

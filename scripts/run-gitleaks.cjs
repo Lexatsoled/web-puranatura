@@ -95,6 +95,8 @@ const defaultArgs = [
   '--source',
   '.',
   '--no-git',
+  '--config',
+  path.join('.github', '.gitleaks.toml'),
   '--report-format',
   'json',
   '--report-path',

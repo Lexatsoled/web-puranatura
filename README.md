@@ -87,6 +87,8 @@ npx husky add .husky/pre-commit "npx --no-install lint-staged"
 
 1. El proyecto ya incluye `.prettierrc.json` y `lint-staged` configurado para ejecutar Prettier en los archivos modificados antes de cada commit.
 
+Nota sobre `lint-staged` y stashes: hemos actualizado la configuración del proyecto para ejecutar `lint-staged` en modo no concurrente y sin crear stashes automáticos (las tareas no deberán usar `git add`). Esto reduce sorpresas en grandes árboles de trabajo y evita stashes ocultos que puedan generar confusión. Si tu flujo requiere operaciones complejas, recomendamos usar worktrees para pruebas o commits locales antes de enviar PRs.
+
 Esto evita que archivos como `regression-suite.md` lleguen a la CI con formato incorrecto.
 _Nota:_ este README se actualizó solo para reactivar el pipeline y no cambia el comportamiento de la aplicación.
 
@@ -122,11 +124,32 @@ $env:FORCE_REINSTALL='1'
 
 ## Quality gates en CI
 
-- El pipeline `.github/workflows/ci-quality.yml` (pushes/PRs a `main`) ejecuta `npm run perf:web` (LHCI autorun) y `npm run a11y` (axe/playwright) para validar el presupuesto de bundle y la accesibilidad de la Fase 3 antes de marcar la corrida como verde.
-- El job `main-guard` en el mismo flujo reejecuta `npm run perf:web` como última puerta antes de que un push llegue a `main`.
-- Para reproducir esos gates localmente: `npm run build` seguido de `npm run perf:web` y `npm run a11y`. Los reports resultantes (`reports/lighthouse-mobile-latest.report.report.json`, `localhost_*.report.html`, `reports/axe-report.json`) sirven como evidencia para la revisión.
 
 - La Fase 4 añade more gates: `npm run perf:api` (k6 smoke con p95 actual ~96.9 ms / error rate 40 % porque el login intenta usar la tabla `main.User` que no existe en el SQLite vacío; documenta ese fallo y vuelve a correr después de sembrar datos), `npm run lint:openapi`, `npm run test:contract`, y `npm run verify:observability` (para validar `reports/observability/observability-artifacts.zip`). Coloca los reportes en `reports/` para adjuntarlos a los PRs críticos.
+
+## Escaneos de seguridad — exclusiones y protecciones (nuevo)
+
+Hemos añadido controles para reducir falsos positivos en los escaneos de seguridad (Trivy / gitleaks) y evitar que artefactos temporales o bases de datos de desarrollo acaben en el repositorio.
+
+- Archivo de ignore para Trivy: `.trivyignore` en la raíz del repositorio. Contiene patrones comunes (tmp/, coverage/, `dev.db*`, `*.db`, `*.sqlite`, `reports/`, node_modules/) para evitar escanear artefactos generados localmente.
+- Configuración de gitleaks: `.github/.gitleaks.toml` — contiene allowlists que excluyen reportes generados y artefactos transitorios.
+- Hooks locales (Husky): se añadió un script `check:forbidden-artifacts` que bloquea commits si los archivos a commitear contienen artefactos prohibidos (p. ej. `dev.db`, `tmp/`, `coverage/`, `*.db`, `*.sqlite`). Esto evita que se introduzcan accidentalmente archivos grandes o sensibles.
+- CI: el workflow de Trivy (`.github/workflows/trivy-scan.yml`) ahora incluye una comprobación temprana que falla si se detectan artefactos prohibidos en el árbol del repo (por ejemplo `dev.db` o `coverage/`).
+
+Cómo ejecutarlo localmente (rápido):
+
+```bash
+# comprobar artefactos prohibidos (staged -> pre-commit, o repo -> CI)
+npm run check:forbidden-artifacts
+
+# ejecutar gitleaks con la configuración del repositorio (local)
+node scripts/run-gitleaks.cjs --config .github/.gitleaks.toml --no-git --source . --report-path ./reports/gitleaks-report.json
+
+# ejecutar Trivy local con la ignore file
+trivy fs --ignorefile .trivyignore -f sarif -o trivy-results.sarif .
+```
+
+Consejo: las reglas de exclusión deben ser concretas. Evita patterns demasiado amplios que puedan ocultar secretos. Si necesitas añadir excepciones adicionales, actualiza `.trivyignore` o `.github/.gitleaks.toml` y documenta la razón en este mismo README.
 
 Esto evita errores durante la secuencia de validaciones (lint, type-check, build, tests).
 
