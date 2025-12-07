@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
+// Using simple DOM rendering for product comparison list — no framer-motion
 import { Product } from '../types';
 import { AddProductCard } from './productCompare/AddProductCard';
 import { CompareHeader } from './productCompare/CompareHeader';
@@ -32,18 +32,15 @@ const ProductCompare: React.FC<ProductCompareProps> = ({
 
       <div className="overflow-x-auto">
         <div className="inline-flex space-x-6 min-w-full">
-          <AnimatePresence initial={false}>
-            {products.map((product, index) => (
-              <ProductCardCompare
-                key={product.id}
-                product={product}
-                index={index}
-                showDifferences={showDifferences}
-                differentFeatures={comparison?.different || []}
-                onRemove={onRemoveProduct}
-              />
-            ))}
-          </AnimatePresence>
+          {products.map((product) => (
+            <ProductCardCompare
+              key={product.id}
+              product={product}
+              showDifferences={showDifferences}
+              differentFeatures={comparison?.different || []}
+              onRemove={onRemoveProduct}
+            />
+          ))}
 
           {products.length < maxProducts && <AddProductCard onAdd={() => {}} />}
         </div>

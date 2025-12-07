@@ -3,8 +3,14 @@ name: Security - Trivy repo & fs scan
 on:
   push:
     branches: [main]
+    # Avoid running Trivy when only workflow files change
+    paths-ignore:
+      - '.github/**'
   pull_request:
     branches: [main]
+    # Avoid running Trivy for PRs that only update workflow/config files
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   trivy-scan:

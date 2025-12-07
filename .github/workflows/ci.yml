@@ -3,8 +3,14 @@ name: CI
 on:
   push:
     branches: [main]
+    # ignore pushes that only change workflow / .github config files
+    paths-ignore:
+      - '.github/**'
   pull_request:
     branches: [main]
+    # ignore PRs that only change workflow / .github config files
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   tests:

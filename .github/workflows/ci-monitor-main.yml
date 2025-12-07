@@ -1,0 +1,97 @@
+name: CI health monitor (hourly)
+
+on:
+  # hourly scheduled check
+  schedule:
+    - cron: '0 * * * *'
+  # allow manual runs for debugging
+  workflow_dispatch: {}
+  # run on pushes to this branch so PRs can be tested
+  push:
+    branches: [ci/monitor-main]
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+
+jobs:
+  check-main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Run CI health check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Generate a short hourly summary of workflow runs on main
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            // Look back one hour
+            const since = new Date(Date.now() - 1000 * 60 * 60).toISOString();
+
+            const runsResp = await github.rest.actions.listWorkflowRunsForRepo({ owner, repo, per_page: 100, branch: 'main' });
+            const recent = runsResp.data.workflow_runs.filter(r => r.created_at >= since);
+
+            const total = recent.length;
+            const success = recent.filter(r => r.conclusion === 'success').length;
+            const failed = recent.filter(r => r.conclusion === 'failure').length;
+            const skipped = recent.filter(r => r.conclusion === 'skipped').length;
+
+            const failures = recent.filter(r => r.conclusion === 'failure').map(r => `- ${r.name}: ${r.html_url}`).join('\n') || 'None';
+
+            const body = `CI Health report for main (last 1 hour UTC: ${new Date().toISOString()}):\n\n- Total runs: ${total}\n- Success: ${success}\n- Failed: ${failed}\n- Skipped: ${skipped}\n\nFailures (if any):\n${failures}`;
+
+            // find an existing open issue with label 'ci-monitor' to post updates, otherwise create one
+            const issues = await github.rest.issues.listForRepo({ owner, repo, state: 'open', labels: 'ci-monitor', per_page: 100 });
+            if ((issues.data || []).length === 0) {
+              const created = await github.rest.issues.create({ owner, repo, title: 'CI Health Monitor — hourly report', body, labels: ['ci-monitor'] });
+              console.log(`Created CI health issue #${created.data.number}`);
+            } else {
+              // add a comment to the first matching issue
+              const issueNumber = issues.data[0].number;
+              await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body });
+              console.log(`Appended CI health report to issue #${issueNumber}`);
+            }
+
+            // --- Auto-disable logic: if the monitor workflow file was added 24+ hours ago, remove it and post final note
+            const path = '.github/workflows/ci-monitor-main.yml';
+            try {
+              // find latest commit affecting this file
+              const commits = await github.rest.repos.listCommits({ owner, repo, path, per_page: 1 });
+              const lastCommit = commits.data[0];
+              const lastDate = new Date(lastCommit.commit.committer.date).getTime();
+              const now = Date.now();
+              const ageMs = now - lastDate;
+
+              const oneDayMs = 1000 * 60 * 60 * 24;
+              if (ageMs >= oneDayMs) {
+                console.log('Monitor file older than 24h — attempting to remove it (auto-disable)');
+                // fetch file to get current sha
+                const file = await github.rest.repos.getContent({ owner, repo, path });
+                const sha = file.data.sha;
+
+                // delete file (create commit that removes it)
+                try {
+                  await github.rest.repos.deleteFile({ owner, repo, path, message: 'chore(ci): auto-disable CI monitor after 24h', sha, branch: 'main' });
+                  const finalBody = body + '\n\nNOTE: CI monitor auto-disabled after 24 hours (workflow file removed).';
+                  // post a final comment to the issue
+                  if ((issues.data || []).length === 0) {
+                    await github.rest.issues.create({ owner, repo, title: 'CI Health Monitor — hourly report', body: finalBody, labels: ['ci-monitor'] });
+                  } else {
+                    const issueNumber2 = issues.data[0].number;
+                    await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber2, body: finalBody });
+                  }
+                } catch (err) {
+                  // deletion failed - possibly blocked by branch protection or permissions
+                  console.log('Auto-delete attempted but failed:', err.message || err);
+                  const issueNumber3 = (issues.data || [])[0]?.number;
+                  const failMsg = `CI monitor reached 24h age but automated removal failed. Manual removal required. Error: ${err.message || 'unknown'}`;
+                  if (issueNumber3) await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber3, body: failMsg });
+                }
+              } else {
+                console.log('Monitor age < 24h — leaving active');
+              }
+            } catch (err) {
+              console.log('Error checking monitor file age:', err.message || err);
+            }

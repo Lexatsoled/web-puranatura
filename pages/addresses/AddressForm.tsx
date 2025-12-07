@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+﻿// Use static rendering + CSS transitions for address form
 import { Address, FormData } from './useAddressesState';
 import { InputField, SelectField, FormActions } from './AddressFormFields';
 
@@ -21,11 +21,9 @@ export const AddressForm = ({
   onSubmit,
   onCancel,
 }: Props) => (
-  <motion.div
+  <div
     ref={formRef}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-opacity duration-200"
   >
     <h3 className="text-lg font-semibold text-gray-900 mb-4">
       {editingAddress ? 'Editar Direccion' : 'Agregar Nueva Direccion'}
@@ -52,6 +50,7 @@ export const AddressForm = ({
           placeholder="Ej: Casa principal"
           value={formData.name}
           onChange={onChange}
+          autoComplete="section-address nickname"
         />
       </div>
 
@@ -62,6 +61,7 @@ export const AddressForm = ({
         placeholder="Calle, numero, piso, puerta..."
         value={formData.street}
         onChange={onChange}
+        autoComplete="section-address street-address"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -72,6 +72,7 @@ export const AddressForm = ({
           placeholder="Madrid"
           value={formData.city}
           onChange={onChange}
+          autoComplete="section-address address-level2"
         />
         <InputField
           id="postalCode"
@@ -80,6 +81,9 @@ export const AddressForm = ({
           placeholder="28001"
           value={formData.postalCode}
           onChange={onChange}
+          autoComplete="section-address postal-code"
+          inputMode="numeric"
+          type="text"
         />
         <SelectField
           id="country"
@@ -93,10 +97,11 @@ export const AddressForm = ({
             { value: 'Italia', label: 'Italia' },
           ]}
           onChange={onChange}
+          autoComplete="section-address country"
         />
       </div>
 
       <FormActions isEditing={Boolean(editingAddress)} onCancel={onCancel} />
     </form>
-  </motion.div>
+  </div>
 );

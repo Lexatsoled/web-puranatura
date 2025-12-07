@@ -3,56 +3,21 @@ import { Product } from '../../src/types/product';
 import { sanitizeProductContent } from '../../src/utils/contentSanitizers';
 import { useApi } from '../../src/utils/api';
 import { mapApiProduct, ApiProduct } from '../../src/utils/productMapper';
-
-export type SortOption =
-  | 'name-asc'
-  | 'name-desc'
-  | 'price-asc'
-  | 'price-desc'
-  | 'default';
-
-export type Category = { id: string; name: string };
-
-const DEFAULT_CATEGORY: Category = { id: 'todos', name: 'Todas' };
-
-const applyCategory = (products: Product[], categoryId: string) =>
-  categoryId === 'todos'
-    ? products
-    : products.filter((product) => product.category === categoryId);
-
-const applySearch = (products: Product[], term: string) => {
-  if (!term) return products;
-  const normalized = term.toLowerCase();
-  return products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(normalized) ||
-      product.description.toLowerCase().includes(normalized)
-  );
-};
-
-const sortProducts = (products: Product[], sortOption: SortOption) => {
-  const sorted = [...products];
-  const sorters: Record<SortOption, (a: Product, b: Product) => number> = {
-    'name-asc': (a, b) => a.name.localeCompare(b.name),
-    'name-desc': (a, b) => b.name.localeCompare(a.name),
-    'price-asc': (a, b) => a.price - b.price,
-    'price-desc': (a, b) => b.price - a.price,
-    default: () => 0,
-  };
-  return sorted.sort(sorters[sortOption]);
-};
-
-const paginate = (
-  products: Product[],
-  currentPage: number,
-  itemsPerPage: number
-) => {
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  return products.slice(startIndex, startIndex + itemsPerPage);
-};
+import {
+  computeProcessedProducts,
+  paginate,
+  SortOption,
+} from '../../src/pages/store/utils/storeFilters';
+import { Category, DEFAULT_CATEGORY } from '../../src/pages/store/constants';
+import {
+  FALLBACK_MESSAGE,
+  loadFallbackProducts,
+} from '../../src/pages/store/utils/storeFallback';
 
 export const useStorePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    DEFAULT_CATEGORY.id
+  );
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,19 +41,11 @@ export const useStorePage = () => {
     hasFetched.current = true;
 
     const applyFallback = async () => {
-      const fallbackModule = await import('../../data/products.ts');
-      const fallbackProducts = fallbackModule.products.map((product) =>
-        sanitizeProductContent(product)
-      );
-      const merged = [DEFAULT_CATEGORY, ...fallbackModule.productCategories];
-      const deduped = Array.from(
-        new Map(merged.map((c) => [c.id, c])).values()
-      );
-      setProductCategories(deduped);
+      const { products: fallbackProducts, categories } =
+        await loadFallbackProducts();
+      setProductCategories(categories);
       setProducts(fallbackProducts);
-      setApiError(
-        'Mostrando catálogo provisional mientras conectamos con la API.'
-      );
+      setApiError(FALLBACK_MESSAGE);
       setIsLoadingProducts(false);
     };
 
@@ -97,14 +54,15 @@ export const useStorePage = () => {
       try {
         const apiProducts = await api.get<ApiProduct[]>('/products');
         if (!Array.isArray(apiProducts)) {
-          applyFallback();
+          await applyFallback();
           return;
         }
         const mapped = apiProducts.map((product) =>
           sanitizeProductContent(mapApiProduct(product))
         );
+
         if (mapped.length === 0) {
-          applyFallback();
+          await applyFallback();
         } else {
           setProducts(mapped);
           setApiError(null);
@@ -112,7 +70,7 @@ export const useStorePage = () => {
         }
       } catch (error) {
         console.warn('Error cargando productos desde la API', error);
-        applyFallback();
+        await applyFallback();
       } finally {
         setIsLoadingProducts(false);
       }
@@ -121,11 +79,15 @@ export const useStorePage = () => {
     fetchProducts();
   }, [api]);
 
-  const processedProducts = useMemo(() => {
-    const byCategory = applyCategory(products, selectedCategory);
-    const bySearch = applySearch(byCategory, searchTerm);
-    return sortProducts(bySearch, sortOption);
-  }, [products, selectedCategory, searchTerm, sortOption]);
+  const processedProducts = useMemo(
+    () =>
+      computeProcessedProducts(
+        products,
+        { categoryId: selectedCategory, searchTerm },
+        sortOption
+      ),
+    [products, selectedCategory, searchTerm, sortOption]
+  );
 
   const paginatedProducts = useMemo(
     () => paginate(processedProducts, currentPage, itemsPerPage),
@@ -186,3 +148,6 @@ export const useStorePage = () => {
     setCurrentPage,
   };
 };
+
+// Re-export SortOption type so callers like pages/StorePage can import it
+export type { SortOption } from '../../src/pages/store/utils/storeFilters';

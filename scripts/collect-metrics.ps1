@@ -2,6 +2,11 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+# On Windows PowerShell the automatic $IsWindows variable is missing; shim it for compatibility.
+if (-not (Get-Variable -Name IsWindows -Scope Script -ErrorAction SilentlyContinue)) {
+  $script:IsWindows = $true
+}
+
 Add-Type -AssemblyName System.Net.Http
 
 function Wait-ForHealth {

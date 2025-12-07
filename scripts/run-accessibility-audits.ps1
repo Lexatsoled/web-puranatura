@@ -12,6 +12,14 @@ Write-Host "Starting preview (background)..."
 # ensure reports and tmp dirs exist and use them for TEMP to avoid Windows temp permission issues
 if (!(Test-Path $ReportsDir)) { New-Item -ItemType Directory -Path $ReportsDir | Out-Null }
 $tmpDir = Join-Path $ReportsDir 'tmp'
+# clean stale tmp to avoid EPERM on lighthouse temp folders
+if (Test-Path $tmpDir) {
+    try {
+        Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction Stop
+    } catch {
+        Write-Warning "No se pudo limpiar $tmpDir; continuando con el contenido existente. Error: $_"
+    }
+}
 if (!(Test-Path $tmpDir)) { New-Item -ItemType Directory -Path $tmpDir | Out-Null }
 
 # point TEMP/TMP to a writable folder for spawned Chrome instances

@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+// Use CSS for breadcrumb appearance instead of framer-motion
 import { sanitizeHtml } from '../utils/sanitizer';
+import { BreadcrumbItem, BreadcrumbSeparator } from './Breadcrumbs.helpers';
 
-interface BreadcrumbItem {
+interface BreadcrumbItemData {
   label: string;
   path: string;
   isCurrentPage?: boolean;
 }
 
 interface BreadcrumbsProps {
-  items: BreadcrumbItem[];
+  items: BreadcrumbItemData[];
   className?: string;
   separator?: React.ReactNode;
-  structured?: boolean; // Para datos estructurados de Schema.org
+  structured?: boolean;
 }
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
@@ -36,22 +36,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   ),
   structured = true,
 }) => {
-  const containerVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3,
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: { opacity: 1, x: 0 },
-  };
 
   const jsonLd = useMemo(
     () => ({
@@ -60,10 +44,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
       itemListElement: items.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        item: {
-          '@id': item.path,
-          name: item.label,
-        },
+        item: { '@id': item.path, name: item.label },
       })),
     }),
     [items]
@@ -83,99 +64,20 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
         />
       )}
       <nav aria-label="Breadcrumb" className={className}>
-        <motion.ol
-          className="flex items-center flex-wrap"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <ol className="flex items-center flex-wrap">
           {items.map((item, index) => (
             <React.Fragment key={item.path}>
-              <motion.li variants={itemVariants} className="flex items-center">
-                {item.isCurrentPage ? (
-                  <span
-                    className="text-gray-500 font-medium"
-                    aria-current="page"
-                  >
-                    {item.label}
-                  </span>
-                ) : (
-                  <Link
-                    to={item.path}
-                    className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </motion.li>
+              <BreadcrumbItem
+                label={item.label}
+                path={item.path}
+                isCurrentPage={item.isCurrentPage}
+              />
               {index < items.length - 1 && (
-                <motion.li
-                  variants={itemVariants}
-                  className="mx-2 text-gray-400"
-                  aria-hidden="true"
-                >
-                  {separator}
-                </motion.li>
+                <BreadcrumbSeparator separator={separator} />
               )}
             </React.Fragment>
           ))}
-        </motion.ol>
-      </nav>
-
-      {/* Breadcrumbs movil */}
-      <nav aria-label="Breadcrumb" className={`md:hidden mt-2 ${className}`}>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex items-center"
-        >
-          {items.length > 2 ? (
-            <>
-              <Link
-                to={items[0].path}
-                className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
-              >
-                {items[0].label}
-              </Link>
-              <span className="mx-2 text-gray-400" aria-hidden="true">
-                {separator}
-              </span>
-              <span className="text-gray-500">...</span>
-              <span className="mx-2 text-gray-400" aria-hidden="true">
-                {separator}
-              </span>
-              <span className="text-gray-500 font-medium" aria-current="page">
-                {items[items.length - 1].label}
-              </span>
-            </>
-          ) : (
-            items.map((item, index) => (
-              <React.Fragment key={item.path}>
-                {item.isCurrentPage ? (
-                  <span
-                    className="text-gray-500 font-medium"
-                    aria-current="page"
-                  >
-                    {item.label}
-                  </span>
-                ) : (
-                  <Link
-                    to={item.path}
-                    className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                )}
-                {index < items.length - 1 && (
-                  <span className="mx-2 text-gray-400" aria-hidden="true">
-                    {separator}
-                  </span>
-                )}
-              </React.Fragment>
-            ))
-          )}
-        </motion.div>
+        </ol>
       </nav>
     </>
   );

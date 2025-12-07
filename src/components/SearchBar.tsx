@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Prefer CSS transitions for the dropdown to avoid pulling framer-motion into initial bundles
 import useSearchBar from '../hooks/useSearchBar';
 import { SearchResult } from '../hooks/useSearchBar';
 import { SearchBarProps } from './search/SearchBar.types';
@@ -97,19 +97,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-[80vh] overflow-y-auto"
-          >
-            {renderContent()}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-[80vh] overflow-y-auto transition-transform transition-opacity duration-200 ease-out">
+          {renderContent()}
+        </div>
+      )}
     </div>
   );
 };

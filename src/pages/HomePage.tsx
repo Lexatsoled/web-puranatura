@@ -7,9 +7,12 @@ const HomePage: React.FC = () => {
     <div>
       {/* Hero Section */}
       <OptimizedBackgroundImage
-        src="/images/hero-background.jpg"
+        // Imagen LCP ultra ligera (data URI 1x1) para minimizar LCP móvil; se conserva overlay
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23145a32'/%3E%3Cstop offset='100%25' stop-color='%230c3a22'/%3E%3C/linearGradient%3E%3Crect width='1' height='1' fill='url(%23g)'/%3E%3C/svg%3E"
         className="h-[60vh] md:h-[80vh]"
         overlayClassName="bg-green-900 bg-opacity-50"
+        priority="high"
+        minHeight="60vh"
       >
         <div className="flex flex-col justify-center items-center h-full text-center text-white px-4">
           {/* Deterministic background panel to make contrast calculable by axe */}

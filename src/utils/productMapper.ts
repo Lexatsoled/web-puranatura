@@ -1,4 +1,9 @@
 import { Product } from '../types/product';
+import {
+  getDefaultDescription,
+  getDefaultCategory,
+  getProductImage,
+} from './productMapper.helpers';
 
 export interface ApiProduct {
   id: string;
@@ -11,23 +16,16 @@ export interface ApiProduct {
   stock: number;
 }
 
-const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&w=600&q=80';
-
 export const mapApiProduct = (apiProduct: ApiProduct): Product => {
-  const image = apiProduct.imageUrl ?? FALLBACK_IMAGE;
+  const image = getProductImage(apiProduct.imageUrl);
+
   return {
     id: apiProduct.id,
     name: apiProduct.name,
-    description: apiProduct.description ?? 'Producto de PuraNatura',
+    description: getDefaultDescription(apiProduct.description),
     price: apiProduct.price,
-    category: apiProduct.category ?? 'otros',
-    images: [
-      {
-        full: image,
-        thumbnail: image,
-      },
-    ],
+    category: getDefaultCategory(apiProduct.category),
+    images: [{ full: image, thumbnail: image }],
     benefits: [],
     inStock: apiProduct.stock > 0,
     stock: apiProduct.stock,

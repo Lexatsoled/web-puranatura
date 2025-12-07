@@ -1,28 +1,40 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useCart } from './contexts/CartContext';
-import { useAuth } from './contexts/AuthContext';
+import { CartProvider, useCart } from './contexts/CartContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { WishlistProvider } from './contexts/WishlistContext';
+import { NotificationProvider } from './src/contexts/NotificationContext';
+const UserMenu = React.lazy(() => import('./components/UserMenu'));
+
 const AuthModal = React.lazy(() => import('./components/AuthModal'));
-import UserMenu from './components/UserMenu';
+const CartModal = React.lazy(() => import('./components/CartModal'));
 
-interface SimpleLayoutProps {
-  children: ReactNode;
-  onCartClick: () => void;
-}
+const SimpleLayout: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <NotificationProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <LayoutContent>{children}</LayoutContent>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
+  </NotificationProvider>
+);
 
-const SimpleLayout: React.FC<SimpleLayoutProps> = ({
-  children,
-  onCartClick,
-}) => {
+const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const location = useLocation();
   const { cartCount } = useCart();
   const { isAuthenticated } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isCartOpen, setCartOpen] = useState(false);
   const theme = {
     headerBg: '#0f5132',
     navColor: '#f8fafc',
     navActive: '#facc15',
   };
+
+  const handleCartOpen = () => setCartOpen(true);
+  const handleCartClose = () => setCartOpen(false);
 
   const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({
     to,
@@ -42,7 +54,6 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0f8ff' }}>
-      {/* Estilos CSS para animaciones */}
       <style>
         {`
           @keyframes pulse {
@@ -166,7 +177,6 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
         Saltar al contenido principal
       </a>
 
-      {/* Header con navegacion funcional y carrito */}
       <header
         style={{
           position: 'relative',
@@ -179,7 +189,6 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         }}
       >
-        {/* Background color set to a deterministic solid color to help axe compute contrast. */}
         <div
           style={{
             display: 'flex',
@@ -202,11 +211,11 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
             PuraNatura
           </h1>
 
-          {/* Controles del header - Autenticacion y Carrito */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {/* Sistema de autenticacion */}
             {isAuthenticated ? (
-              <UserMenu />
+              <React.Suspense fallback={null}>
+                <UserMenu />
+              </React.Suspense>
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
@@ -230,9 +239,8 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
               </button>
             )}
 
-            {/* Boton del carrito con estilo consistente */}
             <button
-              onClick={onCartClick}
+              onClick={handleCartOpen}
               className="header-button header-button--secondary"
               aria-label="Abrir carrito"
             >
@@ -290,12 +298,10 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
         </nav>
       </header>
 
-      {/* Contenido principal */}
-      <main id="main-content" style={{ minHeight: 'calc(100vh - 120px)' }}>
+      <main id="main-content" style={{ minHeight: '100vh' }}>
         {children}
       </main>
 
-      {/* Footer */}
       <footer
         style={{
           backgroundColor: '#065f46',
@@ -307,12 +313,14 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({
         <p style={{ margin: 0 }}>(c) 2025 PuraNatura - Terapias Naturales</p>
       </footer>
 
-      {/* Modal de autenticacion (carga diferida para reducir bundle inicial) */}
       <React.Suspense fallback={null}>
         <AuthModal
           isOpen={isAuthModalOpen}
           onClose={() => setIsAuthModalOpen(false)}
         />
+      </React.Suspense>
+      <React.Suspense fallback={null}>
+        <CartModal isOpen={isCartOpen} onClose={handleCartClose} />
       </React.Suspense>
     </div>
   );

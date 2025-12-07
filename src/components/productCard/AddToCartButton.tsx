@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+// Use CSS animation for spinner and simple transforms; remove framer-motion dependency here
 import { StockStatus } from '../../hooks/useProductCardState';
 
 type Props = {
@@ -23,19 +23,24 @@ export const AddToCartButton = ({
 
   return (
     <button
+      type="button"
       onClick={onAddToCart}
       disabled={isAddingToCart || stockStatus === 'out-of-stock'}
+      aria-busy={isAddingToCart}
+      aria-label={
+        stockStatus === 'out-of-stock'
+          ? 'Producto agotado'
+          : isAddingToCart
+            ? 'Agregando al carrito'
+            : 'Añadir al carrito'
+      }
       className={`relative px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 flex items-center space-x-2 ${buttonState}`}
     >
       {isAddingToCart ? (
-        <motion.span
-          className="flex items-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
+        <span className="flex items-center transition-opacity duration-150 opacity-100">
           <SpinnerIcon />
           Agregando...
-        </motion.span>
+        </span>
       ) : (
         <>
           <span>{stockStatus === 'out-of-stock' ? 'Agotado' : 'Añadir'}</span>

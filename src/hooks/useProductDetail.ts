@@ -1,4 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import {
+  useProductDetailAddToCart,
+  useProductDetailKeyboard,
+} from './product/useProductDetail.helpers';
 import type { Product } from '../types';
 import { useProductDetailState } from './product/useProductDetailState';
 
@@ -24,45 +27,20 @@ export function useProductDetail(opts: {
     handleMouseMove,
   } = useProductDetailState(product, isOpen);
 
-  // keyboard nav + close
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
+  useProductDetailKeyboard({
+    isOpen,
+    imageCount: product.images.length,
+    onClose,
+    setSelectedImage,
+  });
 
-      switch (e.key) {
-        case 'Escape':
-          onClose();
-          break;
-        case 'ArrowLeft':
-          setSelectedImage((prev) =>
-            prev === 0 ? product.images.length - 1 : prev - 1
-          );
-          break;
-        case 'ArrowRight':
-          setSelectedImage((prev) =>
-            prev === product.images.length - 1 ? 0 : prev + 1
-          );
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, product.images.length, onClose]);
-
-  const handleAddToCart = useCallback(async () => {
-    if (isAddingToCart) return;
-
-    setIsAddingToCart(true);
-    try {
-      await addToCart(product, quantity);
-      // the component can handle closing / success callback
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-    } finally {
-      setIsAddingToCart(false);
-    }
-  }, [isAddingToCart, addToCart, product, quantity]);
+  const handleAddToCart = useProductDetailAddToCart({
+    addToCart,
+    product,
+    quantity,
+    isAddingToCart,
+    setIsAddingToCart,
+  });
 
   return {
     selectedImage,

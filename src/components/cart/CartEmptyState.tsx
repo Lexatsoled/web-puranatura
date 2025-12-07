@@ -1,11 +1,7 @@
-import { motion } from 'framer-motion';
+// Simple static cart empty state — no framer-motion required
 
 export const CartEmptyState = () => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    className="text-center py-12"
-  >
+  <div className="text-center py-12">
     <svg
       className="mx-auto h-12 w-12 text-gray-400 mb-4"
       fill="none"
@@ -23,5 +19,5 @@ export const CartEmptyState = () => (
     <button className="text-green-600 hover:text-green-700 font-medium">
       Continuar comprando
     </button>
-  </motion.div>
+  </div>
 );

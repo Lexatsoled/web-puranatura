@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ProductCard from '../components/ProductCard';
+import ErrorBoundary from '@/src/components/ErrorBoundary';
 import { useStorePage, SortOption } from './store/useStorePage';
 
 const ProductDetailModal = React.lazy(
@@ -27,12 +28,14 @@ const StorePage: React.FC = () => {
 
         {state.apiError && <ErrorAlert message={state.apiError} />}
 
-        <StoreBody
-          isLoading={state.isLoadingProducts}
-          apiError={state.apiError}
-          products={state.paginatedProducts}
-          onViewDetails={state.handleViewDetails}
-        />
+        <ErrorBoundary>
+          <StoreBody
+            isLoading={state.isLoadingProducts}
+            apiError={state.apiError}
+            products={state.paginatedProducts}
+            onViewDetails={state.handleViewDetails}
+          />
+        </ErrorBoundary>
 
         <PaginationControls
           totalPages={state.totalPages}
@@ -116,12 +119,17 @@ const SearchInput = ({
   onChange: (value: string) => void;
 }) => (
   <div className="relative">
+    <label className="sr-only" htmlFor="store-search">
+      Buscar productos
+    </label>
     <input
+      id="store-search"
       data-testid="search-input"
-      type="text"
+      type="search"
       placeholder="Buscar productos..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      autoComplete="off"
       className="w-full p-3 pl-10 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
     />
     <svg
@@ -130,6 +138,7 @@ const SearchInput = ({
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -195,7 +204,7 @@ const ItemsPerPageSelect = ({
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => (
   <select
-    aria-label="Elementos por pagina"
+    aria-label="Elementos por página"
     value={value}
     onChange={onChange}
     className="w-full p-3 bg-white border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"

@@ -9,6 +9,9 @@ type InputProps = {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   placeholder?: string;
+  type?: React.HTMLInputTypeAttribute;
+  autoComplete?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
 };
 
 export const InputField = ({
@@ -18,6 +21,9 @@ export const InputField = ({
   value,
   onChange,
   placeholder,
+  type = 'text',
+  autoComplete,
+  inputMode,
 }: InputProps) => (
   <div>
     <label
@@ -27,13 +33,15 @@ export const InputField = ({
       {label}
     </label>
     <input
-      type="text"
       id={id}
       name={name}
       value={value}
       onChange={onChange}
       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
       placeholder={placeholder}
+      type={type}
+      autoComplete={autoComplete}
+      inputMode={inputMode}
       required
     />
   </div>
@@ -48,6 +56,7 @@ type SelectProps = {
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
+  autoComplete?: string;
 };
 
 export const SelectField = ({
@@ -57,6 +66,7 @@ export const SelectField = ({
   value,
   options,
   onChange,
+  autoComplete,
 }: SelectProps) => (
   <div>
     <label
@@ -71,6 +81,7 @@ export const SelectField = ({
       value={value}
       onChange={onChange}
       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+      autoComplete={autoComplete}
       required
     >
       {options.map((option) => (

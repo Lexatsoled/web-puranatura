@@ -6,6 +6,9 @@ on:
   workflow_dispatch: {}
   push:
     branches: [main]
+    # don't trigger this handler for commits that only touch workflow files
+    paths-ignore:
+      - '.github/**'
 
 permissions:
   issues: write

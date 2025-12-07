@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AnalyticsEvent } from '../types/analytics';
 import AnalyticsService from '../services/analyticsService';
 import {
-  readConsentFromStorage,
-  writeConsentToStorage,
-} from './analytics/useConsentStorage';
+  getInitialConsent,
+  syncConsent,
+  trackPageView,
+  createTrackEvent,
+} from './analytics/useAnalytics.helpers';
 
 // AnalyticsService behaviour has been extracted into `src/services/analyticsService.ts`
 
@@ -13,34 +14,28 @@ import {
 export function useAnalytics() {
   const location = useLocation();
   const analytics = useMemo(() => AnalyticsService.getInstance(), []);
-  const [consentGranted, setConsentGranted] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    if (!analytics.isEnabled()) return false;
-    return readConsentFromStorage('puranatura-consent-analytics');
-  });
+  const [consentGranted, setConsentGranted] = useState<boolean>(() =>
+    getInitialConsent(analytics)
+  );
 
   useEffect(() => {
-    if (!analytics.isEnabled()) return;
-    analytics.setConsent(consentGranted);
-    writeConsentToStorage('puranatura-consent-analytics', consentGranted);
+    syncConsent(analytics, consentGranted);
   }, [analytics, consentGranted]);
 
   useEffect(() => {
-    if (!analytics.isEnabled() || !consentGranted) return;
-    analytics.trackPageView({
-      path: location.pathname + location.search,
-      title: document.title,
-      referrer: document.referrer,
-    });
+    trackPageView(
+      analytics,
+      consentGranted,
+      location.pathname + location.search,
+      document.title,
+      document.referrer
+    );
   }, [analytics, consentGranted, location]);
 
-  const trackEvent = useCallback(
-    (event: Omit<AnalyticsEvent, 'timestamp'>) => {
-      if (!analytics.isEnabled() || !consentGranted) return;
-      analytics.trackEvent(event);
-    },
-    [analytics, consentGranted]
-  );
+  const trackEvent = useCallback(createTrackEvent(analytics, consentGranted), [
+    analytics,
+    consentGranted,
+  ]);
 
   const setConsent = useCallback((granted: boolean) => {
     setConsentGranted(granted);

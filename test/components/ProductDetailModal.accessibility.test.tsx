@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, test, expect, vi } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import ProductDetailModal from '../../components/ProductDetailModal';
 import { AuthProvider } from '../../contexts/AuthContext';
 import { CartProvider } from '../../contexts/CartContext';
@@ -14,6 +14,16 @@ const sampleProduct = {
 } as any;
 
 describe('ProductDetailModal accessibility', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
+    cleanup();
+  });
+
   test('focus moves to close button when opened and Escape closes', () => {
     const onClose = vi.fn();
     render(

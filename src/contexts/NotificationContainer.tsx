@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+// Prefer CSS transitions for notifications; avoid framer-motion in top-level context
 import { Notification } from './NotificationContext.types';
 import {
   getCardClasses,
@@ -18,15 +18,8 @@ export const NotificationContainer: React.FC<Props> = ({
   onRemove,
 }) => (
   <div className="fixed top-4 right-4 z-50 space-y-4 min-w-[320px]">
-    <AnimatePresence>
       {notifications.map((notification) => (
-        <motion.div
-          key={notification.id}
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          className={getCardClasses(notification.type)}
-        >
+        <div key={notification.id} className={`${getCardClasses(notification.type)} transition-transform duration-150` }>
           <div className="flex justify-between items-start">
             <div>
               {notification.title && (
@@ -52,8 +45,7 @@ export const NotificationContainer: React.FC<Props> = ({
               </svg>
             </button>
           </div>
-        </motion.div>
+        </div>
       ))}
-    </AnimatePresence>
   </div>
 );

@@ -35,6 +35,22 @@ const analyticsLimiter = rateLimit({
       traceId,
     });
   },
+  keyGenerator: (req) => {
+    if (env.nodeEnv === 'test') {
+      const key = req.headers['x-rate-key'];
+      if (key) return String(key);
+    }
+    // Prefiere sessionId o userId en metadata para limitar por usuario/sesión
+    const body: any = req.body || {};
+    const session = body.sessionId ? String(body.sessionId) : null;
+    const userId =
+      body.metadata && body.metadata.userId
+        ? String(body.metadata.userId)
+        : null;
+    if (session) return session;
+    if (userId) return userId;
+    return String(req.ip);
+  },
 });
 
 const normalizeIp = (req: Request): string | undefined => {

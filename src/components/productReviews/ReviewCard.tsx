@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS transforms for interactive elements instead of framer-motion
 import { OptimizedImage } from '../OptimizedImage';
 import { Review } from './useProductReviews';
 
@@ -18,12 +18,7 @@ export const ReviewCard: React.FC<Props> = ({
   onToggleHelpful,
   onToggleReported,
 }) => (
-  <motion.div
-    key={review.id}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="bg-white rounded-lg shadow-sm p-6"
-  >
+  <div key={review.id} className="bg-white rounded-lg shadow-sm p-6">
     <div className="flex items-center mb-4">
       <div className="w-12 h-12 relative rounded-full overflow-hidden mr-4">
         {review.userImage ? (
@@ -73,14 +68,10 @@ export const ReviewCard: React.FC<Props> = ({
     </div>
     <p className="text-gray-600">{review.comment}</p>
     <div className="mt-4 flex items-center space-x-4">
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      <button
         onClick={() => onToggleHelpful(review.id)}
-        className={`text-sm flex items-center ${
-          isHelpful
-            ? 'text-green-600 font-medium'
-            : 'text-gray-500 hover:text-gray-700'
+        className={`text-sm flex items-center transform transition-transform duration-150 active:scale-95 ${
+          isHelpful ? 'text-green-600 font-medium' : 'text-gray-500 hover:text-gray-700'
         }`}
       >
         <svg
@@ -102,19 +93,15 @@ export const ReviewCard: React.FC<Props> = ({
             ({review.helpfulCount + (isHelpful ? 1 : 0)})
           </span>
         )}
-      </motion.button>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      </button>
+      <button
         onClick={() => onToggleReported(review.id)}
-        className={`text-sm ${
-          isReported
-            ? 'text-red-600 font-medium'
-            : 'text-gray-500 hover:text-gray-700'
+        className={`text-sm transform transition-transform duration-150 active:scale-95 ${
+          isReported ? 'text-red-600 font-medium' : 'text-gray-500 hover:text-gray-700'
         }`}
       >
         {isReported ? 'Reportado' : 'Reportar'}
-      </motion.button>
+      </button>
     </div>
-  </motion.div>
+  </div>
 );

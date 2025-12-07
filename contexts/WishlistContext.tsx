@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '../types';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 // Mantiene la lista de deseos sincronizada con localStorage y expone utilidades para la UI.
 
@@ -81,7 +82,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.images[0].full,
+        image: product?.images?.[0]?.full ?? DEFAULT_PRODUCT_IMAGE,
         category: product.category,
         inStock: true, // Por defecto asumimos que está en stock
         addedDate: new Date(),

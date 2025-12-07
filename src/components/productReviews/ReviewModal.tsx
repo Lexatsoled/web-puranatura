@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+// Using simple conditional rendering and CSS transitions for the review modal
 import ReviewForm, { ReviewFormData } from '../ReviewForm';
 
 type Props = {
@@ -9,16 +9,13 @@ type Props = {
 };
 
 export const ReviewModal: React.FC<Props> = ({ isOpen, onClose, onSubmit }) => (
-  <AnimatePresence>
+  <>
     {isOpen && (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
         onClick={onClose}
       >
-        <motion.div
+        <div
           className="bg-white rounded-lg p-6 w-full max-w-lg"
           onClick={(e) => e.stopPropagation()}
         >
@@ -29,8 +26,8 @@ export const ReviewModal: React.FC<Props> = ({ isOpen, onClose, onSubmit }) => (
             }}
             onCancel={onClose}
           />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     )}
-  </AnimatePresence>
+  </>
 );

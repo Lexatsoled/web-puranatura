@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+// Using CSS transforms instead of framer-motion for review form interactive buttons
 
 export interface ReviewFormData {
   userName: string;
@@ -51,15 +51,13 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
           </label>
           <div className="flex">
             {[1, 2, 3, 4, 5].map((star) => (
-              <motion.button
+              <button
                 key={star}
                 type="button"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
+                className="p-1 transition-transform duration-150 transform hover:scale-110 active:scale-95"
                 onClick={() => setFormData({ ...formData, rating: star })}
                 onMouseEnter={() => setHoveredStar(star)}
                 onMouseLeave={() => setHoveredStar(null)}
-                className="p-1"
               >
                 <svg
                   className={`w-6 h-6 ${
@@ -72,7 +70,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
                 >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
@@ -109,28 +107,19 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
       </div>
 
       <div className="flex justify-end space-x-3">
-        <motion.button
+        <button
           type="button"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-transform duration-150 transform active:scale-95"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
         >
           Cancelar
-        </motion.button>
-        <motion.button
+        </button>
+        <button
           type="submit"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className={`px-4 py-2 text-sm font-medium text-white rounded-md transform transition-transform duration-150 active:scale-95 ${
+            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+          }`}
           disabled={isSubmitting}
-          className={`
-            px-4 py-2 text-sm font-medium text-white rounded-md
-            ${
-              isSubmitting
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700'
-            }
-          `}
         >
           {isSubmitting ? (
             <div className="flex items-center">
@@ -159,7 +148,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
           ) : (
             'Enviar Reseña'
           )}
-        </motion.button>
+        </button>
       </div>
     </form>
   );

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+// prefer CSS transitions for lightweight page animations
 import { useAuth } from '../contexts/AuthContext';
 import { sampleOrders } from './orders/constants';
 import { Order } from './orders/types';
@@ -37,11 +37,7 @@ const OrdersPage: React.FC = () => {
         </div>
 
         {!hasOrders ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center"
-          >
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center transition-opacity duration-300 transform">
             <svg
               className="w-16 h-16 text-gray-400 mx-auto mb-4"
               fill="none"
@@ -64,7 +60,7 @@ const OrdersPage: React.FC = () => {
             <button className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">
               Explorar Productos
             </button>
-          </motion.div>
+          </div>
         ) : (
           <div className="space-y-6">
             {sampleOrders.map((order) => (

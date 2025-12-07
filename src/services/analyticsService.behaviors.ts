@@ -7,13 +7,20 @@ import {
 } from './analyticsService.helpers';
 import { AnalyticsService } from './analyticsService';
 
-export const shouldInit = (svc: AnalyticsService) =>
-  svc.initialized || !svc.consentGranted || !svc.enabled;
+const isTrackingActive = (svc: AnalyticsService) =>
+  svc.consentGranted && svc.enabled;
 
-export const performInit = (svc: AnalyticsService) => {
+const initProvidersIfBrowser = (svc: AnalyticsService) => {
   if (typeof window !== 'undefined') {
     initProviders(svc.gaId, svc.fbPixelId);
   }
+};
+
+export const shouldInit = (svc: AnalyticsService) =>
+  svc.initialized || !isTrackingActive(svc);
+
+export const performInit = (svc: AnalyticsService) => {
+  initProvidersIfBrowser(svc);
   svc.initialized = true;
   flushQueue(svc.queue, (event: AnalyticsEvent) => svc.trackEvent(event));
 };
@@ -29,18 +36,14 @@ export const trackEventOrQueue = (
   svc: AnalyticsService,
   event: AnalyticsEvent
 ) => {
-  if (!svc.consentGranted || !svc.enabled) return;
-  if (!svc.initialized) {
-    svc.queue.push(event);
-    return;
-  }
-  dispatchEvent(event);
+  if (!isTrackingActive(svc)) return;
+
+  svc.initialized ? dispatchEvent(event) : svc.queue.push(event);
 };
 
 export const trackPageViewEvent = (
   svc: AnalyticsService,
   payload: PageViewEvent
 ) => {
-  if (!svc.consentGranted || !svc.enabled) return;
   trackEventOrQueue(svc, buildPageViewEvent(payload));
 };

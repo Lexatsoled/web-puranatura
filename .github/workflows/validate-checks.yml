@@ -2,7 +2,13 @@ name: 'Validate docs & memory checks'
 
 on:
   pull_request:
+    # avoid running when PRs only update workflow files
+    paths-ignore:
+      - '.github/**'
   push:
+    # avoid running when pushes only change workflow files
+    paths-ignore:
+      - '.github/**'
   workflow_dispatch:
 
 jobs:

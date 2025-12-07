@@ -1,16 +1,8 @@
-import { AnimatePresence, motion } from 'framer-motion';
+// Use plain rendering and CSS for cart item listing (no framer-motion)
 import { CartItem } from '../../hooks/useShoppingCart';
 import { CartItemRow } from './CartItemRow';
 
-export const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+// removal of framer-motion variants — CSS handles layout/appearance
 
 export const CartItemsList = ({
   items,
@@ -27,24 +19,17 @@ export const CartItemsList = ({
   handleVariantChange: (itemId: string, variantId: string) => void;
   onRemoveItem: (itemId: string) => void;
 }) => (
-  <motion.div
-    variants={containerVariants}
-    initial="hidden"
-    animate="visible"
-    className="divide-y divide-gray-200"
-  >
-    <AnimatePresence>
-      {items.map((item) => (
-        <CartItemRow
-          key={item.id}
-          item={item}
-          currencySymbol={currencySymbol}
-          maxQuantityPerItem={maxQuantityPerItem}
-          handleQuantityChange={handleQuantityChange}
-          handleVariantChange={handleVariantChange}
-          onRemoveItem={onRemoveItem}
-        />
-      ))}
-    </AnimatePresence>
-  </motion.div>
+  <div className="divide-y divide-gray-200">
+    {items.map((item) => (
+      <CartItemRow
+        key={item.id}
+        item={item}
+        currencySymbol={currencySymbol}
+        maxQuantityPerItem={maxQuantityPerItem}
+        handleQuantityChange={handleQuantityChange}
+        handleVariantChange={handleVariantChange}
+        onRemoveItem={onRemoveItem}
+      />
+    ))}
+  </div>
 );

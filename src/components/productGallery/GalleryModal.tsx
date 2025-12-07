@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+// Replace framer-motion modal transitions with CSS-based transitions
 import { ProductImage } from '../../types/product';
 
 export const GalleryModal = ({
@@ -17,16 +17,14 @@ export const GalleryModal = ({
   onPrev: () => void;
   onNext: () => void;
   productName: string;
-}) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black z-50 flex items-center justify-center"
-        onClick={onClose}
-      >
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black z-50 flex items-center justify-center transition-opacity duration-200"
+      onClick={onClose}
+    >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
@@ -47,13 +45,10 @@ export const GalleryModal = ({
           </svg>
         </button>
 
-        <motion.img
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0.8 }}
+        <img
           src={images[selectedImage]?.full || images[selectedImage]?.thumbnail}
           alt={`${productName} - Imagen ${selectedImage + 1}`}
-          className="max-w-full max-h-full object-contain p-4"
+          className="max-w-full max-h-full object-contain p-4 transition-transform duration-200 transform-gpu scale-100"
           onClick={(e) => e.stopPropagation()}
         />
 
@@ -67,10 +62,9 @@ export const GalleryModal = ({
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
           {selectedImage + 1} de {images.length}
         </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+    </div>
+  );
+};
 
 const ArrowButton = ({
   position,

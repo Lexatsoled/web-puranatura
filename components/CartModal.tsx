@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS-driven modal/overlay instead of framer-motion to avoid bundling the motion runtime
 import { useCart } from '../contexts/CartContext';
 import { formatCurrency } from '../src/utils/intl';
 import { useFocusTrap } from '../src/hooks/useFocusTrap';
@@ -10,6 +10,7 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
+  const modalTitleId = 'cart-modal-title';
   const {
     cartItems,
     removeFromCart,
@@ -94,25 +95,18 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-        onClick={onClose}
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+      onClick={onClose}
+    >
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={modalTitleId}
+        className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden transform transition-all duration-200"
+        onClick={(e) => e.stopPropagation()}
       >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          ref={modalRef}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="cart-modal-title"
-          className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[80vh] overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
           <div className="flex items-center justify-between p-4 border-b">
             <h2 id="cart-modal-title" className="text-xl font-semibold">
               {isProcessingPayment
@@ -389,10 +383,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
           )}
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
+        </div>
+      </div>
+    );
 };
 
 export default CartModal;

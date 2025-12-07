@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use lightweight CSS transitions for the user menu dropdown instead of framer-motion
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -252,14 +252,8 @@ const UserMenu: React.FC = () => {
       </button>
 
       {/* Dropdown Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
-          >
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 transition-transform duration-200 transform">
             {/* User Info Header */}
             <div className="px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
@@ -317,9 +311,8 @@ const UserMenu: React.FC = () => {
                 <span className="text-sm">Cerrar Sesión</span>
               </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </div>
   );
 };

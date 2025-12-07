@@ -1,4 +1,6 @@
 name: Deploy to staging
+# Deploy to staging is manual by design — only manual `workflow_dispatch` runs
+# should build and optionally push images for staging environments.
 on:
   workflow_dispatch: {}
 
