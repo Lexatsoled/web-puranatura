@@ -1,22 +1,10 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Using CSS-based transitions for wishlist items instead of framer-motion
 import { Product } from '../types';
 import { OptimizedImage } from './OptimizedImage';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
-export const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-export const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0 },
-};
+// Layout/animation behavior replaced with CSS classes
 
 export const WishlistSkeleton: React.FC = () => (
   <div className="p-6 bg-white rounded-xl shadow-lg">
@@ -125,11 +113,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
   onMoveToCart,
   onRemove,
 }) => (
-  <motion.div
-    variants={itemVariants}
-    exit={{ opacity: 0, x: -20 }}
-    className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-  >
+  <div className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors transform-gpu will-change-transform">
     <input
       type="checkbox"
       checked={isSelected}
@@ -138,7 +122,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
     />
     <div className="ml-4 w-20 h-20 relative flex-shrink-0">
       <OptimizedImage
-        src={item.images[0].thumbnail}
+        src={item?.images?.[0]?.thumbnail ?? DEFAULT_PRODUCT_IMAGE}
         alt={item.name}
         className="rounded-md object-cover"
         aspectRatio={1}
@@ -191,7 +175,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
         </svg>
       </button>
     </div>
-  </motion.div>
+  </div>
 );
 
 export interface WishlistActionsProps {
@@ -203,11 +187,7 @@ export const WishlistActions: React.FC<WishlistActionsProps> = ({
   count,
   onMoveSelected,
 }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="mt-6 flex justify-end"
-  >
+  <div className="mt-6 flex justify-end transition-transform duration-150 ease-out">
     <button
       onClick={onMoveSelected}
       className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
@@ -229,5 +209,5 @@ export const WishlistActions: React.FC<WishlistActionsProps> = ({
         Mover {count} {count === 1 ? 'item' : 'items'} al carrito
       </span>
     </button>
-  </motion.div>
+  </div>
 );

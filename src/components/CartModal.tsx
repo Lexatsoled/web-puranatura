@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCartStore } from '../store/cartStore';
 import { OptimizedImage } from './OptimizedImage';
-import { AnimatePresence, motion } from 'framer-motion';
+// Use CSS for modal show/hide and item transitions instead of framer-motion
 import { CartItem } from '../types/cart';
 
 interface CartModalProps {
@@ -21,22 +21,16 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-50"
           onClick={onClose}
         >
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col"
+          <div
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col transition-transform duration-300 transform translate-x-0"
             onClick={(e) => e.stopPropagation()}
+            aria-hidden={!isOpen}
           >
             <div className="flex justify-between items-center p-4 border-b">
               <h2 className="text-xl font-bold text-gray-800">
@@ -97,13 +91,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               <>
                 <div className="flex-grow overflow-y-auto p-4 space-y-4">
                   {cart.items.map((item: CartItem) => (
-                    <motion.div
+                    <div
                       key={item.product.id}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="flex items-center space-x-4 bg-white p-3 rounded-lg shadow-sm"
+                      className="flex items-center space-x-4 bg-white p-3 rounded-lg shadow-sm transition-transform duration-150"
                     >
                       <div className="relative w-20 h-20 flex-shrink-0">
                         <OptimizedImage
@@ -179,7 +169,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                           />
                         </svg>
                       </button>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
 
@@ -202,10 +192,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                 </div>
               </>
             )}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

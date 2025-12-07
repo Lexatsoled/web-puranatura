@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+// Use CSS for simple list entry transforms instead of framer-motion
 import { Address } from './useAddressesState';
 import {
   AddressTypeIcon,
@@ -21,11 +21,10 @@ export const AddressList = ({
   onDelete,
 }: Props) => (
   <div className="space-y-4 mb-8">
-    {addresses.map((address, index) => (
+    {addresses.map((address) => (
       <AddressCard
         key={address.id}
         address={address}
-        index={index}
         onSetDefault={onSetDefault}
         onEdit={onEdit}
         onDelete={onDelete}
@@ -36,13 +35,11 @@ export const AddressList = ({
 
 const AddressCard = ({
   address,
-  index,
   onSetDefault,
   onEdit,
   onDelete,
 }: {
   address: Address;
-  index: number;
   onSetDefault: (id: string) => void;
   onEdit: (address: Address) => void;
   onDelete: (id: string) => void;
@@ -55,12 +52,7 @@ const AddressCard = ({
     : 'bg-gray-100 text-gray-600';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className={`bg-white rounded-lg shadow-sm border-2 p-6 ${badgeColor}`}
-    >
+    <div className={`bg-white rounded-lg shadow-sm border-2 p-6 ${badgeColor} transition-transform duration-150`}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-4">
           <div className={`p-2 rounded-lg ${iconColor}`}>
@@ -102,7 +94,7 @@ const AddressCard = ({
           onDelete={onDelete}
         />
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -1,44 +1,31 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
   children: React.ReactNode;
 }
 
-const pageTransitionVariants = {
-  initial: {
-    opacity: 0,
-    y: 20,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: 20,
-    transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 1, 1],
-    },
-  },
-} as const;
+const ease = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.style.transition = `opacity 400ms ${ease}, transform 400ms ${ease}`;
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    });
+    return () => {
+      if (el) el.style.transition = '';
+    };
+  }, []);
+
   return (
-    <motion.div
-      variants={pageTransitionVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="w-full"
-    >
+    <div ref={ref} className="w-full" style={{ opacity: 0, transform: 'translateY(20px)' }}>
       {children}
-    </motion.div>
+    </div>
   );
 };
 

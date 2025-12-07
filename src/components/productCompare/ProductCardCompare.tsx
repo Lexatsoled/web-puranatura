@@ -1,56 +1,29 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Product } from '../../types';
 import { OptimizedImage } from '../OptimizedImage';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 type Props = {
   product: Product;
-  index: number;
   showDifferences: boolean;
   differentFeatures: string[];
   onRemove: (id: string) => void;
 };
 
-const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
-    opacity: 0,
-  }),
-  center: {
-    zIndex: 1,
-    x: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => ({
-    zIndex: 0,
-    x: direction < 0 ? 1000 : -1000,
-    opacity: 0,
-  }),
-};
-
 export const ProductCardCompare: React.FC<Props> = ({
   product,
-  index,
   showDifferences,
   differentFeatures,
   onRemove,
 }) => (
-  <motion.div
+  <div
     key={product.id}
     className="w-72 flex-shrink-0"
-    initial="enter"
-    animate="center"
-    exit="exit"
-    variants={slideVariants}
-    custom={index}
-    transition={{
-      x: { type: 'spring', stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 },
-    }}
+    // Keeping simple static layout for product compare card — no framer-motion
   >
     <div className="relative aspect-square mb-4 rounded-lg overflow-hidden">
       <OptimizedImage
-        src={product.images[0].full}
+        src={product?.images?.[0]?.full ?? DEFAULT_PRODUCT_IMAGE}
         alt={product.name}
         className="object-cover w-full h-full"
         aspectRatio={1}
@@ -100,7 +73,7 @@ export const ProductCardCompare: React.FC<Props> = ({
           );
         })}
     </div>
-  </motion.div>
+  </div>
 );
 
 const BenefitRow = ({

@@ -1,5 +1,13 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import { NotificationContainer } from './NotificationContainer';
+import React, { createContext, useContext, useState, useCallback, Suspense } from 'react';
+// The NotificationContainer imports framer-motion which is relatively heavy.
+// Load it lazily so framer-motion is only downloaded/parsed when the app actually
+// needs to render notifications. This reduces initial JS execution cost.
+// NotificationContainer is a named export in the module. React.lazy expects
+// a Promise resolving to { default: Component }, so map the imported module
+// to that shape.
+const NotificationContainer = React.lazy(() =>
+  import('./NotificationContainer').then((mod) => ({ default: mod.NotificationContainer }))
+);
 import {
   Notification,
   NotificationContextType,
@@ -58,10 +66,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       }}
     >
       {children}
-      <NotificationContainer
-        notifications={notifications}
-        onRemove={removeNotification}
-      />
+      {/* only render the notification UI when we actually have notifications */}
+      {notifications.length > 0 && (
+        <Suspense fallback={null}>
+          <NotificationContainer
+            notifications={notifications}
+            onRemove={removeNotification}
+          />
+        </Suspense>
+      )}
     </NotificationContext.Provider>
   );
 };

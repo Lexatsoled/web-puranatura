@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Using CSS transitions for category cards instead of framer-motion
 import {
   Category,
   CategoryScrollBar,
@@ -13,18 +13,6 @@ interface CategoryNavigationProps {
   activeCategory?: string;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-};
 
 const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   categories,
@@ -63,41 +51,27 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 mt-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredCategories.map((category) => (
             <FeaturedCategoryCard
               key={category.id}
               category={category}
-              variants={itemVariants}
               onSelect={onCategorySelect}
             />
           ))}
-        </motion.div>
+        </div>
 
-        <AnimatePresence>
-          {(showAllCategories || regularCategories.length <= 6) && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
-            >
-              {regularCategories.map((category) => (
-                <RegularCategoryCard
-                  key={category.id}
-                  category={category}
-                  variants={itemVariants}
-                  onSelect={onCategorySelect}
-                />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {(showAllCategories || regularCategories.length <= 6) && (
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {regularCategories.map((category) => (
+              <RegularCategoryCard
+                key={category.id}
+                category={category}
+                onSelect={onCategorySelect}
+              />
+            ))}
+          </div>
+        )}
 
         {regularCategories.length > 6 && (
           <div className="text-center mt-6">

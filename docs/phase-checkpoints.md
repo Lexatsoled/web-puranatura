@@ -7,7 +7,7 @@ Fuente canonical:
 - `Plan-mejora/Checklist-Plan-Maestro.md` (checklist maestro, evidencias y pasos por fase).
 - `GPT-51-Codex-Max-Hight/CheckList.md` (CheckList maestro - referencia compartida para validación y sincronización).
 
-Última actualización: 2025-12-05 – sincronizado con el checklist maestro tras cerrar la observabilidad y avanzar la fase 5.
+Última actualización: 2025-12-06 – sincronizado con el checklist maestro tras la validación local final (build, tests, E2E, cobertura y escaneos).
 
 Estado actual (resumen):
 
@@ -31,5 +31,21 @@ Estado actual (resumen):
 - 2025-12-15: `src/hooks/useProductDetail.ts` reduce su responsabilidad al delegar el manejo del teclado y del botón “Añadir al carrito” a `src/hooks/product/useProductDetail.helpers.ts`; el helper y la estrategia se describen en el checkpoint y los tres gates siguen limpios.
 - 2025-12-15: Se deja constancia de que los módulos con CC 10-11 restantes (utilidades base como `api.ts`, `intl.ts`, middlewares) se mantienen por ser control de flujo legítimo con bajo retorno de seguir fragmentando; el checkpoint lo registra y los gates (`npm run lint`, `npm run test:ci`, `npm run check:complexity`) permanecen verdes.
 - 2025-12-15: Se cierra formalmente la fase 5 tras validar gates (lint, test:ci, check:complexity) y dejar documentado que los módulos residuales con CC 10-11 son aceptables; checklist y runbook sincronizados.
+
+### Actualizaciones 2025-12-06 (validación local final)
+
+- Se ejecutó una validación CI-local completa para confirmar que la remoción de framer-motion y las correcciones asociadas no rompieran la base de código. Pasos ejecutados: build (vite), lint + type-check, unit tests (vitest), E2E (Playwright), coverage, pruebas de contrato (Prism), synthetic checks y escaneos de seguridad.
+- Resultados clave:
+  - Build de producción: ✅ `dist/` generado correctamente (advertencias no bloqueantes detectadas).
+  - Unit tests: ✅ 86 tests pasaron (35 archivos)
+  - E2E (Playwright): ✅ 3 tests pasaron
+  - Cobertura: ✅ informe generado
+  - Contract tests: ✅ Prism respondió y los endpoints se validaron
+  - Observability verification: ✅ artefactos presentes (`observability-artifacts.zip`)
+- Escaneos de seguridad: ⚠️ `gitleaks` reportó 9 coincidencias, pero todas aparecen en artefactos temporales de Lighthouse bajo `tmp/lighthouse-temp/*`. Recomendación: excluir `tmp/` de escaneos o limpiar antes de ejecutar `scan:security` para evitar falsos positivos.
+- Test-breaker: ❌ falló localmente por `EBUSY` al intentar renombrar `backend/prisma/dev.db` (archivo bloqueado por procesos locales). Recomendación: detener procesos que accedan a `dev.db` antes de ejecutar el script breaker, o adaptar el script para hacer copias en lugar de rename si el entorno lo requiere.
+- Synthetic checks: ❌ fallo local por arranque/entorno (ts-node / permisos). Recomendación: ejecutar en CI o preparar entorno local con ts-node y puerto libre.
+
+Siguiente paso recomendado: push + abrir PR para que GitHub Actions ejecute la misma batería de checks en CI (entorno limpio y reproducible) — eso validará gates en remoto y evitará diferencias locales.
 
 Nota: para cualquier actualización operativa edita la checklist canonical y actualiza este índice. La documentación viva debe permanecer sincronizada con los artefactos y las evidencias.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Use CSS based overlay and modal transitions instead of framer-motion
 import { OptimizedImage } from '../OptimizedImage';
 
 type Props = {
@@ -17,18 +17,8 @@ export const ImageGalleryModal: React.FC<Props> = ({
   onSelect,
   onClose,
 }) => (
-  <motion.div
-    className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-  >
-    <motion.div
-      className="bg-white rounded-lg overflow-hidden max-w-4xl w-full"
-      initial={{ scale: 0.95 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0.95 }}
-    >
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-lg overflow-hidden max-w-4xl w-full transform transition-transform duration-200 scale-100">
       <div className="relative">
         <OptimizedImage
           src={images[selectedIndex]?.full}
@@ -50,8 +40,8 @@ export const ImageGalleryModal: React.FC<Props> = ({
           onSelect={onSelect}
         />
       </div>
-    </motion.div>
-  </motion.div>
+      </div>
+    </div>
 );
 
 const ImageGalleryThumbs = ({

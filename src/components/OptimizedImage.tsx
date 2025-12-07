@@ -4,6 +4,7 @@ import { ImageErrorFallback } from './optimizedImage/ErrorFallback';
 import { ImagePlaceholder } from './optimizedImage/Placeholder';
 import { OptimizedImageProps } from './optimizedImage/types';
 import { useOptimizedImage } from './optimizedImage/useOptimizedImage';
+import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
@@ -57,7 +58,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <LazyLoadImage
-        src={src}
+        src={src ?? DEFAULT_PRODUCT_IMAGE}
         alt={alt}
         width={finalWidth}
         height={finalHeight}

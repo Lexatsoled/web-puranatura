@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+// Use CSS for breadcrumb appearance instead of framer-motion
 import { sanitizeHtml } from '../utils/sanitizer';
 import { BreadcrumbItem, BreadcrumbSeparator } from './Breadcrumbs.helpers';
 
@@ -36,14 +36,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   ),
   structured = true,
 }) => {
-  const containerVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3, staggerChildren: 0.1 },
-    },
-  };
 
   const jsonLd = useMemo(
     () => ({
@@ -72,12 +64,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
         />
       )}
       <nav aria-label="Breadcrumb" className={className}>
-        <motion.ol
-          className="flex items-center flex-wrap"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <ol className="flex items-center flex-wrap">
           {items.map((item, index) => (
             <React.Fragment key={item.path}>
               <BreadcrumbItem
@@ -90,7 +77,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
               )}
             </React.Fragment>
           ))}
-        </motion.ol>
+        </ol>
       </nav>
     </>
   );

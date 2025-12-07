@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Small interactive button uses CSS transforms instead of framer-motion
 import { ReviewCard } from './productReviews/ReviewCard';
 import { ReviewModal } from './productReviews/ReviewModal';
 import { ReviewsSummary } from './productReviews/ReviewsSummary';
@@ -44,14 +44,12 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
         </div>
 
         <div className="mt-8 text-center">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <button
             onClick={() => setIsWritingReview(true)}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors transform active:scale-95"
           >
             Escribir una Reseña
-          </motion.button>
+          </button>
         </div>
 
         <ReviewModal

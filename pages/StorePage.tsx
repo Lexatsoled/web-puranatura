@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ProductCard from '../components/ProductCard';
+import ErrorBoundary from '@/src/components/ErrorBoundary';
 import { useStorePage, SortOption } from './store/useStorePage';
 
 const ProductDetailModal = React.lazy(
@@ -27,12 +28,14 @@ const StorePage: React.FC = () => {
 
         {state.apiError && <ErrorAlert message={state.apiError} />}
 
-        <StoreBody
-          isLoading={state.isLoadingProducts}
-          apiError={state.apiError}
-          products={state.paginatedProducts}
-          onViewDetails={state.handleViewDetails}
-        />
+        <ErrorBoundary>
+          <StoreBody
+            isLoading={state.isLoadingProducts}
+            apiError={state.apiError}
+            products={state.paginatedProducts}
+            onViewDetails={state.handleViewDetails}
+          />
+        </ErrorBoundary>
 
         <PaginationControls
           totalPages={state.totalPages}

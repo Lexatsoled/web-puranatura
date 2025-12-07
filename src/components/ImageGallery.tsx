@@ -1,5 +1,4 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
 import { ImageGalleryMain } from './imageGallery/ImageGalleryMain';
 import { ImageGalleryModal } from './imageGallery/ImageGalleryModal';
 import { ImageGalleryThumbs } from './imageGallery/ImageGalleryThumbs';
@@ -39,17 +38,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
         onSelect={setSelectedIndex}
       />
 
-      <AnimatePresence>
-        {isOpen && (
-          <ImageGalleryModal
-            images={images}
-            productName={productName}
-            selectedIndex={selectedIndex}
-            onClose={closeModal}
-            onSelect={setSelectedIndex}
-          />
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <ImageGalleryModal
+          images={images}
+          productName={productName}
+          selectedIndex={selectedIndex}
+          onClose={closeModal}
+          onSelect={setSelectedIndex}
+        />
+      )}
     </div>
   );
 };

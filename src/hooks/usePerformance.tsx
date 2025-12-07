@@ -1,18 +1,21 @@
 import React, { Suspense } from 'react';
-import { motion } from 'framer-motion';
 
 // Agrupa utilidades de rendimiento: carga perezosa, memoizacion y callbacks estables.
 
 // Componente de loading con animación
 const LoadingFallback: React.FC = () => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
+  <div
+    aria-hidden
     className="flex items-center justify-center w-full h-32"
+    style={{ opacity: 1 }}
   >
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500" />
-  </motion.div>
+    {/* Simple, CSS-based spinner - avoids bringing framer-motion into initial bundles */}
+    <div
+      role="status"
+      aria-label="Cargando"
+      className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"
+    />
+  </div>
 );
 
 interface WithLazyLoadingProps {

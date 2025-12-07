@@ -1,5 +1,5 @@
 import { NextSeo, ProductJsonLd } from 'next-seo';
-import { motion } from 'framer-motion';
+// Use CSS transition for page entrance; avoid framer-motion in route pages
 import { useParams } from 'react-router-dom';
 import { Product, ProductImage } from '../types/product';
 import { useProductDetails } from '../hooks/useProductDetails';
@@ -42,15 +42,10 @@ const ProductPage: React.FC = () => {
       />
       <BreadcrumbStructuredData sanitizedJson={sanitizedBreadcrumbJsonLd} />
       <div className="container mx-auto px-4 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 transition-transform duration-500 ease-out transform-gpu">
           <ProductHero product={product as Product} />
           <ProductInfo product={product as Product} />
-        </motion.div>
+        </div>
       </div>
     </>
   );

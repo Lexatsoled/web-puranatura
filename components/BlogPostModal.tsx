@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS overlay/modal transitions instead of framer-motion for BlogPostModal
 import { BlogPost } from '../types';
 import {
   sanitizeHtml,
@@ -53,32 +53,25 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({
   });
 
   if (!post) return null;
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) onClose();
-          }}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"
+        role="presentation"
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+      >
+        <div
+          className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-200"
+          onMouseDown={(event) => event.stopPropagation()}
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="blog-post-title"
+          tabIndex={-1}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
-            onMouseDown={(event) => event.stopPropagation()}
-            ref={dialogRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="blog-post-title"
-            tabIndex={-1}
-          >
             <div className="relative">
               {safeImageUrl && (
                 <div className="h-64 w-full overflow-hidden">
@@ -149,11 +142,9 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({
                 </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+          </div>
+        </div>
+      );
 };
 
 export default BlogPostModal;

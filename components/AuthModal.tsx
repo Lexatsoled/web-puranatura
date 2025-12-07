@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Use CSS-based modal transitions instead of framer-motion to keep bundles small
 import { useAuth } from '../contexts/AuthContext';
 import { useFocusTrap } from '../src/hooks/useFocusTrap';
 
@@ -147,27 +147,24 @@ const AuthModal: React.FC<AuthModalProps> = ({
     });
   };
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        role="presentation"
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+      >
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) onClose();
-          }}
+          className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto focus:outline-none transform transition-all duration-200"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="auth-modal-title"
+          ref={dialogRef}
+          tabIndex={-1}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto focus:outline-none"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="auth-modal-title"
-            ref={dialogRef}
-            tabIndex={-1}
-          >
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2
@@ -581,11 +578,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
-  );
+      );
 };
 
 export default AuthModal;

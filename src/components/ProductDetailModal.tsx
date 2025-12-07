@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { Product } from '../types';
 import { useCartStore } from '../store/cartStore';
 import useProductDetail from '../hooks/useProductDetail';
@@ -34,6 +33,19 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     handleAddToCart,
   } = useProductDetail({ product, isOpen, onClose, addToCart });
 
+  // Keep this component simple: animate only on mount with CSS classes.
+  // We remove framer-motion so the runtime won't be pulled into shared chunks.
+
+  // NOTE: hooks must be executed in the same order every render. Keep
+  // state/effect hooks at the top-level even if rendering early-return
+  // paths are used later.
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   if (!isOpen) return null;
 
   const onAddAndClose = async () => {
@@ -43,46 +55,39 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-          onClick={onClose}
-        >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-          >
-            <div className="grid md:grid-cols-2 h-full">
-              <ProductDetailGallery
-                product={product}
-                selectedImage={selectedImage}
-                setSelectedImage={setSelectedImage}
-                isZoomed={isZoomed}
-                setIsZoomed={setIsZoomed}
-                mousePosition={mousePosition}
-                onMouseMove={handleMouseMove}
-              />
+    <div
+      className={`fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 transition-opacity duration-200 ${
+        mounted ? 'opacity-100' : 'opacity-0'
+      }`}
+      onClick={onClose}
+    >
+      <div
+        className={`bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-all duration-200 ${
+          mounted ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        }`}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+      >
+        <div className="grid md:grid-cols-2 h-full">
+          <ProductDetailGallery
+            product={product}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            isZoomed={isZoomed}
+            setIsZoomed={setIsZoomed}
+            mousePosition={mousePosition}
+            onMouseMove={handleMouseMove}
+          />
 
-              <ProductDetailInfo
-                product={product}
-                quantity={quantity}
-                setQuantity={setQuantity}
-                isAddingToCart={isAddingToCart}
-                onAddToCart={onAddAndClose}
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          <ProductDetailInfo
+            product={product}
+            quantity={quantity}
+            setQuantity={setQuantity}
+            isAddingToCart={isAddingToCart}
+            onAddToCart={onAddAndClose}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

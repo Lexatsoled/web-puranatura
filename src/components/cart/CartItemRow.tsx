@@ -1,13 +1,8 @@
-import { motion } from 'framer-motion';
 import { OptimizedImage } from '../OptimizedImage';
 import { useCartItemState } from '../../hooks/useCartItemState';
 import { CartItem } from '../../hooks/useShoppingCart';
 
-export const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, x: -20 },
-};
+// Using CSS for row transitions instead of framer-motion
 
 export const CartItemRow = ({
   item,
@@ -33,11 +28,7 @@ export const CartItemRow = ({
     });
 
   return (
-    <motion.div
-      variants={itemVariants}
-      exit="exit"
-      className="py-6 flex items-center"
-    >
+    <div className="py-6 flex items-center">
       <ProductImageCell item={item} />
       <div className="ml-6 flex-1">
         <div className="flex justify-between">
@@ -61,7 +52,7 @@ export const CartItemRow = ({
           onRemove={() => onRemoveItem(item.id)}
         />
       </div>
-    </motion.div>
+    </div>
   );
 };
 
