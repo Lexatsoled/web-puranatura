@@ -13,6 +13,8 @@ on:
 permissions:
   issues: write
   security-events: read
+  # Required to call the Dependabot alerts API
+  vulnerability-alerts: read
 
 jobs:
   on-high-critical:
