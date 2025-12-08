@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Verify Dependabot patch update and merge only when CI passed
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             // Try to locate the PR reliably across different triggering events
