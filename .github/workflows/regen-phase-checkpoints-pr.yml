@@ -24,7 +24,7 @@ jobs:
           node ./scripts/generate-phase-checkpoints.cjs
 
       - name: Create Pull Request if there are changes
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: automation/regen-phase-checkpoints
