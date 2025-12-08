@@ -28,7 +28,7 @@ jobs:
         run: |
           npm run check:openapi-drift > drift-report.txt 2>&1 || true
       - name: Save drift log
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: openapi-drift-report
           path: |
