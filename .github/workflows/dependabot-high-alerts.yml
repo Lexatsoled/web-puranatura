@@ -21,7 +21,7 @@ jobs:
     name: Create issue for HIGH/CRITICAL Dependabot alerts
     runs-on: ubuntu-latest
     steps:
-      - name: DEBUG — check DEPENDABOT_TOKEN identity and test Dependabot API (PAT)
+      - name: Create issues for HIGH/CRITICAL alerts (PAT)
         if: ${{ secrets.DEPENDABOT_TOKEN }}
         uses: actions/github-script@v6
         with:
@@ -29,32 +29,7 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            try {
-              const who = await github.request('GET /user');
-              core.info(`DEBUG: authenticated user login = ${who.data.login}`);
-            } catch (e) {
-              core.info(`DEBUG: /user call failed: ${e.status || 'unknown'}`);
-            }
-            try {
-              const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open', per_page: 1 });
-              core.info(`DEBUG: dependabot API test status = ${res.status}`);
-            } catch (e) {
-              core.info(`DEBUG: dependabot API test failed: ${e.status || 'unknown'}`);
-            }
-        if: ${{ secrets.DEPENDABOT_TOKEN }}
-        uses: actions/github-script@v6
-        with:
-          # Use the repository secret PAT when configured
-          github-token: ${{ secrets.DEPENDABOT_TOKEN }}
-          script: |
-            // This job runs daily (or ad-hoc via workflow_dispatch).
-            // We call the Dependabot REST API to list repo alerts and create issues
-            // for any open HIGH/CRITICAL alerts, avoiding duplicates.
 
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            // List Dependabot alerts (open)
             const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open' });
             const alerts = res.data || [];
             core.info(`Found ${alerts.length} dependabot alerts (open)`);
@@ -66,7 +41,6 @@ jobs:
               const pkg = alert.dependency?.package || alert.security_advisory?.package || alert.package || 'dependency';
               const title = `Security: Dependabot ${severity.toUpperCase()} alert — ${pkg}`;
 
-              // Avoid duplicates: look for an open issue with the same title
               const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open' });
               if (issues.find(i => i.title === title)) {
                 core.info(`Issue already exists for ${title} — skipping`);
@@ -82,32 +56,12 @@ jobs:
 
               const created = await github.rest.issues.create({ owner, repo, title, body, labels: ['security', 'dependabot', `severity:${severity}`] });
               core.info(`Created issue #${created.data.number} for ${pkg}`);
+            }
 
-      - name: DEBUG — check GITHUB_TOKEN identity and test Dependabot API (fallback)
+      - name: Create issues for HIGH/CRITICAL alerts (fallback GITHUB_TOKEN)
         if: ${{ !secrets.DEPENDABOT_TOKEN }}
         uses: actions/github-script@v6
         with:
-          # Use the default token that the action will use in fallback
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            try {
-              const who = await github.request('GET /user');
-              core.info(`DEBUG: fallback authenticated user login = ${who.data.login}`);
-            } catch (e) {
-              core.info(`DEBUG: fallback /user call failed: ${e.status || 'unknown'}`);
-            }
-            try {
-              const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open', per_page: 1 });
-              core.info(`DEBUG: fallback dependabot API test status = ${res.status}`);
-            } catch (e) {
-              core.info(`DEBUG: fallback dependabot API test failed: ${e.status || 'unknown'}`);
-            }
-        if: ${{ !secrets.DEPENDABOT_TOKEN }}
-        uses: actions/github-script@v6
-        with:
-          # No PAT available; github-script will use the default GITHUB_TOKEN.
-          # If this call returns 403, advise adding DEPENDABOT_TOKEN to repo secrets.
           script: |
             try {
               const owner = context.repo.owner;
@@ -116,7 +70,7 @@ jobs:
               const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open' });
               const alerts = res.data || [];
               core.info(`Found ${alerts.length} dependabot alerts (open)`);
-              // reuse the same logic to create issues as above
+
               for (const alert of alerts) {
                 const severity = (alert.security_advisory?.severity || alert.severity || '').toLowerCase();
                 if (severity !== 'high' && severity !== 'critical') continue;
@@ -137,11 +91,9 @@ jobs:
                 core.info(`Created issue #${created.data.number} for ${pkg}`);
               }
             } catch (err) {
-              // Provide a more actionable message when hitting the 403 case
               if (err && err.status === 403) {
                 core.setFailed('Dependabot API returned 403 (resource not accessible by integration).\n\nSuggested action: Create a personal access token (PAT) with repo scope and add it to repository secrets as DEPENDABOT_TOKEN, then re-run this workflow.');
               } else {
                 throw err;
               }
-            }
             }
