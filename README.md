@@ -2,6 +2,8 @@
 
 <!-- ci: trivial touch to retrigger workflows (bot) - updated 2025-12-08 (fix workflow syntax) -->
 
+Nota: se actualizo el workflow de Dependabot (alertas HIGH/CRITICAL).
+
 This contains everything you need to run your app locally.
 
 ## Run Locally
