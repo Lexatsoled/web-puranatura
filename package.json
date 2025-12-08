@@ -80,7 +80,7 @@
     "sharp": "^0.34.3",
     "vite-imagetools": "^7.1.0",
     "zod": "^4.0.14",
-    "zustand": "^5.0.7"
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^0.1.0",
