@@ -1,6 +1,6 @@
 ﻿# Run and deploy your AI Studio app
 
-<!-- ci: trivial touch to retrigger workflows (bot) - updated 2025-12-08 (test dependabot debug) -->
+<!-- ci: trivial touch to retrigger workflows (bot) - updated 2025-12-08 (fix workflow syntax) -->
 
 This contains everything you need to run your app locally.
 
