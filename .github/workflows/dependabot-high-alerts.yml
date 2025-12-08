@@ -12,17 +12,26 @@ on:
 permissions:
   issues: write
   security-events: read
-  vulnerability-alerts: read
 
 jobs:
   on-high-critical:
     name: Create issue for HIGH/CRITICAL Dependabot alerts
     runs-on: ubuntu-latest
     steps:
+      - name: Select token (PAT preferred)
+        id: token
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.DEPENDABOT_TOKEN }}" ]; then
+            echo "value=${{ secrets.DEPENDABOT_TOKEN }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ github.token }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Handle Dependabot HIGH/CRITICAL alerts
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.DEPENDABOT_TOKEN || secrets.GITHUB_TOKEN }}
+          github-token: ${{ steps.token.outputs.value }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
@@ -36,7 +45,7 @@ jobs:
                 const severity = (alert.security_advisory?.severity || alert.severity || '').toLowerCase();
                 if (severity !== 'high' && severity !== 'critical') continue;
 
-                const pkg = alert.dependency?.package || alert.security_advisory?.package || alert.package || 'dependency';
+                const pkg = alert.dependency?.package?.name || alert.security_advisory?.package?.name || alert.package || 'dependency';
                 const title = `Security: Dependabot ${severity.toUpperCase()} alert — ${pkg}`;
 
                 const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open' });
