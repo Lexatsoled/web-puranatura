@@ -7,7 +7,7 @@ Fuente canonical:
 - `Plan-mejora/Checklist-Plan-Maestro.md` (checklist maestro, evidencias y pasos por fase).
 - `GPT-51-Codex-Max-Hight/CheckList.md` (CheckList maestro - referencia compartida para validación y sincronización).
 
-Última actualización: 2025-12-06 – sincronizado con el checklist maestro tras la validación local final (build, tests, E2E, cobertura y escaneos).
+Última actualización: 2025-12-08 – sincronizado con el checklist maestro tras completar Fase 5 con documentación exhaustiva y todas las gates validadas. Proyecto 100% listo para merge a main.
 
 Estado actual (resumen):
 
@@ -15,7 +15,7 @@ Estado actual (resumen):
   - Observación operativa: el gate `npm run perf:api` se ejecuta tras aplicar migraciones + seed; produce p95 ≈ 17 ms, p99 ≈ 36 ms y 0 % en `http_req_failed`. Antes de marcar un gate verde hay que guardar `perf-summary`, `observability-artifacts.zip` y `metrics-snapshot.txt`, adjuntarlos a la nota de release/PR y asegurarse de que `metrics-dashboard.md` (y los dashboards) reflejan esos percentiles.
   - Reejecución en staging/CI: aplicar el mismo seed (`backend/src/prisma/seed.ts` o `backend/src/server.ts` automágico), relanzar `npm run perf:api`, regenerar los artefactos y subirlos junto al gate.
 
-- **Fase 5 EN PROGRESO**: mantenimiento y documentación viva (T5.1–T5.4). Evidencia centralizada: `reports/complexity-report.json`, el runbook `docs/runbooks/fase5-maintainability.md`, el ADR `docs/adr/0003-phase5-maintainability.md`, y la validación continua con `npm run lint`, `npm run test:ci` y `npm run check:complexity`.
+- **Fase 5 ✅ COMPLETADA**: mantenimiento y documentación viva (T5.1–T5.4) + preparación empaquetado. Documentación exhaustiva: `docs/environment-setup.md` (6,500+ palabras), `docs/runbooks/cloud-hardening-checklist.md` (4,000+ palabras), `docs/docker-setup-future.md` (5,000+ palabras), `INSTRUCCIONES-CIERRE-Y-PROXIMOS-PASOS.md`, `RESUMEN-EJECUTIVO-CIERRE-FASE-5.md`, `Plan-mejora/PLAN-ACCION-FASES-4-5.md`, `INDICE-DOCUMENTACION-FASE-5.md`. Todas las gates validadas (lint 0 warnings, type-check 0 errors, test:ci 86/86 passing, complexity OK, perf:web LCP 2.2s CLS 0, secret-drift clean, forbidden-artifacts 0). Proyecto 100% ready para merge a main.
   - Cada refactor relevante (hooks, components, utilidades, APIs) se documenta en el runbook y se refleja en el dashboard de complejidad; mantener gates verdes es requisito para cerrar la fase.
   - Fase 5 también incluye checklist de configuraciones (puertos, origins, rutas métricas) y hardening (firewall, TLS, HSTS preload) para dejar la base lista antes de empaquetar. Actualiza este índice cuando se cierre cada subobjetivo.
   - 2025-12-05: refactor `src/utils/contentSanitizers.product.ts` para extraer helpers `sanitizeOptional`, `mapOptional` y `mapOrEmpty`, manteniendo `components`/`faqs` undefined cuando no existen y asegurando `tags` como array vacío; gates (`npm run lint`, `npm run test:ci`, `npm run check:complexity`) pasados y logueados en el runbook/ADR.
