@@ -1,52 +1,64 @@
 ﻿{
-  "scanned_at": "2025-12-03T10:00:00Z",
+  "scanned_at": "2025-12-08T16:20:00Z",
   "root": "web-puranatura---terapias-naturales",
   "summary": {
-    "total_files_scanned": 150,
-    "primary_languages": ["TypeScript", "tsx", "json", "Prisma"],
-    "frameworks": ["React", "Vite", "Express", "Prisma", "TailwindCSS"]
+    "total_files_scanned": 450,
+    "total_modules": 4,
+    "languages": ["TypeScript", "JavaScript", "HTML", "CSS", "SQL"],
+    "frameworks": ["React 19", "Vite", "Express", "Prisma", "TailwindCSS"]
   },
   "modules": [
     {
       "id": "frontend-core",
-      "description": "SPA React con Vite",
-      "path": "src/",
-      "technologies": ["React 19", "Vite", "Zustand", "React Router 7"],
+      "path": "src",
+      "description": "SPA Principal (React 19 + Vite)",
       "key_files": [
+        "src/main.tsx",
         "src/App.tsx",
-        "src/index.tsx",
-        "vite.config.ts",
-        "tailwind.config.js"
-      ]
+        "src/components/AuthModal.tsx"
+      ],
+      "tech": "React, Zustand, React Query"
     },
     {
       "id": "backend-api",
-      "description": "API REST Node.js/Express",
-      "path": "backend/",
-      "technologies": ["Express", "Prisma", "SQLite (dev)", "Helmet", "JWT"],
+      "path": "backend",
+      "description": "API REST Node.js/Express + Prisma",
       "key_files": [
-        "backend/src/server.ts",
         "backend/src/app.ts",
+        "backend/src/server.ts",
         "backend/prisma/schema.prisma"
-      ]
+      ],
+      "tech": "Express, Prisma, SQLite/Postgres"
     },
     {
-      "id": "testing-suite",
-      "description": "Configuración de pruebas",
-      "path": "test/",
-      "technologies": ["Vitest", "Playwright", "Testing Library"],
-      "key_files": [
-        "vitest.config.ts",
-        "playwright.config.ts",
-        "test/backend.auth.test.ts"
-      ]
+      "id": "design-system",
+      "path": "components",
+      "description": "Componentes UI compartidos (Posible duplicidad con src/components)",
+      "key_files": ["components/AuthModal.tsx", "components/CartModal.tsx"],
+      "tech": "TailwindCSS, HeadlessUI"
     },
     {
-      "id": "infrastructure",
-      "description": "Scripts de build y CI",
-      "path": "scripts/",
-      "technologies": ["Node Scripts", "Husky"],
-      "key_files": ["package.json", "scripts/check-no-secrets.cjs"]
+      "id": "tooling-scripts",
+      "path": "scripts",
+      "description": "Scripts de CI/CD, mantenimiento y auditoría",
+      "key_files": ["scripts/check-secret-drift.cjs", "scripts/run-e2e.cjs"],
+      "tech": "Node.js Scripts"
     }
-  ]
+  ],
+  "large_files": [
+    {
+      "path": "components/AuthModal.tsx",
+      "size": 23320,
+      "reason": "Monolithic component"
+    },
+    {
+      "path": "components/CartModal.tsx",
+      "size": 15105,
+      "reason": "Logic/UI coupling"
+    }
+  ],
+  "potential_issues": {
+    "mixed_dependencies": "Dependencias de backend (mongoose, prisma) en package.json raíz junto a frontend.",
+    "directory_confusion": "Existencia de carpeta /components y /src/components."
+  }
 }

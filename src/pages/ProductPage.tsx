@@ -3,11 +3,11 @@ import { NextSeo, ProductJsonLd } from 'next-seo';
 import { useParams } from 'react-router-dom';
 import { Product, ProductImage } from '../types/product';
 import { useProductDetails } from '../hooks/useProductDetails';
-import { ProductHero } from '../../pages/product/components/ProductHero';
-import { ProductInfo } from '../../pages/product/components/ProductInfo';
-import { useProductSeo } from '../../pages/product/hooks/useProductSeo';
+import { ProductHero } from './product/components/ProductHero';
+import { ProductInfo } from './product/components/ProductInfo';
+import { useProductSeo } from './product/hooks/useProductSeo';
 import { useProductBreadcrumbs } from './product/hooks/useProductBreadcrumbs';
-import BreadcrumbStructuredData from '../../components/product/BreadcrumbStructuredData';
+import BreadcrumbStructuredData from '../components/product/BreadcrumbStructuredData';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

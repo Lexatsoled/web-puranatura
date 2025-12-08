@@ -69,11 +69,16 @@ describe('ProductCard', () => {
     };
 
     const { getByRole, queryByAltText } = render(
-      <ProductCard product={noImagesProduct} onViewDetails={handleViewDetails} />
+      <ProductCard
+        product={noImagesProduct}
+        onViewDetails={handleViewDetails}
+      />
     );
 
     // Product info should still render
-    expect(getByRole('heading', { name: noImagesProduct.name })).toBeInTheDocument();
+    expect(
+      getByRole('heading', { name: noImagesProduct.name })
+    ).toBeInTheDocument();
 
     // There should be no image rendered for the product name (image carousel is empty)
     expect(queryByAltText(noImagesProduct.name)).toBeNull();

@@ -65,13 +65,13 @@ router.post('/csp-report', async (req, res) => {
         } as any);
       }
     } catch (err) {
-      logger.warn({ err }, 'Fallo incrementando métricas de CSP');
+      logger.warn('Fallo incrementando métricas de CSP', { err });
     }
 
     // Acknowledge receipt — 204 to indicate no content and quiet success
     res.status(204).end();
   } catch (error) {
-    logger.error({ error }, 'Error procesando CSP report');
+    logger.error('Error procesando CSP report', { error });
     res.status(500).json({ ok: false });
   }
 });

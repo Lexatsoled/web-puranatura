@@ -1,76 +1,65 @@
-﻿# Mapa Arquitectónico - PuraNatura
+﻿# Mapa de Arquitectura - Web Puranatura
 
-## 1. Diagrama de Alto Nivel
+## Diagrama Conceptual
 
 ```mermaid
 graph TD
-    User[Usuario / Navegador] -->|HTTPS| CDN[Vite Frontend Assets]
-    User -->|API Requests /api/*| Proxy[Vite Proxy (Dev) / Nginx (Prod)]
+    User[Usuario / Navegador] -->|HTTPS| CDN[CDN / Edge (Vercel/Netlify?)]
+    CDN -->|Static Assets| Frontend[Frontend SPA (React 19)]
 
-    subgraph "Frontend (React + Vite)"
-        App[App.tsx]
-        Router[React Router]
-        Store[Zustand Store]
-        AuthContext[Auth Context]
+    User -->|API Requests| LB[Load Balancer / Reverse Proxy]
+    LB -->|Express| Backend[Backend API (Node.js)]
 
-        App --> Router
-        Router --> Pages[Pages (Lazy Loaded)]
-        Pages --> Components
-        Components --> Hooks
-        Hooks --> ApiClient[Axios Client]
+    subgraph Frontend Layer
+        Frontend -->|State| Zustand[Zustand Store]
+        Frontend -->|Routing| Router[React Router]
+        Frontend -->|UI| Components[Component Library (Tailwind)]
     end
 
-    subgraph "Backend (Node.js + Express)"
-        Server[server.ts]
-        ExpressApp[Express App]
-        Middleware[Helmet, CORS, RateLimit]
-        AuthMiddleware[JWT Auth]
-        Prisma[Prisma Client]
-
-        Proxy --> Server
-        Server --> ExpressApp
-        ExpressApp --> Middleware
-        Middleware --> Routes
-        Routes --> AuthMiddleware
-        AuthMiddleware --> Controllers
-        Controllers --> Prisma
+    subgraph Backend Layer
+        Backend -->|Middleware| Sec[Helmet/CSP/RateLimit]
+        Backend -->|Auth| AuthMod[Auth Module]
+        Backend -->|ORM| Prisma[Prisma Client]
     end
 
-    subgraph "Data Layer"
-        SQLite[(SQLite Dev DB)]
-        PrismaSchema[Schema.prisma]
-
-        Prisma --> SQLite
+    subgraph Data Layer
+        Prisma -->|SQL| DB[(SQLite / PostgreSQL)]
     end
-
-    ApiClient -.->|JSON| Proxy
 ```
 
-## 2. Flujos de Datos Críticos
+## Flujos de Datos Sensibles
 
-### Autenticación (AuthN/AuthZ)
+1.  **Autenticación**:
+    - **Input**: Email/Password en `AuthModal`.
+    - **Transit**: POST `/api/auth/login` (HTTPS).
+    - **Processing**: Backend valida y compara hash (`bcrypt`).
+    - **Storage**: Password hash en DB (Tabla `User`). Token JWT en Cookie (`HttpOnly`, `Secure`).
+    - **Risk**: Logging accidental de credenciales (Check requestLogger).
 
-1.  **Login:** `POST /api/auth/login` -> `AuthController` -> `Prisma (User)` -> Retorna JWT.
-2.  **Protección:** Middleware valida `Authorization: Bearer <token>`.
-3.  **Frontend:** `AuthProvider` almacena estado, `axios` interceptor maneja errores 401.
+2.  **Analytics**:
+    - **Input**: Interacciones de usuario.
+    - **Transit**: POST `/api/analytics`.
+    - **Storage**: Tabla `AnalyticsEvent`.
+    - **Risk**: `userIp` sin anonimizar explícitamente en el código revisado.
 
-### Catálogo de Productos
+## Entrypoints & Sinks
 
-1.  **Lectura:** `GET /api/products` -> Cache (si existe) -> DB.
-2.  **Imágenes:** `src/utils/imageProcessor.ts` maneja optimización.
+### Entrypoints (Attack Surface)
 
-## 3. Límites de Confianza (Trust Boundaries)
+- **Public Web**: `index.html` (DOM Based XSS vectors).
+- **API Endpoints**:
+  - `/api/auth/*` (Login, Register)
+  - `/api/products/*` (Read operations + Search)
+  - `/api/orders/*` (Transactional)
+  - `/api/analytics/*` (Write heavy)
 
-- **Boundary 1 (Browser <-> Server):** Todo input del cliente es no confiable. Validación estricta con `Zod` en backend requerida.
-- **Boundary 2 (Server <-> DB):** Uso de Prisma ORM mitiga SQLi, pero se debe cuidar raw queries (no detectadas aún).
-- **Boundary 3 (Dev Tools):** Scripts en `scripts/` tienen acceso a FS y env vars.
+### Security Boundaries
 
-## 4. Entrypoints & Sinks
+- **Trust Boundary 1**: Navegador del cliente vs Backend API. (Validación requerida).
+- **Trust Boundary 2**: Backend vs Base de Datos. (Sanitización paramétrica via Prisma - OK).
 
-- **Entrypoints:**
-  - HTTP: `backend/src/server.ts` (puerto dinámico en dev).
-  - CLI: `npm run dev`, `npm run build`.
-- **Sinks (Destinos de datos):**
-  - Logs: `console.log` (stdout), archivos en `tmp-artifacts/`.
-  - DB: Archivo SQLite local `backend/prisma/dev.db`.
-  - Browser DOM: React render (riesgo XSS si se usa `dangerouslySetInnerHTML`).
+## Dependencias Críticas
+
+- **Runtime**: Node.js >= 20.
+- **Database**: SQLite (Dev) -> TBD (Prod).
+- **External**: Google Analytics / Tag Manager (vistos en CSP).

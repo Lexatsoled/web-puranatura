@@ -36,7 +36,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   ),
   structured = true,
 }) => {
-
   const jsonLd = useMemo(
     () => ({
       '@context': 'https://schema.org',

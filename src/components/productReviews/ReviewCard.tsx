@@ -71,7 +71,9 @@ export const ReviewCard: React.FC<Props> = ({
       <button
         onClick={() => onToggleHelpful(review.id)}
         className={`text-sm flex items-center transform transition-transform duration-150 active:scale-95 ${
-          isHelpful ? 'text-green-600 font-medium' : 'text-gray-500 hover:text-gray-700'
+          isHelpful
+            ? 'text-green-600 font-medium'
+            : 'text-gray-500 hover:text-gray-700'
         }`}
       >
         <svg
@@ -97,7 +99,9 @@ export const ReviewCard: React.FC<Props> = ({
       <button
         onClick={() => onToggleReported(review.id)}
         className={`text-sm transform transition-transform duration-150 active:scale-95 ${
-          isReported ? 'text-red-600 font-medium' : 'text-gray-500 hover:text-gray-700'
+          isReported
+            ? 'text-red-600 font-medium'
+            : 'text-gray-500 hover:text-gray-700'
         }`}
       >
         {isReported ? 'Reportado' : 'Reportar'}

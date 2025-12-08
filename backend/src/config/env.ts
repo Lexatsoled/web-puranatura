@@ -175,4 +175,5 @@ export const env = {
     process.env.CSP_REPORT_ONLY !== undefined
       ? toBoolean(process.env.CSP_REPORT_ONLY, true)
       : (process.env.NODE_ENV || 'development') !== 'production',
+  trustProxy: toNumber(process.env.TRUST_PROXY, 1),
 };

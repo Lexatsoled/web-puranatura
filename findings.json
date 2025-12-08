@@ -1,80 +1,89 @@
 ﻿{
   "meta": {
     "version": 1,
-    "severity_scale": ["info", "low", "medium", "high", "critical"]
+    "severity_scale": ["info", "low", "medium", "high", "critical"],
+    "status": "draft"
   },
   "findings": [
     {
-      "id": "SEC-LOG-001",
-      "title": "Exposición de información en logs de arranque",
-      "category": "security",
-      "subcategory": "information-disclosure",
-      "severity": "low",
-      "likelihood": 3,
-      "priority": 6,
-      "where": {
-        "file": "backend/src/server.ts",
-        "line": 12,
-        "snippet": "console.log('[env] rate limits', { ... })"
-      },
-      "evidence": "El servidor imprime configuración de rate limits al iniciar.",
-      "impact": "Un atacante con acceso a logs podría conocer los umbrales de rate limit para ajustar sus ataques.",
-      "recommendation": "Usar un logger estructurado (ej. Winston/Pino) y nivel de log adecuado. Evitar loguear configuración interna en producción.",
-      "fix_example": "logger.debug('Rate limits configured', { ... })"
+      "id": "ARCH-001",
+      "title": "Confusión de estructura de componentes",
+      "category": "maintainability",
+      "subcategory": "structure",
+      "severity": "medium",
+      "likelihood": 5,
+      "priority": 15,
+      "where": { "file": "src/components", "notes": "vs root /components" },
+      "evidence": "Existen dos carpetas de componentes (root y src), lo que sugiere una migración incompleta o falta de convención.",
+      "impact": "Dificultad de mantenimiento, duplicación de código y bundles más grandes.",
+      "recommendation": "Consolidar todos los componentes bajo `src/components`.",
+      "fix_example": "mv components/* src/components/ && rm -rf components",
+      "references": ["React Folder Structure Best Practices"]
     },
     {
-      "id": "SEC-ESLINT-001",
-      "title": "Regla de seguridad desactivada en ESLint",
+      "id": "SEC-PRIV-001",
+      "title": "Almacenamiento potencial de PII (IP) sin hash",
+      "category": "security",
+      "subcategory": "gdpr",
+      "severity": "high",
+      "likelihood": 3,
+      "priority": 12,
+      "where": {
+        "file": "backend/prisma/schema.prisma",
+        "line": 86,
+        "snippet": "userIp String?"
+      },
+      "evidence": "Modelo AnalyticsEvent tiene campo userIp. Si se guarda en crudo, viola privacidad en ciertas jurisdicciones.",
+      "impact": "Incumplimiento GDPR/CCPA.",
+      "recommendation": "Almacenar solo hash(ip + salt) o truncar el último octeto.",
+      "fix_example": "userIp = sha256(req.ip + dailySalt)",
+      "references": ["GDPR Data Minimization"]
+    },
+    {
+      "id": "SEC-XSS-001",
+      "title": "CSP 'trust proxy' con configuración por defecto",
       "category": "security",
       "subcategory": "configuration",
       "severity": "medium",
       "likelihood": 2,
-      "priority": 8,
+      "priority": 6,
       "where": {
-        "file": "eslint.config.cjs",
-        "line": 38,
-        "snippet": "'security/detect-object-injection': 'off'"
+        "file": "backend/src/app.ts",
+        "line": 22,
+        "snippet": "app.set('trust proxy', 1);"
       },
-      "evidence": "La regla 'security/detect-object-injection' está explícitamente desactivada.",
-      "impact": "Riesgo de no detectar vulnerabilidades de inyección de objetos que podrían llevar a DoS o ejecución de código.",
-      "recommendation": "Reactivar la regla y corregir los falsos positivos o usar validación de esquema (Zod) para inputs.",
-      "fix_example": "// 'security/detect-object-injection': 'warn'"
+      "evidence": "Se asume que hay 1 proxy delante. Si se despliega sin proxy, spoofing de IP es posible.",
+      "impact": "Rate limiting bypass, logging incorrecto de IPs.",
+      "recommendation": "Configurar via variable de entorno TRUST_PROXY_HOPS.",
+      "fix_example": "app.set('trust proxy', parseInt(process.env.TRUST_PROXY || '1'))"
     },
     {
-      "id": "PERF-UX-001",
-      "title": "Fallback de carga genérico",
-      "category": "performance",
-      "subcategory": "ux",
+      "id": "CODE-COMPLEX-001",
+      "title": "Componente AuthModal monolítico",
+      "category": "maintainability",
+      "subcategory": "complexity",
       "severity": "low",
       "likelihood": 5,
       "priority": 5,
-      "where": {
-        "file": "src/App.tsx",
-        "line": 36,
-        "snippet": "<div>Cargando...</div>"
-      },
-      "evidence": "Se usa un div simple con texto 'Cargando...' durante la carga perezosa de rutas.",
-      "impact": "Experiencia de usuario pobre (CLS, falta de feedback visual de marca).",
-      "recommendation": "Implementar un componente 'Skeleton' o 'Spinner' que coincida con el layout.",
-      "fix_example": "<Suspense fallback={<LoadingSpinner />}>"
+      "where": { "file": "components/AuthModal.tsx", "lines": "1-587" },
+      "evidence": "Más de 500 líneas mezclando validación, gestión de estado y UI.",
+      "impact": "Difícil de testear y refactorizar.",
+      "recommendation": "Extraer lógica a `useAuthForm` hook y separar subcomponentes (LoginForm, RegisterForm).",
+      "fix_example": "const { register, formState } = useAuthForm();"
     },
     {
-      "id": "CODE-TS-001",
-      "title": "Uso de 'any' en manejo de errores",
-      "category": "maintainability",
-      "subcategory": "typescript",
+      "id": "UX-INT-001",
+      "title": "Validación de email permisiva",
+      "category": "ux",
+      "subcategory": "validation",
       "severity": "low",
-      "likelihood": 5,
-      "priority": 3,
-      "where": {
-        "file": "backend/src/server.ts",
-        "line": 25,
-        "snippet": "server.on('error', (err: any) => { ... })"
-      },
-      "evidence": "Uso explícito de 'any' para el error del servidor.",
-      "impact": "Pérdida de seguridad de tipos y autocompletado.",
-      "recommendation": "Usar el tipo 'NodeJS.ErrnoException' o similar.",
-      "fix_example": "(err: NodeJS.ErrnoException)"
+      "likelihood": 4,
+      "priority": 4,
+      "where": { "file": "components/AuthModal.tsx", "line": 60 },
+      "evidence": "Regex /\\S+@\\S+\\.\\S+/ permite 'a@b.c' que podría no ser deseado.",
+      "impact": "Errores de usuario al registrarse (typos).",
+      "recommendation": "Usar librería robusta como Zod para validación isomórfica.",
+      "fix_example": "z.string().email()"
     }
   ]
 }

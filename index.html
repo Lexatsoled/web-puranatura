@@ -2,73 +2,19 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="PuraNatura ofrece terapias naturales, recursos de bienestar y productos conscientes para acompañarte en un estilo de vida saludable."
+      content="PuraNatura - Tu santuario de bienestar y terapias naturales. Encuentra equilibrio, salud y armonía con nuestros productos y servicios seleccionados."
     />
-    <title>PuraNatura - Terapias Naturales</title>
-    <style>
-      body {
-        font-family:
-          system-ui,
-          -apple-system,
-          sans-serif;
-      }
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      .font-display {
-        font-family:
-          system-ui,
-          -apple-system,
-          sans-serif;
-      }
-      .blog-content p {
-        margin-bottom: 1rem;
-      }
-      .blog-content ul {
-        list-style-position: inside;
-        margin-left: 1rem;
-        margin-bottom: 1rem;
-      }
-      .blog-content li {
-        margin-bottom: 0.5rem;
-      }
-      .blog-content strong {
-        font-weight: 600;
-        color: #1a202c; /* text-gray-900 */
-      }
-    </style>
-    <script type="importmap">
-      {
-        "imports": {
-          "react/": "https://esm.sh/react@^19.1.0/",
-          "react": "https://esm.sh/react@^19.1.0",
-          "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
-        }
-      }
-    </script>
-    <style>
-      /* Refuerzo inline para evitar CLS en main y eliminar swap de fuentes */
-      #main-content {
-        min-height: 100vh !important;
-      }
-      html,
-      body {
-        font-family:
-          system-ui,
-          -apple-system,
-          sans-serif !important;
-      }
-    </style>
-    <link rel="stylesheet" href="/index.css" />
+    <!-- Preload critical assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <title>PuraNatura | Terapias Naturales y Bienestar</title>
   </head>
-  <body class="bg-gray-50">
+  <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

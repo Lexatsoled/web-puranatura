@@ -1,44 +1,42 @@
-﻿# Plan de Mejora - PuraNatura
+﻿# Plan de Mejora - PuraNatura (Anti-Lost-In-The-Middle)
 
-## Fase 0: Análisis y Quick Wins (Días 1-2)
+## Fase 0: Cimientos y Limpieza (1-2 Días)
 
-_Objetivo: Establecer línea base y corregir fallos obvios._
+**Objetivo**: Eliminar ambigüedades arquitectónicas y asegurar el entorno.
 
-- [ ] **[DOCS]** Completar inventario de endpoints API (Swagger/OpenAPI).
-- [ ] **[SEC]** Sanitizar logs en `backend/src/server.ts` (eliminar `console.log` de config).
-- [ ] **[UX]** Reemplazar "Cargando..." en `App.tsx` por componente Skeleton.
-- [ ] **[DEV]** Configurar `husky` pre-commit hooks para linting (ya existe script, verificar ejecución).
+- [x] **ARCH-01**: Unificar carpetas `components` y `src/components`. Mover todo a `src/components`.
+- [ ] **ARCH-02**: Separar dependencias de backend en `backend/package.json` vs root `package.json` para evitar builds pesados en frontend.
+- [x] **DOCS-01**: Actualizar `README.md` con mapa de arquitectura real.
 
-## Fase 1: Seguridad Crítica (Semana 1)
+## Fase 1: Seguridad Crítica (AppSec) (1 Semana)
 
-_Objetivo: Endurecer la aplicación contra ataques comunes._
+**Objetivo**: Cerrar vulnerabilidades de privacidad y configuración.
 
-- [ ] **[SEC]** Revisar y activar reglas de `eslint-plugin-security`.
-- [ ] **[SEC]** Implementar validación estricta con Zod en todos los endpoints del backend (Boundary 1).
-- [ ] **[SEC]** Verificar configuración de CORS y Helmet en `backend/src/app.ts` (pendiente de lectura profunda).
-- [ ] **[SEC]** Auditoría de dependencias (`npm audit` y revisión manual de `package.json`).
+- [x] **SEC-PRIV-01**: Anonimizar `userIp` en `AnalyticsEvent` antes de persistir.
+  - _Propuesta_: Crear utilitario `anonymizeIp(ip)` usando salt rotativa.
+- [x] **SEC-CONF-01**: Parametrizar `trust proxy` en `app.ts`.
+  - _Test_: Verificar headers `X-Forwarded-For` en staging.
+- [ ] **SEC-Input-01**: Migrar validación de forms (AuthModal) a `zod` + `react-hook-form` para paridad cliente-servidor.
 
-## Fase 2: Rendimiento y Estabilidad (Semana 2)
+## Fase 2: Componentes y Mantenibilidad (2 Semanas)
 
-_Objetivo: Mejorar Core Web Vitals y robustez del backend._
+**Objetivo**: Reducir deuda técnica en componentes 'God Object'.
 
-- [ ] **[PERF]** Optimizar carga de imágenes (verificar `vite-imagetools` config).
-- [ ] **[PERF]** Code splitting granular en rutas pesadas.
-- [ ] **[BACK]** Mejorar manejo de errores en `server.ts` (evitar `any`, graceful shutdown).
-- [ ] **[DB]** Revisar índices en `schema.prisma` para queries frecuentes (ej. búsqueda de productos).
+- [x] **REFACTOR-01**: Desacoplar `AuthModal.tsx`.
+  - [x] Crear `components/auth/LoginForm.tsx`.
+  - [x] Crear `components/auth/RegisterForm.tsx`.
+  - [x] Extraer `useAuthForm` hook (implementado via componentes separados).
+- [x] **REFACTOR-02**: Optimizar imports de iconos. Usar dynamic imports o sprites si es posible para reducir JS bundle. (Centralizado en `icons/index.tsx`)
 
-## Fase 3: Accesibilidad y Testing (Semana 3)
+## Fase 3: UX y Rendimiento (1 Semana)
 
-_Objetivo: Cumplimiento WCAG y red de seguridad._
+**Objetivo**: Mejorar Core Web Vitals y Feedback.
 
-- [ ] **[A11Y]** Auditoría automatizada con `axe-core` en CI (verificar scripts existentes).
-- [ ] **[TEST]** Aumentar cobertura de tests unitarios en `backend/src/services`.
-- [ ] **[TEST]** Crear tests E2E críticos (Login, Checkout) con Playwright.
+- [x] **PERF-01**: Implementar Lazy Loading en Modales (`AuthModal`, `CartModal`).
+  - _Impacto_: Reducción de TBT y LCP inicial. (Implementado en `SimpleLayout.tsx`)
+- [ ] **UX-01**: Internacionalización (i18n). Extraer strings hardcodeados a archivos de recursos JSON.
 
-## Fase 4: Observabilidad y Mantenimiento (Semana 4)
+## Fase 4: Observabilidad y Compliance (Ongoing)
 
-_Objetivo: Preparar para producción._
-
-- [ ] **[OPS]** Implementar logger estructurado (Winston/Pino).
-- [ ] **[OPS]** Configurar métricas básicas (Prometheus client ya está en deps, verificar uso).
-- [ ] **[CODE]** Refactorizar componentes grandes en Frontend.
+- [ ] **OPS-01**: Implementar retención de logs y purga automática de `AnalyticsEvent` antiguos (> 90 días).
+- [x] **GDPR-01**: Añadir banner de cookies real conectado a la inicialización de Analytics (ahora parece cargar scripts externos en CSP).

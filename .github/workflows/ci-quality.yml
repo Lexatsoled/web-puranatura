@@ -92,6 +92,9 @@ jobs:
       - name: Generate SBOM
         run: npm run generate:sbom
 
+      - name: Audit Licenses
+        run: npm run check:licenses
+
       - name: Generate complexity report
         # Generate a repo-level complexity report and write to reports/complexity-report.json
         run: npm run check:complexity

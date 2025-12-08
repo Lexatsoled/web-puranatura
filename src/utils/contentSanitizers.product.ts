@@ -50,8 +50,8 @@ export const sanitizeProductFields = (product: Product) => ({
   sku: sanitizeText(product.sku),
 });
 
-export const sanitizeProductImages = (images: Product['images']) =>
-  images.map((image) => ({
+export const sanitizeProductImages = (images: Product['images'] = []) =>
+  (images || []).map((image) => ({
     full: sanitizeImagePath(image.full),
     thumbnail: sanitizeImagePath(image.thumbnail),
   }));

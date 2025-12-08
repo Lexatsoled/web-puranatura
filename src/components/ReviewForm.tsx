@@ -117,7 +117,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
         <button
           type="submit"
           className={`px-4 py-2 text-sm font-medium text-white rounded-md transform transition-transform duration-150 active:scale-95 ${
-            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            isSubmitting
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700'
           }`}
           disabled={isSubmitting}
         >

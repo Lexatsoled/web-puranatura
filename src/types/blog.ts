@@ -1,20 +1,14 @@
 export interface BlogPost {
-  id: string;
+  id?: string;
   title: string;
+  excerpt?: string;
+  summary?: string; // Add summary as alias for excerpt or specific field
   content: string;
-  summary: string;
-  author: string;
-  date: string;
-  imageUrl: string;
-  tags: string[];
-  slug: string;
-  readTime: number;
-  category: string;
-}
-
-export interface BlogFilters {
-  category?: string;
-  tag?: string;
-  searchTerm?: string;
+  date?: string;
   author?: string;
+  readTime?: number;
+  imageUrl: string;
+  slug?: string;
+  category?: string;
+  tags?: string[];
 }

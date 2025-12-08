@@ -8,12 +8,35 @@ import { ensureSmokeUser, seedProducts } from './prisma/seed';
 const startPort = env.port;
 const maxAttempts = 10; // probar hasta startPort + maxAttempts - 1
 
-// eslint-disable-next-line no-console
 console.log('[env] rate limits', {
   globalMax: env.rateLimitMax,
   authMax: env.authRateLimitMax,
   analyticsMax: env.analyticsRateLimitMax,
 });
+
+// Security Check: Fail if running built code with default secrets
+if (
+  process.env.NODE_ENV !== 'production' &&
+  (env.jwtSecret === 'dev_jwt_secret_change_me' ||
+    env.jwtRefreshSecret === 'dev_jwt_refresh_secret_change_me')
+) {
+  // Heuristic: If we are running from a 'dist' folder or 'server.js' (compiled),
+  // we are likely in a deployment context but forgot to set NODE_ENV=production.
+  const isCompiled = __dirname.includes('dist') || __filename.endsWith('.js');
+  if (isCompiled) {
+    console.error(
+      'FATAL: Intentando ejecutar código compilado (dist) con secretos por defecto (NODE_ENV != production).'
+    );
+    console.error(
+      'Por seguridad, el servidor no iniciará. Configura NODE_ENV=production y define JWT_SECRET reales.'
+    );
+    process.exit(1);
+  } else {
+    console.warn(
+      'ADVERTENCIA: Ejecutando servidor con secretos de desarrollo. NO USAR EN PRODUCCIÓN.'
+    );
+  }
+}
 
 const startServer = (port: number) => {
   const server = app.listen(port, () => {

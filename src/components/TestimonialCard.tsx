@@ -15,7 +15,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
           <svg
             key={index}
             className={`w-5 h-5 ${
-              index < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
+              index < (testimonial.rating || 5)
+                ? 'text-yellow-400'
+                : 'text-gray-300'
             }`}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -41,12 +43,14 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
         )}
         <div className={!testimonial.imageUrl ? 'ml-2' : ''}>
           <p className="font-bold text-green-800">{testimonial.name}</p>
-          <p className="text-sm text-gray-600">
-            {new Date(testimonial.date).toLocaleDateString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-            })}
-          </p>
+          {testimonial.date && (
+            <p className="text-sm text-gray-600">
+              {new Date(testimonial.date).toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+              })}
+            </p>
+          )}
         </div>
       </div>
     </div>

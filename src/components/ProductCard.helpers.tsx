@@ -60,9 +60,10 @@ export const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({
     <p className="text-sm text-gray-500 mb-3">{product?.category ?? ''}</p>
 
     <div className="mt-auto flex justify-between items-center">
-        <p className="text-xl font-bold text-green-700">DOP ${
-          typeof product?.price === 'number' ? product.price.toFixed(2) : '--'
-        }</p>
+      <p className="text-xl font-bold text-green-700">
+        DOP $
+        {typeof product?.price === 'number' ? product.price.toFixed(2) : '--'}
+      </p>
 
       <AddToCartButton
         stockStatus={stockStatus}

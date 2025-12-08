@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 // Replaced framer-motion animations with lightweight CSS/Tailwind transitions
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
-import Footer from '../../components/Footer';
+import Footer from './layout/Footer';
 
 // Lazy loading de componentes modales
 const CartModal = React.lazy(() => import('./CartModal'));
@@ -84,14 +84,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           }
         >
-          <CartModal
-            isOpen={isCartOpen}
-            onClose={() => setIsCartOpen(false)}
-          />
+          <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </Suspense>
       )}
 
-        {/* Search modal commented out until SearchModal component is implemented
+      {/* Search modal commented out until SearchModal component is implemented
         {isSearchOpen && (
           <Suspense
             fallback={

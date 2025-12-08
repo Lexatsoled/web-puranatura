@@ -38,7 +38,8 @@ const FALLBACK_PRODUCTS_PATH = '/data/fallback-products.json';
 const fetchJson = async <T>(endpoint: string): Promise<T> => {
   try {
     const res = await fetch(endpoint);
-    if (!res.ok) throw new Error(`fetch ${endpoint} failed with status ${res.status}`);
+    if (!res.ok)
+      throw new Error(`fetch ${endpoint} failed with status ${res.status}`);
     return (await res.json()) as T;
   } catch (err) {
     // If the endpoint is related to products, try the local fallback file
@@ -65,7 +66,7 @@ const fetchJson = async <T>(endpoint: string): Promise<T> => {
       // swallow fallback errors and rethrow original error below
       // console.warn is intentionally modest — caller should decide how to handle
       // the error in their flow (and we keep returning control to them)
-      // eslint-disable-next-line no-console
+
       console.warn('fetch fallback attempt failed', err2);
     }
 

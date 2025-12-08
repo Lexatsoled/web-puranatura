@@ -23,7 +23,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   }, []);
 
   return (
-    <div ref={ref} className="w-full" style={{ opacity: 0, transform: 'translateY(20px)' }}>
+    <div
+      ref={ref}
+      className="w-full"
+      style={{ opacity: 0, transform: 'translateY(20px)' }}
+    >
       {children}
     </div>
   );

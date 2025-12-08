@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthStore } from '../store/authStore';
 import {
   buildInitialForm,
   buildPayload,
@@ -11,7 +11,11 @@ import {
 } from './useProfile.helpers';
 
 export function useProfile() {
-  const { user, updateProfile, isLoading } = useAuth();
+  const { user, updateProfile, isLoading } = useAuthStore((state) => ({
+    user: state.user,
+    updateProfile: state.updateProfile,
+    isLoading: state.isLoading,
+  }));
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<ProfileForm>(buildInitialForm(user));
