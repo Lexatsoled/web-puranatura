@@ -1,5 +1,5 @@
 import React from 'react';
-import { services } from '../../data/services';
+import { services } from '../data/services';
 import { OptimizedImage } from '../components/OptimizedImage';
 import { Service } from '../../types';
 import { formatCurrency } from '../utils/intl';

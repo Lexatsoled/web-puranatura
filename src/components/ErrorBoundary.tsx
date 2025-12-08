@@ -1,4 +1,5 @@
 import React from 'react';
+import { logger } from '../services/logger';
 
 interface Props {
   children: React.ReactNode;
@@ -20,9 +21,11 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: any) {
-    // You could hook this up to an error reporting service
-
-    console.error('ErrorBoundary caught an error', error, info);
+    logger.error('ErrorBoundary caught an error', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: info.componentStack,
+    });
   }
 
   render() {

@@ -1,20 +1,20 @@
 export interface Service {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   imageUrl: string;
-  duration: number;
-  price: number;
-  category: string;
-  benefits: string[];
+  duration?: number;
+  price?: number;
+  category?: string;
+  benefits?: string[];
 }
 
 export interface Testimonial {
-  id: string;
+  id?: string;
   name: string;
   text: string;
-  rating: number;
-  date: string;
+  rating?: number;
+  date?: string;
   imageUrl?: string;
   serviceId?: string;
 }

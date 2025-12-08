@@ -183,6 +183,7 @@
    - Motivo: Remove ESLint no-unused-vars warnings
 
 2. **scripts/check-forbidden-artifacts.cjs** (2 cambios)
+
    ```javascript
    // ANTES: catch (err) { ... }
    // DESPUÉS: catch { ... }

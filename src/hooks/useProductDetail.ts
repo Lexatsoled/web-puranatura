@@ -29,7 +29,7 @@ export function useProductDetail(opts: {
 
   useProductDetailKeyboard({
     isOpen,
-    imageCount: product.images.length,
+    imageCount: product?.images?.length ?? 0,
     onClose,
     setSelectedImage,
   });

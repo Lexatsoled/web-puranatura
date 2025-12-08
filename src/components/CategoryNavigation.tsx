@@ -13,7 +13,6 @@ interface CategoryNavigationProps {
   activeCategory?: string;
 }
 
-
 const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   categories,
   onCategorySelect,

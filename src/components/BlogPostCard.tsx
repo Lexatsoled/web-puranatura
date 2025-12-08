@@ -27,15 +27,17 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex items-center mb-4">
           <span className="text-sm text-green-600 font-semibold">
-            {post.category}
+            {post.category || 'General'}
           </span>
           <span className="mx-2 text-gray-300">•</span>
           <span className="text-sm text-gray-500">
-            {new Date(post.date).toLocaleDateString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            {post.date
+              ? new Date(post.date).toLocaleDateString('es-ES', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })
+              : ''}
           </span>
         </div>
 
@@ -44,13 +46,13 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
         </h3>
 
         <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
-          {post.summary}
+          {post.summary || post.excerpt || ''}
         </p>
 
         <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center">
             <span className="text-sm text-gray-500">
-              {post.readTime} min de lectura
+              {post.readTime || 5} min de lectura
             </span>
           </div>
           <span className="font-semibold text-green-600 group-hover:text-green-800 transition-colors duration-300">

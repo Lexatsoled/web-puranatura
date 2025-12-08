@@ -38,25 +38,19 @@ export const enqueueAnalyticsEvent = (
       },
     })
     .then(() => {
-      logger.debug(
-        {
-          category: payload.category,
-          action: payload.action,
-          traceId: payload.traceId,
-        },
-        'Analytic event persisted'
-      );
+      logger.debug('Analytic event persisted', {
+        category: payload.category,
+        action: payload.action,
+        traceId: payload.traceId,
+      });
     })
     .catch((error) => {
-      logger.warn(
-        {
-          error,
-          category: payload.category,
-          action: payload.action,
-          traceId: payload.traceId,
-        },
-        'No se pudo guardar evento analytics'
-      );
+      logger.warn('No se pudo guardar evento analytics', {
+        error,
+        category: payload.category,
+        action: payload.action,
+        traceId: payload.traceId,
+      });
     });
 
   return promise.then(() => undefined);

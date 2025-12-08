@@ -53,15 +53,37 @@ const analyticsLimiter = rateLimit({
   },
 });
 
+const anonymizeIp = (ip: string): string => {
+  if (ip.includes('.')) {
+    // IPv4: Mask last octet
+    const parts = ip.split('.');
+    if (parts.length === 4) {
+      parts[3] = '0';
+      return parts.join('.');
+    }
+  } else if (ip.includes(':')) {
+    // IPv6: Keep first 64 bits (4 groups) roughly, or just simple truncation
+    // Standard practice varies, but masking suffix is key.
+    const parts = ip.split(':');
+    if (parts.length > 4) {
+      return parts.slice(0, 4).join(':') + ':0000:0000:0000:0000';
+    }
+  }
+  return ip;
+};
+
 const normalizeIp = (req: Request): string | undefined => {
+  let ip: string | undefined;
   const xForwarded = req.headers['x-forwarded-for'];
   if (Array.isArray(xForwarded)) {
-    return xForwarded[0];
+    ip = xForwarded[0];
+  } else if (typeof xForwarded === 'string') {
+    ip = xForwarded.split(',')[0].trim();
+  } else {
+    ip = req.socket.remoteAddress ?? undefined;
   }
-  if (typeof xForwarded === 'string') {
-    return xForwarded.split(',')[0].trim();
-  }
-  return req.socket.remoteAddress ?? undefined;
+
+  return ip ? anonymizeIp(ip) : undefined;
 };
 
 router.post(

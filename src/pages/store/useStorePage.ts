@@ -11,6 +11,8 @@ import {
 import { Category, DEFAULT_CATEGORY } from './constants';
 import { FALLBACK_MESSAGE, loadFallbackProducts } from './utils/storeFallback';
 
+export type { SortOption } from './utils/storeFilters';
+
 export const useStorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
     DEFAULT_CATEGORY.id

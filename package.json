@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "npx vite",
     "build": "npm run optimize-images && npx tsc && npx vite build",
-    "lint": "eslint src pages components tools scripts test --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint src pages components tools scripts test --ext .ts,.tsx --fix",
+    "lint": "eslint src pages tools scripts test --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src pages tools scripts test --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky install",

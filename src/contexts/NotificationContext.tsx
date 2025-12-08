@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, Suspense } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  Suspense,
+} from 'react';
 // The NotificationContainer imports framer-motion which is relatively heavy.
 // Load it lazily so framer-motion is only downloaded/parsed when the app actually
 // needs to render notifications. This reduces initial JS execution cost.
@@ -6,7 +12,9 @@ import React, { createContext, useContext, useState, useCallback, Suspense } fro
 // a Promise resolving to { default: Component }, so map the imported module
 // to that shape.
 const NotificationContainer = React.lazy(() =>
-  import('./NotificationContainer').then((mod) => ({ default: mod.NotificationContainer }))
+  import('./NotificationContainer').then((mod) => ({
+    default: mod.NotificationContainer,
+  }))
 );
 import {
   Notification,

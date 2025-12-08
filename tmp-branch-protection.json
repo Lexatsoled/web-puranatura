@@ -1,1 +1,14 @@
-﻿{"required_status_checks":{"strict":true,"contexts":["tests","Analyze (CodeQL)"]},"enforce_admins":{"enabled":true},"required_pull_request_reviews":null,"restrictions":{"users":["Lexatsoled"],"teams":[],"apps":[]},"required_linear_history":{"enabled":false},"allow_force_pushes":{"enabled":false},"allow_deletions":{"enabled":false},"required_conversation_resolution":{"enabled":false},"required_signatures":{"enabled":false}}
+﻿{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["tests", "Analyze (CodeQL)"]
+  },
+  "enforce_admins": { "enabled": true },
+  "required_pull_request_reviews": null,
+  "restrictions": { "users": ["Lexatsoled"], "teams": [], "apps": [] },
+  "required_linear_history": { "enabled": false },
+  "allow_force_pushes": { "enabled": false },
+  "allow_deletions": { "enabled": false },
+  "required_conversation_resolution": { "enabled": false },
+  "required_signatures": { "enabled": false }
+}

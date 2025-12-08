@@ -19,7 +19,7 @@ export const app = express();
 // Detrás de proxies (NGINX / hosts locales) confiar en el primer proxy
 // para respetar cabeceras como X-Forwarded-For y permitir que cookies Secure
 // y rutas dependientes del proxy funcionen correctamente en staging/infra.
-app.set('trust proxy', 1);
+app.set('trust proxy', env.trustProxy);
 // Default metrics are collected via `backend/src/utils/metrics.ts` to
 // avoid double-registration — keep the app bootstrap clean here.
 
@@ -138,14 +138,11 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
-    logger.error(
-      {
-        error,
-        route: req.originalUrl,
-        traceId: res.locals.traceId,
-      },
-      'Error global de la API'
-    );
+    logger.error('Error global de la API', {
+      error,
+      route: req.originalUrl,
+      traceId: res.locals.traceId,
+    });
     sendErrorResponse(res, req, {
       status: 500,
       code: 'INTERNAL_ERROR',

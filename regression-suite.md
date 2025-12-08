@@ -1,32 +1,67 @@
 ﻿# Suite de Regresión
 
-Esta matriz define las pruebas necesarias para asegurar que los cambios no rompan funcionalidad existente.
+Esta suite define las pruebas críticas que deben pasar antes de cualquier despliegue a producción.
 
-## 1. Comandos de Prueba
+## 1. Unit Tests (Frontend & Backend)
 
-| Tipo            | Comando                 | Descripción                                      |
-| --------------- | ----------------------- | ------------------------------------------------ |
-| **Unitarios**   | `npm run test:unit`     | Tests rápidos de lógica de negocio y utilidades. |
-| **Integración** | `npm run test`          | Tests que involucran DB (SQLite) y API.          |
-| **E2E**         | `npm run test:e2e`      | Flujos completos de usuario con Playwright.      |
-| **Seguridad**   | `npm run scan:security` | Escaneo estático (SAST) y de secretos.           |
-| **Linting**     | `npm run lint`          | Verificación de estilo y errores estáticos.      |
-| **Tipos**       | `npm run type-check`    | Verificación estricta de TypeScript.             |
+> Ejecución rápida, sin I/O real.
 
-## 2. Matriz de Cobertura Crítica
+```bash
+# Backend
+cd backend && npm run test:unit
+# Frontend
+npm run test:unit
+```
 
-| Módulo       | Funcionalidad       | Nivel de Prueba    | Archivos Clave                     |
-| ------------ | ------------------- | ------------------ | ---------------------------------- |
-| **Auth**     | Login / Registro    | Integration + E2E  | `backend.auth.test.ts`             |
-| **Auth**     | Protección de Rutas | Integration        | `backend/src/middleware/auth.ts`   |
-| **Tienda**   | Listar Productos    | Unit + Integration | `backend.products.test.ts`         |
-| **Tienda**   | Carrito de Compras  | Unit (Frontend)    | `src/store/cartStore.ts`           |
-| **Checkout** | Crear Pedido        | E2E                | `e2e/checkout.spec.ts` (Pendiente) |
+**Cobertura clave:**
 
-## 3. Smoke Test Manual (Post-Despliegue)
+- Validación de `registerRoutes` en backend.
+- Utilidades de formateo y cálculo de precios.
+- Reducers de Zustand/Context.
 
-1.  Cargar Home Page (verificar no error 500).
-2.  Iniciar sesión con usuario de prueba.
-3.  Navegar a "Tienda".
-4.  Agregar producto al carrito.
-5.  Verificar que el carrito persiste al recargar.
+## 2. Integration Tests (API Contract)
+
+> Verifica que la API responde según lo esperado (conectado a DB prueba).
+
+```bash
+npm run test:contract
+```
+
+**Escenarios:**
+
+- **Auth Flow**: Login exitoso devuelve cookie/JWT. Login fallido devuelve 401.
+- **Product List**: GET /products devuelve array y paginación correcta.
+- **Order Creation**: POST /orders descuenta stock (si aplica simulacion).
+
+## 3. End-to-End (E2E) - Critical Paths
+
+> Simula usuario real. Usa Playwright/Cypress.
+
+```bash
+npm run test:e2e
+```
+
+**Flujos Críticos:**
+
+1.  **Guest Checkout**: Usuario anónimo añade al carrito -> Checkout -> Login Modal -> Compra.
+2.  **User Registration**: Abrir modal -> Rellenar form -> Submit -> Verificar redirección/estado logged in.
+3.  **Search & Filter**: Buscar "aceite" -> Aplicar filtros -> Verificar resultados.
+
+## 4. Security Regression
+
+> Escaneos automáticos.
+
+```bash
+npm run scan:security
+```
+
+- Verificar que no reintroducimos secretos en código.
+- Verificar dependencias vulnerables (npm audit).
+
+## 5. Accessibility Check
+
+```bash
+npm run a11y
+```
+
+- Verificar que no hay violaciones "critical" o "serious" de WCAG 2.1 AA.

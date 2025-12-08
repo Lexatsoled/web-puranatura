@@ -141,33 +141,33 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
               className="bg-white rounded-lg p-6 w-full max-w-md mx-4 transform transition-transform duration-150 scale-100"
               onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Buscar</h3>
-                  <button
-                    onClick={() => setIsSearchVisible(false)}
-                    className="p-1 hover:bg-gray-100 rounded"
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Buscar</h3>
+                <button
+                  onClick={() => setIsSearchVisible(false)}
+                  className="p-1 hover:bg-gray-100 rounded"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  placeholder="¿Qué estás buscando?"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  autoFocus
-                />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="¿Qué estás buscando?"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                autoFocus
+              />
             </div>
           </div>
         )}

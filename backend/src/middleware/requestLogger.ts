@@ -26,16 +26,13 @@ export const requestLogger = (
     const durationMs = Number(process.hrtime.bigint() - start) / 1_000_000;
     const status = res.statusCode.toString();
 
-    logger.info(
-      {
-        method,
-        route,
-        status,
-        durationMs,
-        traceId,
-      },
-      `${method} ${route} ${status}`
-    );
+    logger.info(`${method} ${route} ${status}`, {
+      method,
+      route,
+      status,
+      durationMs,
+      traceId,
+    });
 
     const queueStart = res.locals.requestQueuedAt;
     if (queueStart) {

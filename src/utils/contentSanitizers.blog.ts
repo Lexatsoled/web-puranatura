@@ -1,10 +1,10 @@
 import { sanitizeHtml, sanitizeText, sanitizeUrl } from './sanitizer';
-import { BlogPost } from '../../types';
+import { BlogPost } from '../types/blog';
 
 export const sanitizeBlogPost = (post: BlogPost): BlogPost => ({
   ...post,
   title: sanitizeText(post.title),
-  summary: sanitizeText(post.summary),
+  summary: sanitizeText(post.summary || ''),
   imageUrl: sanitizeUrl(post.imageUrl),
   content: sanitizeHtml(post.content),
 });

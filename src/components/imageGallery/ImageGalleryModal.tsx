@@ -40,8 +40,8 @@ export const ImageGalleryModal: React.FC<Props> = ({
           onSelect={onSelect}
         />
       </div>
-      </div>
     </div>
+  </div>
 );
 
 const ImageGalleryThumbs = ({

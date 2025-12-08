@@ -1,4 +1,4 @@
-import { BlogPost } from '../../types';
+import { BlogPost } from '../types/blog';
 import { Product } from '../types/product';
 import { sanitizeBlogPost } from './contentSanitizers.blog';
 import { sanitizeImagePath, FALLBACK_IMAGE } from './contentSanitizers.common';

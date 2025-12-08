@@ -116,48 +116,15 @@ router.get('/', async (req, res, next) => {
       breaker?.recordSuccess();
     } catch (dbErr) {
       breaker?.recordFailure();
-      logger.warn(
-        { err: dbErr, route: req.originalUrl },
-        'Products DB read failed'
-      );
+      logger.warn('Products DB read failed', {
+        err: dbErr,
+        route: req.originalUrl,
+      });
 
-      const allowLegacy =
-        env.legacyFallbackEnabled &&
-        process.env.LEGACY_FALLBACK_ENABLED !== 'false';
-      if (allowLegacy) {
-        try {
-          const fallbackModule: any = await import('../data/products');
-          const legacy =
-            fallbackModule?.products ?? fallbackModule?.default ?? [];
-          const normalizedLegacy = legacy.map((p: any, idx: number) => ({
-            ...p,
-            id: p.id ?? p.slug ?? `legacy-${idx}`,
-            updatedAt: p.updatedAt
-              ? new Date(p.updatedAt)
-              : new Date('1970-01-01T00:00:00.000Z'),
-          }));
-          total = normalizedLegacy.length;
-          const fallbackPage = clampPage(total);
-          const offset = (fallbackPage - 1) * pageSize;
-          items = normalizedLegacy.slice(offset, offset + pageSize);
-          normalizedPage = fallbackPage;
-          res.setHeader('X-Backend-Degraded', 'true');
-        } catch (legacyErr) {
-          logger.error(
-            { err: legacyErr },
-            'Legacy products fallback failed as well'
-          );
-          return res.status(503).setHeader('X-Backend-Degraded', 'true').json({
-            code: 'CATALOG_DEGRADED',
-            message: 'Catálogo temporalmente no disponible',
-          });
-        }
-      } else {
-        return res.status(503).setHeader('X-Backend-Degraded', 'true').json({
-          code: 'CATALOG_DEGRADED',
-          message: 'Catálogo temporalmente no disponible',
-        });
-      }
+      return res.status(503).setHeader('X-Backend-Degraded', 'true').json({
+        code: 'CATALOG_DEGRADED',
+        message: 'Catálogo temporalmente no disponible',
+      });
     }
 
     const catalogEtag = buildCatalogEtag(

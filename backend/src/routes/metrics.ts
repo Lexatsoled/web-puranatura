@@ -31,7 +31,7 @@ router.get('/metrics', async (req, res) => {
     res.setHeader('Content-Type', register.contentType);
     res.send(metrics);
   } catch (error) {
-    logger.error({ error }, 'No se pudieron exponer las métricas');
+    logger.error('No se pudieron exponer las métricas', { error });
     res.status(500).send('Error generando métricas');
   }
 });
