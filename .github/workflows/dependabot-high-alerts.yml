@@ -21,7 +21,26 @@ jobs:
     name: Create issue for HIGH/CRITICAL Dependabot alerts
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch open Dependabot alerts and create issues for HIGH/CRITICAL (PAT)
+      - name: DEBUG — check DEPENDABOT_TOKEN identity and test Dependabot API (PAT)
+        if: ${{ secrets.DEPENDABOT_TOKEN }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.DEPENDABOT_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            try {
+              const who = await github.request('GET /user');
+              core.info(`DEBUG: authenticated user login = ${who.data.login}`);
+            } catch (e) {
+              core.info(`DEBUG: /user call failed: ${e.status || 'unknown'}`);
+            }
+            try {
+              const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open', per_page: 1 });
+              core.info(`DEBUG: dependabot API test status = ${res.status}`);
+            } catch (e) {
+              core.info(`DEBUG: dependabot API test failed: ${e.status || 'unknown'}`);
+            }
         if: ${{ secrets.DEPENDABOT_TOKEN }}
         uses: actions/github-script@v6
         with:
@@ -64,7 +83,26 @@ jobs:
               const created = await github.rest.issues.create({ owner, repo, title, body, labels: ['security', 'dependabot', `severity:${severity}`] });
               core.info(`Created issue #${created.data.number} for ${pkg}`);
 
-      - name: Fetch open Dependabot alerts and create issues for HIGH/CRITICAL (fallback)
+      - name: DEBUG — check GITHUB_TOKEN identity and test Dependabot API (fallback)
+        if: ${{ !secrets.DEPENDABOT_TOKEN }}
+        uses: actions/github-script@v6
+        with:
+          # Use the default token that the action will use in fallback
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            try {
+              const who = await github.request('GET /user');
+              core.info(`DEBUG: fallback authenticated user login = ${who.data.login}`);
+            } catch (e) {
+              core.info(`DEBUG: fallback /user call failed: ${e.status || 'unknown'}`);
+            }
+            try {
+              const res = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', { owner, repo, state: 'open', per_page: 1 });
+              core.info(`DEBUG: fallback dependabot API test status = ${res.status}`);
+            } catch (e) {
+              core.info(`DEBUG: fallback dependabot API test failed: ${e.status || 'unknown'}`);
+            }
         if: ${{ !secrets.DEPENDABOT_TOKEN }}
         uses: actions/github-script@v6
         with:
