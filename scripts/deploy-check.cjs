@@ -13,7 +13,8 @@ if (!fs.existsSync(manifest)) {
 const keys = fs
   .readFileSync(manifest, 'utf8')
   .split('\n')
-  .map((l) => l.replace(/^[\s-]*/, '').trim())
+  // strip leading -/spaces, remove inline or full-line comments, trim and ignore empty lines
+  .map((l) => l.replace(/^[\s-]*/, '').replace(/#.*/g, '').trim())
   .filter(Boolean);
 
 const missing = keys.filter((k) => !process.env[k]);

@@ -69,6 +69,10 @@ jobs:
           node-version: '20'
       - name: Install deps
         run: npm ci
+      - name: Install backend deps
+        run: npm --prefix backend ci
+      - name: Build backend
+        run: npm --prefix backend run build
       - name: Start backend & run Playwright E2E
         run: |
           npm run build

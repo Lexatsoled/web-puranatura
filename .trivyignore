@@ -30,3 +30,16 @@ package-lock.json
 # any other noisy patterns
 *.sqlite
 *.db
+
+# typical CI/log artifacts and screenshots that appear in generated reports
+reports/**/*.png
+reports/**/*.jpg
+reports/**/screenshots/
+*.log
+npm-debug.log
+pnpm-debug.log
+
+# temporary test artifacts and debug payloads
+tmp-*.json
+tmp-*.txt
+tmp-*.ps1
