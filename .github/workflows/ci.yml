@@ -20,7 +20,7 @@ jobs:
       # in PRs without requiring a DATABASE_URL secret stored in repo secrets.
       DATABASE_URL: 'file:./backend/test-local.sqlite'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Use Node 20
         uses: actions/setup-node@v4
         with:
