@@ -29,10 +29,15 @@ function checkList(files) {
 
 function listStagedFiles() {
   try {
-    const out = execSync('git diff --cached --name-only', { encoding: 'utf8' }).trim();
+    const out = execSync('git diff --cached --name-only', {
+      encoding: 'utf8',
+    }).trim();
     if (!out) return [];
-    return out.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-  } catch (err) {
+    return out
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  } catch {
     // Not a git repo or no staged files
     return [];
   }
@@ -42,8 +47,11 @@ function listAllTrackedFiles() {
   try {
     const out = execSync('git ls-files', { encoding: 'utf8' }).trim();
     if (!out) return [];
-    return out.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-  } catch (err) {
+    return out
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  } catch {
     // If git not available, return empty (CI should have git)
     return [];
   }
@@ -52,8 +60,12 @@ function listAllTrackedFiles() {
 function fail(matches, context) {
   console.error('\n❌ Forbidden artifact(s) detected (' + context + ')');
   for (const m of matches) console.error(' -', m.file);
-  console.error('\nThese patterns are intentionally blocked: tmp/, coverage/, *.db, *.sqlite, dev.db');
-  console.error('If this block is incorrect, add an allowlist in .github/.gitleaks.toml or update .trivyignore (but prefer keeping artifacts out of the repository).');
+  console.error(
+    '\nThese patterns are intentionally blocked: tmp/, coverage/, *.db, *.sqlite, dev.db'
+  );
+  console.error(
+    'If this block is incorrect, add an allowlist in .github/.gitleaks.toml or update .trivyignore (but prefer keeping artifacts out of the repository).'
+  );
   process.exit(1);
 }
 

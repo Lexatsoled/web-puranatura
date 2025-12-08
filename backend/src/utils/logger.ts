@@ -7,32 +7,32 @@ export const logger = {
     try {
       // eslint-disable-next-line no-console
       console.log(...args);
-    } catch (e) {
-      void e;
+    } catch {
+      // Intentionally silent to prevent logger from throwing
     }
   },
   warn: (...args: unknown[]): void => {
     try {
       // eslint-disable-next-line no-console
       console.warn(...args);
-    } catch (e) {
-      void e;
+    } catch {
+      // Intentionally silent to prevent logger from throwing
     }
   },
   error: (...args: unknown[]): void => {
     try {
       // eslint-disable-next-line no-console
       console.error(...args);
-    } catch (e) {
-      void e;
+    } catch {
+      // Intentionally silent to prevent logger from throwing
     }
   },
   debug: (...args: unknown[]): void => {
     try {
       // eslint-disable-next-line no-console
       console.debug(...args);
-    } catch (e) {
-      void e;
+    } catch {
+      // Intentionally silent to prevent logger from throwing
     }
   },
 };
