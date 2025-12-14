@@ -4,7 +4,9 @@
    sets to their equivalent rule lists.
 */
 const path = require('path');
+const jsxA11y = require('eslint-plugin-jsx-a11y');
 module.exports = [
+  jsxA11y.flatConfigs.recommended,
   {
     ignores: [
       'dist/**',
@@ -34,6 +36,7 @@ module.exports = [
       tailwindcss: require('eslint-plugin-tailwindcss'),
       '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
       prettier: require('eslint-plugin-prettier'),
+      // 'jsx-a11y' plugin is now loaded via flatConfigs.recommended above
     },
     rules: {
       'react-hooks/rules-of-hooks': 'error',
@@ -49,6 +52,8 @@ module.exports = [
       // across the legacy codebase; disable for now and add targeted fixes later.
       'security/detect-object-injection': 'off',
       'security/detect-unsafe-regex': 'warn',
+      'react/no-danger': 'error',
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     },
     settings: {
       react: { version: 'detect' },
@@ -69,16 +74,9 @@ module.exports = [
   // Scoped override for TypeScript files: enable type-aware linting only on project source (exclude tooling scripts)
   {
     files: [
-      'src/**/!(*.d).ts',
-      'src/**/!(*.d).tsx',
-      'pages/**/!(*.d).ts',
-      'pages/**/!(*.d).tsx',
-      'components/**/!(*.d).ts',
-      'components/**/!(*.d).tsx',
-      'tools/**/!(*.d).ts',
-      'tools/**/!(*.d).tsx',
-      'test/**/!(*.d).ts',
-      'test/**/!(*.d).tsx',
+      'src/**/*.{ts,tsx}',
+      'tools/**/*.{ts,tsx}',
+      'test/**/*.{ts,tsx}',
     ],
     languageOptions: {
       parser: require('@typescript-eslint/parser'),
@@ -102,6 +100,14 @@ module.exports = [
         ecmaFeatures: { jsx: true },
         // Intentionally no `project` here.
       },
+    },
+  },
+  {
+    files: ['scripts/**', 'tools/**'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 ];
