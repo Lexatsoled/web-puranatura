@@ -1,0 +1,98 @@
+name: Main CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  quality-check:
+    name: 🎨 Code Quality & Security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint Code
+        run: npm run lint
+
+      # Falla si hay vulnerabilidades moderadas o altas
+      - name: Security Audit (audit-ci)
+        run: npm run audit
+
+  backend-verification:
+    name: 🛡️ Backend Tests & Build
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Backend Tests
+        run: npm run test:ci
+        env:
+          DATABASE_URL: 'postgresql://test_user:test_password@localhost:5432/test_db?schema=public'
+          REDIS_URL: 'redis://localhost:6379'
+          JWT_SECRET: 'super-secret-test-key'
+          JWT_REFRESH_SECRET: 'super-secret-refresh-key'
+
+      - name: Verify Backend Build
+        run: cd backend && npm ci && npm run build
+
+  frontend-build:
+    name: 🏗️ Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Frontend
+        run: npm run build

@@ -2,19 +2,20 @@
 
 Pequeña guía para desarrollo y pruebas locales del backend.
 
-Variables de entorno importantes (ejemplo en `backend/.env.example`):
+- Variables de entorno importantes (ejemplo en `backend/.env.example`):
 
-- DATABASE_URL — URL de la DB (ej. `file:./database.sqlite` para SQLite).
+- DATABASE_URL — URL de la DB (ej. `postgresql://user:password@localhost:5432/puranatura` para Postgres).
 - JWT_SECRET — secreto para firmar access tokens (no versionar valores reales).
 - JWT_REFRESH_SECRET — secreto para refresh tokens (diferente del anterior).
 - PORT — puerto del servidor (por defecto 3001).
 
-Cómo ejecutar localmente:
+Cómo ejecutar localmente (Postgres + Redis):
 
 1. Copia `backend/.env.example` → `backend/.env` y reemplaza secrets.
-2. Instala deps y genera Prisma client: `npm --prefix backend ci` (o `npm --prefix backend install`).
-3. Ejecuta migraciones locales: `npx --prefix backend prisma migrate dev`.
-4. Inicia el servidor: `npm --prefix backend run dev`.
+2. Levanta Postgres y Redis con Docker: `docker compose up -d db redis` (también existe `docker-compose.yml`).
+3. Instala deps y genera Prisma client: `npm --prefix backend ci` (o `npm --prefix backend install`).
+4. Ejecuta migraciones locales apuntando a Postgres: `npx --prefix backend prisma migrate dev --schema=./prisma/schema.prisma`.
+5. Inicia el servidor: `npm --prefix backend run dev`.
 
 Notas sobre pruebas unitarias e integración:
 
