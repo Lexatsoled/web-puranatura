@@ -132,8 +132,12 @@ jobs:
       - name: Format check
         run: npm run format:check
 
-      - name: Type-check
+      - name: Type-check (frontend)
         run: npm run type-check
+
+      - name: Type-check (backend)
+        working-directory: ./backend
+        run: npm run build
 
       - name: Run DB migrations (non-interactive)
         env:
