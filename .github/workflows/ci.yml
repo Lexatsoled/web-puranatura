@@ -71,6 +71,7 @@ jobs:
       - name: Generate Prisma Client
         env:
           DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
         run: npx prisma generate
 
       - name: Run Tests (Vitest)
