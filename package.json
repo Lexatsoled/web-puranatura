@@ -139,7 +139,7 @@
     "msw": "^2.10.4",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
-    "prisma": "^5.22.0",
+    "prisma": "^7.1.0",
     "rollup-plugin-visualizer": "^5.8.1",
     "supertest": "^7.1.4",
     "tailwindcss": "^3.4.17",
