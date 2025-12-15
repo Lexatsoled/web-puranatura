@@ -57,8 +57,12 @@ jobs:
       - name: Formatting Check (Prettier)
         run: npm run format:check
 
-      - name: Type Checking (TypeScript)
+      - name: Type Checking (frontend)
         run: npm run type-check
+
+      - name: Type Checking (backend)
+        working-directory: ./backend
+        run: npm run build
 
       - name: Generate Prisma Client
         env:
