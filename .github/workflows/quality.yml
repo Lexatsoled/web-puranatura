@@ -55,6 +55,12 @@ jobs:
           npm run type-check:frontend
           cd backend && npm ci && npm run build
 
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npx prisma migrate deploy
+
       - name: Unit Tests
         env:
           DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test

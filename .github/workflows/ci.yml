@@ -74,6 +74,12 @@ jobs:
         working-directory: ./backend
         run: npx prisma generate
 
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npx prisma migrate deploy
+
       - name: Run Tests (Vitest)
         env:
           DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
