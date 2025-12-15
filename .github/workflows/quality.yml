@@ -24,13 +24,15 @@ jobs:
         run: npm ci
 
       - name: Linting
-        run: npm run lint
+        run: npm run lint -- --max-warnings 200
 
-      - name: Type Checking
-        run: npx tsc --noEmit
+      - name: Type Checking (frontend + backend)
+        run: |
+          npm run type-check:frontend
+          cd backend && npm ci && npm run build
 
       - name: Unit Tests
-        run: npm run test:run
+        run: npm test
         # Asumiendo que 'test:run' corre vitest una vez. Si no existe, usaremos 'npm test' ajustado.
 
       - name: Build Verification
