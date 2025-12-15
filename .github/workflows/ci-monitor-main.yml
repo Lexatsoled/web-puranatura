@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Run CI health check
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             // Generate a short hourly summary of workflow runs on main
