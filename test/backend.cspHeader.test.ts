@@ -26,7 +26,7 @@ describe('CSP header behaviour', () => {
     expect(header).toBeDefined();
     expect(String(header)).toMatch(/script-src/);
     expect(String(header)).toMatch(
-      /maps.googleapis.com|google-analytics.com|connect.facebook.net/
+      /maps\.googleapis\.com|google-analytics\.com|connect\.facebook\.net/
     );
     // ensure frameAncestors 'none' is present (X-Frame-Options mitigated via CSP)
     expect(String(header)).toMatch(/frame-ancestors\s+'none'/);
