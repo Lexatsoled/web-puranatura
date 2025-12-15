@@ -46,14 +46,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
       <div>
         <h3 className="text-lg font-semibold mb-4">Escribir una Reseña</h3>
         <div className="flex items-center mb-2">
-          <label className="block text-sm font-medium text-gray-700 mr-4">
+          <span className="block text-sm font-medium text-gray-700 mr-4">
             Calificación
-          </label>
+          </span>
           <div className="flex">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
+                aria-label={`Calificar con ${star} estrellas`}
                 className="p-1 transition-transform duration-150 transform hover:scale-110 active:scale-95"
                 onClick={() => setFormData({ ...formData, rating: star })}
                 onMouseEnter={() => setHoveredStar(star)}
@@ -77,10 +78,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="userName"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Nombre
         </label>
         <input
+          id="userName"
           type="text"
           value={formData.userName}
           onChange={(e) =>
@@ -92,10 +97,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onCancel }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="comment"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Comentario
         </label>
         <textarea
+          id="comment"
           value={formData.comment}
           onChange={(e) =>
             setFormData({ ...formData, comment: e.target.value })

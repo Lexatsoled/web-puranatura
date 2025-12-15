@@ -12,7 +12,7 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   webServer: {
     command: process.env.CI ? 'npm run preview -- --port 5173' : 'npm run dev',
-    url: process.env.BASE_URL || 'http://localhost:5173',
+    url: process.env.BASE_URL || 'http://localhost:3000',
     reuseExistingServer: !!process.env.REUSE_VITE_SERVER || !process.env.CI,
     timeout: 120_000,
     env: { VITE_E2E: '1' },

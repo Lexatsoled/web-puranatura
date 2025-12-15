@@ -1,15 +1,17 @@
 import React from 'react';
+import { safeJSONLDSerialization } from '../../utils/security';
 
 interface BreadcrumbStructuredDataProps {
-  sanitizedJson: string;
+  data: any;
 }
 
 const BreadcrumbStructuredData: React.FC<BreadcrumbStructuredDataProps> = ({
-  sanitizedJson,
+  data,
 }) => (
   <script
     type="application/ld+json"
-    dangerouslySetInnerHTML={{ __html: sanitizedJson }}
+    // eslint-disable-next-line react/no-danger
+    dangerouslySetInnerHTML={{ __html: safeJSONLDSerialization(data) }}
   />
 );
 

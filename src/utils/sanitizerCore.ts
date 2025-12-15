@@ -10,7 +10,7 @@ const purifyConfig: PurifyConfig = {
   ALLOWED_URI_REGEXP: new RegExp(sanitizerConfig.ALLOWED_URI_REGEXP, 'i'),
 };
 
-export const sanitizeHtml = (html: string): string =>
+export const sanitizeHTML = (html: string): string =>
   DOMPurify.sanitize(html, purifyConfig);
 
 export const sanitizeText = (text: string): string =>
@@ -18,6 +18,7 @@ export const sanitizeText = (text: string): string =>
 
 export const sanitizeUrl = (url: string): string => {
   const sanitized = DOMPurify.sanitize(url);
-  const hasProtocol = /^https?:\/\//i.test(url);
-  return hasProtocol ? sanitized : `https://${sanitized}`;
+  const isRelative = sanitized.startsWith('/');
+  const hasProtocol = /^https?:\/\//i.test(sanitized);
+  return hasProtocol || isRelative ? sanitized : `https://${sanitized}`;
 };

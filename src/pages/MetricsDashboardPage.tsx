@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { metricCards, seriesTemporales } from '../data/metricsDashboard';
-import ChartSection from '../components/metrics/ChartSection';
+const ChartSection = React.lazy(
+  () => import('../components/metrics/ChartSection')
+);
 import MetricCardTile from '../components/metrics/MetricCardTile';
 
 const MetricsDashboardPage: React.FC = () => {

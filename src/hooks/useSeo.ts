@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { NextSeoProps } from 'next-seo';
+
 import {
   buildSeoConfig,
   normalizeBaseUrl,
@@ -7,7 +7,7 @@ import {
 } from './seo/buildSeoConfig';
 import { DEFAULT_SEO_CONFIG } from '../config/seo.config';
 
-export const useSeo = (props: SeoProps = {}): NextSeoProps => {
+export const useSeo = (props: SeoProps = {}) => {
   const location = useLocation();
   const baseUrl =
     import.meta.env.VITE_APP_URL ||

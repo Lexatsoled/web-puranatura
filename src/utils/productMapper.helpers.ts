@@ -1,5 +1,4 @@
-export const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&w=600&q=80';
+export const FALLBACK_IMAGE = '/optimized/placeholder.webp';
 
 export const getDefaultDescription = (description?: string | null) =>
   description ?? 'Producto de PuraNatura';

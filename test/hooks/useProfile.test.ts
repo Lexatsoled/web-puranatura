@@ -15,12 +15,17 @@ const mockUser = {
 
 const mockUpdate = vi.fn();
 
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: () => ({
-    user: mockUser,
-    updateProfile: mockUpdate,
-    isLoading: false,
-  }),
+vi.mock('../../src/store/authStore', () => ({
+  useAuthStore: (selector: any) => {
+    // Mock state
+    const state = {
+      user: mockUser,
+      updateProfile: mockUpdate,
+      isLoading: false,
+    };
+    // If a selector is passed, use it, otherwise return state
+    return selector ? selector(state) : state;
+  },
 }));
 
 import useProfile from '../../src/hooks/useProfile';

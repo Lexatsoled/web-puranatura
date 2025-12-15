@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { createHash } from 'crypto';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { env } from '../config/env';
@@ -53,23 +54,12 @@ const analyticsLimiter = rateLimit({
   },
 });
 
+const SALT = process.env.ANALYTICS_SALT || 'dev_analytics_salt_fixed_value';
+
 const anonymizeIp = (ip: string): string => {
-  if (ip.includes('.')) {
-    // IPv4: Mask last octet
-    const parts = ip.split('.');
-    if (parts.length === 4) {
-      parts[3] = '0';
-      return parts.join('.');
-    }
-  } else if (ip.includes(':')) {
-    // IPv6: Keep first 64 bits (4 groups) roughly, or just simple truncation
-    // Standard practice varies, but masking suffix is key.
-    const parts = ip.split(':');
-    if (parts.length > 4) {
-      return parts.slice(0, 4).join(':') + ':0000:0000:0000:0000';
-    }
-  }
-  return ip;
+  return createHash('sha256')
+    .update(ip + SALT)
+    .digest('hex');
 };
 
 const normalizeIp = (req: Request): string | undefined => {

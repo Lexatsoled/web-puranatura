@@ -35,4 +35,9 @@ export const authService = {
   logout: async (): Promise<void> => {
     await api.post('/auth/logout');
   },
+
+  updateProfile: async (data: Partial<User>): Promise<User> => {
+    const response = await api.put<{ user: User }>('/auth/me', data);
+    return response.data.user;
+  },
 };

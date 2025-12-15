@@ -31,21 +31,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   } = useProductCardState(product);
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-label={`Ver detalles de ${product.name}`}
+    <article
       data-testid={`product-card-${product.id}`}
       data-testid-base="product-card"
       data-product-id={product.id}
-      className="product-card bg-white rounded-lg shadow-sm overflow-hidden group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white hover:-translate-y-2 transition-transform duration-200"
-      onClick={() => onViewDetails?.(product)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onViewDetails?.(product);
-        }
-      }}
+      className="product-card bg-white rounded-lg shadow-sm overflow-hidden group hover:-translate-y-2 transition-transform duration-200"
       onMouseEnter={hoverOn}
       onMouseLeave={hoverOff}
     >
@@ -56,6 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         isHovered={isHovered}
         stockStatus={stockStatus}
         priority={priority}
+        onViewDetails={() => onViewDetails?.(product)}
       />
 
       <ProductInfoSection
@@ -63,8 +54,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         stockStatus={stockStatus}
         isAddingToCart={isAddingToCart}
         handleAddToCart={handleAddToCart}
+        onViewDetails={() => onViewDetails?.(product)}
       />
-    </div>
+    </article>
   );
 };
 

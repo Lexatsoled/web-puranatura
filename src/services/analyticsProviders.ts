@@ -22,7 +22,8 @@ export const logEventToProviders = (event: AnalyticsEvent) => {
 export const getSessionId = (): string => {
   let sessionId = sessionStorage.getItem('analytics_session_id');
   if (!sessionId) {
-    sessionId = Math.random().toString(36).substring(2);
+    // Use cryptographically secure random for session IDs
+    sessionId = crypto.randomUUID();
     sessionStorage.setItem('analytics_session_id', sessionId);
   }
   return sessionId;

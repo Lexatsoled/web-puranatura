@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { logger } from '../utils/logger';
@@ -6,6 +7,7 @@ import { requireAuth, requireAdmin } from '../middleware/auth';
 import { createHash } from 'crypto';
 import { CatalogBreaker } from '../services/catalogBreaker';
 import { env } from '../config/env';
+import { getOrSetCache } from '../utils/cache';
 
 const breakerEnabled = env.breakerEnabled;
 const breaker = breakerEnabled
@@ -21,7 +23,7 @@ const router = Router();
 
 const querySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  pageSize: z.coerce.number().int().min(1).max(200).default(100),
   category: z.string().trim().optional(),
   search: z.string().trim().optional(),
 });
@@ -39,7 +41,7 @@ const parseIfNoneMatchHeader = (header?: string | string[]): string[] => {
 };
 
 const buildCatalogEtag = (
-  items: { id: string; updatedAt: Date }[],
+  items: { id: string; updatedAt: Date | string }[],
   total: number,
   page: number,
   pageSize: number,
@@ -52,7 +54,7 @@ const buildCatalogEtag = (
     category: category ?? null,
     search: search ?? null,
     total,
-    updates: items.map((item) => item.updatedAt.toISOString()),
+    updates: items.map((item) => new Date(item.updatedAt).toISOString()),
     ids: items.map((item) => item.id),
   };
   return `"${createHash('sha256')
@@ -84,13 +86,28 @@ router.get('/', async (req, res, next) => {
     const { page, pageSize, category, search } = querySchema.parse(req.query);
     const where = {
       ...(category
-        ? { category: { contains: category, mode: 'insensitive' } }
+        ? {
+            category: {
+              contains: category,
+              mode: 'insensitive' as Prisma.QueryMode,
+            },
+          }
         : {}),
       ...(search
         ? {
             OR: [
-              { name: { contains: search, mode: 'insensitive' } },
-              { description: { contains: search, mode: 'insensitive' } },
+              {
+                name: {
+                  contains: search,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
+              },
+              {
+                description: {
+                  contains: search,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
+              },
             ],
           }
         : {}),
@@ -107,12 +124,22 @@ router.get('/', async (req, res, next) => {
     try {
       total = await prisma.product.count({ where });
       normalizedPage = clampPage(total);
-      items = await prisma.product.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        skip: (normalizedPage - 1) * pageSize,
-        take: pageSize,
-      });
+
+      const cacheKey = `products:list:${JSON.stringify({ where, orderBy: { createdAt: 'desc' }, skip: (normalizedPage - 1) * pageSize, take: pageSize })}`;
+
+      items = await getOrSetCache(
+        cacheKey,
+        async () => {
+          return prisma.product.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+            skip: (normalizedPage - 1) * pageSize,
+            take: pageSize,
+          });
+        },
+        60
+      ); // 60 seconds cache
+
       breaker?.recordSuccess();
     } catch (dbErr) {
       breaker?.recordFailure();
@@ -198,6 +225,41 @@ router.get('/:id', async (req, res, next) => {
       return res.status(404).json({ message: 'Producto no encontrado' });
     }
     res.json(product);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:id/reviews', async (req, res, next) => {
+  try {
+    const productId = req.params.id;
+    const page = Number(req.query.page) || 1;
+    const pageSize = Number(req.query.pageSize) || 20;
+
+    const [reviews, total] = await Promise.all([
+      prisma.review.findMany({
+        where: { productId },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: { firstName: true, lastName: true },
+          },
+        },
+      }),
+      prisma.review.count({ where: { productId } }),
+    ]);
+
+    res.json({
+      data: reviews,
+      meta: {
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    });
   } catch (error) {
     next(error);
   }

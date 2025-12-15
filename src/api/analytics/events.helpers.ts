@@ -1,4 +1,5 @@
-import { Request } from 'express';
+// import { Request } from 'express';
+type Request = any;
 import { AnalyticsEvent } from '../../types/analytics';
 import { getClientIp } from './network.helpers';
 

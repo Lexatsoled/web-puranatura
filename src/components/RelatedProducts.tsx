@@ -38,12 +38,16 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {relatedProducts.map((product) => (
-            <div
+            <article
               key={product.id}
-              className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform transition-transform duration-150 hover:-translate-y-1"
-              onClick={() => onProductClick(product)}
+              className="bg-white rounded-lg shadow-sm overflow-hidden transform transition-transform duration-150 hover:-translate-y-1"
             >
-              <div className="aspect-square relative">
+              <button
+                type="button"
+                className="aspect-square relative cursor-pointer w-full text-left p-0 border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-t-lg overflow-hidden"
+                onClick={() => onProductClick(product)}
+                aria-label={`Ver producto ${product.name}`}
+              >
                 <OptimizedImage
                   src={product?.images?.[0]?.full ?? DEFAULT_PRODUCT_IMAGE}
                   alt={product.name}
@@ -57,11 +61,17 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                     </span>
                   </div>
                 )}
-              </div>
+              </button>
 
               <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2">
-                  {product.name}
+                <h3 className="mb-2 line-clamp-2">
+                  <button
+                    type="button"
+                    className="font-semibold text-gray-800 hover:text-green-600 text-left w-full bg-transparent border-0 p-0 focus:outline-none focus:text-green-600 transition-colors"
+                    onClick={() => onProductClick(product)}
+                  >
+                    {product.name}
+                  </button>
                 </h3>
                 <div className="flex items-center justify-between">
                   <span className="text-green-600 font-bold">
@@ -91,7 +101,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   </button>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

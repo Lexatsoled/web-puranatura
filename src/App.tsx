@@ -1,8 +1,12 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-const SimpleLayout = React.lazy(() => import('./components/SimpleLayout'));
-const HomePage = React.lazy(() => import('./pages/HomePage'));
+// Eager load for critical LCP path
+import HomePage from './pages/HomePage';
+import SimpleLayout from './components/SimpleLayout';
+
+// const SimpleLayout = React.lazy(() => import('./components/SimpleLayout')); // Removed lazy
+// const HomePage = React.lazy(() => import('./pages/HomePage')); // Removed lazy
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
 const StorePage = React.lazy(() => import('./pages/StorePage'));
@@ -16,24 +20,25 @@ const WishlistPage = React.lazy(() => import('./pages/WishlistPage'));
 const MetricsDashboardPage = React.lazy(
   () => import('./pages/MetricsDashboardPage')
 );
-
-// We need to ensure all those pages exist in src/pages.
-// I have moved BlogPage, StorePage, MetricsDashboardPage.
-// HomePage, ServicesPage existed in src/pages.
-// What about AboutPage, TestimonialsPage, ContactPage, ProfilePage, OrdersPage, AddressesPage, WishlistPage?
-// I only moved the ones that were broken.
-// I MUST move ALL or App.tsx imports will break.
-// I will point them to ./pages/... and ASSUME they will be moved next.
+const ProductPage = React.lazy(() => import('./pages/ProductPage'));
 
 const LayoutFallback = () => (
-  <div className="flex min-h-screen items-center justify-center bg-emerald-50 text-green-800 p-6">
+  <main className="flex min-h-screen items-center justify-center bg-emerald-50 text-green-800 p-6">
     <div role="status" aria-live="polite">
       Cargando la capa visual…
     </div>
-  </div>
+  </main>
 );
 
+import { useAuthStore } from './store/authStore';
+
 const App: React.FC = () => {
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+
+  React.useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <Suspense fallback={<LayoutFallback />}>
       <SimpleLayout>
@@ -56,7 +61,9 @@ const App: React.FC = () => {
             <Route path="/pedidos" element={<OrdersPage />} />
             <Route path="/direcciones" element={<AddressesPage />} />
             <Route path="/lista-deseos" element={<WishlistPage />} />
+            <Route path="/lista-deseos" element={<WishlistPage />} />
             <Route path="/metricas" element={<MetricsDashboardPage />} />
+            <Route path="/producto/:id" element={<ProductPage />} />
           </Routes>
         </Suspense>
       </SimpleLayout>

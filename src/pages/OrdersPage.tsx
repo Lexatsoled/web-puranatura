@@ -1,18 +1,34 @@
-import React, { useMemo, useState } from 'react';
-// prefer CSS transitions for lightweight page animations
+import React, { useMemo, useState, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { sampleOrders } from './orders/constants';
 import { Order } from './orders/types';
 import { OrderRow } from './orders/components/OrderRow';
+
+import { useNavigate } from 'react-router-dom';
+import { useOrdersService } from '../services/ordersService';
 
 const OrdersPage: React.FC = () => {
   const { user, isAuthenticated } = useAuthStore((state) => ({
     user: state.user,
     isAuthenticated: state.isAuthenticated,
   }));
+  const { getMyOrders } = useOrdersService();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const navigate = useNavigate();
 
-  const hasOrders = useMemo(() => sampleOrders.length > 0, []);
+  useEffect(() => {
+    if (isAuthenticated) {
+      getMyOrders()
+        .then((data) => setOrders(data))
+        .catch((err) => console.error('Failed to fetch orders', err))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  const hasOrders = useMemo(() => orders.length > 0, [orders]);
 
   if (!isAuthenticated || !user) {
     return (
@@ -22,9 +38,17 @@ const OrdersPage: React.FC = () => {
             Acceso Denegado
           </h2>
           <p className="text-gray-600">
-            Debes iniciar sesion para ver tus pedidos.
+            Debes iniciar sesión para ver tus pedidos.
           </p>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-green-600">Cargando pedidos...</div>
       </div>
     );
   }
@@ -55,18 +79,21 @@ const OrdersPage: React.FC = () => {
               />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No tienes pedidos aun
+              No tienes pedidos aún
             </h3>
             <p className="text-gray-600 mb-6">
-              Cuando realices tu primera compra, aparecera aqui.
+              Cuando realices tu primera compra, aparecerá aquí.
             </p>
-            <button className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => navigate('/tienda')}
+              className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors"
+            >
               Explorar Productos
             </button>
           </div>
         ) : (
           <div className="space-y-6">
-            {sampleOrders.map((order) => (
+            {orders.map((order) => (
               <OrderRow
                 key={order.id}
                 order={order}
@@ -84,5 +111,4 @@ const OrdersPage: React.FC = () => {
     </div>
   );
 };
-
 export default OrdersPage;

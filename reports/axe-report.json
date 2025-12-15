@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2025-12-05T19:14:13.574Z",
+  "timestamp": "2025-12-10T15:40:47.290Z",
   "url": "http://localhost:5173/",
   "toolOptions": {
     "runOnly": {
@@ -428,6 +428,60 @@
           "target": [
             ".header-button--secondary"
           ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"px-6 py-2.5 text-sm font-medium text-gray-300 bg-transparent border border-gray-600 rounded-lg hover:bg-gray-800 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 max-w-full justify-center\">Rechazar</button>",
+          "target": [
+            ".bg-transparent"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"px-6 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 max-w-full justify-center\">Aceptar todas</button>",
+          "target": [
+            ".bg-green-600"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-label attribute exists and is not empty"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"absolute top-2 right-2 p-1 text-gray-500 hover:text-white md:hidden\" aria-label=\"Cerrar banner de cookies\">",
+          "target": [
+            ".top-2"
+          ]
         }
       ]
     },
@@ -469,13 +523,7 @@
                   ]
                 },
                 {
-                  "html": "<h1 class=\"text-5xl md:text-7xl font-bold font-display leading-tight mb-4\">Bienestar que Nace de la Tierra</h1>",
-                  "target": [
-                    ".text-5xl"
-                  ]
-                },
-                {
-                  "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holistica</h2>",
+                  "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
                   "target": [
                     "h2"
                   ]
@@ -483,19 +531,25 @@
                 {
                   "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Terapias Personalizadas</h3>",
                   "target": [
-                    ".p-8.bg-white\\/50.border:nth-child(1) > h3"
+                    ".p-8.bg-white\\/50.border-green-100:nth-child(1) > .text-2xl.text-green-700"
                   ]
                 },
                 {
                   "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Productos Naturales</h3>",
                   "target": [
-                    ".p-8.bg-white\\/50.border:nth-child(2) > h3"
+                    ".p-8.bg-white\\/50.border-green-100:nth-child(2) > .text-2xl.text-green-700"
                   ]
                 },
                 {
                   "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Asesoramiento Experto</h3>",
                   "target": [
-                    ".p-8.bg-white\\/50.border:nth-child(3) > h3"
+                    ".p-8.bg-white\\/50.border-green-100:nth-child(3) > .text-2xl.text-green-700"
+                  ]
+                },
+                {
+                  "html": "<h3 class=\"text-lg font-semibold text-white mb-2\">Respetamos tu privacidad</h3>",
+                  "target": [
+                    ".text-lg.font-semibold"
                   ]
                 }
               ],
@@ -825,16 +879,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#ffffff",
-                "bgColor": "#14532d",
-                "contrastRatio": 9.11,
-                "fontSize": "54.0pt (72px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "3:1"
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.11"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -850,16 +904,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#ffffff",
-                "bgColor": "#14532d",
-                "contrastRatio": 9.11,
-                "fontSize": "15.0pt (20px)",
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.11"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -875,16 +929,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#166534",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.13,
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.13"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -900,16 +954,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#ffffff",
-                "bgColor": "#15803d",
-                "contrastRatio": 5.01,
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.01"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -925,22 +979,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#166534",
-                "bgColor": "#ecfdf5",
-                "contrastRatio": 6.76,
-                "fontSize": "27.0pt (36px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "3:1"
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.76"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holistica</h2>",
+          "html": "<h2 class=\"text-4xl font-bold font-display text-green-800 mb-4\">Tu Camino Hacia la Salud Holística</h2>",
           "target": [
             "h2"
           ]
@@ -950,22 +1004,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4b5563",
-                "bgColor": "#ecfdf5",
-                "contrastRatio": 7.17,
-                "fontSize": "13.5pt (18px)",
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.17"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-lg text-gray-600 max-w-3xl mx-auto mb-12\">Ofrecemos una gama de terapias naturales disenadas para tratar a la persona en su totalidad, no solo los sintomas. Descubre un enfoque de salud que es a la vez suave y poderoso.</p>",
+          "html": "<p class=\"text-lg text-gray-600 max-w-3xl mx-auto mb-12\">Ofrecemos una gama de terapias naturales diseñadas para tratar a la persona en su totalidad, no solo los síntomas. Descubre un enfoque de salud que es a la vez suave y poderoso.</p>",
           "target": [
             ".max-w-3xl"
           ]
@@ -975,16 +1029,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#15803d",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 4.89,
-                "fontSize": "18.0pt (24px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "3:1"
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.89"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -992,7 +1046,7 @@
           "impact": null,
           "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Terapias Personalizadas</h3>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(1) > h3"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(1) > .text-2xl.text-green-700"
           ]
         },
         {
@@ -1000,24 +1054,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4b5563",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 7.36,
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.36"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-gray-600\">Planes de tratamiento unicos adaptados a tus necesidades especificas.</p>",
+          "html": "<p class=\"text-gray-600\">Planes de tratamiento únicos adaptados a tus necesidades específicas.</p>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(1) > .text-gray-600"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(1) > .text-gray-600"
           ]
         },
         {
@@ -1025,16 +1079,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#15803d",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 4.89,
-                "fontSize": "18.0pt (24px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "3:1"
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.89"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -1042,7 +1096,7 @@
           "impact": null,
           "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Productos Naturales</h3>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(2) > h3"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(2) > .text-2xl.text-green-700"
           ]
         },
         {
@@ -1050,24 +1104,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4b5563",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 7.36,
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.36"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-gray-600\">Una seleccion cuidada de suplementos y remedios de la mas alta calidad.</p>",
+          "html": "<p class=\"text-gray-600\">Una selección cuidada de suplementos y remedios de la más alta calidad.</p>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(2) > .text-gray-600"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(2) > .text-gray-600"
           ]
         },
         {
@@ -1075,16 +1129,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#15803d",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 4.89,
-                "fontSize": "18.0pt (24px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "3:1"
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.89"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -1092,7 +1146,7 @@
           "impact": null,
           "html": "<h3 class=\"text-2xl font-bold text-green-700 mb-2\">Asesoramiento Experto</h3>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(3) > h3"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(3) > .text-2xl.text-green-700"
           ]
         },
         {
@@ -1100,16 +1154,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4b5563",
-                "bgColor": "#f6fefa",
-                "contrastRatio": 7.36,
+                "fgColor": "#000000",
+                "bgColor": "#f0f8ff",
+                "contrastRatio": 19.57,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.36"
+              "message": "Element has sufficient color contrast of 19.57"
             }
           ],
           "all": [],
@@ -1117,7 +1171,7 @@
           "impact": null,
           "html": "<p class=\"text-gray-600\">Guiado por profesionales apasionados por la salud natural.</p>",
           "target": [
-            ".p-8.bg-white\\/50.border:nth-child(3) > .text-gray-600"
+            ".p-8.bg-white\\/50.border-green-100:nth-child(3) > .text-gray-600"
           ]
         },
         {
@@ -1143,6 +1197,106 @@
           "html": "<p style=\"margin: 0px;\">(c) 2025 PuraNatura - Terapias Naturales</p>",
           "target": [
             "footer > p"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#000000",
+                "bgColor": "#ffffff",
+                "contrastRatio": 21,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 21"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 class=\"text-lg font-semibold text-white mb-2\">Respetamos tu privacidad</h3>",
+          "target": [
+            ".text-lg.font-semibold"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#000000",
+                "bgColor": "#ffffff",
+                "contrastRatio": 21,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 21"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-sm text-gray-300 leading-relaxed\">Utilizamos cookies propias y de terceros para mejorar tu experiencia de usuario, analizar el tráfico del sitio y personalizar el contenido. Al hacer clic en \"Aceptar\", aceptas el uso de las cookies descritas en nuestra Política de Privacidad.</p>",
+          "target": [
+            ".leading-relaxed"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#000000",
+                "bgColor": "#ffffff",
+                "contrastRatio": 21,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 21"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"px-6 py-2.5 text-sm font-medium text-gray-300 bg-transparent border border-gray-600 rounded-lg hover:bg-gray-800 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 max-w-full justify-center\">Rechazar</button>",
+          "target": [
+            ".bg-transparent"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#000000",
+                "bgColor": "#ffffff",
+                "contrastRatio": 21,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 21"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"px-6 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 max-w-full justify-center\">Aceptar todas</button>",
+          "target": [
+            ".bg-green-600"
           ]
         }
       ]
@@ -1400,58 +1554,6 @@
           "html": "<a class=\"nav-link\" href=\"/metricas\" data-discover=\"true\">Metricas</a>",
           "target": [
             "a[href$=\"metricas\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "has-visible-text",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has text that is visible to screen readers"
-            }
-          ],
-          "all": [],
-          "none": [
-            {
-              "id": "focusable-no-name",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element is not in tab order or has accessible text"
-            }
-          ],
-          "impact": null,
-          "html": "<a class=\"bg-white text-green-800 font-semibold py-3 px-8 rounded-full hover:bg-green-100 transition-all duration-300 transform hover:scale-105\" href=\"/servicios\" data-discover=\"true\">Nuestros Servicios</a>",
-          "target": [
-            ".bg-white"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "has-visible-text",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has text that is visible to screen readers"
-            }
-          ],
-          "all": [],
-          "none": [
-            {
-              "id": "focusable-no-name",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element is not in tab order or has accessible text"
-            }
-          ],
-          "impact": null,
-          "html": "<a class=\"bg-green-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-800 transition-all duration-300 transform hover:scale-105\" href=\"/tienda\" data-discover=\"true\">Ir a la Tienda</a>",
-          "target": [
-            ".bg-green-700"
           ]
         }
       ]

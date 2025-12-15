@@ -17,6 +17,7 @@ export const ImageGalleryThumbs: React.FC<Props> = ({
       <button
         key={img.thumbnail}
         onClick={() => onSelect(index)}
+        aria-label={`Ver imagen ${index + 1}`}
         className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
           selectedIndex === index ? 'border-green-500' : 'border-transparent'
         }`}

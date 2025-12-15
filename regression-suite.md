@@ -1,67 +1,49 @@
-﻿# Suite de Regresión
+﻿# Suite de Regresión - Web Puranatura
 
-Esta suite define las pruebas críticas que deben pasar antes de cualquier despliegue a producción.
+## Matriz de Pruebas
 
-## 1. Unit Tests (Frontend & Backend)
+### 1. Pruebas Unitarias (`npm run test:unit`)
 
-> Ejecución rápida, sin I/O real.
+- **Scope**: Hooks, utilidades, componentes aislados.
+- **Críticos**:
+  - `src/store/authStore.ts`: Verificar login/logout y persistencia.
+  - `src/utils/sanitizer.ts`: Verificar limpieza de XSS.
+  - `backend/src/middleware/auth.ts`: Verificar rechazo de tokens inválidos.
 
-```bash
-# Backend
-cd backend && npm run test:unit
-# Frontend
-npm run test:unit
-```
+### 2. Pruebas de Integración (`npm run test:integration` - TBD)
 
-**Cobertura clave:**
+- **Scope**: API Endpoints + DB.
+- **Críticos**:
+  - `GET /api/products`: Verificar filtros y paginación.
+  - `POST /api/auth/login`: Verificar emisión de cookie/token.
 
-- Validación de `registerRoutes` en backend.
-- Utilidades de formateo y cálculo de precios.
-- Reducers de Zustand/Context.
+### 3. Pruebas E2E (`npm run test:e2e`)
 
-## 2. Integration Tests (API Contract)
+- **Scope**: Flujos completos de usuario (Playwright).
+- **Escenarios**:
+  1.  **Checkout Flow**: Agregar producto -> carrito -> (mock) checkout.
+  2.  **Auth Flow**: Registro -> Login -> Perfil -> Logout.
+  3.  **Search**: Buscar "manzanilla" -> Ver resultados -> Click detalle.
 
-> Verifica que la API responde según lo esperado (conectado a DB prueba).
+### 4. Pruebas de Seguridad (`npm run scan:security`)
 
-```bash
-npm run test:contract
-```
+- **Herramientas**: Trivy, Gitleaks.
+- **Regla**: Fallar pipeline si hay High/Critical CVEs.
 
-**Escenarios:**
+### 5. Pruebas de Accesibilidad (`npm run a11y`)
 
-- **Auth Flow**: Login exitoso devuelve cookie/JWT. Login fallido devuelve 401.
-- **Product List**: GET /products devuelve array y paginación correcta.
-- **Order Creation**: POST /orders descuenta stock (si aplica simulacion).
+- **Herramientas**: Axe CLI.
+- **Scope**: Home, Product Detail, Modal de Auth.
 
-## 3. End-to-End (E2E) - Critical Paths
-
-> Simula usuario real. Usa Playwright/Cypress.
-
-```bash
-npm run test:e2e
-```
-
-**Flujos Críticos:**
-
-1.  **Guest Checkout**: Usuario anónimo añade al carrito -> Checkout -> Login Modal -> Compra.
-2.  **User Registration**: Abrir modal -> Rellenar form -> Submit -> Verificar redirección/estado logged in.
-3.  **Search & Filter**: Buscar "aceite" -> Aplicar filtros -> Verificar resultados.
-
-## 4. Security Regression
-
-> Escaneos automáticos.
+## Comandos de Ejecución
 
 ```bash
-npm run scan:security
+# Ejecutar toda la suite
+npm run regression
+
+# Solo tests de backend
+npm run test:ci --filter=backend
+
+# Solo validación de tipos
+npm run type-check
 ```
-
-- Verificar que no reintroducimos secretos en código.
-- Verificar dependencias vulnerables (npm audit).
-
-## 5. Accessibility Check
-
-```bash
-npm run a11y
-```
-
-- Verificar que no hay violaciones "critical" o "serious" de WCAG 2.1 AA.

@@ -1,0 +1,44 @@
+<testsuites id="" name="" tests="9" failures="0" skipped="3" errors="0" time="16.89264">
+<testsuite name="smoke.spec.ts" timestamp="2025-12-10T15:09:35.197Z" hostname="chromium" tests="3" failures="0" skipped="1" time="6.513" errors="0">
+<testcase name="Smoke Test - Flujos Críticos › Home page carga correctamente" classname="smoke.spec.ts" time="1.602">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Navegación a Tienda y visualización de productos" classname="smoke.spec.ts" time="3.681">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Página de Detalle de Producto carga" classname="smoke.spec.ts" time="1.23">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="smoke.spec.ts" timestamp="2025-12-10T15:09:35.197Z" hostname="firefox" tests="3" failures="0" skipped="1" time="17.44" errors="0">
+<testcase name="Smoke Test - Flujos Críticos › Home page carga correctamente" classname="smoke.spec.ts" time="5.409">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Navegación a Tienda y visualización de productos" classname="smoke.spec.ts" time="6.324">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Página de Detalle de Producto carga" classname="smoke.spec.ts" time="5.707">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="smoke.spec.ts" timestamp="2025-12-10T15:09:35.197Z" hostname="webkit" tests="3" failures="0" skipped="1" time="6.221" errors="0">
+<testcase name="Smoke Test - Flujos Críticos › Home page carga correctamente" classname="smoke.spec.ts" time="3.017">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Navegación a Tienda y visualización de productos" classname="smoke.spec.ts" time="1.84">
+</testcase>
+<testcase name="Smoke Test - Flujos Críticos › Página de Detalle de Producto carga" classname="smoke.spec.ts" time="1.364">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

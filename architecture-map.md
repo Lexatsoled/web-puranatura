@@ -1,65 +1,90 @@
 ﻿# Mapa de Arquitectura - Web Puranatura
 
-## Diagrama Conceptual
+## 1. Diagrama de Alto Nivel
 
 ```mermaid
 graph TD
-    User[Usuario / Navegador] -->|HTTPS| CDN[CDN / Edge (Vercel/Netlify?)]
-    CDN -->|Static Assets| Frontend[Frontend SPA (React 19)]
+    User[Usuario (Navegador/PWA)]
+    CDN[CDN / Edge (Vercel/Netlify - Opcional)]
+    LB[Load Balancer / Proxy (Nginx/Docker)]
 
-    User -->|API Requests| LB[Load Balancer / Reverse Proxy]
-    LB -->|Express| Backend[Backend API (Node.js)]
-
-    subgraph Frontend Layer
-        Frontend -->|State| Zustand[Zustand Store]
-        Frontend -->|Routing| Router[React Router]
-        Frontend -->|UI| Components[Component Library (Tailwind)]
+    subgraph "Frontend (Cliente)"
+        SPA[React SPA (Vite)]
+        Store[Estado Global (Zustand)]
+        Router[React Router]
     end
 
-    subgraph Backend Layer
-        Backend -->|Middleware| Sec[Helmet/CSP/RateLimit]
-        Backend -->|Auth| AuthMod[Auth Module]
-        Backend -->|ORM| Prisma[Prisma Client]
+    subgraph "Backend (Container Cluster)"
+        API[Node.js / Express Server]
+        Auth[Auth Middleware (JWT/Redis)]
+        Jobs[Background Jobs (Opcional)]
     end
 
-    subgraph Data Layer
-        Prisma -->|SQL| DB[(SQLite / PostgreSQL)]
+    subgraph "Data Persistence"
+        Redis[(Redis Cache & RateLimit)]
+        DB[(PostgreSQL 15)]
     end
+
+    User -->|HTTPS| CDN
+    CDN -->|Request| LB
+    LB -->|Proxy Pass| API
+
+    SPA -->|API Calls (Axios)| API
+
+    API -->|Auth/RateLimit| Redis
+    API -->|Query/ORM| DB
 ```
 
-## Flujos de Datos Sensibles
+## 2. Inventario de Componentes y Límites de Confianza
 
-1.  **Autenticación**:
-    - **Input**: Email/Password en `AuthModal`.
-    - **Transit**: POST `/api/auth/login` (HTTPS).
-    - **Processing**: Backend valida y compara hash (`bcrypt`).
-    - **Storage**: Password hash en DB (Tabla `User`). Token JWT en Cookie (`HttpOnly`, `Secure`).
-    - **Risk**: Logging accidental de credenciales (Check requestLogger).
+### Frontend (Untrusted)
 
-2.  **Analytics**:
-    - **Input**: Interacciones de usuario.
-    - **Transit**: POST `/api/analytics`.
-    - **Storage**: Tabla `AnalyticsEvent`.
-    - **Risk**: `userIp` sin anonimizar explícitamente en el código revisado.
+- **Módulo**: `frontend-core` (`src/`)
+- **Tecnologías**: React 19, Vite, TailwindCSS, Zustand.
+- **Seguridad**: `index.html` (CSP Meta/Headers), Sanitizers (`dompurify`), Validadores (`zod`).
+- **Entradas**: Inputs de usuario (Formularios, URL Params).
+- **Salidas**: DOM Rendering (React), LocalStorage (Persistencia temporal).
 
-## Entrypoints & Sinks
+### Backend (Trusted-ish)
 
-### Entrypoints (Attack Surface)
+- **Módulo**: `backend-core` (`backend/src/`)
+- **Tecnologías**: Node.js, Express, Prisma, Helmet.
+- **Entradas**: Peticiones JSON/REST, Headers (Auth, Trace).
+- **Límites de Confianza**:
+  - **Input Validation**: `zod` middleware en rutas.
+  - **Auth**: JWT (Signed cookies), CSRF (Double Submit).
+  - **Rate Limiting**: Redis-backed para Auth, Memory para Global.
 
-- **Public Web**: `index.html` (DOM Based XSS vectors).
-- **API Endpoints**:
-  - `/api/auth/*` (Login, Register)
-  - `/api/products/*` (Read operations + Search)
-  - `/api/orders/*` (Transactional)
-  - `/api/analytics/*` (Write heavy)
+### Data Layer (Trusted)
 
-### Security Boundaries
+- **PostgreSQL**: Datos persistentes (Usuarios, Productos, Pedidos). No expuesto a internet.
+- **Redis**: Sesiones volátiles, caché, rate-limit counters. No expuesto a internet.
 
-- **Trust Boundary 1**: Navegador del cliente vs Backend API. (Validación requerida).
-- **Trust Boundary 2**: Backend vs Base de Datos. (Sanitización paramétrica via Prisma - OK).
+## 3. Entrypoints y Data Flow
 
-## Dependencias Críticas
+### Puntos de Entrada Públicos
 
-- **Runtime**: Node.js >= 20.
-- **Database**: SQLite (Dev) -> TBD (Prod).
-- **External**: Google Analytics / Tag Manager (vistos en CSP).
+- `GET /`: SPA Assets.
+- `POST /api/auth/login`: Autenticación y emisión de cookies.
+- `POST /api/auth/register`: Creación de cuentas.
+- `GET /api/products`: Catálogo público.
+
+### Flujos de Datos Sensibles
+
+1.  **Autenticación**: `User Creds` -> `POST /login` -> `Bcrypt Verify` -> `JWT Sign` -> `Set-Cookie (HttpOnly)`.
+2.  **Información Personal (PII)**: `User Profile` -> `DB (User table)` -> `API (Scoped per User ID)`.
+3.  **Newsletter/Contacto**: Emails de usuario.
+
+## 4. Dependencias Clave & Riesgos
+
+- `prisma`: ORM crítico. Vulnerabilidad en Prisma Engine afectaría todo el acceso a datos.
+- `express`: Framework web. Mantenimiento activo requerido.
+- `bcryptjs`: Hashing de contraseñas. Estándar.
+- `jsonwebtoken`: Manejo de sesiones. Clave secreta (`JWT_SECRET`) es el "Reino".
+
+## 5. Infraestructura
+
+- **Docker Compose**: Orquestación local/dev.
+  - `db`: Postgres 15.
+  - `redis`: Redis 7.
+- **CI/CD**: Scripts en `scripts/`, GitHub Actions (inferido por `.github/workflows`).

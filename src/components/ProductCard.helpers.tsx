@@ -12,6 +12,7 @@ export interface ProductImageSectionProps {
   isHovered: boolean;
   stockStatus: StockStatus;
   priority: boolean;
+  onViewDetails?: () => void;
 }
 
 export const ProductImageSection: React.FC<ProductImageSectionProps> = ({
@@ -21,6 +22,7 @@ export const ProductImageSection: React.FC<ProductImageSectionProps> = ({
   isHovered,
   stockStatus,
   priority,
+  onViewDetails,
 }) => (
   <div className="relative aspect-square bg-gray-100">
     <ImageCarousel
@@ -30,12 +32,13 @@ export const ProductImageSection: React.FC<ProductImageSectionProps> = ({
       onSelectImage={selectImage}
       isHovered={isHovered}
       priority={priority}
+      onImageClick={onViewDetails}
     />
 
     <BadgeList product={product} stockStatus={stockStatus} />
 
     <div
-      className={`absolute inset-0 bg-black bg-opacity-10 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-10'}`}
+      className={`absolute inset-0 bg-black bg-opacity-10 transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-0' : 'opacity-10'}`}
     />
   </div>
 );
@@ -45,6 +48,7 @@ export interface ProductInfoSectionProps {
   stockStatus: StockStatus;
   isAddingToCart: boolean;
   handleAddToCart: (e: React.MouseEvent) => void;
+  onViewDetails?: () => void;
 }
 
 export const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({
@@ -52,10 +56,17 @@ export const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({
   stockStatus,
   isAddingToCart,
   handleAddToCart,
+  onViewDetails,
 }) => (
   <div className="p-4 flex flex-col flex-grow">
-    <h3 className="text-lg font-semibold text-gray-800 truncate group-hover:text-green-600 transition-colors">
-      {product?.name ?? 'Producto sin nombre'}
+    <h3 className="text-lg font-semibold text-gray-800 truncate">
+      <button
+        type="button"
+        className="group-hover:text-green-600 transition-colors cursor-pointer bg-transparent border-0 p-0 text-left focus:outline-none focus:text-green-600 w-full truncate"
+        onClick={onViewDetails}
+      >
+        {product?.name ?? 'Producto sin nombre'}
+      </button>
     </h3>
     <p className="text-sm text-gray-500 mb-3">{product?.category ?? ''}</p>
 

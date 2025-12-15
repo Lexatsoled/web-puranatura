@@ -16,7 +16,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(error: Error) {
+    // Check for chunk load error (deployment update)
+    if (
+      error.name === 'ChunkLoadError' ||
+      error.message?.includes('Loading chunk')
+    ) {
+      const previouslyReloaded = sessionStorage.getItem('chunk_reload');
+      if (!previouslyReloaded) {
+        sessionStorage.setItem('chunk_reload', 'true');
+        window.location.reload();
+        return { hasError: false }; // Let reload happen
+      }
+    }
     return { hasError: true };
   }
 

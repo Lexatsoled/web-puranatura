@@ -19,16 +19,32 @@ export const csrfDoubleSubmit = (
   res: Response,
   next: NextFunction
 ) => {
-  const cookieToken = req.cookies?.[CSRF_COOKIE];
+  // Parse cookies manually to avoid dependency on cookieParser middleware order
+  const cookieHeader = req.headers.cookie;
+  let cookieToken: string | undefined;
+
+  if (cookieHeader) {
+    const cookies = cookieHeader.split(';').reduce(
+      (acc, cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+    cookieToken = cookies[CSRF_COOKIE];
+  }
 
   // Siempre emitimos cookie para que el cliente pueda reenviar el token
   if (!cookieToken) {
     // Emit CSRF cookie with SameSite=strict to reduce cross-site leakage.
-    res.cookie(CSRF_COOKIE, generateToken(), {
+    const newToken = generateToken();
+    res.cookie(CSRF_COOKIE, newToken, {
       httpOnly: false,
       sameSite: 'strict',
       secure: req.secure,
     });
+    cookieToken = newToken;
   }
 
   if (skipPaths.has(req.path)) {

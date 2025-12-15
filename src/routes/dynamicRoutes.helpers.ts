@@ -1,4 +1,5 @@
 import { Product } from '../types';
+import { tryProductFallback } from './dynamicRoutes.helpers.utils';
 
 export interface RouteMetadata {
   title: string;
@@ -28,50 +29,25 @@ const CATEGORY_NAMES = [
 const PRODUCT_API = '/api/products';
 const BLOG_API = '/api/blog';
 
-const FALLBACK_PRODUCTS_PATH = '/data/fallback-products.json';
-
 /**
  * Robust fetch wrapper that attempts the primary endpoint first.
- * On network / non-ok responses it will attempt to load product data
- * from a pre-built fallback JSON in public/ (useful when /api is not available).
+ * On failure, attempts to load product data from a pre-built fallback JSON.
  */
 const fetchJson = async <T>(endpoint: string): Promise<T> => {
   try {
     const res = await fetch(endpoint);
-    if (!res.ok)
+    if (!res.ok) {
       throw new Error(`fetch ${endpoint} failed with status ${res.status}`);
-    return (await res.json()) as T;
-  } catch (err) {
-    // If the endpoint is related to products, try the local fallback file
-    try {
-      if (endpoint.startsWith(PRODUCT_API)) {
-        const fallback = await fetch(FALLBACK_PRODUCTS_PATH);
-        if (!fallback.ok) throw new Error('fallback not available');
-        const fallbackJson = await fallback.json();
-
-        // If caller asked for the whole list (/api/products)
-        if (endpoint === PRODUCT_API || endpoint.endsWith('/products')) {
-          // fallback file shape: { products: Product[], productCategories: [] }
-          return (fallbackJson.products ?? []) as unknown as T;
-        }
-
-        // If caller asked for a single product /api/products/:id, find it
-        const id = endpoint.substring(endpoint.lastIndexOf('/') + 1);
-        const product = (fallbackJson.products ?? []).find(
-          (p: any) => String(p.id) === id
-        );
-        if (product) return product as T;
-      }
-    } catch (err2) {
-      // swallow fallback errors and rethrow original error below
-      // console.warn is intentionally modest — caller should decide how to handle
-      // the error in their flow (and we keep returning control to them)
-
-      console.warn('fetch fallback attempt failed', err2);
     }
-
-    // re-throw original error so callers can detect that both primary and fallback failed
-    throw err;
+    return (await res.json()) as T;
+  } catch (primaryError) {
+    // Attempt fallback for product endpoints
+    try {
+      return await tryProductFallback<T>(endpoint);
+    } catch (fallbackError) {
+      console.warn('Fetch fallback attempt failed', fallbackError);
+      throw primaryError; // Re-throw original error
+    }
   }
 };
 

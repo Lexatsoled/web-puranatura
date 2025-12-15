@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /**
  * Verificación de prerrequisitos para el plan de mejora.
  * - Comprueba dependencias npm opcionales (ej. glob, cross-env)

@@ -3,12 +3,13 @@ import { env } from './config/env';
 import { prisma } from './prisma';
 import { execSync } from 'child_process';
 import { ensureSmokeUser, seedProducts } from './prisma/seed';
+import { logger } from './utils/logger';
 
 // Arranque con reintentos si el puerto está ocupado (útil en dev).
 const startPort = env.port;
 const maxAttempts = 10; // probar hasta startPort + maxAttempts - 1
 
-console.log('[env] rate limits', {
+logger.info('[env] rate limits', {
   globalMax: env.rateLimitMax,
   authMax: env.authRateLimitMax,
   analyticsMax: env.analyticsRateLimitMax,
@@ -24,24 +25,37 @@ if (
   // we are likely in a deployment context but forgot to set NODE_ENV=production.
   const isCompiled = __dirname.includes('dist') || __filename.endsWith('.js');
   if (isCompiled) {
-    console.error(
+    logger.error(
       'FATAL: Intentando ejecutar código compilado (dist) con secretos por defecto (NODE_ENV != production).'
     );
-    console.error(
+    logger.error(
       'Por seguridad, el servidor no iniciará. Configura NODE_ENV=production y define JWT_SECRET reales.'
     );
     process.exit(1);
   } else {
-    console.warn(
+    logger.warn(
       'ADVERTENCIA: Ejecutando servidor con secretos de desarrollo. NO USAR EN PRODUCCIÓN.'
     );
   }
 }
 
+// Security Check: Prevent usage of SQLite in Production
+if (
+  env.nodeEnv === 'production' &&
+  (env.databaseUrl?.includes('file:') || env.databaseUrl?.endsWith('.db'))
+) {
+  logger.warn(
+    'ADVERTENCIA: Se detectó configuración de SQLite en entorno de PRODUCCIÓN.'
+  );
+  logger.warn(
+    'Asegúrate de usar volúmenes persistentes si estás en Docker. Para alta concurrencia, considera PostgreSQL local.'
+  );
+  // Continuamos ejecución bajo responsabilidad del admin
+}
+
 const startServer = (port: number) => {
   const server = app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`API de PuraNatura lista en http://localhost:${port}`);
+    logger.info(`API de PuraNatura lista en http://localhost:${port}`);
   });
 
   server.on('error', (err: any) => {
@@ -50,8 +64,7 @@ const startServer = (port: number) => {
       throw err;
     }
     // Otros errores: log y relanzar
-    // eslint-disable-next-line no-console
-    console.error('Error al arrancar el servidor', err);
+    logger.error('Error al arrancar el servidor', { error: err });
     throw err;
   });
 
@@ -71,8 +84,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
         try {
           await ensureSmokeUser(prisma);
         } catch (seedErr) {
-          // eslint-disable-next-line no-console
-          console.warn(
+          logger.warn(
             '[startup] ensureSmokeUser failed:',
             seedErr && (seedErr as any).message
               ? (seedErr as any).message
@@ -83,24 +95,20 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
 
       try {
         const c = await prisma.product.count();
-        // eslint-disable-next-line no-console
-        console.log(`[startup] DB product count: ${c}`);
+        logger.info(`[startup] DB product count: ${c}`);
         // If DB is empty in non-production, seed it automatically to help
         // local development and avoid the front-end falling back to legacy
         // hardcoded fixtures.
         if (c === 0 && env.nodeEnv !== 'production') {
-          // eslint-disable-next-line no-console
-          console.log(
+          logger.info(
             '[startup] DB empty – running dev seed to populate sample products.'
           );
           try {
             await seedProducts(prisma);
             const newCount = await prisma.product.count();
-            // eslint-disable-next-line no-console
-            console.log(`[startup] Seed complete – product count: ${newCount}`);
+            logger.info(`[startup] Seed complete – product count: ${newCount}`);
           } catch (seedErr) {
-            // eslint-disable-next-line no-console
-            console.warn(
+            logger.warn(
               '[startup] Seed failed:',
               seedErr && (seedErr as any).message
                 ? (seedErr as any).message
@@ -110,8 +118,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
         }
         await safeEnsureSmoke();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.warn(
+        logger.warn(
           '[startup] DB check failed:',
           err && (err as any).message ? (err as any).message : err
         );
@@ -120,8 +127,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
         // then re-run seed. This helps new contributors avoid manual steps.
         if (env.nodeEnv !== 'production') {
           try {
-            // eslint-disable-next-line no-console
-            console.log(
+            logger.info(
               '[startup] Attempting to apply migrations automatically (dev).'
             );
             execSync(
@@ -132,13 +138,11 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
             );
             // After migrations, try seeding again
             try {
-              // eslint-disable-next-line no-console
-              console.log('[startup] Running seed after migrate (dev).');
+              logger.info('[startup] Running seed after migrate (dev).');
               await seedProducts(prisma);
               await safeEnsureSmoke();
             } catch (seedErr) {
-              // eslint-disable-next-line no-console
-              console.warn(
+              logger.warn(
                 '[startup] Seed after migrate failed:',
                 seedErr && (seedErr as any).message
                   ? (seedErr as any).message
@@ -146,8 +150,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
               );
             }
           } catch (mErr) {
-            // eslint-disable-next-line no-console
-            console.warn(
+            logger.warn(
               '[startup] Auto-migrate failed (dev):',
               mErr && (mErr as any).message ? (mErr as any).message : mErr
             );
@@ -158,13 +161,11 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
     break; // Éxito, salir del bucle.
   } catch (err: any) {
     if (err && err.code === 'EADDRINUSE') {
-      // eslint-disable-next-line no-console
-      console.warn(
+      logger.warn(
         `Puerto ${portToTry} ocupado. Intentando puerto ${portToTry + 1}...`
       );
       if (attempt === maxAttempts - 1) {
-        // eslint-disable-next-line no-console
-        console.error(
+        logger.error(
           `No se pudo iniciar el servidor. Puertos ${startPort}-${startPort + maxAttempts - 1} ocupados.`
         );
         throw err;
@@ -178,8 +179,7 @@ for (let attempt = 0; attempt < maxAttempts; attempt++) {
 
 const gracefulShutdown = async () => {
   if (server && typeof server.close === 'function') {
-    // eslint-disable-next-line no-console
-    console.log('Cerrando servidor HTTP...');
+    logger.info('Cerrando servidor HTTP...');
     try {
       await new Promise<void>((resolve, reject) => {
         server!.close((closeErr: any) =>
@@ -187,8 +187,7 @@ const gracefulShutdown = async () => {
         );
       });
     } catch (closeErr) {
-      // eslint-disable-next-line no-console
-      console.warn('Error cerrando servidor HTTP:', closeErr);
+      logger.warn('Error cerrando servidor HTTP:', { error: closeErr });
     }
   }
 

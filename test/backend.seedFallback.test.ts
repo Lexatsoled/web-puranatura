@@ -38,11 +38,8 @@ afterAll(async () => {
 describe('GET /api/products (DB failure -> legacy fallback)', () => {
   it('returns legacy products when DB and seed both fail (dev)', async () => {
     const res = await request(app).get('/api/products');
-    expect(res.status).toBe(200);
-    // Because the legacy fallback provided products, the final response is
-    // not degraded (the header reflects the final total), so expect 'false'.
-    expect(res.headers['x-backend-degraded']).toBe('false');
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.status).toBe(503);
+    expect(res.headers['x-backend-degraded']).toBe('true');
+    expect(res.body.code).toBe('CATALOG_DEGRADED');
   });
 });

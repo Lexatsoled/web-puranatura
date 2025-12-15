@@ -19,6 +19,12 @@ export const GalleryMainImage = ({
       <div
         key={idx}
         onClick={onClick}
+        role="button"
+        tabIndex={0}
+        aria-label={`Ver imagen ${idx + 1} en tamaño completo`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') onClick();
+        }}
         className={`absolute inset-0 cursor-zoom-in transition-opacity duration-300 ${
           idx === selectedImage ? 'opacity-100 z-10' : 'opacity-0 z-0'
         }`}

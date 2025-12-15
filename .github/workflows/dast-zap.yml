@@ -33,7 +33,7 @@ jobs:
         run: npm ci --prefix backend
 
       - name: Build web preview
-        run: npm run build
+        run: npm run ci:build
 
       - name: Start preview server
         run: |

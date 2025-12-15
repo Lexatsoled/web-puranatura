@@ -1,5 +1,6 @@
 import React from 'react';
 import { testimonials } from '../data/testimonials';
+import OptimizedImage from '../components/OptimizedImage';
 
 const TestimonialsPage: React.FC = () => {
   return (
@@ -26,12 +27,10 @@ const TestimonialsPage: React.FC = () => {
               </p>
               <div className="flex items-center">
                 {testimonial.imageUrl && (
-                  <img
+                  <OptimizedImage
                     src={testimonial.imageUrl}
                     alt={testimonial.name}
                     className="w-14 h-14 rounded-full mr-4 object-cover"
-                    loading="lazy"
-                    decoding="async"
                     width={56}
                     height={56}
                   />

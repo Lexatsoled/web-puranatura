@@ -1,11 +1,11 @@
-import { NextSeoProps } from 'next-seo';
+// import { NextSeoProps } from 'next-seo'; // Removed
 import { DEFAULT_SEO_CONFIG } from '../../config/seo.config';
 import {
   buildCurrentUrl,
   buildOpenGraphImages,
 } from './buildSeoConfig.helpers';
 
-type SeoProps = Partial<NextSeoProps> & {
+type SeoProps = {
   title?: string;
   description?: string;
   image?: string;
@@ -20,7 +20,7 @@ export const buildSeoConfig = (
   props: SeoProps,
   baseUrl: string,
   path: string
-): NextSeoProps => {
+) => {
   const currentUrl = buildCurrentUrl(baseUrl, path);
   const description = props.description || DEFAULT_SEO_CONFIG.description;
   const canonical = props.url || currentUrl;

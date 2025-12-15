@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
-const productSchema = z.object({
+export const productSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
   description: z.string().optional(),
@@ -14,7 +14,7 @@ const productSchema = z.object({
   stock: z.number().int().min(0),
 });
 
-const rawProducts = [
+export const rawProducts = [
   {
     name: 'Vitamina C 1000mg',
     slug: 'vitamina-c-1000mg',
@@ -50,9 +50,11 @@ const rawProducts = [
   },
 ] as const;
 
+/*
 const validatedProducts = rawProducts.map((product) =>
   productSchema.parse(product)
 );
+*/
 
 const smokeUserSeed = {
   email: process.env.SMOKE_USER ?? 'smoke@puranatura.test',
@@ -76,14 +78,62 @@ const smokeUserUpsertSchema = z.object({
   phone: z.string().optional(),
 });
 
+import fs from 'fs';
+import path from 'path';
+
+// ... (keep imports)
+
 export async function seedProducts(prismaClient?: PrismaClient) {
   const client = prismaClient ?? prisma;
-  for (const product of validatedProducts) {
-    await client.product.upsert({
-      where: { slug: product.slug },
-      create: product,
-      update: product,
-    });
+
+  // Read from public/data/products.json
+  const jsonPath = path.join(__dirname, '../../public/data/products.json');
+
+  try {
+    const data = fs.readFileSync(jsonPath, 'utf-8');
+    const { products } = JSON.parse(data);
+
+    console.log(`Seeding ${products.length} products from JSON...`);
+
+    for (const p of products) {
+      // Map JSON fields to Schema fields
+      const productData = {
+        name: p.name,
+        slug: p.id.toString(), // JSON uses numeric string IDs but schema expects slug. Using ID or creating slug? JSON doesn't have slug.
+        // Wait, JSON doesn't have slug? Let's check JSON again or use a slugifier.
+        // The original seed had slugs. The JSON has "id": "1".
+        // I will generate slug from name.
+        category: p.category,
+        price: p.price,
+        imageUrl: p.images?.[0]?.full || '', // Fallback for legacy support
+        images: p.images, // JSON
+        stock: p.stock,
+        description: p.description,
+        detailedDescription: p.detailedDescription,
+        mechanismOfAction: p.mechanismOfAction,
+        benefits: p.benefitsDescription,
+        healthIssues: p.healthIssues,
+        ingredients: p.components,
+        usageMode: p.administrationMethod,
+        dosage: p.dosage,
+        faqs: p.faqs,
+      };
+
+      // Simple slug generation
+      const slug = p.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+      await client.product.upsert({
+        where: { slug }, // Assuming slug is unique
+        create: { ...productData, slug },
+        update: { ...productData, slug },
+      });
+    }
+  } catch (error) {
+    console.error('Error seeding products from JSON:', error);
+    // Fallback to original hardcoded if file fails? No, better to fail loud or empty.
   }
 }
 

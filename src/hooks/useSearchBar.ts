@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import debounce from 'lodash/debounce';
+import { debounce } from '../utils/debounce';
 import { buildActions, shouldSearch } from './useSearchBar.helpers';
 import { SearchResult, UseSearchBarOptions } from './useSearchBar.types';
 import { useClickOutside } from './useClickOutside';

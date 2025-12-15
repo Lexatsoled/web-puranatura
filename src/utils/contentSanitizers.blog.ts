@@ -1,4 +1,4 @@
-import { sanitizeHtml, sanitizeText, sanitizeUrl } from './sanitizer';
+import { sanitizeHTML, sanitizeText, sanitizeUrl } from './sanitizer';
 import { BlogPost } from '../types/blog';
 
 export const sanitizeBlogPost = (post: BlogPost): BlogPost => ({
@@ -6,5 +6,5 @@ export const sanitizeBlogPost = (post: BlogPost): BlogPost => ({
   title: sanitizeText(post.title),
   summary: sanitizeText(post.summary || ''),
   imageUrl: sanitizeUrl(post.imageUrl),
-  content: sanitizeHtml(post.content),
+  content: sanitizeHTML(post.content),
 });

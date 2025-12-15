@@ -6,6 +6,7 @@ import { WishlistProvider } from '../contexts/WishlistContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import { UserIcon, ShoppingCartIcon } from './icons';
 import { CookieBanner } from './CookieBanner';
+import { UI_TEXTS } from '../data/constants';
 
 const UserMenu = React.lazy(() => import('./layout/UserMenu'));
 const AuthModal = React.lazy(() => import('./auth/AuthModal'));
@@ -54,9 +55,15 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f0f8ff' }}>
+    <>
       <style>
         {`
+          body {
+            min-height: 100vh;
+            background-color: #f0f8ff;
+            margin: 0;
+          }
+
           @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
@@ -154,30 +161,6 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
           }
         `}
       </style>
-
-      <a
-        href="#main-content"
-        style={{
-          position: 'absolute',
-          left: '-999px',
-          top: '-999px',
-          backgroundColor: '#0f5132',
-          color: '#fff',
-          padding: '0.75rem 1rem',
-          zIndex: 1000,
-        }}
-        onFocus={(e) => {
-          e.currentTarget.style.left = '1rem';
-          e.currentTarget.style.top = '1rem';
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.left = '-999px';
-          e.currentTarget.style.top = '-999px';
-        }}
-      >
-        Saltar al contenido principal
-      </a>
-
       <header
         style={{
           position: 'relative',
@@ -190,6 +173,28 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         }}
       >
+        <a
+          href="#main-content"
+          style={{
+            position: 'absolute',
+            left: '-999px',
+            top: '-999px',
+            backgroundColor: '#0f5132',
+            color: '#fff',
+            padding: '0.75rem 1rem',
+            zIndex: 1000,
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.left = '1rem';
+            e.currentTarget.style.top = '1rem';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.left = '-999px';
+            e.currentTarget.style.top = '-999px';
+          }}
+        >
+          {UI_TEXTS.ACTIONS.SKIP_CONTENT}
+        </a>
         <div
           style={{
             display: 'flex',
@@ -209,7 +214,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
             }}
           >
-            PuraNatura
+            {UI_TEXTS.BRAND.NAME}
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -224,7 +229,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
                 aria-label="Abrir inicio de sesion"
               >
                 <UserIcon className="w-[18px] h-[18px]" />
-                Iniciar sesion
+                {UI_TEXTS.ACTIONS.LOGIN}
               </button>
             )}
 
@@ -234,7 +239,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
               aria-label="Abrir carrito"
             >
               <ShoppingCartIcon className="w-[18px] h-[18px]" />
-              <span>Mi Carrito</span>
+              <span>{UI_TEXTS.ACTIONS.CART}</span>
               {cartCount > 0 && (
                 <span
                   style={{
@@ -262,21 +267,21 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
         </div>
 
         <nav style={{ marginTop: '0.5rem' }}>
-          <NavLink to="/">Inicio</NavLink>
-          <NavLink to="/sobre-nosotros">Sobre Nosotros</NavLink>
-          <NavLink to="/servicios">Servicios</NavLink>
-          <NavLink to="/tienda">Tienda</NavLink>
-          <NavLink to="/testimonios">Testimonios</NavLink>
-          <NavLink to="/blog">Blog</NavLink>
-          <NavLink to="/contacto">Contacto</NavLink>
-          <NavLink to="/metricas">Metricas</NavLink>
+          <NavLink to="/">{UI_TEXTS.NAVIGATION.HOME}</NavLink>
+          <NavLink to="/sobre-nosotros">{UI_TEXTS.NAVIGATION.ABOUT}</NavLink>
+          <NavLink to="/servicios">{UI_TEXTS.NAVIGATION.SERVICES}</NavLink>
+          <NavLink to="/tienda">{UI_TEXTS.NAVIGATION.STORE}</NavLink>
+          <NavLink to="/testimonios">
+            {UI_TEXTS.NAVIGATION.TESTIMONIALS}
+          </NavLink>
+          <NavLink to="/blog">{UI_TEXTS.NAVIGATION.BLOG}</NavLink>
+          <NavLink to="/contacto">{UI_TEXTS.NAVIGATION.CONTACT}</NavLink>
+          <NavLink to="/metricas">{UI_TEXTS.NAVIGATION.METRICS}</NavLink>
         </nav>
       </header>
-
       <main id="main-content" style={{ minHeight: '100vh' }}>
         {children}
       </main>
-
       <footer
         style={{
           backgroundColor: '#065f46',
@@ -285,9 +290,13 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
           textAlign: 'center',
         }}
       >
-        <p style={{ margin: 0 }}>(c) 2025 PuraNatura - Terapias Naturales</p>
+        <p style={{ margin: 0 }}>
+          {UI_TEXTS.BRAND.COPYRIGHT.replace(
+            '{year}',
+            new Date().getFullYear().toString()
+          )}
+        </p>
       </footer>
-
       <React.Suspense fallback={null}>
         <AuthModal
           isOpen={isAuthModalOpen}
@@ -297,7 +306,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
       <React.Suspense fallback={null}>
         <CartModal isOpen={isCartOpen} onClose={handleCartClose} />
       </React.Suspense>
-    </div>
+    </>
   );
 };
 

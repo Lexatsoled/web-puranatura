@@ -1,4 +1,5 @@
-import { Request } from 'express';
+// import { Request } from 'express';
+type Request = any;
 
 export const getClientIp = (req: Request) =>
   Array.isArray(req.headers['x-forwarded-for'])

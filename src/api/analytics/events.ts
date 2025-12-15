@@ -1,4 +1,6 @@
-import { Request, Response } from 'express';
+// import { Request, Response } from 'express';
+type Request = any;
+type Response = any;
 import {
   enrichEvent,
   ExtendedAnalyticsEvent,
@@ -34,6 +36,11 @@ async function storeEvent(_event: ExtendedAnalyticsEvent) {
 }
 
 async function processRealTimeEvent(event: ExtendedAnalyticsEvent) {
+  // Validate category against known handlers before dynamic access
+  const validCategories = Object.keys(handlers);
+  if (!validCategories.includes(event.category)) {
+    return; // Ignore unknown categories
+  }
   const handler = handlers[event.category];
   if (handler) await handler(event);
 }

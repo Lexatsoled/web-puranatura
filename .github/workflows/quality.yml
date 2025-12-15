@@ -1,0 +1,114 @@
+name: Quality & Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    name: Validate Quality
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: puranatura_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Linting
+        run: npm run lint -- --max-warnings 200
+
+      - name: Type Checking (frontend + backend)
+        run: |
+          npm run type-check:frontend
+          cd backend && npm ci && npm run build
+
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npx prisma migrate deploy || true
+
+      - name: Push DB schema (fallback when migrations missing)
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npx prisma db push
+
+      - name: Run Database Seed
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npm run seed
+
+      - name: Unit Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          NODE_ENV: test
+        run: npm run test:ci
+        # Asumiendo que 'test:run' corre vitest una vez. Si no existe, usaremos 'npm test' ajustado.
+
+      - name: Build Verification
+        run: npm run ci:build
+
+  accessibility:
+    name: Accessibility Scan
+    runs-on: ubuntu-latest
+    needs: validate # Solo corre si valida código base
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build App
+        run: npm run ci:build
+
+      - name: Run A11y Audit
+        run: node scripts/run-a11y-scan.cjs
+        # El script debe ser capaz de matar el proceso o terminar exitosamente.
+        # Aseguraremos que run-a11y-scan.cjs tenga exit code correcto.

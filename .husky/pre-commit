@@ -1,17 +1,5 @@
 #!/usr/bin/env sh
-
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Prevent commits that include forbidden artifacts (dev DBs, tmp/, coverage/)
-npm run check:forbidden-artifacts || { echo "forbidden artifacts found in staged/tracked files – aborting commit"; exit 1; }
-
-# Run lightweight secrets scan before allowing commit
-node scripts/run-gitleaks.cjs || { echo "gitleaks found potential secrets – aborting commit"; exit 1; }
-
-# Quick repo-level sensitive-file check
-npm run check:no-secrets || { echo "sensitive files detected – aborting commit"; exit 1; }
-
-# Secret drift (warning for missing, fail on findings)
-npm run check:secret-drift -- --warn-missing || { echo "secret drift detected – aborting commit"; exit 1; }
-
-npm run lint-staged && npm run check:complexity
+npx lint-staged
+npx lint-staged

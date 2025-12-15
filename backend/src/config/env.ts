@@ -73,21 +73,6 @@ if ((process.env.NODE_ENV || 'development') !== 'production') {
   }
 }
 
-// If no DATABASE_URL is defined in the environment and we are in a
-// non-production environment, choose a sensible default for local dev
-// to avoid failing out when running `npm run dev`.
-if (
-  !process.env.DATABASE_URL &&
-  (process.env.NODE_ENV || 'development') !== 'production'
-) {
-  // Use the sqlite file inside the backend/prisma folder
-  process.env.DATABASE_URL = 'file:./prisma/dev.db';
-  // eslint-disable-next-line no-console
-  console.warn(
-    '[env] DATABASE_URL not found — falling back to file:./prisma/dev.db for local development'
-  );
-}
-
 const toNumber = (value: string | undefined, fallback: number): number => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -99,7 +84,12 @@ const toBoolean = (value: string | undefined, fallback: boolean): boolean => {
 };
 
 const parseOrigins = (value: string | undefined): string[] => {
-  if (!value) return ['http://localhost:5173'];
+  if (!value)
+    return [
+      'http://localhost:5173',
+      'http://localhost:4173',
+      'http://localhost:3000',
+    ];
   return value
     .split(',')
     .map((origin) => origin.trim())
@@ -115,7 +105,23 @@ const parseList = (value: string | undefined): string[] =>
     : [];
 
 const requireEnv = (value: string | undefined, key: string): string => {
-  if (value) return value;
+  if (value) {
+    if (process.env.NODE_ENV === 'production') {
+      const weakSecrets = [
+        'dev_jwt_secret_change_me',
+        'dev_jwt_refresh_secret_change_me',
+        'changeme',
+        'secret',
+        '123456',
+      ];
+      if (weakSecrets.includes(value)) {
+        throw new Error(
+          `FATAL: La variable ${key} tiene un valor inseguro/por defecto en PRODUCCIÓN.`
+        );
+      }
+    }
+    return value;
+  }
 
   // In non-production environments, provide a secure ephemeral secret so
   // developers can run the backend locally without needing to set real
@@ -136,6 +142,7 @@ export const env = {
   nodeEnv: process.env.NODE_ENV ?? 'development',
   port: toNumber(process.env.PORT, 3001),
   allowedOrigins: parseOrigins(process.env.ALLOWED_ORIGINS),
+  databaseUrl: process.env.DATABASE_URL,
   jwtSecret: requireEnv(process.env.JWT_SECRET, 'JWT_SECRET'),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '15m',
   jwtRefreshSecret: requireEnv(
@@ -158,16 +165,19 @@ export const env = {
     process.env.AUTH_RATE_LIMIT_WINDOW,
     60 * 1000
   ),
+  redis: {
+    host: process.env.REDIS_HOST ?? 'localhost',
+    port: toNumber(process.env.REDIS_PORT, 6379),
+    // Fallback seguro para desarrollo local alineado con docker-compose
+    password:
+      process.env.REDIS_PASSWORD ||
+      ((process.env.NODE_ENV || 'development') !== 'production'
+        ? 'redis_local_password'
+        : undefined),
+  },
   metricsToken: process.env.METRICS_TOKEN?.trim(),
   breakerEnabled: process.env.BREAKER_ENABLED === 'true',
-  legacyFallbackEnabled:
-    process.env.LEGACY_FALLBACK_ENABLED !== 'false' &&
-    (process.env.NODE_ENV || 'development') !== 'production',
-  sqliteBusyTimeoutMs: toNumber(process.env.SQLITE_BUSY_TIMEOUT_MS, 5000),
-  sqlitePragmas: {
-    journalMode: process.env.SQLITE_JOURNAL_MODE || 'wal',
-    synchronous: process.env.SQLITE_SYNCHRONOUS || 'normal',
-  },
+
   // (previously) AI endpoint rate-limits removed – no built-in AI endpoint
   // Controla si la política CSP se aplica en modo report-only o enforce.
   // Si no se define la variable, en producciÓn se fuerza enforce (false) y en dev/staging se usa report-only (true).
