@@ -96,7 +96,7 @@ app.use(
   })
 );
 // parse standard json and CSP report content-type (some browsers use application/csp-report)
-// lgtm[js/missing-token-validation] - CSRF token validation happens in csrfDoubleSubmit middleware below
+// codeql[js/missing-token-validation] - CSRF token validation happens in csrfDoubleSubmit middleware below
 app.use(
   express.json({
     limit: '1mb',

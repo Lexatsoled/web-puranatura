@@ -88,7 +88,7 @@ const ensureBackend = async () => {
 
   const already = await checkBackendUp();
   if (already) {
-    // lgtm[js/clear-text-logging] - This is a test script, not production code
+    // codeql[js/clear-text-logging] - This is a test script, not production code
     console.log(
       'Backend already running at http://127.0.0.1:' +
         envWithDefaults.PORT +
@@ -134,7 +134,7 @@ const run = async () => {
     backend = res.proc;
     backendStartedByUs = res.startedByUs;
   } catch (err) {
-    // lgtm[js/clear-text-logging] - This is a test script, not production code
+    // codeql[js/clear-text-logging] - This is a test script, not production code
     console.error('wait-on backend error:', err.message || err);
     return shutdown(1, backend ? [backend] : []);
   }
