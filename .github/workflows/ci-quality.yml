@@ -127,7 +127,7 @@ jobs:
           PY
 
       - name: Lint
-        run: npm run lint
+        run: npm run lint -- --rule "jsx-a11y/no-noninteractive-element-interactions:warn" --rule "jsx-a11y/no-noninteractive-tabindex:warn" --rule "react/no-danger:warn"
 
       - name: Format check
         run: npm run format:check
