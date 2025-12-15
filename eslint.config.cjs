@@ -94,6 +94,7 @@ module.exports = [
       'jsx-a11y/no-static-element-interactions': 'warn',
       'jsx-a11y/no-autofocus': 'warn',
       'jsx-a11y/no-noninteractive-tabindex': 'warn',
+      'jsx-a11y/no-noninteractive-element-interactions': 'warn',
       'jsx-a11y/label-has-associated-control': 'warn',
       'jsx-a11y/anchor-is-valid': 'warn',
       'react/no-danger': 'warn',

@@ -163,7 +163,7 @@ jobs:
         run: npx wait-on --timeout 30000 http://127.0.0.1:3001/api/health
 
       - name: Build frontend
-        run: npm run build
+        run: npm run ci:build
 
       - name: Run unit tests (vitest)
         run: npm run test:ci
