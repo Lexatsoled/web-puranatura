@@ -108,8 +108,11 @@ app.use(
 );
 app.use(traceIdMiddleware);
 app.use(requestLogger);
+// cookieParser must be applied before auth/CSRF middleware
+// Auth middleware reads JWT token from req.cookies
+app.use(cookieParser());
 // CSRF protection with cookie-based double-submit pattern
-// Note: cookieParser is applied within csrfDoubleSubmit via req.cookies access
+// Uses manual cookie parsing for its own token verification to decouple from cookieParser
 app.use(csrfDoubleSubmit);
 
 // Hardening: headers adicionales base mínimos
