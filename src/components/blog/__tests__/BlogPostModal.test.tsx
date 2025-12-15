@@ -153,7 +153,9 @@ describe('BlogPostModal - XSS Security', () => {
       const post = createMockPost(
         '<form action="javascript:alert(1)"><input type="submit"></form>'
       );
-      const { container } = render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+      const { container } = render(
+        <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+      );
 
       const modalContent = within(container).getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('javascript:');
