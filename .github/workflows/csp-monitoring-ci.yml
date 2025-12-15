@@ -30,6 +30,8 @@ jobs:
         run: npm ci
 
       - name: Run CSP-related tests
+        env:
+          DATABASE_URL: "file:${{ github.workspace }}/backend/prisma/database.sqlite"
         run: npx vitest run test/backend.cspReport.test.ts test/backend.cspHeader.test.ts --run
 
       - name: Run compute metrics helper (sanity)
