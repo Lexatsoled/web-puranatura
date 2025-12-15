@@ -59,10 +59,10 @@ export const handleProductFetch = async ({
     onStatus('ready');
   } catch (apiError) {
     if (!isActive()) return;
-    console.warn(
-      `Product API failed for ${productId}, trying fallback...`,
-      apiError
-    );
+    console.warn('Product API failed, trying fallback...', {
+      productId,
+      error: apiError,
+    });
 
     try {
       const fallbackProducts = await getFallbackProducts();
@@ -71,7 +71,7 @@ export const handleProductFetch = async ({
         onProduct(sanitizeProductContent(fallback));
         onStatus('ready');
       } else {
-        console.warn(`Product ${productId} not found in fallback.`);
+        console.warn('Product not found in fallback', { productId });
         onProduct(null);
         onStatus('error');
       }

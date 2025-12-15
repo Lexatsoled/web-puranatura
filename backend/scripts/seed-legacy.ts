@@ -154,24 +154,34 @@ function extractLegacyProducts() {
   console.log('Reading products from:', productsFilePath);
   const fileContent = fs.readFileSync(productsFilePath, 'utf-8');
 
-  // Relaxed regex to capture the array content.
-  // Matches "const legacyProducts: Product[] =" (allowing spaces)
-  // Captures the array [...]
-  // Ends at "export const products"
-  const regex =
-    /const legacyProducts\s*:\s*Product\[\]\s*=\s*(\[[\s\S]*?\]);\s*(?:\/\/.*|\n)*\s*export/m;
-  const match = fileContent.match(regex);
-
-  if (!match || !match[1]) {
-    // Fallback regex in case 'export' is far away or missing
-    // Look for just the start and try to balance brackets? No, simple regex first.
-    // Try matching just the start line and grabbing "everything" until the last ]; ?
-    // Let's debug by printing a snippet if fail
-    const snippet = fileContent.substring(0, 500); // Check file header
-    // console.log('File snippet:', snippet);
-    throw new Error('Could not extract legacyProducts array (regex mismatch)');
+  // Find the array start and end indices to avoid complex regex
+  const arrayStart = fileContent.indexOf('const legacyProducts: Product[] = [');
+  if (arrayStart === -1) {
+    throw new Error('Could not find legacyProducts array declaration');
   }
-  return eval(match[1]);
+
+  const dataStart = fileContent.indexOf('[', arrayStart);
+  let bracketCount = 0;
+  let dataEnd = dataStart;
+
+  // Find matching closing bracket
+  for (let i = dataStart; i < fileContent.length; i++) {
+    if (fileContent[i] === '[') bracketCount++;
+    if (fileContent[i] === ']') bracketCount--;
+    if (bracketCount === 0) {
+      dataEnd = i + 1;
+      break;
+    }
+  }
+
+  if (bracketCount !== 0) {
+    throw new Error(
+      'Could not find matching closing bracket for legacyProducts array'
+    );
+  }
+
+  const arrayContent = fileContent.substring(dataStart, dataEnd);
+  return eval(arrayContent);
 }
 
 const sanitize = (text: string) => text?.trim().replace(/\s+/g, ' ') || '';

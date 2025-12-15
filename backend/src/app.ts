@@ -106,9 +106,11 @@ app.use(
     },
   })
 );
+// IMPORTANT: cookieParser must be before CSRF middleware to parse cookies
 app.use(cookieParser());
 app.use(traceIdMiddleware);
 app.use(requestLogger);
+// CSRF protection applied after cookieParser - this is correct order
 app.use(csrfDoubleSubmit);
 
 // Hardening: headers adicionales base mínimos
