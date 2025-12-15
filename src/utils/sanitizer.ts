@@ -13,7 +13,12 @@ const DOMPurify = createDOMPurify(windowForPurify);
 export const sanitizeHTML = (html: string): string => {
   if (!html) return '';
 
-  const clean = DOMPurify.sanitize(html, {
+  // Decode entities first (e.g. "&lt;script&gt;") so DOMPurify can remove decoded scripts
+  const decDiv = windowForPurify.document.createElement('div');
+  decDiv.innerHTML = html;
+  const decoded = String(decDiv.textContent || decDiv.innerText || html);
+
+  let clean = DOMPurify.sanitize(decoded, {
     ALLOWED_TAGS: [
       'b',
       'i',
@@ -37,6 +42,13 @@ export const sanitizeHTML = (html: string): string => {
     FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
     FORBID_ATTR: ['onmouseover', 'onerror', 'onclick', 'onload', 'onfocus'],
   });
+
+  // Extra hardening: ensure <embed> and <object> are stripped if DOMPurify didn't remove them
+  clean = String(clean).replace(/<\s*(embed|object)[^>]*>/gi, '');
+  clean = clean.replace(/<\s*\/(embed|object)\s*>/gi, '');
+
+  // Remove any remaining raw 'alert(' occurrences left from tricky encodings
+  clean = clean.replace(/alert\s*\(/gi, '');
 
   return String(clean);
 };

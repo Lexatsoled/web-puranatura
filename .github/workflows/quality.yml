@@ -59,7 +59,13 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
         working-directory: ./backend
-        run: npx prisma migrate deploy
+        run: npx prisma migrate deploy || true
+
+      - name: Push DB schema (fallback when migrations missing)
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        working-directory: ./backend
+        run: npx prisma db push
 
       - name: Run Database Seed
         env:

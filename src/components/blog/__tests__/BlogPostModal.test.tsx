@@ -153,9 +153,9 @@ describe('BlogPostModal - XSS Security', () => {
       const post = createMockPost(
         '<form action="javascript:alert(1)"><input type="submit"></form>'
       );
-      render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+      const { container } = render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
 
-      const modalContent = screen.getByRole('dialog');
+      const modalContent = within(container).getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('javascript:');
       // Form tag should be stripped entirely
       expect(modalContent.innerHTML).not.toContain('<form');
