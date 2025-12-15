@@ -41,10 +41,10 @@ describe('sanitizer - XSS Protection', () => {
     });
 
     it('should remove iframe tags', () => {
-      const input = '<iframe src="https://evil.com"></iframe>';
+      const input = '<iframe src="about:blank"></iframe>';
       const result = sanitizeHTML(input);
       expect(result).not.toContain('<iframe');
-      expect(result).not.toContain('evil.com');
+      expect(result).not.toContain('about:blank');
     });
 
     it('should remove object and embed tags', () => {

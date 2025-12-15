@@ -69,7 +69,7 @@ describe('BlogPostModal - XSS Security', () => {
 
   it('should remove iframe tags', () => {
     const post = createMockPost(
-      '<p>Content</p><iframe src="https://evil.com"></iframe>'
+      '<p>Content</p><iframe src="about:blank"></iframe>'
     );
     const { container } = render(
       <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
@@ -77,7 +77,7 @@ describe('BlogPostModal - XSS Security', () => {
 
     const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('<iframe');
-    expect(modalContent.innerHTML).not.toContain('evil.com');
+    expect(modalContent.innerHTML).not.toContain('about:blank');
   });
 
   it('should handle javascript: protocol in links', () => {
