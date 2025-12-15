@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
-    "@eslint/eslintrc": "^0.1.0",
+    "@eslint/eslintrc": "^3.3.3",
     "@playwright/test": "^1.41.0",
     "@redocly/cli": "^2.11.1",
     "@stoplight/prism-cli": "^5.14.2",
