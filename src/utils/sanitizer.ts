@@ -13,12 +13,7 @@ const DOMPurify = createDOMPurify(windowForPurify);
 export const sanitizeHTML = (html: string): string => {
   if (!html) return '';
 
-  // Decode entities first (e.g. "&lt;script&gt;") so DOMPurify can remove decoded scripts
-  const decDiv = windowForPurify.document.createElement('div');
-  decDiv.innerHTML = html;
-  const decoded = String(decDiv.textContent || decDiv.innerText || html);
-
-  let clean = DOMPurify.sanitize(decoded, {
+  let clean = DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
       'b',
       'i',
