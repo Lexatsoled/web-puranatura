@@ -2,7 +2,8 @@
 import { JSDOM } from 'jsdom';
 
 // Create a DOMPurify instance that works both in browser and Node (JSDOM)
-const windowForPurify = typeof window !== 'undefined' ? window : new JSDOM('').window;
+const windowForPurify =
+  typeof window !== 'undefined' ? window : new JSDOM('').window;
 const DOMPurify = createDOMPurify(windowForPurify);
 
 /**
