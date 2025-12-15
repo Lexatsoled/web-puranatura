@@ -1,10 +1,8 @@
 ﻿import createDOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
 
-// Create a DOMPurify instance that works both in browser and Node (JSDOM)
-const windowForPurify =
-  typeof window !== 'undefined' ? window : new JSDOM('').window;
-const DOMPurify = createDOMPurify(windowForPurify);
+// Create a DOMPurify instance for browser only
+// In test environment (Node), JSDOM is set up by vitest config with happy-dom
+const DOMPurify = createDOMPurify(window as any);
 
 /**
  * Sanitiza HTML para permitir solo tags seguros básicos.
@@ -61,13 +59,13 @@ export const sanitizeText = (html: string): string => {
   if (hasRawTags) {
     const stripped = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
     // Ensure entities are decoded and return only text
-    const div = windowForPurify.document.createElement('div');
+    const div = window.document.createElement('div');
     div.innerHTML = String(stripped);
     return (div.textContent || '').trim();
   }
 
   // If input contained encoded entities, decode them but preserve the decoded string
-  const decDiv = windowForPurify.document.createElement('div');
+  const decDiv = window.document.createElement('div');
   decDiv.innerHTML = html;
   return String(decDiv.textContent || '').trim();
 };
