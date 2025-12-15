@@ -239,8 +239,6 @@ const StoreBody = ({
   );
 };
 
-
-
 const EmptyState = () => (
   <div className="text-center py-20">
     <h2 className="text-2xl font-semibold text-gray-600">

@@ -4,7 +4,9 @@ import chalk from 'chalk';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log(chalk.blue.bold('🔍 Iniciando verificación de mantenimiento de BD...\n'));
+  console.log(
+    chalk.blue.bold('🔍 Iniciando verificación de mantenimiento de BD...\n')
+  );
 
   try {
     // 1. Verificar conexión
@@ -14,7 +16,7 @@ async function main() {
     // 2. Métricas básicas
     const userCount = await prisma.user.count();
     const productCount = await prisma.product.count();
-    const orderCount = await prisma.order?.count().catch(() => 0) ?? 0; // Handle potential missing model if applicable
+    const orderCount = (await prisma.order?.count().catch(() => 0)) ?? 0; // Handle potential missing model if applicable
 
     console.log(chalk.cyan.bold('\n📊 Métricas Actuales:'));
     console.log(`   - Usuarios: ${chalk.yellow(userCount)}`);
@@ -23,8 +25,10 @@ async function main() {
 
     // 3. Verificación de integridad simple (opcional)
     // Aquí se podrían añadir checks más complejos, como buscar huérfanos, etc.
-    
-    console.log(chalk.green.bold('\n✨ Mantenimiento verificado correctamente.'));
+
+    console.log(
+      chalk.green.bold('\n✨ Mantenimiento verificado correctamente.')
+    );
   } catch (error) {
     console.error(chalk.red.bold('\n❌ Error durante el mantenimiento:'));
     console.error(error);

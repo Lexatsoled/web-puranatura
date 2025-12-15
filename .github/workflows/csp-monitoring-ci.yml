@@ -42,7 +42,7 @@ jobs:
 
       - name: Run CSP-related tests
         env:
-          DATABASE_URL: "file:${{ github.workspace }}/backend/prisma/database.sqlite"
+          DATABASE_URL: 'file:${{ github.workspace }}/backend/prisma/database.sqlite'
           REDIS_HOST: localhost
           REDIS_PORT: 6379
         run: npx vitest run test/backend.cspReport.test.ts test/backend.cspHeader.test.ts --run

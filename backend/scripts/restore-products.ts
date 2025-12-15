@@ -8,8 +8,8 @@ const prisma = new PrismaClient();
 function generateSlug(name: string): string {
   return name
     .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
     .trim()
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '');
@@ -29,11 +29,12 @@ async function main() {
 
     for (const p of products) {
       const slug = generateSlug(p.name);
-      const imageUrl = p.images && p.images.length > 0 ? p.images[0].full : null;
+      const imageUrl =
+        p.images && p.images.length > 0 ? p.images[0].full : null;
 
       // Price in JSON is float, Stock is int
       // JSON has 'category' (string), 'description' (string)
-      
+
       console.log(`[RESTORE] Processing: ${p.name} -> ${slug}`);
 
       await prisma.product.upsert({
@@ -60,7 +61,6 @@ async function main() {
     }
 
     console.log(`[RESTORE] Successfully upserted ${importedCount} products.`);
-
   } catch (error) {
     console.error('[RESTORE] Error importing products:', error);
   } finally {

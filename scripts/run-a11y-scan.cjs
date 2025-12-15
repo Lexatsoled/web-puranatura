@@ -7,10 +7,10 @@ const { spawn } = require('child_process');
 async function runAudit() {
   // Check if dev server is already running on 3000
   const testUrl = 'http://localhost:3000';
-  
+
   console.log(`Testing accessibility at ${testUrl}...`);
   console.log('Make sure dev server is running (npm run dev)');
-  
+
   // Give more time for server readiness
   await new Promise((r) => setTimeout(r, 2000));
 

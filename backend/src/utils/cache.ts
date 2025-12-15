@@ -1,4 +1,3 @@
-
 import { redis } from '../lib/redis';
 import { logger } from './logger';
 
@@ -29,7 +28,7 @@ export async function getOrSetCache<T>(
 
   try {
     if (freshData) {
-        await redis.setex(key, ttlSeconds, JSON.stringify(freshData));
+      await redis.setex(key, ttlSeconds, JSON.stringify(freshData));
     }
   } catch (err) {
     logger.warn(`[cache] Redis set error for key ${key}`, { error: err });

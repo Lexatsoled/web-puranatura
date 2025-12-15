@@ -22,8 +22,6 @@ describe('authStore', () => {
     role: 'user',
   };
 
-
-
   beforeEach(() => {
     useAuthStore.setState({
       user: null,
@@ -38,7 +36,6 @@ describe('authStore', () => {
   it('should handle successful login', async () => {
     (authService.login as any).mockResolvedValue({
       user: mockUser,
-
     });
 
     await useAuthStore

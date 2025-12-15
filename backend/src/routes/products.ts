@@ -86,13 +86,28 @@ router.get('/', async (req, res, next) => {
     const { page, pageSize, category, search } = querySchema.parse(req.query);
     const where = {
       ...(category
-        ? { category: { contains: category, mode: 'insensitive' as Prisma.QueryMode } }
+        ? {
+            category: {
+              contains: category,
+              mode: 'insensitive' as Prisma.QueryMode,
+            },
+          }
         : {}),
       ...(search
         ? {
             OR: [
-              { name: { contains: search, mode: 'insensitive' as Prisma.QueryMode } },
-              { description: { contains: search, mode: 'insensitive' as Prisma.QueryMode } },
+              {
+                name: {
+                  contains: search,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
+              },
+              {
+                description: {
+                  contains: search,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
+              },
             ],
           }
         : {}),
@@ -111,15 +126,19 @@ router.get('/', async (req, res, next) => {
       normalizedPage = clampPage(total);
 
       const cacheKey = `products:list:${JSON.stringify({ where, orderBy: { createdAt: 'desc' }, skip: (normalizedPage - 1) * pageSize, take: pageSize })}`;
-      
-      items = await getOrSetCache(cacheKey, async () => {
-        return prisma.product.findMany({
+
+      items = await getOrSetCache(
+        cacheKey,
+        async () => {
+          return prisma.product.findMany({
             where,
             orderBy: { createdAt: 'desc' },
             skip: (normalizedPage - 1) * pageSize,
             take: pageSize,
-        });
-      }, 60); // 60 seconds cache
+          });
+        },
+        60
+      ); // 60 seconds cache
 
       breaker?.recordSuccess();
     } catch (dbErr) {

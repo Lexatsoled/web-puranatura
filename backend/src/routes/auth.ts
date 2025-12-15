@@ -12,7 +12,6 @@ import { logger } from '../utils/logger';
 import RedisStore from 'rate-limit-redis';
 import { redis } from '../lib/redis';
 
-
 const router = Router();
 
 // Per-route limiter for all auth routes — protects login/register/refresh endpoints
@@ -145,9 +144,9 @@ const setAuthCookies = async (res: Response, userId: string) => {
       data: {
         jti: hashToken(refreshJti),
         userId,
-        // We can also populate hashedToken if we want to store the full token hash, 
+        // We can also populate hashedToken if we want to store the full token hash,
         // but hashing the JTI is sufficient for this architecture.
-        hashedToken: hashToken(refreshToken), 
+        hashedToken: hashToken(refreshToken),
         expiresAt: new Date(Date.now() + refreshTokenMs),
       },
     });
@@ -268,8 +267,10 @@ router.post('/logout', async (req, res) => {
           jti?: string;
         };
         if (decoded?.jti) {
-           // Delete by hashed JTI
-           await prisma.refreshToken.delete({ where: { jti: hashToken(decoded.jti) } }).catch(() => null);
+          // Delete by hashed JTI
+          await prisma.refreshToken
+            .delete({ where: { jti: hashToken(decoded.jti) } })
+            .catch(() => null);
         }
       } catch (err) {
         // ignore
@@ -295,25 +296,29 @@ router.post('/refresh', async (req, res) => {
       sub: string;
       jti?: string;
     };
-    
+
     const oldJti = decoded.jti;
     if (!oldJti) {
-        return res.status(401).json({ message: 'Token malformado' });
+      return res.status(401).json({ message: 'Token malformado' });
     }
 
     const hashedOldJti = hashToken(oldJti);
 
     // Check DB using hash
-    const storedToken = await prisma.refreshToken.findUnique({ where: { jti: hashedOldJti } });
+    const storedToken = await prisma.refreshToken.findUnique({
+      where: { jti: hashedOldJti },
+    });
     if (!storedToken) {
-        // Reuse detection logic could go here (if old jti used but not found -> alarm)
-        return res.status(401).json({ message: 'Sesión inválida o expirada' });
+      // Reuse detection logic could go here (if old jti used but not found -> alarm)
+      return res.status(401).json({ message: 'Sesión inválida o expirada' });
     }
 
-     // Verify expiry logic matches DB just in case
+    // Verify expiry logic matches DB just in case
     if (storedToken.expiresAt < new Date()) {
-         await prisma.refreshToken.delete({ where: { jti: hashedOldJti } }).catch(() => null);
-         return res.status(401).json({ message: 'Sesión expirada' });
+      await prisma.refreshToken
+        .delete({ where: { jti: hashedOldJti } })
+        .catch(() => null);
+      return res.status(401).json({ message: 'Sesión expirada' });
     }
 
     // generate a rotated refresh token
@@ -331,13 +336,13 @@ router.post('/refresh', async (req, res) => {
       await prisma.$transaction([
         prisma.refreshToken.delete({ where: { jti: hashedOldJti } }),
         prisma.refreshToken.create({
-            data: {
-                jti: hashToken(newJti),
-                userId: decoded.sub,
-                hashedToken: hashToken(newRefreshToken),
-                expiresAt: new Date(Date.now() + refreshTokenMs),
-            }
-        })
+          data: {
+            jti: hashToken(newJti),
+            userId: decoded.sub,
+            hashedToken: hashToken(newRefreshToken),
+            expiresAt: new Date(Date.now() + refreshTokenMs),
+          },
+        }),
       ]);
     } catch (_) {
       // Race condition or DB error

@@ -48,7 +48,8 @@ describe('sanitizer - XSS Protection', () => {
     });
 
     it('should remove object and embed tags', () => {
-      const input = '<object data="malicious.swf"></object><embed src="bad.swf">';
+      const input =
+        '<object data="malicious.swf"></object><embed src="bad.swf">';
       const result = sanitizeHTML(input);
       expect(result).not.toContain('<object');
       expect(result).not.toContain('<embed');

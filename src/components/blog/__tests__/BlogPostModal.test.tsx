@@ -25,7 +25,7 @@ describe('BlogPostModal - XSS Security', () => {
   it('should render safe HTML content', () => {
     const post = createMockPost('<p>Safe <strong>content</strong></p>');
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     expect(screen.getByText(/Safe/)).toBeInTheDocument();
     expect(screen.getByText(/content/)).toBeInTheDocument();
   });
@@ -35,7 +35,7 @@ describe('BlogPostModal - XSS Security', () => {
       '<p>Normal text</p><script>alert("XSS")</script>'
     );
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const modalContent = screen.getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('<script>');
     expect(modalContent.innerHTML).not.toContain('alert(');
@@ -46,7 +46,7 @@ describe('BlogPostModal - XSS Security', () => {
       '<a href="#" onclick="alert(\'XSS\')">Click me</a>'
     );
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const modalContent = screen.getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('onclick');
   });
@@ -56,7 +56,7 @@ describe('BlogPostModal - XSS Security', () => {
       '<img src="invalid" onerror="alert(\'XSS\')" />'
     );
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const modalContent = screen.getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('onerror');
   });
@@ -66,7 +66,7 @@ describe('BlogPostModal - XSS Security', () => {
       '<p>Content</p><iframe src="https://evil.com"></iframe>'
     );
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const modalContent = screen.getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('<iframe');
     expect(modalContent.innerHTML).not.toContain('evil.com');
@@ -77,27 +77,23 @@ describe('BlogPostModal - XSS Security', () => {
       '<a href="javascript:alert(\'XSS\')">Malicious Link</a>'
     );
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const modalContent = screen.getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('javascript:');
   });
 
   it('should allow safe HTML list structures', () => {
-    const post = createMockPost(
-      '<ul><li>Item 1</li><li>Item 2</li></ul>'
-    );
+    const post = createMockPost('<ul><li>Item 1</li><li>Item 2</li></ul>');
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     expect(screen.getByText(/Item 1/)).toBeInTheDocument();
     expect(screen.getByText(/Item 2/)).toBeInTheDocument();
   });
 
   it('should allow safe links with https', () => {
-    const post = createMockPost(
-      '<a href="https://example.com">Safe Link</a>'
-    );
+    const post = createMockPost('<a href="https://example.com">Safe Link</a>');
     render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-    
+
     const link = screen.getByText('Safe Link').closest('a');
     expect(link).toHaveAttribute('href', 'https://example.com');
   });
@@ -123,7 +119,7 @@ describe('BlogPostModal - XSS Security', () => {
         '<svg onload="alert(\'XSS\')"><circle /></svg>'
       );
       render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-      
+
       const modalContent = screen.getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('onload');
       expect(modalContent.innerHTML).not.toContain('alert');
@@ -134,7 +130,7 @@ describe('BlogPostModal - XSS Security', () => {
         '<p><scr<script>ipt>alert("XSS")</scr</script>ipt></p>'
       );
       render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-      
+
       const modalContent = screen.getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('<script>');
     });
@@ -144,7 +140,7 @@ describe('BlogPostModal - XSS Security', () => {
         '<form action="javascript:alert(1)"><input type="submit"></form>'
       );
       render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
-      
+
       const modalContent = screen.getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('javascript:');
       // Form tag should be stripped entirely

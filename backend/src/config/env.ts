@@ -73,8 +73,6 @@ if ((process.env.NODE_ENV || 'development') !== 'production') {
   }
 }
 
-
-
 const toNumber = (value: string | undefined, fallback: number): number => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -86,7 +84,12 @@ const toBoolean = (value: string | undefined, fallback: boolean): boolean => {
 };
 
 const parseOrigins = (value: string | undefined): string[] => {
-  if (!value) return ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:3000'];
+  if (!value)
+    return [
+      'http://localhost:5173',
+      'http://localhost:4173',
+      'http://localhost:3000',
+    ];
   return value
     .split(',')
     .map((origin) => origin.trim())

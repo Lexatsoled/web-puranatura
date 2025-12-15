@@ -75,11 +75,13 @@ The project follows a unified structure for better maintainability and scalabili
   npm run a11y
   ```
 - **Dependabot**: A workflow is included to handle high/critical alerts.
+
 # Web Puranatura - Terapias Naturales
 
 Proyecto Fullstack (React + Node.js) para PuraNatura.
 
 ## 🚀 Inicio Rápido
+
 **¡Importante!** La arquitectura ha cambiado. Ahora requiere Docker.
 Consulta la [Guía de Arranque (STARTUP_GUIDE.md)](./STARTUP_GUIDE.md) para instrucciones detalladas.
 
@@ -88,6 +90,7 @@ Consulta la [Guía de Arranque (STARTUP_GUIDE.md)](./STARTUP_GUIDE.md) para inst
 docker-compose up -d
 npm run dev
 ```
+
 ## Quality Gates
 
 - **CI Pipeline**: Runs `npm run perf:web` and `npm run a11y` to ensure performance and accessibility standards.

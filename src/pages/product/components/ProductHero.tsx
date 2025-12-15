@@ -75,7 +75,7 @@ export const ProductHero: React.FC<ProductHeroProps> = ({ product }) => {
               src={image.thumbnail}
               alt={`${product.name} - Vista ${idx + 1}`}
             />
-        </button>
+          </button>
         ))}
       </div>
     </div>

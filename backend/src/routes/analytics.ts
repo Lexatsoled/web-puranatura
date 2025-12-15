@@ -57,7 +57,9 @@ const analyticsLimiter = rateLimit({
 const SALT = process.env.ANALYTICS_SALT || 'dev_analytics_salt_fixed_value';
 
 const anonymizeIp = (ip: string): string => {
-  return createHash('sha256').update(ip + SALT).digest('hex');
+  return createHash('sha256')
+    .update(ip + SALT)
+    .digest('hex');
 };
 
 const normalizeIp = (req: Request): string | undefined => {

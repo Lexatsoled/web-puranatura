@@ -8,7 +8,7 @@ async function main() {
     const productCount = await prisma.product.count();
     console.log(`[VERIFY] Users: ${userCount}`);
     console.log(`[VERIFY] Products: ${productCount}`);
-    
+
     if (userCount > 0 || productCount > 0) {
       console.log('[VERIFY] SUCCESS: Database has data.');
     } else {

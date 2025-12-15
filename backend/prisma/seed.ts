@@ -85,10 +85,10 @@ import path from 'path';
 
 export async function seedProducts(prismaClient?: PrismaClient) {
   const client = prismaClient ?? prisma;
-  
+
   // Read from public/data/products.json
   const jsonPath = path.join(__dirname, '../../public/data/products.json');
-  
+
   try {
     const data = fs.readFileSync(jsonPath, 'utf-8');
     const { products } = JSON.parse(data);
@@ -101,7 +101,7 @@ export async function seedProducts(prismaClient?: PrismaClient) {
         name: p.name,
         slug: p.id.toString(), // JSON uses numeric string IDs but schema expects slug. Using ID or creating slug? JSON doesn't have slug.
         // Wait, JSON doesn't have slug? Let's check JSON again or use a slugifier.
-        // The original seed had slugs. The JSON has "id": "1". 
+        // The original seed had slugs. The JSON has "id": "1".
         // I will generate slug from name.
         category: p.category,
         price: p.price,
@@ -120,7 +120,10 @@ export async function seedProducts(prismaClient?: PrismaClient) {
       };
 
       // Simple slug generation
-      const slug = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const slug = p.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
 
       await client.product.upsert({
         where: { slug }, // Assuming slug is unique

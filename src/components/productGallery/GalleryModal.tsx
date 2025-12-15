@@ -22,7 +22,11 @@ export const GalleryModal = ({
 }) => {
   const modalRef = React.useRef<HTMLDivElement>(null);
   const bgRef = React.useRef<HTMLButtonElement>(null);
-  useFocusTrap(modalRef, { isActive: isOpen, onEscape: onClose, initialFocusRef: bgRef });
+  useFocusTrap(modalRef, {
+    isActive: isOpen,
+    onEscape: onClose,
+    initialFocusRef: bgRef,
+  });
 
   if (!isOpen) return null;
 
@@ -35,7 +39,10 @@ export const GalleryModal = ({
         onClick={onClose}
         aria-label="Cerrar galería"
       />
-      <div ref={modalRef} className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none">
+      <div
+        ref={modalRef}
+        className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none"
+      >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 pointer-events-auto"

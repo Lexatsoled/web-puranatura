@@ -1,4 +1,3 @@
-
 import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
@@ -6,11 +5,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('🔄 Verifying DB Migration for RefreshTokens...');
-  
+
   // 1. Ensure a user exists
   const email = 'test-migration@example.com';
   let user = await prisma.user.findUnique({ where: { email } });
-  
+
   if (!user) {
     console.log('Creating test user...');
     user = await prisma.user.create({
@@ -18,21 +17,21 @@ async function main() {
         email,
         passwordHash: 'placeholder',
         firstName: 'Test',
-        lastName: 'Migration'
-      }
+        lastName: 'Migration',
+      },
     });
   }
 
   // 2. Test RefreshToken creation (Login simulation)
   const jti = randomUUID();
   console.log('Testing create token with JTI:', jti);
-  
+
   const token = await prisma.refreshToken.create({
     data: {
       jti,
       userId: user.id,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour
-    }
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour
+    },
   });
 
   if (!token) throw new Error('Failed to create token');
@@ -49,11 +48,13 @@ async function main() {
   if (check) throw new Error('Failed to delete token');
   console.log('✅ Token deleted successfully');
 
-  console.log('🎉 MIGRATION VERIFIED: DB Connection and RefreshToken table are working.');
+  console.log(
+    '🎉 MIGRATION VERIFIED: DB Connection and RefreshToken table are working.'
+  );
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     console.error(e);
     process.exit(1);
   })

@@ -200,12 +200,14 @@ npm run dev
 ### Common Issues
 
 **Port conflict:**
+
 ```bash
 # Kill process on port 3000
 npx kill-port 3000
 ```
 
 **Stale cache:**
+
 ```bash
 rm -rf node_modules/.vite
 npm run dev
