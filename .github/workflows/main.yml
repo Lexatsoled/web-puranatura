@@ -25,7 +25,7 @@ jobs:
   validate:
     name: Validate Code Quality
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:15-alpine
@@ -53,23 +53,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          
+
       - name: Install dependencies (root)
         run: npm ci
-        
+
       - name: Install dependencies (backend)
         working-directory: ./backend
         run: npm ci
 
       - name: Linting
         run: npm run lint -- --max-warnings 200
-        
+
       - name: Type Checking
         run: npm run type-check || echo "Type check skipped if script missing"
 
