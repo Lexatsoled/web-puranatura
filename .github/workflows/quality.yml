@@ -10,6 +10,30 @@ jobs:
   validate:
     name: Validate Quality
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: puranatura_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +56,11 @@ jobs:
           cd backend && npm ci && npm run build
 
       - name: Unit Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          NODE_ENV: test
         run: npm run test:ci
         # Asumiendo que 'test:run' corre vitest una vez. Si no existe, usaremos 'npm test' ajustado.
 
