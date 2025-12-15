@@ -58,7 +58,7 @@ jobs:
         run: npm run format:check
 
       - name: Type Checking (frontend)
-        run: npm run type-check
+        run: npm run type-check:frontend
 
       - name: Type Checking (backend)
         working-directory: ./backend

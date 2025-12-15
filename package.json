@@ -18,6 +18,7 @@
     "lint-staged": "lint-staged",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
+    "type-check:frontend": "tsc -p tsconfig.frontend.json --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format",
     "test": "vitest",
     "test:ui": "vitest --ui",

@@ -133,7 +133,7 @@ jobs:
         run: npm run format:check
 
       - name: Type-check (frontend)
-        run: npm run type-check
+        run: npm run type-check:frontend
 
       - name: Type-check (backend)
         working-directory: ./backend
