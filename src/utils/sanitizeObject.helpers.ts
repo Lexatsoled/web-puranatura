@@ -1,4 +1,4 @@
-import { sanitizeHtml, sanitizeText, sanitizeUrl } from './sanitizerCore';
+import { sanitizeHTML, sanitizeText, sanitizeUrl } from './sanitizerCore';
 
 type InputValue = unknown;
 
@@ -11,7 +11,7 @@ const isPlainObject = (value: InputValue): value is Record<string, unknown> =>
 type Sanitizer = (value: string) => string;
 
 const SANITIZER_RULES: ReadonlyArray<[RegExp, Sanitizer]> = [
-  [/html/i, sanitizeHtml],
+  [/html/i, sanitizeHTML],
   [/url/i, sanitizeUrl],
 ];
 

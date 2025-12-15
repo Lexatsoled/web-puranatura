@@ -2,88 +2,101 @@
   "meta": {
     "version": 1,
     "severity_scale": ["info", "low", "medium", "high", "critical"],
-    "status": "draft"
+    "generated_at": "2025-12-13T20:30:00Z"
   },
   "findings": [
     {
-      "id": "ARCH-001",
-      "title": "Confusión de estructura de componentes",
-      "category": "maintainability",
-      "subcategory": "structure",
-      "severity": "medium",
-      "likelihood": 5,
-      "priority": 15,
-      "where": { "file": "src/components", "notes": "vs root /components" },
-      "evidence": "Existen dos carpetas de componentes (root y src), lo que sugiere una migración incompleta o falta de convención.",
-      "impact": "Dificultad de mantenimiento, duplicación de código y bundles más grandes.",
-      "recommendation": "Consolidar todos los componentes bajo `src/components`.",
-      "fix_example": "mv components/* src/components/ && rm -rf components",
-      "references": ["React Folder Structure Best Practices"]
-    },
-    {
-      "id": "SEC-PRIV-001",
-      "title": "Almacenamiento potencial de PII (IP) sin hash",
+      "id": "SEC-AUTH-001",
+      "title": "Almacenamiento de JWT en localStorage",
       "category": "security",
-      "subcategory": "gdpr",
-      "severity": "high",
+      "subcategory": "auth",
+      "severity": "medium",
       "likelihood": 3,
-      "priority": 12,
+      "priority": 9,
       "where": {
-        "file": "backend/prisma/schema.prisma",
-        "line": 86,
-        "snippet": "userIp String?"
+        "file": "src/store/authStore.ts",
+        "line": 20,
+        "snippet": "persist(..., { name: 'auth-storage' })"
       },
-      "evidence": "Modelo AnalyticsEvent tiene campo userIp. Si se guarda en crudo, viola privacidad en ciertas jurisdicciones.",
-      "impact": "Incumplimiento GDPR/CCPA.",
-      "recommendation": "Almacenar solo hash(ip + salt) o truncar el último octeto.",
-      "fix_example": "userIp = sha256(req.ip + dailySalt)",
-      "references": ["GDPR Data Minimization"]
+      "evidence": "El store de Zustand persiste el token JWT en localStorage. Esto expone el token a ataques XSS.",
+      "impact": "Si un atacante logra XSS, puede exfiltrar el token y secuestrar la sesión.",
+      "recommendation": "Migrar a cookies HttpOnly y SameSite=Strict para el almacenamiento del token. El backend ya soporta lectura de cookies.",
+      "fix_example": "Mover lógica de persistencia de token a cookies httpOnly gestionadas por el servidor.",
+      "references": ["OWASP LocalStorage vs Cookies"],
+      "tests": ["test/backend.cookies.test.ts"]
     },
     {
       "id": "SEC-XSS-001",
-      "title": "CSP 'trust proxy' con configuración por defecto",
+      "title": "Uso de dangerouslySetInnerHTML en Modales",
       "category": "security",
-      "subcategory": "configuration",
-      "severity": "medium",
-      "likelihood": 2,
-      "priority": 6,
+      "subcategory": "xss",
+      "severity": "low",
+      "likelihood": 1,
+      "priority": 2,
       "where": {
-        "file": "backend/src/app.ts",
-        "line": 22,
-        "snippet": "app.set('trust proxy', 1);"
+        "file": "src/components/blog/BlogPostModal.tsx",
+        "line": 93,
+        "snippet": "dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}"
       },
-      "evidence": "Se asume que hay 1 proxy delante. Si se despliega sin proxy, spoofing de IP es posible.",
-      "impact": "Rate limiting bypass, logging incorrecto de IPs.",
-      "recommendation": "Configurar via variable de entorno TRUST_PROXY_HOPS.",
-      "fix_example": "app.set('trust proxy', parseInt(process.env.TRUST_PROXY || '1'))"
+      "evidence": "Uso explícito de inyección HTML.",
+      "impact": "Riesgo de XSS si la función sanitizeHTML falla o el sanitizer se configura mal en el futuro.",
+      "recommendation": "Mantener vigilancia sobre 'src/utils/sanitizer.ts'. Configurar tests de snapshot para sanitizer.",
+      "fix_example": "N/A (Actualmente mitigado por DOMPurify correctamente implementado).",
+      "references": ["React Security Guide"],
+      "tests": ["src/utils/__tests__/sanitizer.test.ts"]
     },
     {
-      "id": "CODE-COMPLEX-001",
-      "title": "Componente AuthModal monolítico",
-      "category": "maintainability",
-      "subcategory": "complexity",
-      "severity": "low",
-      "likelihood": 5,
-      "priority": 5,
-      "where": { "file": "components/AuthModal.tsx", "lines": "1-587" },
-      "evidence": "Más de 500 líneas mezclando validación, gestión de estado y UI.",
-      "impact": "Difícil de testear y refactorizar.",
-      "recommendation": "Extraer lógica a `useAuthForm` hook y separar subcomponentes (LoginForm, RegisterForm).",
-      "fix_example": "const { register, formState } = useAuthForm();"
+      "id": "PERF-IMG-001",
+      "title": "Optimización de Imágenes y Carga",
+      "category": "performance",
+      "subcategory": "assets",
+      "severity": "info",
+      "likelihood": 1,
+      "priority": 1,
+      "where": {
+        "file": "src/components/OptimizedImage.tsx",
+        "line": 1,
+        "snippet": "Entire File"
+      },
+      "evidence": "El proyecto ya utiliza 'vite-imagetools' y componentes optimizados. Excelente práctica.",
+      "impact": "Positivo: Tiempos de carga reducidos.",
+      "recommendation": "Continuar con esta práctica. Verificar que todas las nuevas imágenes usen este componente.",
+      "metrics": { "lcp_impact": "positive" }
     },
     {
-      "id": "UX-INT-001",
-      "title": "Validación de email permisiva",
-      "category": "ux",
-      "subcategory": "validation",
+      "id": "A11Y-INT-001",
+      "title": "Elementos interactivos no nativos (div buttons)",
+      "category": "accessibility",
+      "subcategory": "semantic",
       "severity": "low",
-      "likelihood": 4,
+      "likelihood": 2,
       "priority": 4,
-      "where": { "file": "components/AuthModal.tsx", "line": 60 },
-      "evidence": "Regex /\\S+@\\S+\\.\\S+/ permite 'a@b.c' que podría no ser deseado.",
-      "impact": "Errores de usuario al registrarse (typos).",
-      "recommendation": "Usar librería robusta como Zod para validación isomórfica.",
-      "fix_example": "z.string().email()"
+      "where": {
+        "file": "src/components/auth/AuthModal.tsx",
+        "line": 37,
+        "snippet": "onClick={onClose} role=\"button\""
+      },
+      "evidence": "Uso de div con onClick. Aunque tiene role y tabIndex, es fácil olvidar handlers de teclado.",
+      "impact": "Usuarios de teclado podrían tener dificultades si falta onKeyDown.",
+      "recommendation": "Reemplazar divs interactivos por etiquetas <button> reales donde sea posible para obtener comportamiento nativo.",
+      "fix_example": "<button className=\"...\" onClick={onClose} ... />"
+    },
+    {
+      "id": "ARCH-BE-001",
+      "title": "Resiliencia: Circuit Breaker y Caching implementados",
+      "category": "architecture",
+      "subcategory": "reliability",
+      "severity": "info",
+      "likelihood": 1,
+      "priority": 1,
+      "where": {
+        "file": "backend/src/routes/products.ts",
+        "line": 15,
+        "snippet": "new CatalogBreaker(...)"
+      },
+      "evidence": "El backend implementa patrones avanzados de resiliencia.",
+      "impact": "Alta disponibilidad incluso bajo carga o fallos de DB.",
+      "recommendation": "Expandir uso de Circuit Breaker a otras rutas críticas."
     }
   ]
 }

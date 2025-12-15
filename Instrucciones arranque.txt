@@ -7,9 +7,39 @@ o
 
 npm run dev -- --port 3000
 
+o
+
+npm run build
+npm run preview
+
+y
+npm run start
+para produccion
 
 Ademas ahora que tiene Backend hay que inciarlo tambie mediante "npm run dev" en la carpeta "C:\Users\Usuario\Desktop\Web Puranatura\Pureza-Naturalis-V3\backend".
 Esto arranca una base de datos SQLite en localhost:3001
+
+
+NUEVO ARRANQUE CON DOCKER:
+Primero necesitamos encender los "motores" de base de datos y memoria.
+
+Comando: docker-compose up -d
+Qué hace:
+Arranca puranatura-db (PostgreSQL): Donde se guardan tus usuarios y pedidos.
+Arranca puranatura-redis (Redis): Donde se guardan las sesiones y límites de velocidad.
+Nota: Solo necesitas hacer esto una vez al encender tu PC.
+2️⃣ Aplicación (El código)
+Una vez que la infraestructura está lista, arrancamos el código.
+Para detenerlo:
+docker-compose down
+
+Comando: npm run dev
+Qué hace:
+Paso A: Verifica la conexión a la base de datos y genera el cliente (prisma generate).
+Paso B: Arranca el Backend en puerto 3001 (que se conecta automáticamente a Redis y Postgres).
+Paso C: Arranca el Frontend en puerto 5173 (Vite).
+
+
 
 
 cloudflared tunnel run web.purezanaturalis.com

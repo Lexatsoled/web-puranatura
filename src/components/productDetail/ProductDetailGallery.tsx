@@ -36,6 +36,12 @@ export const ProductDetailGallery: React.FC<Props> = ({
         }`}
         onClick={() => setIsZoomed(!isZoomed)}
         onMouseMove={onMouseMove}
+        role="button"
+        tabIndex={0}
+        aria-label={isZoomed ? 'Alejar imagen' : 'Acercar imagen'}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') setIsZoomed(!isZoomed);
+        }}
       >
         <div
           className="w-full h-full"
@@ -67,6 +73,7 @@ export const ProductDetailGallery: React.FC<Props> = ({
           // Use CSS hover/active transforms to mimic the previous framer-motion
           // interactions without importing the motion runtime.
           onClick={() => setSelectedImage(index)}
+          aria-label={`Ver imagen ${index + 1}`}
           className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 transition-colors transform transition-transform hover:scale-105 active:scale-95 ${
             selectedImage === index
               ? 'border-green-500'

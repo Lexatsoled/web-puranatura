@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -13,6 +14,8 @@ import { requestLogger } from './middleware/requestLogger';
 import metricsRouter from './routes/metrics';
 import { logger } from './utils/logger';
 import { sendErrorResponse } from './utils/response';
+import RedisStore from 'rate-limit-redis';
+import { redis } from './lib/redis';
 
 export const app = express();
 
@@ -24,6 +27,7 @@ app.set('trust proxy', env.trustProxy);
 // avoid double-registration — keep the app bootstrap clean here.
 
 app.disable('x-powered-by');
+app.use(compression());
 
 // CSP con nonce por petición; enforce/reportOnly via env
 app.use((req, res, next) => {
@@ -55,6 +59,7 @@ app.use((req, res, next) => {
     objectSrc: ["'none'"],
     baseUri: ["'self'"],
     frameAncestors: ["'none'"],
+    frameSrc: ["'self'", 'https://www.google.com'],
     reportUri: ['/api/security/csp-report'],
   };
   if (!env.cspReportOnly) directives.upgradeInsecureRequests = [];
@@ -72,6 +77,10 @@ app.use((req, res, next) => {
 
 app.use(
   rateLimit({
+    store: new RedisStore({
+      // @ts-expect-error - Known type mismatch between ioredis and rate-limit-redis
+      sendCommand: (...args: string[]) => redis.call(...args),
+    }),
     windowMs: env.rateLimitWindowMs,
     max: env.rateLimitMax,
     standardHeaders: true,

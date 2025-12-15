@@ -40,8 +40,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     try {
       await login({ email, password });
       onSuccess();
-    } catch (err) {
-      // Error is handled in store, but we can see it here too or just rely on store error
+    } catch (error) {
+      // Error is handled by store
+      console.error(error);
       setLocalError('Email o contraseña incorrectos');
     } finally {
       setIsSubmitting(false);

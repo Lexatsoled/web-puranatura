@@ -25,7 +25,10 @@ export const CookieBanner: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gray-900 border-t border-gray-800 shadow-lg md:p-6 animate-slide-up">
+    <aside
+      className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-4 shadow-lg z-50 animate-slide-up"
+      aria-label="Consentimiento de cookies"
+    >
       <div className="container mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex-1 text-center md:text-left">
           <h3 className="text-lg font-semibold text-white mb-2">
@@ -47,7 +50,7 @@ export const CookieBanner: React.FC = () => {
           </button>
           <button
             onClick={handleAccept}
-            className="px-6 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 max-w-full justify-center"
+            className="px-6 py-2.5 text-sm font-medium text-white bg-green-700 rounded-lg hover:bg-green-800 hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-600 max-w-full justify-center"
           >
             Aceptar todas
           </button>
@@ -60,6 +63,6 @@ export const CookieBanner: React.FC = () => {
           <XIcon className="w-5 h-5" />
         </button>
       </div>
-    </div>
+    </aside>
   );
 };

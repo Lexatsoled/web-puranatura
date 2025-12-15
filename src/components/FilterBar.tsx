@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 // Use CSS to show/hide the filter controls instead of framer-motion
-import debounce from 'lodash/debounce';
+import { debounce } from '../utils/debounce';
 import { Product } from '../types';
 import { applyFilters, defaultFilters } from './filters/FilterBar.helpers';
 import { FilterControls } from './filters/FilterControls';

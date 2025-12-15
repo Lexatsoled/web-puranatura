@@ -45,6 +45,11 @@ export const FeaturedCategoryCard: React.FC<{
   <div
     className="relative rounded-xl overflow-hidden cursor-pointer group transform transition-transform duration-150 hover:-translate-y-1"
     onClick={() => onSelect(category.id)}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') onSelect(category.id);
+    }}
   >
     <div className="aspect-[16/9] relative">
       <OptimizedImage
@@ -74,6 +79,11 @@ export const RegularCategoryCard: React.FC<{
   <div
     className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform transition-transform duration-150 hover:-translate-y-0.5"
     onClick={() => onSelect(category.id)}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') onSelect(category.id);
+    }}
   >
     <div className="aspect-square relative">
       <OptimizedImage

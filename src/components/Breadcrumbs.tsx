@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 // Use CSS for breadcrumb appearance instead of framer-motion
-import { sanitizeHtml } from '../utils/sanitizer';
 import { BreadcrumbItem, BreadcrumbSeparator } from './Breadcrumbs.helpers';
+import BreadcrumbStructuredData from './product/BreadcrumbStructuredData';
 
 interface BreadcrumbItemData {
   label: string;
@@ -49,19 +49,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     [items]
   );
 
-  const structuredData = useMemo(
-    () => sanitizeHtml(JSON.stringify(jsonLd)),
-    [jsonLd]
-  );
-
   return (
     <>
-      {structured && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: structuredData }}
-        />
-      )}
+      {structured && <BreadcrumbStructuredData data={jsonLd} />}
       <nav aria-label="Breadcrumb" className={className}>
         <ol className="flex items-center flex-wrap">
           {items.map((item, index) => (

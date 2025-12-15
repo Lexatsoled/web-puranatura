@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Product } from '../../types/product';
 import { sanitizeProductContent } from '../../utils/contentSanitizers';
 import { useApi } from '../../utils/api';
@@ -6,7 +7,7 @@ import { mapApiProduct, ApiProduct } from '../../utils/productMapper';
 import {
   computeProcessedProducts,
   paginate,
-  SortOption,
+  type SortOption,
 } from './utils/storeFilters';
 import { Category, DEFAULT_CATEGORY } from './constants';
 import { FALLBACK_MESSAGE, loadFallbackProducts } from './utils/storeFallback';
@@ -17,12 +18,11 @@ export const useStorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
     DEFAULT_CATEGORY.id
   );
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  /* REMOVED MODAL STATE */
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(48);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCategories, setProductCategories] = useState<Category[]>([
     DEFAULT_CATEGORY,
@@ -30,6 +30,7 @@ export const useStorePage = () => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const api = useApi();
+  const navigate = useNavigate();
   const hasFetched = useRef(false);
 
   useEffect(() => {
@@ -39,25 +40,40 @@ export const useStorePage = () => {
     }
     hasFetched.current = true;
 
-    const applyFallback = async () => {
-      const { products: fallbackProducts, categories } =
-        await loadFallbackProducts();
-      setProductCategories(categories);
-      setProducts(fallbackProducts);
+    // Helper to apply fallback data
+    const applyFallbackData = (data: {
+      products: Product[];
+      categories: Category[];
+    }) => {
+      setProductCategories(data.categories);
+      setProducts(data.products);
       setApiError(FALLBACK_MESSAGE);
       setIsLoadingProducts(false);
+    };
+
+    const applyFallback = async () => {
+      const data = await loadFallbackProducts();
+      applyFallbackData(data);
     };
 
     const fetchProducts = async () => {
       setIsLoadingProducts(true);
       try {
-        const apiProducts = await api.get<ApiProduct[]>('/products');
+        // Fetch local data in parallel to augment API response
+        const [apiProducts, localData] = await Promise.all([
+          api.get<ApiProduct[]>(`/products?t=${Date.now()}`).catch(() => null),
+          loadFallbackProducts().catch(() => ({
+            products: [],
+            categories: [DEFAULT_CATEGORY],
+          })),
+        ]);
+
         if (!Array.isArray(apiProducts)) {
-          await applyFallback();
+          applyFallbackData(localData as any);
           return;
         }
         const mapped = apiProducts.map((product) =>
-          sanitizeProductContent(mapApiProduct(product))
+          sanitizeProductContent(mapApiProduct(product, localData.products))
         );
 
         if (mapped.length === 0) {
@@ -96,13 +112,7 @@ export const useStorePage = () => {
   const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
 
   const handleViewDetails = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProduct(null);
+    navigate(`/producto/${product.id}`);
   };
 
   const handleCategoryChange = (value: string) => {
@@ -127,8 +137,6 @@ export const useStorePage = () => {
 
   return {
     selectedCategory,
-    selectedProduct,
-    isModalOpen,
     searchTerm,
     sortOption,
     currentPage,
@@ -139,7 +147,7 @@ export const useStorePage = () => {
     paginatedProducts,
     totalPages,
     handleViewDetails,
-    handleCloseModal,
+
     handleCategoryChange,
     handleSearchChange,
     handleSortChange,

@@ -27,6 +27,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.production.example
 backend/.env
 backend/.env.*
 !backend/.env.example
@@ -66,4 +67,9 @@ coverage/
 tmp/
 **/dev.db*
 **/*.db
+**/*.db
 **/*.sqlite
+tmp-*.cjs
+tmp-*.js
+*.sql
+tmpfile

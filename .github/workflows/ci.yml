@@ -1,80 +1,79 @@
-name: CI
+name: CI PuraNatura
 
 on:
   push:
-    branches: [main]
-    # ignore pushes that only change workflow / .github config files
-    paths-ignore:
-      - '.github/**'
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [main]
-    # ignore PRs that only change workflow / .github config files
-    paths-ignore:
-      - '.github/**'
+    branches: [ main, master, develop ]
 
 jobs:
-  tests:
+  quality-check:
+    name: Code Quality & Tests
     runs-on: ubuntu-latest
-    env:
-      # Use a local sqlite file for CI runs so Prisma migrations / seeds can run
-      # in PRs without requiring a DATABASE_URL secret stored in repo secrets.
-      DATABASE_URL: 'file:./backend/test-local.sqlite'
+
+    services:
+      # Servicio de Base de Datos para Tests de Integración
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: puranatura_test
+        ports:
+          - 5432:5432
+        # Health check para esperar a que la DB esté lista
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      # Servicio de Redis para Rate Limiting
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
-      - name: Cache node modules (root)
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-npm-root-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install root deps
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Install backend deps
-        run: npm --prefix backend ci
+      - name: Linting (ESLint)
+        run: npm run lint
 
-      - name: Check for accidental secrets / tracked envs
-        run: npm run check:no-secrets
+      - name: Formatting Check (Prettier)
+        run: npm run format:check
 
-      - name: Cleanup any leftover Prisma .tmp files
-        run: node ./scripts/cleanup-prisma-tmp.cjs
+      - name: Type Checking (TypeScript)
+        run: npm run type-check
 
-      - name: Deploy Prisma migrations (backend)
-        run: cd backend && npx prisma migrate deploy --schema=prisma/schema.prisma
+      - name: Generate Prisma Client
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        run: npx prisma generate
 
-      - name: Seed DB (backend)
-        # Run the project's seed script so tests have expected data available.
-        run: npm --prefix backend run seed || echo "Seed failed or already ran; continuing"
+      - name: Run Tests (Vitest)
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          # Redis en CI no suele tener password por defecto en alpine a menos que se configure CMD
+          # Usaremos configuración simple para testing
+          NODE_ENV: test
+        run: npm run test:unit
 
-      - name: Run test:ci (unit/integration)
-        run: npm run test:ci
-
-  e2e:
-    needs: tests
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install deps
-        run: npm ci
-      - name: Install backend deps
-        run: npm --prefix backend ci
-      - name: Build backend
-        run: npm --prefix backend run build
-      - name: Start backend & run Playwright E2E
-        run: |
-          npm run build
-          node scripts/run-e2e.cjs
-  # workflow split: additional quality pipeline moved to .github/workflows/ci-quality.yml
+      - name: Build Check
+        run: npm run ci:build

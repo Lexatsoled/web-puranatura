@@ -55,6 +55,7 @@ export const ThumbnailGrid: React.FC<ThumbnailGridProps> = ({
       <button
         key={index}
         onClick={() => onSelect(index)}
+        aria-label={`Ver imagen ${index + 1}: ${alt}`}
         className={`relative aspect-video rounded-md overflow-hidden ${
           selectedImage === index
             ? 'ring-2 ring-green-500'
@@ -100,7 +101,19 @@ export const GalleryMainImage: React.FC<{
   }`;
 
   return (
-    <div className={containerClass} onClick={onImageClick}>
+    <div
+      className={containerClass}
+      onClick={onImageClick}
+      role="button"
+      tabIndex={0}
+      aria-label={isZoomed ? 'Cerrar zoom' : 'Ampliar imagen'}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onImageClick();
+        }
+      }}
+    >
       <OptimizedImage
         src={image}
         alt={alt}

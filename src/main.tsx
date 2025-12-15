@@ -2,6 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { registerSW } from 'virtual:pwa-register';
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm('Nueva versión disponible. ¿Recargar?')) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    console.info('App lista para trabajar offline');
+  },
+});
+
 import '../index.css'; // Assuming index.css is still in root, so ../index.css. Wait, standard is src/index.css or ./index.css.
 // Step 324 showed index.css in ROOT.
 // I should move index.css to src/index.css?

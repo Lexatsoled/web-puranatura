@@ -48,7 +48,7 @@
     "ci:lint": "eslint --no-error-on-unmatched-pattern src scripts test --ext .ts,.tsx --max-warnings 0",
     "ci:typecheck": "tsc --noEmit",
     "ci:test": "vitest run --coverage",
-    "ci:build": "npm run build",
+    "ci:build": "npm run optimize-images && npx vite build",
     "ci:a11y": "node scripts/run-a11y-scan.cjs",
     "ci": "npm run ci:lint && npm run ci:typecheck && npm run ci:test",
     "check:no-secrets": "node scripts/check-no-secrets.cjs",

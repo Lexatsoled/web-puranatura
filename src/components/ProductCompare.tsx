@@ -5,6 +5,7 @@ import { AddProductCard } from './productCompare/AddProductCard';
 import { CompareHeader } from './productCompare/CompareHeader';
 import { ProductCardCompare } from './productCompare/ProductCardCompare';
 import { useProductCompare } from './productCompare/useProductCompare';
+import { UI_TEXTS } from '../constants/uiTexts';
 
 interface ProductCompareProps {
   products: Product[];
@@ -53,7 +54,7 @@ const ProductCompare: React.FC<ProductCompareProps> = ({
             onClick={() => products.forEach((p) => onRemoveProduct(p.id))}
             className="px-4 py-2 text-red-600 hover:text-red-700 font-medium"
           >
-            Limpiar Todo
+            {UI_TEXTS.ACTIONS.CLEAR_ALL}
           </button>
           <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
             Compartir Comparación

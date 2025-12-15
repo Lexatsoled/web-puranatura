@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { EyeIcon, EyeOffIcon } from '../icons';
+import { FormField } from '../common/FormField';
+import {
+  validateFormData,
+  REGISTER_VALIDATION_RULES,
+} from './RegisterForm.validation';
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -36,18 +41,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.firstName) newErrors.firstName = 'El nombre es requerido';
-    if (!formData.lastName) newErrors.lastName = 'El apellido es requerido';
-    if (!formData.email) newErrors.email = 'El email es requerido';
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = 'Email inválido';
-    if (!formData.password) newErrors.password = 'La contraseña es requerida';
-    else if (formData.password.length < 6)
-      newErrors.password = 'Mínimo 6 caracteres';
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = 'Las contraseñas no coinciden';
-
+    const newErrors = validateFormData(formData, REGISTER_VALIDATION_RULES);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -89,77 +83,52 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre *
-            </label>
-            <input
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md focus:ring-green-500 ${
-                errors.firstName ? 'border-red-300' : 'border-gray-300'
-              }`}
-            />
-            {errors.firstName && (
-              <p className="text-red-600 text-xs mt-1">{errors.firstName}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Apellido *
-            </label>
-            <input
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md focus:ring-green-500 ${
-                errors.lastName ? 'border-red-300' : 'border-gray-300'
-              }`}
-            />
-            {errors.lastName && (
-              <p className="text-red-600 text-xs mt-1">{errors.lastName}</p>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email *
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
+          <FormField
+            label="Nombre"
+            name="firstName"
+            value={formData.firstName}
+            error={errors.firstName}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-green-500 ${
-              errors.email ? 'border-red-300' : 'border-gray-300'
-            }`}
+            required
           />
-          {errors.email && (
-            <p className="text-red-600 text-xs mt-1">{errors.email}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Teléfono
-          </label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
+          <FormField
+            label="Apellido"
+            name="lastName"
+            value={formData.lastName}
+            error={errors.lastName}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500"
+            required
           />
         </div>
 
+        <FormField
+          label="Email"
+          name="email"
+          type="email"
+          value={formData.email}
+          error={errors.email}
+          onChange={handleInputChange}
+          required
+        />
+
+        <FormField
+          label="Teléfono"
+          name="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={handleInputChange}
+        />
+
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Contraseña *
           </label>
           <div className="relative">
             <input
+              id="password"
               type={showPassword ? 'text' : 'password'}
               name="password"
               value={formData.password}
@@ -185,25 +154,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Confirmar Contraseña *
-          </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-green-500 ${
-              errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-            }`}
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-600 text-xs mt-1">
-              {errors.confirmPassword}
-            </p>
-          )}
-        </div>
+        <FormField
+          label="Confirmar Contraseña"
+          name="confirmPassword"
+          type="password"
+          value={formData.confirmPassword}
+          error={errors.confirmPassword}
+          onChange={handleInputChange}
+          required
+        />
 
         <button
           type="submit"

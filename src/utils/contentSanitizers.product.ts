@@ -1,4 +1,4 @@
-import { sanitizeHtml, sanitizeText } from './sanitizer';
+import { sanitizeHTML, sanitizeText } from './sanitizer';
 import { Product } from '../types/product';
 import { sanitizeImagePath } from './contentSanitizers.common';
 
@@ -24,7 +24,7 @@ const sanitizeComponent = (component: ProductComponent) => ({
 
 const sanitizeFaq = (faq: NonNullable<Product['faqs']>[number]) => ({
   question: sanitizeText(faq.question),
-  answer: sanitizeHtml(faq.answer),
+  answer: sanitizeHTML(faq.answer),
 });
 
 export const sanitizeProductFields = (product: Product) => ({
@@ -34,9 +34,9 @@ export const sanitizeProductFields = (product: Product) => ({
   description: sanitizeText(product.description),
   detailedDescription: sanitizeOptional(
     product.detailedDescription,
-    sanitizeHtml
+    sanitizeHTML
   ),
-  mechanismOfAction: sanitizeOptional(product.mechanismOfAction, sanitizeHtml),
+  mechanismOfAction: sanitizeOptional(product.mechanismOfAction, sanitizeHTML),
   benefitsDescription: mapOptional(product.benefitsDescription, sanitizeText),
   healthIssues: mapOptional(product.healthIssues, sanitizeText),
   components: mapOptional(product.components, sanitizeComponent),

@@ -12,7 +12,7 @@ export const ProductHero: React.FC<ProductHeroProps> = ({ product }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isZoomed) return;
     const { left, top, width, height } =
       e.currentTarget.getBoundingClientRect();
@@ -24,11 +24,13 @@ export const ProductHero: React.FC<ProductHeroProps> = ({ product }) => {
   return (
     <div className="relative flex flex-col">
       <div className="relative flex-grow mb-4">
-        <div
-          className={`aspect-w-1 aspect-h-1 bg-gray-100 rounded-lg overflow-hidden relative ${
+        <button
+          type="button"
+          className={`aspect-w-1 aspect-h-1 bg-gray-100 rounded-lg overflow-hidden relative w-full h-full p-0 border-0 ${
             isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
           }`}
           onClick={() => setIsZoomed(!isZoomed)}
+          aria-label={isZoomed ? 'Alejar imagen' : 'Acercar imagen'}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setIsZoomed(false)}
         >
@@ -53,25 +55,27 @@ export const ProductHero: React.FC<ProductHeroProps> = ({ product }) => {
               priority={selectedImage === 0}
             />
           </div>
-        </div>
+        </button>
       </div>
       <div className="flex space-x-4 overflow-x-auto pb-2">
-        {product.images?.map((image: ProductImage, index: number) => (
+        {product.images?.map((image: ProductImage, idx: number) => (
           <button
-            key={index}
-            onClick={() => setSelectedImage(index)}
-            className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${
-              selectedImage === index
-                ? 'border-green-500'
+            key={idx}
+            type="button"
+            onClick={() => setSelectedImage(idx)}
+            className={`relative h-20 w-20 rounded-md overflow-hidden cursor-pointer border-2 p-0 bg-transparent ${
+              selectedImage === idx
+                ? 'border-primary'
                 : 'border-transparent hover:border-green-300'
             }`}
+            aria-label={`Ver imagen ${idx + 1}`}
+            aria-current={selectedImage === idx}
           >
             <OptimizedImage
               src={image.thumbnail}
-              alt={`${product.name} - Vista ${index + 1}`}
-              className="object-cover w-full h-full"
+              alt={`${product.name} - Vista ${idx + 1}`}
             />
-          </button>
+        </button>
         ))}
       </div>
     </div>

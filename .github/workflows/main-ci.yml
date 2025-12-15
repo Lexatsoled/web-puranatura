@@ -23,7 +23,7 @@ jobs:
         run: npm ci
 
       - name: Lint Code
-        run: npm run lint
+        run: npm run lint -- --max-warnings 200
 
       # Falla si hay vulnerabilidades moderadas o altas
       - name: Security Audit (audit-ci)
@@ -95,4 +95,4 @@ jobs:
         run: npm ci
 
       - name: Build Frontend
-        run: npm run build
+        run: npm run ci:build

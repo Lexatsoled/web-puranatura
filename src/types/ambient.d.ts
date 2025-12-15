@@ -1,4 +1,3 @@
-declare module 'mongoose';
 declare module 'next/router';
 declare module 'react-window';
 

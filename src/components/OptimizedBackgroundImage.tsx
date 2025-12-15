@@ -26,11 +26,7 @@ export const OptimizedBackgroundImage: React.FC<
   const fetchPriority = priority;
 
   return (
-    <div
-      className={`relative ${className}`}
-      style={{ minHeight, aspectRatio }}
-      aria-hidden="true"
-    >
+    <div className={`relative ${className}`} style={{ minHeight, aspectRatio }}>
       {priority === 'high' ? (
         // Para LCP: renderiza imagen directa, sin lazy, con prioridad alta
         <img

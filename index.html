@@ -2,19 +2,94 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/pwa-192x192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSP is handled by backend Helmet -->
     <meta
       name="description"
       content="PuraNatura - Tu santuario de bienestar y terapias naturales. Encuentra equilibrio, salud y armonía con nuestros productos y servicios seleccionados."
     />
-    <!-- Preload critical assets -->
+
+    <!-- Resource Hints for Mobile -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Font with display=swap (no JS overhead) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    />
+
     <title>PuraNatura | Terapias Naturales y Bienestar</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div
+      id="root"
+      role="presentation"
+      style="height: 100vh; width: 100%; display: flex; flex-direction: column"
+    >
+      <!-- Critical CSS for App Shell -->
+      <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Inter', system-ui, sans-serif;
+          background-color: #f0fdf4;
+        }
+        .app-shell-hero {
+          height: 60vh;
+          background: linear-gradient(to bottom, #145a32, #0c3a22);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          text-align: center;
+          padding: 1rem;
+        }
+        @media (min-width: 768px) {
+          .app-shell-hero {
+            height: 80vh;
+          }
+        }
+      </style>
+      <div class="app-shell-hero">
+        <div>
+          <h1
+            style="
+              font-size: 3rem;
+              font-weight: 700;
+              opacity: 0;
+              animation: fadeIn 0.5s forwards;
+            "
+          >
+            PuraNatura
+          </h1>
+          <p
+            style="
+              font-size: 1.25rem;
+              margin-top: 1rem;
+              opacity: 0;
+              animation: fadeIn 0.5s 0.2s forwards;
+            "
+          >
+            Bienestar Natural
+          </p>
+        </div>
+      </div>
+      <style>
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      </style>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

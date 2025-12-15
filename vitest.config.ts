@@ -18,5 +18,9 @@ export default defineConfig({
       'test/**/*.test.ts',
       'test/**/*.test.tsx',
     ],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'json-summary'],
+    },
   },
 });

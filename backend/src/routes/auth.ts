@@ -2,24 +2,27 @@
 import rateLimit from 'express-rate-limit';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { randomUUID } from 'crypto';
+import { randomUUID, createHash } from 'crypto';
 import ms from 'ms';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { env } from '../config/env';
 import { AuthenticatedRequest, getUserIdFromRequest } from '../middleware/auth';
-import {
-  addToken as addRefreshToken,
-  hasToken as hasRefreshToken,
-  revokeToken as revokeRefreshToken,
-  replaceToken as replaceRefreshToken,
-} from '../storage/refreshTokenStore';
+import { logger } from '../utils/logger';
+import RedisStore from 'rate-limit-redis';
+import { redis } from '../lib/redis';
+
 
 const router = Router();
 
 // Per-route limiter for all auth routes — protects login/register/refresh endpoints
 // from abuse (brute force, credential stuffing, refresh abuse).
+// Redis Store configuration
 const authLimiter = rateLimit({
+  store: new RedisStore({
+    // @ts-expect-error - Conocido conflicto de tipos entre ioredis y rate-limit-redis
+    sendCommand: (...args: string[]) => redis.call(...args),
+  }),
   windowMs: env.authRateLimitWindowMs,
   // Allow per-request override of the limit via `x-rate-max` header to make
   // tests deterministic even if modules were initialized earlier.
@@ -66,7 +69,7 @@ const authLimiter = rateLimit({
     res.setHeader('X-Trace-Id', traceId);
     res.status(429).json({
       code: 'RATE_LIMIT_EXCEEDED',
-      message: 'Demasiadas solicitudes en el endpoint de auth',
+      message: 'Demasiadas solicitudes en el endpoint de auth (Redis)',
       traceId,
     });
   },
@@ -86,6 +89,10 @@ const cookieBase = () => ({
   secure: isSecureCookies(),
   path: '/api/auth',
 });
+
+const hashToken = (token: string) => {
+  return createHash('sha256').update(token).digest('hex');
+};
 
 type DurationInput = Parameters<typeof ms>[0];
 
@@ -115,7 +122,7 @@ const refreshCookieOptions = () => ({
   maxAge: refreshTokenMs,
 });
 
-const setAuthCookies = (res: Response, userId: string) => {
+const setAuthCookies = async (res: Response, userId: string) => {
   const token = jwt.sign({ sub: userId }, env.jwtSecret, {
     expiresIn: Math.max(1, Math.floor(accessTokenMs / 1000)),
   });
@@ -131,15 +138,22 @@ const setAuthCookies = (res: Response, userId: string) => {
   res.cookie('token', token, accessCookieOptions());
   res.cookie('refreshToken', refreshToken, refreshCookieOptions());
 
-  // persist refresh token (file-based store) to support rotation/revocation
+  // persist refresh token (hashed JTI) in DB
+  // We store the hash of the JTI so that even with DB access, one cannot identifying valid JTIs to spoof (defence in depth).
   try {
-    addRefreshToken({
-      jti: refreshJti,
-      userId,
-      expiresAt: new Date(Date.now() + refreshTokenMs).toISOString(),
+    await prisma.refreshToken.create({
+      data: {
+        jti: hashToken(refreshJti),
+        userId,
+        // We can also populate hashedToken if we want to store the full token hash, 
+        // but hashing the JTI is sufficient for this architecture.
+        hashedToken: hashToken(refreshToken), 
+        expiresAt: new Date(Date.now() + refreshTokenMs),
+      },
     });
-  } catch (_) {
-    // non fatal
+  } catch (err) {
+    logger.error('Failed to persist refresh token', { error: err });
+    // In strict mode we might want to fail request, but for now log error
   }
 
   return { token, refreshToken };
@@ -212,7 +226,7 @@ router.post('/register', async (req, res, next) => {
       },
     });
 
-    setAuthCookies(res, user.id);
+    await setAuthCookies(res, user.id);
     res.status(201).json({ user: userPayload(user) });
   } catch (error) {
     next(error);
@@ -237,14 +251,14 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    setAuthCookies(res, user.id);
+    await setAuthCookies(res, user.id);
     res.json({ user: userPayload(user) });
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
   // try to revoke a persisted refresh token (if any) when logging out
   try {
     const rt = req.cookies?.refreshToken;
@@ -253,7 +267,10 @@ router.post('/logout', (req, res) => {
         const decoded = jwt.verify(rt, env.jwtRefreshSecret) as {
           jti?: string;
         };
-        if (decoded?.jti) revokeRefreshToken(decoded.jti);
+        if (decoded?.jti) {
+           // Delete by hashed JTI
+           await prisma.refreshToken.delete({ where: { jti: hashToken(decoded.jti) } }).catch(() => null);
+        }
       } catch (err) {
         // ignore
       }
@@ -266,7 +283,7 @@ router.post('/logout', (req, res) => {
   res.json({ ok: true });
 });
 
-router.post('/refresh', (req, res) => {
+router.post('/refresh', async (req, res) => {
   // refresh handler
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
@@ -278,11 +295,25 @@ router.post('/refresh', (req, res) => {
       sub: string;
       jti?: string;
     };
-    // debug the decoded token + check presence in persisted store
-
+    
     const oldJti = decoded.jti;
-    if (!oldJti || !hasRefreshToken(oldJti)) {
-      return res.status(401).json({ message: 'Sesión inválida' });
+    if (!oldJti) {
+        return res.status(401).json({ message: 'Token malformado' });
+    }
+
+    const hashedOldJti = hashToken(oldJti);
+
+    // Check DB using hash
+    const storedToken = await prisma.refreshToken.findUnique({ where: { jti: hashedOldJti } });
+    if (!storedToken) {
+        // Reuse detection logic could go here (if old jti used but not found -> alarm)
+        return res.status(401).json({ message: 'Sesión inválida o expirada' });
+    }
+
+     // Verify expiry logic matches DB just in case
+    if (storedToken.expiresAt < new Date()) {
+         await prisma.refreshToken.delete({ where: { jti: hashedOldJti } }).catch(() => null);
+         return res.status(401).json({ message: 'Sesión expirada' });
     }
 
     // generate a rotated refresh token
@@ -295,15 +326,23 @@ router.post('/refresh', (req, res) => {
       }
     );
 
-    // replace persisted token
+    // Rotate in transaction: delete old, create new
     try {
-      replaceRefreshToken(oldJti, {
-        jti: newJti,
-        userId: decoded.sub,
-        expiresAt: new Date(Date.now() + refreshTokenMs).toISOString(),
-      });
+      await prisma.$transaction([
+        prisma.refreshToken.delete({ where: { jti: hashedOldJti } }),
+        prisma.refreshToken.create({
+            data: {
+                jti: hashToken(newJti),
+                userId: decoded.sub,
+                hashedToken: hashToken(newRefreshToken),
+                expiresAt: new Date(Date.now() + refreshTokenMs),
+            }
+        })
+      ]);
     } catch (_) {
-      // not fatal
+      // Race condition or DB error
+      clearAuthCookies(res);
+      return res.status(401).json({ message: 'Error rotando sesión' });
     }
 
     // set rotated cookies
@@ -316,6 +355,36 @@ router.post('/refresh', (req, res) => {
   } catch (error) {
     clearAuthCookies(res);
     return res.status(401).json({ message: 'Sesión expirada' });
+  }
+});
+
+router.put('/me', async (req: AuthenticatedRequest, res, next) => {
+  try {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      return res.status(401).json({ message: 'No authenticated' });
+    }
+
+    const updateSchema = z.object({
+      firstName: z.string().min(1).optional(),
+      lastName: z.string().min(1).optional(),
+      phone: z.string().optional(),
+    });
+
+    const data = updateSchema.parse(req.body);
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...data,
+        // If empty string is passed for phone, set to null/undefined or handle as business logic requires.
+        // For now, allow simple update.
+      },
+    });
+
+    res.json({ user: userPayload(user) });
+  } catch (error) {
+    next(error);
   }
 });
 

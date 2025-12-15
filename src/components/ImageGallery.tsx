@@ -20,10 +20,14 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
   } = useImageGallery(images.length);
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
       className="space-y-4"
       onKeyDown={(e) => handleKeyPress(e.key)}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
+      role="region"
+      aria-label={`Galería de imágenes de ${productName}`}
     >
       <ImageGalleryMain
         images={images}

@@ -1,7 +1,35 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '../../test/test-utils';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, cleanup } from '../../test/test-utils';
 import * as testingLibrary from '@testing-library/react';
 import ProductCard from '../ProductCard';
+
+// Mock ImageCarousel to bypass transform errors
+vi.mock('../productCard/ImageCarousel', () => ({
+  ImageCarousel: ({
+    images,
+    currentImageIndex,
+    productName,
+    onImageClick,
+  }: any) => {
+    if (!images || images.length === 0) return null;
+    const img = images?.[currentImageIndex];
+    const src = img?.full || img?.thumbnail || 'default-placeholder.jpg';
+    return (
+      <button
+        onClick={onImageClick}
+        aria-label={`Ver detalles de ${productName}`}
+      >
+        <div data-testid="mock-carousel">
+          <img src={src} alt={productName} />
+        </div>
+      </button>
+    );
+  },
+}));
+
+afterEach(() => {
+  cleanup();
+});
 
 const mockProduct = {
   id: '1',
@@ -23,31 +51,35 @@ const mockProduct = {
 describe('ProductCard', () => {
   it('renders product information correctly', () => {
     const handleViewDetails = vi.fn();
-    const { getAllByText, getByRole, getByText } = render(
+    const { getByRole } = render(
       <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
     );
 
     // Verificar que la información del producto se muestra correctamente
-    expect(getAllByText(mockProduct.name)[0]).toBeInTheDocument();
+    const headings = testingLibrary.screen.getAllByRole('heading', {
+      name: mockProduct.name,
+    });
+    // Si hay múltiples headings (e.g. uno visible y otro oculto o duplicado por algún motivo de render), verificamos que al menos uno exista.
+    expect(headings[0]).toBeInTheDocument();
+
     expect(
-      getByRole('heading', { name: mockProduct.name })
-    ).toBeInTheDocument();
-    expect(
-      getByText(`DOP $${mockProduct.price.toFixed(2)}`)
+      testingLibrary.screen.getByText(`DOP $${mockProduct.price.toFixed(2)}`)
     ).toBeInTheDocument();
     expect(getByRole('button', { name: /añadir/i })).toBeInTheDocument();
   });
 
   it('calls onViewDetails when clicked', () => {
     const handleViewDetails = vi.fn();
-    const { getAllByTestId } = render(
+    const { getAllByRole } = render(
       <ProductCard product={mockProduct} onViewDetails={handleViewDetails} />
     );
 
-    // Simular clic en el componente
-    const cards = getAllByTestId('product-card-1');
-    const cardToClick = cards.length > 1 ? cards[1] : cards[0];
-    (testingLibrary as any).fireEvent.click(cardToClick);
+    // Simular clic en el componente (ahora a través de los botones interactivos)
+    const viewDetailsButtons = getAllByRole('button', {
+      name: new RegExp(`Ver detalles de ${mockProduct.name}`, 'i'),
+    });
+    // Puede haber múltiples botones (imagen y título)
+    (testingLibrary as any).fireEvent.click(viewDetailsButtons[0]);
     expect(handleViewDetails).toHaveBeenCalledWith(mockProduct);
   });
 

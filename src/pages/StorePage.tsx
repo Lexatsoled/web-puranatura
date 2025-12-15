@@ -1,11 +1,8 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import ProductCard from '../components/ProductCard';
+import { StoreSkeleton } from '../components/skeletons/StoreSkeleton';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { useStorePage, SortOption } from './store/useStorePage'; // Assuming src/pages/store/useStorePage exists and matches
-
-const ProductDetailModal = React.lazy(
-  () => import('../components/ProductDetailModal')
-);
 
 const StorePage: React.FC = () => {
   const state = useStorePage();
@@ -46,15 +43,6 @@ const StorePage: React.FC = () => {
           }
         />
       </div>
-      <Suspense fallback={null}>
-        {state.selectedProduct && (
-          <ProductDetailModal
-            isOpen={state.isModalOpen}
-            onClose={state.handleCloseModal}
-            product={state.selectedProduct}
-          />
-        )}
-      </Suspense>
     </div>
   );
 };
@@ -92,8 +80,8 @@ const StoreControls = ({
   itemsPerPage: number;
   onItemsPerPageChange: (value: number) => void;
 }) => (
-  <div className="bg-emerald-50/95 backdrop-blur-sm py-4 mb-8 rounded-lg shadow-md border border-emerald-200">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+  <div className="bg-emerald-50/95 backdrop-blur-sm py-6 mb-8 rounded-lg shadow-md border border-emerald-200 p-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
       <SearchInput value={searchTerm} onChange={onSearchChange} />
       <Select
         ariaLabel="Categoria"
@@ -137,6 +125,7 @@ const SearchInput = ({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+      style={{ width: '1.25rem', height: '1.25rem' }}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -229,7 +218,7 @@ const StoreBody = ({
   onViewDetails: (product: any) => void;
 }) => {
   if (isLoading && !apiError) {
-    return <LoadingState />;
+    return <StoreSkeleton />;
   }
 
   if (products.length === 0) {
@@ -238,20 +227,19 @@ const StoreBody = ({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {products.map((product) => (
+      {products.map((product, index) => (
         <ProductCard
           key={product.id}
           product={product}
           onViewDetails={onViewDetails}
+          priority={index < 4}
         />
       ))}
     </div>
   );
 };
 
-const LoadingState = () => (
-  <div className="text-center py-20 text-gray-500">Cargando catálogo...</div>
-);
+
 
 const EmptyState = () => (
   <div className="text-center py-20">

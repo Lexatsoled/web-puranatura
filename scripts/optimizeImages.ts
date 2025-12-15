@@ -24,7 +24,8 @@ async function ensureInputDir(dir: string) {
 async function countOptimizedFiles(dir: string) {
   try {
     const files = await fs.readdir(dir);
-    return files.filter(isImageFile).length;
+    // Ignore optimized folder to avoid double processing or loops if input==public
+    return files.filter((f) => f !== 'optimized').filter(isImageFile).length;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       return 0;
@@ -35,7 +36,7 @@ async function countOptimizedFiles(dir: string) {
 
 async function optimizeImages() {
   const publicDir = path.join(process.cwd(), 'public');
-  const inputDir = path.join(publicDir, 'Jpeg');
+  const inputDir = publicDir; // Scan root public directly
   const outputDir = path.join(publicDir, 'optimized');
 
   try {

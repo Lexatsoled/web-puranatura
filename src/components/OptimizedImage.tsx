@@ -56,7 +56,10 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div
+      className={`relative overflow-hidden ${className}`}
+      style={{ aspectRatio: aspectRatio ? `${aspectRatio}` : undefined }}
+    >
       <LazyLoadImage
         src={src ?? DEFAULT_PRODUCT_IMAGE}
         alt={alt}

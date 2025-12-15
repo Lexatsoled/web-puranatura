@@ -39,6 +39,10 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
                 className={`text-gray-700 hover:text-green-600 font-medium transition-colors ${
                   location.pathname === item.path ? 'text-green-600' : ''
                 }`}
+                onMouseEnter={() => {
+                  if (item.path === '/tienda') import('../pages/StorePage');
+                  if (item.path === '/blog') import('../pages/BlogPage');
+                }}
               >
                 {item.label}
               </Link>
@@ -135,17 +139,23 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
         {isSearchVisible && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-            onClick={() => setIsSearchVisible(false)}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsSearchVisible(false);
+            }}
+            aria-hidden="true"
           >
             <div
               className="bg-white rounded-lg p-6 w-full max-w-md mx-4 transform transition-transform duration-150 scale-100"
-              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Buscar productos"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Buscar</h3>
                 <button
                   onClick={() => setIsSearchVisible(false)}
                   className="p-1 hover:bg-gray-100 rounded"
+                  aria-label="Cerrar búsqueda"
                 >
                   <svg
                     className="h-5 w-5"
@@ -163,10 +173,12 @@ const Header: React.FC<HeaderProps> = ({ onCartClick }) => {
                 </button>
               </div>
               <input
+                ref={(input) => {
+                  if (input) input.focus();
+                }}
                 type="text"
                 placeholder="¿Qué estás buscando?"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                autoFocus
               />
             </div>
           </div>

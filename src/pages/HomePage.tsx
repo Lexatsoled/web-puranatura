@@ -79,10 +79,10 @@ const FeatureCard: React.FC<{ title: string; description: string }> = ({
   title,
   description,
 }) => (
-  <div className="p-8 bg-white/50 border border-green-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+  <article className="p-8 bg-white/50 border border-green-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
     <h3 className="text-2xl font-bold text-green-700 mb-2">{title}</h3>
     <p className="text-gray-600">{description}</p>
-  </div>
+  </article>
 );
 
 export default HomePage;

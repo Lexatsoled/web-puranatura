@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useCartStore } from '../store/cartStore';
 import { OptimizedImage } from './OptimizedImage';
 // Use CSS for modal show/hide and item transitions instead of framer-motion
 import { CartItem } from '../types/cart';
+
+import { useNavigate } from 'react-router-dom';
+import { useOrdersService } from '../services/ordersService';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -11,6 +15,12 @@ interface CartModalProps {
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCartStore();
+  const { createOrder } = useOrdersService();
+  const navigate = useNavigate();
+  const [isCheckingOut, setIsCheckingOut] = React.useState(false);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, { isActive: isOpen, onEscape: onClose });
 
   if (!isOpen) return null;
 
@@ -20,17 +30,42 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleCheckout = async () => {
+    if (cart.items.length === 0) return;
+
+    setIsCheckingOut(true);
+    try {
+      const orderItems = cart.items.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      }));
+
+      await createOrder(orderItems);
+      clearCart();
+      onClose();
+      navigate('/pedidos'); // Go to orders page to see the new order
+    } catch (error) {
+      console.error('Checkout failed', error);
+      alert('Error al procesar el pedido. Por favor intenta de nuevo.');
+    } finally {
+      setIsCheckingOut(false);
+    }
+  };
+
   return (
     <>
       {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50"
-          onClick={onClose}
-        >
+        <>
           <div
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col transition-transform duration-300 transform translate-x-0"
-            onClick={(e) => e.stopPropagation()}
-            aria-hidden={!isOpen}
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+          <div
+            ref={modalRef}
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col transition-transform duration-300 transform translate-x-0 z-50"
+            role="dialog"
+            aria-modal="true"
           >
             <div className="flex justify-between items-center p-4 border-b">
               <h2 className="text-xl font-bold text-gray-800">
@@ -71,7 +106,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={1}
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
                 <h3 className="text-xl font-semibold text-gray-700">
@@ -126,6 +161,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                           <input
                             type="number"
                             min="1"
+                            aria-label={`Cantidad para ${item.product.name}`}
                             value={item.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
@@ -182,18 +218,25 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <button
                       onClick={clearCart}
                       className="px-4 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                      disabled={isCheckingOut}
                     >
                       Vaciar Carrito
                     </button>
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                      Proceder al Pago
+                    <button
+                      onClick={handleCheckout}
+                      disabled={isCheckingOut}
+                      className={`px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors ${
+                        isCheckingOut ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      {isCheckingOut ? 'Procesando...' : 'Proceder al Pago'}
                     </button>
                   </div>
                 </div>
               </>
             )}
           </div>
-        </div>
+        </>
       )}
     </>
   );

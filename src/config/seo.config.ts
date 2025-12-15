@@ -1,6 +1,6 @@
-import { DefaultSeoProps } from 'next-seo';
+// import { DefaultSeoProps } from 'next-seo'; // Removed
 
-export const DEFAULT_SEO_CONFIG: DefaultSeoProps = {
+export const DEFAULT_SEO_CONFIG = {
   titleTemplate: '%s | PuraNatura - Terapias Naturales',
   defaultTitle: 'PuraNatura - Terapias Naturales y Suplementos',
   description:

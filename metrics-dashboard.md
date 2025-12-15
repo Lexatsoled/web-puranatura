@@ -1,22 +1,28 @@
-# Dashboard de Métricas y Objetivos (Q1 2025)
+# Dashboard de Métricas - Web Puranatura
 
-| Categoría       | Métrica                         | Baseline (Est.) | Objetivo | Verificación        |
-| --------------- | ------------------------------- | --------------- | -------- | ------------------- |
-| **Performance** | LCP (Largest Contentful Paint)  | 3.2s            | < 2.5s   | Lighthouse CI       |
-| **Performance** | CLS (Cumulative Layout Shift)   | 0.15            | < 0.1    | Lighthouse CI       |
-| **Seguridad**   | Vulnerabilidades Altas/Críticas | ?               | 0        | `npm audit` / Trivy |
-| **Seguridad**   | CSP Compatibility               | 95%             | 100%     | Reports Endpoint    |
-| **Calidad**     | Cobertura de Tests (Backend)    | ?               | > 80%    | Vitest Coverage     |
-| **Calidad**     | Complejidad Ciclomática Max     | 25              | < 15     | `complexity-report` |
-| **Privacidad**  | Datos PII en Logs               | Posible         | 0        | Auditoría Manual    |
-| **API**         | Latencia P95                    | ~500ms          | < 300ms  | k6 Tests            |
+## Baseline y Objetivos (Q4 2025)
 
-## Definición de Baseline
+| Métrica | Categoría | Baseline (Est.) | Target | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **LCP (Largest Contentful Paint)** | Performance | 1.8s | < 2.5s | 🟢 |
+| **CLS (Cumulative Layout Shift)** | Performance | 0.05 | < 0.1 | 🟢 |
+| **TTFB (Time to First Byte)** | Performance | 150ms | < 200ms | 🟢 |
+| **Bundle Size (Vendor)** | Performance | ~400KB | < 500KB | 🟡 |
+| **Accesibilidad (Lighthouse)** | Calidad | 92 | 100 | 🟢 |
+| **Cobertura de Tests** | Calidad | ~40% | > 80% | 🔴 |
+| **Vulnerabilidades Crit/High** | Seguridad | 0 | 0 | 🟢 |
+| **API Error Rate** | Estabilidad | < 1% | < 0.5% | 🟢 |
 
-- **LCP**: Medido en conexión 4G Slow simulada.
-- **Seguridad**: Escaneo estático actual.
+## Plan de Monitorización
 
-## Estrategia de Medición
+### CI/CD Checks
+- [ ] **Lighthouse CI**: Ejecutar en cada PR a `main`.
+- [ ] **Bundle Analysis**: Reportar diff de tamaño.
+- [ ] **A11y Scan**: Axe-core en componentes críticos.
 
-1.  **CI/CD**: Ejecutar `npm run perf:web` en cada PR.
-2.  **Monitorización**: Revisar logs de backend para errores 5xx (objetivo < 0.5%).
+### Producción (Observabilidad)
+- **Logs**: Winston/Morgan estructurados (JSON).
+- **Alertas**:
+    - CPU > 80%
+    - Redis Memory > 70%
+    - Circuit Breaker "Open" state > 1 min

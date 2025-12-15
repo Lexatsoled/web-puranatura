@@ -1,7 +1,7 @@
 // Use CSS-based cross-fade for carousel images instead of framer-motion
 import { Product } from '../../types/product';
 import { OptimizedImage } from '../OptimizedImage';
-import { DEFAULT_PRODUCT_IMAGE } from '@/src/constants/images';
+import { DEFAULT_PRODUCT_IMAGE } from '../../constants/images';
 
 type Props = {
   images: Product['images'];
@@ -10,6 +10,7 @@ type Props = {
   onSelectImage: (index: number) => void;
   isHovered: boolean;
   priority: boolean;
+  onImageClick?: () => void;
 };
 
 export const ImageCarousel = ({
@@ -19,6 +20,7 @@ export const ImageCarousel = ({
   onSelectImage,
   isHovered,
   priority,
+  onImageClick,
 }: Props) => (
   <>
     <div className="absolute inset-0">
@@ -29,19 +31,28 @@ export const ImageCarousel = ({
             idx === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          <OptimizedImage
-            src={
-              (idx === currentImageIndex
-                ? (img?.full ?? img?.thumbnail)
-                : (images?.[0]?.full ?? images?.[0]?.thumbnail)) ??
-              DEFAULT_PRODUCT_IMAGE
-            }
-            alt={productName}
-            className="w-full h-full object-cover"
-            aspectRatio={1}
-            priority={priority && idx === currentImageIndex}
-            blur
-          />
+          <button
+            type="button"
+            onClick={onImageClick}
+            className="w-full h-full p-0 border-0 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer block text-left"
+            tabIndex={idx === currentImageIndex ? 0 : -1}
+            aria-label={`Ver detalles de ${productName}`}
+            disabled={!onImageClick}
+          >
+            <OptimizedImage
+              src={
+                (idx === currentImageIndex
+                  ? (img?.full ?? img?.thumbnail)
+                  : (images?.[0]?.full ?? images?.[0]?.thumbnail)) ??
+                DEFAULT_PRODUCT_IMAGE
+              }
+              alt={productName}
+              className="w-full h-full object-cover"
+              aspectRatio={1}
+              priority={priority && idx === currentImageIndex}
+              blur
+            />
+          </button>
         </div>
       ))}
     </div>
@@ -62,6 +73,7 @@ export const ImageCarousel = ({
             onClick={(e) => {
               e.stopPropagation();
               onSelectImage(index);
+              // prevent default to allow focus to stay or move appropriately?
             }}
           />
         ))}

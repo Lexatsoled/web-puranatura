@@ -1,42 +1,61 @@
-﻿# Plan de Mejora - PuraNatura (Anti-Lost-In-The-Middle)
+﻿# Plan de Mejora - Web Puranatura
 
-## Fase 0: Cimientos y Limpieza (1-2 Días)
+> [!NOTE]
+> Este plan se basa en la auditoría del 13/12/2025. Se prioriza la seguridad estructural y la accesibilidad.
 
-**Objetivo**: Eliminar ambigüedades arquitectónicas y asegurar el entorno.
+## Fase 0: Análisis e Inventario (Completado)
+- [x] Inventario de archivos (`inventory.json`)
+- [x] Mapa de arquitectura (`architecture-map.md`)
+- [x] Detección de hallazgos (`findings.json`)
 
-- [x] **ARCH-01**: Unificar carpetas `components` y `src/components`. Mover todo a `src/components`.
-- [ ] **ARCH-02**: Separar dependencias de backend en `backend/package.json` vs root `package.json` para evitar builds pesados en frontend.
-- [x] **DOCS-01**: Actualizar `README.md` con mapa de arquitectura real.
+## Fase 1: Seguridad y Estabilidad (Semana 1)
+**Objetivo**: Fortalecer la autenticación y prevenir regresiones de seguridad.
 
-## Fase 1: Seguridad Crítica (AppSec) (1 Semana)
+### Tareas Prioritarias
+1.  **[SEC-AUTH-001] Migración de JWT a Cookies HttpOnly**
+    -   **Objetivo**: Eliminar JWT de `localStorage`.
+    -   **Pasos**:
+        -   Actualizar `backend/src/controllers/authController.ts` para setear cookie `token`.
+        -   Actualizar `src/store/authStore.ts` para dejar de persistir `token`.
+        -   Asegurar que `auth.ts` middleware lea de cookie (ya implementado).
+    -   **Rollback**: Revertir a persistencia en localStorage.
 
-**Objetivo**: Cerrar vulnerabilidades de privacidad y configuración.
+2.  **[SEC-ENV] Hardening de Variables de Entorno**
+    -   **Objetivo**: Asegurar que no se usen secretos por defecto en Prod.
+    -   **Pasos**:
+        -   Verificar que `env.ts` lanza error fatal si `JWT_SECRET` es default en NODE_ENV=production.
 
-- [x] **SEC-PRIV-01**: Anonimizar `userIp` en `AnalyticsEvent` antes de persistir.
-  - _Propuesta_: Crear utilitario `anonymizeIp(ip)` usando salt rotativa.
-- [x] **SEC-CONF-01**: Parametrizar `trust proxy` en `app.ts`.
-  - _Test_: Verificar headers `X-Forwarded-For` en staging.
-- [ ] **SEC-Input-01**: Migrar validación de forms (AuthModal) a `zod` + `react-hook-form` para paridad cliente-servidor.
+### Pruebas de Regresión
+-   Ejecutar `npm run test:e2e` (Login flow).
+-   Ejecutar `npm run test:unit` (Auth store).
 
-## Fase 2: Componentes y Mantenibilidad (2 Semanas)
+## Fase 2: Rendimiento y UX (Semana 2)
+**Objetivo**: Mantener la excelencia actual y pulir detalles.
 
-**Objetivo**: Reducir deuda técnica en componentes 'God Object'.
+### Tareas
+1.  **[PERF-MON] Implementar Performance Budget en CI**
+    -   **Objetivo**: Alertar si el bundle size excede límites.
+    -   **Pasos**: Configurar `vite.config.ts` o script de CI para fallar si `vendor` chunk > 500kb.
 
-- [x] **REFACTOR-01**: Desacoplar `AuthModal.tsx`.
-  - [x] Crear `components/auth/LoginForm.tsx`.
-  - [x] Crear `components/auth/RegisterForm.tsx`.
-  - [x] Extraer `useAuthForm` hook (implementado via componentes separados).
-- [x] **REFACTOR-02**: Optimizar imports de iconos. Usar dynamic imports o sprites si es posible para reducir JS bundle. (Centralizado en `icons/index.tsx`)
+2.  **[UX-ERR] Mejorar Feedback de Errores**
+    -   **Objetivo**: Unified Error UI.
+    -   **Pasos**: Revisar `ErrorBoundary.tsx` y asegurar que cubre fallos de carga diferida (lazy load chunks).
 
-## Fase 3: UX y Rendimiento (1 Semana)
+## Fase 3: Accesibilidad y Compatibilidad (Semana 3)
+**Objetivo**: Cumplir WCAG 2.1 AA.
 
-**Objetivo**: Mejorar Core Web Vitals y Feedback.
+### Tareas
+1.  **[A11Y-INT-001] Refactor de Elementos Interactivos**
+    -   **Objetivo**: Eliminar `div` con `onClick`.
+    -   **Pasos**:
+        -   Auditar `AuthModal.tsx` y otros modales.
+        -   Reemplazar por `<button>` o asegurar `onKeyDown` + `role` correctos.
+    -   **Verificación**: `npm run a11y` (Axe scan).
 
-- [x] **PERF-01**: Implementar Lazy Loading en Modales (`AuthModal`, `CartModal`).
-  - _Impacto_: Reducción de TBT y LCP inicial. (Implementado en `SimpleLayout.tsx`)
-- [ ] **UX-01**: Internacionalización (i18n). Extraer strings hardcodeados a archivos de recursos JSON.
+## Fase 4: Observabilidad y Deuda Técnica
+**Objetivo**: Preparar para escalado.
 
-## Fase 4: Observabilidad y Compliance (Ongoing)
-
-- [ ] **OPS-01**: Implementar retención de logs y purga automática de `AnalyticsEvent` antiguos (> 90 días).
-- [x] **GDPR-01**: Añadir banner de cookies real conectado a la inicialización de Analytics (ahora parece cargar scripts externos en CSP).
+### Tareas
+1.  **[ARCH-BE-001] Expandir Circuit Breakers**
+    -   **Objetivo**: Proteger DB de sobrecarga en búsquedas.
+    -   **Pasos**: Aplicar `CatalogBreaker` a endpoints de búsqueda intensiva.

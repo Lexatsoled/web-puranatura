@@ -105,7 +105,7 @@ jobs:
 
       - name: Build backend
         working-directory: ./backend
-        run: npm run build
+        run: npm run ci:build
 
       - name: Check for NUL bytes in tracked files
         run: |
@@ -127,7 +127,7 @@ jobs:
           PY
 
       - name: Lint
-        run: npm run lint -- --rule "jsx-a11y/no-noninteractive-element-interactions:warn" --rule "jsx-a11y/no-noninteractive-tabindex:warn" --rule "react/no-danger:warn"
+        run: npm run lint -- --rule "jsx-a11y/no-noninteractive-element-interactions:warn" --rule "jsx-a11y/no-noninteractive-tabindex:warn" --rule "react/no-danger:warn" --max-warnings 200
 
       - name: Format check
         run: npm run format:check
@@ -271,7 +271,7 @@ jobs:
       - run: npm ci
       - run: npm --prefix backend ci && npm --prefix backend run build
       - name: Build frontend
-        run: npm run build
+        run: npm run ci:build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       - name: Set runtime env defaults (JWT)

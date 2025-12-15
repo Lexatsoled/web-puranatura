@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Product } from '../../../types/product';
 import { generateBreadcrumbJsonLd } from '../../../utils/schemaGenerators';
-import { sanitizeHtml } from '../../../utils/sanitizer';
 
 interface Breadcrumb {
   name: string;
@@ -31,10 +30,9 @@ export const useProductBreadcrumbs = (
     return [...baseBreadcrumbs, productBreadcrumb, detailBreadcrumb];
   }, [currentUrl, product?.category, product?.name]);
 
-  const sanitizedBreadcrumbJsonLd = useMemo(() => {
-    const schema = generateBreadcrumbJsonLd(breadcrumbs);
-    return sanitizeHtml(JSON.stringify(schema));
+  const breadcrumbJsonLd = useMemo(() => {
+    return generateBreadcrumbJsonLd(breadcrumbs);
   }, [breadcrumbs]);
 
-  return { breadcrumbs, sanitizedBreadcrumbJsonLd };
+  return { breadcrumbs, breadcrumbJsonLd };
 };

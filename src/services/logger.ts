@@ -28,7 +28,7 @@ const sendLog = async (entry: LogEntry) => {
 
 export const logger = {
   info: (message: string, context?: Record<string, any>) => {
-    console.log(message, context);
+    console.info(message, context);
     sendLog({
       level: 'info',
       message,

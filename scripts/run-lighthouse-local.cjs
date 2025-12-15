@@ -2,6 +2,7 @@
 const { spawn } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
+const { stripVTControlCharacters } = require('node:util');
 
 // Run Lighthouse in a way that avoids Windows EPERM temp-dir cleanup errors
 // Strategy:
@@ -27,17 +28,11 @@ const env = Object.assign({}, process.env, {
   TEMP: tmpDir,
 });
 
-// Construct args for npx lighthouse
-// lighthouseArgs removed — build commands are constructed below when needed
-
 console.log('Running Lighthouse with TMP/TEMP ->', tmpDir);
 console.log('Writing JSON ->', jsonReport);
 console.log('Writing HTML  ->', htmlReport);
 
-// spawn without shell so args are passed as-is (no accidental splitting on spaces)
-// Build a single command string and run it via shell so `npx` resolution works cross-platform.
-// We'll quote file paths to avoid issues with spaces in Windows paths.
-const baseFlags = `--chrome-flags="--headless --no-sandbox --disable-gpu --user-data-dir=\"${chromeProfile}\" --single-process" --only-categories=performance,accessibility,best-practices,seo`;
+const baseFlags = `--chrome-flags="--headless --no-sandbox --disable-gpu" --only-categories=performance,accessibility,best-practices,seo`;
 
 function runShell(cmdStr) {
   return new Promise((resolve, reject) => {
@@ -48,15 +43,72 @@ function runShell(cmdStr) {
 }
 
 async function runAll() {
+  let serverProcess = null;
+
   try {
+    // 1. Start Server
+    console.log('Starting preview server...');
+    // We use 'npm run preview' which usually runs 'vite preview'
+    // Add --host to ensure binding to 0.0.0.0 (fixes 127.0.0.1 vs localhost issues)
+    // Also use random port 0 to avoid conflicts, but let's stick to default or detected.
+    serverProcess = spawn(
+      'npm',
+      ['run', 'preview', '--', '--host', '--port', '0'],
+      {
+        env,
+        stdio: 'pipe',
+        shell: true,
+      }
+    );
+
+    let port = '5173';
+
+    // Wait for server to be ready
+    await new Promise((resolve) => {
+      const timeout = setTimeout(() => {
+        console.warn(
+          'Server startup timeout, proceeding anyway hoping it is up...'
+        );
+        resolve();
+      }, 15000);
+
+      serverProcess.stdout.on('data', (data) => {
+        const rawStr = data.toString();
+        const str = stripVTControlCharacters(rawStr);
+        console.log('[Server]:', str.trim());
+
+        // Match "http://localhost:PORT/" anywhere
+        const match = str.match(/http:\/\/localhost:(\d+)\//);
+        if (match) {
+          port = match[1];
+          console.log(`Detected server port: ${port}`);
+          clearTimeout(timeout);
+          resolve();
+        }
+      });
+
+      serverProcess.stderr.on('data', (data) =>
+        console.error('[Server Error]:', data.toString())
+      );
+      serverProcess.on('exit', (code) => {
+        if (code !== 0 && code !== null) {
+          console.error(`Server exited early with ${code}`);
+        }
+      });
+    });
+
+    console.log(
+      `Server is supposedly ready on port ${port}. Running Lighthouse...`
+    );
+
     // Run JSON output first
-    const cmdJson = `npx lighthouse "http://127.0.0.1:5173" --output=json --output-path="${jsonReport}" ${baseFlags}`;
-    console.log('\nRunning (JSON):', cmdJson);
+    const cmdJson = `npx lighthouse "http://localhost:${port}" --output=json --output-path="${jsonReport}" ${baseFlags}`;
+    console.log('\\nRunning (JSON):', cmdJson);
     const res1 = await runShell(cmdJson);
 
     // Run HTML output
-    const cmdHtml = `npx lighthouse "http://127.0.0.1:5173" --output=html --output-path="${htmlReport}" ${baseFlags}`;
-    console.log('\nRunning (HTML):', cmdHtml);
+    const cmdHtml = `npx lighthouse "http://localhost:${port}" --output=html --output-path="${htmlReport}" ${baseFlags}`;
+    console.log('\\nRunning (HTML):', cmdHtml);
     const res2 = await runShell(cmdHtml);
 
     // if either run had non-zero exit but produced the respective file, treat as success
@@ -66,15 +118,17 @@ async function runAll() {
       fs.existsSync(htmlReport) && fs.statSync(htmlReport).size > 0;
 
     if ((res1.code === 0 || jExists) && (res2.code === 0 || hExists)) {
-      console.log('\nLighthouse runs finished (reports generated).');
-      cleanupAndExit(0);
+      console.log('\\nLighthouse runs finished (reports generated).');
+      cleanupAndExit(0, serverProcess);
       return;
     }
 
-    console.error('\nLighthouse runs failed and expected reports are missing.');
-    cleanupAndExit(1);
-  } catch {
-    console.error('Error while running lighthouse: (see logs)');
+    console.error(
+      '\\nLighthouse runs failed and expected reports are missing.'
+    );
+    cleanupAndExit(1, serverProcess);
+  } catch (err) {
+    console.error('Error while running lighthouse:', err);
     // check for existing reports anyway
     const jExists =
       fs.existsSync(jsonReport) && fs.statSync(jsonReport).size > 0;
@@ -84,38 +138,42 @@ async function runAll() {
       console.warn(
         'Reports were created despite the error, treating as success.'
       );
-      cleanupAndExit(0);
+      cleanupAndExit(0, serverProcess);
     } else {
-      cleanupAndExit(1);
+      cleanupAndExit(1, serverProcess);
     }
   }
 }
 
 runAll();
 
-function cleanupAndExit(code) {
+function cleanupAndExit(code, serverProcess) {
+  if (serverProcess) {
+    console.log('Stopping server...');
+    try {
+      if (process.platform === 'win32') {
+        spawn('taskkill', ['/pid', serverProcess.pid, '/f', '/t']);
+      } else {
+        serverProcess.kill();
+      }
+    } catch (e) {
+      console.error('Error killing server:', e);
+    }
+  }
+
   // Try to remove the chromeProfile and tmpDir, but don't fail when EPERM occurs
   try {
     if (fs.existsSync(chromeProfile)) {
-      fs.rmSync(chromeProfile, { recursive: true, force: true });
+      // fs.rmSync(chromeProfile, { recursive: true, force: true });
+      // Skipping aggression cleanup to avoid EPERM on Windows
     }
-  } catch {
-    console.warn(
-      'Warning: could not remove chrome profile dir (safe to ignore on Windows):',
-      chromeProfile
-    );
-  }
+  } catch {}
 
-  // DON'T aggressively delete tmpDir — Chrome sometimes holds handles and removal will fail.
-  // Leave the tmpDir for inspection if removal fails.
   try {
     if (fs.existsSync(tmpDir)) {
-      // try one more gentle removal
-      fs.rmSync(tmpDir, { recursive: true, force: true });
+      // fs.rmSync(tmpDir, { recursive: true, force: true });
     }
-  } catch {
-    console.warn('Warning: could not remove tmp dir (safe to ignore):', tmpDir);
-  }
+  } catch {}
 
   process.exit(code);
 }

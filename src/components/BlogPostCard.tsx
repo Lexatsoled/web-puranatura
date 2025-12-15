@@ -9,11 +9,13 @@ interface BlogPostCardProps {
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
   return (
-    <div
-      className="bg-white rounded-lg shadow-lg overflow-hidden group flex flex-col cursor-pointer transform hover:-translate-y-1 transition-all duration-300"
-      onClick={() => onClick(post)}
-    >
-      <div className="relative h-48">
+    <article className="bg-white rounded-lg shadow-lg overflow-hidden group flex flex-col transform hover:-translate-y-1 transition-all duration-300">
+      <button
+        type="button"
+        className="relative h-48 cursor-pointer w-full text-left p-0 border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500"
+        onClick={() => onClick(post)}
+        aria-label={`Leer artículo: ${post.title}`}
+      >
         <OptimizedImage
           src={post.imageUrl}
           alt={post.title}
@@ -22,7 +24,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
           blur={true}
         />
         <div className="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity duration-300" />
-      </div>
+      </button>
 
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex items-center mb-4">
@@ -41,8 +43,14 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
           </span>
         </div>
 
-        <h3 className="text-2xl font-bold text-green-800 font-display mb-3 group-hover:text-green-600 transition-colors duration-300">
-          {post.title}
+        <h3 className="text-2xl font-bold text-green-800 font-display mb-3">
+          <button
+            type="button"
+            className="group-hover:text-green-600 transition-colors duration-300 cursor-pointer text-left w-full bg-transparent border-0 p-0 focus:outline-none"
+            onClick={() => onClick(post)}
+          >
+            {post.title}
+          </button>
         </h3>
 
         <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
@@ -55,9 +63,12 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
               {post.readTime || 5} min de lectura
             </span>
           </div>
-          <span className="font-semibold text-green-600 group-hover:text-green-800 transition-colors duration-300">
+          <button
+            onClick={() => onClick(post)}
+            className="font-semibold text-green-600 group-hover:text-green-800 transition-colors duration-300 focus:outline-none"
+          >
             Leer más &rarr;
-          </span>
+          </button>
         </div>
 
         {post.tags && post.tags.length > 0 && (
@@ -73,7 +84,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -17,7 +17,7 @@ const ContactPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Aqui iria la logica de envio del formulario (ej. a una API)
-    console.log('Formulario enviado:', formData);
+    console.info('Formulario enviado:', formData);
     setStatus('Gracias por tu mensaje! Nos pondremos en contacto pronto.');
     setFormData({ name: '', email: '', message: '' });
   };

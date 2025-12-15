@@ -1,13 +1,22 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [Unreleased] - 2025-12-10
 
-## [Unreleased]
+### Features
 
-### Removed
+- **Backend**: Added `PUT /api/auth/me` endpoint for user profile updates.
+- **Frontend**: Integrated `authService` and `authStore` with real profile update API.
+- **Performance**: Added `scripts/optimizeImages.ts` for automated image compression (WebP).
+- **Security**: Added `sanitizeHTML` utility (DOMPurify with strict config) for blog content.
 
-- 2025-11-29: Removed built-in AI endpoints (`/api/ai`) and removed direct integrations with LLM providers. The project no longer stores or expects provider keys for LLMs in CI or runtime by default.
+### Improvements
 
-### Notes
+- **Performance**: Implemented Layout Shift (CLS) fix in `OptimizedImage` by enforcing aspect-ratio on container.
+- **Accessibility**: Audited semantic headers (H1 frequency) and button labels. Verified `npm run a11y` pipeline.
+- **Maintenance**: Centralized hardcoded UI strings into `src/constants/uiTexts.ts`.
+- **Docs**: Updated architecture documentation and automated auditing scripts.
 
-- If you need LLM functionality in the future, integrate via an external orchestrator (e.g., n8n) using secure webhooks and rotated keys. Avoid embedding secrets in the repository.
+### Fixes
+
+- **Auth**: Resolved TODOs in `authStore.ts` by removing mocks.
+- **Images**: Identified and processed legacy unoptimized images in `public/Jpeg`.

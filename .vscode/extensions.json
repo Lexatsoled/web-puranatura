@@ -5,9 +5,8 @@
     "bradlc.vscode-tailwindcss",
     "prisma.prisma",
     "humao.rest-client",
-    "rangav.vscode-thunder-client",
-    "usernamehw.errorlens",
-    "yoavbls.pretty-ts-errors",
-    "streetsidesoftware.code-spell-checker"
+    "deque-systems.vscode-axe-linter",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens"
   ]
 }

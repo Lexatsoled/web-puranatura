@@ -51,6 +51,12 @@ export const BlogGallery: React.FC<BlogGalleryProps> = ({ images, alt }) => {
         <div
           className="fixed inset-0 z-40 bg-black/50"
           onClick={() => setIsZoomed(false)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setIsZoomed(false);
+          }}
+          aria-label="Cerrar zoom"
         />
       )}
     </>
