@@ -32,7 +32,7 @@ jobs:
           cd backend && npm ci && npm run build
 
       - name: Unit Tests
-        run: npm test
+        run: npm run test:ci
         # Asumiendo que 'test:run' corre vitest una vez. Si no existe, usaremos 'npm test' ajustado.
 
       - name: Build Verification
