@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import BlogPostModal from '../BlogPostModal';
 import type { BlogPost } from '../../../types/blog';
 
@@ -34,9 +34,11 @@ describe('BlogPostModal - XSS Security', () => {
     const post = createMockPost(
       '<p>Normal text</p><script>alert("XSS")</script>'
     );
-    render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+    const { container } = render(
+      <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+    );
 
-    const modalContent = screen.getByRole('dialog');
+    const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('<script>');
     expect(modalContent.innerHTML).not.toContain('alert(');
   });
@@ -45,9 +47,11 @@ describe('BlogPostModal - XSS Security', () => {
     const post = createMockPost(
       '<a href="#" onclick="alert(\'XSS\')">Click me</a>'
     );
-    render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+    const { container } = render(
+      <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+    );
 
-    const modalContent = screen.getByRole('dialog');
+    const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('onclick');
   });
 
@@ -55,9 +59,11 @@ describe('BlogPostModal - XSS Security', () => {
     const post = createMockPost(
       '<img src="invalid" onerror="alert(\'XSS\')" />'
     );
-    render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+    const { container } = render(
+      <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+    );
 
-    const modalContent = screen.getByRole('dialog');
+    const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('onerror');
   });
 
@@ -65,9 +71,11 @@ describe('BlogPostModal - XSS Security', () => {
     const post = createMockPost(
       '<p>Content</p><iframe src="https://evil.com"></iframe>'
     );
-    render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+    const { container } = render(
+      <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+    );
 
-    const modalContent = screen.getByRole('dialog');
+    const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('<iframe');
     expect(modalContent.innerHTML).not.toContain('evil.com');
   });
@@ -76,9 +84,11 @@ describe('BlogPostModal - XSS Security', () => {
     const post = createMockPost(
       '<a href="javascript:alert(\'XSS\')">Malicious Link</a>'
     );
-    render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+    const { container } = render(
+      <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+    );
 
-    const modalContent = screen.getByRole('dialog');
+    const modalContent = within(container).getByRole('dialog');
     expect(modalContent.innerHTML).not.toContain('javascript:');
   });
 
@@ -118,9 +128,11 @@ describe('BlogPostModal - XSS Security', () => {
       const post = createMockPost(
         '<svg onload="alert(\'XSS\')"><circle /></svg>'
       );
-      render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+      const { container } = render(
+        <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+      );
 
-      const modalContent = screen.getByRole('dialog');
+      const modalContent = within(container).getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('onload');
       expect(modalContent.innerHTML).not.toContain('alert');
     });
@@ -129,9 +141,11 @@ describe('BlogPostModal - XSS Security', () => {
       const post = createMockPost(
         '<p><scr<script>ipt>alert("XSS")</scr</script>ipt></p>'
       );
-      render(<BlogPostModal isOpen={true} onClose={() => {}} post={post} />);
+      const { container } = render(
+        <BlogPostModal isOpen={true} onClose={() => {}} post={post} />
+      );
 
-      const modalContent = screen.getByRole('dialog');
+      const modalContent = within(container).getByRole('dialog');
       expect(modalContent.innerHTML).not.toContain('<script>');
     });
 
