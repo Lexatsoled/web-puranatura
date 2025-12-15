@@ -25,21 +25,78 @@ jobs:
   validate:
     name: Validate Code Quality
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: puranatura_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install dependencies
+          
+      - name: Install dependencies (root)
         run: npm ci
+        
+      - name: Install dependencies (backend)
+        working-directory: ./backend
+        run: npm ci
+
       - name: Linting
         run: npm run lint -- --max-warnings 200
+        
       - name: Type Checking
         run: npm run type-check || echo "Type check skipped if script missing"
-        # Adjust if you don't have a specific type-check script, or use tsc --noEmit
+
+      - name: Generate Prisma Client
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        run: npx prisma generate
+
+      - name: Run Database Migrations
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        run: npx prisma migrate deploy || npx prisma db push
+
+      - name: Run Database Seed
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+        run: npm run seed
+
       - name: Unit Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/puranatura_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          TEST_MODE: true
         run: npm run test:unit || npm test
 
   build:
